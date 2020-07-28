@@ -1,13 +1,13 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.entities.account;
 
 public interface AccountDAO {
-    Account retrieveAccount(int id);
+    AccountDTO selectAccount(int id);
 
-    Account retrieveAccount(String email);
+    AccountDTO selectAccount(String email);
 
-    boolean createAccount(Account account);
+    boolean createAccount(AccountDTO account);
 
-    boolean updateAccount(Account account);
+    boolean updateAccount(AccountDTO account);
 
-    boolean deleteAccount(Account account);
+    boolean deleteAccount(AccountDTO account);
 }

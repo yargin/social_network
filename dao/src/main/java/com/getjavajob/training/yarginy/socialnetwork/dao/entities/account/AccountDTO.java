@@ -2,11 +2,9 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.entities.account;
 
 import com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.additionaldata.Sex;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.time.LocalDate;
 
-public interface Account {
+public interface AccountDTO {
     int getId();
 
     String getName();
@@ -70,10 +68,4 @@ public interface Account {
     void setCity(String city);
 
     void setCountry(String country);
-
-    boolean create(Connection connection) throws SQLException;
-
-    boolean update(Connection connection) throws SQLException;
-
-    boolean delete(Connection connection) throws SQLException;
 }

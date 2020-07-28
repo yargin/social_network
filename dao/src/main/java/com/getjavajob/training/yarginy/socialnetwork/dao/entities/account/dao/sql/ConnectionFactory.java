@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.sql;
+package com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.dao.sql;
 
 import java.io.IOException;
 import java.io.InputStream;
