@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.entities.account;
+package com.getjavajob.training.yarginy.socialnetwork.dao.account;
 
 /**
  * provides CRUD operations with {@link Account}

@@ -1,7 +1,7 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.entities.account;
+package com.getjavajob.training.yarginy.socialnetwork.dao.account;
 
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.additionaldata.Sex;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.dto.AccountImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.account.additionaldata.Sex;
+import com.getjavajob.training.yarginy.socialnetwork.dao.account.dto.AccountImpl;
 
 import java.time.LocalDate;
 

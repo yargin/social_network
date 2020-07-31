@@ -1,20 +1,24 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.dao.sql;
+package com.getjavajob.training.yarginy.socialnetwork.dao.account.dao.sql;
 
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.AccountDAO;
+import com.getjavajob.training.yarginy.socialnetwork.dao.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.dao.account.AccountDAO;
+import com.getjavajob.training.yarginy.socialnetwork.dao.account.dao.sql.factories.AbstractConnectionFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.dao.sql.AccountSQLQueriesHandler.*;
-import static com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.dao.sql.ConnectionFactory.getConnection;
-
 public class AccountDAOImpl implements AccountDAO {
+    private final AbstractConnectionFactory connectionFactory;
+
+    public AccountDAOImpl(AbstractConnectionFactory connectionFactory) {
+        this.connectionFactory = connectionFactory;
+    }
+
     public Account selectAccount(int id) {
         try {
-            return selectById(getConnection(), id);
+            return AccountSQLQueriesHandler.selectById(connectionFactory.getConnection(), id);
         } catch (SQLException e) {
             throw new IllegalStateException(e.getMessage());
         }
@@ -22,7 +26,7 @@ public class AccountDAOImpl implements AccountDAO {
 
     public Account selectAccount(String email) {
         try {
-            return selectByEmail(getConnection(), email);
+            return AccountSQLQueriesHandler.selectByEmail(connectionFactory.getConnection(), email);
         } catch (SQLException e) {
             throw new IllegalStateException(e.getMessage());
         }
@@ -30,14 +34,14 @@ public class AccountDAOImpl implements AccountDAO {
 
     @Override
     public boolean createAccount(Account account) {
-        try (Connection connection = getConnection();
-             PreparedStatement statement = getSelectStatementByEmail(connection, account.getEmail());
+        try (Connection connection = connectionFactory.getConnection();
+             PreparedStatement statement = AccountSQLQueriesHandler.getSelectStatementByEmail(connection, account.getEmail());
              ResultSet resultSet = statement.executeQuery()) {
             if (resultSet.next()) {
                 return false;
             }
             resultSet.moveToInsertRow();
-            updateAccountRow(resultSet, account);
+            AccountSQLQueriesHandler.updateAccountRow(resultSet, account);
             resultSet.insertRow();
             connection.commit();
             return true;
@@ -48,13 +52,13 @@ public class AccountDAOImpl implements AccountDAO {
 
     @Override
     public boolean updateAccount(Account account) {
-        try (Connection connection = getConnection();
-             PreparedStatement statement = getSelectStatementById(connection, account.getId());
+        try (Connection connection = connectionFactory.getConnection();
+             PreparedStatement statement = AccountSQLQueriesHandler.getSelectStatementByEmail(connection, account.getEmail());
              ResultSet resultSet = statement.executeQuery()) {
             if (!resultSet.next()) {
                 return false;
             }
-            updateAccountRow(resultSet, account);
+            AccountSQLQueriesHandler.updateAccountRow(resultSet, account);
             resultSet.updateRow();
             connection.commit();
             return true;
@@ -65,8 +69,8 @@ public class AccountDAOImpl implements AccountDAO {
 
     @Override
     public boolean deleteAccount(Account account) {
-        try (Connection connection = getConnection();
-             PreparedStatement statement = getSelectStatementById(connection, account.getId());
+        try (Connection connection = connectionFactory.getConnection();
+             PreparedStatement statement = AccountSQLQueriesHandler.getSelectStatementByEmail(connection, account.getEmail());
              ResultSet resultSet = statement.executeQuery()) {
             if (!resultSet.next()) {
                 return false;

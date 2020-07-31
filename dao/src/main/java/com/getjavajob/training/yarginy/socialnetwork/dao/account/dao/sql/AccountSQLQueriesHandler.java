@@ -1,11 +1,11 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.dao.sql;
+package com.getjavajob.training.yarginy.socialnetwork.dao.account.dao.sql;
 
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.dto.AccountImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.dao.account.dto.AccountImpl;
 
 import java.sql.*;
 
-import static com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.additionaldata.Sex.valueOf;
+import static com.getjavajob.training.yarginy.socialnetwork.dao.account.additionaldata.Sex.valueOf;
 import static java.util.Objects.isNull;
 
 public class AccountSQLQueriesHandler {
