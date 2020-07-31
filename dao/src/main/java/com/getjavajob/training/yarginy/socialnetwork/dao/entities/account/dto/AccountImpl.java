@@ -1,12 +1,12 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.dto;
 
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.AccountDTO;
+import com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.additionaldata.Sex;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class AccountDTOImpl implements AccountDTO {
+public class AccountImpl implements Account {
     private int id;
     private String name;
     private String surname;
@@ -187,8 +187,8 @@ public class AccountDTOImpl implements AccountDTO {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AccountDTO)) return false;
-        AccountDTO account = (AccountDTO) o;
+        if (!(o instanceof Account)) return false;
+        Account account = (Account) o;
         return Objects.equals(email, account.getEmail());
     }
 
@@ -199,7 +199,7 @@ public class AccountDTOImpl implements AccountDTO {
 
     @Override
     public String toString() {
-        return "AccountDTO{name=" + name + ", surname='" + surname + ", patronymic=" + patronymic + ", birthDate=" +
+        return "Account{name=" + name + ", surname='" + surname + ", patronymic=" + patronymic + ", birthDate=" +
                 birthDate + ", city=" + city + ", country=" + country + '}';
     }
 }

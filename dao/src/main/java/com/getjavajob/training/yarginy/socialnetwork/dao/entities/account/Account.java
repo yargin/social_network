@@ -1,10 +1,25 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.entities.account;
 
 import com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.additionaldata.Sex;
+import com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.dto.AccountImpl;
 
 import java.time.LocalDate;
 
-public interface AccountDTO {
+/**
+ * provides object model of relational entity Account
+ */
+public interface Account {
+    /**
+     * notifies that current {@link Account} doesn't exist
+     *
+     * @return representation of non-existing {@link Account}
+     */
+    static Account getNullAccount() {
+        Account nullAccount = new AccountImpl();
+        nullAccount.setEmail("account not found");
+        return nullAccount;
+    }
+
     int getId();
 
     String getName();

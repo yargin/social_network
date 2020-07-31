@@ -1,72 +1,73 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.dao.sql;
 
+import com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.AccountDAO;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.AccountDTO;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.dao.sql.AccountQueryHandler.*;
+import static com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.dao.sql.AccountSQLQueriesHandler.*;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.dao.sql.ConnectionFactory.getConnection;
 
 public class AccountDAOImpl implements AccountDAO {
-    public AccountDTO selectAccount(int id) {
+    public Account selectAccount(int id) {
         try {
             return selectById(getConnection(), id);
         } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getCause());
+            throw new IllegalStateException(e.getMessage());
         }
     }
 
-    public AccountDTO selectAccount(String email) {
+    public Account selectAccount(String email) {
         try {
             return selectByEmail(getConnection(), email);
         } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getCause());
+            throw new IllegalStateException(e.getMessage());
         }
     }
 
     @Override
-    public boolean createAccount(AccountDTO account) {
-        try {
-            Connection connection = getConnection();
-            ResultSet resultSet = getResultSetByEmail(connection, account.getEmail());
+    public boolean createAccount(Account account) {
+        try (Connection connection = getConnection();
+             PreparedStatement statement = getSelectStatementByEmail(connection, account.getEmail());
+             ResultSet resultSet = statement.executeQuery()) {
             if (resultSet.next()) {
                 return false;
             }
             resultSet.moveToInsertRow();
-            buildInsert(resultSet, account);
+            updateAccountRow(resultSet, account);
             resultSet.insertRow();
             connection.commit();
             return true;
         } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getCause());
+            throw new IllegalStateException(e.getMessage());
         }
     }
 
     @Override
-    public boolean updateAccount(AccountDTO account) {
-        try {
-            Connection connection = getConnection();
-            ResultSet resultSet = getResultSetById(connection, account.getId());
+    public boolean updateAccount(Account account) {
+        try (Connection connection = getConnection();
+             PreparedStatement statement = getSelectStatementById(connection, account.getId());
+             ResultSet resultSet = statement.executeQuery()) {
             if (!resultSet.next()) {
                 return false;
             }
-            buildInsert(resultSet, account);
+            updateAccountRow(resultSet, account);
             resultSet.updateRow();
             connection.commit();
             return true;
         } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getCause());
+            throw new IllegalStateException(e.getMessage());
         }
     }
 
     @Override
-    public boolean deleteAccount(AccountDTO account) {
-        try {
-            Connection connection = getConnection();
-            ResultSet resultSet = getResultSetById(connection, account.getId());
+    public boolean deleteAccount(Account account) {
+        try (Connection connection = getConnection();
+             PreparedStatement statement = getSelectStatementById(connection, account.getId());
+             ResultSet resultSet = statement.executeQuery()) {
             if (!resultSet.next()) {
                 return false;
             }
@@ -74,7 +75,7 @@ public class AccountDAOImpl implements AccountDAO {
             connection.commit();
             return true;
         } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getCause());
+            throw new IllegalStateException(e.getMessage());
         }
     }
 }

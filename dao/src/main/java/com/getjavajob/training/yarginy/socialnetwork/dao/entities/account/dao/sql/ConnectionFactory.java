@@ -14,12 +14,11 @@ public class ConnectionFactory {
         Properties properties = new Properties();
         try (InputStream inputStream = ConnectionFactory.class.getClassLoader().getResourceAsStream(PROPERTIES)) {
             properties.load(inputStream);
-            try (Connection connection = DriverManager.getConnection(properties.getProperty("url"), properties)) {
+            Connection connection = DriverManager.getConnection(properties.getProperty("url"), properties);
                 connection.setAutoCommit(false);
                 return connection;
-            }
         } catch (IOException e) {
-            throw new IllegalStateException(e.getCause());
+            throw new IllegalStateException(e.getMessage());
         }
     }
 }
