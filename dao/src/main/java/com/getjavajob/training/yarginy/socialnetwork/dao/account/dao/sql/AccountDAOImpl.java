@@ -2,7 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.account.dao.sql;
 
 import com.getjavajob.training.yarginy.socialnetwork.dao.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.dao.account.AccountDAO;
-import com.getjavajob.training.yarginy.socialnetwork.dao.account.dao.sql.factories.AbstractConnectionFactory;
+import com.getjavajob.training.yarginy.socialnetwork.dao.dbfactories.DbConnector;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,15 +10,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class AccountDAOImpl implements AccountDAO {
-    private final AbstractConnectionFactory connectionFactory;
+    private final DbConnector dbConnector;
 
-    public AccountDAOImpl(AbstractConnectionFactory connectionFactory) {
-        this.connectionFactory = connectionFactory;
+    public AccountDAOImpl(DbConnector dbConnector) {
+        this.dbConnector = dbConnector;
     }
 
     public Account selectAccount(int id) {
         try {
-            return AccountSQLQueriesHandler.selectById(connectionFactory.getConnection(), id);
+            return AccountSQLQueriesHandler.selectById(dbConnector.getConnection(), id);
         } catch (SQLException e) {
             throw new IllegalStateException(e.getMessage());
         }
@@ -26,7 +26,7 @@ public class AccountDAOImpl implements AccountDAO {
 
     public Account selectAccount(String email) {
         try {
-            return AccountSQLQueriesHandler.selectByEmail(connectionFactory.getConnection(), email);
+            return AccountSQLQueriesHandler.selectByEmail(dbConnector.getConnection(), email);
         } catch (SQLException e) {
             throw new IllegalStateException(e.getMessage());
         }
@@ -34,7 +34,7 @@ public class AccountDAOImpl implements AccountDAO {
 
     @Override
     public boolean createAccount(Account account) {
-        try (Connection connection = connectionFactory.getConnection();
+        try (Connection connection = dbConnector.getConnection();
              PreparedStatement statement = AccountSQLQueriesHandler.getSelectStatementByEmail(connection, account.getEmail());
              ResultSet resultSet = statement.executeQuery()) {
             if (resultSet.next()) {
@@ -52,7 +52,7 @@ public class AccountDAOImpl implements AccountDAO {
 
     @Override
     public boolean updateAccount(Account account) {
-        try (Connection connection = connectionFactory.getConnection();
+        try (Connection connection = dbConnector.getConnection();
              PreparedStatement statement = AccountSQLQueriesHandler.getSelectStatementByEmail(connection, account.getEmail());
              ResultSet resultSet = statement.executeQuery()) {
             if (!resultSet.next()) {
@@ -69,7 +69,7 @@ public class AccountDAOImpl implements AccountDAO {
 
     @Override
     public boolean deleteAccount(Account account) {
-        try (Connection connection = connectionFactory.getConnection();
+        try (Connection connection = dbConnector.getConnection();
              PreparedStatement statement = AccountSQLQueriesHandler.getSelectStatementByEmail(connection, account.getEmail());
              ResultSet resultSet = statement.executeQuery()) {
             if (!resultSet.next()) {

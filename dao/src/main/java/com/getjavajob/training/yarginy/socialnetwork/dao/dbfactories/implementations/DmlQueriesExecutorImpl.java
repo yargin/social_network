@@ -1,4 +1,7 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.account.dao.sql.factories;
+package com.getjavajob.training.yarginy.socialnetwork.dao.dbfactories.implementations;
+
+import com.getjavajob.training.yarginy.socialnetwork.dao.dbfactories.DbConnector;
+import com.getjavajob.training.yarginy.socialnetwork.dao.dbfactories.DmlQueriesExecutor;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -9,11 +12,13 @@ import java.sql.Statement;
 
 import static java.lang.System.lineSeparator;
 
-public abstract class AbstractDMLQueriesFactory {
-    private final AbstractConnectionFactory connectionFactory;
+public class DmlQueriesExecutorImpl implements DmlQueriesExecutor {
+    private final DbConnector dbConnector;
+    private final String scriptsDir;
 
-    public AbstractDMLQueriesFactory(AbstractConnectionFactory connectionFactory) {
-        this.connectionFactory = connectionFactory;
+    public DmlQueriesExecutorImpl(DbConnector dbConnector, String scriptsDir) {
+        this.dbConnector = dbConnector;
+        this.scriptsDir = scriptsDir;
     }
 
     private String readQueryFromFile(String queryFile) {
@@ -29,8 +34,9 @@ public abstract class AbstractDMLQueriesFactory {
         }
     }
 
-    private boolean executeQuery(String query) {
-        try(Connection connection = connectionFactory.getConnection();
+    private boolean executeScript(String script) {
+        String query = readQueryFromFile(scriptsDir + script);
+        try(Connection connection = dbConnector.getConnection();
             Statement statement = connection.createStatement()) {
             return statement.execute(query);
         } catch (SQLException e) {
@@ -38,15 +44,13 @@ public abstract class AbstractDMLQueriesFactory {
         }
     }
 
+    @Override
     public boolean createAccounts() {
-        return executeQuery(readQueryFromFile(getCreateAccountsQueryFile()));
+        return executeScript("create_table_accounts");
     }
 
+    @Override
     public boolean dropAccounts() {
-        return executeQuery(readQueryFromFile(getDropAccountsQueryFile()));
+        return executeScript("drop_table_accounts");
     }
-
-    protected abstract String getCreateAccountsQueryFile();
-
-    protected abstract String getDropAccountsQueryFile();
 }

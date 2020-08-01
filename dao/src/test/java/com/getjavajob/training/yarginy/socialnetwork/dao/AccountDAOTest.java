@@ -2,9 +2,9 @@ package com.getjavajob.training.yarginy.socialnetwork.dao;
 
 import com.getjavajob.training.yarginy.socialnetwork.dao.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.dao.account.AccountDAO;
-import com.getjavajob.training.yarginy.socialnetwork.dao.account.dao.sql.AccountDAOImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.account.dao.sql.factories.AbstractDMLQueriesFactory;
-import com.getjavajob.training.yarginy.socialnetwork.dao.account.dao.sql.factories.MainFactory;
+import com.getjavajob.training.yarginy.socialnetwork.dao.dbfactories.DbFactory;
+import com.getjavajob.training.yarginy.socialnetwork.dao.dbfactories.DmlQueriesExecutor;
+import com.getjavajob.training.yarginy.socialnetwork.dao.dbfactories.databases.H2Factory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.account.dto.AccountImpl;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -14,14 +14,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
 public class AccountDAOTest {
+    private static final DbFactory dbFactory = new H2Factory();
     private static final String CLASS = "AccountDAOTest.";
     private static final String PASSED = "() passed";
-    private static final AbstractDMLQueriesFactory dmlQueriesFactory = MainFactory.getDmlQueriesFactory();
-    private final AccountDAO accountDAO = new AccountDAOImpl(MainFactory.getConnectionFactory());
-    private final Account account;
+    private static final DmlQueriesExecutor dmlQueriesExecutor = dbFactory.getDmlQueriesExecutor();
+    private static final AccountDAO accountDAO = dbFactory.getAccountDao();
+    private static final Account account = new AccountImpl();
 
     public AccountDAOTest() {
-        account = new AccountImpl();
         account.setEmail("asd@asd");
         account.setName("Vasya");
         account.setSurname("Pupkin");
@@ -31,12 +31,12 @@ public class AccountDAOTest {
 
     @BeforeClass
     public static void createTableAccounts() {
-        dmlQueriesFactory.createAccounts();
+        dmlQueriesExecutor.createAccounts();
     }
 
     @AfterClass
     public static void dropTableAccounts() {
-        dmlQueriesFactory.dropAccounts();
+        dmlQueriesExecutor.dropAccounts();
     }
 
     @Test
