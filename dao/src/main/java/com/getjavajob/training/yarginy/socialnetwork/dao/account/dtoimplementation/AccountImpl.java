@@ -1,9 +1,11 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.account.dto;
+package com.getjavajob.training.yarginy.socialnetwork.dao.account.dtoimplementation;
 
 import com.getjavajob.training.yarginy.socialnetwork.dao.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.dao.account.additionaldata.Sex;
+import com.getjavajob.training.yarginy.socialnetwork.dao.group.Group;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 public class AccountImpl implements Account {
@@ -23,6 +25,8 @@ public class AccountImpl implements Account {
     private String skype;
     private String city;
     private String country;
+    private List<Group> groupsOwner;
+    private List<Group> groupsMember;
 
     @Override
     public int getId() {
@@ -182,6 +186,26 @@ public class AccountImpl implements Account {
     @Override
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    @Override
+    public List<Group> getGroupsOwner() {
+        return groupsOwner;
+    }
+
+    @Override
+    public void setGroupsOwner(List<Group> groupsOwner) {
+        this.groupsOwner = groupsOwner;
+    }
+
+    @Override
+    public List<Group> getGroupsMember() {
+        return groupsMember;
+    }
+
+    @Override
+    public void setGroupsMember(List<Group> groupsMember) {
+        this.groupsMember = groupsMember;
     }
 
     @Override

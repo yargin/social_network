@@ -1,9 +1,13 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.account;
 
+import com.getjavajob.training.yarginy.socialnetwork.dao.group.Group;
+
+import java.util.List;
+
 /**
  * provides CRUD operations with {@link Account}
  */
-public interface AccountDAO {
+public interface AccountDao {
     /**
      * retrieves {@link Account} specified by id
      *
@@ -43,4 +47,10 @@ public interface AccountDAO {
      * @return true if successfully deleted, false if specified {@link Account} doesn't exist
      */
     boolean deleteAccount(Account account);
+
+    List<Group> selectOwnershipGroups(Account account);
+
+    // todo: update groups? or in update?
+
+    List<Group> selectMembershipGroups(Account account);
 }

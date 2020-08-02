@@ -1,7 +1,9 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.dbfactories;
 
-import com.getjavajob.training.yarginy.socialnetwork.dao.account.AccountDAO;
 import com.getjavajob.training.yarginy.socialnetwork.dao.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.dao.account.AccountDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.group.GroupDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.group.Group;
 
 /**
  * provides SQL & DML operations bounded to specified database
@@ -15,9 +17,16 @@ public interface DbFactory {
     DmlQueriesExecutor getDmlQueriesExecutor();
 
     /**
-     * provides {@link AccountDAO} to execute CRUD operations onto {@link Account}
+     * provides {@link AccountDao} to execute CRUD operations onto {@link Account}
      *
-     * @return {@link AccountDAO} implementation bounded to specified database
+     * @return {@link AccountDao} implementation bounded to specified database
      */
-    AccountDAO getAccountDao();
+    AccountDao getAccountDao();
+
+    /**
+     * provides {@link GroupDao} to execute CRUD operations onto {@link Group}
+     *
+     * @return {@link GroupDao} implementation bounded to specified database
+     */
+    GroupDao getGroupDao();
 }

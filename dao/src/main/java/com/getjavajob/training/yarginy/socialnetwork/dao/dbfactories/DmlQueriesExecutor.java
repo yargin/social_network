@@ -17,4 +17,18 @@ public interface DmlQueriesExecutor {
      * @return true if deletion successful, otherwise false
      */
     boolean dropAccounts();
+
+    /**
+     * creates table Groups
+     *
+     * @return true if creation successful, otherwise false
+     */
+    boolean createGroups();
+
+    /**
+     * deletes table Groups
+     *
+     * @return true if deletion successful, otherwise false
+     */
+    boolean dropGroups();
 }

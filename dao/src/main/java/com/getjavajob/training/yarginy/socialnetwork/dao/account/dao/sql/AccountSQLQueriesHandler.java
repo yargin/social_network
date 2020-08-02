@@ -1,15 +1,19 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.account.dao.sql;
 
 import com.getjavajob.training.yarginy.socialnetwork.dao.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.dao.account.dto.AccountImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.account.dtoimplementation.AccountImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.group.Group;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.getjavajob.training.yarginy.socialnetwork.dao.account.additionaldata.Sex.valueOf;
+import static com.getjavajob.training.yarginy.socialnetwork.dao.group.dao.sql.GroupSQLQueriesHandler.selectGroupRow;
 import static java.util.Objects.isNull;
 
 public class AccountSQLQueriesHandler {
-    private static final String TABLE = "Accounts";
+    private static final String ACCOUNTS = "Accounts";
     private static final String ID = "ID";
     private static final String NAME = "Name";
     private static final String SURNAME = "Surname";
@@ -26,8 +30,15 @@ public class AccountSQLQueriesHandler {
     private static final String ADDITIONAL_EMAIL = "Additional_email";
     private static final String COUNTRY = "Country";
     private static final String CITY = "City";
-    private static final String SELECT_BY_ID = "SELECT * FROM " + TABLE + " WHERE " + ID + " = ?";
-    private static final String SELECT_BY_EMAIL = "SELECT * FROM " + TABLE + " WHERE " + EMAIL + " = ?";
+    private static final String SELECT_BY_ID = "SELECT * FROM " + ACCOUNTS + " WHERE " + ID + " = ?";
+    private static final String SELECT_BY_EMAIL = "SELECT * FROM " + ACCOUNTS + " WHERE " + EMAIL + " = ?";
+
+    private static final String ACCOUNTS_IN_GROUPS = "Accounts_in_groups";
+    private static final String GROUPS = "Groups";
+    private static final String ACCOUNT_ID = "Account_id";
+    private static final String SELECT_GROUPS_BY_ACCOUNT = "SELECT * FROM " + GROUPS + " JOIN " + ACCOUNTS_IN_GROUPS +
+            "WHERE " + ACCOUNTS_IN_GROUPS + "." + ACCOUNT_ID + " = ?";
+
 
     /**
      * updates row that given {@link ResultSet}'s cursor currently points to
@@ -135,6 +146,20 @@ public class AccountSQLQueriesHandler {
             account.setCity(resultSet.getString(CITY));
             account.setCountry(resultSet.getString(COUNTRY));
             return account;
+        }
+    }
+
+    public static List<Group> selectGroupsByAccount(Connection connection, Account account) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_GROUPS_BY_ACCOUNT)) {
+            statement.setInt(1, account.getId());
+            List<Group> groups = new ArrayList<>();
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Group group = selectGroupRow(resultSet);
+                    groups.add(group);
+                }
+            }
+            return groups;
         }
     }
 }

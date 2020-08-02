@@ -1,9 +1,11 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.account;
 
 import com.getjavajob.training.yarginy.socialnetwork.dao.account.additionaldata.Sex;
-import com.getjavajob.training.yarginy.socialnetwork.dao.account.dto.AccountImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.account.dtoimplementation.AccountImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.group.Group;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * provides object model of relational entity Account
@@ -83,4 +85,12 @@ public interface Account {
     void setCity(String city);
 
     void setCountry(String country);
+
+    List<Group> getGroupsOwner();
+
+    void setGroupsOwner(List<Group> groupsOwner);
+
+    List<Group> getGroupsMember();
+
+    void setGroupsMember(List<Group> groupsMember);
 }

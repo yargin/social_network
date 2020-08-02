@@ -1,11 +1,11 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao;
 
 import com.getjavajob.training.yarginy.socialnetwork.dao.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.dao.account.AccountDAO;
+import com.getjavajob.training.yarginy.socialnetwork.dao.account.AccountDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.dbfactories.DbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.dbfactories.DmlQueriesExecutor;
 import com.getjavajob.training.yarginy.socialnetwork.dao.dbfactories.databases.H2Factory;
-import com.getjavajob.training.yarginy.socialnetwork.dao.account.dto.AccountImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.account.dtoimplementation.AccountImpl;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -13,15 +13,15 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
-public class AccountDAOTest {
+public class AccountDaoTest {
     private static final DbFactory dbFactory = new H2Factory();
-    private static final String CLASS = "AccountDAOTest.";
+    private static final String CLASS = "AccountDaoTest.";
     private static final String PASSED = "() passed";
     private static final DmlQueriesExecutor dmlQueriesExecutor = dbFactory.getDmlQueriesExecutor();
-    private static final AccountDAO accountDAO = dbFactory.getAccountDao();
+    private static final AccountDao accountDAO = dbFactory.getAccountDao();
     private static final Account account = new AccountImpl();
 
-    public AccountDAOTest() {
+    public AccountDaoTest() {
         account.setEmail("asd@asd");
         account.setName("Vasya");
         account.setSurname("Pupkin");

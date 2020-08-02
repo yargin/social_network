@@ -53,4 +53,14 @@ public class DmlQueriesExecutorImpl implements DmlQueriesExecutor {
     public boolean dropAccounts() {
         return executeScript("drop_table_accounts");
     }
+
+    @Override
+    public boolean createGroups() {
+        return false;
+    }
+
+    @Override
+    public boolean dropGroups() {
+        return false;
+    }
 }
