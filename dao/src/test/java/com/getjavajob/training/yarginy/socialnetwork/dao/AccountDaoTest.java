@@ -1,11 +1,11 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao;
 
-import com.getjavajob.training.yarginy.socialnetwork.dao.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.dao.account.AccountDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.dbfactories.DbFactory;
-import com.getjavajob.training.yarginy.socialnetwork.dao.dbfactories.DmlQueriesExecutor;
-import com.getjavajob.training.yarginy.socialnetwork.dao.dbfactories.databases.H2Factory;
-import com.getjavajob.training.yarginy.socialnetwork.dao.account.dtoimplementation.AccountImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.databases.H2DbFactory;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.dml.DmlExecutor;
+import com.getjavajob.training.yarginy.socialnetwork.dao.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.dao.models.account.AccountDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.models.account.AccountImpl;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -14,11 +14,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
 public class AccountDaoTest {
-    private static final DbFactory dbFactory = new H2Factory();
+    private static final DbFactory dbFactory = new H2DbFactory();
     private static final String CLASS = "AccountDaoTest.";
     private static final String PASSED = "() passed";
-    private static final DmlQueriesExecutor dmlQueriesExecutor = dbFactory.getDmlQueriesExecutor();
     private static final AccountDao accountDAO = dbFactory.getAccountDao();
+    private static final DmlExecutor dmlExecutor = dbFactory.getDmlExecutor();
     private static final Account account = new AccountImpl();
 
     public AccountDaoTest() {
@@ -31,58 +31,58 @@ public class AccountDaoTest {
 
     @BeforeClass
     public static void createTableAccounts() {
-        dmlQueriesExecutor.createAccounts();
+        dmlExecutor.createTables();
     }
 
     @AfterClass
     public static void dropTableAccounts() {
-        dmlQueriesExecutor.dropAccounts();
+        dmlExecutor.dropTables();
     }
 
     @Test
     public void testCreateAccount() {
-        accountDAO.deleteAccount(account);
-        boolean actual = accountDAO.createAccount(account);
+        accountDAO.delete(account);
+        boolean actual = accountDAO.create(account);
         assertSame(true, actual);
         System.out.println(CLASS + "testCreateAccount" + PASSED);
     }
 
     @Test
     public void testCreateExistingAccount() {
-        accountDAO.createAccount(account);
-        boolean actual = accountDAO.createAccount(account);
+        accountDAO.create(account);
+        boolean actual = accountDAO.create(account);
         assertSame(false, actual);
         System.out.println(CLASS + "testCreateExistingAccount" + PASSED);
     }
 
     @Test
     public void testSelectAccount() {
-        accountDAO.createAccount(account);
-        Account actual = accountDAO.selectAccount(account.getEmail());
+        accountDAO.create(account);
+        Account actual = accountDAO.select(account.getEmail());
         assertEquals(account, actual);
-        actual = accountDAO.selectAccount(actual.getId());
+        actual = accountDAO.select(actual.getId());
         assertEquals(account, actual);
         System.out.println(CLASS + "testSelectAccount" + PASSED);
     }
 
     @Test
     public void testSelectNonExistingAccount() {
-        accountDAO.deleteAccount(account);
-        Account actual = accountDAO.selectAccount("non existing email");
-        assertEquals(Account.getNullAccount(), actual);
-        actual = accountDAO.selectAccount(123);
-        assertEquals(Account.getNullAccount(), actual);
+        accountDAO.delete(account);
+        Account actual = accountDAO.select("non existing email");
+        assertEquals(accountDAO.getNullEntity(), actual);
+        actual = accountDAO.select(123);
+        assertEquals(accountDAO.getNullEntity(), actual);
         System.out.println(CLASS + "testSelectNonExistingAccount" + PASSED);
     }
 
     @Test
     public void testUpdateAccount() {
-        accountDAO.createAccount(account);
+        accountDAO.create(account);
         String newPatronymic = "new Patronymic";
         account.setPatronymic(newPatronymic);
-        boolean actual = accountDAO.updateAccount(account);
+        boolean actual = accountDAO.update(account);
         assertSame(true, actual);
-        Account storageAccount = accountDAO.selectAccount(account.getEmail());
+        Account storageAccount = accountDAO.select(account.getEmail());
         assertEquals(newPatronymic, storageAccount.getPatronymic());
         System.out.println(CLASS + "testUpdateAccount" + PASSED);
     }
@@ -90,7 +90,7 @@ public class AccountDaoTest {
     @Test
     public void testUpdateNonExistingAccount() {
         Account nonExisting = new AccountImpl();
-        boolean actual = accountDAO.updateAccount(nonExisting);
+        boolean actual = accountDAO.update(nonExisting);
         assertSame(false, actual);
         System.out.println(CLASS + "testUpdateNonExistingAccount" + PASSED);
     }
@@ -98,18 +98,18 @@ public class AccountDaoTest {
     @Test
     public void testDeleteNonExisting() {
         Account nonExisting = new AccountImpl();
-        boolean actual = accountDAO.deleteAccount(nonExisting);
+        boolean actual = accountDAO.delete(nonExisting);
         assertSame(false, actual);
         System.out.println(CLASS + "testDeleteNonExisting" + PASSED);
     }
 
     @Test
     public void testDeleteAccount() {
-        accountDAO.createAccount(account);
-        boolean actual = accountDAO.deleteAccount(account);
+        accountDAO.create(account);
+        boolean actual = accountDAO.delete(account);
         assertSame(true, actual);
-        Account nonExisting = Account.getNullAccount();
-        assertEquals(nonExisting, accountDAO.selectAccount(account.getEmail()));
+        Account nonExisting = accountDAO.getNullEntity();
+        assertEquals(nonExisting, accountDAO.select(account.getEmail()));
         System.out.println(CLASS + "testDeleteAccount" + PASSED);
     }
 }
