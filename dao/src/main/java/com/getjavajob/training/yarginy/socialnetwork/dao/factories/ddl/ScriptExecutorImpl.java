@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.factories.dml;
+package com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl;
 
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.DbConnector;
 
@@ -11,13 +11,11 @@ import java.sql.Statement;
 
 import static java.lang.System.lineSeparator;
 
-public class DmlExecutorImpl implements DmlExecutor {
-    private static final String CREATION_FILE = "creation_script";
-    private static final String DELETION_FILE = "deletion_script";
+public class ScriptExecutorImpl implements ScriptExecutor {
     private final DbConnector dbConnector;
     protected final String scriptsDir;
 
-    public DmlExecutorImpl(DbConnector dbConnector, String scriptsDir) {
+    public ScriptExecutorImpl(DbConnector dbConnector, String scriptsDir) {
         this.dbConnector = dbConnector;
         this.scriptsDir = scriptsDir;
     }
@@ -31,27 +29,18 @@ public class DmlExecutorImpl implements DmlExecutor {
             }
             return stringBuilder.toString();
         } catch (IOException e) {
-            throw new IllegalStateException(e.getMessage());
+            throw new IllegalStateException(e);
         }
     }
 
-    private boolean executeScript(String script) {
-        String query = readQueryFromFile(scriptsDir + script);
-        try(Connection connection = dbConnector.getConnection();
-            Statement statement = connection.createStatement()) {
+    @Override
+    public boolean executeScript(String scriptFile) {
+        String query = readQueryFromFile(scriptsDir + scriptFile);
+        try (Connection connection = dbConnector.getConnection();
+             Statement statement = connection.createStatement()) {
             return statement.execute(query);
         } catch (SQLException e) {
-            throw new IllegalStateException(e.getMessage());
+            throw new IllegalArgumentException(e);
         }
-    }
-
-    @Override
-    public boolean createTables() {
-        return executeScript(CREATION_FILE);
-    }
-
-    @Override
-    public boolean dropTables() {
-        return executeScript(DELETION_FILE);
     }
 }

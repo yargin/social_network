@@ -1,9 +1,9 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.models;
 
 /**
- * provides execution CRUD operations with models
+ * provides CRUD operations with {@link Entity}
  *
- * @param <E> model type
+ * @param <E> {@link Entity} inheritor
  */
 public interface EntityDao<E extends Entity> {
     /**
@@ -52,4 +52,11 @@ public interface EntityDao<E extends Entity> {
      * @return representation of non-existing {@link E}
      */
     E getNullEntity();
+
+    /**
+     * selects * from storage. Expected for development usage
+     *
+     * @return {@link String} representation of data stored in table
+     */
+    String selectAll();
 }

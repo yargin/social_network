@@ -4,7 +4,8 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFac
 
 public class H2DbFactory extends AbstractDbFactory {
     private static final String DB_CONNECTION_FILE = "connections/H2Connection.properties";
-    private static final String DML_QUERIES_FILE = "./src/main/resources/scripts/H2/";
+    private static final String SCRIPTS_DIR = "./src/main/resources/scripts/H2/";
+    private static final String CREATION_SCRIPT = "run_creation.sql";
 
     @Override
     protected String getConnectionFile() {
@@ -12,7 +13,17 @@ public class H2DbFactory extends AbstractDbFactory {
     }
 
     @Override
-    protected String getDmlDirectory() {
-        return DML_QUERIES_FILE;
+    protected String getScriptDirectory() {
+        return SCRIPTS_DIR;
+    }
+
+    @Override
+    protected String getStartingScript() {
+        return CREATION_SCRIPT;
+    }
+
+    @Override
+    protected boolean runScriptOnStart() {
+        return true;
     }
 }

@@ -1,29 +1,33 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.models.account.sql;
+package com.getjavajob.training.yarginy.socialnetwork.dao.models.account.dml;
 
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.EntitySql;
+import com.getjavajob.training.yarginy.socialnetwork.dao.models.EntityDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.dao.models.account.AccountImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.accountsingroups.AccountsInGroups;
 import com.getjavajob.training.yarginy.socialnetwork.dao.models.group.Group;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.group.sql.GroupSql;
+import com.getjavajob.training.yarginy.socialnetwork.dao.models.group.sql.GroupDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.models.group.sql.Groups;
+import com.getjavajob.training.yarginy.socialnetwork.dao.models.relations.AccountsInGroups;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.dao.models.account.additionaldata.Sex.valueOf;
+import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 import static java.util.Objects.isNull;
 
-public class AccountSql implements EntitySql<Account> {
-    private static final String SELECT_BY_ID = "SELECT * FROM " + Accounts.TABLE + " WHERE " + Accounts.ID + " = ?";
-    private static final String SELECT_BY_EMAIL = "SELECT * FROM " + Accounts.TABLE + " WHERE " + Accounts.EMAIL + " = ?";
+public class AccountDml implements EntityDml<Account> {
+    private static final String SELECT_ALL = buildQuery().select(Accounts.TABLE).build();
+    private static final String SELECT_BY_ID = buildQuery().select(Accounts.TABLE).where(Accounts.ID).build();
+    private static final String SELECT_BY_EMAIL = buildQuery().select(Accounts.TABLE).where(Accounts.EMAIL).build();
+    private static final String SELECT_GROUPS_BY_MEMBER = buildQuery().selectJoin(Groups.TABLE, AccountsInGroups.TABLE,
+            Groups.ID, AccountsInGroups.GROUP_ID).where(AccountsInGroups.ACCOUNT_ID).build();
+    private static final String SELECT_GROUPS_BY_OWNER = buildQuery().select(Groups.TABLE).where(Groups.OWNER).build();
 
-    private static final String SELECT_GROUPS_BY_MEMBER = "SELECT * FROM " + Groups.TABLE + " JOIN " +
-            AccountsInGroups.TABLE + " ON " + Groups.TABLE + "." + Groups.ID + " = "+ AccountsInGroups.TABLE + "." +
-            AccountsInGroups.GROUP_ID + " WHERE " + AccountsInGroups.TABLE + "." + AccountsInGroups.ACCOUNT_ID + " = ?";
-    private static final String SELECT_GROUPS_BY_OWNER = "SELECT * FROM " + Groups.TABLE + " WHERE " + Accounts.TABLE + "." +
-            Groups.OWNER + " = ?";
+    @Override
+    public String getSelectAllQuery() {
+        return SELECT_ALL;
+    }
 
     @Override
     public PreparedStatement getSelectStatement(Connection connection, int id) throws SQLException {
@@ -100,7 +104,7 @@ public class AccountSql implements EntitySql<Account> {
         try (PreparedStatement statement = connection.prepareStatement(SELECT_GROUPS_BY_MEMBER)) {
             statement.setInt(1, account.getId());
             try (ResultSet resultSet = statement.executeQuery()) {
-                EntitySql<Group> groupSql = new GroupSql();
+                EntityDml<Group> groupSql = new GroupDml();
                 return groupSql.selectEntities(resultSet);
             }
         }
@@ -110,7 +114,7 @@ public class AccountSql implements EntitySql<Account> {
         try (PreparedStatement statement = connection.prepareStatement(SELECT_GROUPS_BY_OWNER)) {
             statement.setInt(1, account.getId());
             try (ResultSet resultSet = statement.executeQuery()) {
-                EntitySql<Group> groupSql = new GroupSql();
+                EntityDml<Group> groupSql = new GroupDml();
                 return groupSql.selectEntities(resultSet);
             }
         }

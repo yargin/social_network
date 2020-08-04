@@ -22,7 +22,7 @@ public class DbConnectorImpl implements DbConnector {
             connection.setAutoCommit(false);
             return connection;
         } catch (IOException e) {
-            throw new IllegalStateException(e.getMessage());
+            throw new IllegalStateException(e);
         }
     }
 }

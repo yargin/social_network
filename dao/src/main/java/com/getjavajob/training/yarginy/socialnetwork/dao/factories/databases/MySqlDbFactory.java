@@ -4,7 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFac
 
 public class MySqlDbFactory extends AbstractDbFactory {
     private static final String DB_CONNECTION_FILE = "connections/MySQLConnection.properties";
-    private static final String DML_QUERIES_FILE = "./src/main/resources/scripts/MySQL/";
+    private static final String SCRIPTS_DIR = "./src/main/resources/scripts/MySQL/";
 
     @Override
     protected String getConnectionFile() {
@@ -12,7 +12,17 @@ public class MySqlDbFactory extends AbstractDbFactory {
     }
 
     @Override
-    protected String getDmlDirectory() {
-        return DML_QUERIES_FILE;
+    protected String getScriptDirectory() {
+        return SCRIPTS_DIR;
+    }
+
+    @Override
+    protected String getStartingScript() {
+        throw new UnsupportedOperationException("not specified");
+    }
+
+    @Override
+    protected boolean runScriptOnStart() {
+        return false;
     }
 }

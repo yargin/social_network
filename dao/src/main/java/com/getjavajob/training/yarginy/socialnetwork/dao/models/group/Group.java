@@ -1,9 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.models.group;
 
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.dao.models.Entity;
-
-import java.util.List;
+import com.getjavajob.training.yarginy.socialnetwork.dao.models.account.Account;
 
 public interface Group extends Entity {
     int getId();
@@ -21,8 +19,4 @@ public interface Group extends Entity {
     String getDescription();
 
     void setDescription(String description);
-
-    List<Account> getMembers();
-
-    void setMembers(List<Account> members);
 }

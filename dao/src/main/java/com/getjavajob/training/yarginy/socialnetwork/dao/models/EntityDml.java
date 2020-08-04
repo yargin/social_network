@@ -1,12 +1,14 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.models;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Collection;
 
-public interface EntitySql<E extends Entity> {
+/**
+ * encapsulates work with SQL-queries, {@link ResultSet}s & {@link Statement}s
+ *
+ * @param <E> {@link Entity} inheritor to work with
+ */
+public interface EntityDml<E extends Entity> {
     /**
      * retrieves {@link PreparedStatement} which execution result will be {@link E} found by email. Used for
      * insertion, modification & deletion
@@ -49,7 +51,14 @@ public interface EntitySql<E extends Entity> {
      * updates row that given {@link ResultSet}'s cursor currently points to
      *
      * @param resultSet {@link ResultSet} with positioned cursor
-     * @param entity {@link E}that need to be updated
+     * @param entity    {@link E}that need to be updated
      */
     void updateRow(ResultSet resultSet, E entity) throws SQLException;
+
+    /**
+     * gives query that will select all data from Entity's table
+     *
+     * @return query that selects all data
+     */
+    String getSelectAllQuery();
 }

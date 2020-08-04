@@ -12,6 +12,7 @@ public interface DbConnector {
      * <br>BE CAREFUL - use only with Try-with-resources or Finally block
      *
      * @return {@link Connection} to database
+     * @throws IllegalStateException if it's not possible to connect to database
      */
     Connection getConnection() throws SQLException;
 }

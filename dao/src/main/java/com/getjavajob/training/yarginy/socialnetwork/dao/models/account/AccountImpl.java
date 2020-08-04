@@ -32,7 +32,7 @@ public class AccountImpl implements Account {
 
     @Override
     public String getIdentifier() {
-        return email;
+        return getEmail();
     }
 
     @Override
@@ -192,8 +192,12 @@ public class AccountImpl implements Account {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Account)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Account)) {
+            return false;
+        }
         Account account = (Account) o;
         return Objects.equals(email, account.getEmail());
     }

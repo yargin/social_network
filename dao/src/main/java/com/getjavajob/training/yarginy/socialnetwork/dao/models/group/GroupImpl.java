@@ -19,7 +19,7 @@ public class GroupImpl implements Group {
 
     @Override
     public String getIdentifier() {
-        return name;
+        return getName();
     }
 
     @Override
@@ -58,19 +58,13 @@ public class GroupImpl implements Group {
     }
 
     @Override
-    public List<Account> getMembers() {
-        return members;
-    }
-
-    @Override
-    public void setMembers(List<Account> members) {
-        this.members = members;
-    }
-
-    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Group)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Group)) {
+            return false;
+        }
         Group group = (Group) o;
         return Objects.equals(name, group.getName());
     }
@@ -82,6 +76,6 @@ public class GroupImpl implements Group {
 
     @Override
     public String toString() {
-        return "GroupImpl{ name = '" + name + "' }";
+        return "GroupImpl{name = '" + name + "'}";
     }
 }
