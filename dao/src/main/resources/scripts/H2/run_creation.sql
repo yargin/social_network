@@ -1,0 +1,1 @@
+RUNSCRIPT FROM 'classpath:scripts/h2/creation_script.sql'
