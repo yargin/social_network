@@ -11,6 +11,8 @@
 
     <groupId>com.getjavajob.training.yarginy.socialnetwork.dao</groupId>
     <artifactId>dao</artifactId>
+    <packaging>jar</packaging>
+
     <dependencies>
         <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
         <dependency>

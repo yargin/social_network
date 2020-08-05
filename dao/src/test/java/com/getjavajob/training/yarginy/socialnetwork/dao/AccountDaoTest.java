@@ -7,7 +7,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.models.account.AccountD
 import com.getjavajob.training.yarginy.socialnetwork.dao.models.account.AccountImpl;
 import org.junit.Test;
 
-import static com.getjavajob.training.yarginy.socialnetwork.dao.ResultPrinter.printPassed;
+import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.ResultPrinter.printPassed;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 

@@ -20,7 +20,7 @@ public abstract class AbstractDbFactory implements DbFactory {
     private ScriptExecutor scriptExecutor;
 
     public AbstractDbFactory() {
-        dbConnector = new DbConnectorImpl(getConnectionFile());
+        dbConnector = new DbConnectorImpl(getConnectionFile(), getConnectionsCapacity());
         if (runScriptOnStart()) {
             getScriptExecutor().executeScript(getStartingScript());
         }
@@ -42,8 +42,8 @@ public abstract class AbstractDbFactory implements DbFactory {
     protected abstract String getScriptDirectory();
 
     /**
-     * provides file with script that will be executed at right after factory creation if {@link AbstractDbFactory#
-     * runScriptOnStart()} returns true
+     * provides file with script that will be executed at right after factory creation if
+     * {@link AbstractDbFactory#runScriptOnStart()} returns true
      *
      * @return script file name
      */
@@ -53,6 +53,13 @@ public abstract class AbstractDbFactory implements DbFactory {
      * tells {@link AbstractDbFactory} to execute starting script or not
      */
     protected abstract boolean runScriptOnStart();
+
+    /**
+     * specifies number of possible concurrent connections
+     *
+     * @return concurrent connections capacity
+     */
+    protected abstract int getConnectionsCapacity();
 
     @Override
     public ScriptExecutor getScriptExecutor() {

@@ -9,7 +9,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.models.group.GroupDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.models.group.GroupImpl;
 import org.junit.Test;
 
-import static com.getjavajob.training.yarginy.socialnetwork.dao.ResultPrinter.printPassed;
+import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.ResultPrinter.printPassed;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 

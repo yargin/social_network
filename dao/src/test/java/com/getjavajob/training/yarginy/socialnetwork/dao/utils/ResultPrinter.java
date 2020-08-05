@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao;
+package com.getjavajob.training.yarginy.socialnetwork.dao.utils;
 
 import static java.lang.System.lineSeparator;
 import static java.lang.System.out;
