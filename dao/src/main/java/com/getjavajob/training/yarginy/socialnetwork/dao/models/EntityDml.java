@@ -8,17 +8,17 @@ import java.util.Collection;
  *
  * @param <E> {@link Entity} inheritor to work with
  */
-public interface EntityDml<E extends Entity> {
+public abstract class EntityDml<E extends Entity> {
     /**
      * retrieves {@link PreparedStatement} which execution result will be {@link E} found by email. Used for
      * insertion, modification & deletion
      * <br>BE CAREFUL - use only with Try-with-resources or Finally block
      *
      * @param connection {@link Connection} specified connection to make {@link PreparedStatement}
-     * @param id {@link E}'s id
+     * @param id         {@link E}'s id
      * @return {@link PreparedStatement} that selects {@link E} found by id
      */
-    PreparedStatement getSelectStatement(Connection connection, int id) throws SQLException;
+    public abstract PreparedStatement getSelectStatement(Connection connection, int id) throws SQLException;
 
     /**
      * retrieves {@link PreparedStatement} which execution result will be {@link E} found by identifier. Used for
@@ -29,7 +29,7 @@ public interface EntityDml<E extends Entity> {
      * @param identifier {@link E}'s {@link String} identifier
      * @return {@link PreparedStatement} that selects {@link E} found by identifier
      */
-    PreparedStatement getSelectStatement(Connection connection, String identifier) throws SQLException;
+    public abstract PreparedStatement getSelectStatement(Connection connection, String identifier) throws SQLException;
 
     /**
      * retrieves {@link E} from {@link ResultSet}'s current cursor position
@@ -37,7 +37,7 @@ public interface EntityDml<E extends Entity> {
      * @param resultSet specified {@link ResultSet}
      * @return extracted {@link E}
      */
-    E selectFromRow(ResultSet resultSet) throws SQLException;
+    public abstract E selectFromRow(ResultSet resultSet) throws SQLException;
 
     /**
      * retrieves {@link Collection}<{@link E}> from specified {@link ResultSet}
@@ -45,7 +45,7 @@ public interface EntityDml<E extends Entity> {
      * @param resultSet specified {@link ResultSet}
      * @return extracted {@link Collection}<{@link E}>
      */
-    Collection<E> selectEntities(ResultSet resultSet) throws SQLException;
+    public abstract Collection<E> selectEntities(ResultSet resultSet) throws SQLException;
 
     /**
      * updates row that given {@link ResultSet}'s cursor currently points to
@@ -53,12 +53,12 @@ public interface EntityDml<E extends Entity> {
      * @param resultSet {@link ResultSet} with positioned cursor
      * @param entity    {@link E}that need to be updated
      */
-    void updateRow(ResultSet resultSet, E entity) throws SQLException;
+    public abstract void updateRow(ResultSet resultSet, E entity) throws SQLException;
 
     /**
      * gives query that will select all data from Entity's table
      *
      * @return query that selects all data
      */
-    String getSelectAllQuery();
+    public abstract String getSelectAllQuery();
 }

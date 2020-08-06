@@ -1,7 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao;
 
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factory.DatabaseFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.dao.models.account.AccountDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.models.account.AccountImpl;
@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
 public class AccountDaoTest {
-    private static final DbFactory dbFactory = DatabaseFactory.getDbFactory();
+    private static final DbFactory dbFactory = AbstractDbFactory.getDbFactory();
     private static final String CLASS = "AccountDaoTest";
     private static final AccountDao accountDAO = dbFactory.getAccountDao();
     private static final Account account = new AccountImpl();

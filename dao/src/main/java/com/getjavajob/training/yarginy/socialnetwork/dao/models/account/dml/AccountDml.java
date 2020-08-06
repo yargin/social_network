@@ -16,7 +16,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.models.account.a
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 import static java.util.Objects.isNull;
 
-public class AccountDml implements EntityDml<Account> {
+public class AccountDml extends EntityDml<Account> {
     private static final String SELECT_ALL = buildQuery().select(Accounts.TABLE).build();
     private static final String SELECT_BY_ID = buildQuery().select(Accounts.TABLE).where(Accounts.ID).build();
     private static final String SELECT_BY_EMAIL = buildQuery().select(Accounts.TABLE).where(Accounts.EMAIL).build();

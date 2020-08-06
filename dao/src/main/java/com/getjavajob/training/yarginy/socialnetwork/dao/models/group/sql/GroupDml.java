@@ -18,7 +18,7 @@ import java.util.Collection;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 import static java.util.Objects.isNull;
 
-public class GroupDml implements EntityDml<Group> {
+public class GroupDml extends EntityDml<Group> {
     private static final String SELECT_ALL = buildQuery().select(Groups.TABLE).build();
     private static final String SELECT_BY_ID = buildQuery().select(Groups.TABLE).where(Groups.ID).build();
     private static final String SELECT_BY_NAME = buildQuery().select(Groups.TABLE).where(Groups.NAME).build();
@@ -78,8 +78,8 @@ public class GroupDml implements EntityDml<Group> {
         try (PreparedStatement statement = connection.prepareStatement(SELECT_MEMBERS)) {
             statement.setInt(1, group.getId());
             try (ResultSet resultSet = statement.executeQuery()) {
-                EntityDml<Account> accountSql = new AccountDml();
-                return accountSql.selectEntities(resultSet);
+                EntityDml<Account> accountDml = new AccountDml();
+                return accountDml.selectEntities(resultSet);
             }
         }
     }

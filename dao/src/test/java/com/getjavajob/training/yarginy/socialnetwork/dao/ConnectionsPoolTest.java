@@ -23,11 +23,9 @@ public class ConnectionsPoolTest {
     public void testGetConnection() throws InterruptedException {
         for (int i = 0; i < NEEDED_CONNECTIONS; i++) {
             Thread thread = new Thread(() -> {
-                try {
-                    Connection connection = CONNECTOR.getConnection();
+                try (Connection connection = CONNECTOR.getConnection()) {
                     COUNTER.incrementAndGet();
-                    sleep(10000);
-                    connection.close();
+                    sleep(4000);
                 } catch (SQLException | InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -36,6 +34,9 @@ public class ConnectionsPoolTest {
             thread.start();
         }
         sleep(1000);
+        assertSame(POOL_SIZE, COUNTER.get());
+        printPassed(CLASS, "testGetConnection");
+        sleep(7000);
         assertSame(POOL_SIZE, COUNTER.get());
         printPassed(CLASS, "testGetConnection");
     }
