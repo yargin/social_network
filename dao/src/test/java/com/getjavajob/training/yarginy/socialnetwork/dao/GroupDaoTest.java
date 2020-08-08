@@ -1,12 +1,11 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao;
 
+import com.getjavajob.training.yarginy.socialnetwork.dao.entities.EntityDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.dao.entities.group.Group;
+import com.getjavajob.training.yarginy.socialnetwork.dao.entities.group.GroupImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.account.AccountDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.group.Group;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.group.GroupDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.group.GroupImpl;
 import org.junit.Test;
 
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.ResultPrinter.printPassed;
@@ -17,10 +16,10 @@ public class GroupDaoTest {
     private static final DbFactory dbFactory = AbstractDbFactory.getDbFactory();
     private static final String CLASS = "GroupDaoTest";
     private static final Group group = new GroupImpl();
-    private static final GroupDao groupDao = dbFactory.getGroupDao();
+    private static final EntityDao<Group> groupDao = dbFactory.getGroupDao();
 
     public GroupDaoTest() {
-        AccountDao accountDao = dbFactory.getAccountDao();
+        EntityDao<Account> accountDao = dbFactory.getAccountDao();
         Account account = accountDao.select("robot@power.com");
         group.setName("new Group");
         group.setOwner(account);

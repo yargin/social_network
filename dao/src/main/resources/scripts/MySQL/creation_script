@@ -15,6 +15,9 @@ CREATE TABLE IF NOT EXISTS Accounts (
         country VARCHAR(40)
 );
 
+ALTER TABLE Accounts
+ADD CHECK (sex IN ('MALE', 'FEMALE'));
+
 CREATE TABLE IF NOT EXISTS _Groups (
         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(50) NOT NULL UNIQUE,
@@ -39,6 +42,24 @@ ADD CONSTRAINT C_13 FOREIGN KEY (account_id) REFERENCES Accounts (id) ON DELETE 
 ALTER TABLE Accounts_in_groups
 ADD CONSTRAINT C_14 FOREIGN KEY (group_id) REFERENCES _Groups (id) ON DELETE CASCADE;
 
+
+CREATE TABLE IF NOT EXISTS Friendships (
+        first_account INT UNSIGNED,
+        second_account INT UNSIGNED
+    );
+
+ALTER TABLE Friendships
+ADD CONSTRAINT C_15 PRIMARY KEY(first_account, second_account);
+
+ALTER TABLE Friendships
+ADD CONSTRAINT C_16 FOREIGN KEY (first_account) REFERENCES Accounts (id) ON DELETE CASCADE;
+
+ALTER TABLE Friendships
+ADD CONSTRAINT C_17 FOREIGN KEY (second_account) REFERENCES Accounts (id) ON DELETE CASCADE;
+
+ALTER TABLE Friendships
+ADD CHECK (first_account != second_account);
+
 INSERT INTO Accounts (name, surname, phone, email) VALUES
 ('Vladimir', 'Lenin', '1918', 'rise@communism'),
 ('dracula', 'NOSFERATU', '666', 'drink@blood.com'),
@@ -51,3 +72,6 @@ INSERT INTO _Groups (name, description, owner_id) VALUES
 
 INSERT INTO Accounts_in_groups VALUES
 (1, 1), (2, 1), (3, 2), (1, 2);
+
+INSERT INTO Friendships VALUES
+(1, 2), (1, 3);

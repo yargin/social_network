@@ -1,15 +1,18 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.factories;
 
+import com.getjavajob.training.yarginy.socialnetwork.dao.entities.EntityDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.entities.EntityDaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.dml.AccountDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.entities.group.Group;
+import com.getjavajob.training.yarginy.socialnetwork.dao.entities.group.dml.GroupDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.DbConnector;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.DbConnectorImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl.ScriptExecutor;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl.ScriptExecutorImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.account.AccountDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.account.dao.AccountDaoImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.account.dml.AccountDml;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.group.GroupDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.group.dao.GroupDaoImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.group.sql.GroupDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.nonidentifying.SelfManyToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.nonidentifying.SelfManyToManyDaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.nonidentifying.friendship.FriendshipDml;
 
 import java.util.Properties;
 
@@ -70,12 +73,17 @@ public abstract class CommonDbFactory implements DbFactory {
     }
 
     @Override
-    public AccountDao getAccountDao() {
-        return new AccountDaoImpl(dbConnector, new AccountDml());
+    public EntityDao<Account> getAccountDao() {
+        return new EntityDaoImpl<>(dbConnector, new AccountDml());
     }
 
     @Override
-    public GroupDao getGroupDao() {
-        return new GroupDaoImpl(dbConnector, new GroupDml());
+    public EntityDao<Group> getGroupDao() {
+        return new EntityDaoImpl<>(dbConnector, new GroupDml());
+    }
+
+    @Override
+    public SelfManyToManyDao<Account> getFriendshipDao() {
+        return new SelfManyToManyDaoImpl<>(dbConnector, new FriendshipDml());
     }
 }

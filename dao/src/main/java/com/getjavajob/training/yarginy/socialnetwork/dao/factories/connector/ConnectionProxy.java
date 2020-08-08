@@ -18,7 +18,7 @@ public class ConnectionProxy implements Connection {
     /**
      * closes encapsulated {@link Connection}
      */
-    public void closeReally() throws SQLException {
+    public void closeDirectly() throws SQLException {
         beingUsed = false;
         connection.close();
     }
@@ -26,8 +26,8 @@ public class ConnectionProxy implements Connection {
     /**
      * tells that {@link Connection} is being used
      */
-    public void setBeingUsed() {
-        beingUsed = true;
+    public void setBeingUsed(boolean beingUsed) {
+        this.beingUsed = beingUsed;
     }
 
     @Override

@@ -11,6 +11,7 @@
     <modules>
         <module>dao</module>
         <module>common</module>
+        <module>service</module>
     </modules>
 
 

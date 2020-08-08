@@ -25,11 +25,11 @@ public class DbConnectorImpl2 implements DbConnector {
     public synchronized void closeConnection(ConnectionProxy connectionProxy) throws SQLException {
         //if no Connection's consumer is waiting for connection
         if (!connectionConsumers.isEmpty()) {
-            connectionProxy.closeReally();
+            connectionProxy.closeDirectly();
         } else {
             try {
                 connectionConsumers.take().takeConnection(connectionProxy);
-                connectionProxy.setBeingUsed();
+                connectionProxy.setBeingUsed(false);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

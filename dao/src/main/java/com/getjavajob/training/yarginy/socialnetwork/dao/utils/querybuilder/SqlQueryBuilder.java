@@ -36,6 +36,19 @@ public class SqlQueryBuilder {
     }
 
     /**
+     * appends 'SELECT <b>column</b> <b>alias</b> FROM <b>table</b>' to query
+     *
+     * @param table  specified table
+     * @param column specified column
+     * @param alias  alias for column
+     * @return {@link SqlQueryBuilder} having added 'SELECT <b>column</b> <b>alias</b> FROM <b>table</b>' to query
+     */
+    public SqlQueryBuilder selectColumn(String table, String column, String alias) {
+        query.append("SELECT ").append(column).append(' ').append(alias).append(' ').append(" FROM ").append(table);
+        return this;
+    }
+
+    /**
      * appends 'SELECT * FROM <b>leftTable</b> JOIN <b>rightTable</b> ON <b>leftColumn</b> = <b>rightColumn</b>' to query
      *
      * @param leftTable   specified left table
@@ -48,6 +61,27 @@ public class SqlQueryBuilder {
     public SqlQueryBuilder selectJoin(String leftTable, String rightTable, String leftColumn, String rightColumn) {
         query.append("SELECT * FROM ").append(leftTable).append(" JOIN ").append(rightTable).append(" ON ").
                 append(leftColumn).append(" = ").append(rightColumn);
+        return this;
+    }
+
+    /**
+     * appends 'SELECT * FROM <b>leftTable</b> JOIN (<b>subSelect</b>) s ON <b>leftColumn</b> = <b>alias</b>'
+     *
+     * @param leftTable  specified left table
+     * @param subSelect  specified sub select
+     * @param leftColumn specified left column
+     * @param alias      sub select column used for join. ALSO NEED TO BE specified in sub select query
+     * @return {@link SqlQueryBuilder} having added 'SELECT * FROM <b>leftTable</b> JOIN (<b>subSelect</b>) s ON
+     * <b>leftColumn</b> = <b>alias</b>' to query
+     */
+    public SqlQueryBuilder joinSubSelect(String leftTable, String subSelect, String leftColumn, String alias) {
+        query.append("SELECT * FROM ").append(leftTable).append(" JOIN (").append(subSelect).append(" ) ").
+                append("s ON ").append(leftColumn).append(" = ").append("s.").append(alias);
+        return this;
+    }
+
+    public SqlQueryBuilder union() {
+        query.append(" UNION ");
         return this;
     }
 

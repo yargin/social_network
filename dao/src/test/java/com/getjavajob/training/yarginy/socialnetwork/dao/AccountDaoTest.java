@@ -1,10 +1,10 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao;
 
+import com.getjavajob.training.yarginy.socialnetwork.dao.entities.EntityDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.account.AccountDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.account.AccountImpl;
 import org.junit.Test;
 
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.ResultPrinter.printPassed;
@@ -14,7 +14,7 @@ import static org.junit.Assert.assertSame;
 public class AccountDaoTest {
     private static final DbFactory dbFactory = AbstractDbFactory.getDbFactory();
     private static final String CLASS = "AccountDaoTest";
-    private static final AccountDao accountDAO = dbFactory.getAccountDao();
+    private static final EntityDao<Account> accountDAO = dbFactory.getAccountDao();
     private static final Account account = new AccountImpl();
 
     public AccountDaoTest() {

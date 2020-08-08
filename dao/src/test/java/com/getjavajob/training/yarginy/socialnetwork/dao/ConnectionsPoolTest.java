@@ -7,25 +7,29 @@ import org.junit.Test;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.ResultPrinter.printPassed;
 import static java.lang.Thread.sleep;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
 public class ConnectionsPoolTest {
     private static final String CLASS = "ConnectionsPoolTest";
-    private static final int NEEDED_CONNECTIONS = 5;
-    private static final int POOL_SIZE = 2;
-    private static final DbConnector CONNECTOR = new DbConnectorImpl("connections/MySQLConnection.properties", POOL_SIZE);
+    private static final String PROPERTIES_FILE = "connections/MySQLConnection.properties";
+    private static final int CONNECTIONS_NEEDED = 5;
     private static final AtomicInteger COUNTER = new AtomicInteger(0);
+    private static int counter;
 
     @Test
     public void testGetConnection() throws InterruptedException {
-        for (int i = 0; i < NEEDED_CONNECTIONS; i++) {
+        int connections_needed = 2;
+        DbConnector CONNECTOR = new DbConnectorImpl(PROPERTIES_FILE, connections_needed);
+        for (int i = 0; i < CONNECTIONS_NEEDED; i++) {
             Thread thread = new Thread(() -> {
                 try (Connection connection = CONNECTOR.getConnection()) {
                     COUNTER.incrementAndGet();
-                    sleep(4000);
+                    sleep(7000);
                 } catch (SQLException | InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -34,10 +38,41 @@ public class ConnectionsPoolTest {
             thread.start();
         }
         sleep(1000);
-        assertSame(POOL_SIZE, COUNTER.get());
+        assertSame(connections_needed, COUNTER.get());
         printPassed(CLASS, "testGetConnection");
-        sleep(7000);
-        assertSame(POOL_SIZE, COUNTER.get());
+        sleep(4000);
+        assertSame(connections_needed, COUNTER.get());
         printPassed(CLASS, "testGetConnection");
     }
+
+    @Test
+    public void testConnectionReuse() throws InterruptedException {
+        DbConnector dbConnector = new DbConnectorImpl(PROPERTIES_FILE, 1);
+        AtomicReference<Connection> firstConnection = new AtomicReference<>();
+        AtomicReference<Connection> lastConnection = new AtomicReference<>();
+        for (int i = 0; i < CONNECTIONS_NEEDED; i++) {
+            final int counter = i;
+            Runnable runnable = () -> {
+                try (Connection connection = dbConnector.getConnection()) {
+                    sleep(1000);
+                    if (counter == 0) {
+                        firstConnection.set(connection);
+                    } else {
+                        lastConnection.set(connection);
+                    }
+                } catch (SQLException e) {
+                    throw new RuntimeException(e.getMessage());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            };
+            Thread thread = new Thread(runnable);
+            thread.setDaemon(true);
+            thread.start();
+        }
+        sleep(5000);
+        assertEquals(firstConnection.get(), lastConnection.get());
+        printPassed(CLASS, "testConnectionReuse");
+    }
+
 }
