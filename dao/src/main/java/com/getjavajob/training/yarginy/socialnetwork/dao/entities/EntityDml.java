@@ -56,7 +56,7 @@ public abstract class EntityDml<E extends Entity> {
     public abstract void updateRow(ResultSet resultSet, E entity) throws SQLException;
 
     /**
-     * gives query that will select all data from Entity's table
+     * provides query that will select all data from Entity's table
      *
      * @return query that selects all data
      */

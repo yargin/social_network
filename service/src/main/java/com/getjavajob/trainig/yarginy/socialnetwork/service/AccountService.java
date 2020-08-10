@@ -12,6 +12,4 @@ public interface AccountService {
     boolean addFriend(Account account, Account friend);
 
     boolean removeFriend(Account account, Account friend);
-
-
 }

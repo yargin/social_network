@@ -6,6 +6,9 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.entities.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl.ScriptExecutor;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.nonidentifying.SelfManyToManyDao;
 
+/**
+ * stored entities abstract fabric. CRUD operations with entities are provided by *Dao objects
+ */
 public interface DbFactory {
     EntityDao<Account> getAccountDao();
 

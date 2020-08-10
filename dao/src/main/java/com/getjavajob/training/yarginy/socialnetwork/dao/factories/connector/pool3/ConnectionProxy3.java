@@ -1,16 +1,15 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector;
+package com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.pool3;
 
 import java.sql.*;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
-public class ConnectionProxy implements Connection {
+public class ConnectionProxy3 implements Connection {
     private final Connection connection;
-    private final DbConnectorImpl dbConnector;
-    private boolean beingUsed;
+    private final DbConnectorImpl3 dbConnector;
 
-    public ConnectionProxy(Connection connection, DbConnectorImpl dbConnector) {
+    public ConnectionProxy3(Connection connection, DbConnectorImpl3 dbConnector) {
         this.connection = connection;
         this.dbConnector = dbConnector;
     }
@@ -19,29 +18,12 @@ public class ConnectionProxy implements Connection {
      * closes encapsulated {@link Connection}
      */
     public void closeActually() throws SQLException {
-        beingUsed = false;
         connection.close();
-    }
-
-    /**
-     * tells that {@link Connection} is being used
-     */
-    public void setBeingUsed(boolean beingUsed) {
-        this.beingUsed = beingUsed;
     }
 
     @Override
     public void close() throws SQLException {
         dbConnector.closeConnection(this);
-    }
-
-    /**
-     * tells if encapsulated {@link Connection} being used or not
-     *
-     * @return true if encapsulated {@link Connection} is used
-     */
-    public boolean isBeingUsed() {
-        return beingUsed;
     }
 
     @Override

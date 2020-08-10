@@ -15,4 +15,6 @@ public interface DbConnector {
      * @throws IllegalStateException if it's not possible to connect to database
      */
     Connection getConnection() throws SQLException;
+
+    int getCapacity();
 }

@@ -23,7 +23,7 @@ public abstract class CommonDbFactory implements DbFactory {
     private ScriptExecutor scriptExecutor;
 
     public CommonDbFactory() {
-        dbConnector = new DbConnectorImpl(getConnectionFile(), getConnectionsCapacity());
+        dbConnector = DbConnectorImpl.getDbConnector(getConnectionFile(), getConnectionsCapacity());
         if (runScriptOnStart()) {
             getScriptExecutor().executeScript(getStartingScript());
         }

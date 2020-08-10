@@ -1,7 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.entities.group.dml;
 
 /**
- * table Groups columns
+ * table Groupss columns
  */
 public interface Groups {
     String TABLE = "_Groups";

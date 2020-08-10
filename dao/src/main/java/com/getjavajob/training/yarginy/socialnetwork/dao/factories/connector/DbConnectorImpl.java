@@ -10,12 +10,14 @@ import java.util.Properties;
 import static java.util.Objects.isNull;
 
 public class DbConnectorImpl implements DbConnector {
+    private static DbConnector singleDbConnector;
     private final Properties properties = new Properties();
     private final ConnectionProxy[] connections;
     private volatile boolean waitingForConnection;
-    private final Object mutex = new Object();
+    private final Object consumersMutex = new Object();
+    private final Object proxyMutex = new Object();
 
-    public DbConnectorImpl(String propertiesFile, int capacity) {
+    private DbConnectorImpl(String propertiesFile, int capacity) {
         try (InputStream inputStream = DbConnectorImpl.class.getClassLoader().getResourceAsStream(propertiesFile)) {
             properties.load(inputStream);
         } catch (IOException e) {
@@ -24,11 +26,20 @@ public class DbConnectorImpl implements DbConnector {
         connections = new ConnectionProxy[capacity];
     }
 
+    public static DbConnector getDbConnector(String propertiesFile, int capacity) {
+//        if (isNull(singleDbConnector)) {
+//            singleDbConnector = new DbConnectorImpl(propertiesFile, capacity);
+//        }
+//        throw new UnsupportedOperationException("only one instance available");
+
+        return new DbConnectorImpl(propertiesFile, capacity);
+    }
+
     public void closeConnection(ConnectionProxy connectionProxy) throws SQLException {
         //if no Connection's consumer is waiting for connection
-        synchronized (properties) {
+        synchronized (proxyMutex) {
             if (!waitingForConnection) {
-                connectionProxy.closeDirectly();
+                connectionProxy.closeActually();
             } else {
                 connectionProxy.setBeingUsed(false);
             }
@@ -36,8 +47,13 @@ public class DbConnectorImpl implements DbConnector {
     }
 
     @Override
+    public int getCapacity() {
+        return connections.length;
+    }
+
+    @Override
     public Connection getConnection() throws SQLException {
-        synchronized (mutex) {
+        synchronized (consumersMutex) {
             waitingForConnection = true;
             int capacity = connections.length;
             while (true) {
