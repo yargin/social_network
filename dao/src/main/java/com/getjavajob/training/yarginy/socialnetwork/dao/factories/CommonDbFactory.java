@@ -1,18 +1,21 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.factories;
 
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.EntityDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.EntityDaoImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.dml.AccountDml;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.group.Group;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.group.dml.GroupDml;
+import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.entities.group.Group;
+import com.getjavajob.training.yarginy.socialnetwork.dao.entities.Dao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.entities.DaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.entities.accounts.AccountDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.entities.groups.GroupDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.DbConnector;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.DbConnectorImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl.ScriptExecutor;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl.ScriptExecutorImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.nonidentifying.SelfManyToManyDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.nonidentifying.SelfManyToManyDaoImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.nonidentifying.friendship.FriendshipDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.selfrelated.SelfManyToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.selfrelated.SelfManyToManyDaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.selfrelated.friendship.FriendshipDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.variousrelated.ManyToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.variousrelated.ManyToManyDaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.variousrelated.accountsingroups.AccountsInGroupsDml;
 
 import java.util.Properties;
 
@@ -73,17 +76,22 @@ public abstract class CommonDbFactory implements DbFactory {
     }
 
     @Override
-    public EntityDao<Account> getAccountDao() {
-        return new EntityDaoImpl<>(dbConnector, new AccountDml());
+    public Dao<Account> getAccountDao() {
+        return new DaoImpl<>(dbConnector, new AccountDml());
     }
 
     @Override
-    public EntityDao<Group> getGroupDao() {
-        return new EntityDaoImpl<>(dbConnector, new GroupDml());
+    public Dao<Group> getGroupDao() {
+        return new DaoImpl<>(dbConnector, new GroupDml());
+    }
+
+    @Override
+    public ManyToManyDao<Account, Group> getGroupMembershipDao() {
+        return new ManyToManyDaoImpl<>(dbConnector, new AccountsInGroupsDml(), getAccountDao(), getGroupDao());
     }
 
     @Override
     public SelfManyToManyDao<Account> getFriendshipDao() {
-        return new SelfManyToManyDaoImpl<>(dbConnector, new FriendshipDml());
+        return new SelfManyToManyDaoImpl<>(dbConnector, new FriendshipDml(), getAccountDao());
     }
 }

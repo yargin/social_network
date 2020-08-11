@@ -1,9 +1,10 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao;
 
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.EntityDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.group.Group;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.group.GroupImpl;
+import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.entities.group.Group;
+import com.getjavajob.training.yarginy.socialnetwork.common.entities.group.GroupImpl;
+import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
+import com.getjavajob.training.yarginy.socialnetwork.dao.entities.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
 import org.junit.Test;
@@ -13,70 +14,76 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
 public class GroupDaoTest {
-    private static final DbFactory dbFactory = AbstractDbFactory.getDbFactory();
+    private static final DbFactory DB_FACTORY = AbstractDbFactory.getDbFactory();
     private static final String CLASS = "GroupDaoTest";
-    private static final Group group = new GroupImpl();
-    private static final EntityDao<Group> groupDao = dbFactory.getGroupDao();
+    private static final Group GROUP = new GroupImpl();
+    private static final Dao<Group> GROUP_DAO = DB_FACTORY.getGroupDao();
 
     public GroupDaoTest() {
-        EntityDao<Account> accountDao = dbFactory.getAccountDao();
+        Dao<Account> accountDao = DB_FACTORY.getAccountDao();
         Account account = accountDao.select("robot@power.com");
-        group.setName("new Group");
-        group.setOwner(account);
+        GROUP.setName("new Group");
+        GROUP.setOwner(account);
     }
 
     @Test
     public void testCreateGroup() {
-        groupDao.delete(group);
-        boolean actual = groupDao.create(group);
+        GROUP_DAO.delete(GROUP);
+        boolean actual = GROUP_DAO.create(GROUP);
         assertSame(true, actual);
         printPassed(CLASS, "testCreateGroup");
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testNullFieldCreate() {
-        groupDao.delete(group);
-        group.setName(null);
-        groupDao.create(group);
+        GROUP_DAO.delete(GROUP);
+        GROUP.setName(null);
+        boolean actual = true;
+        try {
+            GROUP_DAO.create(GROUP);
+        } catch (IncorrectDataException e) {
+            actual = false;
+        }
+        assertSame(false, actual);
         printPassed(CLASS, "testNullFieldCreate");
     }
 
     @Test
     public void testCreateExistingGroup() {
-        groupDao.create(group);
-        boolean actual = groupDao.create(group);
+        GROUP_DAO.create(GROUP);
+        boolean actual = GROUP_DAO.create(GROUP);
         assertSame(false, actual);
         printPassed(CLASS, "testCreateExistingGroup");
     }
 
     @Test
     public void testSelectGroup() {
-        groupDao.create(group);
-        Group actual = groupDao.select(group.getIdentifier());
-        assertEquals(group, actual);
-        actual = groupDao.select(actual.getId());
-        assertEquals(group, actual);
+        GROUP_DAO.create(GROUP);
+        Group actual = GROUP_DAO.select(GROUP.getIdentifier());
+        assertEquals(GROUP, actual);
+        actual = GROUP_DAO.select(actual.getId());
+        assertEquals(GROUP, actual);
         printPassed(CLASS, "testSelectGroup");
     }
 
     @Test
     public void testSelectNonExistingGroup() {
-        groupDao.delete(group);
-        Group actual = groupDao.select("non existing email");
-        assertEquals(groupDao.getNullEntity(), actual);
-        actual = groupDao.select(123);
-        assertEquals(groupDao.getNullEntity(), actual);
+        GROUP_DAO.delete(GROUP);
+        Group actual = GROUP_DAO.select("non existing email");
+        assertEquals(GROUP_DAO.getNullEntity(), actual);
+        actual = GROUP_DAO.select(123);
+        assertEquals(GROUP_DAO.getNullEntity(), actual);
         printPassed(CLASS, "testSelectNonExistingGroup");
     }
 
     @Test
     public void testUpdateGroup() {
-        groupDao.create(group);
+        GROUP_DAO.create(GROUP);
         String newPatronymic = "new Description";
-        group.setDescription(newPatronymic);
-        boolean actual = groupDao.update(group);
+        GROUP.setDescription(newPatronymic);
+        boolean actual = GROUP_DAO.update(GROUP);
         assertSame(true, actual);
-        Group storageGroup = groupDao.select(group.getIdentifier());
+        Group storageGroup = GROUP_DAO.select(GROUP.getIdentifier());
         assertEquals(newPatronymic, storageGroup.getDescription());
         printPassed(CLASS, "testUpdateGroup");
     }
@@ -84,7 +91,7 @@ public class GroupDaoTest {
     @Test
     public void testUpdateNonExistingGroup() {
         Group nonExisting = new GroupImpl();
-        boolean actual = groupDao.update(nonExisting);
+        boolean actual = GROUP_DAO.update(nonExisting);
         assertSame(false, actual);
         printPassed(CLASS, "testUpdateNonExistingGroup");
     }
@@ -92,18 +99,17 @@ public class GroupDaoTest {
     @Test
     public void testDeleteNonExisting() {
         Group nonExisting = new GroupImpl();
-        boolean actual = groupDao.delete(nonExisting);
+        boolean actual = GROUP_DAO.delete(nonExisting);
         assertSame(false, actual);
         printPassed(CLASS, "testDeleteNonExisting");
     }
 
     @Test
     public void testDeleteGroup() {
-        groupDao.create(group);
-        boolean actual = groupDao.delete(group);
+        GROUP_DAO.create(GROUP);
+        boolean actual = GROUP_DAO.delete(GROUP);
         assertSame(true, actual);
-        Group nonExisting = groupDao.getNullEntity();
-        assertEquals(nonExisting, groupDao.select(group.getIdentifier()));
+        assertEquals(GROUP_DAO.getNullEntity(), GROUP_DAO.select(GROUP.getIdentifier()));
         printPassed(CLASS, "testDeleteGroup");
     }
 }

@@ -1,11 +1,11 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao;
 
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.EntityDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.account.AccountImpl;
+import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.AccountImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.entities.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.nonidentifying.SelfManyToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.selfrelated.SelfManyToManyDao;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public class FriendshipDaoTest {
     private static final DbFactory dbFactory = AbstractDbFactory.getDbFactory();
     private static final String CLASS = "AccountDaoTest";
     private static final SelfManyToManyDao<Account> FRIENDSHIP_DAO = dbFactory.getFriendshipDao();
-    private static final EntityDao<Account> ACCOUNT_DAO = dbFactory.getAccountDao();
+    private static final Dao<Account> ACCOUNT_DAO = dbFactory.getAccountDao();
     private final Account friend;
     private final Account noFriends;
 
