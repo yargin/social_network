@@ -10,6 +10,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static com.getjavajob.training.yarginy.socialnetwork.common.utils.StringHandler.*;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 import static java.util.Objects.isNull;
 
@@ -66,23 +67,23 @@ public class AccountDml extends AbstractDml<Account> {
 
     @Override
     public void updateRow(ResultSet resultSet, Account account) throws SQLException {
-        resultSet.updateString(Accounts.NAME, checkedString(account.getName()));
-        resultSet.updateString(Accounts.SURNAME, account.getSurname());
-        resultSet.updateString(Accounts.PATRONYMIC, account.getPatronymic());
+        resultSet.updateString(Accounts.NAME, checkAndPrepare(account.getName()));
+        resultSet.updateString(Accounts.SURNAME, prepareString(account.getSurname()));
+        resultSet.updateString(Accounts.PATRONYMIC, prepareString(account.getPatronymic()));
         if (!isNull(account.getSex())) {
             resultSet.updateString(Accounts.SEX, account.getSex().toString());
         }
         if (!isNull(account.getBirthDate())) {
             resultSet.updateDate(Accounts.BIRTH_DATE, Date.valueOf(account.getBirthDate()));
         }
-        resultSet.updateString(Accounts.PHONE, checkedString(account.getPhone()));
-        resultSet.updateString(Accounts.ADDITIONAL_PHONE, account.getAdditionalPhone());
-        resultSet.updateString(Accounts.ICQ, account.getIcq());
-        resultSet.updateString(Accounts.SKYPE, account.getSkype());
-        resultSet.updateString(Accounts.EMAIL, checkedString(account.getEmail()));
-        resultSet.updateString(Accounts.ADDITIONAL_EMAIL, account.getAdditionalEmail());
-        resultSet.updateString(Accounts.COUNTRY, account.getCountry());
-        resultSet.updateString(Accounts.CITY, account.getCity());
+        resultSet.updateString(Accounts.PHONE, checkAndPrepare(account.getPhone()));
+        resultSet.updateString(Accounts.ADDITIONAL_PHONE, prepareString(account.getAdditionalPhone()));
+        resultSet.updateString(Accounts.ICQ, prepareString(account.getIcq()));
+        resultSet.updateString(Accounts.SKYPE, prepareString(account.getSkype()));
+        resultSet.updateString(Accounts.EMAIL, checkAndPrepareEmail(account.getEmail()));
+        resultSet.updateString(Accounts.ADDITIONAL_EMAIL, prepareString(account.getAdditionalEmail()));
+        resultSet.updateString(Accounts.COUNTRY, prepareString(account.getCountry()));
+        resultSet.updateString(Accounts.CITY, prepareString(account.getCity()));
     }
 
     @Override

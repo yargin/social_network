@@ -5,6 +5,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.Acc
 import java.util.List;
 import java.util.Objects;
 
+import static com.getjavajob.training.yarginy.socialnetwork.common.utils.StringHandler.prepareString;
 import static java.util.Objects.isNull;
 
 public class GroupImpl implements Group {
@@ -69,7 +70,7 @@ public class GroupImpl implements Group {
         }
         if (o instanceof Group) {
             Group group = (Group) o;
-            return Objects.equals(name, group.getName());
+            return Objects.equals(prepareString(name), prepareString(group.getName()));
         }
         return false;
     }

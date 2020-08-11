@@ -6,8 +6,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import java.sql.*;
 import java.util.Collection;
 
-import static java.util.Objects.isNull;
-
 /**
  * encapsulates work with SQL-queries, {@link ResultSet}s & {@link Statement}s
  *
@@ -74,11 +72,4 @@ public abstract class AbstractDml<E extends Entity> {
      * @return representation of non-existing {@link E}
      */
     public abstract E getNullEntity();
-
-    protected String checkedString(String stringToCheck) {
-        if (isNull(stringToCheck) || "".equals(stringToCheck)) {
-            throw new IncorrectDataException("can't be null or empty");
-        }
-        return stringToCheck;
-    }
 }

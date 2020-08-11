@@ -7,6 +7,8 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.selfrelated.SelfManyToManyDao;
 
 import java.util.Collection;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
 import static java.util.Objects.isNull;
@@ -58,5 +60,12 @@ public class AccountServiceImpl implements AccountService {
             friends = friendshipDao.select(account);
         }
         return friends;
+    }
+
+    private boolean validateEmail(String email) {
+        email.trim().toLowerCase();
+        Pattern pattern = Pattern.compile("^[a-zA-Z0-9] + [a-zA-Z0-9_.]+ + [a-zA-Z0-9]");
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 }

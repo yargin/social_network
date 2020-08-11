@@ -12,6 +12,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static com.getjavajob.training.yarginy.socialnetwork.common.utils.StringHandler.checkAndPrepare;
+import static com.getjavajob.training.yarginy.socialnetwork.common.utils.StringHandler.prepareString;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 import static java.util.Objects.isNull;
 
@@ -52,8 +54,8 @@ public class GroupDml extends AbstractDml<Group> {
 
     @Override
     public void updateRow(ResultSet resultSet, Group group) throws SQLException {
-        resultSet.updateString(Groups.NAME, checkedString(group.getName()));
-        resultSet.updateString(Groups.DESCRIPTION, group.getDescription());
+        resultSet.updateString(Groups.NAME, checkAndPrepare(group.getName()));
+        resultSet.updateString(Groups.DESCRIPTION, prepareString(group.getDescription()));
         if (isNull(group.getOwner())) {
             throw new IncorrectDataException("owner can't be null");
         }

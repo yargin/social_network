@@ -9,7 +9,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFac
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
 import org.junit.Test;
 
-import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.ResultPrinter.printPassed;
+import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.TestResultPrinter.printPassed;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
