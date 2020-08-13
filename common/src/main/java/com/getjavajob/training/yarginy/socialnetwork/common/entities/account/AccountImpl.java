@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.utils.StringHandler.prepareString;
+import static com.getjavajob.training.yarginy.socialnetwork.common.utils.StringHandler.trimString;
 import static java.util.Objects.isNull;
 
 public class AccountImpl implements Account {
@@ -183,7 +183,7 @@ public class AccountImpl implements Account {
         }
         if (o instanceof Account) {
             Account account = (Account) o;
-            return Objects.equals(prepareString(email), prepareString(account.getEmail()));
+            return Objects.equals(trimString(email), trimString(account.getEmail()));
         }
         return false;
     }

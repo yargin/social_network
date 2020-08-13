@@ -67,23 +67,23 @@ public class AccountDml extends AbstractDml<Account> {
 
     @Override
     public void updateRow(ResultSet resultSet, Account account) throws SQLException {
-        resultSet.updateString(Accounts.NAME, checkAndPrepare(account.getName()));
-        resultSet.updateString(Accounts.SURNAME, prepareString(account.getSurname()));
-        resultSet.updateString(Accounts.PATRONYMIC, prepareString(account.getPatronymic()));
+        resultSet.updateString(Accounts.NAME, checkAndTrim(account.getName()));
+        resultSet.updateString(Accounts.SURNAME, trimString(account.getSurname()));
+        resultSet.updateString(Accounts.PATRONYMIC, trimString(account.getPatronymic()));
         if (!isNull(account.getSex())) {
             resultSet.updateString(Accounts.SEX, account.getSex().toString());
         }
         if (!isNull(account.getBirthDate())) {
             resultSet.updateDate(Accounts.BIRTH_DATE, Date.valueOf(account.getBirthDate()));
         }
-        resultSet.updateString(Accounts.PHONE, checkAndPrepare(account.getPhone()));
-        resultSet.updateString(Accounts.ADDITIONAL_PHONE, prepareString(account.getAdditionalPhone()));
-        resultSet.updateString(Accounts.ICQ, prepareString(account.getIcq()));
-        resultSet.updateString(Accounts.SKYPE, prepareString(account.getSkype()));
+        resultSet.updateString(Accounts.PHONE, checkAndTrim(account.getPhone()));
+        resultSet.updateString(Accounts.ADDITIONAL_PHONE, trimString(account.getAdditionalPhone()));
+        resultSet.updateString(Accounts.ICQ, trimString(account.getIcq()));
+        resultSet.updateString(Accounts.SKYPE, trimString(account.getSkype()));
         resultSet.updateString(Accounts.EMAIL, checkAndPrepareEmail(account.getEmail()));
-        resultSet.updateString(Accounts.ADDITIONAL_EMAIL, prepareString(account.getAdditionalEmail()));
-        resultSet.updateString(Accounts.COUNTRY, prepareString(account.getCountry()));
-        resultSet.updateString(Accounts.CITY, prepareString(account.getCity()));
+        resultSet.updateString(Accounts.ADDITIONAL_EMAIL, trimString(account.getAdditionalEmail()));
+        resultSet.updateString(Accounts.COUNTRY, trimString(account.getCountry()));
+        resultSet.updateString(Accounts.CITY, trimString(account.getCity()));
     }
 
     @Override

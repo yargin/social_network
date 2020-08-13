@@ -1,5 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.pool2;
 
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.DbConnector;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.DbConnectorImpl;
 
 import java.io.IOException;
@@ -14,8 +15,8 @@ import java.util.concurrent.Semaphore;
 
 import static java.util.Objects.isNull;
 
-public class DbConnectorImpl2 implements DbConnector2 {
-    private static DbConnector2 singleDbConnector;
+public class DbConnectorImpl2 implements DbConnector {
+    private static DbConnector singleDbConnector;
     private final Properties properties = new Properties();
     private final BlockingQueue<ConnectionProxy2> connections;
     private final Semaphore semaphore;
@@ -32,7 +33,7 @@ public class DbConnectorImpl2 implements DbConnector2 {
         semaphore = new Semaphore(capacity);
     }
 
-    public static DbConnector2 getDbConnector(String propertiesFile, int capacity) {
+    public static DbConnector getDbConnector(String propertiesFile, int capacity) {
         if (isNull(singleDbConnector)) {
             singleDbConnector = new DbConnectorImpl2(propertiesFile, capacity);
             return singleDbConnector;

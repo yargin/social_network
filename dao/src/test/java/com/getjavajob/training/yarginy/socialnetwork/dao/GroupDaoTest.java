@@ -66,10 +66,10 @@ public class GroupDaoTest {
         printPassed(CLASS, "testSelectGroup");
     }
 
-    @Test
+        @Test
     public void testSelectNonExistingGroup() {
         GROUP_DAO.delete(GROUP);
-        Group actual = GROUP_DAO.select("non existing email");
+            Group actual = GROUP_DAO.select("non existing name");
         assertEquals(GROUP_DAO.getNullEntity(), actual);
         actual = GROUP_DAO.select(123);
         assertEquals(GROUP_DAO.getNullEntity(), actual);
@@ -79,12 +79,12 @@ public class GroupDaoTest {
     @Test
     public void testUpdateGroup() {
         GROUP_DAO.create(GROUP);
-        String newPatronymic = "new Description";
-        GROUP.setDescription(newPatronymic);
+        String newDescription = "new Description";
+        GROUP.setDescription(newDescription);
         boolean actual = GROUP_DAO.update(GROUP);
         assertSame(true, actual);
         Group storageGroup = GROUP_DAO.select(GROUP.getIdentifier());
-        assertEquals(newPatronymic, storageGroup.getDescription());
+        assertEquals(newDescription, storageGroup.getDescription());
         printPassed(CLASS, "testUpdateGroup");
     }
 

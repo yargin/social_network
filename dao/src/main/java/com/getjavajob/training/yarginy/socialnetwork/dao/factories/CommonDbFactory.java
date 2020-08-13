@@ -7,7 +7,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.entities.DaoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.entities.accounts.AccountDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.entities.groups.GroupDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.DbConnector;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.DbConnectorImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.pool2.DbConnectorImpl2;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl.ScriptExecutor;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl.ScriptExecutorImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.selfrelated.SelfManyToManyDao;
@@ -26,7 +26,7 @@ public abstract class CommonDbFactory implements DbFactory {
     private ScriptExecutor scriptExecutor;
 
     public CommonDbFactory() {
-        dbConnector = DbConnectorImpl.getDbConnector(getConnectionFile(), getConnectionsCapacity());
+        dbConnector = DbConnectorImpl2.getDbConnector(getConnectionFile(), getConnectionsCapacity());
         if (runScriptOnStart()) {
             getScriptExecutor().executeScript(getStartingScript());
         }

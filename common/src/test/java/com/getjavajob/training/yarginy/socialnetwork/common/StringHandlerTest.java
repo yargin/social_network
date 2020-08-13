@@ -4,7 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.StringHandler;
 import org.junit.Test;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.utils.StringHandler.prepareString;
+import static com.getjavajob.training.yarginy.socialnetwork.common.utils.StringHandler.trimString;
 import static com.getjavajob.training.yarginy.socialnetwork.common.utils.TestResultPrinter.printPassed;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -17,7 +17,7 @@ public class StringHandlerTest {
     @Test
     public void testPrepareString() {
         givenString = " aaAAaa   ";
-        assertEquals("aaaaaa", prepareString(givenString));
+        assertEquals("aaaaaa", trimString(givenString));
         printPassed(CLASS, "testPrepareString");
     }
 
@@ -61,6 +61,6 @@ public class StringHandlerTest {
     }
 
     private interface StringHandlerMethod {
-        String callMethod(String string);
+        void callMethod(String string);
     }
 }

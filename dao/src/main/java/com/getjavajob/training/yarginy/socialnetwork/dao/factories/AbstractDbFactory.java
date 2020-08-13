@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.factories;
 
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.databases.MySqlDbFactory;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.databases.H2DbFactory;
 
 /**
  * creates new database vendor bounded abstract factory
@@ -10,6 +10,6 @@ public abstract class AbstractDbFactory {
     }
 
     public static DbFactory getDbFactory() {
-        return new MySqlDbFactory();
+        return new H2DbFactory();
     }
 }

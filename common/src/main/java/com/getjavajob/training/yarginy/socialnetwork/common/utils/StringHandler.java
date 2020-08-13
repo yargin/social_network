@@ -11,14 +11,14 @@ public class StringHandler {
     }
 
     /**
-     * handles given {@link String} - trims leading-tailing spaces and sets to lower case
+     * handles given {@link String} - trims leading-tailing spaces
      *
      * @param string to handle
      * @return handled {@link String}
      */
-    public static String prepareString(String string) {
+    public static String trimString(String string) {
         if (!isNull(string)) {
-            string = string.trim().toLowerCase();
+            string = string.trim();
         }
         return string;
     }
@@ -38,14 +38,14 @@ public class StringHandler {
     }
 
     /**
-     * checks that given {@link String} is not null or empty. Then trims leading-tailing spaces and sets to lower case
+     * checks that given {@link String} is not null or empty. Then trims leading-tailing spaces
      *
      * @param string to check and handle
      * @return checked and handled {@link String}
      * @throws IncorrectDataException if given {@link String} is empty or null
      */
-    public static String checkAndPrepare(String string) {
-        return prepareString(checkString(string));
+    public static String checkAndTrim(String string) {
+        return trimString(checkString(string));
     }
 
     /**
@@ -59,7 +59,7 @@ public class StringHandler {
         checkString(email);
         String symbols = "[a-zA-Z0-9]";
         String regex = "^" + symbols + "(\\w" + "[.]?)+" + symbols + "@" + "[a-zA-Z0-9]" + "(\\w{2,}" + "[.])+" +
-                symbols + "{2,3}";
+                symbols + "{2,8}";
         Pattern pattern = Pattern.compile(regex);
         if (!pattern.matcher(email).matches()) {
             throw new IncorrectDataException("wrong email");
@@ -68,13 +68,13 @@ public class StringHandler {
     }
 
     /**
-     * checks that given {@link String} is e-mail. Then trims leading-tailing spaces and sets to lower case
+     * trims given e-mail. Then checks that given {@link String} is e-mail and sets to lower case
      *
      * @param email to check and handle
      * @return checked and handled e-mail
      * @throws IncorrectDataException if given {@link String} is empty or null or not e-mail
      */
     public static String checkAndPrepareEmail(String email) {
-        return prepareString(checkEmail(email));
+        return checkEmail(trimString(email)).toLowerCase();
     }
 }

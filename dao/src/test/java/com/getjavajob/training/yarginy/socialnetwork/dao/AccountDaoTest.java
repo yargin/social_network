@@ -19,7 +19,7 @@ public class AccountDaoTest {
     private static final Account ACCOUNT = new AccountImpl();
 
     public AccountDaoTest() {
-        ACCOUNT.setEmail("email@site");
+        ACCOUNT.setEmail("email@site.site");
         ACCOUNT.setName("Vasya");
         ACCOUNT.setSurname("Pupkin");
         ACCOUNT.setPhone("no phone(");
@@ -43,7 +43,7 @@ public class AccountDaoTest {
             actual = false;
         }
         assertSame(false, actual);
-        ACCOUNT.setEmail("email@site");
+        ACCOUNT.setEmail("email@site.site");
         actual = ACCOUNT_DAO.create(ACCOUNT);
         assertSame(true, actual);
         printPassed(CLASS, "testCreateAccount");
