@@ -5,7 +5,8 @@ import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.Acc
 import java.util.List;
 import java.util.Objects;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.utils.StringHandler.trimString;
+import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataChecker.stringPrepare;
+import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataChecker.stringTrim;
 import static java.util.Objects.isNull;
 
 public class GroupImpl implements Group {
@@ -37,7 +38,7 @@ public class GroupImpl implements Group {
 
     @Override
     public void setName(String name) {
-        this.name = name;
+        this.name = stringPrepare(name);
     }
 
     @Override
@@ -57,7 +58,7 @@ public class GroupImpl implements Group {
 
     @Override
     public void setDescription(String description) {
-        this.description = description;
+        this.description = stringTrim(description);
     }
 
     @Override
@@ -70,7 +71,7 @@ public class GroupImpl implements Group {
         }
         if (o instanceof Group) {
             Group group = (Group) o;
-            return Objects.equals(trimString(name), trimString(group.getName()));
+            return Objects.equals(stringTrim(name), stringTrim(group.getName()));
         }
         return false;
     }

@@ -6,6 +6,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.dao.entities.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
+import org.junit.Before;
 import org.junit.Test;
 
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.TestResultPrinter.printPassed;
@@ -18,7 +19,8 @@ public class AccountDaoTest {
     private static final Dao<Account> ACCOUNT_DAO = DB_FACTORY.getAccountDao();
     private static final Account ACCOUNT = new AccountImpl();
 
-    public AccountDaoTest() {
+    @Before
+    public void accountInit() {
         ACCOUNT.setEmail("email@site.site");
         ACCOUNT.setName("Vasya");
         ACCOUNT.setSurname("Pupkin");
@@ -28,16 +30,16 @@ public class AccountDaoTest {
     @Test
     public void testCreateAccount() {
         ACCOUNT_DAO.delete(ACCOUNT);
-        ACCOUNT.setEmail(null);
         boolean actual;
         try {
+            ACCOUNT.setEmail(null);
             actual = ACCOUNT_DAO.create(ACCOUNT);
         } catch (IncorrectDataException e) {
             actual = false;
         }
         assertSame(false, actual);
-        ACCOUNT.setEmail("");
         try {
+            ACCOUNT.setEmail("");
             actual = ACCOUNT_DAO.create(ACCOUNT);
         } catch (IncorrectDataException e) {
             actual = false;

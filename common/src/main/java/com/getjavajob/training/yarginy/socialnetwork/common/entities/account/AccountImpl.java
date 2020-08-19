@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.utils.StringHandler.trimString;
+import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataChecker.*;
 import static java.util.Objects.isNull;
 
 public class AccountImpl implements Account {
@@ -50,7 +50,7 @@ public class AccountImpl implements Account {
 
     @Override
     public void setName(String name) {
-        this.name = name;
+        this.name = stringPrepare(name);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class AccountImpl implements Account {
 
     @Override
     public void setSurname(String surname) {
-        this.surname = surname;
+        this.surname = stringPrepare(surname);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class AccountImpl implements Account {
 
     @Override
     public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
+        this.patronymic = stringTrim(patronymic);
     }
 
     @Override
@@ -120,7 +120,7 @@ public class AccountImpl implements Account {
 
     @Override
     public void setEmail(String email) {
-        this.email = email;
+        this.email = emailPrepare(email);
     }
 
     @Override
@@ -130,7 +130,7 @@ public class AccountImpl implements Account {
 
     @Override
     public void setAdditionalEmail(String additionalEmail) {
-        this.additionalEmail = additionalEmail;
+        this.additionalEmail = emailCheck(additionalEmail);
     }
 
     @Override
@@ -140,7 +140,7 @@ public class AccountImpl implements Account {
 
     @Override
     public void setIcq(String icq) {
-        this.icq = icq;
+        this.icq = stringTrim(icq);
     }
 
     @Override
@@ -150,7 +150,7 @@ public class AccountImpl implements Account {
 
     @Override
     public void setSkype(String skype) {
-        this.skype = skype;
+        this.skype = stringTrim(skype);
     }
 
     @Override
@@ -160,7 +160,7 @@ public class AccountImpl implements Account {
 
     @Override
     public void setCity(String city) {
-        this.city = city;
+        this.city = stringTrim(city);
     }
 
     @Override
@@ -170,7 +170,7 @@ public class AccountImpl implements Account {
 
     @Override
     public void setCountry(String country) {
-        this.country = country;
+        this.country = stringTrim(country);
     }
 
     @Override
@@ -183,7 +183,7 @@ public class AccountImpl implements Account {
         }
         if (o instanceof Account) {
             Account account = (Account) o;
-            return Objects.equals(trimString(email), trimString(account.getEmail()));
+            return Objects.equals(stringTrim(email), stringTrim(account.getEmail()));
         }
         return false;
     }

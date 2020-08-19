@@ -10,7 +10,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.utils.StringHandler.*;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 import static java.util.Objects.isNull;
 
@@ -67,23 +66,23 @@ public class AccountDml extends AbstractDml<Account> {
 
     @Override
     public void updateRow(ResultSet resultSet, Account account) throws SQLException {
-        resultSet.updateString(Accounts.NAME, checkAndTrim(account.getName()));
-        resultSet.updateString(Accounts.SURNAME, trimString(account.getSurname()));
-        resultSet.updateString(Accounts.PATRONYMIC, trimString(account.getPatronymic()));
+        resultSet.updateString(Accounts.NAME, account.getName());
+        resultSet.updateString(Accounts.SURNAME, account.getSurname());
+        resultSet.updateString(Accounts.PATRONYMIC, account.getPatronymic());
         if (!isNull(account.getSex())) {
             resultSet.updateString(Accounts.SEX, account.getSex().toString());
         }
         if (!isNull(account.getBirthDate())) {
             resultSet.updateDate(Accounts.BIRTH_DATE, Date.valueOf(account.getBirthDate()));
         }
-        resultSet.updateString(Accounts.PHONE, checkAndTrim(account.getPhone()));
-        resultSet.updateString(Accounts.ADDITIONAL_PHONE, trimString(account.getAdditionalPhone()));
-        resultSet.updateString(Accounts.ICQ, trimString(account.getIcq()));
-        resultSet.updateString(Accounts.SKYPE, trimString(account.getSkype()));
-        resultSet.updateString(Accounts.EMAIL, checkAndPrepareEmail(account.getEmail()));
-        resultSet.updateString(Accounts.ADDITIONAL_EMAIL, trimString(account.getAdditionalEmail()));
-        resultSet.updateString(Accounts.COUNTRY, trimString(account.getCountry()));
-        resultSet.updateString(Accounts.CITY, trimString(account.getCity()));
+        resultSet.updateString(Accounts.PHONE, account.getPhone());
+        resultSet.updateString(Accounts.ADDITIONAL_PHONE, account.getAdditionalPhone());
+        resultSet.updateString(Accounts.ICQ, account.getIcq());
+        resultSet.updateString(Accounts.SKYPE, account.getSkype());
+        resultSet.updateString(Accounts.EMAIL, account.getEmail());
+        resultSet.updateString(Accounts.ADDITIONAL_EMAIL, account.getAdditionalEmail());
+        resultSet.updateString(Accounts.COUNTRY, account.getCountry());
+        resultSet.updateString(Accounts.CITY, account.getCity());
     }
 
     @Override
@@ -100,7 +99,7 @@ public class AccountDml extends AbstractDml<Account> {
     public Account getNullEntity() {
         Account nullAccount = new AccountImpl();
         nullAccount.setId(-1);
-        nullAccount.setEmail("");
+        nullAccount.setEmail("email@doesnt.exist");
         return nullAccount;
     }
 

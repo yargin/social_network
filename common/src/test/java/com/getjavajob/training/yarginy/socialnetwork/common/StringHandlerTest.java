@@ -1,10 +1,10 @@
 package com.getjavajob.training.yarginy.socialnetwork.common;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
-import com.getjavajob.training.yarginy.socialnetwork.common.utils.StringHandler;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataChecker;
 import org.junit.Test;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.utils.StringHandler.trimString;
+import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataChecker.stringTrim;
 import static com.getjavajob.training.yarginy.socialnetwork.common.utils.TestResultPrinter.printPassed;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -17,35 +17,35 @@ public class StringHandlerTest {
     @Test
     public void testPrepareString() {
         givenString = " aaAAaa   ";
-        assertEquals("aaaaaa", trimString(givenString));
+        assertEquals("aaaaaa", stringTrim(givenString));
         printPassed(CLASS, "testPrepareString");
     }
 
     @Test
     public void testCheckString() {
         givenString = "";
-        assertException(StringHandler::checkString);
+        assertException(DataChecker::stringPrepare);
         givenString = null;
-        assertException(StringHandler::checkString);
+        assertException(DataChecker::stringPrepare);
         printPassed(CLASS, "testCheckString");
     }
 
     @Test
     public void testCheckEmail() {
         givenString = ".asd@asd.";
-        assertException(StringHandler::checkEmail);
+        assertException(DataChecker::emailCheck);
         givenString = "a.sd@a.sd";
-        assertException(StringHandler::checkEmail);
+        assertException(DataChecker::emailCheck);
         givenString = "a..sd@asd.asd";
-        assertException(StringHandler::checkEmail);
+        assertException(DataChecker::emailCheck);
         givenString = "a%$@asd.asd";
-        assertException(StringHandler::checkEmail);
+        assertException(DataChecker::emailCheck);
         givenString = "asd.@.asd.asd";
-        assertException(StringHandler::checkEmail);
+        assertException(DataChecker::emailCheck);
         givenString = "a.s.d@asd.as";
-        assertException(StringHandler::checkEmail);
+        assertException(DataChecker::emailCheck);
         givenString = "asd@as.d.as";
-        assertException(StringHandler::checkEmail);
+        assertException(DataChecker::emailCheck);
         givenString = "asd@asd.asd";
         printPassed(CLASS, "testCheckEmail");
     }
