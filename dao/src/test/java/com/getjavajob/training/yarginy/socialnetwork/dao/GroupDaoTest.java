@@ -9,6 +9,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFac
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
 import org.junit.Test;
 
+import static com.getjavajob.training.yarginy.socialnetwork.common.entities.NullEntitiesFactory.getNullGroup;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.TestResultPrinter.printPassed;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
@@ -68,13 +69,13 @@ public class GroupDaoTest {
 
         @Test
     public void testSelectNonExistingGroup() {
-        GROUP_DAO.delete(GROUP);
+            GROUP_DAO.delete(GROUP);
             Group actual = GROUP_DAO.select("non existing name");
-        assertEquals(GROUP_DAO.getNullEntity(), actual);
-        actual = GROUP_DAO.select(123);
-        assertEquals(GROUP_DAO.getNullEntity(), actual);
-        printPassed(CLASS, "testSelectNonExistingGroup");
-    }
+            assertEquals(getNullGroup(), actual);
+            actual = GROUP_DAO.select(123);
+            assertEquals(getNullGroup(), actual);
+            printPassed(CLASS, "testSelectNonExistingGroup");
+        }
 
     @Test
     public void testUpdateGroup() {
@@ -109,7 +110,7 @@ public class GroupDaoTest {
         GROUP_DAO.create(GROUP);
         boolean actual = GROUP_DAO.delete(GROUP);
         assertSame(true, actual);
-        assertEquals(GROUP_DAO.getNullEntity(), GROUP_DAO.select(GROUP.getIdentifier()));
+        assertEquals(getNullGroup(), GROUP_DAO.select(GROUP.getIdentifier()));
         printPassed(CLASS, "testDeleteGroup");
     }
 }

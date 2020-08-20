@@ -12,7 +12,7 @@ public interface Dao<E extends Entity> {
      * retrieves {@link E} specified by id
      *
      * @param id {@link E}'s number
-     * @return {@link E} that was found or {@link DaoImpl#getNullEntity()} if any wasn't found
+     * @return {@link E} that was found or {@link AbstractDml#getNullEntity()} if any wasn't found
      */
     E select(int id);
 
@@ -54,13 +54,6 @@ public interface Dao<E extends Entity> {
      * @return {@link String} representation of data stored in table
      */
     String selectAll();
-
-    /**
-     * represents non-existing entity
-     *
-     * @return representation of non-existing {@link E}
-     */
-    E getNullEntity();
 
     /**
      * checks that {@link Entity} is applicable

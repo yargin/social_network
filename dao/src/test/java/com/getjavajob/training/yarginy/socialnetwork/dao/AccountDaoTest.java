@@ -9,6 +9,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.getjavajob.training.yarginy.socialnetwork.common.entities.NullEntitiesFactory.getNullAccount;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.TestResultPrinter.printPassed;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
@@ -73,9 +74,9 @@ public class AccountDaoTest {
     public void testSelectNonExistingAccount() {
         ACCOUNT_DAO.delete(ACCOUNT);
         Account actual = ACCOUNT_DAO.select("non existing email");
-        assertEquals(ACCOUNT_DAO.getNullEntity(), actual);
+        assertEquals(getNullAccount(), actual);
         actual = ACCOUNT_DAO.select(123);
-        assertEquals(ACCOUNT_DAO.getNullEntity(), actual);
+        assertEquals(getNullAccount(), actual);
         printPassed(CLASS, "testSelectNonExistingAccount");
     }
 
@@ -113,7 +114,7 @@ public class AccountDaoTest {
         ACCOUNT_DAO.create(ACCOUNT);
         boolean actual = ACCOUNT_DAO.delete(ACCOUNT);
         assertSame(true, actual);
-        assertEquals(ACCOUNT_DAO.getNullEntity(), ACCOUNT_DAO.select(ACCOUNT.getEmail()));
+        assertEquals(getNullAccount(), ACCOUNT_DAO.select(ACCOUNT.getEmail()));
         printPassed(CLASS, "testDeleteAccount");
     }
 }

@@ -120,11 +120,6 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
     }
 
     @Override
-    public E getNullEntity() {
-        return abstractDml.getNullEntity();
-    }
-
-    @Override
     public void checkEntity(E entity) {
         if (isNull(entity) || abstractDml.getNullEntity().equals(entity)) {
             throw new IllegalArgumentException();
