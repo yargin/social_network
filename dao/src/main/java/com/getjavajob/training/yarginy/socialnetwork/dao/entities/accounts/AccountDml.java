@@ -10,6 +10,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static com.getjavajob.training.yarginy.socialnetwork.common.entities.NullEntitiesFactory.getNullAccount;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 import static java.util.Objects.isNull;
 
@@ -97,10 +98,7 @@ public class AccountDml extends AbstractDml<Account> {
 
     @Override
     public Account getNullEntity() {
-        Account nullAccount = new AccountImpl();
-        nullAccount.setId(-1);
-        nullAccount.setEmail("email@doesnt.exist");
-        return nullAccount;
+        return getNullAccount();
     }
 
 //    public Collection<Group> selectGroupsByOwner(Connection connection, Account account) throws SQLException {

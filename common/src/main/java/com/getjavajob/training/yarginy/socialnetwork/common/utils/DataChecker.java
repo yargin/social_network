@@ -11,7 +11,7 @@ public class DataChecker {
     }
 
     /**
-     * used for optionally fields
+     * used for optional {@link String} fields
      * handles given {@link String} - trims leading-tailing spaces
      *
      * @param string to handle
@@ -25,14 +25,14 @@ public class DataChecker {
     }
 
     /**
-     * used for mandatory fields
+     * used for mandatory {@link String} fields
      * trims leading-tailing spaces. Then checks that given {@link String} is not null or empty
      *
      * @param string to check
      * @return given {@link String}
      * @throws IncorrectDataException if given {@link String} is empty or null
      */
-    public static String stringPrepare(String string) {
+    public static String stringCheck(String string) {
         stringTrim(string);
         if (isNull(string) || string.isEmpty()) {
             throw new IncorrectDataException("can't be null or empty");
@@ -41,11 +41,11 @@ public class DataChecker {
     }
 
     /**
-     * used for optionally e-mail-fields
-     * checks that given {@link String} is e-mail or null
+     * used for optional e-mail-fields
+     * checks that given {@link String} is e-mail or null and sets it to lower case
      *
      * @param email to check
-     * @return checked e-mail or null if specified e-mail was null
+     * @return checked e-mail or null if specified e-mail is null
      * @throws IncorrectDataException if given {@link String} is empty or null or not e-mail
      */
     public static String emailCheck(String email) {
@@ -70,27 +70,57 @@ public class DataChecker {
      * @throws IncorrectDataException if given {@link String} is empty or null or not e-mail
      */
     public static String emailPrepare(String email) {
-        return emailCheck(stringPrepare(email));
+        return emailCheck(stringCheck(email));
     }
 
     /**
-     * used for optionally e-mail-fields
-     * checks that given {@link String} is e-mail or null
+     * used for optional phone-fields
+     * checks that given {@link String} is phone or null
      *
      * @param phone to check
-     * @return checked e-mail or null if specified e-mail was null
-     * @throws IncorrectDataException if given {@link String} is empty or null or not e-mail
+     * @return checked phone or null if specified phone is null
+     * @throws IncorrectDataException if given {@link String} is empty or null or not phone
      */
     public static String phoneCheck(String phone) {
         if (isNull(phone)) {
             return null;
         }
-        String symbol = "[a-zA-Z0-9]";
-        String regex = symbol + "(\\w" + "[.]?)+" + symbol + '@' + symbol + "(\\w{2,}" + "[.])+" + symbol + "{2,8}";
+        String space = "[\\s]?";
+        String regex = "[+]?" + space + "\\d{1,4}" + "([\\s-]?\\d+)+";
+        String regexWithBraces = "[+]?" + space + "\\d{1,4}" + space + "[(]" + space + "\\d+" + space + "[)]" + space +
+                "([\\s-]?\\d+)+";
         Pattern pattern = Pattern.compile(regex);
-        if (!pattern.matcher(phone).matches()) {
-            throw new IncorrectDataException("wrong email");
+        Pattern patternWithBraces = Pattern.compile(regexWithBraces);
+        if (!pattern.matcher(phone).matches() && !patternWithBraces.matcher(phone).matches()) {
+            throw new IncorrectDataException("wrong phone");
         }
-        return phone.toLowerCase();
+        return phone;
+    }
+
+    /**
+     * used for mandatory phone-fields
+     * trims given phone. Then checks that given {@link String} is phone
+     *
+     * @param phone to check and handle
+     * @return checked and handled phone
+     * @throws IncorrectDataException if given {@link String} is empty or null or not a phone
+     */
+    public static String phonePrepare(String phone) {
+        return phoneCheck(stringCheck(phone));
+    }
+
+    /**
+     * used for mandatory fields
+     *
+     * @param object object to check for null
+     * @param <E>    object's type
+     * @return given object if it's not null
+     * @throws IncorrectDataException if given object is null
+     */
+    public static <E> E checkObject(E object) {
+        if (isNull(object)) {
+            throw new IncorrectDataException("can't be null");
+        }
+        return object;
     }
 }

@@ -2,11 +2,9 @@ package com.getjavajob.training.yarginy.socialnetwork.common.entities.group;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.Account;
 
-import java.util.List;
 import java.util.Objects;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataChecker.stringPrepare;
-import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataChecker.stringTrim;
+import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataChecker.*;
 import static java.util.Objects.isNull;
 
 public class GroupImpl implements Group {
@@ -14,7 +12,14 @@ public class GroupImpl implements Group {
     private String name;
     private String description;
     private Account owner;
-    private List<Account> members;
+
+    public GroupImpl() {
+    }
+
+    public GroupImpl(String name, Account owner) {
+        this.name = name;
+        this.owner = owner;
+    }
 
     @Override
     public int getId() {
@@ -38,7 +43,7 @@ public class GroupImpl implements Group {
 
     @Override
     public void setName(String name) {
-        this.name = stringPrepare(name);
+        this.name = stringCheck(name);
     }
 
     @Override
@@ -48,7 +53,7 @@ public class GroupImpl implements Group {
 
     @Override
     public void setOwner(Account owner) {
-        this.owner = owner;
+        this.owner = checkObject(owner);
     }
 
     @Override

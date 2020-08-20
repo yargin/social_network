@@ -37,9 +37,9 @@ public class GroupDaoTest {
     @Test
     public void testNullFieldCreate() {
         GROUP_DAO.delete(GROUP);
-        GROUP.setName(null);
         boolean actual = true;
         try {
+            GROUP.setName(null);
             GROUP_DAO.create(GROUP);
         } catch (IncorrectDataException e) {
             actual = false;

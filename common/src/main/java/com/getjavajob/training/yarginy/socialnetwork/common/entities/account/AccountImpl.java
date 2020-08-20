@@ -1,10 +1,8 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.entities.account;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.additionaldata.Sex;
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.group.Group;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataChecker.*;
@@ -25,8 +23,14 @@ public class AccountImpl implements Account {
     private String skype;
     private String city;
     private String country;
-    private List<Group> groupsOwner;
-    private List<Group> groupsMember;
+
+    public AccountImpl() {
+    }
+
+    public AccountImpl(String name, String email) {
+        this.name = stringCheck(name);
+        this.email = emailPrepare(email);
+    }
 
     @Override
     public int getId() {
@@ -50,7 +54,7 @@ public class AccountImpl implements Account {
 
     @Override
     public void setName(String name) {
-        this.name = stringPrepare(name);
+        this.name = stringCheck(name);
     }
 
     @Override
@@ -60,7 +64,7 @@ public class AccountImpl implements Account {
 
     @Override
     public void setSurname(String surname) {
-        this.surname = stringPrepare(surname);
+        this.surname = stringCheck(surname);
     }
 
     @Override
@@ -100,7 +104,7 @@ public class AccountImpl implements Account {
 
     @Override
     public void setPhone(String phone) {
-        this.phone = phone;
+        this.phone = phoneCheck(phone);
     }
 
     @Override
@@ -110,7 +114,7 @@ public class AccountImpl implements Account {
 
     @Override
     public void setAdditionalPhone(String additionalPhone) {
-        this.additionalPhone = additionalPhone;
+        this.additionalPhone = phoneCheck(additionalPhone);
     }
 
     @Override

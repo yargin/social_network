@@ -24,7 +24,7 @@ public class AccountDaoTest {
         ACCOUNT.setEmail("email@site.site");
         ACCOUNT.setName("Vasya");
         ACCOUNT.setSurname("Pupkin");
-        ACCOUNT.setPhone("no phone(");
+        ACCOUNT.setPhone("00");
     }
 
     @Test

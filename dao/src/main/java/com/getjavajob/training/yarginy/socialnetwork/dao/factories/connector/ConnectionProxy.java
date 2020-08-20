@@ -8,7 +8,6 @@ import java.util.concurrent.Executor;
 public class ConnectionProxy implements Connection {
     private final Connection connection;
     private final DbConnectorImpl dbConnector;
-    private boolean beingUsed;
 
     public ConnectionProxy(Connection connection, DbConnectorImpl dbConnector) {
         this.connection = connection;
@@ -19,29 +18,12 @@ public class ConnectionProxy implements Connection {
      * closes encapsulated {@link Connection}
      */
     public void closeActually() throws SQLException {
-        beingUsed = false;
         connection.close();
-    }
-
-    /**
-     * tells that {@link Connection} is being used
-     */
-    public void setBeingUsed(boolean beingUsed) {
-        this.beingUsed = beingUsed;
     }
 
     @Override
     public void close() throws SQLException {
         dbConnector.closeConnection(this);
-    }
-
-    /**
-     * tells if encapsulated {@link Connection} being used or not
-     *
-     * @return true if encapsulated {@link Connection} is used
-     */
-    public boolean isBeingUsed() {
-        return beingUsed;
     }
 
     @Override

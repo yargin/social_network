@@ -15,23 +15,23 @@ public class StringHandlerTest {
     private boolean caughtException;
 
     @Test
-    public void testPrepareString() {
+    public void testStringTrim() {
         givenString = " aaAAaa   ";
-        assertEquals("aaaaaa", stringTrim(givenString));
-        printPassed(CLASS, "testPrepareString");
+        assertEquals("aaAAaa", stringTrim(givenString));
+        printPassed(CLASS, "testStringTrim");
     }
 
     @Test
-    public void testCheckString() {
+    public void testStringPrepare() {
         givenString = "";
-        assertException(DataChecker::stringPrepare);
+        assertException(DataChecker::stringCheck);
         givenString = null;
-        assertException(DataChecker::stringPrepare);
-        printPassed(CLASS, "testCheckString");
+        assertException(DataChecker::stringCheck);
+        printPassed(CLASS, "testStringPrepare");
     }
 
     @Test
-    public void testCheckEmail() {
+    public void testEmailCheck() {
         givenString = ".asd@asd.";
         assertException(DataChecker::emailCheck);
         givenString = "a.sd@a.sd";
@@ -47,7 +47,29 @@ public class StringHandlerTest {
         givenString = "asd@as.d.as";
         assertException(DataChecker::emailCheck);
         givenString = "asd@asd.asd";
-        printPassed(CLASS, "testCheckEmail");
+        assertNoException(DataChecker::emailCheck);
+        printPassed(CLASS, "testEmailCheck");
+    }
+
+    @Test
+    public void testPhoneCheck() {
+        givenString = "+7  22222";
+        assertException(DataChecker::phoneCheck);
+        givenString = "123124  123123";
+        assertException(DataChecker::phoneCheck);
+        givenString = "1..sd asd.2";
+        assertException(DataChecker::phoneCheck);
+        givenString = "+124124124";
+        assertNoException(DataChecker::phoneCheck);
+        givenString = "+1(241)24124";
+        assertNoException(DataChecker::phoneCheck);
+        givenString = "124(124)124";
+        assertNoException(DataChecker::phoneCheck);
+        givenString = "+12-412-4124";
+        assertNoException(DataChecker::phoneCheck);
+        givenString = "12 ( 412 ) 41 24";
+        assertNoException(DataChecker::phoneCheck);
+        printPassed(CLASS, "testPhoneCheck");
     }
 
     private void assertException(StringHandlerMethod method) {
@@ -58,6 +80,11 @@ public class StringHandlerTest {
         }
         assertTrue(caughtException);
         caughtException = false;
+    }
+
+    private void assertNoException(StringHandlerMethod method) {
+        method.callMethod(givenString);
+        assertTrue(true);
     }
 
     private interface StringHandlerMethod {

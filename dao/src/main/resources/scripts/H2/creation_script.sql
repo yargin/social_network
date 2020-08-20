@@ -42,7 +42,7 @@ alter table Accounts_in_groups
 add CONSTRAINT C_14 FOREIGN KEY (group_id) REFERENCES _Groups (id) ON delete CASCADE;
 
 insert into Accounts (name, surname, phone, email) values
-('Vladimir', 'Lenin', '1918', 'rise@communism'),
+('Vladimir', 'Lenin', '1918', 'rise@communism.su'),
 ('dracula', 'NOSFERATU', '666', 'drink@blood.com'),
 ('Alan', 'Turing', '121314', 'robot@power.com'),
 ('Petr', 'Popov', '8921-849-43-42', 'popovp@gmail.com');
@@ -53,3 +53,23 @@ insert into _Groups (name, description, owner_id) values
 
 insert into Accounts_in_groups values
 (1, 1), (2, 1), (3, 2), (1, 2);
+
+CREATE TABLE IF NOT EXISTS Friendships (
+        first_account INT UNSIGNED NOT NULL,
+        second_account INT UNSIGNED NOT NULL
+    );
+
+ALTER TABLE Friendships
+ADD CONSTRAINT C_15 PRIMARY KEY(first_account, second_account);
+
+ALTER TABLE Friendships
+ADD CONSTRAINT C_16 FOREIGN KEY (first_account) REFERENCES Accounts (id) ON DELETE CASCADE;
+
+ALTER TABLE Friendships
+ADD CONSTRAINT C_17 FOREIGN KEY (second_account) REFERENCES Accounts (id) ON DELETE CASCADE;
+
+ALTER TABLE Friendships
+ADD CHECK (first_account != second_account);
+
+INSERT INTO Friendships VALUES
+(1, 2), (1, 3);

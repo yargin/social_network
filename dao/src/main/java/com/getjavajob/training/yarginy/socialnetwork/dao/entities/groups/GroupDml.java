@@ -12,7 +12,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataChecker.stringPrepare;
+import static com.getjavajob.training.yarginy.socialnetwork.common.entities.NullEntitiesFactory.getNullGroup;
+import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataChecker.stringCheck;
 import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataChecker.stringTrim;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 import static java.util.Objects.isNull;
@@ -54,7 +55,7 @@ public class GroupDml extends AbstractDml<Group> {
 
     @Override
     public void updateRow(ResultSet resultSet, Group group) throws SQLException {
-        resultSet.updateString(Groups.NAME, stringPrepare(group.getName()));
+        resultSet.updateString(Groups.NAME, stringCheck(group.getName()));
         resultSet.updateString(Groups.DESCRIPTION, stringTrim(group.getDescription()));
         if (isNull(group.getOwner())) {
             throw new IncorrectDataException("owner can't be null");
@@ -74,9 +75,6 @@ public class GroupDml extends AbstractDml<Group> {
 
     @Override
     public Group getNullEntity() {
-        Group nullGroup = new GroupImpl();
-        nullGroup.setId(-1);
-        nullGroup.setName("group doesn't exist");
-        return nullGroup;
+        return getNullGroup();
     }
 }

@@ -12,10 +12,22 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.Abstra
 import static java.util.Objects.isNull;
 
 public class AccountServiceImpl implements AccountService {
-    private final DbFactory dbFactory = getDbFactory();
-    private final Dao<Account> accountDao = dbFactory.getAccountDao();
-    private final SelfManyToManyDao<Account> friendshipDao = dbFactory.getFriendshipDao();
+    private final DbFactory dbFactory;
+    private final Dao<Account> accountDao;
+    private final SelfManyToManyDao<Account> friendshipDao;
     private Collection<Account> friends;
+
+    public AccountServiceImpl() {
+        dbFactory = getDbFactory();
+        accountDao = dbFactory.getAccountDao();
+        friendshipDao = dbFactory.getFriendshipDao();
+    }
+
+    public AccountServiceImpl(Dao<Account> accountDao, SelfManyToManyDao<Account> friendshipDao) {
+        dbFactory = null;
+        this.accountDao = accountDao;
+        this.friendshipDao = friendshipDao;
+    }
 
     public Account getAccount(int id) {
         return accountDao.select(id);
@@ -39,7 +51,7 @@ public class AccountServiceImpl implements AccountService {
 
     public boolean addFriend(Account account, Account friend) {
         if (friendshipDao.create(account, friend)) {
-            if (!friends.add(friend)) {
+            if (!isNull(friends) && !friends.add(friend)) {
                 friends = null;
             }
             return true;
@@ -49,7 +61,7 @@ public class AccountServiceImpl implements AccountService {
 
     public boolean removeFriend(Account account, Account friend) {
         if (friendshipDao.delete(account, friend)) {
-            if (!friends.remove(friend)) {
+            if (!isNull(friends) && !friends.remove(friend)) {
                 friends = null;
             }
             return true;

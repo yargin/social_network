@@ -11,6 +11,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.TestResultPrinter.printPassed;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
@@ -30,6 +31,7 @@ public class AccountsInGroupsTest {
         boolean actual = MEMBERSHIP_DAO.create(account, group);
         assertSame(true, actual);
         MEMBERSHIP_DAO.delete(account, group);
+        printPassed(CLASS, "testJoinGroup");
     }
 
     @Test
@@ -38,6 +40,7 @@ public class AccountsInGroupsTest {
         group = GROUP_DAO.select(2);
         boolean actual = MEMBERSHIP_DAO.create(account, group);
         assertSame(false, actual);
+        printPassed(CLASS, "testJoinAlreadyJoinedGroup");
     }
 
     @Test
@@ -46,6 +49,7 @@ public class AccountsInGroupsTest {
         group = GROUP_DAO.select(2);
         boolean actual = MEMBERSHIP_DAO.delete(account, group);
         assertSame(true, actual);
+        printPassed(CLASS, "testLeaveGroup");
         MEMBERSHIP_DAO.create(account, group);
     }
 
@@ -57,6 +61,7 @@ public class AccountsInGroupsTest {
         group = GROUP_DAO.select(1);
         Collection<Account> actual = MEMBERSHIP_DAO.selectBySecond(group);
         assertEquals(expected, actual);
+        printPassed(CLASS, "selectMembers");
     }
 
     @Test
@@ -67,5 +72,6 @@ public class AccountsInGroupsTest {
         account = ACCOUNT_DAO.select(1);
         Collection<Group> actual = MEMBERSHIP_DAO.selectByFirst(account);
         assertEquals(expected, actual);
+        printPassed(CLASS, "selectGroups");
     }
 }

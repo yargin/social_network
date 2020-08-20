@@ -6,16 +6,16 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
-
-import static java.util.Objects.isNull;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Semaphore;
 
 public class DbConnectorImpl implements DbConnector {
     private static DbConnector singleDbConnector;
     private final Properties properties = new Properties();
-    private final ConnectionProxy[] connections;
-    private volatile boolean waitingForConnection;
-    private final Object consumersMutex = new Object();
-    private final Object proxyMutex = new Object();
+    private final BlockingQueue<ConnectionProxy> connections;
+    private final Semaphore semaphore;
+    private final int capacity;
 
     private DbConnectorImpl(String propertiesFile, int capacity) {
         try (InputStream inputStream = DbConnectorImpl.class.getClassLoader().getResourceAsStream(propertiesFile)) {
@@ -23,57 +23,52 @@ public class DbConnectorImpl implements DbConnector {
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
-        connections = new ConnectionProxy[capacity];
+        this.capacity = capacity;
+        connections = new ArrayBlockingQueue<>(capacity);
+        semaphore = new Semaphore(capacity);
     }
 
     public static DbConnector getDbConnector(String propertiesFile, int capacity) {
 //        if (isNull(singleDbConnector)) {
 //            singleDbConnector = new DbConnectorImpl(propertiesFile, capacity);
+//            return singleDbConnector;
+//        } else {
+//            throw new UnsupportedOperationException("only one instance allowed");
 //        }
-//        throw new UnsupportedOperationException("only one instance available");
-
         return new DbConnectorImpl(propertiesFile, capacity);
     }
 
     public void closeConnection(ConnectionProxy connectionProxy) throws SQLException {
         //if no Connection's consumer is waiting for connection
-        synchronized (proxyMutex) {
-            if (!waitingForConnection) {
-                connectionProxy.closeActually();
-            } else {
-                connectionProxy.setBeingUsed(false);
+        if (semaphore.getQueueLength() == 0) {
+            connectionProxy.closeActually();
+            //if some consumer waiting for connection
+        } else {
+            try {
+                connections.put(connectionProxy);
+            } catch (InterruptedException e) {
+                throw new IllegalStateException(e.getMessage());
             }
+        }
+        semaphore.release();
+    }
+
+    @Override
+    public Connection getConnection() throws SQLException {
+        try {
+            semaphore.acquire();
+            if (connections.isEmpty()) {
+                return new ConnectionProxy(DriverManager.getConnection(properties.getProperty("url"), properties), this);
+            }
+            //blocks until at least one connection becomes free
+            return connections.take();
+        } catch (InterruptedException e) {
+            throw new IllegalStateException(e.getMessage());
         }
     }
 
     @Override
     public int getCapacity() {
-        return connections.length;
-    }
-
-    @Override
-    public Connection getConnection() throws SQLException {
-        synchronized (consumersMutex) {
-            waitingForConnection = true;
-            int capacity = connections.length;
-            while (true) {
-                for (int i = 0; i < capacity; i++) {
-                    //create new ConnectionProxy if currently iterated not initialised yet or actually closed
-                    if (isNull(connections[i]) || connections[i].isClosed()) {
-                        connections[i] = new ConnectionProxy(DriverManager.getConnection(properties.getProperty("url"),
-                                properties), this);
-                        connections[i].setAutoCommit(false);
-                        waitingForConnection = false;
-                        connections[i].setBeingUsed(true);
-                        return connections[i];
-                        //reuse connected ConnectionProxy
-                    } else if (!connections[i].isBeingUsed()) {
-                        waitingForConnection = false;
-                        connections[i].setBeingUsed(true);
-                        return connections[i];
-                    }
-                }
-            }
-        }
+        return capacity;
     }
 }
