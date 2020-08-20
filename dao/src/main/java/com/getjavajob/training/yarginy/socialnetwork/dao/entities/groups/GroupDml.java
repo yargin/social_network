@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.entities.NullEntitiesFactory.getNullGroup;
-import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataChecker.stringCheck;
-import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataChecker.stringTrim;
+import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper.stringCheck;
+import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper.stringTrim;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 import static java.util.Objects.isNull;
 

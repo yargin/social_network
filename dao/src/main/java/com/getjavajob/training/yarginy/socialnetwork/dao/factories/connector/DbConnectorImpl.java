@@ -10,7 +10,9 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Semaphore;
 
-public class DbConnectorImpl implements DbConnector {
+import static java.lang.Thread.currentThread;
+
+public final class DbConnectorImpl implements DbConnector {
     private static DbConnector singleDbConnector;
     private final Properties properties = new Properties();
     private final BlockingQueue<ConnectionProxy> connections;
@@ -47,7 +49,7 @@ public class DbConnectorImpl implements DbConnector {
             try {
                 connections.put(connectionProxy);
             } catch (InterruptedException e) {
-                throw new IllegalStateException(e.getMessage());
+                currentThread().interrupt();
             }
         }
         semaphore.release();

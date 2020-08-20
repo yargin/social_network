@@ -13,7 +13,7 @@ import static java.lang.System.lineSeparator;
 
 public class ScriptExecutorImpl implements ScriptExecutor {
     private final DbConnector dbConnector;
-    protected final String scriptsDir;
+    private final String scriptsDir;
 
     public ScriptExecutorImpl(DbConnector dbConnector, String scriptsDir) {
         this.dbConnector = dbConnector;

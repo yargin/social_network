@@ -2,6 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder;
 
 public class SqlQueryBuilder {
     private StringBuilder query = new StringBuilder();
+    public static final String SELECT_ALL = "SELECT * FROM ";
 
     /**
      * creates new {@link SqlQueryBuilder} for further query creation
@@ -19,7 +20,7 @@ public class SqlQueryBuilder {
      * @return {@link SqlQueryBuilder} having added 'SELECT * FROM <b>table</b>' to query
      */
     public SqlQueryBuilder select(String table) {
-        query.append("SELECT * FROM ").append(table);
+        query.append(SELECT_ALL).append(table);
         return this;
     }
 
@@ -59,7 +60,7 @@ public class SqlQueryBuilder {
      * <b>leftColumn</b> = <b>rightColumn</b>' to query
      */
     public SqlQueryBuilder selectJoin(String leftTable, String rightTable, String leftColumn, String rightColumn) {
-        query.append("SELECT * FROM ").append(leftTable).append(" JOIN ").append(rightTable).append(" ON ").
+        query.append(SELECT_ALL).append(leftTable).append(" JOIN ").append(rightTable).append(" ON ").
                 append(leftColumn).append(" = ").append(rightColumn);
         return this;
     }
@@ -75,7 +76,7 @@ public class SqlQueryBuilder {
      * <b>leftColumn</b> = <b>alias</b>' to query
      */
     public SqlQueryBuilder joinSubSelect(String leftTable, String subSelect, String leftColumn, String alias) {
-        query.append("SELECT * FROM ").append(leftTable).append(" JOIN (").append(subSelect).append(" ) ").
+        query.append(SELECT_ALL).append(leftTable).append(" JOIN (").append(subSelect).append(" ) ").
                 append("s ON ").append(leftColumn).append(" = ").append("s.").append(alias);
         return this;
     }

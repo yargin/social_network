@@ -52,7 +52,7 @@ public class ConnectionsPoolTest {
      * the {@link Set}. In the end we compare set's size(number of unique connections was used) with specified capacity
      */
     @Test
-    public void testConnectionReuse() throws InterruptedException, SQLException {
+    public void testConnectionReuse() throws InterruptedException {
         Set<Connection> connections = Collections.synchronizedSet(new HashSet<>());
         for (int i = 0; i < CONNECTIONS_NEEDED; i++) {
             Runnable runnable = () -> {

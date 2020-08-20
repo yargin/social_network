@@ -4,7 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.Acc
 
 import java.util.Objects;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataChecker.*;
+import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper.*;
 import static java.util.Objects.isNull;
 
 public class GroupImpl implements Group {

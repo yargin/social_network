@@ -6,6 +6,9 @@ import com.getjavajob.training.yarginy.socialnetwork.common.entities.group.Group
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.group.GroupImpl;
 
 public abstract class NullEntitiesFactory {
+    private NullEntitiesFactory() {
+    }
+
     public static Account getNullAccount() {
         Account nullAccount = new AccountImpl();
         nullAccount.setId(-1);

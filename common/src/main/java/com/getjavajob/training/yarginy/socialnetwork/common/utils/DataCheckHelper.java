@@ -6,8 +6,8 @@ import java.util.regex.Pattern;
 
 import static java.util.Objects.isNull;
 
-public class DataChecker {
-    private DataChecker() {
+public final class DataCheckHelper {
+    private DataCheckHelper() {
     }
 
     /**
@@ -19,9 +19,9 @@ public class DataChecker {
      */
     public static String stringTrim(String string) {
         if (!isNull(string)) {
-            string = string.trim();
+            return string.trim();
         }
-        return string;
+        return null;
     }
 
     /**

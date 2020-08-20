@@ -1,10 +1,10 @@
 package com.getjavajob.training.yarginy.socialnetwork.common;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
-import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataChecker;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper;
 import org.junit.Test;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataChecker.stringTrim;
+import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper.stringTrim;
 import static com.getjavajob.training.yarginy.socialnetwork.common.utils.TestResultPrinter.printPassed;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -24,51 +24,51 @@ public class StringHandlerTest {
     @Test
     public void testStringPrepare() {
         givenString = "";
-        assertException(DataChecker::stringCheck);
+        assertException(DataCheckHelper::stringCheck);
         givenString = null;
-        assertException(DataChecker::stringCheck);
+        assertException(DataCheckHelper::stringCheck);
         printPassed(CLASS, "testStringPrepare");
     }
 
     @Test
     public void testEmailCheck() {
         givenString = ".asd@asd.";
-        assertException(DataChecker::emailCheck);
+        assertException(DataCheckHelper::emailCheck);
         givenString = "a.sd@a.sd";
-        assertException(DataChecker::emailCheck);
+        assertException(DataCheckHelper::emailCheck);
         givenString = "a..sd@asd.asd";
-        assertException(DataChecker::emailCheck);
+        assertException(DataCheckHelper::emailCheck);
         givenString = "a%$@asd.asd";
-        assertException(DataChecker::emailCheck);
+        assertException(DataCheckHelper::emailCheck);
         givenString = "asd.@.asd.asd";
-        assertException(DataChecker::emailCheck);
+        assertException(DataCheckHelper::emailCheck);
         givenString = "a.s.d@asd.as";
-        assertException(DataChecker::emailCheck);
+        assertException(DataCheckHelper::emailCheck);
         givenString = "asd@as.d.as";
-        assertException(DataChecker::emailCheck);
+        assertException(DataCheckHelper::emailCheck);
         givenString = "asd@asd.asd";
-        assertNoException(DataChecker::emailCheck);
+        assertNoException(DataCheckHelper::emailCheck);
         printPassed(CLASS, "testEmailCheck");
     }
 
     @Test
     public void testPhoneCheck() {
         givenString = "+7  22222";
-        assertException(DataChecker::phoneCheck);
+        assertException(DataCheckHelper::phoneCheck);
         givenString = "123124  123123";
-        assertException(DataChecker::phoneCheck);
+        assertException(DataCheckHelper::phoneCheck);
         givenString = "1..sd asd.2";
-        assertException(DataChecker::phoneCheck);
+        assertException(DataCheckHelper::phoneCheck);
         givenString = "+124124124";
-        assertNoException(DataChecker::phoneCheck);
+        assertNoException(DataCheckHelper::phoneCheck);
         givenString = "+1(241)24124";
-        assertNoException(DataChecker::phoneCheck);
+        assertNoException(DataCheckHelper::phoneCheck);
         givenString = "124(124)124";
-        assertNoException(DataChecker::phoneCheck);
+        assertNoException(DataCheckHelper::phoneCheck);
         givenString = "+12-412-4124";
-        assertNoException(DataChecker::phoneCheck);
+        assertNoException(DataCheckHelper::phoneCheck);
         givenString = "12 ( 412 ) 41 24";
-        assertNoException(DataChecker::phoneCheck);
+        assertNoException(DataCheckHelper::phoneCheck);
         printPassed(CLASS, "testPhoneCheck");
     }
 
