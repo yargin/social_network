@@ -9,7 +9,6 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFac
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
 import org.junit.Test;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.entities.NullEntitiesFactory.getNullGroup;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.TestResultPrinter.printPassed;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
@@ -71,9 +70,9 @@ public class GroupDaoTest {
     public void testSelectNonExistingGroup() {
             GROUP_DAO.delete(GROUP);
             Group actual = GROUP_DAO.select("non existing name");
-            assertEquals(getNullGroup(), actual);
+            assertEquals(GROUP_DAO.getNullEntity(), actual);
             actual = GROUP_DAO.select(123);
-            assertEquals(getNullGroup(), actual);
+            assertEquals(GROUP_DAO.getNullEntity(), actual);
             printPassed(CLASS, "testSelectNonExistingGroup");
         }
 
@@ -92,6 +91,7 @@ public class GroupDaoTest {
     @Test
     public void testUpdateNonExistingGroup() {
         Group nonExisting = new GroupImpl();
+        nonExisting.setName("non existing group");
         boolean actual = GROUP_DAO.update(nonExisting);
         assertSame(false, actual);
         printPassed(CLASS, "testUpdateNonExistingGroup");
@@ -100,6 +100,7 @@ public class GroupDaoTest {
     @Test
     public void testDeleteNonExisting() {
         Group nonExisting = new GroupImpl();
+        nonExisting.setName("non existing group");
         boolean actual = GROUP_DAO.delete(nonExisting);
         assertSame(false, actual);
         printPassed(CLASS, "testDeleteNonExisting");
@@ -110,7 +111,7 @@ public class GroupDaoTest {
         GROUP_DAO.create(GROUP);
         boolean actual = GROUP_DAO.delete(GROUP);
         assertSame(true, actual);
-        assertEquals(getNullGroup(), GROUP_DAO.select(GROUP.getIdentifier()));
+        assertEquals(GROUP_DAO.getNullEntity(), GROUP_DAO.select(GROUP.getIdentifier()));
         printPassed(CLASS, "testDeleteGroup");
     }
 }

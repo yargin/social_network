@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collection;
 
-public abstract class OneToManyDml<M extends Entity> {
-    public abstract Collection<M> selectByOne(Connection connection, int oneId) throws SQLException;
+public abstract class OneToManyDml<O extends Entity, M extends Entity> {
+    public abstract Collection<M> selectByOne(Connection connection, long oneId) throws SQLException;
+
+    public abstract O selectByOneOfMany(Connection connection, long oneOfManyId) throws SQLException;
 }

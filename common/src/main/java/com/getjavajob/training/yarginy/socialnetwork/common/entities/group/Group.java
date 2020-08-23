@@ -4,10 +4,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.entities.Entity;
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.Account;
 
 public interface Group extends Entity {
-    int getId();
-
-    void setId(int id);
-
     String getName();
 
     void setName(String name);

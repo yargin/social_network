@@ -9,12 +9,12 @@ import java.sql.SQLException;
 import java.util.Collection;
 
 public abstract class ManyToManyDml<F extends Entity, S extends Entity> {
-    public abstract Collection<S> selectByFirst(Connection connection, int firstId) throws SQLException;
+    public abstract Collection<S> selectByFirst(Connection connection, long firstId) throws SQLException;
 
-    public abstract Collection<F> selectBySecond(Connection connection, int secondId) throws SQLException;
+    public abstract Collection<F> selectBySecond(Connection connection, long secondId) throws SQLException;
 
-    public abstract PreparedStatement getSelectStatement(Connection connection, int firstId, int secondId) throws
+    public abstract PreparedStatement getSelectStatement(Connection connection, long firstId, long secondId) throws
             SQLException;
 
-    public abstract void updateRow(ResultSet resultSet, int firstId, int secondId) throws SQLException;
+    public abstract void updateRow(ResultSet resultSet, long firstId, long secondId) throws SQLException;
 }

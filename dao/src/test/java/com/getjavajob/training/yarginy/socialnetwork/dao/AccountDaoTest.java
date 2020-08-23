@@ -9,7 +9,6 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.entities.NullEntitiesFactory.getNullAccount;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.TestResultPrinter.printPassed;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
@@ -25,7 +24,6 @@ public class AccountDaoTest {
         ACCOUNT.setEmail("email@site.site");
         ACCOUNT.setName("Vasya");
         ACCOUNT.setSurname("Pupkin");
-        ACCOUNT.setPhone("00");
     }
 
     @Test
@@ -74,9 +72,9 @@ public class AccountDaoTest {
     public void testSelectNonExistingAccount() {
         ACCOUNT_DAO.delete(ACCOUNT);
         Account actual = ACCOUNT_DAO.select("non existing email");
-        assertEquals(getNullAccount(), actual);
+        assertEquals(ACCOUNT_DAO.getNullEntity(), actual);
         actual = ACCOUNT_DAO.select(123);
-        assertEquals(getNullAccount(), actual);
+        assertEquals(ACCOUNT_DAO.getNullEntity(), actual);
         printPassed(CLASS, "testSelectNonExistingAccount");
     }
 
@@ -95,6 +93,7 @@ public class AccountDaoTest {
     @Test
     public void testUpdateNonExistingAccount() {
         Account nonExisting = new AccountImpl();
+        nonExisting.setEmail("email@that.doesnt.exist");
         boolean actual = ACCOUNT_DAO.update(nonExisting);
         assertSame(false, actual);
         printPassed(CLASS, "testUpdateNonExistingAccount");
@@ -103,6 +102,7 @@ public class AccountDaoTest {
     @Test
     public void testDeleteNonExisting() {
         Account nonExisting = new AccountImpl();
+        nonExisting.setEmail("email@that.doesnt.exist");
         boolean actual;
         actual = ACCOUNT_DAO.delete(nonExisting);
         assertSame(false, actual);
@@ -114,7 +114,7 @@ public class AccountDaoTest {
         ACCOUNT_DAO.create(ACCOUNT);
         boolean actual = ACCOUNT_DAO.delete(ACCOUNT);
         assertSame(true, actual);
-        assertEquals(getNullAccount(), ACCOUNT_DAO.select(ACCOUNT.getEmail()));
+        assertEquals(ACCOUNT_DAO.getNullEntity(), ACCOUNT_DAO.select(ACCOUNT.getEmail()));
         printPassed(CLASS, "testDeleteAccount");
     }
 }

@@ -20,7 +20,8 @@ public class AccountsInGroupsTest {
     private static final String CLASS = "AccountDaoTest";
     private static final Dao<Account> ACCOUNT_DAO = DB_FACTORY.getAccountDao();
     private static final Dao<Group> GROUP_DAO = DB_FACTORY.getGroupDao();
-    private static final ManyToManyDao<Account, Group> MEMBERSHIP_DAO = DB_FACTORY.getGroupMembershipDao();
+    private static final ManyToManyDao<Account, Group> MEMBERSHIP_DAO = DB_FACTORY.getGroupMembershipDao(ACCOUNT_DAO,
+            GROUP_DAO);
     private static Account account;
     private static Group group;
 

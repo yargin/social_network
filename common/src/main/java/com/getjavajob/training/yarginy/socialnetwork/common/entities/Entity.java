@@ -11,10 +11,19 @@ public interface Entity {
      */
     String getIdentifier();
 
+    //todo: if id required implies that it was written from database so it could be checked for non-null??
+
     /**
-     * retrieve entity's number unique identifier, usually auto-generated
+     * get entity's number unique identifier, usually auto-generated
      *
      * @return unique number identifier
      */
-    int getId();
+    long getId();
+
+    /**
+     * set entity's number unique identifier
+     *
+     * @param id unique number identifier
+     */
+    void setId(long id);
 }

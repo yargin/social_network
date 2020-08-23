@@ -2,10 +2,12 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.factories;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.group.Group;
+import com.getjavajob.training.yarginy.socialnetwork.common.entities.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.entities.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.entities.DaoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.entities.accounts.AccountDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.entities.groups.GroupDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.entities.phones.PhonesDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.DbConnector;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.DbConnectorImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl.ScriptExecutor;
@@ -16,6 +18,9 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.se
 import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.variousrelated.ManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.variousrelated.ManyToManyDaoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.variousrelated.accountsingroups.AccountsInGroupsDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relations.onetomany.OneToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relations.onetomany.OneToManyDaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relations.onetomany.accountsphones.AccountsPhonesDml;
 
 import java.util.Properties;
 
@@ -86,12 +91,22 @@ public abstract class CommonDbFactory implements DbFactory {
     }
 
     @Override
-    public ManyToManyDao<Account, Group> getGroupMembershipDao() {
-        return new ManyToManyDaoImpl<>(dbConnector, new AccountsInGroupsDml(), getAccountDao(), getGroupDao());
+    public ManyToManyDao<Account, Group> getGroupMembershipDao(Dao<Account> accountDao, Dao<Group> groupDao) {
+        return new ManyToManyDaoImpl<>(dbConnector, new AccountsInGroupsDml(), accountDao, groupDao);
     }
 
     @Override
-    public SelfManyToManyDao<Account> getFriendshipDao() {
-        return new SelfManyToManyDaoImpl<>(dbConnector, new FriendshipDml(), getAccountDao());
+    public SelfManyToManyDao<Account> getFriendshipDao(Dao<Account> accountDao) {
+        return new SelfManyToManyDaoImpl<>(dbConnector, new FriendshipDml(), accountDao);
+    }
+
+    @Override
+    public Dao<Phone> getPhoneDao() {
+        return new DaoImpl<>(dbConnector, new PhonesDml());
+    }
+
+    @Override
+    public OneToManyDao<Account, Phone> getAccountsPhones(Dao<Account> accountDao, Dao<Phone> phoneDao) {
+        return new OneToManyDaoImpl<>(dbConnector, new AccountsPhonesDml(), accountDao, phoneDao);
     }
 }

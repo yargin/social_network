@@ -2,6 +2,8 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.entities;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.Entity;
 
+import java.util.Collection;
+
 /**
  * provides CRUD operations with {@link Entity}
  *
@@ -14,7 +16,7 @@ public interface Dao<E extends Entity> {
      * @param id {@link E}'s number
      * @return {@link E} that was found or {@link AbstractDml#getNullEntity()} if any wasn't found
      */
-    E select(int id);
+    E select(long id);
 
     /**
      * retrieves {@link E} specified by email
@@ -49,11 +51,11 @@ public interface Dao<E extends Entity> {
     boolean delete(E entity);
 
     /**
-     * selects * from storage. Expected for development usage
+     * selects all entities
      *
      * @return {@link String} representation of data stored in table
      */
-    String selectAll();
+    Collection<E> selectAll();
 
     /**
      * checks that {@link Entity} is applicable
@@ -61,4 +63,6 @@ public interface Dao<E extends Entity> {
      * @param entity to check
      */
     void checkEntity(E entity);
+
+    E getNullEntity();
 }

@@ -2,7 +2,6 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.entities.groups;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.group.GroupImpl;
-import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.dao.entities.AbstractDml;
 
 import java.sql.Connection;
@@ -13,15 +12,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.entities.NullEntitiesFactory.getNullGroup;
-import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper.stringCheck;
-import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper.stringTrim;
+import static com.getjavajob.training.yarginy.socialnetwork.dao.entities.groups.GroupsTable.*;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
-import static java.util.Objects.isNull;
 
 public class GroupDml extends AbstractDml<Group> {
-    private static final String SELECT_ALL = buildQuery().select(Groups.TABLE).build();
-    private static final String SELECT_BY_ID = buildQuery().select(Groups.TABLE).where(Groups.ID).build();
-    private static final String SELECT_BY_NAME = buildQuery().select(Groups.TABLE).where(Groups.NAME).build();
+    private static final String SELECT_ALL = buildQuery().select(TABLE).build();
+    private static final String SELECT_BY_ID = buildQuery().select(TABLE).where(ID).build();
+    private static final String SELECT_BY_NAME = buildQuery().select(TABLE).where(NAME).build();
 
     @Override
     public String getSelectAllQuery() {
@@ -29,10 +26,10 @@ public class GroupDml extends AbstractDml<Group> {
     }
 
     @Override
-    public PreparedStatement getSelectStatement(Connection connection, int id) throws SQLException {
+    public PreparedStatement getSelectStatement(Connection connection, long id) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID, ResultSet.TYPE_SCROLL_INSENSITIVE,
                 ResultSet.CONCUR_UPDATABLE);
-        statement.setInt(1, id);
+        statement.setLong(1, id);
         return statement;
     }
 
@@ -47,20 +44,17 @@ public class GroupDml extends AbstractDml<Group> {
     @Override
     public Group selectFromRow(ResultSet resultSet) throws SQLException {
         Group group = new GroupImpl();
-        group.setId(resultSet.getInt(Groups.ID));
-        group.setName(resultSet.getString(Groups.NAME));
-        group.setDescription(resultSet.getString(Groups.DESCRIPTION));
+        group.setId(resultSet.getLong(ID));
+        group.setName(resultSet.getString(NAME));
+        group.setDescription(resultSet.getString(DESCRIPTION));
         return group;
     }
 
     @Override
     public void updateRow(ResultSet resultSet, Group group) throws SQLException {
-        resultSet.updateString(Groups.NAME, stringCheck(group.getName()));
-        resultSet.updateString(Groups.DESCRIPTION, stringTrim(group.getDescription()));
-        if (isNull(group.getOwner())) {
-            throw new IncorrectDataException("owner can't be null");
-        }
-        resultSet.updateInt(Groups.OWNER, group.getOwner().getId());
+        resultSet.updateString(NAME, group.getName());
+        resultSet.updateString(DESCRIPTION, group.getDescription());
+        resultSet.updateLong(OWNER, group.getOwner().getId());
     }
 
     @Override

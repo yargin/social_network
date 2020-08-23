@@ -4,12 +4,14 @@ import com.getjavajob.trainig.yarginy.socialnetwork.service.AccountService;
 import com.getjavajob.trainig.yarginy.socialnetwork.service.AccountServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.AccountImpl;
+import com.getjavajob.training.yarginy.socialnetwork.common.entities.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.entities.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.selfrelated.SelfManyToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relations.onetomany.OneToManyDao;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.getjavajob.training.yarginy.socialnetwork.service.utils.TestResultPrinter.printPassed;
@@ -20,8 +22,11 @@ import static org.mockito.Mockito.when;
 public class AccountServiceTest {
     public static final String CLASS = "AccountServiceTest";
     private final Dao<Account> accountDao = mock(Dao.class);
+    private final Dao<Phone> phoneDao = mock(Dao.class);
     private final SelfManyToManyDao<Account> friendsDao = mock(SelfManyToManyDao.class);
-    private final AccountService accountService = new AccountServiceImpl(accountDao, friendsDao);
+    private final OneToManyDao<Account, Phone> accountsPhonesDao = mock(OneToManyDao.class);
+    private final AccountService accountService = new AccountServiceImpl(accountDao, friendsDao, phoneDao,
+            accountsPhonesDao);
     private Account account;
 
     @Before
@@ -90,8 +95,29 @@ public class AccountServiceTest {
 
     @Test
     public void testGetFriends() {
-        List<Account> emptyFriends = Collections.EMPTY_LIST;
+        List<Account> emptyFriends = new ArrayList<>();
         assertEquals(emptyFriends, accountService.getFriends(account));
         printPassed(CLASS, "testGetFriends");
+    }
+
+    //todo
+    @Test
+    public void testAddPhone() {
+
+    }
+
+    @Test
+    public void testRemovePhone() {
+
+    }
+
+    @Test
+    public void testGetPhones() {
+
+    }
+
+    @Test
+    public void testGetAllWithPhones() {
+
     }
 }

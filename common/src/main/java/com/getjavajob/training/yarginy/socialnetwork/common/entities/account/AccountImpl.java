@@ -1,5 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.entities.account;
 
+import com.getjavajob.training.yarginy.socialnetwork.common.entities.AbstractEntity;
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.additionaldata.Sex;
 
 import java.time.LocalDate;
@@ -8,15 +9,12 @@ import java.util.Objects;
 import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper.*;
 import static java.util.Objects.isNull;
 
-public class AccountImpl implements Account {
-    private int id;
+public class AccountImpl extends AbstractEntity implements Account {
     private String name;
     private String surname;
     private String patronymic;
     private Sex sex;
     private LocalDate birthDate;
-    private String phone;
-    private String additionalPhone;
     private String email;
     private String additionalEmail;
     private String icq;
@@ -28,13 +26,13 @@ public class AccountImpl implements Account {
     }
 
     public AccountImpl(String name, String email) {
-        this.name = stringCheck(name);
-        this.email = emailPrepare(email);
+        this.name = stringMandatory(name);
+        this.email = emailMandatory(email);
     }
 
     @Override
-    public int getId() {
-        return id;
+    public long getId() {
+        return getIdNumber();
     }
 
     @Override
@@ -43,38 +41,38 @@ public class AccountImpl implements Account {
     }
 
     @Override
-    public void setId(int id) {
-        this.id = id;
+    public void setId(long id) {
+        setIdNumber(id);
     }
 
     @Override
     public String getName() {
-        return name;
+        return stringMandatory(name);
     }
 
     @Override
     public void setName(String name) {
-        this.name = stringCheck(name);
+        this.name = stringMandatory(name);
     }
 
     @Override
     public String getSurname() {
-        return surname;
+        return stringMandatory(surname);
     }
 
     @Override
     public void setSurname(String surname) {
-        this.surname = stringCheck(surname);
+        this.surname = stringMandatory(surname);
     }
 
     @Override
     public String getPatronymic() {
-        return patronymic;
+        return stringOptional(patronymic);
     }
 
     @Override
     public void setPatronymic(String patronymic) {
-        this.patronymic = stringTrim(patronymic);
+        this.patronymic = stringOptional(patronymic);
     }
 
     @Override
@@ -98,83 +96,63 @@ public class AccountImpl implements Account {
     }
 
     @Override
-    public String getPhone() {
-        return phone;
-    }
-
-    @Override
-    public void setPhone(String phone) {
-        this.phone = phoneCheck(phone);
-    }
-
-    @Override
-    public String getAdditionalPhone() {
-        return additionalPhone;
-    }
-
-    @Override
-    public void setAdditionalPhone(String additionalPhone) {
-        this.additionalPhone = phoneCheck(additionalPhone);
-    }
-
-    @Override
     public String getEmail() {
-        return email;
+        return emailMandatory(email);
     }
 
     @Override
     public void setEmail(String email) {
-        this.email = emailPrepare(email);
+        this.email = emailMandatory(email);
     }
 
     @Override
     public String getAdditionalEmail() {
-        return additionalEmail;
+        return emailOptional(additionalEmail);
     }
 
     @Override
     public void setAdditionalEmail(String additionalEmail) {
-        this.additionalEmail = emailCheck(additionalEmail);
+        this.additionalEmail = emailOptional(additionalEmail);
     }
 
     @Override
     public String getIcq() {
-        return icq;
+        return stringOptional(icq);
     }
 
     @Override
     public void setIcq(String icq) {
-        this.icq = stringTrim(icq);
+        this.icq = stringOptional(icq);
     }
 
     @Override
     public String getSkype() {
-        return skype;
+        return stringOptional(skype);
     }
 
     @Override
     public void setSkype(String skype) {
-        this.skype = stringTrim(skype);
+        this.skype = stringOptional(skype);
     }
 
     @Override
     public String getCity() {
-        return city;
+        return stringOptional(city);
     }
 
     @Override
     public void setCity(String city) {
-        this.city = stringTrim(city);
+        this.city = stringOptional(city);
     }
 
     @Override
     public String getCountry() {
-        return country;
+        return stringOptional(country);
     }
 
     @Override
     public void setCountry(String country) {
-        this.country = stringTrim(country);
+        this.country = stringOptional(country);
     }
 
     @Override
@@ -187,7 +165,7 @@ public class AccountImpl implements Account {
         }
         if (o instanceof Account) {
             Account account = (Account) o;
-            return Objects.equals(stringTrim(email), stringTrim(account.getEmail()));
+            return Objects.equals(stringOptional(email), stringOptional(account.getEmail()));
         }
         return false;
     }

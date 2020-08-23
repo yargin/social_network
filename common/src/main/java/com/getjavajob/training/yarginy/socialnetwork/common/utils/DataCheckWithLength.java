@@ -1,28 +1,32 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.utils;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
-import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataFlowException;
 
 import java.util.regex.Pattern;
 
 import static java.util.Objects.isNull;
 
-public final class DataCheckHelper {
+public final class DataCheckWithLength {
     public static final int DEFAULT_LENGTH = 200;
 
-    private DataCheckHelper() {
+    private DataCheckWithLength() {
     }
 
     /**
      * used for optional {@link String} fields
-     * trims given {@link String}
+     * trims given {@link String} and checks its not too long
      *
-     * @param string to check and trim
+     * @param string    to check and trim
+     * @param maxLength max length applicable
      * @return checked and trimmed {@link String}, null if was null or empty or only-spaces
+     * @throws IncorrectDataException if given {@link String} is too long
      */
-    public static String stringOptional(String string) {
+    public static String stringOptional(String string, int maxLength) {
         if (!isNull(string)) {
             string.trim();
+            if (string.length() > maxLength) {
+                throw new IncorrectDataException("too long");
+            }
             if (!string.isEmpty()) {
                 return string;
             }
@@ -30,16 +34,21 @@ public final class DataCheckHelper {
         return null;
     }
 
+//    public static String stringOptional(String string) {
+//        return stringOptional(string, DEFAULT_LENGTH);
+//    }
+
     /**
      * used for mandatory {@link String} fields
-     * trims given {@link String}. Then checks that its not empty, only-spaces or null
+     * trims given {@link String} and checks its not too long. Then checks that its not empty, only-spaces or null
      *
-     * @param string to check
+     * @param string    to check
+     * @param maxLength max length applicable
      * @return given {@link String}
-     * @throws IncorrectDataException if given {@link String} is empty, null or only-spaces
+     * @throws IncorrectDataException if given {@link String} is empty, null, only-spaces or too long
      */
-    public static String stringMandatory(String string) {
-        stringOptional(string);
+    public static String stringMandatory(String string, int maxLength) {
+        stringOptional(string, maxLength);
         if (isNull(string)) {
             throw new IncorrectDataException("can't be null or empty");
         }
@@ -48,15 +57,16 @@ public final class DataCheckHelper {
 
     /**
      * used for optional e-mail-fields
-     * trims given {@link String}. Then checks that given {@link String} is e-mail and sets
+     * trims given {@link String} and checks its not too long. Then checks that given {@link String} is e-mail and sets
      * it to lower case
      *
-     * @param email to check
+     * @param email     to check
+     * @param maxLength max length applicable
      * @return checked e-mail or null if specified e-mail is null
      * @throws IncorrectDataException if given {@link String} is not an e-mail
      */
-    public static String emailOptional(String email) {
-        DataCheckHelper.stringOptional(email);
+    public static String emailOptional(String email, int maxLength) {
+        stringOptional(email, maxLength);
         if (isNull(email)) {
             return null;
         }
@@ -68,26 +78,28 @@ public final class DataCheckHelper {
      * trims given {@link String} and checks its not too long. Then checks that given {@link String} is e-mail and sets
      * it to lower case
      *
-     * @param email to check
+     * @param email     to check
+     * @param maxLength max length applicable
      * @return checked e-mail
-     * @throws IncorrectDataException if given {@link String} is empty, null or not an e-mail is empty, null
-     *                                or only-spaces
+     * @throws IncorrectDataException if given {@link String} is empty, null, too long or not an e-mail
+     *                                is empty, null, only-spaces or too long
      */
-    public static String emailMandatory(String email) {
-        DataCheckHelper.stringMandatory(email);
+    public static String emailMandatory(String email, int maxLength) {
+        stringMandatory(email, maxLength);
         return isEmail(email).toLowerCase();
     }
 
     /**
      * used for optional phone-fields
-     * trims given {@link String}. Then checks that given {@link String} is phone or null
+     * trims given {@link String} and checks its not too long. Then checks that given {@link String} is phone or null
      *
-     * @param phone to check
+     * @param phone     to check
+     * @param maxLength max length applicable
      * @return checked phone or null if specified phone is null
      * @throws IncorrectDataException if given {@link String} is empty or null or not phone
      */
-    public static String phoneOptional(String phone) {
-        DataCheckHelper.stringOptional(phone);
+    public static String phoneOptional(String phone, int maxLength) {
+        stringOptional(phone, maxLength);
         if (isNull(phone)) {
             return null;
         }
@@ -96,14 +108,15 @@ public final class DataCheckHelper {
 
     /**
      * used for mandatory phone-fields
-     * trims given {@link String}. Then checks that given {@link String} is phone
+     * trims given {@link String} and checks its not too long. Then checks that given {@link String} is phone
      *
-     * @param phone to check and handle
+     * @param phone     to check and handle
+     * @param maxLength max length applicable
      * @return checked and handled phone
      * @throws IncorrectDataException if given {@link String} is empty or null or not a phone
      */
-    public static String phoneMandatory(String phone) {
-        stringMandatory(phone);
+    public static String phoneMandatory(String phone, int maxLength) {
+        stringMandatory(phone, maxLength);
         return isPhone(phone);
     }
 
@@ -143,14 +156,5 @@ public final class DataCheckHelper {
             throw new IncorrectDataException("wrong phone");
         }
         return phone;
-    }
-
-    public static long checkId(long id) {
-        if (id == 0) {
-            throw new IncorrectDataFlowException("must be read from storage");
-        } else if (id < -1) {
-            throw new IncorrectDataException("wrong id");
-        }
-        return id;
     }
 }

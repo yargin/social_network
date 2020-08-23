@@ -18,8 +18,8 @@ import static org.junit.Assert.assertSame;
 public class FriendshipDaoTest {
     private static final DbFactory dbFactory = AbstractDbFactory.getDbFactory();
     private static final String CLASS = "AccountDaoTest";
-    private static final SelfManyToManyDao<Account> FRIENDSHIP_DAO = dbFactory.getFriendshipDao();
     private static final Dao<Account> ACCOUNT_DAO = dbFactory.getAccountDao();
+    private static final SelfManyToManyDao<Account> FRIENDSHIP_DAO = dbFactory.getFriendshipDao(ACCOUNT_DAO);
     private final Account friend;
     private final Account noFriends;
 
@@ -49,6 +49,7 @@ public class FriendshipDaoTest {
     public void testNonExistingAccount() {
         Account nonExistingAccount = new AccountImpl();
         nonExistingAccount.setId(666);
+        nonExistingAccount.setEmail("email@that.doesnt.exist");
         Collection<Account> friends = FRIENDSHIP_DAO.select(nonExistingAccount);
         assertSame(true, friends.isEmpty());
         printPassed(CLASS, "testNonExistingAccount");

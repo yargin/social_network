@@ -2,7 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.s
 
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.dao.entities.accounts.AccountDml;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.accounts.Accounts;
+import com.getjavajob.training.yarginy.socialnetwork.dao.entities.accounts.AccountsTable;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.selfrelated.SelfManyToManyDml;
 
 import java.sql.Connection;
@@ -16,20 +16,20 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuild
 
 public class FriendshipDml extends SelfManyToManyDml<Account> {
     private static final String ALIAS = "acc_id";
-    private static final String SUB_SELECT = buildQuery().selectColumn(Friendships.TABLE, Friendships.FIRST_ACCOUNT, ALIAS).
-            where(Friendships.SECOND_ACCOUNT).union().selectColumn(Friendships.TABLE, Friendships.SECOND_ACCOUNT).
-            where(Friendships.FIRST_ACCOUNT).build();
-    private static final String SELECT_BY_ID = buildQuery().joinSubSelect(Accounts.TABLE, SUB_SELECT, Accounts.ID, ALIAS).build();
+    private static final String SUB_SELECT = buildQuery().selectColumn(FriendshipsTable.TABLE, FriendshipsTable.FIRST_ACCOUNT, ALIAS).
+            where(FriendshipsTable.SECOND_ACCOUNT).union().selectColumn(FriendshipsTable.TABLE, FriendshipsTable.SECOND_ACCOUNT).
+            where(FriendshipsTable.FIRST_ACCOUNT).build();
+    private static final String SELECT_BY_ID = buildQuery().joinSubSelect(AccountsTable.TABLE, SUB_SELECT, AccountsTable.ID, ALIAS).build();
 
-    private static final String SELECT_BY_BOTH = buildQuery().select(Friendships.TABLE).where(Friendships.FIRST_ACCOUNT).
-            and(Friendships.SECOND_ACCOUNT).build();
+    private static final String SELECT_BY_BOTH = buildQuery().select(FriendshipsTable.TABLE).where(FriendshipsTable.FIRST_ACCOUNT).
+            and(FriendshipsTable.SECOND_ACCOUNT).build();
     private static final AccountDml ACCOUNT_DML = new AccountDml();
 
     @Override
-    public Collection<Account> select(Connection connection, int id) throws SQLException {
+    public Collection<Account> select(Connection connection, long id) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID)) {
-            statement.setInt(1, id);
-            statement.setInt(2, id);
+            statement.setLong(1, id);
+            statement.setLong(2, id);
             return selectFromStatement(statement);
         }
     }
@@ -46,17 +46,17 @@ public class FriendshipDml extends SelfManyToManyDml<Account> {
     }
 
     @Override
-    public PreparedStatement getSelectStatement(Connection connection, int firstId, int secondId) throws SQLException {
+    public PreparedStatement getSelectStatement(Connection connection, long firstId, long secondId) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(SELECT_BY_BOTH, ResultSet.TYPE_SCROLL_INSENSITIVE,
                 ResultSet.CONCUR_UPDATABLE);
-        statement.setInt(1, firstId);
-        statement.setInt(2, secondId);
+        statement.setLong(1, firstId);
+        statement.setLong(2, secondId);
         return statement;
     }
 
     @Override
-    public void updateRow(ResultSet resultSet, int firstId, int secondId) throws SQLException {
-        resultSet.updateInt(1, firstId);
-        resultSet.updateInt(2, secondId);
+    public void updateRow(ResultSet resultSet, long firstId, long secondId) throws SQLException {
+        resultSet.updateLong(1, firstId);
+        resultSet.updateLong(2, secondId);
     }
 }

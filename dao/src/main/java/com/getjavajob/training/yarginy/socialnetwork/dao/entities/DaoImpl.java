@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import static java.util.Objects.isNull;
 
@@ -21,7 +23,7 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
     }
 
     @Override
-    public E select(int id) {
+    public E select(long id) {
         try (Connection connection = dbConnector.getConnection();
              PreparedStatement statement = abstractDml.getSelectStatement(connection, id)) {
             return select(statement);
@@ -101,19 +103,15 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
     }
 
     @Override
-    public String selectAll() {
+    public Collection<E> selectAll() {
         try (Connection connection = dbConnector.getConnection();
              PreparedStatement statement = connection.prepareStatement(abstractDml.getSelectAllQuery());
              ResultSet resultSet = statement.executeQuery()) {
-            int columnNumber = resultSet.getMetaData().getColumnCount();
-            StringBuilder stringBuilder = new StringBuilder();
+            Collection<E> all = new ArrayList<>();
             while (resultSet.next()) {
-                for (int i = 1; i <= columnNumber; i++) {
-                    stringBuilder.append(resultSet.getObject(i)).append(" ");
-                }
-                stringBuilder.append(System.lineSeparator());
+                all.add(abstractDml.selectFromRow(resultSet));
             }
-            return stringBuilder.toString();
+            return all;
         } catch (SQLException e) {
             throw new IllegalStateException(e);
         }
@@ -124,5 +122,10 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
         if (isNull(entity) || abstractDml.getNullEntity().equals(entity)) {
             throw new IllegalArgumentException();
         }
+    }
+
+    @Override
+    public E getNullEntity() {
+        return abstractDml.getNullEntity();
     }
 }

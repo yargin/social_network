@@ -1,5 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.entities.group;
 
+import com.getjavajob.training.yarginy.socialnetwork.common.entities.AbstractEntity;
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.Account;
 
 import java.util.Objects;
@@ -7,8 +8,7 @@ import java.util.Objects;
 import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper.*;
 import static java.util.Objects.isNull;
 
-public class GroupImpl implements Group {
-    private int id;
+public class GroupImpl extends AbstractEntity implements Group {
     private String name;
     private String description;
     private Account owner;
@@ -22,8 +22,8 @@ public class GroupImpl implements Group {
     }
 
     @Override
-    public int getId() {
-        return id;
+    public long getId() {
+        return getIdNumber();
     }
 
     @Override
@@ -32,38 +32,38 @@ public class GroupImpl implements Group {
     }
 
     @Override
-    public void setId(int id) {
-        this.id = id;
+    public void setId(long id) {
+        setIdNumber(id);
     }
 
     @Override
     public String getName() {
-        return name;
+        return stringMandatory(name);
     }
 
     @Override
     public void setName(String name) {
-        this.name = stringCheck(name);
+        this.name = stringMandatory(name);
     }
 
     @Override
     public Account getOwner() {
-        return owner;
+        return objectMandatory(owner);
     }
 
     @Override
     public void setOwner(Account owner) {
-        this.owner = checkObject(owner);
+        this.owner = objectMandatory(owner);
     }
 
     @Override
     public String getDescription() {
-        return description;
+        return stringOptional(description);
     }
 
     @Override
     public void setDescription(String description) {
-        this.description = stringTrim(description);
+        this.description = stringOptional(description);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class GroupImpl implements Group {
         }
         if (o instanceof Group) {
             Group group = (Group) o;
-            return Objects.equals(stringTrim(name), stringTrim(group.getName()));
+            return Objects.equals(stringOptional(name), stringOptional(group.getName()));
         }
         return false;
     }

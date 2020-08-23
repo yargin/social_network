@@ -1,14 +1,12 @@
 drop ALL OBJECTS;
 
 create TABLE IF NOT EXISTS Accounts (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(40) NOT NULL,
     surname VARCHAR(40) NOT NULL,
     patronymic VARCHAR(40),
     sex CHAR(6),
     birth_date DATE,
-    phone VARCHAR(20) NOT NULL UNIQUE,
-    additional_phone VARCHAR(20),
     email VARCHAR(40) NOT NULL UNIQUE,
     additional_email VARCHAR(40) UNIQUE,
     icq VARCHAR(40),
@@ -18,18 +16,18 @@ create TABLE IF NOT EXISTS Accounts (
 );
 
 create TABLE IF NOT EXISTS _Groups (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE,
     description VARCHAR(500),
-    owner_id INT UNSIGNED NOT NULL
+    owner_id BIGINT UNSIGNED NOT NULL
 );
 
 alter table _Groups
 add CONSTRAINT C_11 FOREIGN KEY (owner_id) REFERENCES Accounts (id) ON delete CASCADE;
 
 create TABLE IF NOT EXISTS Accounts_in_groups (
-    account_id INT UNSIGNED NOT NULL,
-    group_id INT UNSIGNED NOT NULL
+    account_id BIGINT UNSIGNED NOT NULL,
+    group_id BIGINT UNSIGNED NOT NULL
 );
 
 alter table Accounts_in_groups
@@ -41,11 +39,11 @@ add CONSTRAINT C_13 FOREIGN KEY (account_id) REFERENCES Accounts (id) ON delete 
 alter table Accounts_in_groups
 add CONSTRAINT C_14 FOREIGN KEY (group_id) REFERENCES _Groups (id) ON delete CASCADE;
 
-insert into Accounts (name, surname, phone, email) values
-('Vladimir', 'Lenin', '1918', 'rise@communism.su'),
-('dracula', 'NOSFERATU', '666', 'drink@blood.com'),
-('Alan', 'Turing', '121314', 'robot@power.com'),
-('Petr', 'Popov', '8921-849-43-42', 'popovp@gmail.com');
+insert into Accounts (name, surname, email) values
+('Vladimir', 'Lenin',  'rise@communism.su'),
+('dracula', 'NOSFERATU',  'drink@blood.com'),
+('Alan', 'Turing', 'robot@power.com'),
+('Petr', 'Popov', 'popovp@gmail.com');
 
 insert into _Groups (name, description, owner_id) values
 ('USSR fans', 'building Communism', 1),
@@ -55,8 +53,8 @@ insert into Accounts_in_groups values
 (1, 1), (2, 1), (3, 2), (1, 2);
 
 CREATE TABLE IF NOT EXISTS Friendships (
-        first_account INT UNSIGNED NOT NULL,
-        second_account INT UNSIGNED NOT NULL
+        first_account BIGINT UNSIGNED NOT NULL,
+        second_account BIGINT UNSIGNED NOT NULL
     );
 
 ALTER TABLE Friendships
@@ -73,3 +71,25 @@ ADD CHECK (first_account != second_account);
 
 INSERT INTO Friendships VALUES
 (1, 2), (1, 3);
+
+CREATE TABLE IF NOT EXISTS Phones (
+        id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        number VARCHAR(50) NOT NULL UNIQUE,
+        type CHAR(7),
+        owner_id BIGINT UNSIGNED NOT NULL
+    );
+
+ALTER TABLE Phones
+ADD CONSTRAINT C_18 FOREIGN KEY (owner_id) REFERENCES Accounts (id) ON DELETE CASCADE;
+
+ALTER TABLE Phones
+ADD CONSTRAINT C_19 CHECK (type IN ('PRIVATE', 'WORK'));
+
+INSERT INTO Phones (number, type, owner_id) VALUES
+('89218942', 'PRIVATE', 4),
+('+9 812 123 321', 'WORK', 3),
+('444-444-444', 'PRIVATE', 3),
+('14-1414-14', 'WORK', 2),
+('8 (921) 1234321', 'PRIVATE', 2),
+('+7 (920) 123-23-32', 'WORK', 1),
+('02', 'WORK', 1);

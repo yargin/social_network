@@ -9,8 +9,6 @@ import java.time.LocalDate;
  * provides object model of relational entity Account
  */
 public interface Account extends Entity {
-    int getId();
-
     String getName();
 
     String getSurname();
@@ -20,10 +18,6 @@ public interface Account extends Entity {
     Sex getSex();
 
     LocalDate getBirthDate();
-
-    String getPhone();
-
-    String getAdditionalPhone();
 
     String getEmail();
 
@@ -37,8 +31,6 @@ public interface Account extends Entity {
 
     String getCountry();
 
-    void setId(int id);
-
     void setSex(Sex sex);
 
     void setName(String name);
@@ -48,10 +40,6 @@ public interface Account extends Entity {
     void setPatronymic(String patronymic);
 
     void setBirthDate(LocalDate birthDate);
-
-    void setPhone(String phone);
-
-    void setAdditionalPhone(String workPhone);
 
     void setEmail(String email);
 

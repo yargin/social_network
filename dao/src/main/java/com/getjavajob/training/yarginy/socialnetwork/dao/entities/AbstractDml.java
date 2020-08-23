@@ -21,7 +21,7 @@ public abstract class AbstractDml<E extends Entity> {
      * @param id         {@link E}'s id
      * @return {@link PreparedStatement} that selects {@link E} found by id
      */
-    public abstract PreparedStatement getSelectStatement(Connection connection, int id) throws SQLException;
+    public abstract PreparedStatement getSelectStatement(Connection connection, long id) throws SQLException;
 
     /**
      * retrieves {@link PreparedStatement} which execution result will be {@link E} found by identifier. Used for
