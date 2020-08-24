@@ -13,15 +13,23 @@ import java.util.Collection;
  */
 public abstract class AbstractDml<E extends Entity> {
     /**
-     * retrieves {@link PreparedStatement} which execution result will be {@link E} found by email. Used for
-     * insertion, modification & deletion
+     * retrieves {@link PreparedStatement} which execution result will be {@link E} found by id number
      * <br>BE CAREFUL - use only with Try-with-resources or Finally block
      *
      * @param connection {@link Connection} specified connection to make {@link PreparedStatement}
      * @param id         {@link E}'s id
      * @return {@link PreparedStatement} that selects {@link E} found by id
      */
-    public abstract PreparedStatement getSelectStatement(Connection connection, long id) throws SQLException;
+    public PreparedStatement getSelectStatement(Connection connection, long id) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(getSelectById());
+        statement.setLong(1, id);
+        return statement;
+    }
+
+    /**
+     * @return {@link String} representation of select by id number query
+     */
+    protected abstract String getSelectById();
 
     /**
      * retrieves {@link PreparedStatement} which execution result will be {@link E} found by identifier. Used for
@@ -32,7 +40,52 @@ public abstract class AbstractDml<E extends Entity> {
      * @param identifier {@link E}'s {@link String} identifier
      * @return {@link PreparedStatement} that selects {@link E} found by identifier
      */
-    public abstract PreparedStatement getSelectStatement(Connection connection, String identifier) throws SQLException;
+    public PreparedStatement getSelectStatement(Connection connection, String identifier) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(getSelectByIdentifier());
+        statement.setString(1, identifier);
+        return statement;
+    }
+
+    /**
+     * @return {@link String} representation of select by string identifier number query
+     */
+    protected abstract String getSelectByIdentifier();
+
+    /**
+     * retrieves {@link PreparedStatement} which execution result will be {@link E} found by identifier. Used for
+     * insertion, modification & deletion
+     * <br>BE CAREFUL - use only with Try-with-resources or Finally block
+     *
+     * @param connection {@link Connection} specified connection to make {@link PreparedStatement}
+     * @param identifier {@link E}'s {@link String} identifier
+     * @return updatable {@link PreparedStatement} with query that selects {@link E} found by identifier
+     */
+    public PreparedStatement getUpdatableSelectStatement(Connection connection, String identifier) throws
+            SQLException {
+        PreparedStatement statement = connection.prepareStatement(getUpdatableSelect(), ResultSet.
+                TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        statement.setString(1, identifier);
+        return statement;
+    }
+
+    /**
+     * @return {@link String} representation of updatable select query
+     */
+    protected abstract String getUpdatableSelect();
+
+    /**
+     * provides query that will select all data from Entity's table
+     *
+     * @return query that selects all data
+     */
+    public PreparedStatement getSelectAllStatement(Connection connection) throws SQLException {
+        return connection.prepareStatement(getSelectAll());
+    }
+
+    /**
+     * @return {@link String} representation select all query
+     */
+    protected abstract String getSelectAll();
 
     /**
      * retrieves {@link E} from {@link ResultSet}'s current cursor position
@@ -58,13 +111,6 @@ public abstract class AbstractDml<E extends Entity> {
      * @throws IncorrectDataException if entity's data is incorrect
      */
     public abstract void updateRow(ResultSet resultSet, E entity) throws SQLException;
-
-    /**
-     * provides query that will select all data from Entity's table
-     *
-     * @return query that selects all data
-     */
-    public abstract String getSelectAllQuery();
 
     /**
      * represents non-existing entity

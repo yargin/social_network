@@ -1,11 +1,12 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.entities.groups;
 
+import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.group.GroupImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.entities.AbstractDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.entities.accounts.AccountDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.entities.accounts.AccountsTable;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,28 +18,31 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuild
 
 public class GroupDml extends AbstractDml<Group> {
     private static final String SELECT_ALL = buildQuery().select(TABLE).build();
-    private static final String SELECT_BY_ID = buildQuery().select(TABLE).where(ID).build();
-    private static final String SELECT_BY_NAME = buildQuery().select(TABLE).where(NAME).build();
+    private static final String SELECT_BY_ID = buildQuery().selectJoin(TABLE, AccountsTable.TABLE, OWNER,
+            AccountsTable.ID).where(ID).build();
+    private static final String SELECT_BY_NAME = buildQuery().selectJoin(TABLE, AccountsTable.TABLE, OWNER,
+            AccountsTable.ID).where(NAME).build();
+    private static final String SELECT_UPDATE = buildQuery().select(TABLE).where(NAME).build();
+    private final AccountDml accountDml = new AccountDml();
 
     @Override
-    public String getSelectAllQuery() {
+    protected String getSelectById() {
+        return SELECT_BY_ID;
+    }
+
+    @Override
+    protected String getSelectByIdentifier() {
+        return SELECT_BY_NAME;
+    }
+
+    @Override
+    protected String getUpdatableSelect() {
+        return SELECT_UPDATE;
+    }
+
+    @Override
+    protected String getSelectAll() {
         return SELECT_ALL;
-    }
-
-    @Override
-    public PreparedStatement getSelectStatement(Connection connection, long id) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID, ResultSet.TYPE_SCROLL_INSENSITIVE,
-                ResultSet.CONCUR_UPDATABLE);
-        statement.setLong(1, id);
-        return statement;
-    }
-
-    @Override
-    public PreparedStatement getSelectStatement(Connection connection, String identifier) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(SELECT_BY_NAME, ResultSet.TYPE_SCROLL_INSENSITIVE,
-                ResultSet.CONCUR_UPDATABLE);
-        statement.setString(1, identifier);
-        return statement;
     }
 
     @Override
@@ -47,6 +51,8 @@ public class GroupDml extends AbstractDml<Group> {
         group.setId(resultSet.getLong(ID));
         group.setName(resultSet.getString(NAME));
         group.setDescription(resultSet.getString(DESCRIPTION));
+        Account owner = accountDml.selectFromRow(resultSet);
+        group.setOwner(owner);
         return group;
     }
 

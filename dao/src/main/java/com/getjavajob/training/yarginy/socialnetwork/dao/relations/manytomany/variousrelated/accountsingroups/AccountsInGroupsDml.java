@@ -21,7 +21,8 @@ public class AccountsInGroupsDml extends ManyToManyDml<Account, Group> {
     private static final String SELECT_MEMBERS = buildQuery().selectJoin(AccountsTable.TABLE, AccountsInGroups.TABLE,
             AccountsTable.ID, AccountsInGroups.ACCOUNT_ID).where(AccountsInGroups.GROUP_ID).build();
     private static final String SELECT_GROUPS = buildQuery().selectJoin(GroupsTable.TABLE, AccountsInGroups.TABLE,
-            GroupsTable.ID, AccountsInGroups.GROUP_ID).where(AccountsInGroups.ACCOUNT_ID).build();
+            GroupsTable.ID, AccountsInGroups.GROUP_ID).join(AccountsTable.TABLE, GroupsTable.OWNER, AccountsTable.ID).
+            where(AccountsInGroups.ACCOUNT_ID).build();
     private static final String SELECT = buildQuery().select(AccountsInGroups.TABLE).where(AccountsInGroups.ACCOUNT_ID).
             and(AccountsInGroups.GROUP_ID).build();
 

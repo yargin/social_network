@@ -1,14 +1,15 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.entities.phones;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.NullEntitiesFactory;
+import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.phone.PhoneImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.phone.additionaldata.PhoneType;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.dao.entities.AbstractDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.entities.accounts.AccountDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.entities.accounts.AccountsTable;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -19,34 +20,45 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuild
 import static java.util.Objects.isNull;
 
 public class PhonesDml extends AbstractDml<Phone> {
-    public static final String SELECT_ALL = buildQuery().select(TABLE).build();
-    public static final String SELECT_BY_ID = buildQuery().select(TABLE).where(ID).build();
-    public static final String SELECT_BY_NUMBER = buildQuery().select(TABLE).where(NUMBER).build();
+    public static final String SELECT_ALL = buildQuery().selectJoin(TABLE, AccountsTable.TABLE, OWNER, AccountsTable.ID).
+            build();
+    public static final String SELECT_UPDATE = buildQuery().select(TABLE).where(NUMBER).build();
+    public static final String SELECT_BY_ID = buildQuery().selectJoin(TABLE, AccountsTable.TABLE, OWNER,
+            AccountsTable.ID).where(ID).build();
+    public static final String SELECT_BY_NUMBER = buildQuery().selectJoin(TABLE, AccountsTable.TABLE, OWNER,
+            AccountsTable.ID).where(NUMBER).build();
+    private final AccountDml accountDml = new AccountDml();
 
     @Override
-    public PreparedStatement getSelectStatement(Connection connection, long id) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID, ResultSet.TYPE_SCROLL_INSENSITIVE,
-                ResultSet.CONCUR_UPDATABLE);
-        statement.setLong(1, id);
-        return statement;
+    protected String getUpdatableSelect() {
+        return SELECT_UPDATE;
     }
 
     @Override
-    public PreparedStatement getSelectStatement(Connection connection, String identifier) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(SELECT_BY_NUMBER, ResultSet.TYPE_SCROLL_INSENSITIVE,
-                ResultSet.CONCUR_UPDATABLE);
-        statement.setString(1, identifier);
-        return statement;
+    protected String getSelectAll() {
+        return SELECT_ALL;
+    }
+
+    @Override
+    protected String getSelectById() {
+        return SELECT_BY_ID;
+    }
+
+    @Override
+    protected String getSelectByIdentifier() {
+        return SELECT_BY_NUMBER;
     }
 
     @Override
     public Phone selectFromRow(ResultSet resultSet) throws SQLException {
         Phone phone = new PhoneImpl();
-        phone.setId(resultSet.getInt(ID));
+        phone.setId(resultSet.getLong(ID));
         phone.setNumber(resultSet.getString(NUMBER));
         if (!isNull(resultSet.getString(TYPE))) {
             phone.setType(PhoneType.valueOf(resultSet.getString(TYPE)));
         }
+        Account owner = accountDml.selectFromRow(resultSet);
+        phone.setOwner(owner);
         return phone;
     }
 
@@ -70,11 +82,6 @@ public class PhonesDml extends AbstractDml<Phone> {
             throw new IncorrectDataException("owner can't be null");
         }
         resultSet.updateLong(OWNER, phone.getOwner().getId());
-    }
-
-    @Override
-    public String getSelectAllQuery() {
-        return SELECT_ALL;
     }
 
     @Override

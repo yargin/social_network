@@ -116,8 +116,8 @@ public class AccountServiceImpl implements AccountService {
         Collection<Account> allAccounts = accountDao.selectAll();
         Map<Account, Collection<Phone>> accountsPhones = new HashMap<>();
         for (Account account : allAccounts) {
-            Collection<Phone> accountPhones = allPhones.stream().filter((phone) -> phone.getOwner().getId() == account.
-                    getId()).collect(Collectors.toList());
+            Collection<Phone> accountPhones = allPhones.stream().filter((phone) -> phone.getOwner().equals(account)).
+                    collect(Collectors.toList());
             accountsPhones.put(account, accountPhones);
         }
         return accountsPhones;

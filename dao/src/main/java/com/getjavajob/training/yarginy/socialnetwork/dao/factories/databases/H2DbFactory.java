@@ -6,7 +6,7 @@ public class H2DbFactory extends CommonDbFactory {
     private static final String DB_CONNECTION_FILE = "connections/H2Connection.properties";
     private static final String SCRIPTS_DIR = "./src/main/resources/scripts/H2/";
     private static final String CREATION_SCRIPT = "run_creation.sql";
-    private static final int CONNECTIONS = 1;
+    private static final int CONNECTIONS = 2;
 
     @Override
     protected String getConnectionFile() {

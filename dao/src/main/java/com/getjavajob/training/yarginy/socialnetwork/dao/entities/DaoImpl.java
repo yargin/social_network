@@ -54,7 +54,7 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
     @Override
     public boolean create(E entity) {
         try (Connection connection = dbConnector.getConnection();
-             PreparedStatement statement = abstractDml.getSelectStatement(connection, entity.getIdentifier());
+             PreparedStatement statement = abstractDml.getUpdatableSelectStatement(connection, entity.getIdentifier());
              ResultSet resultSet = statement.executeQuery()) {
             if (resultSet.next()) {
                 return false;
@@ -72,7 +72,7 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
     @Override
     public boolean update(E entity) {
         try (Connection connection = dbConnector.getConnection();
-             PreparedStatement statement = abstractDml.getSelectStatement(connection, entity.getIdentifier());
+             PreparedStatement statement = abstractDml.getUpdatableSelectStatement(connection, entity.getIdentifier());
              ResultSet resultSet = statement.executeQuery()) {
             if (!resultSet.next()) {
                 return false;
@@ -89,7 +89,7 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
     @Override
     public boolean delete(E entity) {
         try (Connection connection = dbConnector.getConnection();
-             PreparedStatement statement = abstractDml.getSelectStatement(connection, entity.getIdentifier());
+             PreparedStatement statement = abstractDml.getUpdatableSelectStatement(connection, entity.getIdentifier());
              ResultSet resultSet = statement.executeQuery()) {
             if (!resultSet.next()) {
                 return false;
@@ -105,7 +105,7 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
     @Override
     public Collection<E> selectAll() {
         try (Connection connection = dbConnector.getConnection();
-             PreparedStatement statement = connection.prepareStatement(abstractDml.getSelectAllQuery());
+             PreparedStatement statement = abstractDml.getSelectAllStatement(connection);
              ResultSet resultSet = statement.executeQuery()) {
             Collection<E> all = new ArrayList<>();
             while (resultSet.next()) {

@@ -18,7 +18,8 @@ import java.util.Collection;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 
 public class AccountsPhonesDml extends OneToManyDml<Account, Phone> {
-    public static final String SELECT_BY_ACCOUNT = buildQuery().select(PhonesTable.TABLE).where(PhonesTable.OWNER).build();
+    public static final String SELECT_BY_ACCOUNT = buildQuery().selectJoin(AccountsTable.TABLE, PhonesTable.TABLE,
+            AccountsTable.ID, PhonesTable.OWNER).where(PhonesTable.OWNER).build();
     public static final String SELECT_BY_PHONE = buildQuery().selectJoin(AccountsTable.TABLE, PhonesTable.TABLE,
             AccountsTable.ID, PhonesTable.OWNER).where(PhonesTable.ID).build();
 

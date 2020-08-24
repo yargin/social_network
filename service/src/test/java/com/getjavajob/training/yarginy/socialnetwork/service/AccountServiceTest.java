@@ -5,6 +5,7 @@ import com.getjavajob.trainig.yarginy.socialnetwork.service.AccountServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.phone.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.common.entities.phone.PhoneImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.entities.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.selfrelated.SelfManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relations.onetomany.OneToManyDao;
@@ -12,9 +13,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static com.getjavajob.training.yarginy.socialnetwork.service.utils.TestResultPrinter.printPassed;
+import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -100,20 +103,34 @@ public class AccountServiceTest {
         printPassed(CLASS, "testGetFriends");
     }
 
-    //todo
     @Test
     public void testAddPhone() {
-
+        Phone phone = new PhoneImpl();
+        phone.setNumber("111-111");
+        when(phoneDao.create(phone)).thenReturn(true);
+        assertTrue(phoneDao.create(phone));
+        printPassed(CLASS, "testAddPhone");
     }
 
     @Test
     public void testRemovePhone() {
-
+        Phone phone = new PhoneImpl();
+        phone.setNumber("111-111");
+        when(phoneDao.create(phone)).thenReturn(true);
+        assertTrue(phoneDao.create(phone));
+        printPassed(CLASS, "testAddPhone");
     }
 
     @Test
     public void testGetPhones() {
-
+        Phone firstPhone = new PhoneImpl();
+        firstPhone.setNumber("11333");
+        Phone secondPhone = new PhoneImpl();
+        firstPhone.setNumber("33111");
+        Collection<Phone> phones = asList(firstPhone, secondPhone);
+        when(accountsPhonesDao.selectMany(account)).thenReturn(phones);
+        assertEquals(phones, accountService.getPhones(account));
+        printPassed(CLASS, "testGetPhones");
     }
 
     @Test

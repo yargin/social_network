@@ -66,6 +66,21 @@ public class SqlQueryBuilder {
     }
 
     /**
+     * appends 'JOIN <b>joinedTable</b> ON <b>leftColumn</b> = <b>joinedColumn</b>' to query
+     *
+     * @param joinedTable  specified joined table
+     * @param leftColumn   specified left column
+     * @param joinedColumn specified joined column
+     * @return {@link SqlQueryBuilder} having added 'JOIN <b>joinedTable</b> ON <b>leftColumn</b> = <b>joinedColumn</b>'
+     * to query
+     */
+    public SqlQueryBuilder join(String joinedTable, String leftColumn, String joinedColumn) {
+        query.append(" JOIN ").append(joinedTable).append(" ON ").
+                append(leftColumn).append(" = ").append(joinedColumn);
+        return this;
+    }
+
+    /**
      * appends 'SELECT * FROM <b>leftTable</b> JOIN (<b>subSelect</b>) s ON <b>leftColumn</b> = <b>alias</b>'
      *
      * @param leftTable  specified left table

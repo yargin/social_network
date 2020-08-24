@@ -12,17 +12,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.selfrelated.friendship.FriendshipsTable.*;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 
 public class FriendshipDml extends SelfManyToManyDml<Account> {
     private static final String ALIAS = "acc_id";
-    private static final String SUB_SELECT = buildQuery().selectColumn(FriendshipsTable.TABLE, FriendshipsTable.FIRST_ACCOUNT, ALIAS).
-            where(FriendshipsTable.SECOND_ACCOUNT).union().selectColumn(FriendshipsTable.TABLE, FriendshipsTable.SECOND_ACCOUNT).
-            where(FriendshipsTable.FIRST_ACCOUNT).build();
-    private static final String SELECT_BY_ID = buildQuery().joinSubSelect(AccountsTable.TABLE, SUB_SELECT, AccountsTable.ID, ALIAS).build();
+    private static final String SUB_SELECT = buildQuery().selectColumn(TABLE, FIRST_ACCOUNT, ALIAS).where(
+            SECOND_ACCOUNT).union().selectColumn(TABLE, SECOND_ACCOUNT).where(FIRST_ACCOUNT).build();
+    private static final String SELECT_BY_ID = buildQuery().joinSubSelect(AccountsTable.TABLE, SUB_SELECT,
+            AccountsTable.ID, ALIAS).build();
 
-    private static final String SELECT_BY_BOTH = buildQuery().select(FriendshipsTable.TABLE).where(FriendshipsTable.FIRST_ACCOUNT).
-            and(FriendshipsTable.SECOND_ACCOUNT).build();
+    private static final String SELECT_BY_BOTH = buildQuery().select(TABLE).where(FIRST_ACCOUNT).
+            and(SECOND_ACCOUNT).build();
     private static final AccountDml ACCOUNT_DML = new AccountDml();
 
     @Override

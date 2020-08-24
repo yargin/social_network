@@ -5,7 +5,9 @@ import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.Acc
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.additionaldata.Sex;
 import com.getjavajob.training.yarginy.socialnetwork.dao.entities.AbstractDml;
 
-import java.sql.*;
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -20,24 +22,23 @@ public class AccountDml extends AbstractDml<Account> {
     private static final String SELECT_BY_EMAIL = buildQuery().select(TABLE).where(EMAIL).build();
 
     @Override
-    public String getSelectAllQuery() {
+    protected String getSelectById() {
+        return SELECT_BY_ID;
+    }
+
+    @Override
+    protected String getSelectByIdentifier() {
+        return SELECT_BY_EMAIL;
+    }
+
+    @Override
+    protected String getUpdatableSelect() {
+        return SELECT_BY_EMAIL;
+    }
+
+    @Override
+    protected String getSelectAll() {
         return SELECT_ALL;
-    }
-
-    @Override
-    public PreparedStatement getSelectStatement(Connection connection, long id) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID, ResultSet.TYPE_SCROLL_INSENSITIVE,
-                ResultSet.CONCUR_UPDATABLE);
-        statement.setLong(1, id);
-        return statement;
-    }
-
-    @Override
-    public PreparedStatement getSelectStatement(Connection connection, String identifier) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(SELECT_BY_EMAIL, ResultSet.TYPE_SCROLL_INSENSITIVE,
-                ResultSet.CONCUR_UPDATABLE);
-        statement.setString(1, identifier);
-        return statement;
     }
 
     @Override

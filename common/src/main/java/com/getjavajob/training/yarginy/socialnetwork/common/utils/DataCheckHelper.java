@@ -145,6 +145,12 @@ public final class DataCheckHelper {
         return phone;
     }
 
+    /**
+     * checks that id is applicable. 0 means that entity is not saved yet, -1 means that it doesn't exist(nullEntity)
+     *
+     * @param id to check
+     * @return checked id
+     */
     public static long checkId(long id) {
         if (id == 0) {
             throw new IncorrectDataFlowException("must be read from storage");
