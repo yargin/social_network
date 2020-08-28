@@ -20,9 +20,9 @@ public final class DataCheckHelper {
      */
     public static String stringOptional(String string) {
         if (!isNull(string)) {
-            string.trim();
-            if (!string.isEmpty()) {
-                return string;
+            String stringToReturn = string.trim();
+            if (!stringToReturn.isEmpty()) {
+                return stringToReturn;
             }
         }
         return null;
@@ -37,11 +37,11 @@ public final class DataCheckHelper {
      * @throws IncorrectDataException if given {@link String} is empty, null or only-spaces
      */
     public static String stringMandatory(String string) {
-        stringOptional(string);
-        if (isNull(string)) {
+        String stringToReturn = stringOptional(string);
+        if (isNull(stringToReturn)) {
             throw new IncorrectDataException("can't be null or empty");
         }
-        return string;
+        return stringToReturn;
     }
 
     /**
