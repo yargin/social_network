@@ -3,7 +3,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.entities.groups;
 /**
  * table Groups columns
  */
-public class GroupsTable {
+public final class GroupsTable {
     public static final String TABLE = "_Groups";
     public static final String ID = TABLE + '.' + "ID";
     public static final String NAME = TABLE + '.' + "Name";

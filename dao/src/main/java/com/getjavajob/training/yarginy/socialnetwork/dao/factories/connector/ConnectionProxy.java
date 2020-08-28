@@ -14,7 +14,7 @@ public class ConnectionProxy implements Connection {
         try {
             connection.setAutoCommit(false);
         } catch (SQLException e) {
-            throw new IllegalStateException(e.getMessage());
+            throw new IllegalStateException(e);
         }
         this.dbConnector = dbConnector;
     }

@@ -27,6 +27,8 @@ public abstract class AbstractDml<E extends Entity> {
     }
 
     /**
+     * query to select by id
+     *
      * @return {@link String} representation of select by id number query
      */
     protected abstract String getSelectById();
@@ -47,6 +49,8 @@ public abstract class AbstractDml<E extends Entity> {
     }
 
     /**
+     * query to select by {@link String} identifier
+     *
      * @return {@link String} representation of select by string identifier number query
      */
     protected abstract String getSelectByIdentifier();
@@ -69,6 +73,8 @@ public abstract class AbstractDml<E extends Entity> {
     }
 
     /**
+     * query to select {@link Entity}s for update
+     *
      * @return {@link String} representation of updatable select query
      */
     protected abstract String getUpdatableSelect();
@@ -83,6 +89,8 @@ public abstract class AbstractDml<E extends Entity> {
     }
 
     /**
+     * query to select all {@link Entity}s
+     *
      * @return {@link String} representation select all query
      */
     protected abstract String getSelectAll();

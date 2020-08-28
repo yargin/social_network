@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.entities.phones;
 
-public class PhonesTable {
+public final class PhonesTable {
     public static final String TABLE = "Phones";
     public static final String ID = TABLE + '.' + "Id";
     public static final String NUMBER = TABLE + '.' + "Number";

@@ -12,9 +12,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.relations.onetomany.One
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import static com.getjavajob.training.yarginy.socialnetwork.service.utils.TestResultPrinter.printPassed;
 import static java.util.Arrays.asList;
@@ -126,7 +124,7 @@ public class AccountServiceTest {
         Phone firstPhone = new PhoneImpl();
         firstPhone.setNumber("11333");
         Phone secondPhone = new PhoneImpl();
-        firstPhone.setNumber("33111");
+        secondPhone.setNumber("33111");
         Collection<Phone> phones = asList(firstPhone, secondPhone);
         when(accountsPhonesDao.selectMany(account)).thenReturn(phones);
         assertEquals(phones, accountService.getPhones(account));
@@ -135,6 +133,67 @@ public class AccountServiceTest {
 
     @Test
     public void testGetAllWithPhones() {
+        Map<Account, Collection<Phone>> expected = new HashMap<>();
+        //all phones for mock
+        Collection<Phone> phones = new HashSet<>();
 
+        Account account = new AccountImpl("Vladimir", "rise@communism.com");
+        account.setId(1);
+        Phone phone = new PhoneImpl();
+        phone.setOwner(account);
+        phone.setNumber("02");
+        phones.add(phone);
+        Collection<Phone> accountPhones = new HashSet<>();
+        accountPhones.add(phone);
+        phone = new PhoneImpl();
+        phone.setOwner(account);
+        phone.setNumber("+7 (920) 123-23-32");
+        phones.add(phone);
+        accountPhones.add(phone);
+        expected.put(account, accountPhones);
+
+        account = new AccountImpl("dracula", "drink@blood.com");
+        account.setId(2);
+        phone = new PhoneImpl();
+        phone.setOwner(account);
+        phone.setNumber("8 (921) 1234321");
+        phones.add(phone);
+        accountPhones = new HashSet<>();
+        accountPhones.add(phone);
+        phone = new PhoneImpl();
+        phone.setOwner(account);
+        phone.setNumber("14-1414-14");
+        accountPhones.add(phone);
+        phones.add(phone);
+        expected.put(account, accountPhones);
+
+        account = new AccountImpl("Alan", "robot@power.com");
+        account.setId(3);
+        phone = new PhoneImpl();
+        phone.setOwner(account);
+        phone.setNumber("444-444-444");
+        phones.add(phone);
+        accountPhones = new HashSet<>();
+        accountPhones.add(phone);
+        phone = new PhoneImpl();
+        phone.setOwner(account);
+        phone.setNumber("+9 812 123 321");
+        phones.add(phone);
+        accountPhones.add(phone);
+        expected.put(account, accountPhones);
+
+        account = new AccountImpl("Petr", "popovp@gmail.com");
+        account.setId(3);
+        phone = new PhoneImpl();
+        phone.setOwner(account);
+        phone.setNumber("89218942");
+        phones.add(phone);
+        accountPhones = new HashSet<>();
+        accountPhones.add(phone);
+        expected.put(account, accountPhones);
+
+        when(phoneDao.selectAll()).thenReturn(phones);
+        assertEquals(expected, accountService.getAllWithPhones());
+        printPassed(CLASS, "testGetAllWithPhones");
     }
 }

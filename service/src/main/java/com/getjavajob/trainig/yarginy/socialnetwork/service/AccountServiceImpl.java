@@ -10,8 +10,8 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.relations.onetomany.One
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
 import static java.util.Objects.isNull;
@@ -23,7 +23,6 @@ public class AccountServiceImpl implements AccountService {
     private final OneToManyDao<Account, Phone> accountsPhonesDao;
     private final SelfManyToManyDao<Account> friendshipDao;
     private Collection<Account> friends;
-    private Collection<Phone> phones;
 
     public AccountServiceImpl() {
         dbFactory = getDbFactory();
@@ -113,13 +112,17 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Map<Account, Collection<Phone>> getAllWithPhones() {
         Collection<Phone> allPhones = phoneDao.selectAll();
-        Collection<Account> allAccounts = accountDao.selectAll();
         Map<Account, Collection<Phone>> accountsPhones = new HashMap<>();
-        for (Account account : allAccounts) {
-            Collection<Phone> accountPhones = allPhones.stream().filter((phone) -> phone.getOwner().equals(account)).
-                    collect(Collectors.toList());
-            accountsPhones.put(account, accountPhones);
-        }
+        allPhones.forEach(a -> {
+            Collection<Phone> phones;
+            if (accountsPhones.containsKey(a.getOwner())) {
+                phones = accountsPhones.get(a.getOwner());
+            } else {
+                phones = new HashSet<>();
+                accountsPhones.put(a.getOwner(), phones);
+            }
+            phones.add(a);
+        });
         return accountsPhones;
     }
 }

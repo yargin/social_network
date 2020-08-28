@@ -8,8 +8,6 @@ import java.util.regex.Pattern;
 import static java.util.Objects.isNull;
 
 public final class DataCheckHelper {
-    public static final int DEFAULT_LENGTH = 200;
-
     private DataCheckHelper() {
     }
 

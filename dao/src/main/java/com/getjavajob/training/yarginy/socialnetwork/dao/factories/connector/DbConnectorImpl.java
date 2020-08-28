@@ -65,7 +65,7 @@ public final class DbConnectorImpl implements DbConnector {
             //blocks until at least one connection becomes free
             return connections.take();
         } catch (InterruptedException e) {
-            throw new IllegalStateException(e.getMessage());
+            throw new IllegalStateException(e);
         }
     }
 
