@@ -11,6 +11,5 @@
 
     <groupId>com.getjavajob.training.yarginy.socialnetwork.common</groupId>
     <artifactId>common</artifactId>
-
-
+    <packaging>jar</packaging>
 </project>

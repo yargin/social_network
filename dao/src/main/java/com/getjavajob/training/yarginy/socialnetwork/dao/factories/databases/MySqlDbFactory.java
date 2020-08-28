@@ -1,10 +1,11 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.factories.databases;
 
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.CommonDbFactory;
 
-public class MySqlDbFactory extends AbstractDbFactory {
+public class MySqlDbFactory extends CommonDbFactory {
     private static final String DB_CONNECTION_FILE = "connections/MySQLConnection.properties";
     private static final String SCRIPTS_DIR = "./src/main/resources/scripts/MySQL/";
+    private static final int CONNECTIONS = 4;
 
     @Override
     protected String getConnectionFile() {
@@ -24,5 +25,10 @@ public class MySqlDbFactory extends AbstractDbFactory {
     @Override
     protected boolean runScriptOnStart() {
         return false;
+    }
+
+    @Override
+    protected int getConnectionsCapacity() {
+        return CONNECTIONS;
     }
 }
