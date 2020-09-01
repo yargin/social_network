@@ -1,7 +1,5 @@
 package com.getjavajob.training.yarginy.socialnetwork.service;
 
-import com.getjavajob.trainig.yarginy.socialnetwork.service.AccountService;
-import com.getjavajob.trainig.yarginy.socialnetwork.service.AccountServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.phone.Phone;

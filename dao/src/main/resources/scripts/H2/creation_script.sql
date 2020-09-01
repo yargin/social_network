@@ -1,6 +1,6 @@
-drop ALL OBJECTS;
+DROP ALL OBJECTS;
 
-create TABLE IF NOT EXISTS Accounts (
+CREATE TABLE IF NOT EXISTS Accounts (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(40) NOT NULL,
     surname VARCHAR(40) NOT NULL,
@@ -15,41 +15,41 @@ create TABLE IF NOT EXISTS Accounts (
     country VARCHAR(40)
 );
 
-create TABLE IF NOT EXISTS _Groups (
+CREATE TABLE IF NOT EXISTS _Groups (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE,
     description VARCHAR(500),
     owner_id BIGINT UNSIGNED NOT NULL
 );
 
-alter table _Groups
-add CONSTRAINT C_11 FOREIGN KEY (owner_id) REFERENCES Accounts (id) ON delete CASCADE;
+ALTER TABLE _Groups
+ADD CONSTRAINT C_11 FOREIGN KEY (owner_id) REFERENCES Accounts (id) ON DELETE CASCADE;
 
-create TABLE IF NOT EXISTS Accounts_in_groups (
+CREATE TABLE IF NOT EXISTS Accounts_in_groups (
     account_id BIGINT UNSIGNED NOT NULL,
     group_id BIGINT UNSIGNED NOT NULL
 );
 
-alter table Accounts_in_groups
-add CONSTRAINT C_12 PRIMARY KEY (account_id, group_id);
+ALTER TABLE Accounts_in_groups
+ADD CONSTRAINT C_12 PRIMARY KEY (account_id, group_id);
 
-alter table Accounts_in_groups
-add CONSTRAINT C_13 FOREIGN KEY (account_id) REFERENCES Accounts (id) ON delete CASCADE;
+ALTER TABLE Accounts_in_groups
+ADD CONSTRAINT C_13 FOREIGN KEY (account_id) REFERENCES Accounts (id) ON DELETE CASCADE;
 
-alter table Accounts_in_groups
-add CONSTRAINT C_14 FOREIGN KEY (group_id) REFERENCES _Groups (id) ON delete CASCADE;
+ALTER TABLE Accounts_in_groups
+ADD CONSTRAINT C_14 FOREIGN KEY (group_id) REFERENCES _Groups (id) ON DELETE CASCADE;
 
-insert into Accounts (name, surname, email) values
+INSERT INTO Accounts (name, surname, email) VALUES
 ('Vladimir', 'Lenin',  'rise@communism.su'),
 ('dracula', 'NOSFERATU',  'drink@blood.com'),
 ('Alan', 'Turing', 'robot@power.com'),
 ('Petr', 'Popov', 'popovp@gmail.com');
 
-insert into _Groups (name, description, owner_id) values
+INSERT INTO _Groups (name, description, owner_id) VALUES
 ('USSR fans', 'building Communism', 1),
 ('machine learning', '', 3);
 
-insert into Accounts_in_groups values
+INSERT INTO Accounts_in_groups VALUES
 (1, 1), (2, 1), (3, 2), (1, 2);
 
 CREATE TABLE IF NOT EXISTS Friendships (
