@@ -5,7 +5,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.factories.CommonDbFacto
 public class JawsDBFactory extends CommonDbFactory {
     private static final String DB_CONNECTION_FILE = "connections/JawsDBConnection.properties";
     private static final String SCRIPTS_DIR = "./src/main/resources/scripts/MySQL/";
-    private static final int CONNECTIONS = 4;
+    private static final int CONNECTIONS = 10;
 
     public JawsDBFactory() {
         //register driver
