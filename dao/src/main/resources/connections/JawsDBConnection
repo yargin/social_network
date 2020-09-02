@@ -1,0 +1,5 @@
+url=jdbc:mysql://ob3tdoreg91spqkc:tpkl0gslmimomhgg@q2gen47hi68k1yrb.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/crmpcpc571dqa7ra
+password=tpkl0gslmimomhgg
+useLegacyDatetimeCode=false
+serverTimezone=UTC
+useSSL=false
