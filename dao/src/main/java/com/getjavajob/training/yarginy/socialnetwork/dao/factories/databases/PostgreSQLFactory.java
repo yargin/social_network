@@ -3,7 +3,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.factories.databases;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.CommonDbFactory;
 
 public class PostgreSQLFactory extends CommonDbFactory {
-    private static final String DB_CONNECTION_FILE = "connections/PostgreSQLConnection.properities";
+    private static final String DB_CONNECTION_FILE = "connections/PostgreSQLConnection.properties";
     private static final String SCRIPTS_DIR = "./src/main/resources/scripts/PostgreSQL/";
     private static final int CONNECTIONS = 4;
 
