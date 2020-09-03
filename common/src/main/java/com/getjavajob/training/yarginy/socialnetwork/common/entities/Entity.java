@@ -11,8 +11,6 @@ public interface Entity {
      */
     String getIdentifier();
 
-    //todo: if id required implies that it was written from database so it could be checked for non-null??
-
     /**
      * get entity's number unique identifier, usually auto-generated
      *

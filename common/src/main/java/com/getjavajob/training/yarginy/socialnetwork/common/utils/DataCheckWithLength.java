@@ -23,20 +23,16 @@ public final class DataCheckWithLength {
      */
     public static String stringOptional(String string, int maxLength) {
         if (!isNull(string)) {
-            string.trim();
-            if (string.length() > maxLength) {
+            String stringOptional = string.trim();
+            if (stringOptional.length() > maxLength) {
                 throw new IncorrectDataException("too long");
             }
-            if (!string.isEmpty()) {
-                return string;
+            if (!stringOptional.isEmpty()) {
+                return stringOptional;
             }
         }
         return null;
     }
-
-//    public static String stringOptional(String string) {
-//        return stringOptional(string, DEFAULT_LENGTH);
-//    }
 
     /**
      * used for mandatory {@link String} fields
@@ -48,11 +44,11 @@ public final class DataCheckWithLength {
      * @throws IncorrectDataException if given {@link String} is empty, null, only-spaces or too long
      */
     public static String stringMandatory(String string, int maxLength) {
-        stringOptional(string, maxLength);
-        if (isNull(string)) {
+        String stringMandatory = stringOptional(string, maxLength);
+        if (isNull(stringMandatory)) {
             throw new IncorrectDataException("can't be null or empty");
         }
-        return string;
+        return stringMandatory;
     }
 
     /**
@@ -66,11 +62,11 @@ public final class DataCheckWithLength {
      * @throws IncorrectDataException if given {@link String} is not an e-mail
      */
     public static String emailOptional(String email, int maxLength) {
-        stringOptional(email, maxLength);
-        if (isNull(email)) {
+        String emailOptional = stringOptional(email, maxLength);
+        if (isNull(emailOptional)) {
             return null;
         }
-        return isEmail(email).toLowerCase();
+        return isEmail(emailOptional).toLowerCase();
     }
 
     /**
@@ -85,8 +81,8 @@ public final class DataCheckWithLength {
      *                                is empty, null, only-spaces or too long
      */
     public static String emailMandatory(String email, int maxLength) {
-        stringMandatory(email, maxLength);
-        return isEmail(email).toLowerCase();
+        String emailMandatory = stringMandatory(email, maxLength);
+        return isEmail(emailMandatory).toLowerCase();
     }
 
     /**
@@ -99,11 +95,11 @@ public final class DataCheckWithLength {
      * @throws IncorrectDataException if given {@link String} is empty or null or not phone
      */
     public static String phoneOptional(String phone, int maxLength) {
-        stringOptional(phone, maxLength);
-        if (isNull(phone)) {
+        String phoneOptional = stringOptional(phone, maxLength);
+        if (isNull(phoneOptional)) {
             return null;
         }
-        return isPhone(phone);
+        return isPhone(phoneOptional);
     }
 
     /**
@@ -116,8 +112,8 @@ public final class DataCheckWithLength {
      * @throws IncorrectDataException if given {@link String} is empty or null or not a phone
      */
     public static String phoneMandatory(String phone, int maxLength) {
-        stringMandatory(phone, maxLength);
-        return isPhone(phone);
+        String phoneMandatory = stringMandatory(phone, maxLength);
+        return isPhone(phoneMandatory);
     }
 
     /**

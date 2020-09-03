@@ -5,11 +5,11 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.entities.accounts;
  */
 public final class AccountsTable {
     public static final String TABLE = "Accounts";
-    public static final String ID = TABLE + '.' + "ID";
+    public static final String ID = TABLE + '.' + "Id";
     public static final String NAME = TABLE + '.' + "Name";
     public static final String SURNAME = TABLE + '.' + "Surname";
     public static final String PATRONYMIC = TABLE + '.' + "Patronymic";
-    public static final String SEX = TABLE + '.' + "sex";
+    public static final String SEX = TABLE + '.' + "Sex";
     public static final String BIRTH_DATE = TABLE + '.' + "Birth_date";
     public static final String ICQ = TABLE + '.' + "Icq";
     public static final String SKYPE = TABLE + '.' + "Skype";

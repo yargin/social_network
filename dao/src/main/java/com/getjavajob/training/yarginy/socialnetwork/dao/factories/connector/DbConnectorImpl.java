@@ -11,6 +11,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Semaphore;
 
 import static java.lang.Thread.currentThread;
+import static java.util.Objects.isNull;
 
 public final class DbConnectorImpl implements DbConnector {
     private static DbConnector singleDbConnector;
@@ -31,13 +32,13 @@ public final class DbConnectorImpl implements DbConnector {
     }
 
     public static DbConnector getDbConnector(String propertiesFile, int capacity) {
-//        if (isNull(singleDbConnector)) {
-//            singleDbConnector = new DbConnectorImpl(propertiesFile, capacity);
-//            return singleDbConnector;
-//        } else {
-//            throw new UnsupportedOperationException("only one instance allowed");
-//        }
-        return new DbConnectorImpl(propertiesFile, capacity);
+        if (isNull(singleDbConnector)) {
+            singleDbConnector = new DbConnectorImpl(propertiesFile, capacity);
+            return singleDbConnector;
+        } else {
+            throw new UnsupportedOperationException("only one instance allowed");
+        }
+//        return new DbConnectorImpl(propertiesFile, capacity);
     }
 
     public void closeConnection(ConnectionProxy connectionProxy) throws SQLException {

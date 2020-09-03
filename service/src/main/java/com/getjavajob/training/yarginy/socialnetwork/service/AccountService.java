@@ -1,4 +1,4 @@
-package com.getjavajob.trainig.yarginy.socialnetwork.service;
+package com.getjavajob.training.yarginy.socialnetwork.service;
 
 
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.Account;

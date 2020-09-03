@@ -8,6 +8,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.entities.phone.addit
 import com.getjavajob.training.yarginy.socialnetwork.dao.entities.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -26,6 +27,11 @@ public class PhoneDaoTest {
         phone.setNumber("123321");
         phone.setOwner(ACCOUNT_DAO.select(1));
         phone.setType(PhoneType.PRIVATE);
+    }
+
+    @AfterClass
+    public static void clearDb() {
+        PHONE_DAO.delete(phone);
     }
 
     @Test

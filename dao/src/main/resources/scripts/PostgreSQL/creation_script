@@ -1,5 +1,5 @@
 create TABLE IF NOT EXISTS Accounts (
-        id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        id BIGSERIAL PRIMARY KEY,
         name VARCHAR(40) NOT NULL,
         surname VARCHAR(40) NOT NULL,
         patronymic VARCHAR(40),
@@ -17,18 +17,18 @@ alter table Accounts
 add CHECK (sex IN ('MALE', 'FEMALE'));
 
 create TABLE IF NOT EXISTS _Groups (
-        id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        id BIGSERIAL PRIMARY KEY,
         name VARCHAR(50) NOT NULL UNIQUE,
         description VARCHAR(500),
-        owner_id BIGINT UNSIGNED NOT NULL
+        owner_id BIGINT NOT NULL
 );
 
 alter table _Groups
 add CONSTRAINT C_11 FOREIGN KEY (owner_id) REFERENCES Accounts (id) ON delete CASCADE;
 
 create TABLE IF NOT EXISTS Accounts_in_groups (
-        account_id BIGINT UNSIGNED,
-        group_id BIGINT UNSIGNED
+        account_id BIGINT,
+        group_id BIGINT
 );
 
 alter table Accounts_in_groups
@@ -42,8 +42,8 @@ add CONSTRAINT C_14 FOREIGN KEY (group_id) REFERENCES _Groups (id) ON delete CAS
 
 
 create TABLE IF NOT EXISTS Friendships (
-        first_account BIGINT UNSIGNED,
-        second_account BIGINT UNSIGNED
+        first_account BIGINT,
+        second_account BIGINT
 );
 
 alter table Friendships
@@ -75,11 +75,11 @@ insert into Friendships values
 (1, 2), (1, 3);
 
 create TABLE IF NOT EXISTS Phones (
-        id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        id BIGSERIAL PRIMARY KEY,
         number VARCHAR(50) NOT NULL UNIQUE,
         type CHAR(7),
-        owner_id BIGINT UNSIGNED NOT NULL
-);
+        owner_id BIGINT NOT NULL
+    );
 
 alter table Phones
 add CONSTRAINT C_18 FOREIGN KEY (owner_id) REFERENCES Accounts (id) ON delete CASCADE;
