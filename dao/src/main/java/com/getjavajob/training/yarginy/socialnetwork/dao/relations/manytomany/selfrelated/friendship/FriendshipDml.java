@@ -21,9 +21,8 @@ public class FriendshipDml extends SelfManyToManyDml<Account> {
             SECOND_ACCOUNT).union().selectColumn(TABLE, SECOND_ACCOUNT).where(FIRST_ACCOUNT).build();
     private static final String SELECT_BY_ID = buildQuery().joinSubSelect(AccountsTable.TABLE, SUB_SELECT,
             AccountsTable.ID, ALIAS).build();
-
-    private static final String SELECT_BY_BOTH = buildQuery().select(TABLE).where(FIRST_ACCOUNT).
-            and(SECOND_ACCOUNT).build();
+    private static final String SELECT_BY_BOTH = buildQuery().select(TABLE).where(FIRST_ACCOUNT).and(SECOND_ACCOUNT).
+            build();
     private static final AccountDml ACCOUNT_DML = new AccountDml();
 
     @Override

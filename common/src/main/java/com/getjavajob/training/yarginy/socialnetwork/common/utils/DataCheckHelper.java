@@ -20,9 +20,9 @@ public final class DataCheckHelper {
      */
     public static String stringOptional(String string) {
         if (!isNull(string)) {
-            String stringToReturn = string.trim();
-            if (!stringToReturn.isEmpty()) {
-                return stringToReturn;
+            String stringOptional = string.trim();
+            if (!stringOptional.isEmpty()) {
+                return stringOptional;
             }
         }
         return null;
@@ -37,11 +37,11 @@ public final class DataCheckHelper {
      * @throws IncorrectDataException if given {@link String} is empty, null or only-spaces
      */
     public static String stringMandatory(String string) {
-        String stringToReturn = stringOptional(string);
-        if (isNull(stringToReturn)) {
+        String stringMandatory = stringOptional(string);
+        if (isNull(stringMandatory)) {
             throw new IncorrectDataException("can't be null or empty");
         }
-        return stringToReturn;
+        return stringMandatory;
     }
 
     /**
@@ -54,11 +54,11 @@ public final class DataCheckHelper {
      * @throws IncorrectDataException if given {@link String} is not an e-mail
      */
     public static String emailOptional(String email) {
-        DataCheckHelper.stringOptional(email);
-        if (isNull(email)) {
+        String emailOptional = stringOptional(email);
+        if (isNull(emailOptional)) {
             return null;
         }
-        return isEmail(email).toLowerCase();
+        return isEmail(emailOptional).toLowerCase();
     }
 
     /**
@@ -72,8 +72,8 @@ public final class DataCheckHelper {
      *                                or only-spaces
      */
     public static String emailMandatory(String email) {
-        DataCheckHelper.stringMandatory(email);
-        return isEmail(email).toLowerCase();
+        String emailMandatory = stringMandatory(email);
+        return isEmail(emailMandatory).toLowerCase();
     }
 
     /**
@@ -85,11 +85,11 @@ public final class DataCheckHelper {
      * @throws IncorrectDataException if given {@link String} is empty or null or not phone
      */
     public static String phoneOptional(String phone) {
-        DataCheckHelper.stringOptional(phone);
-        if (isNull(phone)) {
+        String phoneOptional = stringOptional(phone);
+        if (isNull(phoneOptional)) {
             return null;
         }
-        return isPhone(phone);
+        return isPhone(phoneOptional);
     }
 
     /**
@@ -101,8 +101,8 @@ public final class DataCheckHelper {
      * @throws IncorrectDataException if given {@link String} is empty or null or not a phone
      */
     public static String phoneMandatory(String phone) {
-        stringMandatory(phone);
-        return isPhone(phone);
+        String phoneMandatory = stringMandatory(phone);
+        return isPhone(phoneMandatory);
     }
 
     /**

@@ -12,26 +12,27 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 
 public class FirstServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         resp.setContentType("text/html");
-        Writer writer = resp.getWriter();
+        try {
+            Writer writer = resp.getWriter();
+            AccountService accountService = new AccountServiceImpl();
+            Map<Account, Collection<Phone>> accountsPhones = accountService.getAllWithPhones();
 
-        AccountService accountService = new AccountServiceImpl();
-        Map<Account, Collection<Phone>> accountsPhones = accountService.getAllWithPhones();
-        Set<Account> accounts = accountsPhones.keySet();
-        for (Account account : accounts) {
-            writer.write(account.getName() + " " + account.getSurname());
-            writer.write("<br>");
-            for (Phone phone : accountsPhones.get(account)) {
-                writer.write(phone.getNumber());
+            for (Map.Entry<Account, Collection<Phone>> entry : accountsPhones.entrySet()) {
+                writer.write(entry.getKey().getName() + " " + entry.getKey().getSurname());
+                writer.write("<br>");
+                for (Phone phone : entry.getValue()) {
+                    writer.write(phone.getNumber());
+                    writer.write("<br>");
+                }
+                writer.write("-----------------------------------------");
                 writer.write("<br>");
             }
-            writer.write("-----------------------------------------");
-            writer.write("<br>");
+        } catch (IOException ignore) {
         }
     }
 }

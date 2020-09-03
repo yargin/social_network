@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder;
+package com.getjavajob.training.yarginy.socialnetwork.dao.utils;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
