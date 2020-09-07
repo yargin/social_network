@@ -1,0 +1,92 @@
+@font-face {
+    font-family: 'Quattrocento-Sans-Bold';
+    src:url('../font/Quattrocento-Sans-Bold.ttf.woff') format('woff'),
+    url('../font/Quattrocento-Sans-Bold.ttf.svg#Quattrocento-Sans-Bold') format('svg'),
+    url('../font/Quattrocento-Sans-Bold.ttf.eot'),
+    url('../font/Quattrocento-Sans-Bold.ttf.eot?#iefix') format('embedded-opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+a {
+    text-decoration: none;
+    color: #2c5e99;
+    font-weight: bolder;
+}
+
+a:hover {
+    color: #b75208;
+}
+
+html, body, ul, li {
+    margin: 0;
+}
+
+#logo {
+    float: left;
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-right: 1%;
+    width: 45px;
+}
+
+.wrapper {
+    margin: auto;
+    max-width: 1024px;
+    color: #2c5e99;
+}
+
+.header {
+    min-height: 100px;
+    background: #94d2d4;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.header h1 {
+    overflow: hidden;
+    font-family: 'Quattrocento-Sans-Bold', serif;
+    font-weight: normal;
+    position: relative;
+    top: 35px;
+    left: 20px;
+}
+
+.menu {
+    float: left;
+    font-family: "Tahoma", serif;
+    font-size: 13px;
+}
+
+.menu ul {
+    padding: 0;
+    list-style-type: none;
+}
+
+.menu li {
+    margin: 10px 10px 10px 10px;
+}
+
+.content {
+    font-size: 13px;
+    font-family: "Tahoma", serif;
+    /*padding: 10px 10px 30px 30px;*/
+    padding: 1%;
+    min-height: 300px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+}
+
+.footer {
+    height: 20px;
+    background: #94d2d4;
+    font-family: 'Quattrocento-Sans-Bold', serif;
+}
+
+.footer p {
+    padding-top: 4px;
+    margin-left: 1%;
+    font-size: 11px;
+    text-align: center;
+}
