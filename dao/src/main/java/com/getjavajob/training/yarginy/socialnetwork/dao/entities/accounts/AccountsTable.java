@@ -17,6 +17,9 @@ public final class AccountsTable {
     public static final String ADDITIONAL_EMAIL = TABLE + '.' + "Additional_email";
     public static final String COUNTRY = TABLE + '.' + "Country";
     public static final String CITY = TABLE + '.' + "City";
+    public static final String REGISTRATION_DATE = TABLE + '.' + "Registration_date";
+    public static final String ROLE = TABLE + '.' + "Role";
+    public static final String PASSWORD = TABLE + '.' + "Password";
 
     private AccountsTable() {
     }

@@ -1,6 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.entities.account;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.AbstractEntity;
+import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.additionaldata.Sex;
 
 import java.time.LocalDate;
@@ -15,8 +16,11 @@ public class AccountImpl extends AbstractEntity implements Account {
     private String patronymic;
     private Sex sex;
     private LocalDate birthDate;
+    private LocalDate registrationDate;
     private String email;
     private String additionalEmail;
+    private String password;
+    private Role role;
     private String icq;
     private String skype;
     private String city;
@@ -96,6 +100,16 @@ public class AccountImpl extends AbstractEntity implements Account {
     }
 
     @Override
+    public LocalDate getRegistrationDate() {
+        return registrationDate;
+    }
+
+    @Override
+    public void setRegistrationDate(LocalDate registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+
+    @Override
     public String getEmail() {
         return emailMandatory(email);
     }
@@ -113,6 +127,26 @@ public class AccountImpl extends AbstractEntity implements Account {
     @Override
     public void setAdditionalEmail(String additionalEmail) {
         this.additionalEmail = emailOptional(additionalEmail);
+    }
+
+    @Override
+    public String getPassword() {
+        return passwordMandatory(password);
+    }
+
+    @Override
+    public void setPassword(String password) {
+        this.password = passwordMandatory(password);
+    }
+
+    @Override
+    public Role getRole() {
+        return role;
+    }
+
+    @Override
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     @Override

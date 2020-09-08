@@ -2,6 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.entities.accounts;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.AccountImpl;
+import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.additionaldata.Sex;
 import com.getjavajob.training.yarginy.socialnetwork.dao.entities.AbstractDml;
 
@@ -54,8 +55,15 @@ public class AccountDml extends AbstractDml<Account> {
         if (!isNull(resultSet.getDate(BIRTH_DATE))) {
             account.setBirthDate(resultSet.getDate(BIRTH_DATE).toLocalDate());
         }
+        if (!isNull(resultSet.getDate(REGISTRATION_DATE))) {
+            account.setRegistrationDate(resultSet.getDate(REGISTRATION_DATE).toLocalDate());
+        }
         account.setEmail(resultSet.getString(EMAIL));
         account.setAdditionalEmail(resultSet.getString(ADDITIONAL_EMAIL));
+        account.setEmail(resultSet.getString(PASSWORD));
+        if (!isNull(resultSet.getString(ROLE))) {
+            account.setSex(Sex.valueOf(resultSet.getString(ROLE)));
+        }
         account.setIcq(resultSet.getString(ICQ));
         account.setSkype(resultSet.getString(SKYPE));
         account.setCity(resultSet.getString(CITY));
@@ -71,13 +79,20 @@ public class AccountDml extends AbstractDml<Account> {
         if (!isNull(account.getSex())) {
             resultSet.updateString(SEX, account.getSex().toString());
         }
+        if (!isNull(account.getRole())) {
+            resultSet.updateString(ROLE, account.getRole().toString());
+        }
         if (!isNull(account.getBirthDate())) {
             resultSet.updateDate(BIRTH_DATE, Date.valueOf(account.getBirthDate()));
+        }
+        if (!isNull(account.getRegistrationDate())) {
+            resultSet.updateDate(REGISTRATION_DATE, Date.valueOf(account.getRegistrationDate()));
         }
         resultSet.updateString(ICQ, account.getIcq());
         resultSet.updateString(SKYPE, account.getSkype());
         resultSet.updateString(EMAIL, account.getEmail());
         resultSet.updateString(ADDITIONAL_EMAIL, account.getAdditionalEmail());
+        resultSet.updateString(PASSWORD, account.getPassword());
         resultSet.updateString(COUNTRY, account.getCountry());
         resultSet.updateString(CITY, account.getCity());
     }

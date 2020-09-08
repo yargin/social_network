@@ -46,6 +46,14 @@
         <servlet-name>hello</servlet-name>
         <url-pattern>/hello</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>register</servlet-name>
+        <jsp-file>/WEB-INF/jsps/registration.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>register</servlet-name>
+        <url-pattern>/registration</url-pattern>
+    </servlet-mapping>
 
 
 </web-app>

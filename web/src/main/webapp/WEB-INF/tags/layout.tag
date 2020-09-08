@@ -20,13 +20,13 @@
 <div class="wrapper">
     <div class="menu">
         <ul>
-            <li><a href="#"><fmt:message key="homepage"/></a></li>
-            <li><a href="#"><fmt:message key="friends"/></a></li>
-            <li><a href="#"><fmt:message key="messages"/></a></li>
-            <li><a href="#"><fmt:message key="groups"/></a></li>
-            <li><a href="#"><fmt:message key="photos"/></a></li>
-            <li><a href="#"><fmt:message key="settings"/></a></li>
-            <li><a href="#"><fmt:message key="quit"/></a></li>
+            <li><a href="#"><fmt:message key="menu.homepage"/></a></li>
+            <li><a href="#"><fmt:message key="menu.friends"/></a></li>
+            <li><a href="#"><fmt:message key="menu.messages"/></a></li>
+            <li><a href="#"><fmt:message key="menu.groups"/></a></li>
+            <li><a href="#"><fmt:message key="menu.photos"/></a></li>
+            <li><a href="#"><fmt:message key="menu.settings"/></a></li>
+            <li><a href="#"><fmt:message key="menu.quit"/></a></li>
         </ul>
     </div>
     <div class="content">

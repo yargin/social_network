@@ -1,6 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.entities.account;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.Entity;
+import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.additionaldata.Sex;
 
 import java.time.LocalDate;
@@ -19,9 +20,15 @@ public interface Account extends Entity {
 
     LocalDate getBirthDate();
 
+    LocalDate getRegistrationDate();
+
     String getEmail();
 
     String getAdditionalEmail();
+
+    String getPassword();
+
+    Role getRole();
 
     String getIcq();
 
@@ -41,9 +48,15 @@ public interface Account extends Entity {
 
     void setBirthDate(LocalDate birthDate);
 
+    void setRegistrationDate(LocalDate registrationDate);
+
     void setEmail(String email);
 
     void setAdditionalEmail(String additionalEmail);
+
+    void setPassword(String password);
+
+    void setRole(Role role);
 
     void setIcq(String icq);
 

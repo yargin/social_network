@@ -8,6 +8,9 @@ import java.util.regex.Pattern;
 import static java.util.Objects.isNull;
 
 public final class DataCheckHelper {
+    public static final int MIN_PASSWORD = 6;
+    public static final int MAX_PASSWORD = 20;
+
     private DataCheckHelper() {
     }
 
@@ -106,6 +109,19 @@ public final class DataCheckHelper {
     }
 
     /**
+     * used for mandatory password-fields
+     * trims given {@link String}. Then checks that given {@link String} is phone
+     *
+     * @param password to check and handle
+     * @return checked and handled phone
+     * @throws IncorrectDataException if given {@link String} is empty, null, too short, too long or not a password
+     */
+    public static String passwordMandatory(String password) {
+        String passwordMandatory = stringMandatory(password);
+        return isPassword(passwordMandatory);
+    }
+
+    /**
      * used for mandatory object-fields
      *
      * @param object object to check for null
@@ -141,6 +157,21 @@ public final class DataCheckHelper {
             throw new IncorrectDataException("wrong phone");
         }
         return phone;
+    }
+
+    private static String isPassword(String password) {
+        if (password.length() < MIN_PASSWORD) {
+            throw new IncorrectDataException("password too short");
+        }
+        if (password.length() > MAX_PASSWORD) {
+            throw new IncorrectDataException("password too long");
+        }
+        String regex = "[a-zA-z&&[0-9]]+";
+        Pattern pattern = Pattern.compile(regex);
+        if (!pattern.matcher(password).matches()) {
+            throw new IncorrectDataException("wrong password");
+        }
+        return password;
     }
 
     /**

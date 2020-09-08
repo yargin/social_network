@@ -3,7 +3,6 @@
 
 <common:layout>
     <div class="post">
-        <common:loginform/>
+        <common:registrationform/>
     </div>
 </common:layout>
-
