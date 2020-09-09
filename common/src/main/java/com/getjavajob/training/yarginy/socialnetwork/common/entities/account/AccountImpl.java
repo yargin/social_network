@@ -129,15 +129,15 @@ public class AccountImpl extends AbstractEntity implements Account {
         this.additionalEmail = emailOptional(additionalEmail);
     }
 
-    @Override
-    public String getPassword() {
-        return passwordMandatory(password);
-    }
-
-    @Override
-    public void setPassword(String password) {
-        this.password = passwordMandatory(password);
-    }
+//    @Override
+//    public String getPassword() {
+//        return passwordMandatory(password);
+//    }
+//
+//    @Override
+//    public void setPassword(String password) {
+//        this.password = passwordMandatory(password);
+//    }
 
     @Override
     public Role getRole() {
@@ -146,7 +146,7 @@ public class AccountImpl extends AbstractEntity implements Account {
 
     @Override
     public void setRole(Role role) {
-        this.role = role;
+        this.role = objectMandatory(role);
     }
 
     @Override

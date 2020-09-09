@@ -26,7 +26,7 @@ public interface Account extends Entity {
 
     String getAdditionalEmail();
 
-    String getPassword();
+//    String getPassword();
 
     Role getRole();
 
@@ -54,7 +54,7 @@ public interface Account extends Entity {
 
     void setAdditionalEmail(String additionalEmail);
 
-    void setPassword(String password);
+//    void setPassword(String password);
 
     void setRole(Role role);
 

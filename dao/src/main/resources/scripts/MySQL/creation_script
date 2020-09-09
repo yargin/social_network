@@ -1,10 +1,12 @@
-create TABLE IF NOT EXISTS Accounts (
+CREATE TABLE IF NOT EXISTS Accounts (
         id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(40) NOT NULL,
         surname VARCHAR(40) NOT NULL,
         patronymic VARCHAR(40),
         sex CHAR(6),
         birth_date DATE,
+        registration_date DATE,
+        role smallint,
         email VARCHAR(40) NOT NULL UNIQUE,
         additional_email VARCHAR(40) UNIQUE,
         icq VARCHAR(40),
@@ -13,81 +15,93 @@ create TABLE IF NOT EXISTS Accounts (
         country VARCHAR(40)
 );
 
-alter table Accounts
-add CHECK (sex IN ('MALE', 'FEMALE'));
+ALTER TABLE Accounts
+ADD CHECK (sex IN ('MALE', 'FEMALE'));
 
-create TABLE IF NOT EXISTS _Groups (
+CREATE TABLE IF NOT EXISTS _Groups (
         id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(50) NOT NULL UNIQUE,
         description VARCHAR(500),
         owner_id BIGINT UNSIGNED NOT NULL
 );
 
-alter table _Groups
-add CONSTRAINT C_11 FOREIGN KEY (owner_id) REFERENCES Accounts (id) ON delete CASCADE;
+CREATE TABLE IF NOT EXISTS Roles (
+    id TINYINT PRIMARY KEY,
+    role CHAR(7)
+);
 
-create TABLE IF NOT EXISTS Accounts_in_groups (
+ALTER TABLE Accounts
+ADD CONSTRAINT C_22 FOREIGN KEY (role) REFERENCES Roles (id);
+
+INSERT INTO Roles (id, role) VALUES
+(1, 'admin'),
+(2, 'regular');
+
+ALTER TABLE _Groups
+ADD CONSTRAINT C_11 FOREIGN KEY (owner_id) REFERENCES Accounts (id) ON DELETE CASCADE;
+
+CREATE TABLE IF NOT EXISTS Accounts_in_groups (
         account_id BIGINT UNSIGNED,
         group_id BIGINT UNSIGNED
 );
 
-alter table Accounts_in_groups
-add CONSTRAINT C_12 PRIMARY KEY(account_id, group_id);
+ALTER TABLE Accounts_in_groups
+ADD CONSTRAINT C_12 PRIMARY KEY(account_id, group_id);
 
-alter table Accounts_in_groups
-add CONSTRAINT C_13 FOREIGN KEY (account_id) REFERENCES Accounts (id) ON delete CASCADE;
+ALTER TABLE Accounts_in_groups
+ADD CONSTRAINT C_13 FOREIGN KEY (account_id) REFERENCES Accounts (id) ON DELETE CASCADE;
 
-alter table Accounts_in_groups
-add CONSTRAINT C_14 FOREIGN KEY (group_id) REFERENCES _Groups (id) ON delete CASCADE;
+ALTER TABLE Accounts_in_groups
+ADD CONSTRAINT C_14 FOREIGN KEY (group_id) REFERENCES _Groups (id) ON DELETE CASCADE;
 
 
-create TABLE IF NOT EXISTS Friendships (
+CREATE TABLE IF NOT EXISTS Friendships (
         first_account BIGINT UNSIGNED,
         second_account BIGINT UNSIGNED
 );
 
-alter table Friendships
-add CONSTRAINT C_15 PRIMARY KEY(first_account, second_account);
+ALTER TABLE Friendships
+ADD CONSTRAINT C_15 PRIMARY KEY(first_account, second_account);
 
-alter table Friendships
-add CONSTRAINT C_16 FOREIGN KEY (first_account) REFERENCES Accounts (id) ON delete CASCADE;
+ALTER TABLE Friendships
+ADD CONSTRAINT C_16 FOREIGN KEY (first_account) REFERENCES Accounts (id) ON DELETE CASCADE;
 
-alter table Friendships
-add CONSTRAINT C_17 FOREIGN KEY (second_account) REFERENCES Accounts (id) ON delete CASCADE;
+ALTER TABLE Friendships
+ADD CONSTRAINT C_17 FOREIGN KEY (second_account) REFERENCES Accounts (id) ON DELETE CASCADE;
 
-alter table Friendships
-add CHECK (first_account != second_account);
+ALTER TABLE Friendships
+ADD CHECK (first_account != second_account);
 
-insert into Accounts (name, surname, email) values
+INSERT INTO Accounts (name, surname, email) VALUES
 ('Vladimir', 'Lenin', 'rise@communism.su'),
 ('dracula', 'NOSFERATU', 'drink@blood.com'),
 ('Alan', 'Turing','robot@power.com'),
 ('Petr', 'Popov', 'popovp@gmail.com');
 
-insert into _Groups (name, description, owner_id) values
+INSERT INTO _Groups (name, description, owner_id) VALUES
 ('USSR fans', 'building Communism', 1),
 ('machine learning', '', 3);
 
-insert into Accounts_in_groups values
+INSERT INTO Accounts_in_groups VALUES
 (1, 1), (2, 1), (3, 2), (1, 2);
 
-insert into Friendships values
+INSERT INTO Friendships VALUES
 (1, 2), (1, 3);
 
-create TABLE IF NOT EXISTS Phones (
+CREATE TABLE IF NOT EXISTS Phones (
         id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
         number VARCHAR(50) NOT NULL UNIQUE,
         type CHAR(7),
         owner_id BIGINT UNSIGNED NOT NULL
 );
 
-alter table Phones
-add CONSTRAINT C_18 FOREIGN KEY (owner_id) REFERENCES Accounts (id) ON delete CASCADE;
+ALTER TABLE Phones
+ADD CONSTRAINT C_18 FOREIGN KEY (owner_id) REFERENCES Accounts (id) ON DELETE CASCADE;
 
-alter table Phones
-add CONSTRAINT C_19 CHECK (type IN ('PRIVATE', 'WORK'));
+ALTER TABLE Phones
+ADD CONSTRAINT C_19 CHECK (type IN ('PRIVATE', 'WORK'));
 
-insert into Phones (number, type, owner_id) values
+INSERT INTO Phones (number, type, owner_id) VALUES
 ('89218942', 'PRIVATE', 4),
 ('+9 812 123 321', 'WORK', 3),
 ('444-444-444', 'PRIVATE', 3),
@@ -95,3 +109,20 @@ insert into Phones (number, type, owner_id) values
 ('8 (921) 1234321', 'PRIVATE', 2),
 ('+7 (920) 123-23-32', 'WORK', 1),
 ('02', 'WORK', 1);
+
+CREATE TABLE Passwords (
+    email VARCHAR(40),
+    password VARCHAR(255)
+);
+
+ALTER TABLE Passwords
+ADD CONSTRAINT C_20 PRIMARY KEY(email, password);
+
+ALTER TABLE Passwords
+ADD CONSTRAINT C_21 FOREIGN KEY (email) REFERENCES Accounts (email) ON DELETE CASCADE;
+
+INSERT INTO Passwords (email, password) VALUES
+('rise@communism.su', SHA2('communism1', 0)),
+('drink@blood.com', SHA2('blood2', 0)),
+('robot@power.com', SHA2('power3', 0)),
+('popovp@gmail.com', SHA2('gmail4', 0));

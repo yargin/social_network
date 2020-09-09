@@ -72,6 +72,21 @@ public class DataCheckHelperTest {
         printPassed(CLASS, "testPhoneCheck");
     }
 
+    @Test
+    public void testPasswordCheck() {
+        givenString = "aaa";
+        assertException(DataCheckHelper::passwordMandatory);
+        givenString = "111111111111111111111111111111111111111";
+        assertException(DataCheckHelper::passwordMandatory);
+        givenString = "aaaaaa";
+        assertException(DataCheckHelper::passwordMandatory);
+        givenString = "111111";
+        assertException(DataCheckHelper::passwordMandatory);
+        givenString = "1a1a1a";
+        assertNoException(DataCheckHelper::passwordMandatory);
+        printPassed(CLASS, "testPasswordCheck");
+    }
+
     private void assertException(StringHandlerMethod method) {
         try {
             method.callMethod(givenString);

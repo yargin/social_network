@@ -166,9 +166,16 @@ public final class DataCheckHelper {
         if (password.length() > MAX_PASSWORD) {
             throw new IncorrectDataException("password too long");
         }
-        String regex = "[a-zA-z&&[0-9]]+";
-        Pattern pattern = Pattern.compile(regex);
-        if (!pattern.matcher(password).matches()) {
+        Pattern lettersDigitsOnly = Pattern.compile("[a-zA-Z0-9]+");
+        if (!lettersDigitsOnly.matcher(password).matches()) {
+            throw new IncorrectDataException("wrong password");
+        }
+        Pattern hasLetterPattern = Pattern.compile(".+[a-zA-Z].+");
+        if (!hasLetterPattern.matcher(password).matches()) {
+            throw new IncorrectDataException("wrong password");
+        }
+        Pattern hasDigitPattern = Pattern.compile(".+\\d.+");
+        if (!hasDigitPattern.matcher(password).matches()) {
             throw new IncorrectDataException("wrong password");
         }
         return password;

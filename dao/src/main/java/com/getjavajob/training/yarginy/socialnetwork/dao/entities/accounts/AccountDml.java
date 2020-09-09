@@ -60,7 +60,7 @@ public class AccountDml extends AbstractDml<Account> {
         }
         account.setEmail(resultSet.getString(EMAIL));
         account.setAdditionalEmail(resultSet.getString(ADDITIONAL_EMAIL));
-        account.setEmail(resultSet.getString(PASSWORD));
+//        account.setPassword(resultSet.getString(PASSWORD));
         if (!isNull(resultSet.getString(ROLE))) {
             account.setSex(Sex.valueOf(resultSet.getString(ROLE)));
         }
@@ -92,7 +92,7 @@ public class AccountDml extends AbstractDml<Account> {
         resultSet.updateString(SKYPE, account.getSkype());
         resultSet.updateString(EMAIL, account.getEmail());
         resultSet.updateString(ADDITIONAL_EMAIL, account.getAdditionalEmail());
-        resultSet.updateString(PASSWORD, account.getPassword());
+//        resultSet.updateString(PASSWORD, account.getPassword());
         resultSet.updateString(COUNTRY, account.getCountry());
         resultSet.updateString(CITY, account.getCity());
     }
