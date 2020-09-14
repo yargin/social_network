@@ -1,13 +1,13 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.relations.onetomany.accountsphones;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.AbstractDml;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.accounts.AccountDml;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.accounts.AccountsTable;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.phones.PhonesDml;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.phones.PhonesTable;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AbstractDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.AccountDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.PhonesDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relations.onetomany.OneToManyDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable;
+import com.getjavajob.training.yarginy.socialnetwork.dao.tables.PhonesTable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

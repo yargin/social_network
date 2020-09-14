@@ -1,9 +1,9 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.selfrelated.friendship;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.accounts.AccountDml;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.accounts.AccountsTable;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.AccountDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.selfrelated.SelfManyToManyDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

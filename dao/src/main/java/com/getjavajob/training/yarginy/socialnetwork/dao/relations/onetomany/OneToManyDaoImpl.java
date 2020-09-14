@@ -1,8 +1,8 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.relations.onetomany;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.Entity;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.Dao;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.DbConnector;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;

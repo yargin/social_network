@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.variousrelated;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.Entity;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,3 +18,4 @@ public abstract class ManyToManyDml<F extends Entity, S extends Entity> {
 
     public abstract void updateRow(ResultSet resultSet, long firstId, long secondId) throws SQLException;
 }
+

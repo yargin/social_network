@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.selfrelated;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.Entity;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
 
 import java.util.Collection;
 

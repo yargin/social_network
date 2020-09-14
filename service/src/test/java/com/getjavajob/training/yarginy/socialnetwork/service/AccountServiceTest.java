@@ -1,10 +1,10 @@
 package com.getjavajob.training.yarginy.socialnetwork.service;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.AccountImpl;
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.phone.PhoneImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.Dao;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.selfrelated.SelfManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relations.onetomany.OneToManyDao;
 import org.junit.Before;
@@ -27,10 +27,13 @@ public class AccountServiceTest {
     private final AccountService accountService = new AccountServiceImpl(accountDao, friendsDao, phoneDao,
             accountsPhonesDao);
     private Account account;
+    private Collection<Phone> phones;
 
     @Before
     public void init() {
         account = new AccountImpl("Petr", "email@gjj.ru");
+        account.setId(555);
+        phones = asList(new PhoneImpl("123321", account), new PhoneImpl("123123", account));
     }
 
     @Test
@@ -38,8 +41,8 @@ public class AccountServiceTest {
         when(accountDao.select(1)).thenReturn(account);
         Account actualAccount = accountService.getAccount(1);
         assertEquals(account, actualAccount);
-        when(accountDao.select("email@gjj.ru")).thenReturn(account);
-        actualAccount = accountService.getAccount("email@gjj.ru");
+        when(accountDao.select(account)).thenReturn(account);
+        actualAccount = accountService.getAccount(account);
         assertEquals(account, actualAccount);
         when(accountDao.select(1)).thenReturn(account);
         actualAccount = accountService.getAccount(1);
@@ -50,9 +53,9 @@ public class AccountServiceTest {
     @Test
     public void testCreateAccount() {
         when(accountDao.create(account)).thenReturn(true);
-        assertTrue(accountService.createAccount(account));
+        assertTrue(accountService.createAccount(account, phones));
         when(accountDao.create(account)).thenReturn(false);
-        assertFalse(accountService.createAccount(account));
+        assertFalse(accountService.createAccount(account, phones));
         printPassed(CLASS, "testCreateAccount");
     }
 

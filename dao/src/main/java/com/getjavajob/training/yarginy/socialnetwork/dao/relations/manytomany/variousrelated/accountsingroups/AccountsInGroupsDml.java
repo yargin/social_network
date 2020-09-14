@@ -1,13 +1,13 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.variousrelated.accountsingroups;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.group.Group;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.AbstractDml;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.accounts.AccountDml;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.accounts.AccountsTable;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.groups.GroupDml;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.groups.GroupsTable;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AbstractDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.AccountDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.GroupDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.variousrelated.ManyToManyDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable;
+import com.getjavajob.training.yarginy.socialnetwork.dao.tables.GroupsTable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

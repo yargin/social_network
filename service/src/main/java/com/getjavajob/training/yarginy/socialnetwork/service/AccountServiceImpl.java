@@ -1,10 +1,10 @@
 package com.getjavajob.training.yarginy.socialnetwork.service;
 
 
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.Dao;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.selfrelated.SelfManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relations.onetomany.OneToManyDao;
 
@@ -45,12 +45,17 @@ public class AccountServiceImpl implements AccountService {
         return accountDao.select(id);
     }
 
-    public Account getAccount(String email) {
-        return accountDao.select(email);
+    public Account getAccount(Account account) {
+        return accountDao.select(account);
     }
 
-    public boolean createAccount(Account account) {
-        return accountDao.create(account);
+    public boolean createAccount(Account account, Collection<Phone> phones) {
+        boolean creation = accountDao.create(account);
+        ;
+        for (Phone phone : phones) {
+            phoneDao.create(phone);
+        }
+        return creation;
     }
 
     public boolean updateAccount(Account account) {

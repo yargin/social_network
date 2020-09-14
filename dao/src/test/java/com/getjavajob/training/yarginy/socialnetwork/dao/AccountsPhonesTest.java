@@ -1,11 +1,11 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.phone.PhoneImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.Dao;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relations.onetomany.OneToManyDao;
 import org.junit.Test;
 
@@ -41,8 +41,9 @@ public class AccountsPhonesTest {
     @Test
     public void testSelectAccount() {
         Account expectedAccount = ACCOUNT_DAO.select(1);
-        //todo: select by identifier??
-        Phone phone = PHONE_DAO.select("+7 (920) 123-23-32");
+        Phone phone = new PhoneImpl();
+        phone.setNumber("+7 (920) 123-23-32");
+        phone = PHONE_DAO.select(phone);
         Account actualAccount = ACCOUNTS_PHONES.selectOne(phone);
         assertEquals(expectedAccount, actualAccount);
         printPassed(CLASS, "testSelectAccount");

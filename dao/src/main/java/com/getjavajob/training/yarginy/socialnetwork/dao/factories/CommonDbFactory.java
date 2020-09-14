@@ -1,17 +1,23 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.factories;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.group.Group;
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.Dao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.DaoImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.accounts.AccountDml;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.groups.GroupDml;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.phones.PhonesDml;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.dmls.BatchPhonesDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.DbConnector;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.DbConnectorImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl.ScriptExecutor;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl.ScriptExecutorImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.DaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.AccountDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.GroupDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.PhonesDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.password.PasswordDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.password.PasswordDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.selfrelated.SelfManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.selfrelated.SelfManyToManyDaoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.selfrelated.friendship.FriendshipDml;
@@ -108,5 +114,15 @@ public abstract class CommonDbFactory implements DbFactory {
     @Override
     public OneToManyDao<Account, Phone> getAccountsPhones(Dao<Account> accountDao, Dao<Phone> phoneDao) {
         return new OneToManyDaoImpl<>(dbConnector, new AccountsPhonesDml(), accountDao, phoneDao);
+    }
+
+    @Override
+    public Dao<Password> getPasswordDao() {
+        return new PasswordDao(dbConnector, new PasswordDml());
+    }
+
+    @Override
+    public BatchDao<Phone> getBatchPhone() {
+        return new BatchDaoImpl<>(dbConnector, new BatchPhonesDml());
     }
 }

@@ -160,6 +160,7 @@ public final class DataCheckHelper {
     }
 
     private static String isPassword(String password) {
+        String wrongPassword = "wrong password";
         if (password.length() < MIN_PASSWORD) {
             throw new IncorrectDataException("password too short");
         }
@@ -168,15 +169,15 @@ public final class DataCheckHelper {
         }
         Pattern lettersDigitsOnly = Pattern.compile("[a-zA-Z0-9]+");
         if (!lettersDigitsOnly.matcher(password).matches()) {
-            throw new IncorrectDataException("wrong password");
+            throw new IncorrectDataException(wrongPassword);
         }
-        Pattern hasLetterPattern = Pattern.compile(".+[a-zA-Z].+");
+        Pattern hasLetterPattern = Pattern.compile(".*[a-zA-Z].*");
         if (!hasLetterPattern.matcher(password).matches()) {
-            throw new IncorrectDataException("wrong password");
+            throw new IncorrectDataException(wrongPassword);
         }
-        Pattern hasDigitPattern = Pattern.compile(".+\\d.+");
+        Pattern hasDigitPattern = Pattern.compile(".*\\d.*");
         if (!hasDigitPattern.matcher(password).matches()) {
-            throw new IncorrectDataException("wrong password");
+            throw new IncorrectDataException(wrongPassword);
         }
         return password;
     }
