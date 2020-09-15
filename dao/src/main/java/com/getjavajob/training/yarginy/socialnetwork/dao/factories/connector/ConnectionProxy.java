@@ -7,16 +7,14 @@ import java.util.concurrent.Executor;
 
 public class ConnectionProxy implements Connection {
     private final Connection connection;
-    private final DbConnectorImpl dbConnector;
 
-    public ConnectionProxy(Connection connection, DbConnectorImpl dbConnector) {
+    public ConnectionProxy(Connection connection) {
         this.connection = connection;
         try {
             connection.setAutoCommit(false);
         } catch (SQLException e) {
             throw new IllegalStateException(e);
         }
-        this.dbConnector = dbConnector;
     }
 
     /**
@@ -28,7 +26,7 @@ public class ConnectionProxy implements Connection {
 
     @Override
     public void close() throws SQLException {
-        dbConnector.closeConnection(this);
+//        dbConnector.closeConnection(this);
     }
 
     @Override
