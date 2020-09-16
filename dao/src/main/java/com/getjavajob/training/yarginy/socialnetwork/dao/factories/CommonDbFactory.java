@@ -8,7 +8,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDaoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.dmls.BatchPhonesDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.DbConnector;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.DbConnectorImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.Transaction;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl.ScriptExecutor;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl.ScriptExecutorImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
@@ -37,7 +37,7 @@ public abstract class CommonDbFactory implements DbFactory {
     private ScriptExecutor scriptExecutor;
 
     public CommonDbFactory() {
-        dbConnector = DbConnectorImpl.getDbConnector(getConnectionFile(), getConnectionsCapacity());
+        dbConnector = DbConnector.getDbConnector(getConnectionFile(), getConnectionsCapacity());
         if (runScriptOnStart()) {
             getScriptExecutor().executeScript(getStartingScript());
         }
@@ -124,5 +124,10 @@ public abstract class CommonDbFactory implements DbFactory {
     @Override
     public BatchDao<Phone> getBatchPhone() {
         return new BatchDaoImpl<>(dbConnector, new BatchPhonesDml());
+    }
+
+    @Override
+    public Transaction getTransaction() {
+        return dbConnector;
     }
 }

@@ -1,15 +1,15 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.password;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.DbConnector;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.ConnectionPool;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AbstractDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.DaoImpl;
 
 import java.util.Collection;
 
 public class PasswordDao extends DaoImpl<Password> {
-    public PasswordDao(DbConnector dbConnector, AbstractDml<Password> passwordDml) {
-        super(dbConnector, passwordDml);
+    public PasswordDao(ConnectionPool connectionPool, AbstractDml<Password> passwordDml) {
+        super(connectionPool, passwordDml);
     }
 
 

@@ -14,15 +14,10 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsT
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 import static java.util.Objects.isNull;
 
-public class AccountDml extends AbstractDml<Account> {
+public class AccountDml implements AbstractDml<Account> {
     private static final String SELECT_ALL = buildQuery().select(TABLE).build();
     private static final String SELECT_BY_ID = buildQuery().select(TABLE).where(ID).build();
     private static final String SELECT_BY_EMAIL = buildQuery().select(TABLE).where(EMAIL).build();
-
-    @Override
-    protected String getSelectByIdQuery() {
-        return SELECT_BY_ID;
-    }
 
     @Override
     public PreparedStatement getSelect(Connection connection, Account account) throws SQLException {
@@ -32,16 +27,23 @@ public class AccountDml extends AbstractDml<Account> {
     }
 
     @Override
+    public PreparedStatement getSelect(Connection connection, long id) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
+        statement.setLong(1, id);
+        return statement;
+    }
+
+    @Override
+    public PreparedStatement getSelectAll(Connection connection) throws SQLException {
+        return connection.prepareStatement(SELECT_ALL);
+    }
+
+    @Override
     public PreparedStatement getUpdatableSelect(Connection connection, Account account) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(SELECT_BY_EMAIL, ResultSet.TYPE_SCROLL_INSENSITIVE,
                 ResultSet.CONCUR_UPDATABLE);
         statement.setString(1, account.getEmail());
         return statement;
-    }
-
-    @Override
-    protected String getSelectAllQuery() {
-        return SELECT_ALL;
     }
 
     @Override

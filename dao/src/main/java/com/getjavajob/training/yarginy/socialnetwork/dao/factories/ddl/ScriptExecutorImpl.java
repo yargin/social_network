@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl;
 
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.DbConnector;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.ConnectionPool;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -12,11 +12,11 @@ import java.sql.Statement;
 import static java.lang.System.lineSeparator;
 
 public class ScriptExecutorImpl implements ScriptExecutor {
-    private final DbConnector dbConnector;
+    private final ConnectionPool connectionPool;
     private final String scriptsDir;
 
-    public ScriptExecutorImpl(DbConnector dbConnector, String scriptsDir) {
-        this.dbConnector = dbConnector;
+    public ScriptExecutorImpl(ConnectionPool connectionPool, String scriptsDir) {
+        this.connectionPool = connectionPool;
         this.scriptsDir = scriptsDir;
     }
 
@@ -36,7 +36,7 @@ public class ScriptExecutorImpl implements ScriptExecutor {
     @Override
     public boolean executeScript(String scriptFile) {
         String query = readQueryFromFile(scriptsDir + scriptFile);
-        try (Connection connection = dbConnector.getConnection();
+        try (Connection connection = connectionPool.getConnection();
              Statement statement = connection.createStatement()) {
             return statement.execute(query);
         } catch (SQLException e) {

@@ -40,6 +40,6 @@ public class BatchUpdateTest {
         phoneDao.delete(secondPhone);
         Date date1 = new Date();
         Date date2 = new Date();
-        batchDao.select(date1, date2);
+//        batchDao.select(date1, date2);
     }
 }

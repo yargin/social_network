@@ -18,7 +18,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEn
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 import static java.util.Objects.isNull;
 
-public class PasswordDml extends AbstractDml<Password> {
+public class PasswordDml implements AbstractDml<Password> {
     public static final String SELECT = buildQuery().selectJoin(PasswordTable.TABLE, AccountsTable.TABLE,
             PasswordTable.EMAIL, AccountsTable.EMAIL).where(PasswordTable.EMAIL).build();
     public static final String SELECT_UPDATE = buildQuery().select(PasswordTable.TABLE).where(PasswordTable.EMAIL).
@@ -69,12 +69,12 @@ public class PasswordDml extends AbstractDml<Password> {
     }
 
     @Override
-    protected String getSelectByIdQuery() {
+    public PreparedStatement getSelect(Connection connection, long id) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    protected String getSelectAllQuery() {
+    public PreparedStatement getSelectAll(Connection connection) throws SQLException {
         throw new UnsupportedOperationException();
     }
 }

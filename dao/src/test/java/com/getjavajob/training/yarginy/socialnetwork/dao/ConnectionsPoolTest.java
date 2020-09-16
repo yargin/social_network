@@ -1,7 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao;
 
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.ConnectionPool;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.DbConnector;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.DbConnectorImpl;
 
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -11,7 +11,7 @@ public class ConnectionsPoolTest {
     private static final String PROPERTIES_FILE = "connections/MySQLConnection.properties";
     private static final int CONNECTIONS_NEEDED = 10;
     private static final AtomicInteger COUNTER = new AtomicInteger(0);
-    private static final DbConnector CONNECTOR = DbConnectorImpl.getDbConnector(PROPERTIES_FILE, 1);
+    private static final ConnectionPool CONNECTOR = DbConnector.getDbConnector(PROPERTIES_FILE, 1);
 
 //    @Test
 //    public void testGetConnection() throws InterruptedException {

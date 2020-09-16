@@ -4,6 +4,8 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.Transaction;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.selfrelated.SelfManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relations.onetomany.OneToManyDao;
@@ -24,8 +26,10 @@ public class AccountServiceTest {
     private final Dao<Phone> phoneDao = mock(Dao.class);
     private final SelfManyToManyDao<Account> friendsDao = mock(SelfManyToManyDao.class);
     private final OneToManyDao<Account, Phone> accountsPhonesDao = mock(OneToManyDao.class);
+    private final Transaction transaction = mock(Transaction.class);
+    private final BatchDao<Phone> phoneBatchDao = mock(BatchDao.class);
     private final AccountService accountService = new AccountServiceImpl(accountDao, friendsDao, phoneDao,
-            accountsPhonesDao);
+            accountsPhonesDao, transaction, phoneBatchDao);
     private Account account;
     private Collection<Phone> phones;
 

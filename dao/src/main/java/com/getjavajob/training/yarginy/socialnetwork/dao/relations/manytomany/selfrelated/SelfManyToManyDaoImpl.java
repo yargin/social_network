@@ -1,7 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.selfrelated;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.DbConnector;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.ConnectionPool;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 
 import java.sql.Connection;
@@ -11,12 +11,12 @@ import java.sql.SQLException;
 import java.util.Collection;
 
 public class SelfManyToManyDaoImpl<E extends Entity> implements SelfManyToManyDao<E> {
-    private final DbConnector dbConnector;
+    private final ConnectionPool connectionPool;
     private final SelfManyToManyDml<E> manyToManyDml;
     private final Dao<E> dao;
 
-    public SelfManyToManyDaoImpl(DbConnector dbConnector, SelfManyToManyDml<E> manyToManyDml, Dao<E> dao) {
-        this.dbConnector = dbConnector;
+    public SelfManyToManyDaoImpl(ConnectionPool connectionPool, SelfManyToManyDml<E> manyToManyDml, Dao<E> dao) {
+        this.connectionPool = connectionPool;
         this.manyToManyDml = manyToManyDml;
         this.dao = dao;
     }
@@ -24,7 +24,7 @@ public class SelfManyToManyDaoImpl<E extends Entity> implements SelfManyToManyDa
     @Override
     public Collection<E> select(E entity) {
         dao.checkEntity(entity);
-        try (Connection connection = dbConnector.getConnection()) {
+        try (Connection connection = connectionPool.getConnection()) {
             return manyToManyDml.select(connection, entity.getId());
         } catch (SQLException e) {
             throw new IllegalStateException(e);
@@ -35,7 +35,7 @@ public class SelfManyToManyDaoImpl<E extends Entity> implements SelfManyToManyDa
     public boolean create(E first, E second) {
         dao.checkEntity(first);
         dao.checkEntity(second);
-        try (Connection connection = dbConnector.getConnection();
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement statement = manyToManyDml.getSelectStatement(connection, first.getId(), second.getId());
              ResultSet resultSet = statement.executeQuery()) {
             if (resultSet.next()) {
@@ -44,7 +44,6 @@ public class SelfManyToManyDaoImpl<E extends Entity> implements SelfManyToManyDa
             resultSet.moveToInsertRow();
             manyToManyDml.updateRow(resultSet, first.getId(), second.getId());
             resultSet.insertRow();
-            connection.commit();
             return true;
         } catch (SQLException e) {
             throw new IllegalStateException(e);
@@ -55,14 +54,13 @@ public class SelfManyToManyDaoImpl<E extends Entity> implements SelfManyToManyDa
     public boolean delete(E first, E second) {
         dao.checkEntity(first);
         dao.checkEntity(second);
-        try (Connection connection = dbConnector.getConnection();
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement statement = manyToManyDml.getSelectStatement(connection, first.getId(), second.getId());
              ResultSet resultSet = statement.executeQuery()) {
             if (!resultSet.next()) {
                 return false;
             }
             resultSet.deleteRow();
-            connection.commit();
             return true;
         } catch (SQLException e) {
             throw new IllegalStateException(e);

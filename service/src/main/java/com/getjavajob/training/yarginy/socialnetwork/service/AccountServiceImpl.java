@@ -3,7 +3,9 @@ package com.getjavajob.training.yarginy.socialnetwork.service;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.Transaction;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.selfrelated.SelfManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relations.onetomany.OneToManyDao;
@@ -22,6 +24,8 @@ public class AccountServiceImpl implements AccountService {
     private final Dao<Phone> phoneDao;
     private final OneToManyDao<Account, Phone> accountsPhonesDao;
     private final SelfManyToManyDao<Account> friendshipDao;
+    private final BatchDao<Phone> phoneBatchDao;
+    private final Transaction transaction;
     private Collection<Account> friends;
 
     public AccountServiceImpl() {
@@ -30,15 +34,20 @@ public class AccountServiceImpl implements AccountService {
         friendshipDao = dbFactory.getFriendshipDao(accountDao);
         phoneDao = dbFactory.getPhoneDao();
         accountsPhonesDao = dbFactory.getAccountsPhones(accountDao, phoneDao);
+        transaction = dbFactory.getTransaction();
+        phoneBatchDao = dbFactory.getBatchPhone();
     }
 
     public AccountServiceImpl(Dao<Account> accountDao, SelfManyToManyDao<Account> friendshipDao, Dao<Phone> phoneDao,
-                              OneToManyDao<Account, Phone> accountsPhonesDao) {
+                              OneToManyDao<Account, Phone> accountsPhonesDao, Transaction transaction,
+                              BatchDao<Phone> phoneBatchDao) {
         dbFactory = null;
         this.accountDao = accountDao;
         this.friendshipDao = friendshipDao;
         this.phoneDao = phoneDao;
         this.accountsPhonesDao = accountsPhonesDao;
+        this.transaction = transaction;
+        this.phoneBatchDao = phoneBatchDao;
     }
 
     public Account getAccount(int id) {
@@ -50,11 +59,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     public boolean createAccount(Account account, Collection<Phone> phones) {
+        transaction.begin();
         boolean creation = accountDao.create(account);
-        ;
-        for (Phone phone : phones) {
-            phoneDao.create(phone);
-        }
+        phoneBatchDao.create(phones);
+        transaction.commit();
+        transaction.end();
         return creation;
     }
 

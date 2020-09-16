@@ -17,7 +17,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEn
 import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.GroupsTable.*;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 
-public class GroupDml extends AbstractDml<Group> {
+public class GroupDml implements AbstractDml<Group> {
     private static final String SELECT_ALL = buildQuery().select(TABLE).build();
     private static final String SELECT_BY_ID = buildQuery().selectJoin(TABLE, AccountsTable.TABLE, OWNER,
             AccountsTable.ID).where(ID).build();
@@ -27,8 +27,15 @@ public class GroupDml extends AbstractDml<Group> {
     private final AccountDml accountDml = new AccountDml();
 
     @Override
-    protected String getSelectByIdQuery() {
-        return SELECT_BY_ID;
+    public PreparedStatement getSelect(Connection connection, long id) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
+        statement.setLong(1, id);
+        return statement;
+    }
+
+    @Override
+    public PreparedStatement getSelectAll(Connection connection) throws SQLException {
+        return connection.prepareStatement(SELECT_ALL);
     }
 
     @Override
@@ -44,11 +51,6 @@ public class GroupDml extends AbstractDml<Group> {
                 ResultSet.CONCUR_UPDATABLE);
         statement.setString(1, group.getName());
         return statement;
-    }
-
-    @Override
-    protected String getSelectAllQuery() {
-        return SELECT_ALL;
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.DbConnector;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.ConnectionPool;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.DaoImpl;
 
 import java.sql.Connection;
@@ -13,14 +13,14 @@ import java.util.Collection;
 public class BatchDaoImpl<E extends Entity> extends DaoImpl<E> implements BatchDao<E> {
     private final BatchDml<E> batchDml;
 
-    public BatchDaoImpl(DbConnector dbConnector, BatchDml<E> batchDml) {
-        super(dbConnector, batchDml);
+    public BatchDaoImpl(ConnectionPool connectionPool, BatchDml<E> batchDml) {
+        super(connectionPool, batchDml);
         this.batchDml = batchDml;
     }
 
     @Override
     public boolean create(Collection<E> entities) {
-        try (Connection connection = dbConnector.getConnection();
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement statement = batchDml.batchSelect(connection, entities);
              ResultSet resultSet = statement.executeQuery()) {
             if (resultSet.next()) {

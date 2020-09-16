@@ -4,6 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.Transaction;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 
 import java.util.Collection;
@@ -15,21 +16,23 @@ public class AuthServiceImpl implements AuthService {
     private final Dao<Account> accountDao;
     private final Dao<Password> passwordDao;
     private final Dao<Phone> phoneDao;
+    private final Transaction transaction;
 
     public AuthServiceImpl() {
         dbFactory = getDbFactory();
         accountDao = dbFactory.getAccountDao();
         passwordDao = dbFactory.getPasswordDao();
         phoneDao = dbFactory.getPhoneDao();
+        transaction = dbFactory.getTransaction();
     }
 
     @Override
     public boolean register(Account account, Collection<Phone> phones, Password password) {
-        boolean transactionChain;
-        transactionChain = accountDao.create(account);
-        transactionChain = passwordDao.create(password);
-//        transactionChain = phoneDao.create();
-        return transactionChain;
+        transaction.begin();
+        accountDao.create(account);
+        passwordDao.create(password);
+        transaction.commit();
+        transaction.end();
     }
 
     @Override

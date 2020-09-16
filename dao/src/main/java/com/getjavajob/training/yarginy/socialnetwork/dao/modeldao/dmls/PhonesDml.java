@@ -20,7 +20,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.PhonesTab
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 import static java.util.Objects.isNull;
 
-public class PhonesDml extends AbstractDml<Phone> {
+public class PhonesDml implements AbstractDml<Phone> {
     public static final String SELECT_ALL = buildQuery().selectJoin(TABLE, AccountsTable.TABLE, OWNER, AccountsTable.ID).
             build();
     public static final String SELECT_UPDATE = buildQuery().select(TABLE).where(NUMBER).build();
@@ -39,13 +39,15 @@ public class PhonesDml extends AbstractDml<Phone> {
     }
 
     @Override
-    protected String getSelectAllQuery() {
-        return SELECT_ALL;
+    public PreparedStatement getSelect(Connection connection, long id) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
+        statement.setLong(1, id);
+        return statement;
     }
 
     @Override
-    protected String getSelectByIdQuery() {
-        return SELECT_BY_ID;
+    public PreparedStatement getSelectAll(Connection connection) throws SQLException {
+        return connection.prepareStatement(SELECT_ALL);
     }
 
     @Override
