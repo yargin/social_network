@@ -19,13 +19,12 @@ public interface Dao<E extends Entity> {
     E select(long id);
 
     /**
-     * todo
-     * retrieves {@link E} specified by email
+     * retrieves {@link Entity} from storage according specified data, generally alternate key
      *
-     * @param identifier {@link E}'s {@link String} identifier
-     * @return {@link E} that was found or null-entity if any wasn't found
+     * @param entityToSelect {@link E} with initialised alternate key
+     * @return {@link E} that was found or null-entity if wasn't found any
      */
-    E select(E entity);
+    E select(E entityToSelect);
 
     /**
      * creates new record storing {@link E} data

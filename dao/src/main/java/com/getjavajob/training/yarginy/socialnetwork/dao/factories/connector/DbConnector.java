@@ -65,6 +65,7 @@ public class DbConnector implements ConnectionPool, Transaction {
 
     @Override
     public Connection getConnection() throws SQLException {
+
         return initConnection();
     }
 
@@ -84,9 +85,15 @@ public class DbConnector implements ConnectionPool, Transaction {
     }
 
     private ConnectionProxy initConnection() {
-        ConnectionProxy connection;
         try {
+            //if current thread already got connection
+            if (!isNull(threadConnection.get()) && !threadConnection.get().isClosed()) {
+                return threadConnection.get();
+            }
+
+            //if another thread need connection
             waitersSemaphore.acquire();
+            ConnectionProxy connection;
             if (connectionsToReuse.isEmpty()) {
                 connection = new ConnectionProxy(DriverManager.getConnection(properties.getProperty("url"), properties),
                         this);
@@ -94,11 +101,11 @@ public class DbConnector implements ConnectionPool, Transaction {
                 //blocks until at least one connection becomes free
                 connection = connectionsToReuse.take();
             }
+            threadConnection.set(connection);
+            return connection;
         } catch (InterruptedException | SQLException e) {
             throw new IllegalStateException(e);
         }
-        threadConnection.set(connection);
-        return connection;
     }
 
     @Override

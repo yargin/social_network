@@ -33,9 +33,9 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
     }
 
     @Override
-    public E select(E entity) {
+    public E select(E entityToSelect) {
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement statement = abstractDml.getSelect(connection, entity)) {
+             PreparedStatement statement = abstractDml.getSelect(connection, entityToSelect)) {
             return select(statement);
         } catch (SQLException e) {
             throw new IllegalStateException(e);

@@ -28,16 +28,21 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean register(Account account, Collection<Phone> phones, Password password) {
+        //make autocloseable???
+        //change to manager.startTransaction
         transaction.begin();
         accountDao.create(account);
         passwordDao.create(password);
         transaction.commit();
+        //change to close()
         transaction.end();
+        return true;
     }
 
     @Override
-    public Account login(Password password) {
-        return null;
+    public Account login(Password passwordToCheck) {
+        Password password = passwordDao.select(passwordToCheck);
+        return password.getAccount();
     }
 
     @Override

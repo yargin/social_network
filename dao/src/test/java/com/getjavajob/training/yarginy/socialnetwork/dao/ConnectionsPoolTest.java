@@ -1,66 +1,95 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao;
 
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.ConnectionPool;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.DbConnector;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.Transaction;
+import org.junit.Test;
 
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+
+import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
+import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.TestResultPrinter.printPassed;
+import static org.junit.Assert.assertSame;
 
 public class ConnectionsPoolTest {
     private static final String CLASS = "ConnectionsPoolTest";
-    private static final String PROPERTIES_FILE = "connections/MySQLConnection.properties";
-    private static final int CONNECTIONS_NEEDED = 10;
-    private static final AtomicInteger COUNTER = new AtomicInteger(0);
-    private static final ConnectionPool CONNECTOR = DbConnector.getDbConnector(PROPERTIES_FILE, 1);
-
-//    @Test
-//    public void testGetConnection() throws InterruptedException {
-//        sleep(15000);
-//        for (int i = 0; i < CONNECTIONS_NEEDED; i++) {
-//            Thread thread = new Thread(() -> {
-//                try (Connection connection = CONNECTOR.getConnection()) {
-//                    COUNTER.incrementAndGet();
-//                    sleep(3000);
-//                } catch (SQLException | InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            });
-//            thread.setDaemon(true);
-//            thread.start();
-//        }
-//        sleep(1000);
-//        int connections = CONNECTOR.getCapacity();
-//        assertSame(connections, COUNTER.get());
-//        printPassed(CLASS, "testGetConnection");
-//        sleep(4500);
-//        assertSame(connections + CONNECTOR.getCapacity(), COUNTER.get());
-//        printPassed(CLASS, "testGetConnection");
-//    }
+    private static final DbFactory DB_FACTORY = getDbFactory();
+    private static final ConnectionPool CONNECTION_POOL = DB_FACTORY.getConnectionPool();
+    private static final Transaction TRANSACTION = DB_FACTORY.getTransaction();
+    private static final int threadsNumber = 30;
 
     /**
-     * assert that required connections will actually be specified reused connections. Needed connections are stored in
-     * the {@link Set}. In the end we compare set's size(number of unique connections was used) with specified capacity
+     * create some threads. In each a connection required
+     * test asserts that number of connections used in multiple threads is equal to pool size
+     * that means connections are transferred between threads when one doesn't need it anymore - without transactions
      */
-//    @Test
-//    public void testConnectionReuse() throws InterruptedException {
-//        Set<Connection> connections = Collections.synchronizedSet(new HashSet<>());
-//        for (int i = 0; i < CONNECTIONS_NEEDED; i++) {
-//            Runnable runnable = () -> {
-//                try (Connection connection = CONNECTOR.getConnection()) {
-//                    sleep(1000);
-//                    connections.add(connection);
-//                } catch (SQLException e) {
-//                    throw new RuntimeException(e.getMessage());
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            };
-//            Thread thread = new Thread(runnable);
-//            thread.setDaemon(true);
-//            thread.start();
-//        }
-//        sleep(7000);
-//        assertEquals(CONNECTOR.getCapacity(), connections.size());
-//        printPassed(CLASS, "testConnectionReuse");
-//    }
+    @Test
+    public void testGetConnection() {
+        Set<Connection> connections = Collections.newSetFromMap(new ConcurrentHashMap<>());
+        List<Thread> threads = new ArrayList<>();
+        for (int i = 0; i < threadsNumber; i++) {
+            Thread thread = new Thread(() -> {
+                try {
+                    Connection connection = CONNECTION_POOL.getConnection();
+                    connections.add(connection);
+                    connection.close();
+                } catch (SQLException e) {
+                    throw new IllegalStateException(e);
+                }
+            });
+            threads.add(thread);
+            thread.start();
+        }
+        for (Thread thread : threads) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        assertSame(connections.size(), CONNECTION_POOL.getCapacity());
+        printPassed(CLASS, "testGetConnection");
+    }
+
+    /**
+     * create some threads in which transaction started and some connections reused
+     * test asserts that number of connections used in multiple threads and multiple transactions is equal to pool size
+     * that means that one connection is used due one transaction and
+     * connections are transferred between transactions when any doesn't need it anymore
+     */
+    @Test
+    public void testTransaction() {
+        Set<Connection> connections = Collections.newSetFromMap(new ConcurrentHashMap<>());
+        Collection<Thread> threads = new ArrayList<>();
+        for (int i = 0; i < threadsNumber; i++) {
+            Thread thread = new Thread(() -> {
+                try {
+                    TRANSACTION.begin();
+                    for (int j = 0; j < 5; j++) {
+                        Connection connection = CONNECTION_POOL.getConnection();
+                        connections.add(connection);
+                        connection.close();
+                    }
+                    TRANSACTION.commit();
+                    TRANSACTION.end();
+                } catch (SQLException e) {
+                    throw new IllegalStateException(e);
+                }
+            });
+            threads.add(thread);
+            thread.start();
+        }
+        for (Thread thread : threads) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        assertSame(connections.size(), CONNECTION_POOL.getCapacity());
+        printPassed(CLASS, "testTransaction");
+    }
 }
