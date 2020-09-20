@@ -5,7 +5,7 @@
          version="4.0">
 
     <welcome-file-list>
-        <welcome-file>hello</welcome-file>
+        <welcome-file>/WEB-INF/jsps/login.jsp</welcome-file>
     </welcome-file-list>
 
     <session-config>
@@ -19,33 +19,37 @@
         </jsp-property-group>
     </jsp-config>
 
-<!--    <filter>-->
-<!--        <filter-name>CharacterSetFilter</filter-name>-->
-<!--        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.CharacterSetFilter</filter-class>-->
-<!--    </filter>-->
-<!--    <filter-mapping>-->
-<!--        <filter-name>CharacterSetFilter</filter-name>-->
-<!--        <url-pattern>/*</url-pattern>-->
-<!--    </filter-mapping>-->
+    <!--    <filter>-->
+    <!--        <filter-name>CharacterSetFilter</filter-name>-->
+    <!--        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.CharacterSetFilter</filter-class>-->
+    <!--    </filter>-->
+    <!--    <filter-mapping>-->
+    <!--        <filter-name>CharacterSetFilter</filter-name>-->
+    <!--        <url-pattern>/*</url-pattern>-->
+    <!--    </filter-mapping>-->
 
+    <!--        <filter>-->
+    <!--            <filter-name>AuthFilter</filter-name>-->
+    <!--            <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.AuthFilter</filter-class>-->
+    <!--            <init-param>-->
+    <!--                <param-name>pathToIgnore</param-name>-->
+    <!--                <param-value>/registration</param-value>-->
+    <!--            </init-param>-->
+    <!--        </filter>-->
+    <!--        <filter-mapping>-->
+    <!--            <filter-name>AuthFilter</filter-name>-->
+    <!--            <url-pattern>/*</url-pattern>-->
+    <!--        </filter-mapping>-->
 
     <servlet>
-        <servlet-name>FirstServlet</servlet-name>
-        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.FirstServlet</servlet-class>
+        <servlet-name>myWall</servlet-name>
+        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.MyWallServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>FirstServlet</servlet-name>
-        <url-pattern>/serv</url-pattern>
+        <servlet-name>myWall</servlet-name>
+        <url-pattern>/mywall</url-pattern>
     </servlet-mapping>
 
-    <servlet>
-        <servlet-name>hello</servlet-name>
-        <jsp-file>/WEB-INF/jsps/hello.jsp</jsp-file>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>hello</servlet-name>
-        <url-pattern>/hello</url-pattern>
-    </servlet-mapping>
     <servlet>
         <servlet-name>register</servlet-name>
         <jsp-file>/WEB-INF/jsps/registration.jsp</jsp-file>
@@ -55,5 +59,13 @@
         <url-pattern>/registration</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>login</servlet-name>
+        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.LoginServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>login</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
 
 </web-app>

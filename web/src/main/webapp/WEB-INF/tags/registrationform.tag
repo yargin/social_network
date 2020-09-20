@@ -1,5 +1,5 @@
 <div class="post">
-    <form action="${pageContext.servletContext.contextPath}/hello" method="post">
+    <form action="${pageContext.servletContext.contextPath}/mywall" method="post">
         <input type="text" name="name" placeholder="name" required>
         <input type="text" name="surname" placeholder="surname" required>
         <input type="text" name="patronymic" placeholder="patronymic">

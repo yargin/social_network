@@ -9,7 +9,7 @@ import java.util.Collection;
 public interface AuthService {
     boolean register(Account account, Collection<Phone> phones, Password password);
 
-    Account login(Password password);
+    Account login(String email, String password);
 
     boolean logout(Account account);
 

@@ -112,6 +112,13 @@ html, body, ul, li {
     color: black;
 }
 
+#error {
+    font-family: "Tahoma", serif;
+    font-size: 15px;
+    color: #b75208;
+    font-weight: bolder;
+}
+
 button {
     padding: 5px 10px 5px 10px;
     margin-top: 10px;

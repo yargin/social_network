@@ -1,5 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.utils;
 
+import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataFlowException;
 
@@ -141,7 +142,7 @@ public final class DataCheckHelper {
         String regex = symbol + "(\\w" + "[.]?)+" + symbol + '@' + symbol + "(\\w{2,}" + "[.])+" + symbol + "{2,8}";
         Pattern pattern = Pattern.compile(regex);
         if (!pattern.matcher(email).matches()) {
-            throw new IncorrectDataException("wrong email");
+            throw new IncorrectDataException(IncorrectData.NOT_AN_EMAIL);
         }
         return email;
     }
@@ -154,30 +155,29 @@ public final class DataCheckHelper {
         Pattern pattern = Pattern.compile(regex);
         Pattern patternWithBraces = Pattern.compile(regexWithBraces);
         if (!pattern.matcher(phone).matches() && !patternWithBraces.matcher(phone).matches()) {
-            throw new IncorrectDataException("wrong phone");
+            throw new IncorrectDataException(IncorrectData.NOT_A_PHONE);
         }
         return phone;
     }
 
     private static String isPassword(String password) {
-        String wrongPassword = "wrong password";
         if (password.length() < MIN_PASSWORD) {
-            throw new IncorrectDataException("password too short");
+            throw new IncorrectDataException(IncorrectData.PASSWORD_TOO_SHORT);
         }
         if (password.length() > MAX_PASSWORD) {
-            throw new IncorrectDataException("password too long");
+            throw new IncorrectDataException(IncorrectData.PASSWORD_TOO_LONG);
         }
         Pattern lettersDigitsOnly = Pattern.compile("[a-zA-Z0-9]+");
         if (!lettersDigitsOnly.matcher(password).matches()) {
-            throw new IncorrectDataException(wrongPassword);
+            throw new IncorrectDataException(IncorrectData.NOT_A_PASSWORD);
         }
         Pattern hasLetterPattern = Pattern.compile(".*[a-zA-Z].*");
         if (!hasLetterPattern.matcher(password).matches()) {
-            throw new IncorrectDataException(wrongPassword);
+            throw new IncorrectDataException(IncorrectData.NOT_A_PASSWORD);
         }
         Pattern hasDigitPattern = Pattern.compile(".*\\d.*");
         if (!hasDigitPattern.matcher(password).matches()) {
-            throw new IncorrectDataException(wrongPassword);
+            throw new IncorrectDataException(IncorrectData.NOT_A_PASSWORD);
         }
         return password;
     }

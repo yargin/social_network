@@ -2,12 +2,10 @@ package com.getjavajob.training.yarginy.socialnetwork.common.models.password;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper.passwordMandatory;
+import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper.encrypt;
 
 public class PasswordImpl implements Password {
     private Account account;
@@ -31,19 +29,7 @@ public class PasswordImpl implements Password {
     @Override
     public void setPassword(String password) {
         password = passwordMandatory(password);
-        MessageDigest md = null;
-        try {
-            md = MessageDigest.getInstance("SHA-256");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        assert md != null;
-        byte[] hashedPassword = md.digest(password.getBytes(StandardCharsets.UTF_8));
-        StringBuilder stringBuilder = new StringBuilder();
-        for (byte symbol : hashedPassword) {
-            stringBuilder.append(String.format("%02x", symbol));
-        }
-        this.password = stringBuilder.toString();
+        this.password = encrypt(password);
     }
 
     @Override
