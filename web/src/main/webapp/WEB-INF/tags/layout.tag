@@ -1,7 +1,7 @@
 <%@ tag description="" pageEncoding="UTF-8" %>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/fmt" prefix = "fmt" %>
 <fmt:setBundle basename="label"/>
-<%--<fmt:setLocale value="ru"/>--%>
+<fmt:setLocale value="en"/>
 <!DOCTYPE html>
 <html>
 <head>

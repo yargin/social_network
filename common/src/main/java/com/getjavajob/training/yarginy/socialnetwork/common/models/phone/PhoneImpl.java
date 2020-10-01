@@ -20,6 +20,7 @@ public class PhoneImpl extends AbstractEntity implements Phone {
     public PhoneImpl(String number, Account owner) {
         this.number = phoneMandatory(number);
         this.owner = objectMandatory(owner);
+        setType(PhoneType.PRIVATE);
     }
 
     @Override

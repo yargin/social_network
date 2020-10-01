@@ -35,7 +35,7 @@ public class AccountServiceImpl implements AccountService {
         phoneDao = dbFactory.getPhoneDao();
         accountsPhonesDao = dbFactory.getAccountsPhones(accountDao, phoneDao);
         transaction = dbFactory.getTransaction();
-        phoneBatchDao = dbFactory.getBatchPhone();
+        phoneBatchDao = dbFactory.getBatchPhoneDao();
     }
 
     public AccountServiceImpl(Dao<Account> accountDao, SelfManyToManyDao<Account> friendshipDao, Dao<Phone> phoneDao,

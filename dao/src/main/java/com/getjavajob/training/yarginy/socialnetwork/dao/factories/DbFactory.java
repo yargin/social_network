@@ -33,7 +33,7 @@ public interface DbFactory {
 
     ScriptExecutor getScriptExecutor();
 
-    BatchDao<Phone> getBatchPhone();
+    BatchDao<Phone> getBatchPhoneDao();
 
     Transaction getTransaction();
 

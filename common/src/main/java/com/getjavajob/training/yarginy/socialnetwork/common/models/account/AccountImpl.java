@@ -1,5 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.models.account;
 
+import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
+import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.AbstractEntity;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
@@ -19,7 +21,6 @@ public class AccountImpl extends AbstractEntity implements Account {
     private LocalDate registrationDate;
     private String email;
     private String additionalEmail;
-    private String password;
     private Role role;
     private String icq;
     private String skype;
@@ -86,12 +87,12 @@ public class AccountImpl extends AbstractEntity implements Account {
 
     @Override
     public LocalDate getBirthDate() {
-        return birthDate;
+        return applicableAge(birthDate);
     }
 
     @Override
     public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
+        this.birthDate = applicableAge(birthDate);
     }
 
     @Override
@@ -121,6 +122,9 @@ public class AccountImpl extends AbstractEntity implements Account {
 
     @Override
     public void setAdditionalEmail(String additionalEmail) {
+        if (Objects.equals(additionalEmail, email)) {
+            throw new IncorrectDataException(IncorrectData.SAME_ADDITIONAL_EMAIL);
+        }
         this.additionalEmail = emailOptional(additionalEmail);
     }
 

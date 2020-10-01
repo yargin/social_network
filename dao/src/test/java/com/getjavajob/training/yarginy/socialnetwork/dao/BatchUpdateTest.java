@@ -19,7 +19,7 @@ import static org.junit.Assert.assertTrue;
 
 public class BatchUpdateTest {
     public static final DbFactory DB_FACTORY = getDbFactory();
-    private final BatchDao<Phone> batchDao = DB_FACTORY.getBatchPhone();
+    private final BatchDao<Phone> batchDao = DB_FACTORY.getBatchPhoneDao();
     private final Dao<Account> accountDao = DB_FACTORY.getAccountDao();
     private final Dao<Phone> phoneDao = DB_FACTORY.getPhoneDao();
     private final OneToManyDao<Account, Phone> accountPhones = DB_FACTORY.getAccountsPhones(accountDao, phoneDao);

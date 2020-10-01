@@ -8,6 +8,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.PasswordImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.Transaction;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
@@ -21,14 +22,14 @@ public class AuthServiceImpl implements AuthService {
     private final DbFactory dbFactory;
     private final Dao<Account> accountDao;
     private final Dao<Password> passwordDao;
-    private final Dao<Phone> phoneDao;
+    private final BatchDao<Phone> phoneDao;
     private final Transaction transaction;
 
     public AuthServiceImpl() {
         dbFactory = getDbFactory();
         accountDao = dbFactory.getAccountDao();
         passwordDao = dbFactory.getPasswordDao();
-        phoneDao = dbFactory.getPhoneDao();
+        phoneDao = dbFactory.getBatchPhoneDao();
         transaction = dbFactory.getTransaction();
     }
 
@@ -38,6 +39,7 @@ public class AuthServiceImpl implements AuthService {
         //change to manager.startTransaction
         transaction.begin();
         accountDao.create(account);
+        phoneDao.create(phones);
         passwordDao.create(password);
         transaction.commit();
         //change to close()

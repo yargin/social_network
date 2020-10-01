@@ -100,7 +100,7 @@ html, body, ul, li {
     justify-content: center;
 }
 
-.post input,select {
+.post input, select, label {
     margin-top: 10px;
     display: block;
 }

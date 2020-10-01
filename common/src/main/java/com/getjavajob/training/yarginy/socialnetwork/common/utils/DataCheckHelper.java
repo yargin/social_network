@@ -4,13 +4,16 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataFlowException;
 
+import java.time.LocalDate;
 import java.util.regex.Pattern;
 
 import static java.util.Objects.isNull;
 
 public final class DataCheckHelper {
-    public static final int MIN_PASSWORD = 6;
-    public static final int MAX_PASSWORD = 20;
+    public static final short MIN_PASSWORD = 6;
+    public static final short MAX_PASSWORD = 20;
+    public static final short MIN_AGE = 10;
+    public static final short MAX_AGE = 140;
 
     private DataCheckHelper() {
     }
@@ -43,7 +46,7 @@ public final class DataCheckHelper {
     public static String stringMandatory(String string) {
         String stringMandatory = stringOptional(string);
         if (isNull(stringMandatory)) {
-            throw new IncorrectDataException("can't be null or empty");
+            throw new IncorrectDataException(IncorrectData.WRONG_STRING);
         }
         return stringMandatory;
     }
@@ -180,6 +183,19 @@ public final class DataCheckHelper {
             throw new IncorrectDataException(IncorrectData.NOT_A_PASSWORD);
         }
         return password;
+    }
+
+    public static LocalDate applicableAge(LocalDate date) {
+        if (!isNull(date)) {
+            LocalDate minDate = LocalDate.now().minusYears(MIN_AGE);
+            LocalDate maxDate = LocalDate.now().minusYears(MAX_AGE);
+            if (date.isAfter(minDate)) {
+                throw new IncorrectDataException(IncorrectData.TOO_YOUNG);
+            } else if (date.isBefore(maxDate)) {
+                throw new IncorrectDataException(IncorrectData.TOO_OLD);
+            }
+        }
+        return date;
     }
 
     /**

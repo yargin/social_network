@@ -8,18 +8,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static java.lang.System.out;
 import static java.util.Objects.isNull;
 
 public class AuthHelper {
-    public static void checkAuth(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public static void checkAuth(HttpServletRequest request, HttpServletResponse response, String jsp) throws ServletException, IOException {
         HttpSession session = request.getSession(true);
         Account account = (Account) session.getAttribute("account");
-        out.println(account);
         if (isNull(account)) {
-//            request.getRequestDispatcher("/WEB-INF/jsps/login.jsp").forward(request, response);
-//            redirect(request, response, request.getContextPath() + "/login");
             response.sendRedirect(request.getContextPath() + "/login");
+        } else {
+            request.getRequestDispatcher(jsp).forward(request, response);
         }
     }
 }

@@ -123,7 +123,7 @@ public abstract class CommonDbFactory implements DbFactory {
     }
 
     @Override
-    public BatchDao<Phone> getBatchPhone() {
+    public BatchDao<Phone> getBatchPhoneDao() {
         return new BatchDaoImpl<>(dbConnector, new BatchPhonesDml());
     }
 
