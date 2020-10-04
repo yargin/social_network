@@ -1,9 +1,11 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls;
 
+import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AbstractDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable;
 
 import java.sql.Connection;
@@ -14,8 +16,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory.getNullGroup;
+import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.GroupsTable.*;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
+import static java.util.Objects.isNull;
 
 public class GroupDml implements AbstractDml<Group> {
     private static final String SELECT_ALL = buildQuery().select(TABLE).build();
@@ -25,6 +29,7 @@ public class GroupDml implements AbstractDml<Group> {
             AccountsTable.ID).where(NAME).build();
     private static final String SELECT_UPDATE = buildQuery().select(TABLE).where(NAME).build();
     private final AccountDml accountDml = new AccountDml();
+    private final Dao<Account> accountDao = getDbFactory().getAccountDao();
 
     @Override
     public PreparedStatement getSelect(Connection connection, long id) throws SQLException {
@@ -68,6 +73,12 @@ public class GroupDml implements AbstractDml<Group> {
     public void updateRow(ResultSet resultSet, Group group) throws SQLException {
         resultSet.updateString(NAME, group.getName());
         resultSet.updateString(DESCRIPTION, group.getDescription());
+        if (isNull(group.getOwner())) {
+            throw new IncorrectDataException("owner can't be null");
+        }
+        if (group.getOwner().getId() < 1) {
+            group.setOwner(accountDao.select(group.getOwner()));
+        }
         resultSet.updateLong(OWNER, group.getOwner().getId());
     }
 

@@ -1,6 +1,5 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.servlets;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
@@ -12,6 +11,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneIm
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
 import com.getjavajob.training.yarginy.socialnetwork.service.AuthService;
 import com.getjavajob.training.yarginy.socialnetwork.service.AuthServiceImpl;
+import com.getjavajob.training.yarginy.socialnetwork.web.servlets.additionaldata.PhoneExchanger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -19,7 +19,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory.getNullPassword;
@@ -27,16 +29,30 @@ import static java.util.Objects.isNull;
 
 public class RegisterServlet extends HttpServlet {
     private static final String JSP = "/WEB-INF/jsps/registration.jsp";
-    private static final String REG_SUCCESS_JSP = "/mywall.jsp";
+    private static final String REG_SUCCESS_URL = "/mywall";
     private static final AuthService AUTH_SERVICE = new AuthServiceImpl();
-    private final Map<String, IncorrectData> violations = new HashMap<>();
     private final Account account = new AccountImpl();
+    private final Collection<PhoneExchanger> privatePhones = new ArrayList<>();
+    private final Collection<PhoneExchanger> workPhones = new ArrayList<>();
     private boolean paramsAccepted;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("male", Sex.MALE.toString());
         req.setAttribute("female", Sex.FEMALE.toString());
+
+        if (privatePhones.isEmpty()) {
+            privatePhones.add(new PhoneExchanger("privatePhone1", "", ""));
+            privatePhones.add(new PhoneExchanger("privatePhone2", "", ""));
+        }
+        req.setAttribute("privatePhones", privatePhones);
+
+        if (workPhones.isEmpty()) {
+            workPhones.add(new PhoneExchanger("workPhone1", "", ""));
+            workPhones.add(new PhoneExchanger("workPhone2", "", ""));
+        }
+        req.setAttribute("workPhones", workPhones);
+
         req.getRequestDispatcher(JSP).forward(req, resp);
     }
 
@@ -60,15 +76,34 @@ public class RegisterServlet extends HttpServlet {
         setStringParam(account::setCountry, "country", req);
         setStringParam(account::setCity, "city", req);
 
-        Collection<Phone> phones = new ArrayList<>();
+        Collection<Phone> phones = getPhones(req, privatePhones, PhoneType.PRIVATE);
+        phones.addAll(getPhones(req, workPhones, PhoneType.WORK));
 
         if (!paramsAccepted) {
             doGet(req, resp);
         } else {
             AUTH_SERVICE.register(account, phones, password);
-//            //todo login? && setRegistrationDate(into service layer)?
-            resp.sendRedirect(req.getContextPath() + REG_SUCCESS_JSP);
+            resp.sendRedirect(req.getContextPath() + REG_SUCCESS_URL);
         }
+    }
+
+    private Collection<Phone> getPhones(HttpServletRequest req, Collection<PhoneExchanger> phonesToGet, PhoneType type) {
+        Collection<Phone> phones = new ArrayList<>();
+        for (PhoneExchanger enteredPhone : phonesToGet) {
+            String phoneToAdd = req.getParameter(enteredPhone.getName());
+            if (!isNull(phoneToAdd) && !phoneToAdd.trim().isEmpty()) {
+                try {
+                    Phone phone = new PhoneImpl(phoneToAdd, account);
+                    phone.setType(type);
+                    phones.add(phone);
+                } catch (IncorrectDataException e) {
+                    enteredPhone.setError(e.getType().getPropertyKey());
+                    paramsAccepted = false;
+                }
+                enteredPhone.setValue(phoneToAdd);
+            }
+        }
+        return phones;
     }
 
     private Password getPassword(HttpServletRequest req) {
@@ -100,9 +135,12 @@ public class RegisterServlet extends HttpServlet {
 
     private void setDateParam(Consumer<LocalDate> consumer, String param, HttpServletRequest req) {
         try {
-            LocalDate date = LocalDate.parse(req.getParameter(param));
-            consumer.accept(date);
-            req.setAttribute(param, date);
+            String enteredDate = req.getParameter(param);
+            if (!enteredDate.trim().isEmpty()) {
+                LocalDate date = LocalDate.parse(req.getParameter(param));
+                consumer.accept(date);
+                req.setAttribute(param, date);
+            }
         } catch (IncorrectDataException e) {
             req.setAttribute("err" + param, e.getType().getPropertyKey());
             paramsAccepted = false;
@@ -121,16 +159,5 @@ public class RegisterServlet extends HttpServlet {
             req.setAttribute("err" + param, e.getType().getPropertyKey());
             paramsAccepted = false;
         }
-    }
-
-    private Phone readPhoneData(PhoneType type, String phoneToAdd, Account account, String key) {
-        try {
-            Phone phone = new PhoneImpl(phoneToAdd, account);
-            phone.setType(type);
-            return phone;
-        } catch (IncorrectDataException e) {
-            violations.put(key, IncorrectData.NOT_A_PHONE);
-        }
-        return new PhoneImpl();
     }
 }

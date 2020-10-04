@@ -1,5 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao;
 
+import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
@@ -56,7 +57,7 @@ public class PhoneDaoTest {
         PHONE.setOwner(wrongAccount);
         try {
             PHONE_DAO.create(PHONE);
-        } catch (IllegalStateException e) {
+        } catch (IncorrectDataException e) {
             assertTrue(true);
         }
         PHONE.setOwner(ACCOUNT_DAO.select(1));

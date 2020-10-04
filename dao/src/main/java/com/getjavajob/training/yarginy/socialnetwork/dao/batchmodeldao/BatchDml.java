@@ -11,5 +11,5 @@ import java.util.Collection;
 public interface BatchDml<E extends Entity> extends AbstractDml<E> {
 //    public abstract PreparedStatement getSelect(Connection connection, Collection<E> entities);
 
-    PreparedStatement batchSelect(Connection connection, Collection<E> entities) throws SQLException;
+    PreparedStatement batchSelectUpdate(Connection connection, Collection<E> entities) throws SQLException;
 }

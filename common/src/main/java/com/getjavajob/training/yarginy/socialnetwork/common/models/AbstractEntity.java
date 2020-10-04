@@ -18,7 +18,7 @@ public class AbstractEntity {
      * @return id assigned when {@link Entity} saved to storage
      */
     public long getIdNumber() {
-        return checkId(id);
+        return id;
     }
 
     /**

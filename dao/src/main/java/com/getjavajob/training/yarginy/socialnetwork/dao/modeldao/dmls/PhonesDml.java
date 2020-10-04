@@ -7,6 +7,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AbstractDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable;
 
 import java.sql.Connection;
@@ -16,6 +17,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.PhonesTable.*;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 import static java.util.Objects.isNull;
@@ -29,6 +31,7 @@ public class PhonesDml implements AbstractDml<Phone> {
     public static final String SELECT_BY_NUMBER = buildQuery().selectJoin(TABLE, AccountsTable.TABLE, OWNER,
             AccountsTable.ID).where(NUMBER).build();
     private final AccountDml accountDml = new AccountDml();
+    private final Dao<Account> accountDao = getDbFactory().getAccountDao();
 
     @Override
     public PreparedStatement getUpdatableSelect(Connection connection, Phone phone) throws SQLException {
@@ -88,6 +91,9 @@ public class PhonesDml implements AbstractDml<Phone> {
         }
         if (isNull(phone.getOwner())) {
             throw new IncorrectDataException("owner can't be null");
+        }
+        if (phone.getOwner().getId() < 1) {
+            phone.setOwner(accountDao.select(phone.getOwner()));
         }
         resultSet.updateLong(OWNER, phone.getOwner().getId());
     }

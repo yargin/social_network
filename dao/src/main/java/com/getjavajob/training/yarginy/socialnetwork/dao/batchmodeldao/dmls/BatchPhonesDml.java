@@ -1,7 +1,9 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.dmls;
 
+import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.PhonesDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.PhonesTable;
 
@@ -11,21 +13,24 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 
+import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 
 public class BatchPhonesDml extends PhonesDml implements BatchDml<Phone> {
+    private final Dao<Account> accountDao = getDbFactory().getAccountDao();
+
     @Override
-    public PreparedStatement batchSelect(Connection connection, Collection<Phone> entities) throws SQLException {
-        StringBuilder idBuilder = new StringBuilder();
+    public PreparedStatement batchSelectUpdate(Connection connection, Collection<Phone> entities) throws SQLException {
         StringBuilder numberBuilder = new StringBuilder();
         for (Phone phone : entities) {
-            idBuilder.append(phone.getId()).append(", ");
+            Account account = phone.getOwner();
+            account = accountDao.approveFromStorage(account);
+            phone.setOwner(account);
             numberBuilder.append(phone.getNumber()).append(", ");
         }
-        String ids = idBuilder.substring(0, idBuilder.length() - 2);
-        String numbers = numberBuilder.substring(0, idBuilder.length() - 2);
-        String select = buildQuery().select(PhonesTable.TABLE).whereInOpen(new String[]{PhonesTable.ID,
-                PhonesTable.NUMBER}, new String[]{ids, numbers}).build();
+        String numbers = numberBuilder.substring(0, numberBuilder.length() - 2);
+        String select = buildQuery().select(PhonesTable.TABLE).whereIn(new String[]{PhonesTable.NUMBER},
+                new String[]{numbers}).build();
         return connection.prepareStatement(select, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
     }
 }

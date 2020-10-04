@@ -118,7 +118,7 @@ public class SqlQueryBuilder {
      * @param column specified column
      * @return {@link SqlQueryBuilder} having added ' WHERE <b>column</b> IN (' to query
      */
-    public SqlQueryBuilder whereInOpen(String[] column, String[] params) {
+    public SqlQueryBuilder whereIn(String[] column, String[] params) {
         int columnNumber = column.length;
         if (columnNumber != params.length) {
             throw new IllegalArgumentException("wrong arrays sizes");

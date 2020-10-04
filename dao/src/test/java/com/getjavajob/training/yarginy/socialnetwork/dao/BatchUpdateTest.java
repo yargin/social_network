@@ -31,6 +31,8 @@ public class BatchUpdateTest {
         firstPhone.setType(PhoneType.PRIVATE);
         Phone secondPhone = new PhoneImpl("89218942", account);
         secondPhone.setType(PhoneType.PRIVATE);
+        batchDao.delete(firstPhone);
+        batchDao.delete(secondPhone);
         Collection<Phone> phones = asList(firstPhone, secondPhone);
         batchDao.create(phones);
         Collection<Phone> allAccountPhones = accountPhones.selectMany(account);

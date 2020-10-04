@@ -2,7 +2,6 @@ package com.getjavajob.training.yarginy.socialnetwork.service;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
@@ -13,20 +12,21 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.Transaction;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 
+import java.time.LocalDate;
 import java.util.Collection;
 
+import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory.getNullPassword;
 import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper.encrypt;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
 
 public class AuthServiceImpl implements AuthService {
-    private final DbFactory dbFactory;
     private final Dao<Account> accountDao;
     private final Dao<Password> passwordDao;
     private final BatchDao<Phone> phoneDao;
     private final Transaction transaction;
 
     public AuthServiceImpl() {
-        dbFactory = getDbFactory();
+        DbFactory dbFactory = getDbFactory();
         accountDao = dbFactory.getAccountDao();
         passwordDao = dbFactory.getPasswordDao();
         phoneDao = dbFactory.getBatchPhoneDao();
@@ -38,6 +38,7 @@ public class AuthServiceImpl implements AuthService {
         //make autocloseable???
         //change to manager.startTransaction
         transaction.begin();
+        account.setRegistrationDate(LocalDate.now());
         accountDao.create(account);
         phoneDao.create(phones);
         passwordDao.create(password);
@@ -55,7 +56,7 @@ public class AuthServiceImpl implements AuthService {
         passwordObject.setAccount(account);
         passwordObject.setPassword(password);
         passwordObject = passwordDao.select(passwordObject);
-        if (passwordObject.equals(NullEntitiesFactory.getNullPassword())) {
+        if (passwordObject.equals(getNullPassword())) {
             throw new IncorrectDataException(IncorrectData.WRONG_EMAIL);
         }
         if (!passwordObject.getPassword().equals(encrypt(password))) {

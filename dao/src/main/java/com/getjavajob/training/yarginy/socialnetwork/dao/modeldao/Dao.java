@@ -64,5 +64,19 @@ public interface Dao<E extends Entity> {
      */
     void checkEntity(E entity);
 
+    /**
+     * @return {@link Entity} that doesn't exist
+     */
     E getNullEntity();
+
+    /**
+     * checks if {@link Entity} not null, exists & is read from database<br>
+     * used for relational actions
+     *
+     * @param entity to check
+     * @return original {@link Entity} if it was read from database,<br>
+     * otherwise {@link Entity} read from database
+     * @throws IllegalArgumentException if {@param entity} is null
+     */
+    E approveFromStorage(E entity);
 }

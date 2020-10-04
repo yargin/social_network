@@ -125,4 +125,16 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
     public E getNullEntity() {
         return abstractDml.getNullEntity();
     }
+
+    @Override
+    public E approveFromStorage(E entity) {
+        checkEntity(entity);
+        if (entity.getId() == 0) {
+            E readEntity = select(entity);
+            checkEntity(readEntity);
+            return readEntity;
+        } else {
+            return entity;
+        }
+    }
 }
