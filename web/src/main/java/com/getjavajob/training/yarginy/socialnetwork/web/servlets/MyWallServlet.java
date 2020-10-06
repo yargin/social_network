@@ -14,6 +14,7 @@ public class MyWallServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //todo service.get messages
+//        System.out.println("myWall: " + req.getHeader("Referer"));
         checkAuth(req, resp, JSP);
     }
 }

@@ -10,6 +10,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.Transaction;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.TransactionManager;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 
 import java.time.LocalDate;
@@ -23,28 +24,33 @@ public class AuthServiceImpl implements AuthService {
     private final Dao<Account> accountDao;
     private final Dao<Password> passwordDao;
     private final BatchDao<Phone> phoneDao;
-    private final Transaction transaction;
+    private final TransactionManager transactionManager;
 
     public AuthServiceImpl() {
         DbFactory dbFactory = getDbFactory();
         accountDao = dbFactory.getAccountDao();
         passwordDao = dbFactory.getPasswordDao();
         phoneDao = dbFactory.getBatchPhoneDao();
-        transaction = dbFactory.getTransaction();
+        transactionManager = dbFactory.getTransactionManager();
     }
 
     @Override
     public boolean register(Account account, Collection<Phone> phones, Password password) {
-        //make autocloseable???
-        //change to manager.startTransaction
-        transaction.begin();
-        account.setRegistrationDate(LocalDate.now());
-        accountDao.create(account);
-        phoneDao.create(phones);
-        passwordDao.create(password);
-        transaction.commit();
-        //change to close()
-        transaction.end();
+        try (Transaction transaction = transactionManager.getTransaction()) {
+            account.setRegistrationDate(LocalDate.now());
+            if (!accountDao.create(account)) {
+                throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
+            }
+            if (!phoneDao.create(phones)) {
+                throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
+            }
+            passwordDao.create(password);
+            transaction.commit();
+        } catch (IncorrectDataException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new IllegalStateException(e.getCause());
+        }
         return true;
     }
 

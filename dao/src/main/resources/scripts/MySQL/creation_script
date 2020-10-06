@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS Accounts (
         sex CHAR(6),
         birth_date DATE,
         registration_date DATE,
-        role smallint,
+        role CHAR(5) DEFAULT 'USER',
         email VARCHAR(40) NOT NULL UNIQUE,
         additional_email VARCHAR(40) UNIQUE,
         icq VARCHAR(40),
@@ -18,24 +18,15 @@ CREATE TABLE IF NOT EXISTS Accounts (
 ALTER TABLE Accounts
 ADD CHECK (sex IN ('MALE', 'FEMALE'));
 
+ALTER TABLE Accounts
+ADD CHECK (role IN ('ADMIN', 'USER'));
+
 CREATE TABLE IF NOT EXISTS _Groups (
         id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(50) NOT NULL UNIQUE,
         description VARCHAR(500),
         owner_id BIGINT UNSIGNED NOT NULL
 );
-
-CREATE TABLE IF NOT EXISTS Roles (
-    id TINYINT PRIMARY KEY,
-    role CHAR(7)
-);
-
-ALTER TABLE Accounts
-ADD CONSTRAINT C_22 FOREIGN KEY (role) REFERENCES Roles (id);
-
-INSERT INTO Roles (id, role) VALUES
-(1, 'admin'),
-(2, 'regular');
 
 ALTER TABLE _Groups
 ADD CONSTRAINT C_11 FOREIGN KEY (owner_id) REFERENCES Accounts (id) ON DELETE CASCADE;

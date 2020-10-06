@@ -13,7 +13,7 @@ public interface Phone extends Entity {
 
     void setType(PhoneType type);
 
-    Account getOwner();
+    void setOwner(Account entity);
 
-    void setOwner(Account owner);
+    Account getOwner();
 }

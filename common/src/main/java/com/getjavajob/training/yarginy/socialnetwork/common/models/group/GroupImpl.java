@@ -43,7 +43,7 @@ public class GroupImpl extends AbstractEntity implements Group {
 
     @Override
     public Account getOwner() {
-        return objectMandatory(owner);
+        return owner;
     }
 
     @Override

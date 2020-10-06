@@ -6,15 +6,12 @@ import com.getjavajob.training.yarginy.socialnetwork.service.AuthService;
 import com.getjavajob.training.yarginy.socialnetwork.service.AuthServiceImpl;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import java.io.IOException;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData.WRONG_EMAIL;
 import static com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData.WRONG_PASSWORD;
-import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
+import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirectToReferer;
 import static java.util.Objects.isNull;
 
 public class LoginServlet extends HttpServlet {
@@ -22,11 +19,31 @@ public class LoginServlet extends HttpServlet {
     private static final String ERROR = "logerror";
     private static final String EMAIL = "email";
     private static final String PASSWORD = "password";
+    private static final String USER_NAME = "userName";
     private final AuthService authService = new AuthServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher(JSP).forward(req, resp);
+        String email = null;
+        String password = null;
+        Cookie[] cookies = req.getCookies();
+
+        if (!isNull(cookies)) {
+            for (Cookie cookie : cookies) {
+                if (EMAIL.equals(cookie.getName())) {
+                    email = cookie.getValue();
+                } else if (PASSWORD.equals(cookie.getName())) {
+                    password = cookie.getValue();
+                }
+            }
+        }
+        try {
+            Account account = authService.login(email, password);
+            req.getSession().setAttribute(USER_NAME, account.getName());
+            redirectToReferer(req, resp);
+        } catch (Exception e) {
+            req.getRequestDispatcher(JSP).forward(req, resp);
+        }
     }
 
     @Override
@@ -60,8 +77,18 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
+        String rememberMe = req.getParameter("rememberMe");
+        if ("on".equals(rememberMe)) {
+            Cookie emailCookie = new Cookie(EMAIL, email);
+            emailCookie.setMaxAge(2);
+            Cookie passwordCookie = new Cookie(PASSWORD, email);
+            passwordCookie.setMaxAge(2);
+            resp.addCookie(emailCookie);
+            resp.addCookie(passwordCookie);
+        }
+
         HttpSession session = req.getSession();
-        session.setAttribute("account", account);
-        redirect(req, resp, req.getContextPath() + "/mywall");
+        session.setAttribute(USER_NAME, account.getName());
+        redirectToReferer(req, resp);
     }
 }

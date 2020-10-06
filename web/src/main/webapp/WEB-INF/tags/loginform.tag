@@ -13,6 +13,8 @@
         <input type="password" name="password" placeholder="<fmt:message key="form.password" bundle="${label}"/>"
                required>
         <br>
+        <fmt:message key="form.rememberMe" bundle="${label}"/><input type="radio" name="rememberMe">
+        <br>
         <button type="submit"><fmt:message key="button.login" bundle="${label}"/></button>
         <br>
         <fmt:message key="label.notRegistered" bundle="${label}"/> <a

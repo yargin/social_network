@@ -15,17 +15,17 @@ import static java.util.Objects.isNull;
 
 public class DaoImpl<E extends Entity> implements Dao<E> {
     protected final ConnectionPool connectionPool;
-    protected final AbstractDml<E> abstractDml;
+    protected final Dml<E> dml;
 
-    public DaoImpl(ConnectionPool connectionPool, AbstractDml<E> abstractDml) {
+    public DaoImpl(ConnectionPool connectionPool, Dml<E> dml) {
         this.connectionPool = connectionPool;
-        this.abstractDml = abstractDml;
+        this.dml = dml;
     }
 
     @Override
     public E select(long id) {
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement statement = abstractDml.getSelect(connection, id)) {
+             PreparedStatement statement = dml.getSelect(connection, id)) {
             return select(statement);
         } catch (SQLException e) {
             throw new IllegalStateException(e);
@@ -35,7 +35,7 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
     @Override
     public E select(E entityToSelect) {
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement statement = abstractDml.getSelect(connection, entityToSelect)) {
+             PreparedStatement statement = dml.getSelect(connection, entityToSelect)) {
             return select(statement);
         } catch (SQLException e) {
             throw new IllegalStateException(e);
@@ -45,22 +45,23 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
     private E select(PreparedStatement statement) throws SQLException {
         try (ResultSet resultSet = statement.executeQuery()) {
             if (!resultSet.next()) {
-                return abstractDml.getNullEntity();
+                return dml.getNullEntity();
             }
-            return abstractDml.selectFromRow(resultSet);
+            return dml.selectFromRow(resultSet);
         }
     }
 
     @Override
     public boolean create(E entity) {
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement statement = abstractDml.getUpdatableSelect(connection, entity);
+             PreparedStatement statement = dml.getUpdatableSelect(connection, entity);
              ResultSet resultSet = statement.executeQuery()) {
             if (resultSet.next()) {
                 return false;
             }
             resultSet.moveToInsertRow();
-            abstractDml.updateRow(resultSet, entity);
+            E storedEntity = getNullEntity();
+            dml.updateRow(resultSet, entity, storedEntity);
             resultSet.insertRow();
             return true;
         } catch (SQLException e) {
@@ -70,13 +71,14 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
 
     @Override
     public boolean update(E entity) {
+        E storedEntity = select(entity.getId());
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement statement = abstractDml.getUpdatableSelect(connection, entity);
+             PreparedStatement statement = dml.getUpdatableSelect(connection, entity);
              ResultSet resultSet = statement.executeQuery()) {
             if (!resultSet.next()) {
                 return false;
             }
-            abstractDml.updateRow(resultSet, entity);
+            dml.updateRow(resultSet, entity, storedEntity);
             resultSet.updateRow();
             return true;
         } catch (SQLException e) {
@@ -87,7 +89,7 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
     @Override
     public boolean delete(E entity) {
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement statement = abstractDml.getUpdatableSelect(connection, entity);
+             PreparedStatement statement = dml.getUpdatableSelect(connection, entity);
              ResultSet resultSet = statement.executeQuery()) {
             if (!resultSet.next()) {
                 return false;
@@ -102,11 +104,11 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
     @Override
     public Collection<E> selectAll() {
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement statement = abstractDml.getSelectAll(connection);
+             PreparedStatement statement = dml.getSelectAll(connection);
              ResultSet resultSet = statement.executeQuery()) {
             Collection<E> all = new ArrayList<>();
             while (resultSet.next()) {
-                all.add(abstractDml.selectFromRow(resultSet));
+                all.add(dml.selectFromRow(resultSet));
             }
             return all;
         } catch (SQLException e) {
@@ -116,14 +118,14 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
 
     @Override
     public void checkEntity(E entity) {
-        if (isNull(entity) || abstractDml.getNullEntity().equals(entity)) {
+        if (isNull(entity) || dml.getNullEntity().equals(entity)) {
             throw new IllegalArgumentException();
         }
     }
 
     @Override
     public E getNullEntity() {
-        return abstractDml.getNullEntity();
+        return dml.getNullEntity();
     }
 
     @Override

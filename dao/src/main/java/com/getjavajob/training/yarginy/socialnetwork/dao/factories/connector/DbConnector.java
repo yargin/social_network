@@ -14,7 +14,7 @@ import java.util.concurrent.Semaphore;
 import static java.lang.Thread.currentThread;
 import static java.util.Objects.isNull;
 
-public class DbConnector implements ConnectionPool, Transaction {
+public class DbConnector implements ConnectionPool, Transaction, TransactionManager {
     private static DbConnector singleDbConnector;
     private final Properties properties = new Properties();
     private final BlockingQueue<ConnectionProxy> connectionsToReuse;
@@ -42,7 +42,7 @@ public class DbConnector implements ConnectionPool, Transaction {
     }
 
     @Override
-    public void end() {
+    public void close() {
         ConnectionProxy connectionProxy = threadConnection.get();
         threadConnection.remove();
         //if no connections consumer is waiting for connection
@@ -64,13 +64,12 @@ public class DbConnector implements ConnectionPool, Transaction {
     }
 
     @Override
-    public Connection getConnection() throws SQLException {
-
+    public Connection getConnection() {
         return initConnection();
     }
 
     public void closeConnection() {
-        end();
+        close();
     }
 
     @Override
@@ -79,9 +78,10 @@ public class DbConnector implements ConnectionPool, Transaction {
     }
 
     @Override
-    public void begin() {
+    public Transaction getTransaction() {
         ConnectionProxy connection = initConnection();
         connection.setTransactional(true);
+        return this;
     }
 
     private ConnectionProxy initConnection() {

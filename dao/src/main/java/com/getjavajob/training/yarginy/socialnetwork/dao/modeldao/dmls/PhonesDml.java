@@ -1,13 +1,11 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AbstractDml;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable;
 
 import java.sql.Connection;
@@ -17,12 +15,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.PhonesTable.*;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 import static java.util.Objects.isNull;
 
-public class PhonesDml implements AbstractDml<Phone> {
+public class PhonesDml extends AbstractDml<Phone> {
     public static final String SELECT_ALL = buildQuery().selectJoin(TABLE, AccountsTable.TABLE, OWNER, AccountsTable.ID).
             build();
     public static final String SELECT_UPDATE = buildQuery().select(TABLE).where(NUMBER).build();
@@ -31,7 +28,6 @@ public class PhonesDml implements AbstractDml<Phone> {
     public static final String SELECT_BY_NUMBER = buildQuery().selectJoin(TABLE, AccountsTable.TABLE, OWNER,
             AccountsTable.ID).where(NUMBER).build();
     private final AccountDml accountDml = new AccountDml();
-    private final Dao<Account> accountDao = getDbFactory().getAccountDao();
 
     @Override
     public PreparedStatement getUpdatableSelect(Connection connection, Phone phone) throws SQLException {
@@ -84,18 +80,10 @@ public class PhonesDml implements AbstractDml<Phone> {
     }
 
     @Override
-    public void updateRow(ResultSet resultSet, Phone phone) throws SQLException {
-        resultSet.updateString(NUMBER, phone.getNumber());
-        if (!isNull(phone.getType())) {
-            resultSet.updateString(TYPE, phone.getType().toString());
-        }
-        if (isNull(phone.getOwner())) {
-            throw new IncorrectDataException("owner can't be null");
-        }
-        if (phone.getOwner().getId() < 1) {
-            phone.setOwner(accountDao.select(phone.getOwner()));
-        }
-        resultSet.updateLong(OWNER, phone.getOwner().getId());
+    public void updateRow(ResultSet resultSet, Phone phone, Phone storedPhone) throws SQLException {
+        updateFieldIfDiffers(phone::getNumber, storedPhone::getNumber, resultSet::updateString, NUMBER);
+        updateFieldIfDiffers(phone::getType, storedPhone::getType, resultSet::updateString, TYPE, PhoneType::toString);
+        updateFieldIfDiffers(phone::getOwner, storedPhone::getOwner, resultSet::updateLong, OWNER, Account::getId);
     }
 
     @Override

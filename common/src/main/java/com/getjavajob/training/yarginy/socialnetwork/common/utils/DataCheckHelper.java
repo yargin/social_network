@@ -1,8 +1,8 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.utils;
 
+import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.DataFlowViolationException;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
-import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataFlowException;
 
 import java.time.LocalDate;
 import java.util.regex.Pattern;
@@ -185,7 +185,7 @@ public final class DataCheckHelper {
         return password;
     }
 
-    public static LocalDate applicableAge(LocalDate date) {
+    public static LocalDate eligebleAge(LocalDate date) {
         if (!isNull(date)) {
             LocalDate minDate = LocalDate.now().minusYears(MIN_AGE);
             LocalDate maxDate = LocalDate.now().minusYears(MAX_AGE);
@@ -206,7 +206,7 @@ public final class DataCheckHelper {
      */
     public static long checkId(long id) {
         if (id == 0) {
-            throw new IncorrectDataFlowException("must be read from storage");
+            throw new DataFlowViolationException("must be read from storage");
         } else if (id < -1) {
             throw new IncorrectDataException("wrong id");
         }

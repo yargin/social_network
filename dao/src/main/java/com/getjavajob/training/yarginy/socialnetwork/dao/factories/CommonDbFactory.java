@@ -9,7 +9,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDaoI
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.dmls.BatchPhonesDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.ConnectionPool;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.DbConnector;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.Transaction;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.TransactionManager;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl.ScriptExecutor;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl.ScriptExecutorImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
@@ -128,7 +128,7 @@ public abstract class CommonDbFactory implements DbFactory {
     }
 
     @Override
-    public Transaction getTransaction() {
+    public TransactionManager getTransactionManager() {
         return dbConnector;
     }
 

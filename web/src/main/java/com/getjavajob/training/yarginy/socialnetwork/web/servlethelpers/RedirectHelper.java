@@ -1,22 +1,32 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 import static java.util.Objects.isNull;
 
 public class RedirectHelper {
-    public static void redirect(HttpServletRequest request, HttpServletResponse response, String location) {
-        response.setHeader("Location", location);
-        response.setStatus(HttpServletResponse.SC_FOUND);
+    private static final String START_JSP = "/WEB-INF/jsps/mywall.jsp";
+
+    public static void redirect(HttpServletRequest req, HttpServletResponse resp, String location) throws IOException {
+//        resp.setHeader("Location", location);
+//        resp.setStatus(HttpServletResponse.SC_FOUND);
+        resp.sendRedirect(location);
     }
 
-    public static void redirectToReferer(HttpServletRequest request, HttpServletResponse response) {
-        String referer = request.getHeader("Referer");
-        String url = request.getRequestURL().toString();
-        if (isNull(referer) || referer.equals(url)) {
-            referer = request.getContextPath();
+    public static void redirectToReferer(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
+            IOException {
+        String referer = req.getHeader("Referer");
+        if (isNull(referer)) {
+            resp.sendRedirect(req.getContextPath() + "/mywall");
+            return;
         }
-        redirect(request, response, referer);
+        String url = req.getRequestURL().toString();
+        if (referer.equals(url)) {
+            referer = req.getContextPath();
+        }
+        redirect(req, resp, referer);
     }
 }

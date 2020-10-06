@@ -1,5 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.servlets;
 
+import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
@@ -28,6 +29,8 @@ import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEn
 import static java.util.Objects.isNull;
 
 public class RegisterServlet extends HttpServlet {
+    private static final String EMAIL_DUPLICATE = "emailDuplicate";
+    private static final String PHONE_DUPLICATE = "phoneDuplicate";
     private static final String JSP = "/WEB-INF/jsps/registration.jsp";
     private static final String REG_SUCCESS_URL = "/mywall";
     private static final AuthService AUTH_SERVICE = new AuthServiceImpl();
@@ -82,9 +85,23 @@ public class RegisterServlet extends HttpServlet {
         if (!paramsAccepted) {
             doGet(req, resp);
         } else {
-            AUTH_SERVICE.register(account, phones, password);
-            resp.sendRedirect(req.getContextPath() + REG_SUCCESS_URL);
+            register(phones, password, req, resp);
         }
+    }
+
+    private void register(Collection<Phone> phones, Password password, HttpServletRequest req, HttpServletResponse resp)
+            throws IOException, ServletException {
+        try {
+            AUTH_SERVICE.register(account, phones, password);
+        } catch (IncorrectDataException e) {
+            if (e.getType() == IncorrectData.EMAIL_DUPLICATE) {
+                req.setAttribute(EMAIL_DUPLICATE, e.getType().getPropertyKey());
+            } else if (e.getType() == IncorrectData.PHONE_DUPLICATE) {
+                req.setAttribute(PHONE_DUPLICATE, e.getType().getPropertyKey());
+            }
+            doGet(req, resp);
+        }
+        resp.sendRedirect(req.getContextPath() + REG_SUCCESS_URL);
     }
 
     private Collection<Phone> getPhones(HttpServletRequest req, Collection<PhoneExchanger> phonesToGet, PhoneType type) {

@@ -6,7 +6,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Pass
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AbstractDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.AccountDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable;
-import com.getjavajob.training.yarginy.socialnetwork.dao.tables.PasswordTable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,14 +14,13 @@ import java.sql.SQLException;
 import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory.getNullPassword;
+import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.PasswordTable.*;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
-import static java.util.Objects.isNull;
 
-public class PasswordDml implements AbstractDml<Password> {
-    public static final String SELECT = buildQuery().selectJoin(PasswordTable.TABLE, AccountsTable.TABLE,
-            PasswordTable.EMAIL, AccountsTable.EMAIL).where(PasswordTable.EMAIL).build();
-    public static final String SELECT_UPDATE = buildQuery().select(PasswordTable.TABLE).where(PasswordTable.EMAIL).
-            build();
+public class PasswordDml extends AbstractDml<Password> {
+    public static final String SELECT = buildQuery().selectJoin(TABLE, AccountsTable.TABLE, EMAIL, AccountsTable.EMAIL).
+            where(EMAIL).build();
+    public static final String SELECT_UPDATE = buildQuery().select(TABLE).where(EMAIL).build();
     public static final AccountDml ACCOUNT_DML = new AccountDml();
 
     @Override
@@ -46,7 +44,7 @@ public class PasswordDml implements AbstractDml<Password> {
         Password password = new PasswordImpl();
         Account account = ACCOUNT_DML.selectFromRow(resultSet);
         password.setAccount(account);
-        password.setEncryptedPassword(resultSet.getString(PasswordTable.PASSWORD));
+        password.setEncryptedPassword(resultSet.getString(PASSWORD));
         return password;
     }
 
@@ -56,11 +54,10 @@ public class PasswordDml implements AbstractDml<Password> {
     }
 
     @Override
-    public void updateRow(ResultSet resultSet, Password password) throws SQLException {
-        resultSet.updateString(PasswordTable.PASSWORD, password.getPassword());
-        if (!isNull(password.getAccount())) {
-            resultSet.updateString(PasswordTable.EMAIL, password.getAccount().getEmail());
-        }
+    public void updateRow(ResultSet resultSet, Password password, Password storedPassword) throws SQLException {
+        updateFieldIfDiffers(password::getPassword, storedPassword::getPassword, resultSet::updateString, PASSWORD);
+        updateFieldIfDiffers(password::getAccount, storedPassword::getAccount, resultSet::updateString, EMAIL,
+                Account::getEmail);
     }
 
     @Override

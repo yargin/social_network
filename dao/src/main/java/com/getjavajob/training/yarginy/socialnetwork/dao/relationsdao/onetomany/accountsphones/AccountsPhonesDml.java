@@ -2,7 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AbstractDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.AccountDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.PhonesDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDml;
@@ -28,7 +28,7 @@ public class AccountsPhonesDml extends OneToManyDml<Account, Phone> {
         try (PreparedStatement statement = connection.prepareStatement(SELECT_BY_ACCOUNT)) {
             statement.setLong(1, oneId);
             try (ResultSet resultSet = statement.executeQuery()) {
-                AbstractDml<Phone> phonesDml = new PhonesDml();
+                Dml<Phone> phonesDml = new PhonesDml();
                 return phonesDml.selectEntities(resultSet);
             }
         }
@@ -39,7 +39,7 @@ public class AccountsPhonesDml extends OneToManyDml<Account, Phone> {
         try (PreparedStatement statement = connection.prepareStatement(SELECT_BY_PHONE)) {
             statement.setLong(1, oneOfManyId);
             try (ResultSet resultSet = statement.executeQuery()) {
-                AbstractDml<Account> accountDml = new AccountDml();
+                Dml<Account> accountDml = new AccountDml();
                 if (resultSet.next()) {
                     return accountDml.selectFromRow(resultSet);
                 } else {

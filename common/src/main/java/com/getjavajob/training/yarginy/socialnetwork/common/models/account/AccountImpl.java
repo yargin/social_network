@@ -87,12 +87,12 @@ public class AccountImpl extends AbstractEntity implements Account {
 
     @Override
     public LocalDate getBirthDate() {
-        return applicableAge(birthDate);
+        return eligebleAge(birthDate);
     }
 
     @Override
     public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = applicableAge(birthDate);
+        this.birthDate = eligebleAge(birthDate);
     }
 
     @Override

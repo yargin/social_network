@@ -16,6 +16,8 @@ public abstract class NullEntitiesFactory {
     public static Account getNullAccount() {
         Account nullAccount = new AccountImpl();
         nullAccount.setId(-1);
+        nullAccount.setName("doesn't exist");
+        nullAccount.setSurname("doesn't exist");
         nullAccount.setEmail("email@doesnt.exist");
         return nullAccount;
     }
@@ -24,12 +26,14 @@ public abstract class NullEntitiesFactory {
         Group nullGroup = new GroupImpl();
         nullGroup.setId(-1);
         nullGroup.setName("group doesn't exist");
+        nullGroup.setOwner(getNullAccount());
         return nullGroup;
     }
 
     public static Phone getNullPhone() {
         Phone nullPhone = new PhoneImpl();
         nullPhone.setNumber("000000");
+        nullPhone.setOwner(getNullAccount());
         return nullPhone;
     }
 

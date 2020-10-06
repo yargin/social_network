@@ -8,11 +8,11 @@ public interface Group extends Entity {
 
     void setName(String name);
 
-    Account getOwner();
-
-    void setOwner(Account owner);
-
     String getDescription();
 
     void setDescription(String description);
+
+    Account getOwner();
+
+    void setOwner(Account entity);
 }

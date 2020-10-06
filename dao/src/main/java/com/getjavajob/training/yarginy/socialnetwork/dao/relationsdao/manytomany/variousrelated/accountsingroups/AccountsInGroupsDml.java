@@ -2,7 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytoman
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AbstractDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.AccountDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.GroupDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.ManyToManyDml;
@@ -31,7 +31,7 @@ public class AccountsInGroupsDml extends ManyToManyDml<Account, Group> {
         try (PreparedStatement statement = connection.prepareStatement(SELECT_GROUPS)) {
             statement.setLong(1, accountId);
             try (ResultSet resultSet = statement.executeQuery()) {
-                AbstractDml<Group> groupSql = new GroupDml();
+                Dml<Group> groupSql = new GroupDml();
                 return groupSql.selectEntities(resultSet);
             }
         }
@@ -42,7 +42,7 @@ public class AccountsInGroupsDml extends ManyToManyDml<Account, Group> {
         try (PreparedStatement statement = connection.prepareStatement(SELECT_MEMBERS)) {
             statement.setLong(1, groupId);
             try (ResultSet resultSet = statement.executeQuery()) {
-                AbstractDml<Account> accountDml = new AccountDml();
+                Dml<Account> accountDml = new AccountDml();
                 return accountDml.selectEntities(resultSet);
             }
         }

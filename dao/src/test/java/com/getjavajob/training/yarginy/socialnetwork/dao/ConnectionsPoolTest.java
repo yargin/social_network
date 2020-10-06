@@ -3,6 +3,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.ConnectionPool;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.Transaction;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.TransactionManager;
 import org.junit.Test;
 
 import java.sql.Connection;
@@ -18,7 +19,7 @@ public class ConnectionsPoolTest {
     private static final String CLASS = "ConnectionsPoolTest";
     private static final DbFactory DB_FACTORY = getDbFactory();
     private static final ConnectionPool CONNECTION_POOL = DB_FACTORY.getConnectionPool();
-    private static final Transaction TRANSACTION = DB_FACTORY.getTransaction();
+    private static final TransactionManager TRANSACTION_MANAGER = DB_FACTORY.getTransactionManager();
     private static final int threadsNumber = 30;
 
     /**
@@ -67,16 +68,18 @@ public class ConnectionsPoolTest {
         for (int i = 0; i < threadsNumber; i++) {
             Thread thread = new Thread(() -> {
                 try {
-                    TRANSACTION.begin();
-                    for (int j = 0; j < 5; j++) {
-                        Connection connection = CONNECTION_POOL.getConnection();
-                        connections.add(connection);
-                        connection.close();
+                    try (Transaction transaction = TRANSACTION_MANAGER.getTransaction()) {
+                        for (int j = 0; j < 5; j++) {
+                            Connection connection = CONNECTION_POOL.getConnection();
+                            connections.add(connection);
+                            connection.close();
+                        }
+                        transaction.commit();
                     }
-                    TRANSACTION.commit();
-                    TRANSACTION.end();
                 } catch (SQLException e) {
                     throw new IllegalStateException(e);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             });
             threads.add(thread);
@@ -89,7 +92,7 @@ public class ConnectionsPoolTest {
                 e.printStackTrace();
             }
         }
-        assertSame(connections.size(), CONNECTION_POOL.getCapacity());
+        assertSame(CONNECTION_POOL.getCapacity(), connections.size());
         printPassed(CLASS, "testTransaction");
     }
 }

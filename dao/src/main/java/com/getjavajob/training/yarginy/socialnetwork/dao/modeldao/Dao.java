@@ -14,7 +14,7 @@ public interface Dao<E extends Entity> {
      * retrieves {@link E} specified by id
      *
      * @param id {@link E}'s number
-     * @return {@link E} that was found or {@link AbstractDml#getNullEntity()} if any wasn't found
+     * @return {@link E} that was found or {@link Dml#getNullEntity()} if any wasn't found
      */
     E select(long id);
 

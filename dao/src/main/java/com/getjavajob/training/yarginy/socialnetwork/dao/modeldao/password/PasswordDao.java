@@ -2,16 +2,19 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.password;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.ConnectionPool;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AbstractDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.DaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dml;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Collection;
 
 public class PasswordDao extends DaoImpl<Password> {
-    public PasswordDao(ConnectionPool connectionPool, AbstractDml<Password> passwordDml) {
+    public PasswordDao(ConnectionPool connectionPool, Dml<Password> passwordDml) {
         super(connectionPool, passwordDml);
     }
-
 
     @Override
     public boolean delete(Password entity) {
@@ -26,5 +29,23 @@ public class PasswordDao extends DaoImpl<Password> {
     @Override
     public Collection<Password> selectAll() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean update(Password password) {
+        Password storedPassword = select(password);
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement statement = dml.getUpdatableSelect(connection, password);
+             ResultSet resultSet = statement.executeQuery()) {
+            if (!resultSet.next()) {
+                return false;
+            }
+            dml.updateRow(resultSet, password, storedPassword);
+            resultSet.updateRow();
+            return true;
+        } catch (SQLException e) {
+            throw new IllegalStateException(e);
+        }
+
     }
 }

@@ -2,23 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector;
 
 import java.sql.Savepoint;
 
-public interface Transaction {
-    /**
-     * starts transaction bounded to current thread by bounding connection to it
-     * All connections retrieved from {@link ConnectionPool} are transactional -
-     * no any commit/rollback when are closed
-     *
-     * @throws IllegalStateException if couldn't connect to database
-     */
-    void begin();
-
-    /**
-     * ends transaction bounded to current thread
-     *
-     * @throws IllegalStateException if couldn't close bounded connection
-     */
-    void end();
-
+public interface Transaction extends AutoCloseable {
     /**
      * applies changes. Doesn't close connection or transaction
      */

@@ -28,7 +28,7 @@ public class BatchDaoImpl<E extends Entity> extends DaoImpl<E> implements BatchD
             }
             for (E entity : entities) {
                 resultSet.moveToInsertRow();
-                abstractDml.updateRow(resultSet, entity);
+                dml.updateRow(resultSet, entity, getNullEntity());
                 resultSet.insertRow();
             }
             connection.commit();

@@ -17,10 +17,10 @@ public class GroupDaoTest {
     private static final String CLASS = "GroupDaoTest";
     private static final Group GROUP = new GroupImpl();
     private static final Dao<Group> GROUP_DAO = DB_FACTORY.getGroupDao();
+    private static final Dao<Account> ACCOUNT_DAO = DB_FACTORY.getAccountDao();
 
     public GroupDaoTest() {
-        Dao<Account> accountDao = DB_FACTORY.getAccountDao();
-        Account account = accountDao.select(3);
+        Account account = ACCOUNT_DAO.select(3);
         GROUP.setName("new Group");
         GROUP.setOwner(account);
     }
@@ -49,6 +49,15 @@ public class GroupDaoTest {
         GROUP_DAO.create(GROUP);
         assertFalse(GROUP_DAO.create(GROUP));
         printPassed(CLASS, "testCreateExistingGroup");
+    }
+
+    @Test
+    public void testUpdateOwner() {
+        GROUP.setOwner(ACCOUNT_DAO.select(1));
+        assertTrue(GROUP_DAO.update(GROUP));
+        assertSame(1L, GROUP_DAO.select(GROUP).getOwner().getId());
+        GROUP.setOwner(ACCOUNT_DAO.select(3));
+        GROUP_DAO.update(GROUP);
     }
 
     @Test

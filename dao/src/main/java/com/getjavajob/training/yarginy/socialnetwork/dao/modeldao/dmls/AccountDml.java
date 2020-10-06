@@ -2,6 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AbstractDml;
 
@@ -14,7 +15,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsT
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 import static java.util.Objects.isNull;
 
-public class AccountDml implements AbstractDml<Account> {
+public class AccountDml extends AbstractDml<Account> {
     private static final String SELECT_ALL = buildQuery().select(TABLE).build();
     private static final String SELECT_BY_ID = buildQuery().select(TABLE).where(ID).build();
     private static final String SELECT_BY_EMAIL = buildQuery().select(TABLE).where(EMAIL).build();
@@ -65,7 +66,7 @@ public class AccountDml implements AbstractDml<Account> {
         account.setEmail(resultSet.getString(EMAIL));
         account.setAdditionalEmail(resultSet.getString(ADDITIONAL_EMAIL));
         if (!isNull(resultSet.getString(ROLE))) {
-            account.setSex(Sex.valueOf(resultSet.getString(ROLE)));
+            account.setRole(Role.valueOf(resultSet.getString(ROLE)));
         }
         account.setIcq(resultSet.getString(ICQ));
         account.setSkype(resultSet.getString(SKYPE));
@@ -75,28 +76,23 @@ public class AccountDml implements AbstractDml<Account> {
     }
 
     @Override
-    public void updateRow(ResultSet resultSet, Account account) throws SQLException {
-        resultSet.updateString(NAME, account.getName());
-        resultSet.updateString(SURNAME, account.getSurname());
-        resultSet.updateString(PATRONYMIC, account.getPatronymic());
-        if (!isNull(account.getSex())) {
-            resultSet.updateString(SEX, account.getSex().toString());
-        }
-        if (!isNull(account.getRole())) {
-            resultSet.updateString(ROLE, account.getRole().toString());
-        }
-        if (!isNull(account.getBirthDate())) {
-            resultSet.updateDate(BIRTH_DATE, Date.valueOf(account.getBirthDate()));
-        }
-        if (!isNull(account.getRegistrationDate())) {
-            resultSet.updateDate(REGISTRATION_DATE, Date.valueOf(account.getRegistrationDate()));
-        }
-        resultSet.updateString(ICQ, account.getIcq());
-        resultSet.updateString(SKYPE, account.getSkype());
-        resultSet.updateString(EMAIL, account.getEmail());
-        resultSet.updateString(ADDITIONAL_EMAIL, account.getAdditionalEmail());
-        resultSet.updateString(COUNTRY, account.getCountry());
-        resultSet.updateString(CITY, account.getCity());
+    public void updateRow(ResultSet resultSet, Account account, Account storedAccount) throws SQLException {
+        updateFieldIfDiffers(account::getName, storedAccount::getName, resultSet::updateString, NAME);
+        updateFieldIfDiffers(account::getSurname, storedAccount::getSurname, resultSet::updateString, SURNAME);
+        updateFieldIfDiffers(account::getPatronymic, storedAccount::getPatronymic, resultSet::updateString, PATRONYMIC);
+        updateFieldIfDiffers(account::getSex, storedAccount::getSex, resultSet::updateString, SEX, Sex::toString);
+        updateFieldIfDiffers(account::getBirthDate, storedAccount::getBirthDate, resultSet::updateDate, BIRTH_DATE,
+                Date::valueOf);
+        updateFieldIfDiffers(account::getRegistrationDate, storedAccount::getRegistrationDate, resultSet::updateDate,
+                REGISTRATION_DATE, Date::valueOf);
+        updateFieldIfDiffers(account::getRole, storedAccount::getRole, resultSet::updateString, ROLE, Role::toString);
+        updateFieldIfDiffers(account::getIcq, storedAccount::getIcq, resultSet::updateString, ICQ);
+        updateFieldIfDiffers(account::getSkype, storedAccount::getSkype, resultSet::updateString, SKYPE);
+        updateFieldIfDiffers(account::getEmail, storedAccount::getEmail, resultSet::updateString, EMAIL);
+        updateFieldIfDiffers(account::getAdditionalEmail, storedAccount::getAdditionalEmail, resultSet::updateString,
+                ADDITIONAL_EMAIL);
+        updateFieldIfDiffers(account::getCountry, storedAccount::getCountry, resultSet::updateString, COUNTRY);
+        updateFieldIfDiffers(account::getCity, storedAccount::getCity, resultSet::updateString, CITY);
     }
 
     @Override

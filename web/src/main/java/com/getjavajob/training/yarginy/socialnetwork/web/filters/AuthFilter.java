@@ -28,6 +28,7 @@ public class AuthFilter implements Filter {
             String path = httpRequest.getRequestURI();
             System.out.println("path: " + path);
             System.out.println("ignored: " + ignored);
+            System.out.println(this.getClass().getCanonicalName());
             //todo: read ignored paths from somewhere
             if (path.contains(ignored)) {
                 filterChain.doFilter(httpRequest, response);
