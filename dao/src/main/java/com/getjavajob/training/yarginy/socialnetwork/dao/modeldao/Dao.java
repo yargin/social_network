@@ -70,7 +70,7 @@ public interface Dao<E extends Entity> {
     E getNullEntity();
 
     /**
-     * checks if {@link Entity} not null, exists & is read from database<br>
+     * checks if {@link Entity} not null, exists & was read from database<br>
      * used for relational actions
      *
      * @param entity to check

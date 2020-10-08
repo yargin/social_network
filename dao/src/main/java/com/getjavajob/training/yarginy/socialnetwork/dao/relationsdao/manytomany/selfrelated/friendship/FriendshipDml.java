@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.friendship.FriendshipsTable.*;
+import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.FriendshipsTable.*;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 
 public class FriendshipDml extends SelfManyToManyDml<Account> {

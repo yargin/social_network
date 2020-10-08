@@ -6,6 +6,4 @@ import java.util.Collection;
 
 public interface OneToManyDao<O extends Entity, M extends Entity> {
     Collection<M> selectMany(O entity);
-
-    O selectOne(M entity);
 }

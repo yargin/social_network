@@ -14,8 +14,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
 public class AccountDaoTest {
-    private static final DbFactory DB_FACTORY = AbstractDbFactory.getDbFactory();
     private static final String CLASS = "AccountDaoTest";
+    private static final DbFactory DB_FACTORY = AbstractDbFactory.getDbFactory();
     private static final Dao<Account> ACCOUNT_DAO = DB_FACTORY.getAccountDao();
     private static final Account ACCOUNT = new AccountImpl();
 

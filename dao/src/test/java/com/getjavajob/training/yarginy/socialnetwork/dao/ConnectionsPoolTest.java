@@ -69,7 +69,7 @@ public class ConnectionsPoolTest {
             Thread thread = new Thread(() -> {
                 try {
                     try (Transaction transaction = TRANSACTION_MANAGER.getTransaction()) {
-                        for (int j = 0; j < 5; j++) {
+                        for (int j = 0; j < 15; j++) {
                             Connection connection = CONNECTION_POOL.getConnection();
                             connections.add(connection);
                             connection.close();

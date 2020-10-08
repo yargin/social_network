@@ -38,4 +38,6 @@ public interface DbFactory {
     TransactionManager getTransactionManager();
 
     ConnectionPool getConnectionPool();
+
+    OneToManyDao<Account, Group> getAccountsOwnedGroupsDao(Dao<Account> accountDao, Dao<Group> groupDao);
 }

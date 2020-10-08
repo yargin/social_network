@@ -37,15 +37,4 @@ public class AccountsPhonesTest {
         assertEquals(expectedPhones, actualPhones);
         printPassed(CLASS, "testSelectPhones");
     }
-
-    @Test
-    public void testSelectAccount() {
-        Account expectedAccount = ACCOUNT_DAO.select(1);
-        Phone phone = new PhoneImpl();
-        phone.setNumber("+7 (920) 123-23-32");
-        phone = PHONE_DAO.select(phone);
-        Account actualAccount = ACCOUNTS_PHONES.selectOne(phone);
-        assertEquals(expectedAccount, actualAccount);
-        printPassed(CLASS, "testSelectAccount");
-    }
 }

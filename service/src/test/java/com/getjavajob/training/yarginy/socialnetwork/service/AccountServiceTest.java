@@ -1,5 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.service;
 
+import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
@@ -14,6 +15,7 @@ import org.junit.Test;
 
 import java.util.*;
 
+import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
 import static com.getjavajob.training.yarginy.socialnetwork.service.utils.TestResultPrinter.printPassed;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
@@ -26,10 +28,10 @@ public class AccountServiceTest {
     private final Dao<Phone> phoneDao = mock(Dao.class);
     private final SelfManyToManyDao<Account> friendsDao = mock(SelfManyToManyDao.class);
     private final OneToManyDao<Account, Phone> accountsPhonesDao = mock(OneToManyDao.class);
-    private final TransactionManager transaction = mock(TransactionManager.class);
+    private final TransactionManager transactionManager = getDbFactory().getTransactionManager();
     private final BatchDao<Phone> phoneBatchDao = mock(BatchDao.class);
-    private final AccountService accountService = new AccountServiceImpl(accountDao, friendsDao, phoneDao,
-            accountsPhonesDao, transaction, phoneBatchDao);
+    private final AccountService accountService = new AccountServiceImpl(accountDao, friendsDao, accountsPhonesDao,
+            transactionManager, phoneBatchDao);
     private Account account;
     private Collection<Phone> phones;
 
@@ -57,10 +59,23 @@ public class AccountServiceTest {
     @Test
     public void testCreateAccount() {
         when(accountDao.create(account)).thenReturn(true);
+        when(phoneBatchDao.create(phones)).thenReturn(true);
         assertTrue(accountService.createAccount(account, phones));
-        when(accountDao.create(account)).thenReturn(false);
-        assertFalse(accountService.createAccount(account, phones));
         printPassed(CLASS, "testCreateAccount");
+    }
+
+    @Test(expected = IncorrectDataException.class)
+    public void testCreateExistingAccount() {
+        when(accountDao.create(account)).thenReturn(false);
+        accountService.createAccount(account, phones);
+        printPassed(CLASS, "IncorrectDataException");
+    }
+
+    @Test(expected = IncorrectDataException.class)
+    public void testCreateExistingPhone() {
+        when(phoneBatchDao.create(phones)).thenReturn(false);
+        accountService.createAccount(account, phones);
+        printPassed(CLASS, "testCreateExistingPhone");
     }
 
     @Test
@@ -198,6 +213,7 @@ public class AccountServiceTest {
         expected.put(account, accountPhones);
 
         when(phoneDao.selectAll()).thenReturn(phones);
+        System.out.println(phoneDao.selectAll());
         assertEquals(expected, accountService.getAllWithPhones());
         printPassed(CLASS, "testGetAllWithPhones");
     }

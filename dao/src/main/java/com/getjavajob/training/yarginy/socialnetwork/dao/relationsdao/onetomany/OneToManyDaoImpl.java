@@ -30,14 +30,4 @@ public class OneToManyDaoImpl<M extends Entity, O extends Entity> implements One
             throw new IllegalStateException(e);
         }
     }
-
-    @Override
-    public O selectOne(M entity) {
-        manyDao.checkEntity(entity);
-        try (Connection connection = connectionPool.getConnection()) {
-            return oneToManyDml.selectByOneOfMany(connection, entity.getId());
-        } catch (SQLException e) {
-            throw new IllegalStateException(e);
-        }
-    }
 }

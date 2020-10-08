@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.accountsingroups;
+package com.getjavajob.training.yarginy.socialnetwork.dao.tables;
 
 /**
  * table Accounts_in_groups columns

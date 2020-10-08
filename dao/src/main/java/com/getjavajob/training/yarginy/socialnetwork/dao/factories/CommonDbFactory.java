@@ -27,6 +27,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.accountsingroups.AccountsInGroupsDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.accountgroups.AccountsGroupsDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.accountsphones.AccountsPhonesDml;
 
 import java.util.Properties;
@@ -135,5 +136,10 @@ public abstract class CommonDbFactory implements DbFactory {
     @Override
     public ConnectionPool getConnectionPool() {
         return dbConnector;
+    }
+
+    @Override
+    public OneToManyDao<Account, Group> getAccountsOwnedGroupsDao(Dao<Account> accountDao, Dao<Group> groupDao) {
+        return new OneToManyDaoImpl<>(dbConnector, new AccountsGroupsDml(), accountDao, groupDao);
     }
 }

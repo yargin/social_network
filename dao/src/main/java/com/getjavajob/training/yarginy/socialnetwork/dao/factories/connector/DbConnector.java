@@ -41,6 +41,30 @@ public class DbConnector implements ConnectionPool, Transaction, TransactionMana
         return singleDbConnector;
     }
 
+    private ConnectionProxy initConnection() {
+        try {
+            //if current thread already got connection
+            if (!isNull(threadConnection.get()) && !threadConnection.get().isClosed()) {
+                return threadConnection.get();
+            }
+
+            //if another thread need connection
+            waitersSemaphore.acquire();
+            ConnectionProxy connection;
+            if (connectionsToReuse.isEmpty()) {
+                connection = new ConnectionProxy(DriverManager.getConnection(properties.getProperty("url"), properties),
+                        this);
+            } else {
+                //blocks until at least one connection becomes free
+                connection = connectionsToReuse.take();
+            }
+            threadConnection.set(connection);
+            return connection;
+        } catch (InterruptedException | SQLException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
     @Override
     public void close() {
         ConnectionProxy connectionProxy = threadConnection.get();
@@ -82,30 +106,6 @@ public class DbConnector implements ConnectionPool, Transaction, TransactionMana
         ConnectionProxy connection = initConnection();
         connection.setTransactional(true);
         return this;
-    }
-
-    private ConnectionProxy initConnection() {
-        try {
-            //if current thread already got connection
-            if (!isNull(threadConnection.get()) && !threadConnection.get().isClosed()) {
-                return threadConnection.get();
-            }
-
-            //if another thread need connection
-            waitersSemaphore.acquire();
-            ConnectionProxy connection;
-            if (connectionsToReuse.isEmpty()) {
-                connection = new ConnectionProxy(DriverManager.getConnection(properties.getProperty("url"), properties),
-                        this);
-            } else {
-                //blocks until at least one connection becomes free
-                connection = connectionsToReuse.take();
-            }
-            threadConnection.set(connection);
-            return connection;
-        } catch (InterruptedException | SQLException e) {
-            throw new IllegalStateException(e);
-        }
     }
 
     @Override

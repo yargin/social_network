@@ -13,7 +13,8 @@ public class LogoutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession();
-        session.removeAttribute(USER_NAME);
+        session.invalidate();
+//        session.removeAttribute(USER_NAME);
 
         Cookie[] cookies = req.getCookies();
 

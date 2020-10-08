@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.friendship;
+package com.getjavajob.training.yarginy.socialnetwork.dao.tables;
 
 public final class FriendshipsTable {
     public static final String TABLE = "Friendships";

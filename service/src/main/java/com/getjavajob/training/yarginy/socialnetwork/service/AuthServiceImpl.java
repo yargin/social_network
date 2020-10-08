@@ -49,7 +49,7 @@ public class AuthServiceImpl implements AuthService {
         } catch (IncorrectDataException e) {
             throw e;
         } catch (Exception e) {
-            throw new IllegalStateException(e.getCause());
+            throw new IllegalStateException("couldn't start transaction");
         }
         return true;
     }
