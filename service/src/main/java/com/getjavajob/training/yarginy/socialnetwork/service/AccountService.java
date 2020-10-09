@@ -33,4 +33,6 @@ public interface AccountService {
     Collection<Phone> getPhones(Account account);
 
     Map<Account, Collection<Phone>> getAllWithPhones();
+
+    //todo logic for group
 }

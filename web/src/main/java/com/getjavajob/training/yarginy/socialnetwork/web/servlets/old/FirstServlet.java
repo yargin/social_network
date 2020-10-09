@@ -3,7 +3,7 @@ package com.getjavajob.training.yarginy.socialnetwork.web.servlets.old;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
-import com.getjavajob.training.yarginy.socialnetwork.service.AccountServiceImpl;
+import com.getjavajob.training.yarginy.socialnetwork.service.AccountServiceImplOld;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,7 +20,7 @@ public class FirstServlet extends HttpServlet {
         resp.setContentType("text/html");
         try {
             Writer writer = resp.getWriter();
-            AccountService accountService = new AccountServiceImpl();
+            AccountService accountService = new AccountServiceImplOld();
             Map<Account, Collection<Phone>> accountsPhones = accountService.getAllWithPhones();
 
 //            for (Map.Entry<Account, Collection<Phone>> entry : accountsPhones.entrySet()) {

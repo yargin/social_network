@@ -23,7 +23,7 @@ public class FriendshipDaoImpl implements FriendshipDao {
     }
 
     @Override
-    public boolean cancelFriendship(Account firstAccount, Account secondAccount) {
+    public boolean removeFriendship(Account firstAccount, Account secondAccount) {
         return friendshipDao.delete(firstAccount, secondAccount);
     }
 }

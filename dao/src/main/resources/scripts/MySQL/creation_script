@@ -12,7 +12,8 @@ CREATE TABLE IF NOT EXISTS Accounts (
         icq VARCHAR(40),
         skype VARCHAR(40),
         city VARCHAR(40),
-        country VARCHAR(40)
+        country VARCHAR(40),
+        photo BLOB;
 );
 
 ALTER TABLE Accounts
@@ -25,7 +26,8 @@ CREATE TABLE IF NOT EXISTS _Groups (
         id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(50) NOT NULL UNIQUE,
         description VARCHAR(500),
-        owner_id BIGINT UNSIGNED NOT NULL
+        owner_id BIGINT UNSIGNED NOT NULL,
+        photo BLOB;
 );
 
 ALTER TABLE _Groups

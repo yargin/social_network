@@ -9,5 +9,5 @@ public interface FriendshipDao {
 
     boolean createFriendship(Account firstAccount, Account secondAccount);
 
-    boolean cancelFriendship(Account firstAccount, Account secondAccount);
+    boolean removeFriendship(Account firstAccount, Account secondAccount);
 }

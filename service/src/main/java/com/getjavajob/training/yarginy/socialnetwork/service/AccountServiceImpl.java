@@ -1,71 +1,63 @@
 package com.getjavajob.training.yarginy.socialnetwork.service;
 
-
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.Transaction;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.TransactionManager;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.SelfManyToManyDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.facades.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
-import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
 import static java.util.Objects.isNull;
 
 public class AccountServiceImpl implements AccountService {
-    private final DbFactory dbFactory;
-    private final Dao<Account> accountDao;
-    private final OneToManyDao<Account, Phone> accountsPhonesDao;
-    private final SelfManyToManyDao<Account> friendshipDao;
-    private final BatchDao<Phone> phoneBatchDao;
+    private final AccountDao accountDao;
+    private final PhoneDao phoneDao;
+    private final FriendshipDao friendshipDao;
+    private final AccountsInGroupsDao accountsInGroupsDao;
     private final TransactionManager transactionManager;
-    private Collection<Account> friends;
+    private Collection<Account> friends = new ArrayList<>();
 
     public AccountServiceImpl() {
-        dbFactory = getDbFactory();
-        accountDao = dbFactory.getAccountDao();
-        friendshipDao = dbFactory.getFriendshipDao(accountDao);
-        phoneBatchDao = dbFactory.getBatchPhoneDao();
-        accountsPhonesDao = dbFactory.getAccountsPhones(accountDao, phoneBatchDao);
-        transactionManager = dbFactory.getTransactionManager();
+        accountDao = new AccountDaoImpl();
+        phoneDao = new PhoneDaoImpl();
+        friendshipDao = new FriendshipDaoImpl();
+        accountsInGroupsDao = new AccountsInGroupsDaoImpl();
+        transactionManager = TransactionManagerFactory.getTransactionManager();
     }
 
-    public AccountServiceImpl(Dao<Account> accountDao, SelfManyToManyDao<Account> friendshipDao,
-                              OneToManyDao<Account, Phone> accountsPhonesDao, TransactionManager transactionManager,
-                              BatchDao<Phone> phoneBatchDao) {
-        dbFactory = null;
+    public AccountServiceImpl(AccountDao accountDao, PhoneDao phoneDao, FriendshipDao friendshipDao,
+                              AccountsInGroupsDao accountsInGroupsDao, TransactionManager transactionManager) {
         this.accountDao = accountDao;
+        this.phoneDao = phoneDao;
         this.friendshipDao = friendshipDao;
-        this.accountsPhonesDao = accountsPhonesDao;
+        this.accountsInGroupsDao = accountsInGroupsDao;
         this.transactionManager = transactionManager;
-        this.phoneBatchDao = phoneBatchDao;
     }
 
+    @Override
     public Account getAccount(int id) {
         return accountDao.select(id);
     }
 
+    @Override
     public Account getAccount(Account account) {
         return accountDao.select(account);
     }
 
+    @Override
     public boolean createAccount(Account account, Collection<Phone> phones) {
         try (Transaction transaction = transactionManager.getTransaction()) {
             account.setRegistrationDate(LocalDate.now());
             if (!accountDao.create(account)) {
                 throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
             }
-            if (!phoneBatchDao.create(phones)) {
+            if (!phoneDao.create(phones)) {
                 throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
             }
             transaction.commit();
@@ -77,16 +69,19 @@ public class AccountServiceImpl implements AccountService {
         return true;
     }
 
+    @Override
     public boolean updateAccount(Account account) {
         return accountDao.update(account);
     }
 
+    @Override
     public boolean deleteAccount(Account account) {
         return accountDao.delete(account);
     }
 
+    @Override
     public boolean addFriend(Account account, Account friend) {
-        if (friendshipDao.create(account, friend)) {
+        if (friendshipDao.createFriendship(account, friend)) {
             if (!isNull(friends) && !friends.add(friend)) {
                 friends = null;
             }
@@ -95,8 +90,9 @@ public class AccountServiceImpl implements AccountService {
         return false;
     }
 
+    @Override
     public boolean removeFriend(Account account, Account friend) {
-        if (friendshipDao.delete(account, friend)) {
+        if (friendshipDao.removeFriendship(account, friend)) {
             if (!isNull(friends) && !friends.remove(friend)) {
                 friends = null;
             }
@@ -105,48 +101,34 @@ public class AccountServiceImpl implements AccountService {
         return false;
     }
 
-    public Collection<Account> getFriends(Account account) {
-        if (isNull(friends)) {
-            friends = friendshipDao.select(account);
-        }
-        return friends;
-    }
-
     @Override
     public Collection<Account> getAll(Account account) {
         return accountDao.selectAll();
     }
 
     @Override
+    public Collection<Account> getFriends(Account account) {
+        return friendshipDao.selectFriends(account);
+    }
+
+    @Override
     public boolean addPhone(Account account, Phone phone) {
         phone.setOwner(account);
-        return phoneBatchDao.create(phone);
+        return phoneDao.create(phone);
     }
 
     @Override
     public boolean removePhone(Phone phone) {
-        return phoneBatchDao.delete(phone);
+        return phoneDao.delete(phone);
     }
 
     @Override
     public Collection<Phone> getPhones(Account account) {
-        return accountsPhonesDao.selectMany(account);
+        return phoneDao.selectPhonesByOwner(account);
     }
 
     @Override
     public Map<Account, Collection<Phone>> getAllWithPhones() {
-        Collection<Phone> allPhones = phoneBatchDao.selectAll();
-        Map<Account, Collection<Phone>> accountsPhones = new HashMap<>();
-        allPhones.forEach(a -> {
-            Collection<Phone> phones;
-            if (accountsPhones.containsKey(a.getOwner())) {
-                phones = accountsPhones.get(a.getOwner());
-            } else {
-                phones = new HashSet<>();
-                accountsPhones.put(a.getOwner(), phones);
-            }
-            phones.add(a);
-        });
-        return accountsPhones;
+        return null;
     }
 }
