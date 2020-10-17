@@ -6,7 +6,8 @@
 <fmt:setBundle basename="error" var="error"/>
 
 <div class="post">
-    <form action="${pageContext.servletContext.contextPath}/registration" method="post">
+    <form action="${pageContext.servletContext.contextPath}/registration" method="post"
+          enctype="multipart/form-data">
 
         <input type="text" name="name"
                <c:if test="${not empty name}">value="${name}"</c:if>
@@ -26,9 +27,10 @@
         <br>
         <c:if test="${not empty errpatronymic}"><fmt:message key="${errpatronymic}" bundle="${error}"/><br></c:if>
 
+        <label>
+            <fmt:message key="form.sex" bundle="${label}"/>
+        </label>
         <select name="sex" required>
-            <option value="" disabled <c:if test="${empty sex}">selected</c:if>>
-                <fmt:message key="form.sex" bundle="${label}"/></option>
             <option value="${male}" <c:if test="${Sex.MALE eq sex}">selected</c:if>>
                 <fmt:message key="form.male" bundle="${label}"/></option>
             <option value="${female}" <c:if test="${Sex.FEMALE eq sex}">selected</c:if>>
@@ -62,15 +64,12 @@
                                                                   bundle="${error}"/><br></c:if>
         <c:if test="${not empty passNotMatch}"><fmt:message key="${passNotMatch}" bundle="${error}"/><br></c:if>
 
+
+        <label><fmt:message key="form.birthdate" bundle="${label}"/></label>
         <input type="date" name="birthDate"
-        <fmt:parseDate value="${birthDate}" pattern="yyyy-MM-dd" var="bd" type="date"/>
-        <%--               value="2001-01-01"--%>
-               <c:if test="${not empty birthDate}">value="<fmt:parseDate value="${birthDate}" pattern="yyyy-MM-dd"/>"
-        </c:if>
-               placeholder="<fmt:message key="form.birthdate" bundle="${label}"/>">
+        <c:if test="${not empty birthDate}">value="${birthDate}"</c:if>>
         <br>
         <c:if test="${not empty errbirthDate}"><fmt:message key="${errbirthDate}" bundle="${error}"/><br></c:if>
-        <%--        <fmt:formatDate pattern="dd/MMM/yyyy" value="${bd}"/>--%>
 
         <input type="text" name="icq"
                <c:if test="${not empty icq}">value="${icq}"</c:if>
@@ -96,7 +95,12 @@
         <br>
         <c:if test="${not empty errcity}"><fmt:message key="${errcity}" bundle="${error}"/><br></c:if>
 
-        <common:phonesedition/>
+        <common:phonesEdition/>
+
+<%--        uploaded--%>
+        <input type="file" name="photo" accept="image/*" title="<fmt:message key="form.uploadImage" bundle="${label}"/>">
+        <br>
+<%--        error--%>
 
         <button><fmt:message key="button.register" bundle="${label}"/></button>
     </form>

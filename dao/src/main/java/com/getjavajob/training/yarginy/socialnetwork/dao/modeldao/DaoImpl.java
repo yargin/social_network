@@ -71,13 +71,13 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
 
     @Override
     public boolean update(E entity) {
-        E storedEntity = select(entity.getId());
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement statement = dml.getUpdatableSelect(connection, entity);
              ResultSet resultSet = statement.executeQuery()) {
             if (!resultSet.next()) {
                 return false;
             }
+            E storedEntity = dml.selectFromRow(resultSet);
             dml.updateRow(resultSet, entity, storedEntity);
             resultSet.updateRow();
             return true;

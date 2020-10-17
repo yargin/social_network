@@ -12,8 +12,7 @@ CREATE TABLE IF NOT EXISTS Accounts (
         icq VARCHAR(40),
         skype VARCHAR(40),
         city VARCHAR(40),
-        country VARCHAR(40),
-        photo BLOB;
+        country VARCHAR(40)
 );
 
 ALTER TABLE Accounts
@@ -26,8 +25,7 @@ CREATE TABLE IF NOT EXISTS _Groups (
         id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(50) NOT NULL UNIQUE,
         description VARCHAR(500),
-        owner_id BIGINT UNSIGNED NOT NULL,
-        photo BLOB;
+        owner_id BIGINT UNSIGNED NOT NULL
 );
 
 ALTER TABLE _Groups
@@ -119,3 +117,12 @@ INSERT INTO Passwords (email, password) VALUES
 ('drink@blood.com', SHA2('blood2', 0)),
 ('robot@power.com', SHA2('power3', 0)),
 ('popovp@gmail.com', SHA2('gmail4', 0));
+
+CREATE TABLE IF NOT EXISTS Account_photo (
+    owner_id BIGINT UNSIGNED PRIMARY KEY,
+    photo MEDIUMBLOB
+);
+
+ALTER TABLE Account_photo
+ADD CONSTRAINT C_22 FOREIGN KEY (owner_id) REFERENCES Accounts (id) ON DELETE CASCADE;
+

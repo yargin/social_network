@@ -2,7 +2,7 @@
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/fmt" prefix = "fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <fmt:setBundle basename="label"/>
-<fmt:setLocale value="en"/>
+<%--<fmt:setLocale value="en"/>--%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,7 +16,7 @@
     <div class="header">
         <img src="${pageContext.servletContext.contextPath}/img/java.png" id="logo">
         <h1><fmt:message key="header"/></h1>
-        <p><c:if test="${not empty userName}">
+        <p class="welcome"><c:if test="${not empty userName}">
             <fmt:message key="layout.welcome"/>
             <a href="${pageContext.servletContext.contextPath}/mywall">${userName}</a>
         </c:if></p>

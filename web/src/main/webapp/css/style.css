@@ -52,6 +52,10 @@ html, body, ul, li {
     left: 20px;
 }
 
+.header p {
+    float: right;
+}
+
 .menu {
     float: left;
     font-family: "Tahoma", serif;
@@ -78,6 +82,14 @@ html, body, ul, li {
     justify-content: center;
 }
 
+.content img {
+    float: right;
+    max-height: 200px;
+    max-width: 200px;
+    overflow: hidden;
+    margin-left: 20px;
+}
+
 .footer {
     height: 20px;
     background: #94d2d4;
@@ -100,16 +112,16 @@ html, body, ul, li {
     justify-content: center;
 }
 
-.post input, select, label {
+.post input, select {
     margin-top: 10px;
     display: inline-block;
     alignment: center;
 }
 
-.post p {
+.post p, label {
     font-family: 'Tahoma', serif;
     font-weight: normal;
-    font-size: 15px;
+    font-size: 13px;
     color: black;
 }
 

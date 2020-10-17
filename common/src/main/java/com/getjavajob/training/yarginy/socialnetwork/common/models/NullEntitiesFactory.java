@@ -2,6 +2,8 @@ package com.getjavajob.training.yarginy.socialnetwork.common.models;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.AccountPhoto;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.AccountPhotoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
@@ -42,5 +44,9 @@ public abstract class NullEntitiesFactory {
         nullPassword.setPassword("nullPassword0");
         nullPassword.setAccount(getNullAccount());
         return nullPassword;
+    }
+
+    public static AccountPhoto getNullAccountPhoto() {
+        return new AccountPhotoImpl();
     }
 }

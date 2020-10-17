@@ -5,6 +5,8 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.AccountPhoto;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.AccountPhotoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.PasswordImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
@@ -15,10 +17,10 @@ import com.getjavajob.training.yarginy.socialnetwork.service.AuthServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.additionaldata.PhoneExchanger;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,6 +43,14 @@ public class RegisterServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession(true);
+
+        String userName = (String) session.getAttribute("userName");
+        if (!isNull(userName)) {
+            resp.sendRedirect(req.getContextPath() + REG_SUCCESS_URL);
+            return;
+        }
+
         req.setAttribute("male", Sex.MALE.toString());
         req.setAttribute("female", Sex.FEMALE.toString());
 
@@ -139,42 +149,51 @@ public class RegisterServlet extends HttpServlet {
         }
     }
 
-    private void setStringParam(Consumer<String> consumer, String param, HttpServletRequest req) {
+    private void setStringParam(Consumer<String> setter, String param, HttpServletRequest req) {
+        String value = req.getParameter(param);
         try {
-            String value = req.getParameter(param);
-            consumer.accept(value);
-            req.setAttribute(param, value);
+            setter.accept(value);
         } catch (IncorrectDataException e) {
             req.setAttribute("err" + param, e.getType().getPropertyKey());
             paramsAccepted = false;
         }
+        req.setAttribute(param, value);
     }
 
-    private void setDateParam(Consumer<LocalDate> consumer, String param, HttpServletRequest req) {
-        try {
-            String enteredDate = req.getParameter(param);
-            if (!enteredDate.trim().isEmpty()) {
-                LocalDate date = LocalDate.parse(req.getParameter(param));
-                consumer.accept(date);
-                req.setAttribute(param, date);
+    private void setDateParam(Consumer<LocalDate> setter, String param, HttpServletRequest req) {
+        String enteredDate = req.getParameter(param);
+        if (!isNull(enteredDate) & !enteredDate.trim().isEmpty()) {
+            LocalDate date = LocalDate.parse(enteredDate);
+            try {
+                setter.accept(date);
+            } catch (IncorrectDataException e) {
+                req.setAttribute("err" + param, e.getType().getPropertyKey());
+                paramsAccepted = false;
             }
-        } catch (IncorrectDataException e) {
-            req.setAttribute("err" + param, e.getType().getPropertyKey());
-            paramsAccepted = false;
+            req.setAttribute(param, Date.valueOf(date));
         }
     }
 
-    private void setSexParam(Consumer<Sex> consumer, String param, HttpServletRequest req) {
+    private void setSexParam(Consumer<Sex> setter, String param, HttpServletRequest req) {
         try {
             String selectedSex = req.getParameter(param);
             if (!isNull(selectedSex)) {
                 Sex sex = Sex.valueOf(selectedSex);
-                consumer.accept(sex);
+                setter.accept(sex);
                 req.setAttribute(param, sex);
             }
         } catch (IncorrectDataException e) {
             req.setAttribute("err" + param, e.getType().getPropertyKey());
             paramsAccepted = false;
         }
+    }
+
+    private void setStreamParam(Consumer<AccountPhoto> setter, String param, HttpServletRequest req) throws IOException,
+            ServletException {
+        Part imagePart = req.getPart("photo");
+        InputStream inputStream = imagePart.getInputStream();
+        AccountPhoto accountPhoto = new AccountPhotoImpl();
+        accountPhoto.setPhoto(inputStream );
+        accountPhoto.setOwner(account);
     }
 }

@@ -1,12 +1,16 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.factories;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.AccountPhoto;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDaoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.dmls.BatchPhonesDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.dependedmodeldao.OwnedModelDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.dependedmodeldao.OwnedModelDaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.dependedmodeldao.dmls.AccountPhotoDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.ConnectionPool;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.DbConnector;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.TransactionManager;
@@ -141,5 +145,10 @@ public abstract class CommonDbFactory implements DbFactory {
     @Override
     public OneToManyDao<Account, Group> getAccountsOwnedGroupsDao(Dao<Account> accountDao, Dao<Group> groupDao) {
         return new OneToManyDaoImpl<>(dbConnector, new AccountsGroupsDml(), accountDao, groupDao);
+    }
+
+    @Override
+    public OwnedModelDao<Account, AccountPhoto> getAccountPhotoDao() {
+        return new OwnedModelDaoImpl<>(dbConnector, new AccountPhotoDml());
     }
 }

@@ -4,6 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.service.AuthService;
 import com.getjavajob.training.yarginy.socialnetwork.service.AuthServiceImpl;
+import com.getjavajob.training.yarginy.socialnetwork.web.attributes.SessionAttributes;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
@@ -11,6 +12,7 @@ import java.io.IOException;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData.WRONG_EMAIL;
 import static com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData.WRONG_PASSWORD;
+import static com.getjavajob.training.yarginy.socialnetwork.web.attributes.SessionAttributes.*;
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirectToReferer;
 import static java.util.Objects.isNull;
 
@@ -19,7 +21,6 @@ public class LoginServlet extends HttpServlet {
     private static final String ERROR = "logerror";
     private static final String EMAIL = "email";
     private static final String PASSWORD = "password";
-    private static final String USER_NAME = "userName";
     private final AuthService authService = new AuthServiceImpl();
 
     @Override
@@ -40,6 +41,7 @@ public class LoginServlet extends HttpServlet {
         try {
             Account account = authService.login(email, password);
             req.getSession().setAttribute(USER_NAME, account.getName());
+            req.getSession().setAttribute(USER_ID, account.getId());
             redirectToReferer(req, resp);
         } catch (Exception e) {
             req.getRequestDispatcher(JSP).forward(req, resp);
@@ -89,6 +91,7 @@ public class LoginServlet extends HttpServlet {
 
         HttpSession session = req.getSession();
         session.setAttribute(USER_NAME, account.getName());
+        session.setAttribute(USER_ID, account.getId());
         redirectToReferer(req, resp);
     }
 }

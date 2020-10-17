@@ -7,10 +7,10 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.Transaction;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.TransactionManager;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.facades.AccountDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.facades.AccountsInGroupsDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.facades.FriendshipDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.facades.PhoneDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountsInGroupsDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDao;
 import org.junit.Before;
 import org.junit.Test;
 

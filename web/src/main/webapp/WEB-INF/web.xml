@@ -19,27 +19,27 @@
         </jsp-property-group>
     </jsp-config>
 
-    <!--    <filter>-->
-    <!--        <filter-name>CharacterSetFilter</filter-name>-->
-    <!--        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.CharacterSetFilter</filter-class>-->
-    <!--    </filter>-->
-    <!--    <filter-mapping>-->
-    <!--        <filter-name>CharacterSetFilter</filter-name>-->
-    <!--        <url-pattern>/*</url-pattern>-->
-    <!--    </filter-mapping>-->
+    <filter>
+        <filter-name>CharacterSetFilter</filter-name>
+        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.CharacterSetFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CharacterSetFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
-    <!--            <filter>-->
-    <!--                <filter-name>AuthFilter</filter-name>-->
-    <!--                <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.AuthFilter</filter-class>-->
-    <!--                <init-param>-->
-    <!--                    <param-name>pathToIgnore</param-name>-->
-    <!--                    <param-value>/registration</param-value>-->
-    <!--                </init-param>-->
-    <!--            </filter>-->
-    <!--            <filter-mapping>-->
-    <!--                <filter-name>AuthFilter</filter-name>-->
-    <!--                <url-pattern>/*</url-pattern>-->
-    <!--            </filter-mapping>-->
+    <filter>
+        <filter-name>AuthFilter</filter-name>
+        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.AuthFilter</filter-class>
+        <init-param>
+            <param-name>pathToIgnore</param-name>
+            <param-value>registration:login:css:img</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
     <servlet>
         <servlet-name>myWall</servlet-name>
@@ -53,6 +53,8 @@
     <servlet>
         <servlet-name>register</servlet-name>
         <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.RegisterServlet</servlet-class>
+        <multipart-config>
+        </multipart-config>
     </servlet>
     <servlet-mapping>
         <servlet-name>register</servlet-name>

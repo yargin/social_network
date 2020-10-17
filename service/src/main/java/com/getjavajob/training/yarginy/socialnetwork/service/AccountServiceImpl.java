@@ -6,7 +6,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.Transaction;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.TransactionManager;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.facades.*;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

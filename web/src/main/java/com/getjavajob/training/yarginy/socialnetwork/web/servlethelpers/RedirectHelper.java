@@ -8,7 +8,7 @@ import java.io.IOException;
 import static java.util.Objects.isNull;
 
 public class RedirectHelper {
-    private static final String START_JSP = "/WEB-INF/jsps/mywall.jsp";
+    private static final String START_JSP = "/WEB-INF/jsps/myWall.jsp";
 
     public static void redirect(HttpServletRequest req, HttpServletResponse resp, String location) throws IOException {
 //        resp.setHeader("Location", location);
@@ -19,7 +19,7 @@ public class RedirectHelper {
     public static void redirectToReferer(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
             IOException {
         String referer = req.getHeader("Referer");
-        if (isNull(referer)) {
+        if (isNull(referer) || referer.contains("/login")) {
             resp.sendRedirect(req.getContextPath() + "/mywall");
             return;
         }
