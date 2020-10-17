@@ -4,7 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.OwnedEntity;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
 
 public interface OwnedModelDao<O extends Entity, E extends OwnedEntity<O>> {
-    E select(E ownedEntity);
+    E select(O owner);
 
     boolean create(E ownedEntity);
 

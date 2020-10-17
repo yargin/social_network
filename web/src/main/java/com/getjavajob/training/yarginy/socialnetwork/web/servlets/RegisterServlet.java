@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -36,9 +37,11 @@ public class RegisterServlet extends HttpServlet {
     private static final String JSP = "/WEB-INF/jsps/registration.jsp";
     private static final String REG_SUCCESS_URL = "/mywall";
     private static final AuthService AUTH_SERVICE = new AuthServiceImpl();
-    private final Account account = new AccountImpl();
-    private final Collection<PhoneExchanger> privatePhones = new ArrayList<>();
-    private final Collection<PhoneExchanger> workPhones = new ArrayList<>();
+    //todo each thread should have it's own variable
+    private Account account = new AccountImpl();
+    private AccountPhoto accountPhoto = new AccountPhotoImpl();
+    private Collection<PhoneExchanger> privatePhones = new ArrayList<>();
+    private Collection<PhoneExchanger> workPhones = new ArrayList<>();
     private boolean paramsAccepted;
 
     @Override
@@ -92,6 +95,8 @@ public class RegisterServlet extends HttpServlet {
         Collection<Phone> phones = getPhones(req, privatePhones, PhoneType.PRIVATE);
         phones.addAll(getPhones(req, workPhones, PhoneType.WORK));
 
+        setStreamParam(accountPhoto::setPhoto, "photo", req);
+
         if (!paramsAccepted) {
             doGet(req, resp);
         } else {
@@ -99,10 +104,10 @@ public class RegisterServlet extends HttpServlet {
         }
     }
 
-    private void register(Collection<Phone> phones, Password password, HttpServletRequest req, HttpServletResponse resp)
-            throws IOException, ServletException {
+    private void register(Collection<Phone> phones, Password password, HttpServletRequest req,
+                          HttpServletResponse resp) throws IOException, ServletException {
         try {
-            AUTH_SERVICE.register(account, phones, password);
+            AUTH_SERVICE.register(account, phones, password, accountPhoto);
         } catch (IncorrectDataException e) {
             if (e.getType() == IncorrectData.EMAIL_DUPLICATE) {
                 req.setAttribute(EMAIL_DUPLICATE, e.getType().getPropertyKey());
@@ -188,12 +193,20 @@ public class RegisterServlet extends HttpServlet {
         }
     }
 
-    private void setStreamParam(Consumer<AccountPhoto> setter, String param, HttpServletRequest req) throws IOException,
+    private void setStreamParam(Consumer<InputStream> setter, String param, HttpServletRequest req) throws IOException,
             ServletException {
-        Part imagePart = req.getPart("photo");
-        InputStream inputStream = imagePart.getInputStream();
-        AccountPhoto accountPhoto = new AccountPhotoImpl();
-        accountPhoto.setPhoto(inputStream );
-        accountPhoto.setOwner(account);
+        Part imagePart = req.getPart(param);
+        try {
+            try (InputStream inputStream = imagePart.getInputStream()) {
+                setter.accept(inputStream);
+                String base64Image = Base64.getEncoder().encodeToString(accountPhoto.getPhoto());
+                req.setAttribute("photo", base64Image);
+            } catch (IOException e) {
+                throw new IncorrectDataException(IncorrectData.UPLOADING_ERROR);
+            }
+        } catch (IncorrectDataException e) {
+            req.setAttribute("err" + param, e.getType().getPropertyKey());
+            paramsAccepted = false;
+        }
     }
 }

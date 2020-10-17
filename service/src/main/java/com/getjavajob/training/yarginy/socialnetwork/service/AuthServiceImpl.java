@@ -4,10 +4,12 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.AccountPhoto;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.PasswordImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.dependedmodeldao.OwnedModelDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.Transaction;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.TransactionManager;
@@ -19,11 +21,13 @@ import java.util.Collection;
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory.getNullPassword;
 import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper.encrypt;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
+import static java.util.Objects.isNull;
 
 public class AuthServiceImpl implements AuthService {
     private final Dao<Account> accountDao;
     private final Dao<Password> passwordDao;
     private final BatchDao<Phone> phoneDao;
+    private final OwnedModelDao<Account, AccountPhoto> accountPhotoDao;
     private final TransactionManager transactionManager;
 
     public AuthServiceImpl() {
@@ -32,10 +36,11 @@ public class AuthServiceImpl implements AuthService {
         passwordDao = dbFactory.getPasswordDao();
         phoneDao = dbFactory.getBatchPhoneDao();
         transactionManager = dbFactory.getTransactionManager();
+        accountPhotoDao= dbFactory.getAccountPhotoDao(accountDao);
     }
 
     @Override
-    public boolean register(Account account, Collection<Phone> phones, Password password) {
+    public boolean register(Account account, Collection<Phone> phones, Password password, AccountPhoto accountPhoto) {
         try (Transaction transaction = transactionManager.getTransaction()) {
             account.setRegistrationDate(LocalDate.now());
             if (!accountDao.create(account)) {
@@ -49,7 +54,20 @@ public class AuthServiceImpl implements AuthService {
         } catch (IncorrectDataException e) {
             throw e;
         } catch (Exception e) {
-            throw new IllegalStateException("couldn't start transaction");
+            e.printStackTrace();
+        }
+        try (Transaction transaction = transactionManager.getTransaction()) {
+            if (!isNull(accountPhoto)) {
+                accountPhoto.setOwner(account);
+                if (!accountPhotoDao.create(accountPhoto)) {
+                    throw new IncorrectDataException(IncorrectData.UPLOADING_ERROR);
+                }
+            }
+            transaction.commit();
+        } catch (IncorrectDataException e) {
+            throw e;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return true;
     }

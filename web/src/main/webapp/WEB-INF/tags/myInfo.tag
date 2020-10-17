@@ -3,6 +3,8 @@
 <fmt:setBundle basename="label"/>
 
 <c:if test="${not empty user}">
+
+    <div class="info">
         <fmt:message key="form.name"/> : ${user.getName()}<br>
         <fmt:message key="form.surname"/> : ${user.getSurname()}<br>
         <fmt:message key="form.patronymic"/> : ${user.getPatronymic()}<br>
@@ -23,6 +25,8 @@
             <br>
             ${phone.getNumber()}
         </c:forEach>
-        <br>
-    <img src="img/emptyAvatar.png">
+    </div>
+    <c:if test="${not empty photo}">
+        <img src="data:image/jpeg;base64, ${photo}">
+    </c:if>
 </c:if>

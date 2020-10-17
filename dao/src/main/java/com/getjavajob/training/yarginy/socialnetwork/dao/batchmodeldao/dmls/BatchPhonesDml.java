@@ -22,15 +22,20 @@ public class BatchPhonesDml extends PhonesDml implements BatchDml<Phone> {
     @Override
     public PreparedStatement batchSelectUpdate(Connection connection, Collection<Phone> entities) throws SQLException {
         StringBuilder numberBuilder = new StringBuilder();
-        for (Phone phone : entities) {
-            Account account = phone.getOwner();
-            account = accountDao.approveFromStorage(account);
-            phone.setOwner(account);
-            numberBuilder.append(phone.getNumber()).append(", ");
+        String select;
+        if (entities.isEmpty()) {
+            throw new IllegalArgumentException();
+        } else {
+            for (Phone phone : entities) {
+                Account account = phone.getOwner();
+                account = accountDao.approveFromStorage(account);
+                phone.setOwner(account);
+                numberBuilder.append(phone.getNumber()).append(", ");
+            }
+            String numbers = numberBuilder.substring(0, numberBuilder.length() - 2);
+            select = buildQuery().select(PhonesTable.TABLE).whereIn(new String[]{PhonesTable.NUMBER},
+                    new String[]{numbers}).build();
         }
-        String numbers = numberBuilder.substring(0, numberBuilder.length() - 2);
-        String select = buildQuery().select(PhonesTable.TABLE).whereIn(new String[]{PhonesTable.NUMBER},
-                new String[]{numbers}).build();
         return connection.prepareStatement(select, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
     }
 }

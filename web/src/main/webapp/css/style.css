@@ -82,7 +82,7 @@ html, body, ul, li {
     justify-content: center;
 }
 
-.content img {
+.info img {
     float: right;
     max-height: 200px;
     max-width: 200px;

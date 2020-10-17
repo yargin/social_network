@@ -97,10 +97,15 @@
 
         <common:phonesEdition/>
 
-<%--        uploaded--%>
-        <input type="file" name="photo" accept="image/*" title="<fmt:message key="form.uploadImage" bundle="${label}"/>">
+        <c:if test="${not empty photo}">
+            <img src="data:image/jpeg;base64, ${photo}">
+            <br>
+            <fmt:message key="form.chooseAnother" bundle="${label}"/>
+            <br>
+        </c:if>
+        <input type="file" placeholder="asd" name="photo" accept="image/*" title="<fmt:message key="form.uploadImage" bundle="${label}"/>">
         <br>
-<%--        error--%>
+        <c:if test="${not empty errphoto}"><fmt:message key="${errphoto}" bundle="${error}"/><br></c:if>
 
         <button><fmt:message key="button.register" bundle="${label}"/></button>
     </form>

@@ -3,6 +3,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.dependedmodeldao;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.OwnedEntity;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.ConnectionPool;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -15,21 +16,24 @@ import static java.util.Objects.isNull;
 public class OwnedModelDaoImpl<O extends Entity, E extends OwnedEntity<O>> implements OwnedModelDao<O, E> {
     protected final ConnectionPool connectionPool;
     protected final OwnedEntityDml<O, E> dml;
+    protected final Dao<O> ownerDao;
 
-    public OwnedModelDaoImpl(ConnectionPool connectionPool, OwnedEntityDml<O, E> dml) {
+    public OwnedModelDaoImpl(ConnectionPool connectionPool, OwnedEntityDml<O, E> dml, Dao<O> ownerDao) {
         this.connectionPool = connectionPool;
         this.dml = dml;
+        this.ownerDao = ownerDao;
     }
 
     @Override
-    public E select(E ownedEntity) {
+    public E select(O owner) {
+        ownerDao.checkEntity(owner);
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement statement = dml.getSelect(connection, ownedEntity);
+             PreparedStatement statement = dml.getSelect(connection, owner);
              ResultSet resultSet = statement.executeQuery()) {
             if (!resultSet.next()) {
                 return dml.getNullEntity();
             }
-            return dml.selectFromRow(resultSet, ownedEntity.getOwner());
+            return dml.selectFromRow(resultSet, owner);
         } catch (SQLException | IOException e) {
             throw new IllegalStateException(e);
         }
@@ -37,8 +41,9 @@ public class OwnedModelDaoImpl<O extends Entity, E extends OwnedEntity<O>> imple
 
     @Override
     public boolean create(E ownedEntity) {
+        ownerDao.checkEntity(ownedEntity.getOwner());
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement statement = dml.getSelect(connection, ownedEntity);
+             PreparedStatement statement = dml.getSelect(connection, ownedEntity.getOwner());
              ResultSet resultSet = statement.executeQuery()) {
             if (resultSet.next()) {
                 return false;
@@ -55,7 +60,7 @@ public class OwnedModelDaoImpl<O extends Entity, E extends OwnedEntity<O>> imple
     @Override
     public boolean update(E ownedEntity) {
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement statement = dml.getSelect(connection, ownedEntity);
+             PreparedStatement statement = dml.getSelect(connection, ownedEntity.getOwner());
              ResultSet resultSet = statement.executeQuery()) {
             if (!resultSet.next()) {
                 return false;
@@ -70,7 +75,7 @@ public class OwnedModelDaoImpl<O extends Entity, E extends OwnedEntity<O>> imple
     @Override
     public boolean delete(E ownedEntity) {
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement statement = dml.getSelect(connection, ownedEntity);
+             PreparedStatement statement = dml.getSelect(connection, ownedEntity.getOwner());
              ResultSet resultSet = statement.executeQuery()) {
             if (!resultSet.next()) {
                 return false;

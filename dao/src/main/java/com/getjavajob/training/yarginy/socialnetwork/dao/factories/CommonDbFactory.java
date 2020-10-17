@@ -148,7 +148,7 @@ public abstract class CommonDbFactory implements DbFactory {
     }
 
     @Override
-    public OwnedModelDao<Account, AccountPhoto> getAccountPhotoDao() {
-        return new OwnedModelDaoImpl<>(dbConnector, new AccountPhotoDml());
+    public OwnedModelDao<Account, AccountPhoto> getAccountPhotoDao(Dao<Account> accountDao) {
+        return new OwnedModelDaoImpl<>(dbConnector, new AccountPhotoDml(), accountDao);
     }
 }

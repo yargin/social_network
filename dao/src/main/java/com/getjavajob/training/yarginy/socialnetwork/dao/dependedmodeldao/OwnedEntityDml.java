@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public interface OwnedEntityDml<O extends Entity, E extends OwnedEntity<O>> {
-    PreparedStatement getSelect(Connection connection, E ownedEntity) throws SQLException;
+    PreparedStatement getSelect(Connection connection, O owner) throws SQLException;
 
     E getNullEntity();
 

@@ -6,7 +6,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.
 import java.util.Collection;
 
 public interface AccountPhotoDao {
-    AccountPhoto select(AccountPhoto accountPhoto);
+    AccountPhoto select(Account account);
 
     boolean create(AccountPhoto accountPhoto);
 

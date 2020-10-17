@@ -20,6 +20,9 @@ public class BatchDaoImpl<E extends Entity> extends DaoImpl<E> implements BatchD
 
     @Override
     public boolean create(Collection<E> entities) {
+        if (entities.isEmpty()) {
+            return true;
+        }
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement statement = batchDml.batchSelectUpdate(connection, entities);
              ResultSet resultSet = statement.executeQuery()) {

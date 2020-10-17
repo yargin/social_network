@@ -24,11 +24,11 @@ public class AccountPhotoDml implements OwnedEntityDml<Account, AccountPhoto> {
     private static final String SELECT = buildQuery().select(TABLE).where(OWNER_ID).build();
     private final Dao<Account> accountDao = getDbFactory().getAccountDao();
 
-    public PreparedStatement getSelect(Connection connection, AccountPhoto ownedEntity) throws SQLException {
+    public PreparedStatement getSelect(Connection connection, Account owner) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(SELECT, ResultSet.TYPE_SCROLL_INSENSITIVE,
                 ResultSet.CONCUR_UPDATABLE);
-        ownedEntity.setOwner(accountDao.approveFromStorage(ownedEntity.getOwner()));
-        statement.setLong(1, ownedEntity.getOwner().getId());
+        owner = accountDao.approveFromStorage(owner);
+        statement.setLong(1, owner.getId());
         return statement;
     }
 
@@ -49,7 +49,8 @@ public class AccountPhotoDml implements OwnedEntityDml<Account, AccountPhoto> {
     }
 
     public void updateRow(ResultSet resultSet, AccountPhoto ownedEntity) throws SQLException {
-        resultSet.updateLong(OWNER_ID, ownedEntity.getOwner().getId());
+        Account account = accountDao.approveFromStorage(ownedEntity.getOwner());
+        resultSet.updateLong(OWNER_ID, account.getId());
         try (InputStream inputStream = new ByteArrayInputStream(ownedEntity.getPhoto())) {
             resultSet.updateBinaryStream(PHOTO, inputStream);
         } catch (IOException e) {

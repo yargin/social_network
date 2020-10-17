@@ -43,5 +43,5 @@ public interface DbFactory {
 
     OneToManyDao<Account, Group> getAccountsOwnedGroupsDao(Dao<Account> accountDao, Dao<Group> groupDao);
 
-    OwnedModelDao<Account, AccountPhoto> getAccountPhotoDao();
+    OwnedModelDao<Account, AccountPhoto> getAccountPhotoDao(Dao<Account> accountDao);
 }

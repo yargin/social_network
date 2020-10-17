@@ -1,12 +1,11 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.servlets;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.AccountPhoto;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.AccountPhotoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.*;
 import com.getjavajob.training.yarginy.socialnetwork.web.attributes.SessionAttributes;
 
 import javax.servlet.ServletException;
@@ -15,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -22,6 +22,7 @@ public class MyWallServlet extends HttpServlet {
     private static final String JSP = "/WEB-INF/jsps/myWall.jsp";
     private final AccountDao accountDao = new AccountDaoImpl();
     private final PhoneDao phoneDao = new PhoneDaoImpl();
+    private final AccountPhotoDao accountPhotoDao = new AccountPhotoDaoImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -38,6 +39,10 @@ public class MyWallServlet extends HttpServlet {
         Collection<Phone> workPhones = phones.stream().filter(phone -> phone.getType() == PhoneType.WORK).
                 collect(Collectors.toList());
         req.setAttribute("workPhones", workPhones);
+
+        AccountPhoto accountPhoto =  accountPhotoDao.select(account);
+        String base64Image = Base64.getEncoder().encodeToString(accountPhoto.getPhoto());
+        req.setAttribute("photo", base64Image);
 
         req.getRequestDispatcher(JSP).forward(req, resp);
     }
