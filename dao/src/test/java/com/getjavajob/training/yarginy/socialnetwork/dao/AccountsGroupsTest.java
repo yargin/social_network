@@ -42,5 +42,7 @@ public class AccountsGroupsTest {
         assertEquals(expectedGroups, actualGroups);
         printPassed(CLASS, "testSelectGroups");
         ACCOUNT_DAO.delete(account);
+        GROUP_DAO.delete(firstGroup);
+        GROUP_DAO.delete(secondGroup);
     }
 }

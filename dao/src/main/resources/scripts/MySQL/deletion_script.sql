@@ -1,5 +1,7 @@
 DROP TABLE IF EXISTS Friendships;
 
+DROP TABLE IF EXISTS Account_photo;
+
 DROP TABLE IF EXISTS Phones;
 
 DROP TABLE IF EXISTS Accounts_in_groups;

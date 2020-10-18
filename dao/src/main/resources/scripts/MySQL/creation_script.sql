@@ -25,11 +25,11 @@ CREATE TABLE IF NOT EXISTS _Groups (
         id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(50) NOT NULL UNIQUE,
         description VARCHAR(500),
-        owner_id BIGINT UNSIGNED NOT NULL
+        owner_id BIGINT UNSIGNED
 );
 
 ALTER TABLE _Groups
-ADD CONSTRAINT C_11 FOREIGN KEY (owner_id) REFERENCES Accounts (id) ON DELETE CASCADE;
+ADD CONSTRAINT C_11 FOREIGN KEY (owner_id) REFERENCES Accounts (id) ON DELETE SET NULL;
 
 CREATE TABLE IF NOT EXISTS Accounts_in_groups (
         account_id BIGINT UNSIGNED,
@@ -48,11 +48,9 @@ ADD CONSTRAINT C_14 FOREIGN KEY (group_id) REFERENCES _Groups (id) ON DELETE CAS
 
 CREATE TABLE IF NOT EXISTS Friendships (
         first_account BIGINT UNSIGNED,
-        second_account BIGINT UNSIGNED
+        second_account BIGINT UNSIGNED,
+        PRIMARY KEY(first_account, second_account)
 );
-
-ALTER TABLE Friendships
-ADD CONSTRAINT C_15 PRIMARY KEY(first_account, second_account);
 
 ALTER TABLE Friendships
 ADD CONSTRAINT C_16 FOREIGN KEY (first_account) REFERENCES Accounts (id) ON DELETE CASCADE;

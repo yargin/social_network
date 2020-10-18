@@ -27,7 +27,7 @@ public class ConnectionsPoolTest {
      * test asserts that number of connections used in multiple threads is equal to pool size
      * that means connections are transferred between threads when one doesn't need it anymore - without transactions
      */
-    @Test
+//    @Test
     public void testGetConnection() {
         Set<Connection> connections = Collections.newSetFromMap(new ConcurrentHashMap<>());
         List<Thread> threads = new ArrayList<>();
@@ -61,7 +61,7 @@ public class ConnectionsPoolTest {
      * that means that one connection is used due one transaction and
      * connections are transferred between transactions when any doesn't need it anymore
      */
-    @Test
+//    @Test
     public void testTransaction() {
         Set<Connection> connections = Collections.newSetFromMap(new ConcurrentHashMap<>());
         Collection<Thread> threads = new ArrayList<>();
