@@ -47,6 +47,8 @@ public class AccountDml extends AbstractDml<Account> {
         return statement;
     }
 
+//    public PreparedStatement getSelectt(Connection connection,
+
     @Override
     public Account selectFromRow(ResultSet resultSet) throws SQLException {
         Account account = new AccountImpl();

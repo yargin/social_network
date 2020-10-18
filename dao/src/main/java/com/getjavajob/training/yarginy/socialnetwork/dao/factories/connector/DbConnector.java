@@ -14,6 +14,9 @@ import java.util.concurrent.Semaphore;
 import static java.lang.Thread.currentThread;
 import static java.util.Objects.isNull;
 
+//todo don't close connection
+//todo split implementations
+//todo naming
 public class DbConnector implements ConnectionPool, Transaction, TransactionManager {
     private static DbConnector singleDbConnector;
     private final Properties properties = new Properties();
@@ -44,6 +47,7 @@ public class DbConnector implements ConnectionPool, Transaction, TransactionMana
     private ConnectionProxy initConnection() {
         try {
             //if current thread already got connection
+            //todo unreachable - interrupt??
             if (!isNull(threadConnection.get()) && !threadConnection.get().isClosed()) {
                 return threadConnection.get();
             }
@@ -68,6 +72,7 @@ public class DbConnector implements ConnectionPool, Transaction, TransactionMana
     @Override
     public void close() {
         ConnectionProxy connectionProxy = threadConnection.get();
+        //todo wait for a while if current thread will need connection again
         threadConnection.remove();
         //if no connections consumer is waiting for connection
         if (waitersSemaphore.getQueueLength() == 0) {

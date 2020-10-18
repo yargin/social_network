@@ -200,7 +200,7 @@ public class RegisterServlet extends HttpServlet {
             try (InputStream inputStream = imagePart.getInputStream()) {
                 setter.accept(inputStream);
                 String base64Image = Base64.getEncoder().encodeToString(accountPhoto.getPhoto());
-                req.setAttribute("photo", base64Image);
+                req.setAttribute(param, base64Image);
             } catch (IOException e) {
                 throw new IncorrectDataException(IncorrectData.UPLOADING_ERROR);
             }

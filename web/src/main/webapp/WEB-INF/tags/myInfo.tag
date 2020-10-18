@@ -5,6 +5,9 @@
 <c:if test="${not empty user}">
 
     <div class="info">
+        <c:if test="${not empty photo}">
+            <img src="data:image/jpeg;base64, ${photo}">
+        </c:if>
         <fmt:message key="form.name"/> : ${user.getName()}<br>
         <fmt:message key="form.surname"/> : ${user.getSurname()}<br>
         <fmt:message key="form.patronymic"/> : ${user.getPatronymic()}<br>
@@ -26,7 +29,4 @@
             ${phone.getNumber()}
         </c:forEach>
     </div>
-    <c:if test="${not empty photo}">
-        <img src="data:image/jpeg;base64, ${photo}">
-    </c:if>
 </c:if>

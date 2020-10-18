@@ -17,7 +17,7 @@ public abstract class AbstractDbFactory {
 
     public static DbFactory getDbFactory() {
         if (isNull(dbFactory)) {
-            dbFactory = new MySqlDbFactory();
+            dbFactory = new HerokuJawsDBFactory();
         }
         return dbFactory;
     }

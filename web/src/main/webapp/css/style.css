@@ -118,6 +118,13 @@ html, body, ul, li {
     alignment: center;
 }
 
+.post img {
+    max-height: 200px;
+    max-width: 150px;
+    overflow: hidden;
+    margin-left: 20px;
+}
+
 .post p, label {
     font-family: 'Tahoma', serif;
     font-weight: normal;

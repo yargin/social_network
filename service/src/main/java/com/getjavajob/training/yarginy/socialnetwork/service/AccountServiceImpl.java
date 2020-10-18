@@ -24,11 +24,8 @@ public class AccountServiceImpl implements AccountService {
     private Collection<Account> friends = new ArrayList<>();
 
     public AccountServiceImpl() {
-        accountDao = new AccountDaoImpl();
-        phoneDao = new PhoneDaoImpl();
-        friendshipDao = new FriendshipDaoImpl();
-        accountsInGroupsDao = new AccountsInGroupsDaoImpl();
-        transactionManager = TransactionManagerFactory.getTransactionManager();
+        this(new AccountDaoImpl(), new PhoneDaoImpl(), new FriendshipDaoImpl(), new AccountsInGroupsDaoImpl(),
+                TransactionManagerFactory.getTransactionManager());
     }
 
     public AccountServiceImpl(AccountDao accountDao, PhoneDao phoneDao, FriendshipDao friendshipDao,

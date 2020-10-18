@@ -10,6 +10,7 @@ import java.util.Collection;
  * @param <E> entity type
  */
 public interface SelfManyToManyDao<E extends Entity> {
+    //todo think about reuse many-to-many
     /**
      * selects all participants related to {@link Entity}
      *
