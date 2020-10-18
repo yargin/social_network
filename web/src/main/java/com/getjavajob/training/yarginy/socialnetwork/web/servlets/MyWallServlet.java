@@ -18,6 +18,8 @@ import java.util.Base64;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import static java.util.Objects.isNull;
+
 public class MyWallServlet extends HttpServlet {
     private static final String JSP = "/WEB-INF/jsps/myWall.jsp";
     private final AccountDao accountDao = new AccountDaoImpl();
@@ -41,8 +43,10 @@ public class MyWallServlet extends HttpServlet {
         req.setAttribute("workPhones", workPhones);
 
         AccountPhoto accountPhoto =  accountPhotoDao.select(account);
-        String base64Image = Base64.getEncoder().encodeToString(accountPhoto.getPhoto());
-        req.setAttribute("photo", base64Image);
+        if (!isNull(accountPhoto) && !isNull(accountPhoto.getPhoto())) {
+            String base64Image = Base64.getEncoder().encodeToString(accountPhoto.getPhoto());
+            req.setAttribute("photo", base64Image);
+        }
 
         req.getRequestDispatcher(JSP).forward(req, resp);
     }

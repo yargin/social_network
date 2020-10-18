@@ -37,11 +37,7 @@ public class BatchUpdateTest {
         batchDao.create(phones);
         Collection<Phone> allAccountPhones = accountPhones.selectMany(account);
         assertTrue(allAccountPhones.containsAll(phones));
-        System.out.println(accountPhones.selectMany(account));
         phoneDao.delete(firstPhone);
         phoneDao.delete(secondPhone);
-        Date date1 = new Date();
-        Date date2 = new Date();
-//        batchDao.select(date1, date2);
     }
 }
