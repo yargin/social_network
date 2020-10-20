@@ -9,6 +9,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AbstractDml;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.function.*;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory.getNullAccount;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable.*;
@@ -44,10 +45,25 @@ public class AccountDml extends AbstractDml<Account> {
         PreparedStatement statement = connection.prepareStatement(SELECT_BY_EMAIL, ResultSet.TYPE_SCROLL_INSENSITIVE,
                 ResultSet.CONCUR_UPDATABLE);
         statement.setString(1, account.getEmail());
+//        getSelectt(connection, account::getEmail, PreparedStatement::setString);
         return statement;
     }
 
-//    public PreparedStatement getSelectt(Connection connection,
+//    public PreparedStatement getSelectt(Connection connection, Supplier<String> getter, Consumer<String> setter) throws SQLException {
+//        try {
+//            PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
+//            String string = getter.get();
+//            setter.accept(string);
+//            return statement;
+//        } catch (SQLException e) {
+//            throw new SQLException(e);
+//        }
+//    }
+
+    @FunctionalInterface
+    interface Setter<E> {
+        void set(E value) throws SQLException;
+    }
 
     @Override
     public Account selectFromRow(ResultSet resultSet) throws SQLException {

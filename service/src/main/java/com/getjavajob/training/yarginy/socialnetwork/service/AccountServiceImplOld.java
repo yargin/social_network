@@ -7,8 +7,8 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.Transaction;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.TransactionManager;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.Transaction;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.TransactionManager;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.SelfManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
@@ -28,7 +28,6 @@ public class AccountServiceImplOld implements AccountService {
     private final OneToManyDao<Account, Phone> accountsPhonesDao;
     private final SelfManyToManyDao<Account> friendshipDao;
     private final BatchDao<Phone> phoneBatchDao;
-    private final TransactionManager transactionManager;
     private Collection<Account> friends;
 
     public AccountServiceImplOld() {
@@ -37,17 +36,14 @@ public class AccountServiceImplOld implements AccountService {
         friendshipDao = dbFactory.getFriendshipDao(accountDao);
         phoneBatchDao = dbFactory.getBatchPhoneDao();
         accountsPhonesDao = dbFactory.getAccountsPhones(accountDao, phoneBatchDao);
-        transactionManager = dbFactory.getTransactionManager();
     }
 
     public AccountServiceImplOld(Dao<Account> accountDao, SelfManyToManyDao<Account> friendshipDao,
-                                 OneToManyDao<Account, Phone> accountsPhonesDao, TransactionManager transactionManager,
-                                 BatchDao<Phone> phoneBatchDao) {
+                                 OneToManyDao<Account, Phone> accountsPhonesDao, BatchDao<Phone> phoneBatchDao) {
         dbFactory = null;
         this.accountDao = accountDao;
         this.friendshipDao = friendshipDao;
         this.accountsPhonesDao = accountsPhonesDao;
-        this.transactionManager = transactionManager;
         this.phoneBatchDao = phoneBatchDao;
     }
 
@@ -60,7 +56,7 @@ public class AccountServiceImplOld implements AccountService {
     }
 
     public boolean createAccount(Account account, Collection<Phone> phones) {
-        try (Transaction transaction = transactionManager.getTransaction()) {
+        try (Transaction transaction = TransactionManager.getTransaction()) {
             account.setRegistrationDate(LocalDate.now());
             if (!accountDao.create(account)) {
                 throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);

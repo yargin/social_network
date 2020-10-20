@@ -1,9 +1,9 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao;
 
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.ConnectionPool;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.Transaction;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.TransactionManager;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.ConnectionPool;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.Transaction;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.TransactionManager;
 import org.junit.Test;
 
 import java.sql.Connection;
@@ -19,7 +19,6 @@ public class ConnectionsPoolTest {
     private static final String CLASS = "ConnectionsPoolTest";
     private static final DbFactory DB_FACTORY = getDbFactory();
     private static final ConnectionPool CONNECTION_POOL = DB_FACTORY.getConnectionPool();
-    private static final TransactionManager TRANSACTION_MANAGER = DB_FACTORY.getTransactionManager();
     private static final int threadsNumber = 30;
 
     /**
@@ -27,7 +26,7 @@ public class ConnectionsPoolTest {
      * test asserts that number of connections used in multiple threads is equal to pool size
      * that means connections are transferred between threads when one doesn't need it anymore - without transactions
      */
-//    @Test
+    @Test
     public void testGetConnection() {
         Set<Connection> connections = Collections.newSetFromMap(new ConcurrentHashMap<>());
         List<Thread> threads = new ArrayList<>();
@@ -61,14 +60,14 @@ public class ConnectionsPoolTest {
      * that means that one connection is used due one transaction and
      * connections are transferred between transactions when any doesn't need it anymore
      */
-//    @Test
+    @Test
     public void testTransaction() {
         Set<Connection> connections = Collections.newSetFromMap(new ConcurrentHashMap<>());
         Collection<Thread> threads = new ArrayList<>();
         for (int i = 0; i < threadsNumber; i++) {
             Thread thread = new Thread(() -> {
                 try {
-                    try (Transaction transaction = TRANSACTION_MANAGER.getTransaction()) {
+                    try (Transaction transaction = TransactionManager.getTransaction()) {
                         for (int j = 0; j < 15; j++) {
                             Connection connection = CONNECTION_POOL.getConnection();
                             connections.add(connection);

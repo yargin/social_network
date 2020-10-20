@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector;
+package com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool;
 
 import java.sql.Connection;
 import java.sql.SQLException;

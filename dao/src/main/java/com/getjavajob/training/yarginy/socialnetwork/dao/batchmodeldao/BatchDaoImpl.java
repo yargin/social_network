@@ -1,7 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.ConnectionPool;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.ConnectionPool;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.DaoImpl;
 
 import java.sql.Connection;

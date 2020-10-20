@@ -11,8 +11,8 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.dependedmodeldao.OwnedModelDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.Transaction;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.TransactionManager;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.Transaction;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.TransactionManager;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 
 import java.time.LocalDate;
@@ -28,20 +28,18 @@ public class AuthServiceImpl implements AuthService {
     private final Dao<Password> passwordDao;
     private final BatchDao<Phone> phoneDao;
     private final OwnedModelDao<Account, AccountPhoto> accountPhotoDao;
-    private final TransactionManager transactionManager;
 
     public AuthServiceImpl() {
         DbFactory dbFactory = getDbFactory();
         accountDao = dbFactory.getAccountDao();
         passwordDao = dbFactory.getPasswordDao();
         phoneDao = dbFactory.getBatchPhoneDao();
-        transactionManager = dbFactory.getTransactionManager();
         accountPhotoDao= dbFactory.getAccountPhotoDao(accountDao);
     }
 
     @Override
     public boolean register(Account account, Collection<Phone> phones, Password password, AccountPhoto accountPhoto) {
-        try (Transaction transaction = transactionManager.getTransaction()) {
+        try (Transaction transaction = TransactionManager.getTransaction()) {
             account.setRegistrationDate(LocalDate.now());
             if (!accountDao.create(account)) {
                 throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
@@ -56,7 +54,7 @@ public class AuthServiceImpl implements AuthService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        try (Transaction transaction = transactionManager.getTransaction()) {
+        try (Transaction transaction = TransactionManager.getTransaction()) {
             if (!isNull(accountPhoto)) {
                 accountPhoto.setOwner(account);
                 if (!accountPhotoDao.create(accountPhoto)) {

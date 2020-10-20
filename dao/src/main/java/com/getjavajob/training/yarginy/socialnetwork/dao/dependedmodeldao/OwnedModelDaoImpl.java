@@ -2,7 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.dependedmodeldao;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.OwnedEntity;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.ConnectionPool;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.ConnectionPool;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 
 import java.io.IOException;

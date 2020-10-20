@@ -11,9 +11,8 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.dmls.Batc
 import com.getjavajob.training.yarginy.socialnetwork.dao.dependedmodeldao.OwnedModelDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.dependedmodeldao.OwnedModelDaoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.dependedmodeldao.dmls.AccountPhotoDml;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.ConnectionPool;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.DbConnector;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.TransactionManager;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.ConnectionPool;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.ConnectionPoolImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl.ScriptExecutor;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl.ScriptExecutorImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
@@ -39,11 +38,11 @@ import java.util.Properties;
 import static java.util.Objects.isNull;
 
 public abstract class CommonDbFactory implements DbFactory {
-    private final DbConnector dbConnector;
+    private final ConnectionPool connectionPool;
     private ScriptExecutor scriptExecutor;
 
     public CommonDbFactory() {
-        dbConnector = DbConnector.getDbConnector(getConnectionFile(), getConnectionsCapacity());
+        connectionPool = ConnectionPoolImpl.getConnectionPool(getConnectionFile(), getConnectionsCapacity());
         if (runScriptOnStart()) {
             getScriptExecutor().executeScript(getStartingScript());
         }
@@ -87,68 +86,63 @@ public abstract class CommonDbFactory implements DbFactory {
     @Override
     public ScriptExecutor getScriptExecutor() {
         if (isNull(scriptExecutor)) {
-            scriptExecutor = new ScriptExecutorImpl(dbConnector, getScriptDirectory());
+            scriptExecutor = new ScriptExecutorImpl(connectionPool, getScriptDirectory());
         }
         return scriptExecutor;
     }
 
     @Override
     public Dao<Account> getAccountDao() {
-        return new DaoImpl<>(dbConnector, new AccountDml());
+        return new DaoImpl<>(connectionPool, new AccountDml());
     }
 
     @Override
     public Dao<Group> getGroupDao() {
-        return new DaoImpl<>(dbConnector, new GroupDml());
+        return new DaoImpl<>(connectionPool, new GroupDml());
     }
 
     @Override
     public ManyToManyDao<Account, Group> getGroupMembershipDao(Dao<Account> accountDao, Dao<Group> groupDao) {
-        return new ManyToManyDaoImpl<>(dbConnector, new AccountsInGroupsDml(), accountDao, groupDao);
+        return new ManyToManyDaoImpl<>(connectionPool, new AccountsInGroupsDml(), accountDao, groupDao);
     }
 
     @Override
     public SelfManyToManyDao<Account> getFriendshipDao(Dao<Account> accountDao) {
-        return new SelfManyToManyDaoImpl<>(dbConnector, new FriendshipDml(), accountDao);
+        return new SelfManyToManyDaoImpl<>(connectionPool, new FriendshipDml(), accountDao);
     }
 
     @Override
     public Dao<Phone> getPhoneDao() {
-        return new DaoImpl<>(dbConnector, new PhonesDml());
+        return new DaoImpl<>(connectionPool, new PhonesDml());
     }
 
     @Override
     public OneToManyDao<Account, Phone> getAccountsPhones(Dao<Account> accountDao, Dao<Phone> phoneDao) {
-        return new OneToManyDaoImpl<>(dbConnector, new AccountsPhonesDml(), accountDao, phoneDao);
+        return new OneToManyDaoImpl<>(connectionPool, new AccountsPhonesDml(), accountDao, phoneDao);
     }
 
     @Override
     public Dao<Password> getPasswordDao() {
-        return new PasswordDao(dbConnector, new PasswordDml());
+        return new PasswordDao(connectionPool, new PasswordDml());
     }
 
     @Override
     public BatchDao<Phone> getBatchPhoneDao() {
-        return new BatchDaoImpl<>(dbConnector, new BatchPhonesDml());
-    }
-
-    @Override
-    public TransactionManager getTransactionManager() {
-        return dbConnector;
+        return new BatchDaoImpl<>(connectionPool, new BatchPhonesDml());
     }
 
     @Override
     public ConnectionPool getConnectionPool() {
-        return dbConnector;
+        return connectionPool;
     }
 
     @Override
     public OneToManyDao<Account, Group> getAccountsOwnedGroupsDao(Dao<Account> accountDao, Dao<Group> groupDao) {
-        return new OneToManyDaoImpl<>(dbConnector, new AccountsGroupsDml(), accountDao, groupDao);
+        return new OneToManyDaoImpl<>(connectionPool, new AccountsGroupsDml(), accountDao, groupDao);
     }
 
     @Override
     public OwnedModelDao<Account, AccountPhoto> getAccountPhotoDao(Dao<Account> accountDao) {
-        return new OwnedModelDaoImpl<>(dbConnector, new AccountPhotoDml(), accountDao);
+        return new OwnedModelDaoImpl<>(connectionPool, new AccountPhotoDml(), accountDao);
     }
 }

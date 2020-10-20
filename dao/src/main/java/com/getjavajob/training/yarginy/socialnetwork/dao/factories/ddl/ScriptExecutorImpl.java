@@ -1,6 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl;
 
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.ConnectionPool;
+
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.ConnectionPool;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

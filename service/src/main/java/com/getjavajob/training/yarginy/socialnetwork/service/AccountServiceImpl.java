@@ -4,8 +4,8 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.Transaction;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.TransactionManager;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.Transaction;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.TransactionManager;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.*;
 
 import java.time.LocalDate;
@@ -20,21 +20,18 @@ public class AccountServiceImpl implements AccountService {
     private final PhoneDao phoneDao;
     private final FriendshipDao friendshipDao;
     private final AccountsInGroupsDao accountsInGroupsDao;
-    private final TransactionManager transactionManager;
     private Collection<Account> friends = new ArrayList<>();
 
     public AccountServiceImpl() {
-        this(new AccountDaoImpl(), new PhoneDaoImpl(), new FriendshipDaoImpl(), new AccountsInGroupsDaoImpl(),
-                TransactionManagerFactory.getTransactionManager());
+        this(new AccountDaoImpl(), new PhoneDaoImpl(), new FriendshipDaoImpl(), new AccountsInGroupsDaoImpl());
     }
 
     public AccountServiceImpl(AccountDao accountDao, PhoneDao phoneDao, FriendshipDao friendshipDao,
-                              AccountsInGroupsDao accountsInGroupsDao, TransactionManager transactionManager) {
+                              AccountsInGroupsDao accountsInGroupsDao) {
         this.accountDao = accountDao;
         this.phoneDao = phoneDao;
         this.friendshipDao = friendshipDao;
         this.accountsInGroupsDao = accountsInGroupsDao;
-        this.transactionManager = transactionManager;
     }
 
     @Override
@@ -49,7 +46,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean createAccount(Account account, Collection<Phone> phones) {
-        try (Transaction transaction = transactionManager.getTransaction()) {
+        try (Transaction transaction = TransactionManager.getTransaction()) {
             account.setRegistrationDate(LocalDate.now());
             if (!accountDao.create(account)) {
                 throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);

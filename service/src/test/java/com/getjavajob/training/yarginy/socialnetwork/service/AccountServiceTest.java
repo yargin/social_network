@@ -5,8 +5,8 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.Transaction;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector.TransactionManager;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.Transaction;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.TransactionManager;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountsInGroupsDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipDao;
@@ -30,10 +30,9 @@ public class AccountServiceTest {
     private final FriendshipDao friendsDao = mock(FriendshipDao.class);
     private final PhoneDao phoneDao = mock(PhoneDao.class);
     private final AccountsInGroupsDao accountsInGroups = mock(AccountsInGroupsDao.class);
-    private final TransactionManager transactionManager = mock(TransactionManager.class);
     private final Transaction transaction = mock(Transaction.class);
     private final AccountService accountService = new AccountServiceImpl(accountDao, phoneDao, friendsDao,
-            accountsInGroups, transactionManager);
+            accountsInGroups);
     private Account account;
     private Collection<Phone> phones;
 
@@ -42,7 +41,7 @@ public class AccountServiceTest {
         account = new AccountImpl("Petr", "email@gjj.ru");
         account.setId(555);
         phones = asList(new PhoneImpl("123321", account), new PhoneImpl("123123", account));
-        when(transactionManager.getTransaction()).thenReturn(transaction);
+        when(TransactionManager.getTransaction()).thenReturn(transaction);
     }
 
     @Test

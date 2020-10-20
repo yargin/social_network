@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.factories.connector;
+package com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool;
 
 import java.sql.*;
 import java.util.Map;
@@ -7,17 +7,17 @@ import java.util.concurrent.Executor;
 
 public class ConnectionProxy implements Connection {
     private final Connection connection;
-    private final DbConnector dbConnector;
+    private final ConnectionPoolImpl connectionPool;
     private boolean transactional;
 
-    public ConnectionProxy(Connection connection, DbConnector dbConnector) {
+    public ConnectionProxy(Connection connection, ConnectionPoolImpl connectionPool) {
         this.connection = connection;
         try {
             connection.setAutoCommit(false);
         } catch (SQLException e) {
             throw new IllegalStateException(e);
         }
-        this.dbConnector = dbConnector;
+        this.connectionPool = connectionPool;
     }
 
     public void setTransactional(boolean transactional) {
@@ -31,11 +31,15 @@ public class ConnectionProxy implements Connection {
         connection.close();
     }
 
+    public boolean isTransactional() {
+        return transactional;
+    }
+
     @Override
     public void close() throws SQLException {
         if (!transactional) {
             commit();
-            dbConnector.closeConnection();
+            connectionPool.closeConnectionProxy();
         }
     }
 
