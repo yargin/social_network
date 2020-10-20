@@ -103,7 +103,11 @@
             <fmt:message key="form.chooseAnother" bundle="${label}"/>
             <br>
         </c:if>
-        <input type="file" placeholder="asd" name="photo" accept="image/*" title="<fmt:message key="form.uploadImage" bundle="${label}"/>">
+        <input type="file" placeholder="asd" name="photo" accept="image/*"
+            <c:if test="${not empty photo}">
+                value="${photo}"
+            </c:if>
+               title="<fmt:message key="form.uploadImage" bundle="${label}"/>">
         <br>
         <c:if test="${not empty errphoto}"><fmt:message key="${errphoto}" bundle="${error}"/><br></c:if>
 

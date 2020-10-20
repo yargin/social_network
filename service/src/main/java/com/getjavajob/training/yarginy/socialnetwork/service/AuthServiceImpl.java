@@ -14,6 +14,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.facades.TransactionMana
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.Transaction;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
+import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -49,7 +50,13 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public boolean register(Account account, Collection<Phone> phones, Password password, AccountPhoto accountPhoto) {
+    public boolean register(AccountInfoDTO accountInfoDTO, Password password) {
+        return register(accountInfoDTO.getAccount(), accountInfoDTO.getPhones(), accountInfoDTO.getAccountPhoto(),
+                password);
+    }
+
+    @Override
+    public boolean register(Account account, Collection<Phone> phones, AccountPhoto accountPhoto, Password password) {
         try (Transaction transaction = transactionManager.getTransaction()) {
             account.setRegistrationDate(LocalDate.now());
             if (!accountDao.create(account)) {

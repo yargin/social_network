@@ -39,7 +39,7 @@ public class AuthServiceTest {
         password.setPassword("123qwe123");
         password.setAccount(account);
         AuthService authService = new AuthServiceImpl();
-        boolean registered = authService.register(account, phones, password, null);
+        boolean registered = authService.register(account, phones, null, password);
         assertTrue(registered);
         ACCOUNT_DAO.delete(account);
         printPassed(CLASS, "testRegister");
