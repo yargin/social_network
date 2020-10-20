@@ -10,8 +10,6 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpoo
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.TransactionManagerImpl;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.Collection;

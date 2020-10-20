@@ -42,11 +42,14 @@ public abstract class CommonDbFactory implements DbFactory {
     private ScriptExecutor scriptExecutor;
 
     public CommonDbFactory() {
+        loadJDBCDriver();
         connectionPool = ConnectionPoolImpl.getConnectionPool(getConnectionFile(), getConnectionsCapacity());
         if (runScriptOnStart()) {
             getScriptExecutor().executeScript(getStartingScript());
         }
     }
+
+    protected abstract void loadJDBCDriver();
 
     /**
      * gives file name storing {@link Properties} for connection

@@ -3,4 +3,4 @@
 
 <common:layout/>
 
-<% response.sendRedirect(request.getContextPath() + "/mywall"); %>
+<%--<% response.sendRedirect(request.getContextPath() + "/mywall"); %>--%>

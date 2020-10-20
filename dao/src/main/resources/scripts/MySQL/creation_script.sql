@@ -61,15 +61,15 @@ ADD CONSTRAINT C_17 FOREIGN KEY (second_account) REFERENCES Accounts (id) ON DEL
 ALTER TABLE Friendships
 ADD CHECK (first_account != second_account);
 
-INSERT INTO Accounts (name, surname, email) VALUES
-('Vladimir', 'Lenin', 'rise@communism.su'),
-('dracula', 'NOSFERATU', 'drink@blood.com'),
-('Alan', 'Turing','robot@power.com'),
-('Petr', 'Popov', 'popovp@gmail.com');
+INSERT INTO Accounts (id, name, surname, email) VALUES
+(1, 'Vladimir', 'Lenin', 'rise@communism.su'),
+(2, 'dracula', 'NOSFERATU', 'drink@blood.com'),
+(3, 'Alan', 'Turing','robot@power.com'),
+(4, 'Petr', 'Popov', 'popovp@gmail.com');
 
-INSERT INTO _Groups (name, description, owner_id) VALUES
-('USSR fans', 'building Communism', 1),
-('machine learning', '', 3);
+INSERT INTO _Groups (id, name, description, owner_id) VALUES
+(1, 'USSR fans', 'building Communism', 1),
+(2, 'machine learning', '', 2);
 
 INSERT INTO Accounts_in_groups VALUES
 (1, 1), (2, 1), (3, 2), (1, 2);
@@ -123,4 +123,3 @@ CREATE TABLE IF NOT EXISTS Account_photo (
 
 ALTER TABLE Account_photo
 ADD CONSTRAINT C_22 FOREIGN KEY (owner_id) REFERENCES Accounts (id) ON DELETE CASCADE;
-

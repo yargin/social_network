@@ -7,8 +7,8 @@ public class HerokuPostgreSQLFactory extends CommonDbFactory {
     private static final String SCRIPTS_DIR = "./src/main/resources/scripts/PostgreSQL/";
     private static final int CONNECTIONS = 4;
 
-    public HerokuPostgreSQLFactory() {
-        //register driver
+    @Override
+    protected void loadJDBCDriver() {
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {

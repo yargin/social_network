@@ -28,7 +28,7 @@ public class ConcurrentSelectUpdateTest {
     private volatile boolean inSelectBlock;
     private volatile boolean inCreateBlock;
 
-    @Test
+//    @Test
     public void testConcurrentSelectUpdate() throws InterruptedException {
         Account account = accountDao.select(1);
         Collection<Phone> phones = new ArrayList<>();
@@ -65,6 +65,4 @@ public class ConcurrentSelectUpdateTest {
         assertFalse(inSelectBlock);
         printPassed(CLASS, "testConcurrentSelectUpdate");
     }
-
-
 }
