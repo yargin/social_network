@@ -1,15 +1,10 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool;
 
-import java.sql.Connection;
-
-public final class TransactionManager {
+public final class TransactionManagerImpl {
     private static ConnectionPoolImpl connectionPool;
 
-    private TransactionManager() {
-    }
-
     static void initConnectionPool(ConnectionPoolImpl connectionPool) {
-        TransactionManager.connectionPool = connectionPool;
+        TransactionManagerImpl.connectionPool = connectionPool;
     }
 
     /**

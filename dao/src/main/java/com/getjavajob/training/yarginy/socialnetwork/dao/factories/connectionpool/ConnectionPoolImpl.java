@@ -36,7 +36,7 @@ public class ConnectionPoolImpl implements ConnectionPool {
                 throw new IllegalStateException(e);
             }
         } while (put);
-        TransactionManager.initConnectionPool(this);
+        TransactionManagerImpl.initConnectionPool(this);
     }
 
     public static ConnectionPoolImpl getConnectionPool(String propertiesFile, int capacity) {
