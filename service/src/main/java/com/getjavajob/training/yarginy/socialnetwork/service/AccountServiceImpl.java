@@ -5,7 +5,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.Transaction;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.TransactionManager;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.*;
 
 import java.time.LocalDate;
@@ -16,6 +15,7 @@ import java.util.Map;
 import static java.util.Objects.isNull;
 
 public class AccountServiceImpl implements AccountService {
+    private final TransactionManager transactionManager;
     private final AccountDao accountDao;
     private final PhoneDao phoneDao;
     private final FriendshipDao friendshipDao;
@@ -23,15 +23,17 @@ public class AccountServiceImpl implements AccountService {
     private Collection<Account> friends = new ArrayList<>();
 
     public AccountServiceImpl() {
-        this(new AccountDaoImpl(), new PhoneDaoImpl(), new FriendshipDaoImpl(), new AccountsInGroupsDaoImpl());
+        this(new AccountDaoImpl(), new PhoneDaoImpl(), new FriendshipDaoImpl(), new AccountsInGroupsDaoImpl(), new
+                TransactionManager());
     }
 
     public AccountServiceImpl(AccountDao accountDao, PhoneDao phoneDao, FriendshipDao friendshipDao,
-                              AccountsInGroupsDao accountsInGroupsDao) {
+                              AccountsInGroupsDao accountsInGroupsDao, TransactionManager transactionManager) {
         this.accountDao = accountDao;
         this.phoneDao = phoneDao;
         this.friendshipDao = friendshipDao;
         this.accountsInGroupsDao = accountsInGroupsDao;
+        this.transactionManager = transactionManager;
     }
 
     @Override
@@ -46,7 +48,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean createAccount(Account account, Collection<Phone> phones) {
-        try (Transaction transaction = TransactionManager.getTransaction()) {
+        try (Transaction transaction = transactionManager.getTransaction()) {
             account.setRegistrationDate(LocalDate.now());
             if (!accountDao.create(account)) {
                 throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);

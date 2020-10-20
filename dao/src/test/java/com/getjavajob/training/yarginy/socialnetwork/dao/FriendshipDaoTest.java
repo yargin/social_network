@@ -40,7 +40,6 @@ public class FriendshipDaoTest {
         Collection<Account> friends = FRIENDSHIP_DAO.select(friend);
         Collection<Account> expected = new ArrayList<>();
         expected.add(ACCOUNT_DAO.select(2));
-        expected.add(ACCOUNT_DAO.select(3));
         assertEquals(expected, friends);
         printPassed(CLASS, "testSelectFriends");
     }

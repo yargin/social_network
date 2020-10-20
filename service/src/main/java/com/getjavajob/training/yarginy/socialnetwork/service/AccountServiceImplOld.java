@@ -23,6 +23,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.Abstra
 import static java.util.Objects.isNull;
 
 public class AccountServiceImplOld implements AccountService {
+    private final TransactionManager transactionManager;
     private final DbFactory dbFactory;
     private final Dao<Account> accountDao;
     private final OneToManyDao<Account, Phone> accountsPhonesDao;
@@ -36,15 +37,18 @@ public class AccountServiceImplOld implements AccountService {
         friendshipDao = dbFactory.getFriendshipDao(accountDao);
         phoneBatchDao = dbFactory.getBatchPhoneDao();
         accountsPhonesDao = dbFactory.getAccountsPhones(accountDao, phoneBatchDao);
+        transactionManager = new TransactionManager();
     }
 
     public AccountServiceImplOld(Dao<Account> accountDao, SelfManyToManyDao<Account> friendshipDao,
-                                 OneToManyDao<Account, Phone> accountsPhonesDao, BatchDao<Phone> phoneBatchDao) {
+                                 OneToManyDao<Account, Phone> accountsPhonesDao, BatchDao<Phone> phoneBatchDao,
+                                 TransactionManager transactionManager) {
         dbFactory = null;
         this.accountDao = accountDao;
         this.friendshipDao = friendshipDao;
         this.accountsPhonesDao = accountsPhonesDao;
         this.phoneBatchDao = phoneBatchDao;
+        this.transactionManager = transactionManager;
     }
 
     public Account getAccount(int id) {
@@ -56,7 +60,7 @@ public class AccountServiceImplOld implements AccountService {
     }
 
     public boolean createAccount(Account account, Collection<Phone> phones) {
-        try (Transaction transaction = TransactionManager.getTransaction()) {
+        try (Transaction transaction = transactionManager.getTransaction()) {
             account.setRegistrationDate(LocalDate.now());
             if (!accountDao.create(account)) {
                 throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);

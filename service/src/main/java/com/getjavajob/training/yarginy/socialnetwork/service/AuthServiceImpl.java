@@ -24,6 +24,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.Abstra
 import static java.util.Objects.isNull;
 
 public class AuthServiceImpl implements AuthService {
+    private final TransactionManager transactionManager;
     private final Dao<Account> accountDao;
     private final Dao<Password> passwordDao;
     private final BatchDao<Phone> phoneDao;
@@ -35,11 +36,21 @@ public class AuthServiceImpl implements AuthService {
         passwordDao = dbFactory.getPasswordDao();
         phoneDao = dbFactory.getBatchPhoneDao();
         accountPhotoDao= dbFactory.getAccountPhotoDao(accountDao);
+        transactionManager = new TransactionManager();
+    }
+
+    public AuthServiceImpl(TransactionManager transactionManager, Dao<Account> accountDao, Dao<Password> passwordDao,
+                           BatchDao<Phone> phoneDao, OwnedModelDao<Account, AccountPhoto> accountPhotoDao) {
+        this.transactionManager = transactionManager;
+        this.accountDao = accountDao;
+        this.passwordDao = passwordDao;
+        this.phoneDao = phoneDao;
+        this.accountPhotoDao = accountPhotoDao;
     }
 
     @Override
     public boolean register(Account account, Collection<Phone> phones, Password password, AccountPhoto accountPhoto) {
-        try (Transaction transaction = TransactionManager.getTransaction()) {
+        try (Transaction transaction = transactionManager.getTransaction()) {
             account.setRegistrationDate(LocalDate.now());
             if (!accountDao.create(account)) {
                 throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
@@ -54,7 +65,7 @@ public class AuthServiceImpl implements AuthService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        try (Transaction transaction = TransactionManager.getTransaction()) {
+        try (Transaction transaction = transactionManager.getTransaction()) {
             if (!isNull(accountPhoto)) {
                 accountPhoto.setOwner(account);
                 if (!accountPhotoDao.create(accountPhoto)) {

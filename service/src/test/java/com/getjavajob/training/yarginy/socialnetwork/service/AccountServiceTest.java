@@ -5,14 +5,13 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.*;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.Transaction;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.TransactionManagerImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountsInGroupsDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDao;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,14 +24,15 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class AccountServiceTest {
-    public static final String CLASS = "AccountServiceTest";
+    private static final String CLASS = "AccountServiceTest";
     private final AccountDao accountDao = mock(AccountDao.class);
     private final FriendshipDao friendsDao = mock(FriendshipDao.class);
     private final PhoneDao phoneDao = mock(PhoneDao.class);
     private final AccountsInGroupsDao accountsInGroups = mock(AccountsInGroupsDao.class);
     private final Transaction transaction = mock(Transaction.class);
+    private final TransactionManager transactionManager = mock(TransactionManager.class);
     private final AccountService accountService = new AccountServiceImpl(accountDao, phoneDao, friendsDao,
-            accountsInGroups);
+            accountsInGroups, transactionManager);
     private Account account;
     private Collection<Phone> phones;
 
@@ -41,11 +41,11 @@ public class AccountServiceTest {
         account = new AccountImpl("Petr", "email@gjj.ru");
         account.setId(555);
         phones = asList(new PhoneImpl("123321", account), new PhoneImpl("123123", account));
-        when(TransactionManagerImpl.getTransaction()).thenReturn(transaction);
     }
 
     @Test
     public void testGetAccount() {
+        when(transactionManager.getTransaction()).thenReturn(transaction);
         when(accountDao.select(1)).thenReturn(account);
         Account actualAccount = accountService.getAccount(1);
         assertEquals(account, actualAccount);
@@ -60,6 +60,7 @@ public class AccountServiceTest {
 
     @Test
     public void testCreateAccount() {
+        when(transactionManager.getTransaction()).thenReturn(transaction);
         when(accountDao.create(account)).thenReturn(true);
         when(phoneDao.create(phones)).thenReturn(true);
         assertTrue(accountService.createAccount(account, phones));
@@ -68,6 +69,7 @@ public class AccountServiceTest {
 
     @Test(expected = IncorrectDataException.class)
     public void testCreateExistingAccount() {
+        when(transactionManager.getTransaction()).thenReturn(transaction);
         when(accountDao.create(account)).thenReturn(false);
         accountService.createAccount(account, phones);
         printPassed(CLASS, "IncorrectDataException");
@@ -75,6 +77,7 @@ public class AccountServiceTest {
 
     @Test(expected = IncorrectDataException.class)
     public void testCreateExistingPhone() {
+        when(transactionManager.getTransaction()).thenReturn(transaction);
         when(phoneDao.create(phones)).thenReturn(false);
         accountService.createAccount(account, phones);
         printPassed(CLASS, "testCreateExistingPhone");
@@ -82,6 +85,7 @@ public class AccountServiceTest {
 
     @Test
     public void testUpdateAccount() {
+        when(transactionManager.getTransaction()).thenReturn(transaction);
         when(accountDao.update(account)).thenReturn(true);
         assertTrue(accountService.updateAccount(account));
         when(accountDao.update(account)).thenReturn(false);

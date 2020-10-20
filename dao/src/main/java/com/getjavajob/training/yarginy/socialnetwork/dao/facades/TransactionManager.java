@@ -1,11 +1,10 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.*;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.ConnectionPool;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.Transaction;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.TransactionManagerImpl;
 
-public final class TransactionManager {
-    private TransactionManager() {
-    }
-
+public class TransactionManager {
     /**
      * starts transaction bounded to current thread by bounding connection to it
      * All connections retrieved from {@link ConnectionPool} are transactional -
@@ -13,7 +12,7 @@ public final class TransactionManager {
      *
      * @throws IllegalStateException if couldn't connect to database
      */
-    public static synchronized Transaction getTransaction() {
+    public Transaction getTransaction() {
         return TransactionManagerImpl.getTransaction();
     }
 }

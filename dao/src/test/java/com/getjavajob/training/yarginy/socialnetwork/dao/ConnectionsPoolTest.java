@@ -19,6 +19,7 @@ public class ConnectionsPoolTest {
     private static final String CLASS = "ConnectionsPoolTest";
     private static final DbFactory DB_FACTORY = getDbFactory();
     private static final ConnectionPool CONNECTION_POOL = DB_FACTORY.getConnectionPool();
+    private static final TransactionManager TRANSACTION_MANAGER = new TransactionManager();
     private static final int threadsNumber = 30;
 
     /**
@@ -67,7 +68,7 @@ public class ConnectionsPoolTest {
         for (int i = 0; i < threadsNumber; i++) {
             Thread thread = new Thread(() -> {
                 try {
-                    try (Transaction transaction = TransactionManager.getTransaction()) {
+                    try (Transaction transaction = TRANSACTION_MANAGER.getTransaction()) {
                         for (int j = 0; j < 15; j++) {
                             Connection connection = CONNECTION_POOL.getConnection();
                             connections.add(connection);

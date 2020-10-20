@@ -14,13 +14,14 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.TestResultPrinter.printPassed;
 import static java.lang.Thread.sleep;
 import static org.junit.Assert.assertFalse;
 
 public class ConcurrentSelectUpdateTest {
     private static final String CLASS = "AccountDaoTest";
     private static final DbFactory DB_FACTORY = AbstractDbFactory.getDbFactory();
-    private static final int PHONES_NUMBER = 10000;
+    private static final int PHONES_NUMBER = 1000;
     private final AccountDao accountDao = new AccountDaoImpl();
     private final PhoneDao firstPhoneDao = new PhoneDaoImpl();
     private final PhoneDao secondPhoneDao = new PhoneDaoImpl();
@@ -28,7 +29,7 @@ public class ConcurrentSelectUpdateTest {
     private volatile boolean inCreateBlock;
 
     @Test
-    public void testSelectUpdate() throws InterruptedException {
+    public void testConcurrentSelectUpdate() throws InterruptedException {
         Account account = accountDao.select(1);
         Collection<Phone> phones = new ArrayList<>();
         for (int i = 0; i < PHONES_NUMBER; i++) {
@@ -62,6 +63,7 @@ public class ConcurrentSelectUpdateTest {
         }
 
         assertFalse(inSelectBlock);
+        printPassed(CLASS, "testConcurrentSelectUpdate");
     }
 
 

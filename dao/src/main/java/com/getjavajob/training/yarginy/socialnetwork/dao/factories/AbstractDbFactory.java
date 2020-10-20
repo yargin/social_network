@@ -10,7 +10,7 @@ import static java.util.Objects.isNull;
  * provides vendor-bounded abstract database factory
  */
 public abstract class AbstractDbFactory {
-    private static DbFactory dbFactory;
+    private static DbFactory dbFactory = getDbFactory();
 
     private AbstractDbFactory() {
     }
