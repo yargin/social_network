@@ -44,6 +44,11 @@ public class AccountPhotoImpl implements AccountPhoto {
     }
 
     @Override
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
+    }
+
+    @Override
     public Account getOwner() {
         return account;
     }

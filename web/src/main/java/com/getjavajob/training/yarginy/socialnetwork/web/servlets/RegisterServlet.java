@@ -108,7 +108,7 @@ public class RegisterServlet extends HttpServlet {
         phones.addAll(getPhones(req, workPhones, PhoneType.WORK, account));
 
         AccountPhoto accountPhoto = accountInfoDTO.getAccountPhoto();
-        setPhotoParam(accountPhoto::setPhoto, PHOTO_ATTRIBUTE, req, accountPhoto);
+        setPhotoParam(req, accountPhoto);
 
         if (!paramsAccepted.get()) {
             doGet(req, resp);
@@ -119,8 +119,9 @@ public class RegisterServlet extends HttpServlet {
 
     private void register(HttpServletRequest req, HttpServletResponse resp, AccountInfoDTO accountInfoDTO, Password
             password) throws IOException, ServletException {
+        boolean registered = false;
         try {
-            AUTH_SERVICE.register(accountInfoDTO, password);
+            registered = AUTH_SERVICE.register(accountInfoDTO, password);
         } catch (IncorrectDataException e) {
             if (e.getType() == IncorrectData.EMAIL_DUPLICATE) {
                 req.setAttribute(EMAIL_DUPLICATE, e.getType().getPropertyKey());
@@ -129,11 +130,15 @@ public class RegisterServlet extends HttpServlet {
             }
             doGet(req, resp);
         }
-        HttpSession session = req.getSession();
-        session.removeAttribute(PHOTO_ATTRIBUTE);
-        session.removeAttribute(PRIVATE_PHONES_ATTRIBUTE);
-        session.removeAttribute(WORK_PHONES_ATTRIBUTE);
-        resp.sendRedirect(req.getContextPath() + REG_SUCCESS_URL);
+        if (registered) {
+            HttpSession session = req.getSession();
+            session.removeAttribute(PHOTO_ATTRIBUTE);
+            session.removeAttribute(PRIVATE_PHONES_ATTRIBUTE);
+            session.removeAttribute(WORK_PHONES_ATTRIBUTE);
+            resp.sendRedirect(req.getContextPath() + REG_SUCCESS_URL);
+        } else {
+            doGet(req, resp);
+        }
     }
 
     private Collection<Phone> getPhones(HttpServletRequest req, Collection<PhoneExchanger> phonesToGet, PhoneType type,
@@ -211,15 +216,14 @@ public class RegisterServlet extends HttpServlet {
         }
     }
 
-    private void setPhotoParam(Consumer<InputStream> setter, String param, HttpServletRequest req, AccountPhoto
-            accountPhoto) throws IOException, ServletException {
-        Part imagePart = req.getPart(param);
+    private void setPhotoParam(HttpServletRequest req, AccountPhoto accountPhoto) throws IOException, ServletException {
+        Part imagePart = req.getPart(PHOTO_ATTRIBUTE);
         HttpSession session = req.getSession();
-        String previousImage = (String) session.getAttribute(param);
+        String previousImage = (String) session.getAttribute(PHOTO_ATTRIBUTE);
         if (!isNull(imagePart)) {
             try {
                 try (InputStream inputStream = imagePart.getInputStream()) {
-                    setter.accept(inputStream);
+                    accountPhoto.setPhoto(inputStream);
                     String enteredPhoto = Base64.getEncoder().encodeToString(accountPhoto.getPhoto());
                     if (!isNull(enteredPhoto) && !enteredPhoto.isEmpty()) {
                         previousImage = Base64.getEncoder().encodeToString(accountPhoto.getPhoto());
@@ -228,12 +232,14 @@ public class RegisterServlet extends HttpServlet {
                     throw new IncorrectDataException(IncorrectData.UPLOADING_ERROR);
                 }
             } catch (IncorrectDataException e) {
-                req.setAttribute("err" + param, e.getType().getPropertyKey());
+                req.setAttribute("err" + PHOTO_ATTRIBUTE, e.getType().getPropertyKey());
                 paramsAccepted.set(false);
             }
         }
         if (!isNull(previousImage) && !previousImage.isEmpty()) {
-            session.setAttribute(param, previousImage);
+            byte[] photo = Base64.getDecoder().decode(previousImage);
+            accountPhoto.setPhoto(photo);
+            session.setAttribute(PHOTO_ATTRIBUTE, previousImage);
         }
     }
 }
