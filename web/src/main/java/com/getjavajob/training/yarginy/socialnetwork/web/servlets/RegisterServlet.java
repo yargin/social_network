@@ -106,6 +106,7 @@ public class RegisterServlet extends HttpServlet {
         Collection<PhoneExchanger> workPhones = (Collection<PhoneExchanger>) req.getSession().getAttribute(
                 WORK_PHONES_ATTRIBUTE);
         phones.addAll(getPhones(req, workPhones, PhoneType.WORK, account));
+        accountInfoDTO.getPhones().addAll(phones);
 
         AccountPhoto accountPhoto = accountInfoDTO.getAccountPhoto();
         setPhotoParam(req, accountPhoto);

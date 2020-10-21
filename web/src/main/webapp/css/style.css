@@ -82,10 +82,15 @@ html, body, ul, li {
     justify-content: center;
 }
 
+.info {
+    display: inline-block;
+}
+
 .info img {
     float: right;
     max-height: 200px;
     max-width: 200px;
+    margin-left: 20px;
     overflow: hidden;
     margin-left: 20px;
 }

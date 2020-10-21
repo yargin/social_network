@@ -72,6 +72,7 @@ public class AuthServiceImpl implements AuthService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        //todo check if it will work in one transaction
         try (Transaction transaction = transactionManager.getTransaction()) {
             if (!isNull(accountPhoto)) {
                 accountPhoto.setOwner(account);
