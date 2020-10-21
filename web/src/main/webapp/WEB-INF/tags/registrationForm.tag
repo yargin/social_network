@@ -4,9 +4,10 @@
 <%@ taglib prefix="common" tagdir="/WEB-INF/tags" %>
 <fmt:setBundle basename="label" var="label"/>
 <fmt:setBundle basename="error" var="error"/>
+<c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 
 <div class="post">
-    <form action="${pageContext.servletContext.contextPath}/registration" method="post"
+    <form action="${context}/registration" method="post"
           enctype="multipart/form-data">
 
         <input type="text" name="name"
@@ -23,7 +24,7 @@
 
         <input type="text" name="patronymic"
                <c:if test="${not empty patronymic}">value="${patronymic}"</c:if>
-               placeholder="<fmt:message key="form.patronymic" bundle="${label}"/>" required>
+               placeholder="<fmt:message key="form.patronymic" bundle="${label}"/>">
         <br>
         <c:if test="${not empty errpatronymic}"><fmt:message key="${errpatronymic}" bundle="${error}"/><br></c:if>
 

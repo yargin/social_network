@@ -12,9 +12,19 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class AccountInfoDTO {
-    private final Account account = new AccountImpl();
-    private final AccountPhoto accountPhoto = new AccountPhotoImpl();
-    private final Collection<Phone> phones = new ArrayList<>();
+    private final Account account;
+    private final AccountPhoto accountPhoto;
+    private final Collection<Phone> phones;
+
+    public AccountInfoDTO(Account account, AccountPhoto accountPhoto, Collection<Phone> phones) {
+        this.account = account;
+        this.accountPhoto = accountPhoto;
+        this.phones = phones;
+    }
+
+    public AccountInfoDTO() {
+        this(new AccountImpl(), new AccountPhotoImpl(), new ArrayList<>());
+    }
 
     public Account getAccount() {
         return account;

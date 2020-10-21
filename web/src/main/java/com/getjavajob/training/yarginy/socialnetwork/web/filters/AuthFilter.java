@@ -1,5 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.filters;
 
+import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
+import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper;
 
 import javax.servlet.*;
@@ -26,7 +28,7 @@ public class AuthFilter implements Filter {
         HttpSession session = req.getSession(true);
         HttpServletResponse resp = (HttpServletResponse) response;
 
-        String userName = (String) session.getAttribute("userName");
+        Long userId = (Long) session.getAttribute(Attributes.USER_ID);
 
         String path = req.getRequestURI();
         for (String ignored : ignoredPages) {
@@ -35,8 +37,8 @@ public class AuthFilter implements Filter {
                 return;
             }
         }
-        if (isNull(userName) || userName.isEmpty()) {
-            RedirectHelper.redirect(req, resp, req.getContextPath() + "/login");
+        if (isNull(userId) || userId < 1) {
+            RedirectHelper.redirect(req, resp, Pages.LOGIN);
             return;
         } else {
             filterChain.doFilter(request, response);

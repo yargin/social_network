@@ -43,12 +43,15 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
     }
 
     private E select(PreparedStatement statement) throws SQLException {
-        //todo check multiple result
         try (ResultSet resultSet = statement.executeQuery()) {
             if (!resultSet.next()) {
                 return dml.getNullEntity();
             }
-            return dml.selectFromRow(resultSet);
+            E entity = dml.selectFromRow(resultSet);
+            if (resultSet.next()) {
+                throw new IllegalStateException("statement returned more then one row");
+            }
+            return entity;
         }
     }
 

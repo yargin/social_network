@@ -2,9 +2,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <fmt:setBundle basename="label" var="label"/>
 <fmt:setBundle basename="error" var="error"/>
+<c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 
 <div class="post">
-    <form action="${pageContext.servletContext.contextPath}/login" method="post">
+    <form action="${context}/login" method="post">
         <c:if test="${not empty logerror}"><fmt:message key="${logerror}" bundle="${error}"/><br></c:if>
         <input type="email" name="email" placeholder="<fmt:message key="form.email" bundle="${label}"/>"
                value="<c:if test="${not empty email}">${email}</c:if>"
@@ -18,7 +19,7 @@
         <button type="submit"><fmt:message key="button.login" bundle="${label}"/></button>
         <br>
         <fmt:message key="label.notRegistered" bundle="${label}"/> <a
-            href="${pageContext.servletContext.contextPath}/registration">
+            href="${context}/registration">
         <fmt:message key="button.register" bundle="${label}"/></a>
 
     </form>

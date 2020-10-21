@@ -19,14 +19,14 @@
         </jsp-property-group>
     </jsp-config>
 
-    <filter>
-        <filter-name>CharacterSetFilter</filter-name>
-        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.CharacterSetFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>CharacterSetFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
+<!--    <filter>-->
+<!--        <filter-name>CharacterSetFilter</filter-name>-->
+<!--        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.CharacterSetFilter</filter-class>-->
+<!--    </filter>-->
+<!--    <filter-mapping>-->
+<!--        <filter-name>CharacterSetFilter</filter-name>-->
+<!--        <url-pattern>/*</url-pattern>-->
+<!--    </filter-mapping>-->
 
     <filter>
         <filter-name>AuthFilter</filter-name>
@@ -79,4 +79,21 @@
         <url-pattern>/logout</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>deleteAccount</servlet-name>
+        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.DeleteAccountServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>deleteAccount</servlet-name>
+        <url-pattern>/deleteAccount</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>updateAccount</servlet-name>
+        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.DeleteAccountServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>updateAccount</servlet-name>
+        <url-pattern>/updateInfo</url-pattern>
+    </servlet-mapping>
 </web-app>

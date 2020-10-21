@@ -61,6 +61,9 @@ public class SelfManyToManyDaoImpl<E extends Entity> implements SelfManyToManyDa
                 return false;
             }
             resultSet.deleteRow();
+            if (resultSet.next()) {
+                throw new IllegalStateException("statement returned more then one row");
+            }
             return true;
         } catch (SQLException e) {
             throw new IllegalStateException(e);

@@ -13,6 +13,8 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additio
 import com.getjavajob.training.yarginy.socialnetwork.service.AuthService;
 import com.getjavajob.training.yarginy.socialnetwork.service.AuthServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
+import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
+import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.additionaldata.PhoneExchanger;
 
 import javax.servlet.ServletException;
@@ -28,6 +30,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory.getNullPassword;
+import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
 import static java.util.Objects.isNull;
 
 public class RegisterServlet extends HttpServlet {
@@ -36,8 +39,7 @@ public class RegisterServlet extends HttpServlet {
     private static final String PHOTO_ATTRIBUTE = "photo";
     private static final String PRIVATE_PHONES_ATTRIBUTE = "privatePhones";
     private static final String WORK_PHONES_ATTRIBUTE = "workPhones";
-    private static final String JSP = "/WEB-INF/jsps/registration.jsp";
-    private static final String REG_SUCCESS_URL = "/mywall";
+    private static final String REG_SUCCESS_URL = Pages.MY_WALL;
     private static final AuthService AUTH_SERVICE = new AuthServiceImpl();
     private final ThreadLocal<Boolean> paramsAccepted = new ThreadLocal<>();
 
@@ -75,7 +77,7 @@ public class RegisterServlet extends HttpServlet {
         }
         session.setAttribute(WORK_PHONES_ATTRIBUTE, workPhones);
 
-        req.getRequestDispatcher(JSP).forward(req, resp);
+        req.getRequestDispatcher(Jsps.REGISTER).forward(req, resp);
     }
 
     @Override
@@ -136,7 +138,7 @@ public class RegisterServlet extends HttpServlet {
             session.removeAttribute(PHOTO_ATTRIBUTE);
             session.removeAttribute(PRIVATE_PHONES_ATTRIBUTE);
             session.removeAttribute(WORK_PHONES_ATTRIBUTE);
-            resp.sendRedirect(req.getContextPath() + REG_SUCCESS_URL);
+            redirect(req, resp, REG_SUCCESS_URL);
         } else {
             doGet(req, resp);
         }
@@ -225,9 +227,9 @@ public class RegisterServlet extends HttpServlet {
             try {
                 try (InputStream inputStream = imagePart.getInputStream()) {
                     accountPhoto.setPhoto(inputStream);
-                    String enteredPhoto = Base64.getEncoder().encodeToString(accountPhoto.getPhoto());
-                    if (!isNull(enteredPhoto) && !enteredPhoto.isEmpty()) {
-                        previousImage = Base64.getEncoder().encodeToString(accountPhoto.getPhoto());
+                    String specifiedPhoto = Base64.getEncoder().encodeToString(accountPhoto.getPhoto());
+                    if (!isNull(specifiedPhoto) && !specifiedPhoto.isEmpty()) {
+                        previousImage = specifiedPhoto;
                     }
                 } catch (IOException e) {
                     throw new IncorrectDataException(IncorrectData.UPLOADING_ERROR);

@@ -42,6 +42,9 @@ public class PasswordDao extends DaoImpl<Password> {
             }
             dml.updateRow(resultSet, password, storedPassword);
             resultSet.updateRow();
+            if (resultSet.next()) {
+                throw new IllegalStateException("statement returned more then one row");
+            }
             return true;
         } catch (SQLException e) {
             throw new IllegalStateException(e);

@@ -1,12 +1,17 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.servlets;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.AccountPhoto;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.AccountPhotoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.*;
-import com.getjavajob.training.yarginy.socialnetwork.web.attributes.SessionAttributes;
+import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
+import com.getjavajob.training.yarginy.socialnetwork.service.AccountServiceImpl;
+import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
+import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
+import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
+import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
+import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -21,20 +26,26 @@ import java.util.stream.Collectors;
 import static java.util.Objects.isNull;
 
 public class MyWallServlet extends HttpServlet {
-    private static final String JSP = "/WEB-INF/jsps/myWall.jsp";
-    private final AccountDao accountDao = new AccountDaoImpl();
-    private final PhoneDao phoneDao = new PhoneDaoImpl();
-    private final AccountPhotoDao accountPhotoDao = new AccountPhotoDaoImpl();
+    private static final AccountService accountService = new AccountServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //todo service.get messages
         HttpSession session = req.getSession();
-        long id = (long) session.getAttribute(SessionAttributes.USER_ID);
-        Account account = accountDao.select(id);
+        long sessionUserId = (long) session.getAttribute(Attributes.USER_ID);
+        String stringRequestedId = req.getParameter(Attributes.USER_ID);
+        if (isNull(stringRequestedId) || stringRequestedId.isEmpty()) {
+            RedirectHelper.redirect(req, resp, Pages.MY_WALL, Attributes.USER_ID, "" + sessionUserId);
+            return;
+        }
+
+        long requestedUserId = Long.parseLong(stringRequestedId);
+
+        AccountInfoDTO accountInfoDTO = accountService.getAccountInfo(requestedUserId);
+
+        Account account = accountInfoDTO.getAccount();
         req.setAttribute("user", account);
 
-        Collection<Phone> phones = phoneDao.selectPhonesByOwner(account);
+        Collection<Phone> phones = accountInfoDTO.getPhones();
         Collection<Phone> privatePhones = phones.stream().filter(phone -> phone.getType() == PhoneType.PRIVATE).
                 collect(Collectors.toList());
         req.setAttribute("privatePhones", privatePhones);
@@ -42,12 +53,21 @@ public class MyWallServlet extends HttpServlet {
                 collect(Collectors.toList());
         req.setAttribute("workPhones", workPhones);
 
-        AccountPhoto accountPhoto =  accountPhotoDao.select(account);
+        AccountPhoto accountPhoto =  accountInfoDTO.getAccountPhoto();
         if (!isNull(accountPhoto) && !isNull(accountPhoto.getPhoto())) {
             String base64Image = Base64.getEncoder().encodeToString(accountPhoto.getPhoto());
             req.setAttribute("photo", base64Image);
         }
 
-        req.getRequestDispatcher(JSP).forward(req, resp);
+        if (sessionUserId != requestedUserId) {
+            Role sessionRole = (Role) session.getAttribute(Attributes.USER_ROLE);
+            if (!isNull(sessionRole) && (Role.ADMINISTRATOR.equals(sessionRole))) {
+                req.setAttribute("updateAble", true);
+            }
+        } else {
+            req.setAttribute("updateAble", true);
+        }
+
+        req.getRequestDispatcher(Jsps.MY_WALL).forward(req, resp);
     }
 }

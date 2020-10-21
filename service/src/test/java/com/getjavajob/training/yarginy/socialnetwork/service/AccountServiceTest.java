@@ -29,8 +29,9 @@ public class AccountServiceTest {
     private final AccountsInGroupsDao accountsInGroups = mock(AccountsInGroupsDao.class);
     private final Transaction transaction = mock(Transaction.class);
     private final TransactionManager transactionManager = mock(TransactionManager.class);
+    private final AccountPhotoDao accountPhotoDao = mock(AccountPhotoDao.class);
     private final AccountService accountService = new AccountServiceImpl(accountDao, phoneDao, friendsDao,
-            accountsInGroups, transactionManager);
+            accountsInGroups, accountPhotoDao, transactionManager);
     private Account account;
     private Collection<Phone> phones;
 

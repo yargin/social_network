@@ -3,12 +3,15 @@ package com.getjavajob.training.yarginy.socialnetwork.service;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 
 import java.util.Collection;
 import java.util.Map;
 
 public interface AccountService {
-    Account getAccount(int id);
+    AccountInfoDTO getAccountInfo(long id);
+
+    Account getAccount(long id);
 
     Account getAccount(Account account);
 

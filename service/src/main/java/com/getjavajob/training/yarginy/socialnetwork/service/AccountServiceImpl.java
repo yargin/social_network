@@ -3,9 +3,11 @@ package com.getjavajob.training.yarginy.socialnetwork.service;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.AccountPhoto;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.Transaction;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.*;
+import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -20,24 +22,35 @@ public class AccountServiceImpl implements AccountService {
     private final PhoneDao phoneDao;
     private final FriendshipDao friendshipDao;
     private final AccountsInGroupsDao accountsInGroupsDao;
+    private final AccountPhotoDao accountPhotoDao;
     private Collection<Account> friends = new ArrayList<>();
 
     public AccountServiceImpl() {
         this(new AccountDaoImpl(), new PhoneDaoImpl(), new FriendshipDaoImpl(), new AccountsInGroupsDaoImpl(), new
-                TransactionManager());
+                AccountPhotoDaoImpl(), new TransactionManager());
     }
 
     public AccountServiceImpl(AccountDao accountDao, PhoneDao phoneDao, FriendshipDao friendshipDao,
-                              AccountsInGroupsDao accountsInGroupsDao, TransactionManager transactionManager) {
+                              AccountsInGroupsDao accountsInGroupsDao, AccountPhotoDao accountPhotoDao,
+                              TransactionManager transactionManager) {
         this.accountDao = accountDao;
         this.phoneDao = phoneDao;
         this.friendshipDao = friendshipDao;
         this.accountsInGroupsDao = accountsInGroupsDao;
         this.transactionManager = transactionManager;
+        this.accountPhotoDao = accountPhotoDao;
     }
 
     @Override
-    public Account getAccount(int id) {
+    public AccountInfoDTO getAccountInfo(long id) {
+        Account account = accountDao.select(id);
+        Collection<Phone> phones = phoneDao.selectPhonesByOwner(account);
+        AccountPhoto accountPhoto = accountPhotoDao.select(account);
+        return new AccountInfoDTO(account, accountPhoto, phones);
+    }
+
+    @Override
+    public Account getAccount(long id) {
         return accountDao.select(id);
     }
 

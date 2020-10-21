@@ -5,7 +5,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
-import com.sun.xml.internal.ws.api.pipe.PipelineAssembler;
 
 import java.util.Collection;
 

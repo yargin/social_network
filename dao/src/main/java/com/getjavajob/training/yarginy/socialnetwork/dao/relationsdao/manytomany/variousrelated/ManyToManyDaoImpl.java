@@ -73,6 +73,9 @@ public class ManyToManyDaoImpl<F extends Entity, S extends Entity> implements Ma
                 return false;
             }
             resultSet.deleteRow();
+            if (resultSet.next()) {
+                throw new IllegalStateException("statement returned more then one row");
+            }
             return true;
         } catch (SQLException e) {
             throw new IllegalStateException(e);
