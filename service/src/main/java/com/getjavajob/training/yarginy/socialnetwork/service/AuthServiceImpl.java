@@ -62,18 +62,10 @@ public class AuthServiceImpl implements AuthService {
             if (!accountDao.create(account)) {
                 throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
             }
-            if (!phoneDao.create(phones)) {
+            if (!phoneDao.update(phones)) {
                 throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
             }
             passwordDao.create(password);
-            transaction.commit();
-        } catch (IncorrectDataException e) {
-            throw e;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        //todo check if it will work in one transaction
-        try (Transaction transaction = transactionManager.getTransaction()) {
             if (!isNull(accountPhoto)) {
                 accountPhoto.setOwner(account);
                 if (!accountPhotoDao.create(accountPhoto)) {
@@ -104,15 +96,5 @@ public class AuthServiceImpl implements AuthService {
             throw new IncorrectDataException(IncorrectData.WRONG_PASSWORD);
         }
         return passwordObject.getAccount();
-    }
-
-    @Override
-    public boolean logout(Account account) {
-        return false;
-    }
-
-    @Override
-    public boolean delete(Account account) {
-        return false;
     }
 }

@@ -11,7 +11,6 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.
 import org.junit.Test;
 
 import java.util.Collection;
-import java.util.Date;
 
 import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
 import static java.util.Arrays.asList;
@@ -19,9 +18,8 @@ import static org.junit.Assert.assertTrue;
 
 public class BatchUpdateTest {
     public static final DbFactory DB_FACTORY = getDbFactory();
-    private final BatchDao<Phone> batchDao = DB_FACTORY.getBatchPhoneDao();
     private final Dao<Account> accountDao = DB_FACTORY.getAccountDao();
-    private final Dao<Phone> phoneDao = DB_FACTORY.getPhoneDao();
+    private final BatchDao<Phone> phoneDao = DB_FACTORY.getPhoneDao();
     private final OneToManyDao<Account, Phone> accountPhones = DB_FACTORY.getAccountsPhones(accountDao, phoneDao);
 
     @Test
@@ -31,10 +29,10 @@ public class BatchUpdateTest {
         firstPhone.setType(PhoneType.PRIVATE);
         Phone secondPhone = new PhoneImpl("89218942", account);
         secondPhone.setType(PhoneType.PRIVATE);
-        batchDao.delete(firstPhone);
-        batchDao.delete(secondPhone);
+        phoneDao.delete(firstPhone);
+        phoneDao.delete(secondPhone);
         Collection<Phone> phones = asList(firstPhone, secondPhone);
-        batchDao.create(phones);
+        phoneDao.create(phones);
         Collection<Phone> allAccountPhones = accountPhones.selectMany(account);
         assertTrue(allAccountPhones.containsAll(phones));
         phoneDao.delete(firstPhone);

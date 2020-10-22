@@ -10,4 +10,14 @@ public class CharacterSetFilter implements Filter {
         response.setCharacterEncoding("UTF-8");
         filterChain.doFilter(request, response);
     }
+
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+
+    }
+
+    @Override
+    public void destroy() {
+
+    }
 }

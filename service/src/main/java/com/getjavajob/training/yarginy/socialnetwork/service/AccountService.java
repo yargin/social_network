@@ -37,5 +37,7 @@ public interface AccountService {
 
     Map<Account, Collection<Phone>> getAllWithPhones();
 
+    boolean updatePhones(Collection<Phone> phones, Account account);
+
     //todo logic for group
 }

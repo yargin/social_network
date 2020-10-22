@@ -44,6 +44,11 @@ public class AccountPhotoImpl implements AccountPhoto {
     }
 
     @Override
+    public int getMaxSize() {
+        return MAX_PHOTO_SIZE;
+    }
+
+    @Override
     public void setPhoto(byte[] photo) {
         this.photo = photo;
     }

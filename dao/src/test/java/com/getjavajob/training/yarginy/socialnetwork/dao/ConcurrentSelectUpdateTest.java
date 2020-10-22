@@ -25,44 +25,44 @@ public class ConcurrentSelectUpdateTest {
     private final AccountDao accountDao = new AccountDaoImpl();
     private final PhoneDao firstPhoneDao = new PhoneDaoImpl();
     private final PhoneDao secondPhoneDao = new PhoneDaoImpl();
-    private volatile boolean inSelectBlock;
-    private volatile boolean inCreateBlock;
+    private volatile boolean inFirstBlock;
+    private volatile boolean inSecondBlock;
 
-//    @Test
-    public void testConcurrentSelectUpdate() throws InterruptedException {
+    @Test
+    public void testConcurrentCreate() throws InterruptedException {
         Account account = accountDao.select(1);
         Collection<Phone> phones = new ArrayList<>();
         for (int i = 0; i < PHONES_NUMBER; i++) {
             phones.add(new PhoneImpl("" + i + i + i + i, account));
         }
 
-        Thread createThread = new Thread(() -> {
-            if (!inSelectBlock) {
-                inCreateBlock = true;
+        Thread firstThread = new Thread(() -> {
+            if (!inFirstBlock) {
+                inSecondBlock = true;
                 System.out.println("started");
                 firstPhoneDao.create(phones);
                 System.out.println("finished");
-                inSelectBlock = false;
+                inFirstBlock = false;
             }
         });
-        createThread.start();
+        firstThread.start();
         sleep(400);
-        Thread selectThread = new Thread(() -> {
-            if (inCreateBlock) {
-                inSelectBlock = true;
-                secondPhoneDao.select(555);
+        Phone secondPhone = new PhoneImpl("123123", account);
+        Thread secondThread = new Thread(() -> {
+            if (inSecondBlock) {
+                inFirstBlock = true;
+                secondPhoneDao.create(secondPhone);
                 System.out.println("selected");
             }
         });
-        selectThread.start();
+        secondThread.start();
 
-        createThread.join();
+        firstThread.join();
 
-        for (Phone phone: phones) {
-            firstPhoneDao.delete(phone);
-        }
+        firstPhoneDao.delete(phones);
+        firstPhoneDao.delete(secondPhone);
 
-        assertFalse(inSelectBlock);
+        assertFalse(inFirstBlock);
         printPassed(CLASS, "testConcurrentSelectUpdate");
     }
 }

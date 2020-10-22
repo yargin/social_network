@@ -7,6 +7,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Pass
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.dmls.BatchGroupDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.dmls.BatchPhonesDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.dependedmodeldao.OwnedModelDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.dependedmodeldao.OwnedModelDaoImpl;
@@ -100,12 +101,12 @@ public abstract class CommonDbFactory implements DbFactory {
     }
 
     @Override
-    public Dao<Group> getGroupDao() {
-        return new DaoImpl<>(connectionPool, new GroupDml());
+    public BatchDao<Group> getGroupDao() {
+        return new BatchDaoImpl<>(connectionPool, new BatchGroupDml());
     }
 
     @Override
-    public ManyToManyDao<Account, Group> getGroupMembershipDao(Dao<Account> accountDao, Dao<Group> groupDao) {
+    public ManyToManyDao<Account, Group> getGroupMembershipDao(Dao<Account> accountDao, BatchDao<Group> groupDao) {
         return new ManyToManyDaoImpl<>(connectionPool, new AccountsInGroupsDml(), accountDao, groupDao);
     }
 
@@ -115,12 +116,12 @@ public abstract class CommonDbFactory implements DbFactory {
     }
 
     @Override
-    public Dao<Phone> getPhoneDao() {
-        return new DaoImpl<>(connectionPool, new PhonesDml());
+    public BatchDao<Phone> getPhoneDao() {
+        return new BatchDaoImpl<>(connectionPool, new BatchPhonesDml());
     }
 
     @Override
-    public OneToManyDao<Account, Phone> getAccountsPhones(Dao<Account> accountDao, Dao<Phone> phoneDao) {
+    public OneToManyDao<Account, Phone> getAccountsPhones(Dao<Account> accountDao, BatchDao<Phone> phoneDao) {
         return new OneToManyDaoImpl<>(connectionPool, new AccountsPhonesDml(), accountDao, phoneDao);
     }
 
@@ -130,17 +131,12 @@ public abstract class CommonDbFactory implements DbFactory {
     }
 
     @Override
-    public BatchDao<Phone> getBatchPhoneDao() {
-        return new BatchDaoImpl<>(connectionPool, new BatchPhonesDml());
-    }
-
-    @Override
     public ConnectionPool getConnectionPool() {
         return connectionPool;
     }
 
     @Override
-    public OneToManyDao<Account, Group> getAccountsOwnedGroupsDao(Dao<Account> accountDao, Dao<Group> groupDao) {
+    public OneToManyDao<Account, Group> getAccountsOwnedGroupsDao(Dao<Account> accountDao, BatchDao<Group> groupDao) {
         return new OneToManyDaoImpl<>(connectionPool, new AccountsGroupsDml(), accountDao, groupDao);
     }
 

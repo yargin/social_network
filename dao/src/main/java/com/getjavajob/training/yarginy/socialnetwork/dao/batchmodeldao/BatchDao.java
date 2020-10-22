@@ -18,4 +18,12 @@ public interface BatchDao<E extends Entity> extends Dao<E> {
      * @return true if creation successful, false if at least one {@link Entity} already exist
      */
     boolean create(Collection<E> entities);
+
+    /**
+     * deletes batch of {@link Entity}
+     *
+     * @param entities to delete
+     * @return true if deletion successful, false if not
+     */
+    boolean delete(Collection<E> entities);
 }

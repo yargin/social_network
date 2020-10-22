@@ -140,4 +140,9 @@ public class AccountServiceImpl implements AccountService {
     public Map<Account, Collection<Phone>> getAllWithPhones() {
         return null;
     }
+
+    @Override
+    public boolean updatePhones(Collection<Phone> phones, Account account) {
+        return false;
+    }
 }

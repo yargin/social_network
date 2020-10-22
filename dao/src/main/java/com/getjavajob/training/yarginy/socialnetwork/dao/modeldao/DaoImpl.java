@@ -86,6 +86,9 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
             E storedEntity = dml.selectFromRow(resultSetStored);
             dml.updateRow(resultSetUpdate, entity, storedEntity);
             resultSetUpdate.updateRow();
+            if (resultSetStored.next() || resultSetUpdate.next()) {
+                throw new IllegalStateException("statement returned more then one row");
+            }
             return true;
         } catch (SQLException e) {
             throw new IllegalStateException(e);
@@ -132,18 +135,5 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
     @Override
     public E getNullEntity() {
         return dml.getNullEntity();
-    }
-
-    //todo remove
-    @Override
-    public E approveFromStorage(E entity) {
-        checkEntity(entity);
-        if (entity.getId() == 0) {
-            E readEntity = select(entity);
-            checkEntity(readEntity);
-            return readEntity;
-        } else {
-            return entity;
-        }
     }
 }

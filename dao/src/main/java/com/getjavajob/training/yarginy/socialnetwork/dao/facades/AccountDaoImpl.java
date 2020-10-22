@@ -3,6 +3,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.SelfManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.ManyToManyDao;
@@ -14,7 +15,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.Abstra
 
 public class AccountDaoImpl implements AccountDao {
     private final Dao<Account> accountDao = getDbFactory().getAccountDao();
-    private final Dao<Group> groupDao = getDbFactory().getGroupDao();
+    private final BatchDao<Group> groupDao = getDbFactory().getGroupDao();
     private final OneToManyDao<Account, Group> accountGroupsDao = getDbFactory().getAccountsOwnedGroupsDao(accountDao,
             groupDao);
     private final ManyToManyDao<Account, Group> accountsInGroupsDao = getDbFactory().getGroupMembershipDao(accountDao,

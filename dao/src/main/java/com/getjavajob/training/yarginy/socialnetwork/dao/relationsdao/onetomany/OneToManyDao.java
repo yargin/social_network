@@ -6,4 +6,6 @@ import java.util.Collection;
 
 public interface OneToManyDao<O extends Entity, M extends Entity> {
     Collection<M> selectMany(O entity);
+
+    boolean updateMany(Collection<M> many, O entity);
 }

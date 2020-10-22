@@ -4,6 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
@@ -21,7 +22,7 @@ public class AccountsGroupsTest {
     public static final String CLASS = "AccountsGroupsTest";
     public static final DbFactory FACTORY = AbstractDbFactory.getDbFactory();
     public static final Dao<Account> ACCOUNT_DAO = FACTORY.getAccountDao();
-    public static final Dao<Group> GROUP_DAO = FACTORY.getGroupDao();
+    public static final BatchDao<Group> GROUP_DAO = FACTORY.getGroupDao();
     public static final OneToManyDao<Account, Group> ACCOUNTS_GROUPS = FACTORY.getAccountsOwnedGroupsDao(ACCOUNT_DAO,
             GROUP_DAO);
 

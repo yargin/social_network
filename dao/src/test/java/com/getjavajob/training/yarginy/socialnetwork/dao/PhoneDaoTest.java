@@ -5,6 +5,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
+import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
@@ -18,7 +19,7 @@ import static org.junit.Assert.*;
 public class PhoneDaoTest {
     private static final DbFactory DB_FACTORY = AbstractDbFactory.getDbFactory();
     private static final String CLASS = "GroupDaoTest";
-    private static final Dao<Phone> PHONE_DAO = DB_FACTORY.getPhoneDao();
+    private static final BatchDao<Phone> PHONE_DAO = DB_FACTORY.getPhoneDao();
     private static final Dao<Account> ACCOUNT_DAO = DB_FACTORY.getAccountDao();
     private static final Phone PHONE = new PhoneImpl();
 

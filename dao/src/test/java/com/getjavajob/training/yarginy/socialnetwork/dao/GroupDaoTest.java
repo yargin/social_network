@@ -4,6 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
@@ -16,7 +17,7 @@ public class GroupDaoTest {
     private static final DbFactory DB_FACTORY = AbstractDbFactory.getDbFactory();
     private static final String CLASS = "GroupDaoTest";
     private static final Group GROUP = new GroupImpl();
-    private static final Dao<Group> GROUP_DAO = DB_FACTORY.getGroupDao();
+    private static final BatchDao<Group> GROUP_DAO = DB_FACTORY.getGroupDao();
     private static final Dao<Account> ACCOUNT_DAO = DB_FACTORY.getAccountDao();
 
     public GroupDaoTest() {

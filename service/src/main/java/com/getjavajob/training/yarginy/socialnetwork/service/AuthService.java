@@ -21,8 +21,4 @@ public interface AuthService {
     boolean register(AccountInfoDTO accountInfoDTO, Password password);
 
     Account login(String email, String password);
-
-    boolean logout(Account account);
-
-    boolean delete(Account account);
 }

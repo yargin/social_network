@@ -15,7 +15,7 @@ public class AccountsPhonesDml extends OneToManyDml<Account, Phone> {
             AccountsTable.ID, PhonesTable.OWNER).where(PhonesTable.OWNER).build();
 
     @Override
-    protected String getSelectQueryByOne() {
+    protected String getSelectQuery() {
         return SELECT_BY_ACCOUNT;
     }
 

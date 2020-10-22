@@ -11,7 +11,7 @@ import java.util.Collection;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
 
 public class PhoneDaoImpl implements PhoneDao {
-    private final BatchDao<Phone> phoneDao = getDbFactory().getBatchPhoneDao();
+    private final BatchDao<Phone> phoneDao = getDbFactory().getPhoneDao();
     private final Dao<Account> accountDao = getDbFactory().getAccountDao();
     private final OneToManyDao<Account, Phone> accountsPhonesDao = getDbFactory().getAccountsPhones(accountDao,
             phoneDao);
@@ -39,6 +39,11 @@ public class PhoneDaoImpl implements PhoneDao {
     @Override
     public boolean delete(Phone phone) {
         return phoneDao.delete(phone);
+    }
+
+    @Override
+    public boolean delete(Collection<Phone> phones) {
+        return phoneDao.delete(phones);
     }
 
     @Override

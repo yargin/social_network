@@ -14,4 +14,6 @@ public interface AccountPhoto extends OwnedEntity<Account> {
     void setPhoto(InputStream photo);
 
     void setPhoto(byte[] photo);
+
+    int getMaxSize();
 }

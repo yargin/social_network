@@ -40,4 +40,22 @@ public class BatchDaoImpl<E extends Entity> extends DaoImpl<E> implements BatchD
             throw new IllegalStateException(e);
         }
     }
+
+    @Override
+    public boolean delete(Collection<E> entities) {
+        if (entities.isEmpty()) {
+            return true;
+        }
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement statement = batchDml.batchSelectUpdate(connection, entities);
+             ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+                resultSet.deleteRow();
+            }
+            connection.commit();
+            return true;
+        } catch (SQLException e) {
+            throw new IllegalStateException(e);
+        }
+    }
 }

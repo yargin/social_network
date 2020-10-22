@@ -2,6 +2,8 @@ package com.getjavajob.training.yarginy.socialnetwork.dao;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
+import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
@@ -19,7 +21,7 @@ public class AccountsInGroupsTest {
     private static final DbFactory DB_FACTORY = AbstractDbFactory.getDbFactory();
     private static final String CLASS = "AccountDaoTest";
     private static final Dao<Account> ACCOUNT_DAO = DB_FACTORY.getAccountDao();
-    private static final Dao<Group> GROUP_DAO = DB_FACTORY.getGroupDao();
+    private static final BatchDao<Group> GROUP_DAO = DB_FACTORY.getGroupDao();
     private static final ManyToManyDao<Account, Group> MEMBERSHIP_DAO = DB_FACTORY.getGroupMembershipDao(ACCOUNT_DAO,
             GROUP_DAO);
     private static Account account;

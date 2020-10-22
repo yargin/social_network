@@ -5,6 +5,7 @@ public final class Jsps {
     public static final String ERROR = "/WEB-INF/jsps/error.jsp";
     public static final String MY_WALL = "/WEB-INF/jsps/myWall.jsp";
     public static final String REGISTER = "/WEB-INF/jsps/registration.jsp";
+    public static final String UPDATE_ACCOUNT = "/WEB-INF/jsps/updateAccount.jsp";
 
     private Jsps() {
     }

@@ -20,25 +20,23 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.
 public interface DbFactory {
     Dao<Account> getAccountDao();
 
-    Dao<Group> getGroupDao();
+    BatchDao<Group> getGroupDao();
 
     SelfManyToManyDao<Account> getFriendshipDao(Dao<Account> accountDao);
 
-    ManyToManyDao<Account, Group> getGroupMembershipDao(Dao<Account> accountDao, Dao<Group> groupDao);
+    ManyToManyDao<Account, Group> getGroupMembershipDao(Dao<Account> accountDao, BatchDao<Group> groupDao);
 
-    Dao<Phone> getPhoneDao();
+    BatchDao<Phone> getPhoneDao();
 
-    OneToManyDao<Account, Phone> getAccountsPhones(Dao<Account> accountDao, Dao<Phone> phoneDao);
+    OneToManyDao<Account, Phone> getAccountsPhones(Dao<Account> accountDao, BatchDao<Phone> phoneDao);
 
     Dao<Password> getPasswordDao();
 
     ScriptExecutor getScriptExecutor();
 
-    BatchDao<Phone> getBatchPhoneDao();
-
     ConnectionPool getConnectionPool();
 
-    OneToManyDao<Account, Group> getAccountsOwnedGroupsDao(Dao<Account> accountDao, Dao<Group> groupDao);
+    OneToManyDao<Account, Group> getAccountsOwnedGroupsDao(Dao<Account> accountDao, BatchDao<Group> groupDao);
 
     OwnedModelDao<Account, AccountPhoto> getAccountPhotoDao(Dao<Account> accountDao);
 }

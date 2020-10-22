@@ -3,6 +3,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
@@ -20,7 +21,7 @@ public class AccountsPhonesTest {
     public static final String CLASS = "AccountsPhonesTest";
     public static final DbFactory FACTORY = AbstractDbFactory.getDbFactory();
     public static final Dao<Account> ACCOUNT_DAO = FACTORY.getAccountDao();
-    public static final Dao<Phone> PHONE_DAO = FACTORY.getPhoneDao();
+    public static final BatchDao<Phone> PHONE_DAO = FACTORY.getPhoneDao();
     public static final OneToManyDao<Account, Phone> ACCOUNTS_PHONES = FACTORY.getAccountsPhones(ACCOUNT_DAO, PHONE_DAO);
 
     @Test
@@ -32,6 +33,9 @@ public class AccountsPhonesTest {
         expectedPhones.add(phoneToAdd);
         phoneToAdd = new PhoneImpl();
         phoneToAdd.setNumber("02");
+        expectedPhones.add(phoneToAdd);
+        phoneToAdd = new PhoneImpl();
+        phoneToAdd.setNumber("123123");
         expectedPhones.add(phoneToAdd);
         Collection<Phone> actualPhones = ACCOUNTS_PHONES.selectMany(account);
         assertEquals(expectedPhones, actualPhones);
