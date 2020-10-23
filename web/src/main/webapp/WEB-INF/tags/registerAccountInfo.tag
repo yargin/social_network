@@ -7,8 +7,7 @@
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 
 <div class="post">
-    <form action="${context}${action}" method="post"
-          enctype="multipart/form-data">
+    <form action="${context}${action}" method="post" enctype="multipart/form-data">
 
         <input type="text" name="name"
                <c:if test="${not empty name}">value="${name}"</c:if>
@@ -96,7 +95,7 @@
         <br>
         <c:if test="${not empty errcity}"><fmt:message key="${errcity}" bundle="${error}"/><br></c:if>
 
-        <common:phonesEdition/>
+        <common:registerPhones/>
 
         <c:if test="${not empty photo}">
             <img src="data:image/jpeg;base64, ${photo}">

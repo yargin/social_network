@@ -10,7 +10,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Pass
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.dependedmodeldao.OwnedModelDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.TransactionManager;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.*;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.Transaction;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
@@ -26,22 +26,18 @@ import static java.util.Objects.isNull;
 
 public class AuthServiceImpl implements AuthService {
     private final TransactionManager transactionManager;
-    private final Dao<Account> accountDao;
-    private final Dao<Password> passwordDao;
-    private final BatchDao<Phone> phoneDao;
-    private final OwnedModelDao<Account, AccountPhoto> accountPhotoDao;
+    private final AccountDao accountDao;
+    private final PasswordDao passwordDao;
+    private final PhoneDao phoneDao;
+    private final AccountPhotoDao accountPhotoDao;
 
     public AuthServiceImpl() {
-        DbFactory dbFactory = getDbFactory();
-        accountDao = dbFactory.getAccountDao();
-        passwordDao = dbFactory.getPasswordDao();
-        phoneDao = dbFactory.getBatchPhoneDao();
-        accountPhotoDao= dbFactory.getAccountPhotoDao(accountDao);
-        transactionManager = new TransactionManager();
+        this(new TransactionManager(), new AccountDaoImpl(), new PasswordDaoImpl(), new PhoneDaoImpl(),
+                new AccountPhotoDaoImpl());
     }
 
-    public AuthServiceImpl(TransactionManager transactionManager, Dao<Account> accountDao, Dao<Password> passwordDao,
-                           BatchDao<Phone> phoneDao, OwnedModelDao<Account, AccountPhoto> accountPhotoDao) {
+    public AuthServiceImpl(TransactionManager transactionManager, AccountDao accountDao, PasswordDao passwordDao,
+                           PhoneDao phoneDao, AccountPhotoDao accountPhotoDao) {
         this.transactionManager = transactionManager;
         this.accountDao = accountDao;
         this.passwordDao = passwordDao;
@@ -60,15 +56,28 @@ public class AuthServiceImpl implements AuthService {
         try (Transaction transaction = transactionManager.getTransaction()) {
             account.setRegistrationDate(LocalDate.now());
             if (!accountDao.create(account)) {
+                transaction.rollback();
                 throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
             }
-            if (!phoneDao.update(phones)) {
+            if (!phoneDao.create(phones)) {
+                transaction.rollback();
                 throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
             }
-            passwordDao.create(password);
+            if (!passwordDao.create(password)) {
+                transaction.rollback();
+                throw new RuntimeException();
+            }
+//            transaction.commit();
+//        } catch (IncorrectDataException e) {
+//            throw e;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        try (Transaction transaction = transactionManager.getTransaction()) {
             if (!isNull(accountPhoto)) {
                 accountPhoto.setOwner(account);
                 if (!accountPhotoDao.create(accountPhoto)) {
+                    transaction.rollback();
                     throw new IncorrectDataException(IncorrectData.UPLOADING_ERROR);
                 }
             }

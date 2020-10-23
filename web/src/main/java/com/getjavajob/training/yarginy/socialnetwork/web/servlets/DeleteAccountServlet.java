@@ -27,8 +27,8 @@ public class DeleteAccountServlet  extends HttpServlet {
         accountToDelete.setId(userId);
         accountToDelete.setEmail(userEmail);
         boolean deleted = accountService.deleteAccount(accountToDelete);
-        req.getSession().invalidate();
         if (deleted) {
+            req.getSession().invalidate();
             redirect(req, resp, Pages.LOGOUT);
         } else {
             req.getRequestDispatcher(Jsps.ERROR).forward(req, resp);

@@ -27,6 +27,7 @@ public class AccountPhotoDml implements OwnedEntityDml<Account, AccountPhoto> {
     public PreparedStatement getSelect(Connection connection, Account owner) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(SELECT, ResultSet.TYPE_SCROLL_INSENSITIVE,
                 ResultSet.CONCUR_UPDATABLE);
+        owner = accountDao.approveFromStorage(owner);
         statement.setLong(1, owner.getId());
         return statement;
     }
@@ -36,8 +37,9 @@ public class AccountPhotoDml implements OwnedEntityDml<Account, AccountPhoto> {
     }
 
     public AccountPhoto selectFromRow(ResultSet resultSet, Account owner) throws SQLException {
+        Account account = accountDao.approveFromStorage(owner);
         AccountPhoto accountPhoto = new AccountPhotoImpl();
-        accountPhoto.setOwner(owner);
+        accountPhoto.setOwner(account);
         try (InputStream inputStream = resultSet.getBinaryStream(PHOTO)) {
             accountPhoto.setPhoto(inputStream);
         } catch (IOException e) {
@@ -47,7 +49,7 @@ public class AccountPhotoDml implements OwnedEntityDml<Account, AccountPhoto> {
     }
 
     public void updateRow(ResultSet resultSet, AccountPhoto ownedEntity) throws SQLException {
-        Account account = ownedEntity.getOwner();
+        Account account = accountDao.approveFromStorage(ownedEntity.getOwner());
         resultSet.updateLong(OWNER_ID, account.getId());
         try (InputStream inputStream = new ByteArrayInputStream(ownedEntity.getPhoto())) {
             resultSet.updateBinaryStream(PHOTO, inputStream);

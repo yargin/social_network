@@ -68,6 +68,7 @@ public class MyWallServlet extends HttpServlet {
             req.setAttribute("updateAble", true);
         }
 
+        req.setAttribute("accountInfo", accountInfoDTO);
         req.getRequestDispatcher(Jsps.MY_WALL).forward(req, resp);
     }
 }

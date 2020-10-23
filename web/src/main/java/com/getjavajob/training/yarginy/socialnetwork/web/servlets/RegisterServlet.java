@@ -44,7 +44,7 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
 
-        initFields(req);
+        initFields(req, null);
 
         req.setAttribute("action", Pages.REGISTER);
 
@@ -88,7 +88,7 @@ public class RegisterServlet extends HttpServlet {
 
     private void register(HttpServletRequest req, HttpServletResponse resp, AccountInfoDTO accountInfoDTO, Password
             password) throws IOException, ServletException {
-        boolean registered = false;
+        boolean registered;
         try {
             registered = AUTH_SERVICE.register(accountInfoDTO, password);
         } catch (IncorrectDataException e) {
@@ -98,6 +98,7 @@ public class RegisterServlet extends HttpServlet {
                 req.setAttribute(PHONE_DUPLICATE, e.getType().getPropertyKey());
             }
             doGet(req, resp);
+            return;
         }
         if (registered) {
             HttpSession session = req.getSession();

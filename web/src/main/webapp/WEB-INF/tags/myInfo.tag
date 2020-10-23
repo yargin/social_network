@@ -3,7 +3,6 @@
 <fmt:setBundle basename="label"/>
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 
-<c:if test="${not empty user}">
     <div class="info">
         <fmt:message key="form.name"/> : ${user.getName()}<br>
         <fmt:message key="form.surname"/> : ${user.getSurname()}<br>
@@ -38,10 +37,3 @@
         </c:choose>
     </div>
     <br>
-    <div>
-        <c:if test="${not empty updateAble}">
-            <a href="${context}/updateInfo"><fmt:message key="label.updateInfo"/></a><br>
-            <a href="${context}/deleteAccount"><fmt:message key="label.deleteAccount"/></a>
-        </c:if>
-    </div>
-</c:if>

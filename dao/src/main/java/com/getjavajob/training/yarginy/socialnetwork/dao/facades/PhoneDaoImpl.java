@@ -37,6 +37,11 @@ public class PhoneDaoImpl implements PhoneDao {
     }
 
     @Override
+    public boolean update(Collection<Phone> phones, Account account) {
+        return accountsPhonesDao.updateMany(phones, account);
+    }
+
+    @Override
     public boolean delete(Phone phone) {
         return phoneDao.delete(phone);
     }

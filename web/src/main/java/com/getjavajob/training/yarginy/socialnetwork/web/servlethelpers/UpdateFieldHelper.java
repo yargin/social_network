@@ -9,6 +9,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Pass
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
+import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.additionaldata.PhoneExchanger;
 
 import javax.servlet.ServletException;
@@ -24,6 +25,7 @@ import java.util.Base64;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory.getNullPassword;
 import static java.util.Objects.isNull;
@@ -31,6 +33,7 @@ import static java.util.Objects.isNull;
 public final class UpdateFieldHelper {
     private static final String PRIVATE_PHONES_ATTRIBUTE = "privatePhones";
     private static final String WORK_PHONES_ATTRIBUTE = "workPhones";
+    private static final int PHONES_SIZE = 2;
 
     private UpdateFieldHelper() {
     }
@@ -134,13 +137,18 @@ public final class UpdateFieldHelper {
     }
 
     public static Collection<Phone> getPhonesFromParams(HttpServletRequest req, Account account, ThreadLocal<Boolean> paramsAccepted) {
+        Collection<Phone> phones = new ArrayList<>();
         Collection<PhoneExchanger> privatePhones = (Collection<PhoneExchanger>) req.getSession().getAttribute(
                 PRIVATE_PHONES_ATTRIBUTE);
-        Collection<Phone> phones = getTypedPhonesFromParam(req, privatePhones, PhoneType.PRIVATE, account,
-                paramsAccepted);
+        if (!isNull(privatePhones)) {
+            phones.addAll(getTypedPhonesFromParam(req, privatePhones, PhoneType.PRIVATE, account,
+                    paramsAccepted));
+        }
         Collection<PhoneExchanger> workPhones = (Collection<PhoneExchanger>) req.getSession().getAttribute(
                 WORK_PHONES_ATTRIBUTE);
-        phones.addAll(getTypedPhonesFromParam(req, workPhones, PhoneType.WORK, account, paramsAccepted));
+        if (!isNull(workPhones)) {
+            phones.addAll(getTypedPhonesFromParam(req, workPhones, PhoneType.WORK, account, paramsAccepted));
+        }
         return phones;
     }
 
@@ -160,31 +168,33 @@ public final class UpdateFieldHelper {
         }
     }
 
-    public static void initFields(HttpServletRequest req) {
+    public static void  initFields(HttpServletRequest req, AccountInfoDTO accountInfo) {
         HttpSession session = req.getSession();
 
         req.setAttribute("male", Sex.MALE.toString());
         req.setAttribute("female", Sex.FEMALE.toString());
 
-        Collection<PhoneExchanger> privatePhones;
-        if (isNull(session.getAttribute(PRIVATE_PHONES_ATTRIBUTE))) {
-            privatePhones = new ArrayList<>();
-            privatePhones.add(new PhoneExchanger("privatePhone1", "", ""));
-            privatePhones.add(new PhoneExchanger("privatePhone2", "", ""));
-        } else {
-            privatePhones = (Collection<PhoneExchanger>) session.getAttribute(PRIVATE_PHONES_ATTRIBUTE);
-        }
-        session.setAttribute(PRIVATE_PHONES_ATTRIBUTE, privatePhones);
+        initPhonesFields(accountInfo, session, PRIVATE_PHONES_ATTRIBUTE, PhoneType.PRIVATE);
+        initPhonesFields(accountInfo, session, WORK_PHONES_ATTRIBUTE, PhoneType.WORK);
+    }
 
-        Collection<PhoneExchanger> workPhones;
-        if (isNull(session.getAttribute(WORK_PHONES_ATTRIBUTE))) {
-            workPhones = new ArrayList<>();
-            workPhones.add(new PhoneExchanger("workPhone1", "", ""));
-            workPhones.add(new PhoneExchanger("workPhone2", "", ""));
-            session.setAttribute(WORK_PHONES_ATTRIBUTE, workPhones);
+    private static void initPhonesFields(AccountInfoDTO accountInfo, HttpSession session, String param, PhoneType type) {
+        Collection<PhoneExchanger> privatePhones;
+        String paramName = param.substring(0, param.length() - 1);
+        if (!isNull(accountInfo)) {
+            privatePhones = accountInfo.getPhones().stream().filter(phone -> type.equals(phone.getType())).
+                    map(phone -> new PhoneExchanger("", phone.getNumber(), "")).collect(Collectors.toList());
+            while (privatePhones.size() < PHONES_SIZE) {
+                privatePhones.add(new PhoneExchanger(paramName + privatePhones.size(), "", ""));
+            }
+        } else if (isNull(session.getAttribute(param))) {
+            privatePhones = new ArrayList<>();
+            while (privatePhones.size() < PHONES_SIZE) {
+                privatePhones.add(new PhoneExchanger(paramName + privatePhones.size(), "", ""));
+            }
         } else {
-            workPhones = (Collection<PhoneExchanger>) session.getAttribute(WORK_PHONES_ATTRIBUTE);
+            privatePhones = (Collection<PhoneExchanger>) session.getAttribute(param);
         }
-        session.setAttribute(WORK_PHONES_ATTRIBUTE, workPhones);
+        session.setAttribute(param, privatePhones);
     }
 }

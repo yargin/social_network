@@ -90,7 +90,7 @@
 
     <servlet>
         <servlet-name>updateAccount</servlet-name>
-        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.DeleteAccountServlet</servlet-class>
+        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.UpdateAccountServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>updateAccount</servlet-name>
