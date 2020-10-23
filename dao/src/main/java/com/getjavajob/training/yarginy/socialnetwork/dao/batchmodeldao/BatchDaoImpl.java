@@ -37,7 +37,7 @@ public class BatchDaoImpl<E extends Entity> extends DaoImpl<E> implements BatchD
             connection.commit();
             return true;
         } catch (SQLException e) {
-            throw new IllegalStateException(e);
+            return false;
         }
     }
 

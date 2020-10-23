@@ -46,7 +46,7 @@ public class SelfManyToManyDaoImpl<E extends Entity> implements SelfManyToManyDa
             resultSet.insertRow();
             return true;
         } catch (SQLException e) {
-            throw new IllegalStateException(e);
+            return false;
         }
     }
 
@@ -66,7 +66,7 @@ public class SelfManyToManyDaoImpl<E extends Entity> implements SelfManyToManyDa
             }
             return true;
         } catch (SQLException e) {
-            throw new IllegalStateException(e);
+            return false;
         }
     }
 }

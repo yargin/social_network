@@ -69,7 +69,7 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
             resultSet.insertRow();
             return true;
         } catch (SQLException e) {
-            throw new IllegalStateException(e);
+            return false;
         }
     }
 
@@ -91,7 +91,7 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
             }
             return true;
         } catch (SQLException e) {
-            throw new IllegalStateException(e);
+            return false;
         }
     }
 
@@ -106,7 +106,7 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
             resultSet.deleteRow();
             return true;
         } catch (SQLException e) {
-            throw new IllegalStateException(e);
+            return false;
         }
     }
 

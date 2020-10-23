@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 import static java.util.Objects.isNull;
 
 public class MyWallServlet extends HttpServlet {
-    private static final AccountService accountService = new AccountServiceImpl();
+    private static final AccountService ACCOUNT_SERVICE = new AccountServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -40,7 +40,7 @@ public class MyWallServlet extends HttpServlet {
 
         long requestedUserId = Long.parseLong(stringRequestedId);
 
-        AccountInfoDTO accountInfoDTO = accountService.getAccountInfo(requestedUserId);
+        AccountInfoDTO accountInfoDTO = ACCOUNT_SERVICE.getAccountInfo(requestedUserId);
 
         Account account = accountInfoDTO.getAccount();
         req.setAttribute("user", account);

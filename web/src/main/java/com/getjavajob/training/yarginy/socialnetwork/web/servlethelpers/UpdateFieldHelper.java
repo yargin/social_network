@@ -4,6 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.AccountPhoto;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.PasswordImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
@@ -11,6 +12,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneIm
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.additionaldata.PhoneExchanger;
+import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -31,8 +33,6 @@ import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEn
 import static java.util.Objects.isNull;
 
 public final class UpdateFieldHelper {
-    private static final String PRIVATE_PHONES_ATTRIBUTE = "privatePhones";
-    private static final String WORK_PHONES_ATTRIBUTE = "workPhones";
     private static final int PHONES_SIZE = 2;
 
     private UpdateFieldHelper() {
@@ -50,10 +50,10 @@ public final class UpdateFieldHelper {
         req.setAttribute(param, value);
     }
 
-    public static  void setDateFromParam(Consumer<LocalDate> setter, String param, HttpServletRequest req,
+    public static void setDateFromParam(Consumer<LocalDate> setter, String param, HttpServletRequest req,
                                          ThreadLocal<Boolean> paramsAccepted) {
         String enteredDate = req.getParameter(param);
-        if (!isNull(enteredDate) & !enteredDate.trim().isEmpty()) {
+        if (!isNull(enteredDate) && !enteredDate.trim().isEmpty()) {
             LocalDate date = LocalDate.parse(enteredDate);
             try {
                 setter.accept(date);
@@ -120,6 +120,7 @@ public final class UpdateFieldHelper {
                                                             Account account, ThreadLocal<Boolean> paramsAccepted) {
         Collection<Phone> phones = new ArrayList<>();
         for (PhoneExchanger enteredPhone : phonesToGet) {
+            enteredPhone.setError(null);
             String phoneToAdd = req.getParameter(enteredPhone.getName());
             if (!isNull(phoneToAdd) && !phoneToAdd.trim().isEmpty()) {
                 try {
@@ -136,23 +137,24 @@ public final class UpdateFieldHelper {
         return phones;
     }
 
-    public static Collection<Phone> getPhonesFromParams(HttpServletRequest req, Account account, ThreadLocal<Boolean> paramsAccepted) {
+    public static Collection<Phone> getPhonesFromParams(HttpServletRequest req, Account account, ThreadLocal<Boolean>
+            paramsAccepted) {
         Collection<Phone> phones = new ArrayList<>();
         Collection<PhoneExchanger> privatePhones = (Collection<PhoneExchanger>) req.getSession().getAttribute(
-                PRIVATE_PHONES_ATTRIBUTE);
+                Attributes.PRIVATE_PHONES_ATTRIBUTE);
         if (!isNull(privatePhones)) {
             phones.addAll(getTypedPhonesFromParam(req, privatePhones, PhoneType.PRIVATE, account,
                     paramsAccepted));
         }
         Collection<PhoneExchanger> workPhones = (Collection<PhoneExchanger>) req.getSession().getAttribute(
-                WORK_PHONES_ATTRIBUTE);
+                Attributes.WORK_PHONES_ATTRIBUTE);
         if (!isNull(workPhones)) {
             phones.addAll(getTypedPhonesFromParam(req, workPhones, PhoneType.WORK, account, paramsAccepted));
         }
         return phones;
     }
 
-    public static Password getPassword(HttpServletRequest req, Account account, ThreadLocal<Boolean> paramsAccepted ) {
+    public static Password getPassword(HttpServletRequest req, Account account, ThreadLocal<Boolean> paramsAccepted) {
         Password password = new PasswordImpl();
         password.setAccount(account);
         setStringFromParam(password::setPassword, "password", req, paramsAccepted);
@@ -174,8 +176,8 @@ public final class UpdateFieldHelper {
         req.setAttribute("male", Sex.MALE.toString());
         req.setAttribute("female", Sex.FEMALE.toString());
 
-        initPhonesFields(accountInfo, session, PRIVATE_PHONES_ATTRIBUTE, PhoneType.PRIVATE);
-        initPhonesFields(accountInfo, session, WORK_PHONES_ATTRIBUTE, PhoneType.WORK);
+        initPhonesFields(accountInfo, session, Attributes.PRIVATE_PHONES_ATTRIBUTE, PhoneType.PRIVATE);
+        initPhonesFields(accountInfo, session, Attributes.WORK_PHONES_ATTRIBUTE, PhoneType.WORK);
     }
 
     private static void initPhonesFields(AccountInfoDTO accountInfo, HttpSession session, String param, PhoneType type) {
@@ -196,5 +198,29 @@ public final class UpdateFieldHelper {
             privatePhones = (Collection<PhoneExchanger>) session.getAttribute(param);
         }
         session.setAttribute(param, privatePhones);
+    }
+
+        public static void getValuesFromParams(HttpServletRequest req, AccountInfoDTO accountInfoDTO, ThreadLocal<Boolean>
+            paramsAccepted) throws IOException, ServletException {
+        Account account = accountInfoDTO.getAccount();
+        setStringFromParam(account::setName, "name", req, paramsAccepted);
+        setStringFromParam(account::setSurname, "surname", req, paramsAccepted);
+        setStringFromParam(account::setPatronymic, "patronymic", req, paramsAccepted);
+        setSexFromParam(account::setSex, "sex", req, paramsAccepted);
+        setStringFromParam(account::setEmail, "email", req, paramsAccepted);
+        setStringFromParam(account::setAdditionalEmail, "additionalEmail", req, paramsAccepted);
+
+        setDateFromParam(account::setBirthDate, "birthDate", req, paramsAccepted);
+
+        setStringFromParam(account::setIcq, "icq", req, paramsAccepted);
+        setStringFromParam(account::setSkype, "skype", req, paramsAccepted);
+        setStringFromParam(account::setCountry, "country", req, paramsAccepted);
+        setStringFromParam(account::setCity, "city", req, paramsAccepted);
+
+        Collection<Phone> phones = getPhonesFromParams(req, account, paramsAccepted);
+        accountInfoDTO.getPhones().addAll(phones);
+
+        AccountPhoto accountPhoto = accountInfoDTO.getAccountPhoto();
+        setPhotoFromParam(req, accountPhoto::setPhoto, Attributes.PHOTO_ATTRIBUTE, accountPhoto.getMaxSize(), paramsAccepted);
     }
 }

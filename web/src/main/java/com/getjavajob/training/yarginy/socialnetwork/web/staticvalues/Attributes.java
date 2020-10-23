@@ -9,4 +9,8 @@ public final class Attributes {
     public static final String USER_ROLE = "userRole";
     public static final String USER_EMAIL = "userEmail";
     public static final String USER_SURNAME = "userSurname";
+    public static final String PRIVATE_PHONES_ATTRIBUTE = "privatePhones";
+    public static final String WORK_PHONES_ATTRIBUTE = "workPhones";
+    public static final String PHOTO_ATTRIBUTE = "photo";
+    public static final String TARGET = "target";
 }

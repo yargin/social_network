@@ -27,9 +27,6 @@ import static java.util.Objects.isNull;
 public class RegisterServlet extends HttpServlet {
     private static final String EMAIL_DUPLICATE = "emailDuplicate";
     private static final String PHONE_DUPLICATE = "phoneDuplicate";
-    private static final String PHOTO_ATTRIBUTE = "photo";
-    private static final String PRIVATE_PHONES_ATTRIBUTE = "privatePhones";
-    private static final String WORK_PHONES_ATTRIBUTE = "workPhones";
     private static final String REG_SUCCESS_URL = Pages.MY_WALL;
     private static final AuthService AUTH_SERVICE = new AuthServiceImpl();
     private final ThreadLocal<Boolean> paramsAccepted = new ThreadLocal<>();
@@ -46,7 +43,7 @@ public class RegisterServlet extends HttpServlet {
 
         initFields(req, null);
 
-        req.setAttribute("action", Pages.REGISTER);
+        req.setAttribute(Attributes.TARGET, Pages.REGISTER);
 
         req.getRequestDispatcher(Jsps.REGISTER).forward(req, resp);
     }
@@ -55,29 +52,31 @@ public class RegisterServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         paramsAccepted.set(true);
         AccountInfoDTO accountInfoDTO = new AccountInfoDTO();
-        Account account = accountInfoDTO.getAccount();
+//        Account account = accountInfoDTO.getAccount();
+//
+//        setStringFromParam(account::setName, "name", req, paramsAccepted);
+//        setStringFromParam(account::setSurname, "surname", req, paramsAccepted);
+//        setStringFromParam(account::setPatronymic, "patronymic", req, paramsAccepted);
+//        setSexFromParam(account::setSex, "sex", req, paramsAccepted);
+//        setStringFromParam(account::setEmail, "email", req, paramsAccepted);
+//        setStringFromParam(account::setAdditionalEmail, "additionalEmail", req, paramsAccepted);
+//
+//        setDateFromParam(account::setBirthDate, "birthDate", req, paramsAccepted);
+//
+//        setStringFromParam(account::setIcq, "icq", req, paramsAccepted);
+//        setStringFromParam(account::setSkype, "skype", req, paramsAccepted);
+//        setStringFromParam(account::setCountry, "country", req, paramsAccepted);
+//        setStringFromParam(account::setCity, "city", req, paramsAccepted);
+//
+//        Collection<Phone> phones = getPhonesFromParams(req, account, paramsAccepted);
+//        accountInfoDTO.getPhones().addAll(phones);
+//
+//        AccountPhoto accountPhoto = accountInfoDTO.getAccountPhoto();
+//        setPhotoFromParam(req, accountPhoto::setPhoto, Attributes.PHOTO_ATTRIBUTE, accountPhoto.getMaxSize(), paramsAccepted);
 
-        setStringFromParam(account::setName, "name", req, paramsAccepted);
-        setStringFromParam(account::setSurname, "surname", req, paramsAccepted);
-        setStringFromParam(account::setPatronymic, "patronymic", req, paramsAccepted);
-        setSexFromParam(account::setSex, "sex", req, paramsAccepted);
-        setStringFromParam(account::setEmail, "email", req, paramsAccepted);
-        setStringFromParam(account::setAdditionalEmail, "additionalEmail", req, paramsAccepted);
+        getValuesFromParams(req, accountInfoDTO, paramsAccepted);
 
-        Password password = getPassword(req, account, paramsAccepted);
-
-        setDateFromParam(account::setBirthDate, "birthDate", req, paramsAccepted);
-
-        setStringFromParam(account::setIcq, "icq", req, paramsAccepted);
-        setStringFromParam(account::setSkype, "skype", req, paramsAccepted);
-        setStringFromParam(account::setCountry, "country", req, paramsAccepted);
-        setStringFromParam(account::setCity, "city", req, paramsAccepted);
-
-        Collection<Phone> phones = getPhonesFromParams(req, account, paramsAccepted);
-        accountInfoDTO.getPhones().addAll(phones);
-
-        AccountPhoto accountPhoto = accountInfoDTO.getAccountPhoto();
-        setPhotoFromParam(req, accountPhoto::setPhoto, PHOTO_ATTRIBUTE, accountPhoto.getMaxSize(), paramsAccepted);
+        Password password = getPassword(req, accountInfoDTO.getAccount(), paramsAccepted);
 
         if (!paramsAccepted.get()) {
             doGet(req, resp);
@@ -102,9 +101,9 @@ public class RegisterServlet extends HttpServlet {
         }
         if (registered) {
             HttpSession session = req.getSession();
-            session.removeAttribute(PHOTO_ATTRIBUTE);
-            session.removeAttribute(PRIVATE_PHONES_ATTRIBUTE);
-            session.removeAttribute(WORK_PHONES_ATTRIBUTE);
+            session.removeAttribute(Attributes.PHOTO_ATTRIBUTE);
+            session.removeAttribute(Attributes.PRIVATE_PHONES_ATTRIBUTE);
+            session.removeAttribute(Attributes.WORK_PHONES_ATTRIBUTE);
             redirect(req, resp, REG_SUCCESS_URL);
         } else {
             doGet(req, resp);

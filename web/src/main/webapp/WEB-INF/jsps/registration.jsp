@@ -3,6 +3,6 @@
 
 <common:layout>
     <div class="post">
-        <common:registerAccountInfo/>
+        <common:registerAccount/>
     </div>
 </common:layout>

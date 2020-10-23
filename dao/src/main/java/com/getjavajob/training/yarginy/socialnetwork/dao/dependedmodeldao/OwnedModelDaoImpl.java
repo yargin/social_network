@@ -53,7 +53,7 @@ public class OwnedModelDaoImpl<O extends Entity, E extends OwnedEntity<O>> imple
             resultSet.insertRow();
             return true;
         } catch (SQLException e) {
-            throw new IllegalStateException(e);
+            return false;
         }
     }
 
@@ -68,7 +68,7 @@ public class OwnedModelDaoImpl<O extends Entity, E extends OwnedEntity<O>> imple
             dml.updateRow(resultSet, ownedEntity);
             return true;
         } catch (SQLException e) {
-            throw new IllegalStateException(e);
+            return false;
         }
     }
 
@@ -83,7 +83,7 @@ public class OwnedModelDaoImpl<O extends Entity, E extends OwnedEntity<O>> imple
             resultSet.deleteRow();
             return true;
         } catch (SQLException e) {
-            throw new IllegalStateException(e);
+            return false;
         }
     }
 

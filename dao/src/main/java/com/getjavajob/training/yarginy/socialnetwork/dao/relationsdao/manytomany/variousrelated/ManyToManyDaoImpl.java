@@ -58,7 +58,7 @@ public class ManyToManyDaoImpl<F extends Entity, S extends Entity> implements Ma
             resultSet.insertRow();
             return true;
         } catch (SQLException e) {
-            throw new IllegalStateException(e);
+            return false;
         }
     }
 
@@ -78,7 +78,7 @@ public class ManyToManyDaoImpl<F extends Entity, S extends Entity> implements Ma
             }
             return true;
         } catch (SQLException e) {
-            throw new IllegalStateException(e);
+            return false;
         }
     }
 }

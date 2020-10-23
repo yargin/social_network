@@ -7,7 +7,7 @@
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 
 <div class="post">
-    <form action="${context}${action}" method="post" enctype="multipart/form-data">
+    <form action="${context}${target}" method="post" enctype="multipart/form-data">
 
         <input type="text" name="name"
                <c:if test="${not empty name}">value="${name}"</c:if>

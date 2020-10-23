@@ -47,13 +47,13 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     public boolean update(AccountInfoDTO accountInfoDTO) {
         try (Transaction transaction = transactionManager.getTransaction()) {
             Account account = accountInfoDTO.getAccount();
-            if (accountDao.update(account)) {
+            if (!accountDao.update(account)) {
                 throw new Exception();
             }
-            if (phoneDao.update(accountInfoDTO.getPhones(), account)) {
+            if (!phoneDao.update(accountInfoDTO.getPhones(), account)) {
                 throw new Exception();
             }
-            if (accountPhotoDao.update(accountInfoDTO.getAccountPhoto())) {
+            if (!accountPhotoDao.update(accountInfoDTO.getAccountPhoto())) {
                 throw new Exception();
             }
             transaction.commit();
