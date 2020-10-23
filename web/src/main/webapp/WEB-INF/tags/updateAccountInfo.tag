@@ -38,33 +38,12 @@
         </select>
         <br>
 
-        <label><fmt:message key="form.email" bundle="${label}"/></label>
-        <input type="email" name="email"
-               <c:if test="${not empty email}">value="${email}"</c:if> required>
-        <br>
-        <c:if test="${not empty erremail}"><fmt:message key="${erremail}" bundle="${error}"/><br></c:if>
-        <c:if test="${not empty emailDuplicate}"><fmt:message key="${emailDuplicate}" bundle="${error}"/><br></c:if>
-
-
         <label><fmt:message key="form.additionalEmail" bundle="${label}"/></label>
         <input type="email" name="additionalEmail"
-               <c:if test="${not empty additionalEmail}">value="${additionalEmail}"</c:if> required>
+               <c:if test="${not empty additionalEmail}">value="${additionalEmail}"</c:if>>
         <br>
         <c:if test="${not empty erradditionalEmail}"><fmt:message key="${erradditionalEmail}"
                                                                   bundle="${error}"/><br></c:if>
-
-<%--        <input type="password" name="password" placeholder="<fmt:message key="form.password" bundle="${label}"/>"--%>
-<%--               required>--%>
-<%--        <br>--%>
-<%--        <c:if test="${not empty errpassword}"><fmt:message key="${errpassword}" bundle="${error}"/><br></c:if>--%>
-
-<%--        <input type="password" name="confirmPassword"--%>
-<%--               placeholder="<fmt:message key="form.confirmPassword" bundle="${label}"/>" required>--%>
-<%--        <br>--%>
-<%--        <c:if test="${not empty errconfirmPassword}"><fmt:message key="${errconfirmPassword}"--%>
-<%--                                                                  bundle="${error}"/><br></c:if>--%>
-<%--        <c:if test="${not empty passNotMatch}"><fmt:message key="${passNotMatch}" bundle="${error}"/><br></c:if>--%>
-
 
         <label><fmt:message key="form.birthdate" bundle="${label}"/></label>
         <input type="date" name="birthDate"

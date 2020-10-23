@@ -11,6 +11,9 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * incapsulates account's information such as {@link Account}, {@link AccountPhoto} & {@link Account}'s {@link Phone}s
+ */
 public class AccountInfoDTO {
     private final Account account;
     private final AccountPhoto accountPhoto;

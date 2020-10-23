@@ -52,27 +52,6 @@ public class RegisterServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         paramsAccepted.set(true);
         AccountInfoDTO accountInfoDTO = new AccountInfoDTO();
-//        Account account = accountInfoDTO.getAccount();
-//
-//        setStringFromParam(account::setName, "name", req, paramsAccepted);
-//        setStringFromParam(account::setSurname, "surname", req, paramsAccepted);
-//        setStringFromParam(account::setPatronymic, "patronymic", req, paramsAccepted);
-//        setSexFromParam(account::setSex, "sex", req, paramsAccepted);
-//        setStringFromParam(account::setEmail, "email", req, paramsAccepted);
-//        setStringFromParam(account::setAdditionalEmail, "additionalEmail", req, paramsAccepted);
-//
-//        setDateFromParam(account::setBirthDate, "birthDate", req, paramsAccepted);
-//
-//        setStringFromParam(account::setIcq, "icq", req, paramsAccepted);
-//        setStringFromParam(account::setSkype, "skype", req, paramsAccepted);
-//        setStringFromParam(account::setCountry, "country", req, paramsAccepted);
-//        setStringFromParam(account::setCity, "city", req, paramsAccepted);
-//
-//        Collection<Phone> phones = getPhonesFromParams(req, account, paramsAccepted);
-//        accountInfoDTO.getPhones().addAll(phones);
-//
-//        AccountPhoto accountPhoto = accountInfoDTO.getAccountPhoto();
-//        setPhotoFromParam(req, accountPhoto::setPhoto, Attributes.PHOTO_ATTRIBUTE, accountPhoto.getMaxSize(), paramsAccepted);
 
         getValuesFromParams(req, accountInfoDTO, paramsAccepted);
 

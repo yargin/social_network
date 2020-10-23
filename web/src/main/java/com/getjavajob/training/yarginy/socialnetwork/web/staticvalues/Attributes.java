@@ -13,4 +13,6 @@ public final class Attributes {
     public static final String WORK_PHONES_ATTRIBUTE = "workPhones";
     public static final String PHOTO_ATTRIBUTE = "photo";
     public static final String TARGET = "target";
+    public static final String ERR = "err";
+    public static final String ACCOUNT_INFO = "accountInfo";
 }
