@@ -91,6 +91,8 @@
     <servlet>
         <servlet-name>updateAccount</servlet-name>
         <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.UpdateAccountServlet</servlet-class>
+        <multipart-config>
+        </multipart-config>
     </servlet>
     <servlet-mapping>
         <servlet-name>updateAccount</servlet-name>

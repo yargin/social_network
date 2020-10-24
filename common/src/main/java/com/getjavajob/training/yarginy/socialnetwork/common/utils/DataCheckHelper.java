@@ -4,6 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.DataFlowV
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.regex.Pattern;
 
@@ -185,13 +186,14 @@ public final class DataCheckHelper {
         return password;
     }
 
-    public static LocalDate eligebleAge(LocalDate date) {
+    public static Date eligibleAge(Date date) {
         if (!isNull(date)) {
+            LocalDate localDate = date.toLocalDate();
             LocalDate minDate = LocalDate.now().minusYears(MIN_AGE);
             LocalDate maxDate = LocalDate.now().minusYears(MAX_AGE);
-            if (date.isAfter(minDate)) {
+            if (localDate.isAfter(minDate)) {
                 throw new IncorrectDataException(IncorrectData.TOO_YOUNG);
-            } else if (date.isBefore(maxDate)) {
+            } else if (localDate.isBefore(maxDate)) {
                 throw new IncorrectDataException(IncorrectData.TOO_OLD);
             }
         }

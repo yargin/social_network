@@ -1,5 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.service;
 
+import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
+import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.AccountPhoto;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
@@ -51,7 +53,7 @@ public class AccountInfoServiceImpl implements AccountInfoService {
                 throw new Exception();
             }
             if (!phoneDao.update(accountInfoDTO.getPhones(), account)) {
-                throw new Exception();
+                throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
             }
             if (!accountPhotoDao.update(accountInfoDTO.getAccountPhoto())) {
                 throw new Exception();

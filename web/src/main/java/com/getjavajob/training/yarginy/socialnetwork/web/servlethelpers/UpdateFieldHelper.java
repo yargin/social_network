@@ -22,7 +22,6 @@ import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collection;
@@ -42,117 +41,97 @@ public final class UpdateFieldHelper {
     private UpdateFieldHelper() {
     }
 
-    public static void setStringFromParam(Consumer<String> setter, Supplier<String> getter, String param,
-                                          HttpServletRequest req, ThreadLocal<Boolean> paramsAccepted) {
-        String value = req.getParameter(param);
-        if (isNull(value)){
-            value = getter.get();
-        } else {
-            try {
-                setter.accept(value);
-            } catch (IncorrectDataException e) {
-                req.setAttribute(Attributes.ERR + param, e.getType().getPropertyKey());
-                paramsAccepted.set(false);
+    /**
+     * gets class E object from request parameter & sets it into model object
+     *
+     * @param setter puts received value into model-object
+     * @param param request parameter's name to receive value
+     * @param req request with parameter
+     * @param paramsAccepted flag that value was successfully set
+     * @param fromParamToValue transforms string parameter into applicable object
+     * @param <E> value's type
+     */
+    public static <E> void setObjectFromParam(Consumer<E> setter, String param,
+                                              HttpServletRequest req, ThreadLocal<Boolean> paramsAccepted,
+                                              Function<String, E> fromParamToValue) {
+        String enteredValue = req.getParameter(param);
+        if (!isNull(enteredValue)) {
+            E value = null;
+            if (!isNull(fromParamToValue)) {
+                value = fromParamToValue.apply(enteredValue);
             }
+            setFromParam(setter, param, req, paramsAccepted, value);
         }
-        req.setAttribute(param, value);
     }
 
-    public static void setDateFromParam(Consumer<LocalDate> setter, Supplier<LocalDate> getter, String param,
-                                        HttpServletRequest req, ThreadLocal<Boolean> paramsAccepted) {
-        String enteredDate = req.getParameter(param);
-        LocalDate date = null;
-        if (isNull(enteredDate)){
-            date = getter.get();
-        } else {
-            if (!enteredDate.trim().isEmpty()) {
-                date = LocalDate.parse(enteredDate);
-                try {
-                    setter.accept(date);
-                } catch (IncorrectDataException e) {
-                    req.setAttribute(Attributes.ERR + param, e.getType().getPropertyKey());
-                    paramsAccepted.set(false);
+    public static void setPhotoFromParam(HttpServletRequest req, AccountPhoto accountPhoto,  String param,
+                                         ThreadLocal<Boolean> paramsAccepted)
+            throws IOException, ServletException {
+        Part imagePart = req.getPart(param);
+        if (!isNull(imagePart)) {
+            try (InputStream inputStream = imagePart.getInputStream()) {
+                if (inputStream.available() > 0) {
+                    accountPhoto.setPhoto(inputStream);
                 }
+            } catch (IOException e) {
+                throw new IncorrectDataException(IncorrectData.UPLOADING_ERROR);
+            } catch (IncorrectDataException e) {
+                paramsAccepted.set(false);
+                req.setAttribute(Attributes.ERR + param, e.getType().getPropertyKey());
             }
-        }
-        if (!isNull(date)) {
-            req.setAttribute(param, Date.valueOf(date));
         }
     }
 
-//    public static <E> void setDateFromParamTrans(Consumer<E> setter, Supplier<E> getter, String param,
-//                                                 HttpServletRequest req,  ThreadLocal<Boolean> paramsAccepted,
-//                                                 Function<String, E> fromParamToValue) {
-//        String enteredDate = req.getParameter(param);
-//        E value = null;
-//        if (isNull(enteredDate)){
-//            value = getter.get();
-//        } else {
-//            if (!enteredDate.trim().isEmpty()) {
-//                value = fromParamToValue.apply(enteredDate);
-//                try {
-//                    setter.accept(value);
-//                } catch (IncorrectDataException e) {
-//                    req.setAttribute(Attributes.ERR + param, e.getType().getPropertyKey());
-//                    paramsAccepted.set(false);
-//                }
-//            }
-//        }
-//        if (!isNull(value)) {
-//            req.setAttribute(param, value);
-//        }
-//    }
+    private static void setStringFromParam(Consumer<String> setter, String param, HttpServletRequest req,
+                                           ThreadLocal<Boolean> paramsAccepted) {
+        String enteredValue = req.getParameter(param);
+        if (!isNull(enteredValue)) {
+            setFromParam(setter, param, req, paramsAccepted, enteredValue);
+        }
+    }
 
-    public static void setSexFromParam(Consumer<Sex> setter, Supplier<Sex> getter, String param, HttpServletRequest req,
-                                         ThreadLocal<Boolean> paramsAccepted) {
+    private static <E> void setFromParam(Consumer<E> setter, String param, HttpServletRequest req,
+                                         ThreadLocal<Boolean> paramsAccepted, E value) {
         try {
-            String selectedSex = req.getParameter(param);
-            Sex sex;
-            if (!isNull(selectedSex)) {
-                sex = Sex.valueOf(selectedSex);
-                setter.accept(sex);
-            } else {
-                sex = getter.get();
-            }
-            req.setAttribute(param, sex);
+            setter.accept(value);
         } catch (IncorrectDataException e) {
             req.setAttribute(Attributes.ERR + param, e.getType().getPropertyKey());
             paramsAccepted.set(false);
+            req.setAttribute(param, value);
         }
     }
 
-    public static void setPhotoFromParam(HttpServletRequest req, Consumer<byte[]> setter,  String param,
-                                         int maxSize, ThreadLocal<Boolean> paramsAccepted)
-            throws IOException, ServletException {
-        Part imagePart = req.getPart(param);
+    public static void initAccountAttributes(HttpServletRequest req, Supplier<AccountInfoDTO> accountInfoCreator) {
         HttpSession session = req.getSession();
-        String previousImage = (String) session.getAttribute(param);
-        if (!isNull(imagePart)) {
-            try {
-                try (InputStream inputStream = imagePart.getInputStream()) {
-                    int size = inputStream.available();
-                    if (size > maxSize) {
-                        throw new IncorrectDataException(IncorrectData.FILE_TOO_LARGE);
-                    }
-                    byte[] photo = new byte[inputStream.available()];
-                    inputStream.read(photo);
-                    setter.accept(photo);
-                    String specifiedPhoto = Base64.getEncoder().encodeToString(photo);
-                    if (!isNull(specifiedPhoto) && !specifiedPhoto.isEmpty()) {
-                        previousImage = specifiedPhoto;
-                    }
-                } catch (IOException e) {
-                    throw new IncorrectDataException(IncorrectData.UPLOADING_ERROR);
-                }
-            } catch (IncorrectDataException e) {
-                req.setAttribute(Attributes.ERR + param, e.getType().getPropertyKey());
-                paramsAccepted.set(false);
+        AccountInfoDTO accountInfo = (AccountInfoDTO) session.getAttribute(Attributes.ACCOUNT_INFO);
+        if (isNull(accountInfo)) {
+            accountInfo = accountInfoCreator.get();
+            session.setAttribute(Attributes.ACCOUNT_INFO, accountInfo);
+        } else {
+            Account account = accountInfo.getAccount();
+            setAttribute(req, "name", account::getName);
+            setAttribute(req, "surname", account::getSurname);
+            setAttribute(req, "patronymic", account::getPatronymic);
+            setAttribute(req, "sex", account::getSex);
+            setAttribute(req, "email", account::getEmail);
+            setAttribute(req, "additionalEmail", account::getAdditionalEmail);
+            setAttribute(req, "birthDate", account::getBirthDate);
+            setAttribute(req, "icq", account::getIcq);
+            setAttribute(req, "skype", account::getSkype);
+            setAttribute(req, "country", account::getCountry);
+            setAttribute(req, "city", account::getCity);
+
+            AccountPhoto accountPhoto = accountInfo.getAccountPhoto();
+            if (!isNull(accountPhoto.getPhoto())) {
+                String photo = Base64.getEncoder().encodeToString(accountPhoto.getPhoto());
+                req.setAttribute("photo", photo);
             }
         }
-        if (!isNull(previousImage) && !previousImage.isEmpty()) {
-            byte[] photo = Base64.getDecoder().decode(previousImage);
-            setter.accept(photo);
-            session.setAttribute(param, previousImage);
+    }
+
+    private static <E> void setAttribute(HttpServletRequest req, String param, Supplier<E> getter) {
+        if (isNull(req.getAttribute(param)) && !isNull(getter.get())) {
+            req.setAttribute(param, getter.get());
         }
     }
 
@@ -198,10 +177,10 @@ public final class UpdateFieldHelper {
     public static Password getPassword(HttpServletRequest req, Account account, ThreadLocal<Boolean> paramsAccepted) {
         Password password = new PasswordImpl();
         password.setAccount(account);
-        setStringFromParam(password::setPassword, password::getPassword, "password", req, paramsAccepted);
+        setStringFromParam(password::setPassword, "password", req, paramsAccepted);
         Password confirmPassword = new PasswordImpl();
         confirmPassword.setAccount(account);
-        setStringFromParam(confirmPassword::setPassword, password::getPassword, "confirmPassword", req, paramsAccepted);
+        setStringFromParam(confirmPassword::setPassword, "confirmPassword", req, paramsAccepted);
         if (!Objects.equals(password, confirmPassword)) {
             req.setAttribute("passNotMatch", "error.passwordNotMatch");
             paramsAccepted.set(false);
@@ -217,7 +196,7 @@ public final class UpdateFieldHelper {
      * @param accountInfo {@link AccountInfoDTO} stores account's data such as {@link Collection} of phones that should
      *                                          be set in params
      */
-    public static void initFields(HttpServletRequest req, AccountInfoDTO accountInfo) {
+    public static void  initFields(HttpServletRequest req, AccountInfoDTO accountInfo) {
         HttpSession session = req.getSession();
 
         req.setAttribute("male", Sex.MALE.toString());
@@ -228,55 +207,52 @@ public final class UpdateFieldHelper {
     }
 
     private static void initPhonesFields(AccountInfoDTO accountInfo, HttpSession session, String param, PhoneType type) {
-        Collection<PhoneExchanger> privatePhones;
+        Collection<PhoneExchanger> phones;
         String paramName = param.substring(0, param.length() - 1);
         if (!isNull(accountInfo)) {
-            privatePhones = accountInfo.getPhones().stream().filter(phone -> type.equals(phone.getType())).
+            phones = accountInfo.getPhones().stream().filter(phone -> type.equals(phone.getType())).
                     map(phone -> new PhoneExchanger("", phone.getNumber(), "")).collect(Collectors.toList());
-            while (privatePhones.size() < PHONES_SIZE) {
-                privatePhones.add(new PhoneExchanger(paramName + privatePhones.size(), "", ""));
+            while (phones.size() < PHONES_SIZE) {
+                phones.add(new PhoneExchanger(paramName + phones.size(), "", ""));
             }
         } else if (isNull(session.getAttribute(param))) {
-            privatePhones = new ArrayList<>();
-            while (privatePhones.size() < PHONES_SIZE) {
-                privatePhones.add(new PhoneExchanger(paramName + privatePhones.size(), "", ""));
+            phones = new ArrayList<>();
+            while (phones.size() < PHONES_SIZE) {
+                phones.add(new PhoneExchanger(paramName + phones.size(), "", ""));
             }
         } else {
-            privatePhones = (Collection<PhoneExchanger>) session.getAttribute(param);
+            phones = (Collection<PhoneExchanger>) session.getAttribute(param);
         }
-        session.setAttribute(param, privatePhones);
+        session.setAttribute(param, phones);
     }
 
-        public static void getValuesFromParams(HttpServletRequest req, AccountInfoDTO accountInfoDTO, ThreadLocal<Boolean>
+    public static void getValuesFromParams(HttpServletRequest req, AccountInfoDTO accountInfoDTO, ThreadLocal<Boolean>
             paramsAccepted) throws IOException, ServletException {
         Account account = accountInfoDTO.getAccount();
-        setStringFromParam(account::setName, account::getName, "name", req, paramsAccepted);
-        setStringFromParam(account::setSurname, account::getSurname, "surname", req, paramsAccepted);
-        setStringFromParam(account::setPatronymic, account::getPatronymic, "patronymic", req, paramsAccepted);
-        setSexFromParam(account::setSex, account::getSex, "sex", req, paramsAccepted);
-        setStringFromParam(account::setEmail, account::getEmail,  "email", req, paramsAccepted);
-        setStringFromParam(account::setAdditionalEmail, account::getAdditionalEmail,  "additionalEmail", req, paramsAccepted);
-
-        setDateFromParam(account::setBirthDate, account::getBirthDate,  "birthDate", req, paramsAccepted);
-
-        setStringFromParam(account::setIcq, account::getIcq,  "icq", req, paramsAccepted);
-        setStringFromParam(account::setSkype, account::getSkype,  "skype", req, paramsAccepted);
-        setStringFromParam(account::setCountry, account::getCountry,  "country", req, paramsAccepted);
-        setStringFromParam(account::setCity, account::getCity,  "city", req, paramsAccepted);
+        setStringFromParam(account::setName, "name", req, paramsAccepted);
+        setStringFromParam(account::setSurname, "surname", req, paramsAccepted);
+        setStringFromParam(account::setPatronymic, "patronymic", req, paramsAccepted);
+        setObjectFromParam(account::setSex, "sex", req, paramsAccepted, Sex::valueOf);
+        setStringFromParam(account::setEmail, "email", req, paramsAccepted);
+        setStringFromParam(account::setAdditionalEmail, "additionalEmail", req,  paramsAccepted);
+        setObjectFromParam(account::setBirthDate, "birthDate", req, paramsAccepted, Date::valueOf);
+        setStringFromParam(account::setIcq, "icq", req, paramsAccepted);
+        setStringFromParam(account::setSkype, "skype", req, paramsAccepted);
+        setStringFromParam(account::setCountry, "country", req, paramsAccepted);
+        setStringFromParam(account::setCity,  "city", req, paramsAccepted);
 
         Collection<Phone> phones = getPhonesFromParams(req, account, paramsAccepted);
         accountInfoDTO.getPhones().addAll(phones);
 
         AccountPhoto accountPhoto = accountInfoDTO.getAccountPhoto();
-        setPhotoFromParam(req, accountPhoto::setPhoto, Attributes.PHOTO_ATTRIBUTE, accountPhoto.getMaxSize(), paramsAccepted);
+        setPhotoFromParam(req, accountPhoto, Attributes.PHOTO_ATTRIBUTE, paramsAccepted);
     }
 
     public static void acceptActionOrRetry(HttpServletRequest req, HttpServletResponse resp, boolean updated,
-                                           String successUrl, DoGetWrapper doGet) throws IOException,
-            ServletException {
+                                           String successUrl, DoGetWrapper doGet) throws IOException, ServletException {
         if (updated) {
             HttpSession session = req.getSession();
-            session.removeAttribute(Attributes.PHOTO_ATTRIBUTE);
+            session.removeAttribute(Attributes.ACCOUNT_INFO);
             session.removeAttribute(Attributes.PRIVATE_PHONES_ATTRIBUTE);
             session.removeAttribute(Attributes.WORK_PHONES_ATTRIBUTE);
             redirect(req, resp, successUrl);

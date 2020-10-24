@@ -12,6 +12,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import org.junit.Test;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Collection;
 
@@ -29,7 +30,7 @@ public class AuthServiceTest {
     public void testRegister() {
         Account account = new AccountImpl("testRegister", "testRegister@test.com");
         account.setSurname("testSurname");
-        account.setBirthDate(LocalDate.of(2001, 1, 1));
+        account.setBirthDate(Date.valueOf(LocalDate.of(2001, 1, 1)));
         account.setSex(Sex.MALE);
         ACCOUNT_DAO.delete(account);
         Phone firstPhone = new PhoneImpl("8921123", account);

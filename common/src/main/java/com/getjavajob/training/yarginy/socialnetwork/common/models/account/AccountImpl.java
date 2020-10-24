@@ -6,6 +6,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.AbstractEntit
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -17,8 +18,8 @@ public class AccountImpl extends AbstractEntity implements Account {
     private String surname;
     private String patronymic;
     private Sex sex;
-    private LocalDate birthDate;
-    private LocalDate registrationDate;
+    private Date birthDate;
+    private Date registrationDate;
     private String email;
     private String additionalEmail;
     private Role role;
@@ -47,7 +48,7 @@ public class AccountImpl extends AbstractEntity implements Account {
 
     @Override
     public String getName() {
-        return stringMandatory(name);
+        return name;
     }
 
     @Override
@@ -57,7 +58,7 @@ public class AccountImpl extends AbstractEntity implements Account {
 
     @Override
     public String getSurname() {
-        return stringMandatory(surname);
+        return surname;
     }
 
     @Override
@@ -67,7 +68,7 @@ public class AccountImpl extends AbstractEntity implements Account {
 
     @Override
     public String getPatronymic() {
-        return stringOptional(patronymic);
+        return patronymic;
     }
 
     @Override
@@ -86,28 +87,28 @@ public class AccountImpl extends AbstractEntity implements Account {
     }
 
     @Override
-    public LocalDate getBirthDate() {
-        return eligebleAge(birthDate);
+    public Date getBirthDate() {
+        return birthDate;
     }
 
     @Override
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = eligebleAge(birthDate);
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = eligibleAge(birthDate);
     }
 
     @Override
-    public LocalDate getRegistrationDate() {
+    public Date getRegistrationDate() {
         return registrationDate;
     }
 
     @Override
-    public void setRegistrationDate(LocalDate registrationDate) {
+    public void setRegistrationDate(Date registrationDate) {
         this.registrationDate = registrationDate;
     }
 
     @Override
     public String getEmail() {
-        return emailMandatory(email);
+        return email;
     }
 
     @Override
@@ -117,7 +118,7 @@ public class AccountImpl extends AbstractEntity implements Account {
 
     @Override
     public String getAdditionalEmail() {
-        return emailOptional(additionalEmail);
+        return additionalEmail;
     }
 
     @Override
@@ -135,12 +136,12 @@ public class AccountImpl extends AbstractEntity implements Account {
 
     @Override
     public void setRole(Role role) {
-        this.role = objectMandatory(role);
+        this.role = role;
     }
 
     @Override
     public String getIcq() {
-        return stringOptional(icq);
+        return icq;
     }
 
     @Override
@@ -150,7 +151,7 @@ public class AccountImpl extends AbstractEntity implements Account {
 
     @Override
     public String getSkype() {
-        return stringOptional(skype);
+        return skype;
     }
 
     @Override
@@ -160,7 +161,7 @@ public class AccountImpl extends AbstractEntity implements Account {
 
     @Override
     public String getCity() {
-        return stringOptional(city);
+        return city;
     }
 
     @Override
@@ -170,7 +171,7 @@ public class AccountImpl extends AbstractEntity implements Account {
 
     @Override
     public String getCountry() {
-        return stringOptional(country);
+        return country;
     }
 
     @Override

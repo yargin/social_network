@@ -16,12 +16,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Base64;
 import java.util.function.Supplier;
 
+import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.UpdateFieldHelper.*;
 import static java.util.Objects.isNull;
 
@@ -34,51 +36,32 @@ public class UpdateAccountServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        long id = (long) req.getSession().getAttribute(Attributes.USER_ID);
+        HttpSession session = req.getSession();
 
-        AccountInfoDTO accountInfo = (AccountInfoDTO) req.getAttribute("accountInfo");
-
-        if (isNull(accountInfo)) {
-            accountInfo = accountInfoService.select(id);
+        Long id = (Long) session.getAttribute(Attributes.USER_ID);
+        if (isNull(id)) {
+            resp.sendRedirect(req.getContextPath() + UPDATE_SUCCESS_URL);
+            return;
         }
+        initAccountAttributes(req, () -> accountInfoService.select(id));
+
+        AccountInfoDTO accountInfo = (AccountInfoDTO) session.getAttribute(Attributes.ACCOUNT_INFO);
         initFields(req, accountInfo);
 
-        Account account = accountInfo.getAccount();
-
-        setAttribute(req, "name", account::getName);
-        setAttribute(req, "surname", account::getSurname);
-        setAttribute(req, "patronymic", account::getPatronymic);
-        setAttribute(req, "sex", account::getSex);
-        setAttribute(req, "additionalEmail", account::getAdditionalEmail);
-        LocalDate birthDate = account.getBirthDate();
-        setAttribute(req, "birthDate", () -> Date.valueOf(birthDate));
-        setAttribute(req, "icq", account::getIcq);
-        setAttribute(req, "skype", account::getSkype);
-        setAttribute(req, "country", account::getCountry);
-        setAttribute(req, "city", account::getCity);
-
-        AccountPhoto accountPhoto = accountInfo.getAccountPhoto();
-        if (!isNull(accountPhoto)) {
-            String photo = Base64.getEncoder().encodeToString(accountPhoto.getPhoto());
-            req.setAttribute(PHOTO_ATTRIBUTE, photo);
-        }
-
-        req.getSession().setAttribute(Attributes.ACCOUNT_INFO, accountInfo);
         req.setAttribute(Attributes.TARGET, Pages.UPDATE_ACCOUNT);
 
         req.getRequestDispatcher(Jsps.UPDATE_ACCOUNT).forward(req, resp);
     }
 
-    private void setAttribute(HttpServletRequest req, String attribute, Supplier getter) {
-        if (isNull(req.getAttribute(attribute))) {
-            req.setAttribute(attribute, getter.get());
-        }
-    }
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         paramsAccepted.set(true);
+
         AccountInfoDTO accountInfoDTO = (AccountInfoDTO) req.getSession().getAttribute(Attributes.ACCOUNT_INFO);
+        if (isNull(accountInfoDTO)) {
+            redirect(req, resp, Pages.LOGOUT);
+            return;
+        }
 
         getValuesFromParams(req, accountInfoDTO, paramsAccepted);
 
@@ -100,9 +83,6 @@ public class UpdateAccountServlet extends HttpServlet {
             }
             doGet(req, resp);
             return;
-        }
-        if (updated) {
-            req.getSession().removeAttribute(Attributes.ACCOUNT_INFO);
         }
         acceptActionOrRetry(req, resp, updated, UPDATE_SUCCESS_URL, (req1, resp1) -> doGet(req1, resp1));
     }

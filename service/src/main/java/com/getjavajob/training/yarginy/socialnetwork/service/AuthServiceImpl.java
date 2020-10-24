@@ -16,6 +16,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpoo
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Collection;
 
@@ -54,7 +55,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public boolean register(Account account, Collection<Phone> phones, AccountPhoto accountPhoto, Password password) {
         try (Transaction transaction = transactionManager.getTransaction()) {
-            account.setRegistrationDate(LocalDate.now());
+            account.setRegistrationDate(Date.valueOf(LocalDate.now()));
             if (!accountDao.create(account)) {
                 transaction.rollback();
                 throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);

@@ -4,6 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 /**
@@ -18,9 +19,9 @@ public interface Account extends Entity {
 
     Sex getSex();
 
-    LocalDate getBirthDate();
+    Date getBirthDate();
 
-    LocalDate getRegistrationDate();
+    Date getRegistrationDate();
 
     String getEmail();
 
@@ -44,9 +45,9 @@ public interface Account extends Entity {
 
     void setPatronymic(String patronymic);
 
-    void setBirthDate(LocalDate birthDate);
+    void setBirthDate(Date birthDate);
 
-    void setRegistrationDate(LocalDate registrationDate);
+    void setRegistrationDate(Date registrationDate);
 
     void setEmail(String email);
 

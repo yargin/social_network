@@ -19,6 +19,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.function.Supplier;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.UpdateFieldHelper.*;
@@ -43,6 +44,8 @@ public class RegisterServlet extends HttpServlet {
 
         initFields(req, null);
 
+        initAccountAttributes(req, AccountInfoDTO::new);
+
         req.setAttribute(Attributes.TARGET, Pages.REGISTER);
 
         req.getRequestDispatcher(Jsps.REGISTER).forward(req, resp);
@@ -51,7 +54,12 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         paramsAccepted.set(true);
-        AccountInfoDTO accountInfoDTO = new AccountInfoDTO();
+
+        AccountInfoDTO accountInfoDTO = (AccountInfoDTO) req.getSession().getAttribute(Attributes.ACCOUNT_INFO);
+        if (isNull(accountInfoDTO)) {
+            redirect(req, resp, Pages.LOGOUT);
+            return;
+        }
 
         getValuesFromParams(req, accountInfoDTO, paramsAccepted);
 
@@ -78,14 +86,6 @@ public class RegisterServlet extends HttpServlet {
             doGet(req, resp);
             return;
         }
-        if (registered) {
-            HttpSession session = req.getSession();
-            session.removeAttribute(Attributes.PHOTO_ATTRIBUTE);
-            session.removeAttribute(Attributes.PRIVATE_PHONES_ATTRIBUTE);
-            session.removeAttribute(Attributes.WORK_PHONES_ATTRIBUTE);
-            redirect(req, resp, REG_SUCCESS_URL);
-        } else {
-            doGet(req, resp);
-        }
+        acceptActionOrRetry(req, resp, registered, REG_SUCCESS_URL, (req1, resp1) -> doGet(req1, resp1));
     }
 }

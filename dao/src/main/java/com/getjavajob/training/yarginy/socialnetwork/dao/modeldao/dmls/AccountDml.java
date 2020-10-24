@@ -45,20 +45,18 @@ public class AccountDml extends AbstractDml<Account> {
         PreparedStatement statement = connection.prepareStatement(SELECT_BY_EMAIL, ResultSet.TYPE_SCROLL_INSENSITIVE,
                 ResultSet.CONCUR_UPDATABLE);
         statement.setString(1, account.getEmail());
-//        getSelectt(connection, account::getEmail, PreparedStatement::setString);
         return statement;
     }
 
-//    public PreparedStatement getSelectt(Connection connection, Supplier<String> getter, Consumer<String> setter) throws SQLException {
-//        try {
-//            PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
-//            String string = getter.get();
-//            setter.accept(string);
-//            return statement;
-//        } catch (SQLException e) {
-//            throw new SQLException(e);
-//        }
-//    }
+    <E> PreparedStatement getSel(Connection connection, Supplier<E> getter, Setter<E> setter, String sql) throws
+            SQLException {
+        PreparedStatement statement = connection.prepareStatement(sql);
+        if (getter != null) {
+            E value = getter.get();
+            setter.set(value);
+        }
+        return statement;
+    }
 
     @FunctionalInterface
     interface Setter<E> {
@@ -76,10 +74,10 @@ public class AccountDml extends AbstractDml<Account> {
             account.setSex(Sex.valueOf(resultSet.getString(SEX)));
         }
         if (!isNull(resultSet.getDate(BIRTH_DATE))) {
-            account.setBirthDate(resultSet.getDate(BIRTH_DATE).toLocalDate());
+            account.setBirthDate(resultSet.getDate(BIRTH_DATE));
         }
         if (!isNull(resultSet.getDate(REGISTRATION_DATE))) {
-            account.setRegistrationDate(resultSet.getDate(REGISTRATION_DATE).toLocalDate());
+            account.setRegistrationDate(resultSet.getDate(REGISTRATION_DATE));
         }
         account.setEmail(resultSet.getString(EMAIL));
         account.setAdditionalEmail(resultSet.getString(ADDITIONAL_EMAIL));
@@ -99,10 +97,9 @@ public class AccountDml extends AbstractDml<Account> {
         updateFieldIfDiffers(account::getSurname, storedAccount::getSurname, resultSet::updateString, SURNAME);
         updateFieldIfDiffers(account::getPatronymic, storedAccount::getPatronymic, resultSet::updateString, PATRONYMIC);
         updateFieldIfDiffers(account::getSex, storedAccount::getSex, resultSet::updateString, SEX, Sex::toString);
-        updateFieldIfDiffers(account::getBirthDate, storedAccount::getBirthDate, resultSet::updateDate, BIRTH_DATE,
-                Date::valueOf);
+        updateFieldIfDiffers(account::getBirthDate, storedAccount::getBirthDate, resultSet::updateDate, BIRTH_DATE);
         updateFieldIfDiffers(account::getRegistrationDate, storedAccount::getRegistrationDate, resultSet::updateDate,
-                REGISTRATION_DATE, Date::valueOf);
+                REGISTRATION_DATE);
         updateFieldIfDiffers(account::getRole, storedAccount::getRole, resultSet::updateString, ROLE, Role::toString);
         updateFieldIfDiffers(account::getIcq, storedAccount::getIcq, resultSet::updateString, ICQ);
         updateFieldIfDiffers(account::getSkype, storedAccount::getSkype, resultSet::updateString, SKYPE);
