@@ -43,10 +43,8 @@ public class UpdateAccountServlet extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + UPDATE_SUCCESS_URL);
             return;
         }
-        initAccountAttributes(req, () -> accountInfoService.select(id));
-
-        AccountInfoDTO accountInfo = (AccountInfoDTO) session.getAttribute(Attributes.ACCOUNT_INFO);
-        initFields(req, accountInfo);
+        AccountInfoDTO accountInfoDTO = accountInfoDTOInit(req, () -> accountInfoService.select(id));
+        initAccountAttributes(req, accountInfoDTO);
 
         req.setAttribute(Attributes.TARGET, Pages.UPDATE_ACCOUNT);
 

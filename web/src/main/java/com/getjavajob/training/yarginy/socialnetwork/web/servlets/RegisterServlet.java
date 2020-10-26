@@ -42,9 +42,8 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
 
-        initFields(req, null);
-
-        initAccountAttributes(req, AccountInfoDTO::new);
+        AccountInfoDTO accountInfoDTO = accountInfoDTOInit(req, AccountInfoDTO::new);
+        initAccountAttributes(req, accountInfoDTO);
 
         req.setAttribute(Attributes.TARGET, Pages.REGISTER);
 

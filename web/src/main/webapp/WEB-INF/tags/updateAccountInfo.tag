@@ -92,6 +92,6 @@
         <c:if test="${not empty errphoto}"><fmt:message key="${errphoto}" bundle="${error}"/><br></c:if>
 
         <button><fmt:message key="button.save" bundle="${label}"/></button>
-<%--        <a href="${context}/mywall"><button type="button"><fmt:message key="button.cancel" bundle="${label}"/></button></a>--%>
+        <a href="${context}/mywall"><button type="button"><fmt:message key="button.cancel" bundle="${label}"/></button></a>
     </form>
 </div>
