@@ -5,22 +5,22 @@ package com.getjavajob.training.yarginy.socialnetwork.web.servlets.additionaldat
  * contains param-name, phone & error
  */
 public class PhoneExchanger {
-    private String name;
+    private String paramName;
     private String value;
     private String error;
 
-    public PhoneExchanger(String name, String value, String error) {
-        this.name = name;
+    public PhoneExchanger(String paramName, String value, String error) {
+        this.paramName = paramName;
         this.value = value;
         this.error = error;
     }
 
-    public String getName() {
-        return name;
+    public String getParamName() {
+        return paramName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setParamName(String name) {
+        this.paramName = name;
     }
 
     public String getValue() {
@@ -42,7 +42,7 @@ public class PhoneExchanger {
     @Override
     public String toString() {
         return "PhoneExchanger{" +
-                "name='" + name + '\'' +
+                "name='" + paramName + '\'' +
                 ", value='" + value + '\'' +
                 ", error='" + error + '\'' +
                 '}';

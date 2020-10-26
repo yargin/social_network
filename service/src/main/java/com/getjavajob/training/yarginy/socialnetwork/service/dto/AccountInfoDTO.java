@@ -4,12 +4,12 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.AccountPhoto;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.AccountPhotoImpl;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.password.PasswordImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * incapsulates account's information such as {@link Account}, {@link AccountPhoto} & {@link Account}'s {@link Phone}s
@@ -39,5 +39,9 @@ public class AccountInfoDTO {
 
     public Collection<Phone> getPhones() {
         return phones;
+    }
+
+    public Collection<Phone> getPhonesByType(PhoneType type) {
+        return phones.stream().filter(p -> type.equals(p.getType())).collect(Collectors.toList());
     }
 }

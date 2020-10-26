@@ -22,10 +22,7 @@ import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Collection;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -65,8 +62,7 @@ public final class UpdateFieldHelper {
     }
 
     public static void setPhotoFromParam(HttpServletRequest req, AccountPhoto accountPhoto, String param,
-                                         ThreadLocal<Boolean> paramsAccepted)
-            throws IOException, ServletException {
+                                         ThreadLocal<Boolean> paramsAccepted) throws IOException, ServletException {
         Part imagePart = req.getPart(param);
         if (!isNull(imagePart)) {
             try (InputStream inputStream = imagePart.getInputStream()) {
@@ -112,7 +108,7 @@ public final class UpdateFieldHelper {
     }
 
     public static void initAccountAttributes(HttpServletRequest req, AccountInfoDTO accountInfo) {
-        initFields(req, accountInfo);
+        initSex(req);
 
         Account account = accountInfo.getAccount();
         setAttribute(req, "name", account::getName);
@@ -135,11 +131,18 @@ public final class UpdateFieldHelper {
 
         Collection<Phone> phones = accountInfo.getPhones();
         HttpSession session = req.getSession();
-        session.setAttribute(Attributes.PRIVATE_PHONES, initPhones(phones, "privatePhone", PhoneType.PRIVATE));
-        session.setAttribute(Attributes.WORK_PHONES , initPhones(phones, "workPhone", PhoneType.WORK));
+        if (isNull(session.getAttribute(Attributes.PRIVATE_PHONES))) {
+            Collection<PhoneExchanger> privatePhones = createPhoneExchangers(phones, "privatePhone", PhoneType.PRIVATE);
+            session.setAttribute(Attributes.PRIVATE_PHONES, privatePhones);
+        }
+        if (isNull(session.getAttribute(Attributes.WORK_PHONES))) {
+            Collection<PhoneExchanger> workPhones = createPhoneExchangers(phones, "workPhone", PhoneType.WORK);
+            session.setAttribute(Attributes.WORK_PHONES, workPhones);
+        }
     }
 
-    private static Collection<PhoneExchanger> initPhones(Collection<Phone> phones, String param, PhoneType type) {
+    private static Collection<PhoneExchanger> createPhoneExchangers(Collection<Phone> phones, String param,
+                                                                    PhoneType type) {
         Collection<PhoneExchanger> phoneExchangers = phones.stream().filter(phone -> type.equals(phone.getType())).
                 map(phone -> new PhoneExchanger("", phone.getNumber(), "")).collect(Collectors.toList());
         phoneExchangers.add(new PhoneExchanger(param + phones.size(), "", ""));
@@ -155,98 +158,40 @@ public final class UpdateFieldHelper {
     /**
      * initialises depended on configuration parameters such as sex-value & phone-fields
      *
-     * @param req         {@link HttpServletRequest} to set attributes into
-     * @param accountInfo {@link AccountInfoDTO} stores account's data such as {@link Collection} of phones that should
-     *                    be set in params
+     * @param req {@link HttpServletRequest} to set attributes into
      */
-    public static void initFields(HttpServletRequest req, AccountInfoDTO accountInfo) {
-        HttpSession session = req.getSession();
-
+    public static void initSex(HttpServletRequest req) {
         req.setAttribute("male", Sex.MALE.toString());
         req.setAttribute("female", Sex.FEMALE.toString());
-
-//        initPhonesFields(accountInfo, session, Attributes.PRIVATE_PHONES, PhoneType.PRIVATE);
-//        initPhonesFields(accountInfo, session, Attributes.WORK_PHONES, PhoneType.WORK);
     }
 
-    private static void initPhonesFields(AccountInfoDTO accountInfo, HttpSession session, String param, PhoneType type) {
-        Collection<PhoneExchanger> phones;
-        String paramName = param.substring(0, param.length() - 1);
-        if (!isNull(accountInfo)) {
-            phones = accountInfo.getPhones().stream().filter(phone -> type.equals(phone.getType())).
-                    map(phone -> new PhoneExchanger("", phone.getNumber(), "")).collect(Collectors.toList());
-            while (phones.size() < PHONES_SIZE) {
-                phones.add(new PhoneExchanger(paramName + phones.size(), "", ""));
-            }
-        } else if (isNull(session.getAttribute(param))) {
-            phones = new ArrayList<>();
-            while (phones.size() < PHONES_SIZE) {
-                phones.add(new PhoneExchanger(paramName + phones.size(), "", ""));
-            }
-        } else {
-            phones = (Collection<PhoneExchanger>) session.getAttribute(param);
-        }
-        session.setAttribute(param, phones);
-    }
-
-    private static Collection<Phone> getTypedPhonesFromParam(HttpServletRequest req,
-                                                             Collection<PhoneExchanger> phonesToGet, PhoneType type,
-                                                             Account account, ThreadLocal<Boolean> paramsAccepted) {
-        Collection<Phone> phones = new ArrayList<>();
-        for (PhoneExchanger enteredPhone : phonesToGet) {
-            enteredPhone.setError(null);
-            String phoneToAdd = req.getParameter(enteredPhone.getName());
-            if (!isNull(phoneToAdd) && !phoneToAdd.trim().isEmpty()) {
-                try {
-                    Phone phone = new PhoneImpl(phoneToAdd, account);
-                    phone.setType(type);
-                    phones.add(phone);
-                } catch (IncorrectDataException e) {
-                    enteredPhone.setError(e.getType().getPropertyKey());
-                    paramsAccepted.set(false);
-                }
-                enteredPhone.setValue(phoneToAdd);
-            }
-        }
-        return phones;
-    }
-
-    public static Collection<Phone> getPhonesFromParams(HttpServletRequest req, Account account, ThreadLocal<Boolean>
-            paramsAccepted) {
-        Collection<Phone> phones = new ArrayList<>();
-        Collection<PhoneExchanger> privatePhones = (Collection) req.getSession().getAttribute(
-                Attributes.PRIVATE_PHONES);
-        if (!isNull(privatePhones)) {
-            phones.addAll(getTypedPhonesFromParam(req, privatePhones, PhoneType.PRIVATE, account,
-                    paramsAccepted));
-        }
-        Collection<PhoneExchanger> workPhones = (Collection) req.getSession().getAttribute(
-                Attributes.WORK_PHONES);
-        if (!isNull(workPhones)) {
-            phones.addAll(getTypedPhonesFromParam(req, workPhones, PhoneType.WORK, account, paramsAccepted));
-        }
-        return phones;
-    }
-
-    private static void getPhones(HttpServletRequest req, AccountInfoDTO accountInfo, PhoneType type, String attribute,
-                                  ThreadLocal<Boolean> paramsAccepted) {
-        Collection<Phone> phones = accountInfo.getPhones();
+    private static Collection<Phone> getPhonesFromParams(HttpServletRequest req, String attribute, PhoneType type,
+                                                         ThreadLocal<Boolean> paramsAccepted) {
+        AccountInfoDTO accountInfo = (AccountInfoDTO) req.getSession().getAttribute(Attributes.ACCOUNT_INFO);
         Account account = accountInfo.getAccount();
-        Collection<PhoneExchanger> exchangers = (Collection) req.getSession().getAttribute(attribute);
-        for (PhoneExchanger exchanger : exchangers) {
-            String number = req.getParameter(exchanger.getName());
-            if (!isNull(number) && number.isEmpty()) {
-                exchanger.setValue(number);
+        Collection<PhoneExchanger> phoneExchangers = (Collection<PhoneExchanger>) req.getSession().getAttribute(attribute);
+        Collection<Phone> phones = new ArrayList<>();
+        Iterator<PhoneExchanger> iterator = phoneExchangers.iterator();
+        while (iterator.hasNext()) {
+            PhoneExchanger phoneExchanger = iterator.next();
+            String phoneValue = req.getParameter(phoneExchanger.getParamName());
+            if (isNull(phoneValue) || phoneValue.isEmpty()) {
+                if (iterator.hasNext()) {
+                    iterator.remove();
+                }
+            } else {
+                phoneExchanger.setValue(phoneValue);
                 try {
-                    Phone phone = new PhoneImpl(number, account);
+                    Phone phone = new PhoneImpl(phoneValue, account);
                     phone.setType(type);
                     phones.add(phone);
                 } catch (IncorrectDataException e) {
+                    phoneExchanger.setError(e.getType().getPropertyKey());
                     paramsAccepted.set(false);
-                    exchanger.setError(e.getType().getPropertyKey());
                 }
             }
         }
+        return phones;
     }
 
     public static Password getPassword(HttpServletRequest req, Account account, ThreadLocal<Boolean> paramsAccepted) {
@@ -280,12 +225,18 @@ public final class UpdateFieldHelper {
         setStringFromParam(account::setCountry, "country", req, paramsAccepted);
         setStringFromParam(account::setCity, "city", req, paramsAccepted);
 
-        accountInfoDTO.getPhones().clear();
-        getPhones(req, accountInfoDTO, PhoneType.PRIVATE, Attributes.PRIVATE_PHONES, paramsAccepted);
-        getPhones(req, accountInfoDTO, PhoneType.WORK, Attributes.WORK_PHONES, paramsAccepted);
+        Collection<Phone> privatePhones = getPhonesFromParams(req, Attributes.PRIVATE_PHONES, PhoneType.PRIVATE, paramsAccepted);
+        Collection<Phone> workPhones = getPhonesFromParams(req, Attributes.WORK_PHONES, PhoneType.WORK, paramsAccepted);
 
         AccountPhoto accountPhoto = accountInfoDTO.getAccountPhoto();
         setPhotoFromParam(req, accountPhoto, Attributes.PHOTO_ATTRIBUTE, paramsAccepted);
+
+        if (Boolean.TRUE.equals(paramsAccepted.get())) {
+            Collection<Phone> phones = accountInfoDTO.getPhones();
+            phones.clear();
+            phones.addAll(privatePhones);
+            phones.addAll(workPhones);
+        }
     }
 
     public static void acceptActionOrRetry(HttpServletRequest req, HttpServletResponse resp, boolean updated,
