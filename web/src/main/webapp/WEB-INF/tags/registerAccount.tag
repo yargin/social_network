@@ -43,7 +43,6 @@
                placeholder="<fmt:message key="form.email" bundle="${label}"/>" required>
         <br>
         <c:if test="${not empty erremail}"><fmt:message key="${erremail}" bundle="${error}"/><br></c:if>
-        <c:if test="${not empty emailDuplicate}"><fmt:message key="${emailDuplicate}" bundle="${error}"/><br></c:if>
 
         <input type="email" name="additionalEmail"
                <c:if test="${not empty additionalEmail}">value="${additionalEmail}"</c:if>
@@ -51,6 +50,7 @@
         <br>
         <c:if test="${not empty erradditionalEmail}"><fmt:message key="${erradditionalEmail}"
                                                                   bundle="${error}"/><br></c:if>
+        <c:if test="${not empty emailDuplicate}"><fmt:message key="${emailDuplicate}" bundle="${error}"/><br></c:if>
 
         <input type="password" name="password" placeholder="<fmt:message key="form.password" bundle="${label}"/>"
                required>

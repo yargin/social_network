@@ -12,7 +12,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneIm
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.additionaldata.PhoneExchanger;
-import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Date;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory.getNullPassword;
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 import static java.util.Objects.isNull;
 
 public final class UpdateFieldHelper {
@@ -73,7 +74,7 @@ public final class UpdateFieldHelper {
                 throw new IncorrectDataException(IncorrectData.UPLOADING_ERROR);
             } catch (IncorrectDataException e) {
                 paramsAccepted.set(false);
-                req.setAttribute(Attributes.ERR + param, e.getType().getPropertyKey());
+                req.setAttribute(ERR + param, e.getType().getPropertyKey());
             }
         }
     }
@@ -91,7 +92,7 @@ public final class UpdateFieldHelper {
         try {
             setter.accept(value);
         } catch (IncorrectDataException e) {
-            req.setAttribute(Attributes.ERR + param, e.getType().getPropertyKey());
+            req.setAttribute(ERR + param, e.getType().getPropertyKey());
             paramsAccepted.set(false);
             req.setAttribute(param, value);
         }
@@ -99,10 +100,10 @@ public final class UpdateFieldHelper {
 
     public static AccountInfoDTO accountInfoDTOInit(HttpServletRequest req, Supplier<AccountInfoDTO> accountInfoCreator) {
         HttpSession session = req.getSession();
-        AccountInfoDTO accountInfo = (AccountInfoDTO) session.getAttribute(Attributes.ACCOUNT_INFO);
+        AccountInfoDTO accountInfo = (AccountInfoDTO) session.getAttribute(ACCOUNT_INFO);
         if (isNull(accountInfo)) {
             accountInfo = accountInfoCreator.get();
-            session.setAttribute(Attributes.ACCOUNT_INFO, accountInfo);
+            session.setAttribute(ACCOUNT_INFO, accountInfo);
         }
         return accountInfo;
     }
@@ -131,20 +132,24 @@ public final class UpdateFieldHelper {
 
         Collection<Phone> phones = accountInfo.getPhones();
         HttpSession session = req.getSession();
-        if (isNull(session.getAttribute(Attributes.PRIVATE_PHONES))) {
+        if (isNull(session.getAttribute(PRIVATE_PHONES))) {
             Collection<PhoneExchanger> privatePhones = createPhoneExchangers(phones, "privatePhone", PhoneType.PRIVATE);
-            session.setAttribute(Attributes.PRIVATE_PHONES, privatePhones);
+            session.setAttribute(PRIVATE_PHONES, privatePhones);
         }
-        if (isNull(session.getAttribute(Attributes.WORK_PHONES))) {
+        if (isNull(session.getAttribute(WORK_PHONES))) {
             Collection<PhoneExchanger> workPhones = createPhoneExchangers(phones, "workPhone", PhoneType.WORK);
-            session.setAttribute(Attributes.WORK_PHONES, workPhones);
+            session.setAttribute(WORK_PHONES, workPhones);
         }
     }
 
     private static Collection<PhoneExchanger> createPhoneExchangers(Collection<Phone> phones, String param,
                                                                     PhoneType type) {
+        AtomicInteger i = new AtomicInteger(0);
         Collection<PhoneExchanger> phoneExchangers = phones.stream().filter(phone -> type.equals(phone.getType())).
-                map(phone -> new PhoneExchanger("", phone.getNumber(), "")).collect(Collectors.toList());
+                map(phone -> {
+                    i.getAndIncrement();
+                    return new PhoneExchanger(param + i, phone.getNumber(), "");
+                }).collect(Collectors.toList());
         phoneExchangers.add(new PhoneExchanger(param + phones.size(), "", ""));
         return phoneExchangers;
     }
@@ -167,7 +172,7 @@ public final class UpdateFieldHelper {
 
     private static Collection<Phone> getPhonesFromParams(HttpServletRequest req, String attribute, PhoneType type,
                                                          ThreadLocal<Boolean> paramsAccepted) {
-        AccountInfoDTO accountInfo = (AccountInfoDTO) req.getSession().getAttribute(Attributes.ACCOUNT_INFO);
+        AccountInfoDTO accountInfo = (AccountInfoDTO) req.getSession().getAttribute(ACCOUNT_INFO);
         Account account = accountInfo.getAccount();
         Collection<PhoneExchanger> phoneExchangers = (Collection<PhoneExchanger>) req.getSession().getAttribute(attribute);
         Collection<Phone> phones = new ArrayList<>();
@@ -225,11 +230,11 @@ public final class UpdateFieldHelper {
         setStringFromParam(account::setCountry, "country", req, paramsAccepted);
         setStringFromParam(account::setCity, "city", req, paramsAccepted);
 
-        Collection<Phone> privatePhones = getPhonesFromParams(req, Attributes.PRIVATE_PHONES, PhoneType.PRIVATE, paramsAccepted);
-        Collection<Phone> workPhones = getPhonesFromParams(req, Attributes.WORK_PHONES, PhoneType.WORK, paramsAccepted);
+        Collection<Phone> privatePhones = getPhonesFromParams(req, PRIVATE_PHONES, PhoneType.PRIVATE, paramsAccepted);
+        Collection<Phone> workPhones = getPhonesFromParams(req, WORK_PHONES, PhoneType.WORK, paramsAccepted);
 
         AccountPhoto accountPhoto = accountInfoDTO.getAccountPhoto();
-        setPhotoFromParam(req, accountPhoto, Attributes.PHOTO_ATTRIBUTE, paramsAccepted);
+        setPhotoFromParam(req, accountPhoto, PHOTO_ATTRIBUTE, paramsAccepted);
 
         if (Boolean.TRUE.equals(paramsAccepted.get())) {
             Collection<Phone> phones = accountInfoDTO.getPhones();
@@ -243,9 +248,9 @@ public final class UpdateFieldHelper {
                                            String successUrl, DoGetWrapper doGet) throws IOException, ServletException {
         if (updated) {
             HttpSession session = req.getSession();
-            session.removeAttribute(Attributes.ACCOUNT_INFO);
-            session.removeAttribute(Attributes.PRIVATE_PHONES);
-            session.removeAttribute(Attributes.WORK_PHONES);
+            session.removeAttribute(ACCOUNT_INFO);
+            session.removeAttribute(PRIVATE_PHONES);
+            session.removeAttribute(WORK_PHONES);
             redirect(req, resp, successUrl);
         } else {
             doGet.accept(req, resp);

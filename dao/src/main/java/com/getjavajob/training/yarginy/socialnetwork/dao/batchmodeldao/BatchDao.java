@@ -26,4 +26,9 @@ public interface BatchDao<E extends Entity> extends Dao<E> {
      * @return true if deletion successful, false if not
      */
     boolean delete(Collection<E> entities);
+
+    /**
+     *
+     */
+    boolean update(Collection<E> storedEntities, Collection<E> newEntities);
 }

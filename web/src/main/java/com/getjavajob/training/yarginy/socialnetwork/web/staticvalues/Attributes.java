@@ -15,4 +15,6 @@ public final class Attributes {
     public static final String TARGET = "target";
     public static final String ERR = "err";
     public static final String ACCOUNT_INFO = "accountInfo";
+    public static final String EMAIL_DUPLICATE = "emailDuplicate";
+    public static final String PHONE_DUPLICATE = "phoneDuplicate";
 }

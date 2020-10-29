@@ -8,12 +8,8 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.PasswordImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.dependedmodeldao.OwnedModelDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.*;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.Transaction;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 
 import java.sql.Date;
@@ -22,7 +18,6 @@ import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory.getNullPassword;
 import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper.encrypt;
-import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
 import static java.util.Objects.isNull;
 
 public class AuthServiceImpl implements AuthService {
@@ -68,13 +63,6 @@ public class AuthServiceImpl implements AuthService {
                 transaction.rollback();
                 throw new RuntimeException();
             }
-//            transaction.commit();
-//        } catch (IncorrectDataException e) {
-//            throw e;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        try (Transaction transaction = transactionManager.getTransaction()) {
             if (!isNull(accountPhoto)) {
                 accountPhoto.setOwner(account);
                 if (!accountPhotoDao.create(accountPhoto)) {

@@ -11,7 +11,12 @@ import java.util.Collection;
 
 public class BatchGroupDml extends GroupDml implements BatchDml<Group> {
     @Override
-    public PreparedStatement batchSelectUpdate(Connection connection, Collection<Group> entities) throws SQLException {
+    public PreparedStatement batchSelectForInsert(Connection connection, Collection<Group> entities) throws SQLException {
+        throw new UnsupportedOperationException("not implemented yet");
+    }
+
+    @Override
+    public PreparedStatement batchSelectForDelete(Connection connection, Collection<Group> entities) throws SQLException {
         throw new UnsupportedOperationException("not implemented yet");
     }
 }

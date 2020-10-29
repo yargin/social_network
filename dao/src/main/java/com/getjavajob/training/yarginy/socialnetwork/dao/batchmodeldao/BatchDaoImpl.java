@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class BatchDaoImpl<E extends Entity> extends DaoImpl<E> implements BatchDao<E> {
@@ -24,7 +25,7 @@ public class BatchDaoImpl<E extends Entity> extends DaoImpl<E> implements BatchD
             return true;
         }
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement statement = batchDml.batchSelectUpdate(connection, entities);
+             PreparedStatement statement = batchDml.batchSelectForInsert(connection, entities);
              ResultSet resultSet = statement.executeQuery()) {
             if (resultSet.next()) {
                 return false;
@@ -47,7 +48,7 @@ public class BatchDaoImpl<E extends Entity> extends DaoImpl<E> implements BatchD
             return true;
         }
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement statement = batchDml.batchSelectUpdate(connection, entities);
+             PreparedStatement statement = batchDml.batchSelectForDelete(connection, entities);
              ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
                 resultSet.deleteRow();
@@ -56,6 +57,18 @@ public class BatchDaoImpl<E extends Entity> extends DaoImpl<E> implements BatchD
             return true;
         } catch (SQLException e) {
             throw new IllegalStateException(e);
+        } catch (IllegalArgumentException e) {
+            return false;
         }
+    }
+
+    @Override
+    public boolean update(Collection<E> storedEntities, Collection<E> newEntities) {
+        Collection<E> entitiesToDelete = new ArrayList<>(storedEntities);
+        entitiesToDelete.removeAll(newEntities);
+        delete(entitiesToDelete);
+        newEntities.removeAll(storedEntities);
+        create(newEntities);
+        return true;
     }
 }

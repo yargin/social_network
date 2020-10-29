@@ -23,7 +23,7 @@ public class BatchUpdateTest {
     private final OneToManyDao<Account, Phone> accountPhones = DB_FACTORY.getAccountsPhones(accountDao, phoneDao);
 
     @Test
-    public void testCreate() {
+    public void testCreateThenDelete() {
         Account account = accountDao.select(1);
         Phone firstPhone = new PhoneImpl("100001", account);
         firstPhone.setType(PhoneType.PRIVATE);
@@ -35,7 +35,6 @@ public class BatchUpdateTest {
         phoneDao.create(phones);
         Collection<Phone> allAccountPhones = accountPhones.selectMany(account);
         assertTrue(allAccountPhones.containsAll(phones));
-        phoneDao.delete(firstPhone);
-        phoneDao.delete(secondPhone);
+        phoneDao.delete(phones);
     }
 }

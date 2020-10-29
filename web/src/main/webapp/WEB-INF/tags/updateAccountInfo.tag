@@ -44,6 +44,7 @@
         <br>
         <c:if test="${not empty erradditionalEmail}"><fmt:message key="${erradditionalEmail}"
                                                                   bundle="${error}"/><br></c:if>
+        <c:if test="${not empty emailDuplicate}"><fmt:message key="${emailDuplicate}" bundle="${error}"/><br></c:if>
 
         <label><fmt:message key="form.birthdate" bundle="${label}"/></label>
         <input type="date" name="birthDate"
@@ -91,7 +92,8 @@
         <br>
         <c:if test="${not empty errphoto}"><fmt:message key="${errphoto}" bundle="${error}"/><br></c:if>
 
-        <button><fmt:message key="button.save" bundle="${label}"/></button>
-        <a href="${context}/mywall"><button type="button"><fmt:message key="button.cancel" bundle="${label}"/></button></a>
+        <button type="submit" name="save" value="save"><fmt:message key="button.save" bundle="${label}"/></button>
+        <button type="submit" name="save" value="cancel"><fmt:message key="button.cancel" bundle="${label}"/></button>
+        <%--        <a href="${context}/mywall"><button type="button"><fmt:message key="button.cancel" bundle="${label}"/></button></a>--%>
     </form>
 </div>
