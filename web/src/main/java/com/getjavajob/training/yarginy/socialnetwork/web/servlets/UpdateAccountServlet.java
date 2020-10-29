@@ -1,6 +1,5 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.servlets;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountInfoService;
@@ -84,16 +83,7 @@ public class UpdateAccountServlet extends HttpServlet {
             Collection<Phone> oldPhoneList = (Collection<Phone>) req.getSession().getAttribute(STORED_PHONE_LIST);
             updated = accountInfoService.update(accountInfoDTO, oldPhoneList);
         } catch (IncorrectDataException e) {
-            if (e.getType() == IncorrectData.EMAIL_DUPLICATE) {
-                req.setAttribute(Attributes.EMAIL_DUPLICATE, e.getType().getPropertyKey());
-            }
-            if (e.getType() == IncorrectData.PHONE_DUPLICATE) {
-                req.setAttribute(Attributes.PHONE_DUPLICATE, e.getType().getPropertyKey());
-            }
-            if (e.getType() == IncorrectData.UPLOADING_ERROR) {
-                req.setAttribute(Attributes.PHONE_DUPLICATE, e.getType().getPropertyKey());
-            }
-            doGet(req, resp);
+            handleInfoExceptions(req, resp, e, this::doGet);
             return;
         }
         acceptActionOrRetry(req, resp, updated, UPDATE_SUCCESS_URL, this::doGet);

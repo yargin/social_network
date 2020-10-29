@@ -12,6 +12,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneIm
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.additionaldata.PhoneExchanger;
+import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -260,5 +261,19 @@ public final class UpdateFieldHelper {
     @FunctionalInterface
     public interface DoGetWrapper {
         void accept(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException;
+    }
+
+    public static void handleInfoExceptions(HttpServletRequest req, HttpServletResponse resp, IncorrectDataException e,
+                                            DoGetWrapper doGet) throws ServletException, IOException {
+        if (e.getType() == IncorrectData.EMAIL_DUPLICATE) {
+            req.setAttribute(EMAIL_DUPLICATE, e.getType().getPropertyKey());
+        }
+        if (e.getType() == IncorrectData.PHONE_DUPLICATE) {
+            req.setAttribute(PHONE_DUPLICATE, e.getType().getPropertyKey());
+        }
+        if (e.getType() == IncorrectData.UPLOADING_ERROR) {
+            req.setAttribute(Attributes.PHONE_DUPLICATE, e.getType().getPropertyKey());
+        }
+        doGet.accept(req, resp);
     }
 }

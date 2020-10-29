@@ -5,8 +5,8 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.AccountPhoto;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.Transaction;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.*;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.Transaction;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 
 import java.sql.Date;
@@ -21,23 +21,23 @@ public class AccountServiceImpl implements AccountService {
     private final TransactionManager transactionManager;
     private final AccountDao accountDao;
     private final PhoneDao phoneDao;
-    private final FriendshipDao friendshipDao;
-    private final AccountsInGroupsDao accountsInGroupsDao;
+    private final AccountsFriendshipsDao friendshipDao;
+    private final GroupsMembersDao groupsMembersDao;
     private final AccountPhotoDao accountPhotoDao;
     private Collection<Account> friends = new ArrayList<>();
 
     public AccountServiceImpl() {
-        this(new AccountDaoImpl(), new PhoneDaoImpl(), new FriendshipDaoImpl(), new AccountsInGroupsDaoImpl(), new
+        this(new AccountDaoImpl(), new PhoneDaoImpl(), new AccountsFriendshipsDaoImpl(), new GroupsMembersDaoImpl(), new
                 AccountPhotoDaoImpl(), new TransactionManager());
     }
 
-    public AccountServiceImpl(AccountDao accountDao, PhoneDao phoneDao, FriendshipDao friendshipDao,
-                              AccountsInGroupsDao accountsInGroupsDao, AccountPhotoDao accountPhotoDao,
+    public AccountServiceImpl(AccountDao accountDao, PhoneDao phoneDao, AccountsFriendshipsDao friendshipDao,
+                              GroupsMembersDao groupsMembersDao, AccountPhotoDao accountPhotoDao,
                               TransactionManager transactionManager) {
         this.accountDao = accountDao;
         this.phoneDao = phoneDao;
         this.friendshipDao = friendshipDao;
-        this.accountsInGroupsDao = accountsInGroupsDao;
+        this.groupsMembersDao = groupsMembersDao;
         this.transactionManager = transactionManager;
         this.accountPhotoDao = accountPhotoDao;
     }

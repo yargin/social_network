@@ -15,7 +15,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.TestResult
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
-public class FriendshipDaoTest {
+public class AccountsFriendshipsDaoTest {
     private static final DbFactory dbFactory = AbstractDbFactory.getDbFactory();
     private static final String CLASS = "AccountDaoTest";
     private static final Dao<Account> ACCOUNT_DAO = dbFactory.getAccountDao();
@@ -23,7 +23,7 @@ public class FriendshipDaoTest {
     private final Account friend;
     private final Account noFriends;
 
-    public FriendshipDaoTest() {
+    public AccountsFriendshipsDaoTest() {
         friend = ACCOUNT_DAO.select(1);
         noFriends = ACCOUNT_DAO.select(4);
     }

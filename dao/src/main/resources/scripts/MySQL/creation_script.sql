@@ -25,26 +25,26 @@ CREATE TABLE IF NOT EXISTS _Groups (
         id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(50) NOT NULL UNIQUE,
         description VARCHAR(500),
-        owner_id BIGINT UNSIGNED
+        owner_id BIGINT UNSIGNED,
+        creation_date DATE
 );
 
 ALTER TABLE _Groups
 ADD CONSTRAINT C_11 FOREIGN KEY (owner_id) REFERENCES Accounts (id) ON DELETE SET NULL;
 
-CREATE TABLE IF NOT EXISTS Accounts_in_groups (
+CREATE TABLE IF NOT EXISTS Group_members (
         account_id BIGINT UNSIGNED,
         group_id BIGINT UNSIGNED
 );
 
-ALTER TABLE Accounts_in_groups
+ALTER TABLE Group_members
 ADD CONSTRAINT C_12 PRIMARY KEY(account_id, group_id);
 
-ALTER TABLE Accounts_in_groups
+ALTER TABLE Group_members
 ADD CONSTRAINT C_13 FOREIGN KEY (account_id) REFERENCES Accounts (id) ON DELETE CASCADE;
 
-ALTER TABLE Accounts_in_groups
+ALTER TABLE Group_members
 ADD CONSTRAINT C_14 FOREIGN KEY (group_id) REFERENCES _Groups (id) ON DELETE CASCADE;
-
 
 CREATE TABLE IF NOT EXISTS Friendships (
         first_account BIGINT UNSIGNED,
@@ -67,11 +67,11 @@ INSERT INTO Accounts (id, name, surname, email) VALUES
 (3, 'Alan', 'Turing','robot@power.com'),
 (4, 'Petr', 'Popov', 'popovp@gmail.com');
 
-INSERT INTO _Groups (id, name, description, owner_id) VALUES
-(1, 'USSR fans', 'building Communism', 1),
-(2, 'machine learning', '', 2);
+INSERT INTO _Groups (id, name, description, owner_id, creation_date) VALUES
+(1, 'USSR fans', 'building Communism', 1, '2020-01-01'),
+(2, 'machine learning', '', 2, '2018-12-31');
 
-INSERT INTO Accounts_in_groups VALUES
+INSERT INTO Group_members VALUES
 (1, 1), (2, 1), (3, 2), (1, 2);
 
 INSERT INTO Friendships VALUES
@@ -123,3 +123,18 @@ CREATE TABLE IF NOT EXISTS Account_photo (
 
 ALTER TABLE Account_photo
 ADD CONSTRAINT C_22 FOREIGN KEY (owner_id) REFERENCES Accounts (id) ON DELETE CASCADE;
+
+CREATE TABLE IF NOT EXISTS Group_moderators (
+    account_id BIGINT UNSIGNED,
+    group_id BIGINT UNSIGNED,
+    PRIMARY KEY (account_id, group_id)
+);
+
+ALTER TABLE Group_moderators
+ADD CONSTRAINT C_24 FOREIGN KEY (account_id) REFERENCES Accounts (id) ON DELETE CASCADE;
+
+ALTER TABLE Group_moderators
+ADD CONSTRAINT C_25 FOREIGN KEY (group_id) REFERENCES _Groups (id) ON DELETE CASCADE;
+
+INSERT INTO Group_moderators VALUES
+(1, 2), (1, 1);

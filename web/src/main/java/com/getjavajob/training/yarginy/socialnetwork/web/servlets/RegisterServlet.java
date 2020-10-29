@@ -1,6 +1,5 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.servlets;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.service.AuthService;
@@ -73,18 +72,9 @@ public class RegisterServlet extends HttpServlet {
         try {
             registered = AUTH_SERVICE.register(accountInfoDTO, password);
         } catch (IncorrectDataException e) {
-            if (e.getType() == IncorrectData.EMAIL_DUPLICATE) {
-                req.setAttribute(EMAIL_DUPLICATE, e.getType().getPropertyKey());
-            }
-            if (e.getType() == IncorrectData.PHONE_DUPLICATE) {
-                req.setAttribute(PHONE_DUPLICATE, e.getType().getPropertyKey());
-            }
-            if (e.getType() == IncorrectData.UPLOADING_ERROR) {
-                req.setAttribute(Attributes.PHONE_DUPLICATE, e.getType().getPropertyKey());
-            }
-            doGet(req, resp);
+            handleInfoExceptions(req, resp, e, this::doGet);
             return;
         }
-        acceptActionOrRetry(req, resp, registered, REG_SUCCESS_URL, (req1, resp1) -> doGet(req1, resp1));
+        acceptActionOrRetry(req, resp, registered, REG_SUCCESS_URL, this::doGet);
     }
 }

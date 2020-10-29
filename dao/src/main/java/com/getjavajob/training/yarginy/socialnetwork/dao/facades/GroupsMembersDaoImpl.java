@@ -10,7 +10,7 @@ import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
 
-public class AccountsInGroupsDaoImpl implements AccountsInGroupsDao {
+public class GroupsMembersDaoImpl implements GroupsMembersDao {
     private final Dao<Account> accountDao = getDbFactory().getAccountDao();
     private final BatchDao<Group> groupDao = getDbFactory().getGroupDao();
     private final ManyToManyDao<Account, Group> accountsInGroupDao = getDbFactory().getGroupMembershipDao(accountDao,

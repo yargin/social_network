@@ -19,8 +19,6 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl.ScriptExe
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.DaoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.AccountDml;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.GroupDml;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.PhonesDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.password.PasswordDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.password.PasswordDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.SelfManyToManyDao;
@@ -28,7 +26,8 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.friendship.FriendshipDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.ManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.ManyToManyDaoImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.accountsingroups.AccountsInGroupsDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.groupmembers.GroupsMembersDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.groupmoderators.GroupModeratorsDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDaoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.accountgroups.AccountsGroupsDml;
@@ -107,7 +106,7 @@ public abstract class CommonDbFactory implements DbFactory {
 
     @Override
     public ManyToManyDao<Account, Group> getGroupMembershipDao(Dao<Account> accountDao, BatchDao<Group> groupDao) {
-        return new ManyToManyDaoImpl<>(connectionPool, new AccountsInGroupsDml(), accountDao, groupDao);
+        return new ManyToManyDaoImpl<>(connectionPool, new GroupsMembersDml(), accountDao, groupDao);
     }
 
     @Override
@@ -143,5 +142,10 @@ public abstract class CommonDbFactory implements DbFactory {
     @Override
     public OwnedModelDao<Account, AccountPhoto> getAccountPhotoDao(Dao<Account> accountDao) {
         return new OwnedModelDaoImpl<>(connectionPool, new AccountPhotoDml(), accountDao);
+    }
+
+    @Override
+    public ManyToManyDao<Account, Group> getGroupModerators(Dao<Account> accountDao, BatchDao<Group> groupDao) {
+        return new ManyToManyDaoImpl<>(connectionPool, new GroupModeratorsDml(), accountDao, groupDao);
     }
 }

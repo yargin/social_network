@@ -9,6 +9,7 @@ public final class GroupsTable {
     public static final String NAME = TABLE + '.' + "Name";
     public static final String DESCRIPTION = TABLE + '.' + "Description";
     public static final String OWNER = TABLE + '.' + "Owner_id";
+    public static final String CREATION_DATE = TABLE + '.' + "Creation_date";
 
     private GroupsTable() {
     }

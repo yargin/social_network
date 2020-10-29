@@ -2,6 +2,8 @@ DROP TABLE IF EXISTS Friendships;
 
 DROP TABLE IF EXISTS Account_photo;
 
+DROP TABLE IF EXISTS Group_moderators;
+
 DROP TABLE IF EXISTS Phones;
 
 DROP TABLE IF EXISTS Accounts_in_groups;
@@ -13,3 +15,4 @@ DROP TABLE IF EXISTS Passwords;
 DROP TABLE IF EXISTS Accounts;
 
 DROP TABLE IF EXISTS Roles;
+

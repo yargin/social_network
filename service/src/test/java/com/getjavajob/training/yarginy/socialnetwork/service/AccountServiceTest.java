@@ -7,7 +7,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.*;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.Transaction;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.TransactionManagerImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,9 +23,9 @@ import static org.mockito.Mockito.when;
 public class AccountServiceTest {
     private static final String CLASS = "AccountServiceTest";
     private final AccountDao accountDao = mock(AccountDao.class);
-    private final FriendshipDao friendsDao = mock(FriendshipDao.class);
+    private final AccountsFriendshipsDao friendsDao = mock(AccountsFriendshipsDao.class);
     private final PhoneDao phoneDao = mock(PhoneDao.class);
-    private final AccountsInGroupsDao accountsInGroups = mock(AccountsInGroupsDao.class);
+    private final GroupsMembersDao accountsInGroups = mock(GroupsMembersDao.class);
     private final Transaction transaction = mock(Transaction.class);
     private final TransactionManager transactionManager = mock(TransactionManager.class);
     private final AccountPhotoDao accountPhotoDao = mock(AccountPhotoDao.class);
