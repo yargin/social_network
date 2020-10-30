@@ -31,7 +31,6 @@ public class PasswordDml extends AbstractDml<Password> {
         return statement;
     }
 
-
     @Override
     public PreparedStatement getSelect(Connection connection, Password password) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(SELECT);
@@ -62,16 +61,6 @@ public class PasswordDml extends AbstractDml<Password> {
 
     @Override
     public Collection<Password> selectEntities(ResultSet resultSet) throws SQLException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public PreparedStatement getSelect(Connection connection, long id) throws SQLException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public PreparedStatement getSelectAll(Connection connection) throws SQLException {
         throw new UnsupportedOperationException();
     }
 }

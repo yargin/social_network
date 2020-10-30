@@ -11,22 +11,12 @@ import java.util.Collection;
 
 public class MessageDml extends AbstractDml<Account> {
     @Override
-    public PreparedStatement getSelect(Connection connection, long id) throws SQLException {
+    public PreparedStatement getUpdatableSelect(Connection connection, Account storedEntity) throws SQLException {
         return null;
     }
 
     @Override
     public PreparedStatement getSelect(Connection connection, Account entity) throws SQLException {
-        return null;
-    }
-
-    @Override
-    public PreparedStatement getUpdatableSelect(Connection connection, Account entity) throws SQLException {
-        return null;
-    }
-
-    @Override
-    public PreparedStatement getSelectAll(Connection connection) throws SQLException {
         return null;
     }
 

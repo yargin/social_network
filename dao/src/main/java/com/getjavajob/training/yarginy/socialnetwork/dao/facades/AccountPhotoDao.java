@@ -3,8 +3,6 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.AccountPhoto;
 
-import java.util.Collection;
-
 public interface AccountPhotoDao {
     AccountPhoto select(Account account);
 

@@ -9,6 +9,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -27,6 +28,31 @@ public class ConcurrentSelectUpdateTest {
     private final PhoneDao secondPhoneDao = new PhoneDaoImpl();
     private volatile boolean inFirstBlock;
     private volatile boolean inSecondBlock;
+
+    @Before
+    public void deletePhones() {
+        Account account = accountDao.select(1);
+        Collection<Phone> phones = new ArrayList<>();
+        for (int i = 0; i < PHONES_NUMBER; i++) {
+            phones.add(new PhoneImpl("" + i + i + i + i, account));
+        }
+        firstPhoneDao.delete(phones);
+        Phone secondPhone = new PhoneImpl("123123", account);
+        firstPhoneDao.delete(secondPhone);
+    }
+
+    @Test
+    //todo
+    public void tryToDelete() {
+        Account account = accountDao.select(1);
+        Collection<Phone> phones = new ArrayList<>();
+        for (int i = 0; i < PHONES_NUMBER; i++) {
+            phones.add(new PhoneImpl("" + i + i + i + i, account));
+        }
+        firstPhoneDao.delete(phones);
+        Phone secondPhone = new PhoneImpl("123123", account);
+        firstPhoneDao.delete(secondPhone);
+    }
 
     @Test
     public void testConcurrentCreate() throws InterruptedException {

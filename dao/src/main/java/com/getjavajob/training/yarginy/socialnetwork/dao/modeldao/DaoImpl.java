@@ -23,16 +23,6 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
     }
 
     @Override
-    public E select(long id) {
-        try (Connection connection = connectionPool.getConnection();
-             PreparedStatement statement = dml.getSelect(connection, id)) {
-            return select(statement);
-        } catch (SQLException e) {
-            throw new IllegalStateException(e);
-        }
-    }
-
-    @Override
     public E select(E entityToSelect) {
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement statement = dml.getSelect(connection, entityToSelect)) {
@@ -74,19 +64,22 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
     }
 
     @Override
-    public boolean update(E entity) {
+    public boolean update(E entity, E storedEntity) {
+        E approvedEntity;
+        try {
+            approvedEntity = approveFromStorage(storedEntity);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement statementForUpdate = dml.getUpdatableSelect(connection, entity);
-             PreparedStatement statementForStored = dml.getSelect(connection, entity);
-             ResultSet resultSetUpdate = statementForUpdate.executeQuery();
-             ResultSet resultSetStored = statementForStored.executeQuery()) {
-            if (!resultSetStored.next() || !resultSetUpdate.next()) {
+             PreparedStatement statementForUpdate = dml.getUpdatableSelect(connection, approvedEntity);
+             ResultSet resultSetUpdate = statementForUpdate.executeQuery()) {
+            if (!resultSetUpdate.next()) {
                 return false;
             }
-            E storedEntity = dml.selectFromRow(resultSetStored);
             dml.updateRow(resultSetUpdate, entity, storedEntity);
             resultSetUpdate.updateRow();
-            if (resultSetStored.next() || resultSetUpdate.next()) {
+            if (resultSetUpdate.next()) {
                 throw new IllegalStateException("statement returned more then one row");
             }
             return true;
@@ -97,8 +90,14 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
 
     @Override
     public boolean delete(E entity) {
+        E approvedEntity;
+        try {
+            approvedEntity = approveFromStorage(entity);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement statement = dml.getUpdatableSelect(connection, entity);
+             PreparedStatement statement = dml.getUpdatableSelect(connection, approvedEntity);
              ResultSet resultSet = statement.executeQuery()) {
             if (!resultSet.next()) {
                 return false;
@@ -113,7 +112,7 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
     @Override
     public Collection<E> selectAll() {
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement statement = dml.getSelectAll(connection);
+             PreparedStatement statement = dml.getSelect(connection, null);
              ResultSet resultSet = statement.executeQuery()) {
             Collection<E> all = new ArrayList<>();
             while (resultSet.next()) {

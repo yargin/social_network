@@ -7,7 +7,7 @@ public interface PasswordDao {
 
     boolean create(Password password);
 
-    boolean update(Password password);
+    boolean update(Password password, Password storedPassword);
 
     Password getNullPassword();
 }

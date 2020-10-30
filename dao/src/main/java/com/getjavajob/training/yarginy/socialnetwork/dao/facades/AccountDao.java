@@ -13,7 +13,7 @@ public interface AccountDao {
 
     boolean create(Account account);
 
-    boolean update(Account account);
+    boolean update(Account account, Account storedAccount);
 
     boolean delete(Account account);
 

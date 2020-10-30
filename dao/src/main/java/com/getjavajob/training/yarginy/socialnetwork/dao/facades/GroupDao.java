@@ -12,7 +12,7 @@ public interface GroupDao {
 
     boolean create(Group group);
 
-    boolean update(Group group);
+    boolean update(Group group, Group storedGroup);
 
     boolean delete(Group group);
 

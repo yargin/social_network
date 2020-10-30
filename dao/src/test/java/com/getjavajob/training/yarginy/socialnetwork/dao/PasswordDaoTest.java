@@ -58,7 +58,7 @@ public class PasswordDaoTest {
         PASSWORD_DAO.create(PASSWORD);
         PASSWORD.setPassword("updatedPassword1");
         //mistake because select by both
-        assertTrue(PASSWORD_DAO.update(PASSWORD));
+        assertTrue(PASSWORD_DAO.update(PASSWORD, PASSWORD_DAO.select(PASSWORD)));
         printPassed(CLASS, "testUpdate");
         PASSWORD.setPassword("qwe123rty");
     }
@@ -66,7 +66,7 @@ public class PasswordDaoTest {
     @Test
     public void testUpdateNonExisting() {
         PASSWORD.setAccount(new AccountImpl("petya", "fake@email.com"));
-        assertFalse(PASSWORD_DAO.update(PASSWORD));
+        assertFalse(PASSWORD_DAO.update(PASSWORD, PASSWORD_DAO.select(PASSWORD)));
         printPassed(CLASS, "testUpdateNonExisting");
         PASSWORD.setAccount(ACCOUNT);
     }

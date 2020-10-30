@@ -12,7 +12,7 @@ public interface PhoneDao {
 
     boolean create(Phone phone);
 
-    boolean update(Phone phone);
+    boolean update(Phone phone, Phone storedPhone);
 
     boolean delete(Phone phone);
 

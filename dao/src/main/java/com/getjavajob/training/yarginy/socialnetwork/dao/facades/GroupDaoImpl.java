@@ -35,8 +35,8 @@ public class GroupDaoImpl implements GroupDao {
     }
 
     @Override
-    public boolean update(Group group) {
-        return groupDao.update(group);
+    public boolean update(Group group, Group storedGroup) {
+        return groupDao.update(group, storedGroup);
     }
 
     @Override

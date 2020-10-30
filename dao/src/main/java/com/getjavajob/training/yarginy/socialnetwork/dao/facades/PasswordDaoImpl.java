@@ -19,8 +19,8 @@ public class PasswordDaoImpl implements PasswordDao {
     }
 
     @Override
-    public boolean update(Password password) {
-        return passwordDao.update(password);
+    public boolean update(Password password, Password storedPassword) {
+        return passwordDao.update(password, storedPassword);
     }
 
     @Override

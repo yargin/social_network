@@ -25,9 +25,9 @@ public class ManyToManyDaoImpl<F extends Entity, S extends Entity> implements Ma
 
     @Override
     public Collection<S> selectByFirst(F first) {
-        firstDao.checkEntity(first);
+        long id = firstDao.approveFromStorage(first).getId();
         try (Connection connection = connectionPool.getConnection()) {
-            return manyToManyDml.selectByFirst(connection, first.getId());
+            return manyToManyDml.selectByFirst(connection, id);
         } catch (SQLException e) {
             throw new IllegalStateException(e);
         }
@@ -35,9 +35,9 @@ public class ManyToManyDaoImpl<F extends Entity, S extends Entity> implements Ma
 
     @Override
     public Collection<F> selectBySecond(S second) {
-        secondDao.checkEntity(second);
+        long id = secondDao.approveFromStorage(second).getId();
         try (Connection connection = connectionPool.getConnection()) {
-            return manyToManyDml.selectBySecond(connection, second.getId());
+            return manyToManyDml.selectBySecond(connection, id);
         } catch (SQLException e) {
             throw new IllegalStateException(e);
         }
@@ -45,29 +45,29 @@ public class ManyToManyDaoImpl<F extends Entity, S extends Entity> implements Ma
 
     @Override
     public boolean create(F first, S second) {
-        firstDao.checkEntity(first);
-        secondDao.checkEntity(second);
+        long firstId = firstDao.approveFromStorage(first).getId();
+        long secondId = secondDao.approveFromStorage(second).getId();
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement statement = manyToManyDml.getSelectStatement(connection, first.getId(), second.getId());
+             PreparedStatement statement = manyToManyDml.getSelectStatement(connection, firstId, secondId);
              ResultSet resultSet = statement.executeQuery()) {
             if (resultSet.next()) {
                 return false;
             }
             resultSet.moveToInsertRow();
-            manyToManyDml.updateRow(resultSet, first.getId(), second.getId());
+            manyToManyDml.updateRow(resultSet, firstId, secondId);
             resultSet.insertRow();
             return true;
         } catch (SQLException e) {
-            return false;
+            throw new IllegalStateException(e);
         }
     }
 
     @Override
     public boolean delete(F first, S second) {
-        firstDao.checkEntity(first);
-        secondDao.checkEntity(second);
+        long firstId = firstDao.approveFromStorage(first).getId();
+        long secondId = secondDao.approveFromStorage(second).getId();
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement statement = manyToManyDml.getSelectStatement(connection, first.getId(), second.getId());
+             PreparedStatement statement = manyToManyDml.getSelectStatement(connection, firstId, secondId);
              ResultSet resultSet = statement.executeQuery()) {
             if (!resultSet.next()) {
                 return false;
@@ -78,7 +78,7 @@ public class ManyToManyDaoImpl<F extends Entity, S extends Entity> implements Ma
             }
             return true;
         } catch (SQLException e) {
-            return false;
+            throw new IllegalStateException(e);
         }
     }
 }

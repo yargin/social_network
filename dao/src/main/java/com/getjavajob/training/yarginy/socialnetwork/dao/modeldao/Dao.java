@@ -35,12 +35,13 @@ public interface Dao<E extends Entity> {
     boolean create(E entity);
 
     /**
-     * modifies record storing {@link E} data
+     * modifies record storing {@link E} data, updates only fields that differs from stored
      *
-     * @param entity stored {@link E}
+     * @param entity       object containing new values {@link E}
+     * @param storedEntity stored {@link E}
      * @return if modification was successful, false if doesn't exists
      */
-    boolean update(E entity);
+    boolean update(E entity, E storedEntity);
 
     /**
      * deletes record storing {@link E} data

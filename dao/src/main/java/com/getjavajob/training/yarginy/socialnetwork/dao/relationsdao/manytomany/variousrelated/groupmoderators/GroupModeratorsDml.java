@@ -7,8 +7,8 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.AccountDm
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.GroupDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.ManyToManyDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable;
-import com.getjavajob.training.yarginy.socialnetwork.dao.tables.GroupModerators;
-import com.getjavajob.training.yarginy.socialnetwork.dao.tables.GroupsMembers;
+import com.getjavajob.training.yarginy.socialnetwork.dao.tables.GroupsMembersTable;
+import com.getjavajob.training.yarginy.socialnetwork.dao.tables.GroupsModeratorsTable;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.GroupsTable;
 
 import java.sql.ResultSet;
@@ -17,13 +17,14 @@ import java.sql.SQLException;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 
 public class GroupModeratorsDml extends ManyToManyDml<Account, Group> {
-    private static final String SELECT_MEMBERS = buildQuery().selectJoin(AccountsTable.TABLE, GroupModerators.TABLE,
-            AccountsTable.ID, GroupModerators.ACCOUNT_ID).where(GroupModerators.GROUP_ID).build();
-    private static final String SELECT_GROUPS = buildQuery().selectJoin(GroupsTable.TABLE, GroupModerators.TABLE,
-            GroupsTable.ID, GroupModerators.GROUP_ID).join(AccountsTable.TABLE, GroupsTable.OWNER, AccountsTable.ID).
-            where(GroupsMembers.ACCOUNT_ID).build();
-    private static final String SELECT = buildQuery().select(GroupModerators.TABLE).where(GroupModerators.ACCOUNT_ID).
-            and(GroupModerators.GROUP_ID).build();
+    private static final String SELECT_MODERATORS = buildQuery().selectJoin(AccountsTable.TABLE,
+            GroupsModeratorsTable.TABLE, AccountsTable.ID, GroupsModeratorsTable.ACCOUNT_ID).
+            where(GroupsModeratorsTable.GROUP_ID).build();
+    private static final String SELECT_GROUPS = buildQuery().selectJoin(GroupsTable.TABLE, GroupsModeratorsTable.TABLE,
+            GroupsTable.ID, GroupsModeratorsTable.GROUP_ID).join(AccountsTable.TABLE, GroupsTable.OWNER,
+            AccountsTable.ID).where(GroupsMembersTable.ACCOUNT_ID).build();
+    private static final String SELECT = buildQuery().select(GroupsModeratorsTable.TABLE).where(
+            GroupsModeratorsTable.ACCOUNT_ID).and(GroupsModeratorsTable.GROUP_ID).build();
 
     @Override
     protected String getSecondSelectQuery() {
@@ -37,7 +38,7 @@ public class GroupModeratorsDml extends ManyToManyDml<Account, Group> {
 
     @Override
     protected String getFirstSelectQuery() {
-        return SELECT_MEMBERS;
+        return SELECT_MODERATORS;
     }
 
     @Override
@@ -52,7 +53,7 @@ public class GroupModeratorsDml extends ManyToManyDml<Account, Group> {
 
     @Override
     public void updateRow(ResultSet resultSet, long firstId, long secondId) throws SQLException {
-        resultSet.updateLong(GroupsMembers.ACCOUNT_ID, firstId);
-        resultSet.updateLong(GroupsMembers.GROUP_ID, secondId);
+        resultSet.updateLong(GroupsMembersTable.ACCOUNT_ID, firstId);
+        resultSet.updateLong(GroupsMembersTable.GROUP_ID, secondId);
     }
 }

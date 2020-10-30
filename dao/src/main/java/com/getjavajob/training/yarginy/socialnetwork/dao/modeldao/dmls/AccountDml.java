@@ -6,10 +6,12 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.addit
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AbstractDml;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.function.*;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory.getNullAccount;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable.*;
@@ -23,21 +25,17 @@ public class AccountDml extends AbstractDml<Account> {
 
     @Override
     public PreparedStatement getSelect(Connection connection, Account account) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(SELECT_BY_EMAIL);
-        statement.setString(1, account.getEmail());
+        PreparedStatement statement;
+        if (isNull(account)) {
+            statement = connection.prepareStatement(SELECT_ALL);
+        } else if (account.getId() > 0) {
+            statement = connection.prepareStatement(SELECT_BY_ID);
+            statement.setLong(1, account.getId());
+        } else {
+            statement = connection.prepareStatement(SELECT_BY_EMAIL);
+            statement.setString(1, account.getEmail());
+        }
         return statement;
-    }
-
-    @Override
-    public PreparedStatement getSelect(Connection connection, long id) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
-        statement.setLong(1, id);
-        return statement;
-    }
-
-    @Override
-    public PreparedStatement getSelectAll(Connection connection) throws SQLException {
-        return connection.prepareStatement(SELECT_ALL);
     }
 
     @Override
@@ -45,16 +43,6 @@ public class AccountDml extends AbstractDml<Account> {
         PreparedStatement statement = connection.prepareStatement(SELECT_BY_EMAIL, ResultSet.TYPE_SCROLL_INSENSITIVE,
                 ResultSet.CONCUR_UPDATABLE);
         statement.setString(1, account.getEmail());
-        return statement;
-    }
-
-    <E> PreparedStatement getSel(Connection connection, Supplier<E> getter, Setter<E> setter, String sql) throws
-            SQLException {
-        PreparedStatement statement = connection.prepareStatement(sql);
-        if (getter != null) {
-            E value = getter.get();
-            setter.set(value);
-        }
         return statement;
     }
 

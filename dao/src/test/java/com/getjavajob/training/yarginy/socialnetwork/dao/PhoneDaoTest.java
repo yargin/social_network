@@ -74,7 +74,7 @@ public class PhoneDaoTest {
 
     @Test
     public void testSelectNonExisting() {
-        assertEquals(PHONE_DAO.getNullEntity(), PHONE_DAO.select(55));
+        assertEquals(PHONE_DAO.getNullEntity(), PHONE_DAO.select(99999999));
         printPassed(CLASS, "testSelectNonExisting");
     }
 
@@ -82,7 +82,7 @@ public class PhoneDaoTest {
     public void testUpdatePhone() {
         PHONE_DAO.create(PHONE);
         PHONE.setType(PhoneType.PRIVATE);
-        assertTrue(PHONE_DAO.update(PHONE));
+        assertTrue(PHONE_DAO.update(PHONE, PHONE_DAO.select(PHONE)));
         printPassed(CLASS, "testUpdatePhone");
     }
 
@@ -90,7 +90,7 @@ public class PhoneDaoTest {
     public void testUpdateNonExisting() {
         Phone nonExisting = new PhoneImpl();
         nonExisting.setNumber("000000");
-        assertFalse(PHONE_DAO.update(nonExisting));
+        assertFalse(PHONE_DAO.update(nonExisting, nonExisting));
         printPassed(CLASS, "testUpdateNonExisting");
     }
 

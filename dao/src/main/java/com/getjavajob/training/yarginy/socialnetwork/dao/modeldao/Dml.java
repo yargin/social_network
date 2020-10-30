@@ -13,16 +13,6 @@ import java.util.Collection;
  */
 public interface Dml<E extends Entity> {
     /**
-     * retrieves {@link PreparedStatement} which execution result will be {@link E} found by id number
-     * <br>BE CAREFUL - use only with Try-with-resources or Finally block
-     *
-     * @param connection {@link Connection} specified connection to make {@link PreparedStatement}
-     * @param id         {@link E}'s id
-     * @return {@link PreparedStatement} that selects {@link E} found by id
-     */
-    PreparedStatement getSelect(Connection connection, long id) throws SQLException;
-
-    /**
      * retrieves {@link PreparedStatement} which execution result will be {@link E} found by it's alternate key. Used
      * for insertion, modification & deletion
      * <br>BE CAREFUL - use only with Try-with-resources or Finally block
@@ -38,19 +28,11 @@ public interface Dml<E extends Entity> {
      * for insertion, modification & deletion
      * <br>BE CAREFUL - use only with Try-with-resources or Finally block
      *
-     * @param connection {@link Connection} specified connection to make {@link PreparedStatement}
-     * @param entity     {@link E} containing data to search by alternate key
+     * @param connection   {@link Connection} specified connection to make {@link PreparedStatement}
+     * @param storedEntity {@link E} that is stored
      * @return updatable {@link PreparedStatement} with query that selects {@link E} found by identifier
      */
-    PreparedStatement getUpdatableSelect(Connection connection, E entity) throws
-            SQLException;
-
-    /**
-     * provides query that will select all data from Entity's table
-     *
-     * @return query that selects all data
-     */
-    PreparedStatement getSelectAll(Connection connection) throws SQLException;
+    PreparedStatement getUpdatableSelect(Connection connection, E storedEntity) throws SQLException;
 
     /**
      * retrieves {@link E} from {@link ResultSet}'s current cursor position

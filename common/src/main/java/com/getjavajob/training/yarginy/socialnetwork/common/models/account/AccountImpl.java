@@ -7,7 +7,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.addit
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
 
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.Objects;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper.*;
@@ -34,6 +33,11 @@ public class AccountImpl extends AbstractEntity implements Account {
     public AccountImpl(String name, String email) {
         this.name = stringMandatory(name);
         this.email = emailMandatory(email);
+    }
+
+    public AccountImpl(String name, String surname, String email) {
+        this(name, email);
+        this.surname = stringMandatory(surname);
     }
 
     @Override

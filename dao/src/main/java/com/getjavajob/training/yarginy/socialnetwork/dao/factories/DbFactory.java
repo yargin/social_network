@@ -41,4 +41,8 @@ public interface DbFactory {
     OwnedModelDao<Account, AccountPhoto> getAccountPhotoDao(Dao<Account> accountDao);
 
     ManyToManyDao<Account, Group> getGroupModerators(Dao<Account> accountDao, BatchDao<Group> groupDao);
+
+    ManyToManyDao<Account, Group> getGroupRequests(Dao<Account> accountDao, BatchDao<Group> groupBatchDao);
+
+    ManyToManyDao<Account, Account> getFriendshipRequests(Dao<Account> accountDao);
 }

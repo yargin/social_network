@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.groupmembers;
+package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.groupsmembershiprequests;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
@@ -13,20 +13,19 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.tables.GroupsTable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.GroupsMembershipsRequestsTable.*;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 
-public class GroupsMembersDml extends ManyToManyDml<Account, Group> {
-    private static final String SELECT_MEMBERS = buildQuery().selectJoin(AccountsTable.TABLE, GroupsMembersTable.TABLE,
-            AccountsTable.ID, GroupsMembersTable.ACCOUNT_ID).where(GroupsMembersTable.GROUP_ID).build();
-    private static final String SELECT_GROUPS = buildQuery().selectJoin(GroupsTable.TABLE, GroupsMembersTable.TABLE,
-            GroupsTable.ID, GroupsMembersTable.GROUP_ID).join(AccountsTable.TABLE, GroupsTable.OWNER, AccountsTable.ID).
-            where(GroupsMembersTable.ACCOUNT_ID).build();
-    private static final String SELECT = buildQuery().select(GroupsMembersTable.TABLE).where(GroupsMembersTable.ACCOUNT_ID).
-            and(GroupsMembersTable.GROUP_ID).build();
+public class GroupsMembershipsRequestsDml extends ManyToManyDml<Account, Group> {
+    private static final String SELECT_MEMBERS = buildQuery().selectJoin(AccountsTable.TABLE, TABLE, AccountsTable.ID,
+            ACCOUNT_ID).where(ACCOUNT_ID).build();
+    private static final String SELECT_GROUPS = buildQuery().selectJoin(GroupsTable.TABLE, TABLE, GroupsTable.ID,
+            GROUP_ID).where(GroupsMembersTable.ACCOUNT_ID).build();
+    private static final String SELECT = buildQuery().select(TABLE).where(ACCOUNT_ID).and(GROUP_ID).build();
 
     @Override
     protected String getSecondSelectQuery() {
-        return SELECT_GROUPS;
+        return SELECT_MEMBERS;
     }
 
     @Override
@@ -36,7 +35,7 @@ public class GroupsMembersDml extends ManyToManyDml<Account, Group> {
 
     @Override
     protected String getFirstSelectQuery() {
-        return SELECT_MEMBERS;
+        return SELECT_GROUPS;
     }
 
     @Override
@@ -51,7 +50,7 @@ public class GroupsMembersDml extends ManyToManyDml<Account, Group> {
 
     @Override
     public void updateRow(ResultSet resultSet, long accountId, long groupId) throws SQLException {
-        resultSet.updateLong(GroupsMembersTable.ACCOUNT_ID, accountId);
-        resultSet.updateLong(GroupsMembersTable.GROUP_ID, groupId);
+        resultSet.updateLong(ACCOUNT_ID, accountId);
+        resultSet.updateLong(GROUP_ID, groupId);
     }
 }

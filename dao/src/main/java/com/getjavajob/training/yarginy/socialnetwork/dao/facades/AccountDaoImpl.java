@@ -40,8 +40,8 @@ public class AccountDaoImpl implements AccountDao {
     }
 
     @Override
-    public boolean update(Account account) {
-        return accountDao.update(account);
+    public boolean update(Account account, Account storedAccount) {
+        return accountDao.update(account, storedAccount);
     }
 
     @Override

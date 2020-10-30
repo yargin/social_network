@@ -38,21 +38,17 @@ public class PhonesDml extends AbstractDml<Phone> {
     }
 
     @Override
-    public PreparedStatement getSelect(Connection connection, long id) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
-        statement.setLong(1, id);
-        return statement;
-    }
-
-    @Override
-    public PreparedStatement getSelectAll(Connection connection) throws SQLException {
-        return connection.prepareStatement(SELECT_ALL);
-    }
-
-    @Override
     public PreparedStatement getSelect(Connection connection, Phone phone) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(SELECT_BY_NUMBER);
-        statement.setString(1, phone.getNumber());
+        PreparedStatement statement;
+        if (isNull(phone)) {
+            statement = connection.prepareStatement(SELECT_ALL);
+        } else if (phone.getId() > 0) {
+            statement = connection.prepareStatement(SELECT_BY_ID);
+            statement.setLong(1, phone.getId());
+        } else {
+            statement = connection.prepareStatement(SELECT_BY_NUMBER);
+            statement.setString(1, phone.getNumber());
+        }
         return statement;
     }
 

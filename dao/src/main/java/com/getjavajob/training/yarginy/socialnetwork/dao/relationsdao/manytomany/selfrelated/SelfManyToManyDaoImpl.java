@@ -23,9 +23,9 @@ public class SelfManyToManyDaoImpl<E extends Entity> implements SelfManyToManyDa
 
     @Override
     public Collection<E> select(E entity) {
-        dao.checkEntity(entity);
+        long id = dao.approveFromStorage(entity).getId();
         try (Connection connection = connectionPool.getConnection()) {
-            return manyToManyDml.select(connection, entity.getId());
+            return manyToManyDml.select(connection, id);
         } catch (SQLException e) {
             throw new IllegalStateException(e);
         }
@@ -33,16 +33,16 @@ public class SelfManyToManyDaoImpl<E extends Entity> implements SelfManyToManyDa
 
     @Override
     public boolean create(E first, E second) {
-        dao.checkEntity(first);
-        dao.checkEntity(second);
+        long firstId = dao.approveFromStorage(first).getId();
+        long secondId = dao.approveFromStorage(second).getId();
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement statement = manyToManyDml.getSelectStatement(connection, first.getId(), second.getId());
+             PreparedStatement statement = manyToManyDml.getSelectStatement(connection, firstId, secondId);
              ResultSet resultSet = statement.executeQuery()) {
             if (resultSet.next()) {
                 return false;
             }
             resultSet.moveToInsertRow();
-            manyToManyDml.updateRow(resultSet, first.getId(), second.getId());
+            manyToManyDml.updateRow(resultSet, firstId, secondId);
             resultSet.insertRow();
             return true;
         } catch (SQLException e) {
@@ -52,10 +52,10 @@ public class SelfManyToManyDaoImpl<E extends Entity> implements SelfManyToManyDa
 
     @Override
     public boolean delete(E first, E second) {
-        dao.checkEntity(first);
-        dao.checkEntity(second);
+        long firstId = dao.approveFromStorage(first).getId();
+        long secondId = dao.approveFromStorage(second).getId();
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement statement = manyToManyDml.getSelectStatement(connection, first.getId(), second.getId());
+             PreparedStatement statement = manyToManyDml.getSelectStatement(connection, firstId, secondId);
              ResultSet resultSet = statement.executeQuery()) {
             if (!resultSet.next()) {
                 return false;

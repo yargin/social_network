@@ -26,8 +26,10 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.friendship.FriendshipDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.ManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.ManyToManyDaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.accountsfriendshipsrequests.AccountsFriendshipsRequestsDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.groupmembers.GroupsMembersDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.groupmoderators.GroupModeratorsDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.groupsmembershiprequests.GroupsMembershipsRequestsDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDaoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.accountgroups.AccountsGroupsDml;
@@ -147,5 +149,15 @@ public abstract class CommonDbFactory implements DbFactory {
     @Override
     public ManyToManyDao<Account, Group> getGroupModerators(Dao<Account> accountDao, BatchDao<Group> groupDao) {
         return new ManyToManyDaoImpl<>(connectionPool, new GroupModeratorsDml(), accountDao, groupDao);
+    }
+
+    @Override
+    public ManyToManyDao<Account, Group> getGroupRequests(Dao<Account> accountDao, BatchDao<Group> groupDao) {
+        return new ManyToManyDaoImpl<>(connectionPool, new GroupsMembershipsRequestsDml(), accountDao, groupDao);
+    }
+
+    @Override
+    public ManyToManyDao<Account, Account> getFriendshipRequests(Dao<Account> accountDao) {
+        return new ManyToManyDaoImpl<>(connectionPool, new AccountsFriendshipsRequestsDml(), accountDao, accountDao);
     }
 }

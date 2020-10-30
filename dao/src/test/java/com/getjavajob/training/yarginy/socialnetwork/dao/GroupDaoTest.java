@@ -54,11 +54,13 @@ public class GroupDaoTest {
 
     @Test
     public void testUpdateOwner() {
+        Group storedGroup = GROUP_DAO.select(GROUP);
         GROUP.setOwner(ACCOUNT_DAO.select(1));
-        assertTrue(GROUP_DAO.update(GROUP));
+        assertTrue(GROUP_DAO.update(GROUP, storedGroup));
         assertSame(1L, GROUP_DAO.select(GROUP).getOwner().getId());
         GROUP.setOwner(ACCOUNT_DAO.select(3));
-        GROUP_DAO.update(GROUP);
+        storedGroup = GROUP_DAO.select(GROUP);
+        GROUP_DAO.update(GROUP, storedGroup);
     }
 
     @Test
@@ -86,7 +88,8 @@ public class GroupDaoTest {
         GROUP_DAO.create(GROUP);
         String newDescription = "new Description";
         GROUP.setDescription(newDescription);
-        boolean actual = GROUP_DAO.update(GROUP);
+        Group storedGroup = GROUP_DAO.select(GROUP);
+        boolean actual = GROUP_DAO.update(GROUP, storedGroup);
         assertSame(true, actual);
         Group storageGroup = GROUP_DAO.select(GROUP);
         assertEquals(newDescription, storageGroup.getDescription());
@@ -97,7 +100,7 @@ public class GroupDaoTest {
     public void testUpdateNonExistingGroup() {
         Group nonExisting = new GroupImpl();
         nonExisting.setName("non existing group");
-        boolean actual = GROUP_DAO.update(nonExisting);
+        boolean actual = GROUP_DAO.update(nonExisting, nonExisting);
         assertSame(false, actual);
         printPassed(CLASS, "testUpdateNonExistingGroup");
     }

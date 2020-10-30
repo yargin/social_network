@@ -32,8 +32,8 @@ public class PhoneDaoImpl implements PhoneDao {
     }
 
     @Override
-    public boolean update(Phone phone) {
-        return phoneDao.update(phone);
+    public boolean update(Phone phone, Phone storedPhone) {
+        return phoneDao.update(phone, storedPhone);
     }
 
     @Override
