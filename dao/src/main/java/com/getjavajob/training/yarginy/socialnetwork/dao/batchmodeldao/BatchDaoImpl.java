@@ -35,9 +35,9 @@ public class BatchDaoImpl<E extends Entity> extends DaoImpl<E> implements BatchD
                 dml.updateRow(resultSet, entity, getNullEntity());
                 resultSet.insertRow();
             }
-            connection.commit();
             return true;
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -53,11 +53,8 @@ public class BatchDaoImpl<E extends Entity> extends DaoImpl<E> implements BatchD
             while (resultSet.next()) {
                 resultSet.deleteRow();
             }
-            connection.commit();
             return true;
         } catch (SQLException e) {
-            throw new IllegalStateException(e);
-        } catch (IllegalArgumentException e) {
             return false;
         }
     }

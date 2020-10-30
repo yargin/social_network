@@ -24,8 +24,8 @@ public class GroupModeratorsTest {
 
     @Before
     public void initTestValues() {
-        assert accountDao.create(owner);
-        assert accountDao.create(moderator);
+        accountDao.create(owner);
+        accountDao.create(moderator);
         assert groupDao.create(group);
     }
 

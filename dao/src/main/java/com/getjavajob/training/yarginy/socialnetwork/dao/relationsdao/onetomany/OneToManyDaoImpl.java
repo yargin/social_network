@@ -12,20 +12,19 @@ import java.util.Collection;
 public class OneToManyDaoImpl<M extends Entity, O extends Entity> implements OneToManyDao<O, M> {
     private final ConnectionPool connectionPool;
     private final OneToManyDml<O, M> oneToManyDml;
-    private final Dao<O> oneDao;
-    private final BatchDao<M> manyDao;
+    private Dao<O> oneDao;
 
-    public OneToManyDaoImpl(ConnectionPool connectionPool, OneToManyDml<O, M> oneToManyDml, Dao<O> oneDao, BatchDao<M> manyDao) {
+    public OneToManyDaoImpl(ConnectionPool connectionPool, OneToManyDml<O, M> oneToManyDml, Dao<O> oneDao) {
         this.connectionPool = connectionPool;
         this.oneToManyDml = oneToManyDml;
         this.oneDao = oneDao;
-        this.manyDao = manyDao;
     }
 
     @Override
     public Collection<M> selectMany(O entity) {
+        O storedEntity = oneDao.approveFromStorage(entity);
         try (Connection connection = connectionPool.getConnection()) {
-            return oneToManyDml.selectByOne(connection, entity);
+            return oneToManyDml.selectByOne(connection, storedEntity);
         } catch (SQLException e) {
             throw new IllegalStateException(e);
         }

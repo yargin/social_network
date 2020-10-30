@@ -15,9 +15,9 @@ public class GroupDaoImpl implements GroupDao {
     private final BatchDao<Group> groupDao = getDbFactory().getGroupDao();
     private final Dao<Account> accountDao = getDbFactory().getAccountDao();
     private final OneToManyDao<Account, Group> accountsOwnedGroupsDao = getDbFactory().getAccountsOwnedGroupsDao(
+            accountDao);
+    private final ManyToManyDao<Account, Group> accountsGroupMembershipDao = getDbFactory().getGroupMembershipDao(
             accountDao, groupDao);
-    private final ManyToManyDao<Account, Group> accountsGroupMembershipDao = getDbFactory().getGroupMembershipDao(accountDao,
-            groupDao);
 
     @Override
     public Group select(long id) {

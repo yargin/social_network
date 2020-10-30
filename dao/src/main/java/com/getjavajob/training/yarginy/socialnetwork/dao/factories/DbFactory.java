@@ -28,7 +28,7 @@ public interface DbFactory {
 
     BatchDao<Phone> getPhoneDao();
 
-    OneToManyDao<Account, Phone> getAccountsPhones(Dao<Account> accountDao, BatchDao<Phone> phoneDao);
+    OneToManyDao<Account, Phone> getAccountsPhones(Dao<Account> accountDao);
 
     Dao<Password> getPasswordDao();
 
@@ -36,7 +36,7 @@ public interface DbFactory {
 
     ConnectionPool getConnectionPool();
 
-    OneToManyDao<Account, Group> getAccountsOwnedGroupsDao(Dao<Account> accountDao, BatchDao<Group> groupDao);
+    OneToManyDao<Account, Group> getAccountsOwnedGroupsDao(Dao<Account> accountDao);
 
     OwnedModelDao<Account, AccountPhoto> getAccountPhotoDao(Dao<Account> accountDao);
 

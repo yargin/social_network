@@ -35,10 +35,9 @@ public interface Dml<E extends Entity> {
     PreparedStatement getUpdatableSelect(Connection connection, E storedEntity) throws SQLException;
 
     /**
-     * retrieves {@link E} from {@link ResultSet}'s current cursor position
+     * retrieves {@link E} values from {@link ResultSet}'s current cursor position
      *
      * @param resultSet specified {@link ResultSet}
-     * @return extracted {@link E}
      */
     E selectFromRow(ResultSet resultSet) throws SQLException;
 

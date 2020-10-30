@@ -23,6 +23,13 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
     }
 
     @Override
+    public E select(long id) {
+        E entity = dml.getNullEntity();
+        entity.setId(id);
+        return select(entity);
+    }
+
+    @Override
     public E select(E entityToSelect) {
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement statement = dml.getSelect(connection, entityToSelect)) {
@@ -37,11 +44,11 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
             if (!resultSet.next()) {
                 return dml.getNullEntity();
             }
-            E entity = dml.selectFromRow(resultSet);
+            E storedEntity = dml.selectFromRow(resultSet);
             if (resultSet.next()) {
                 throw new IllegalStateException("statement returned more then one row");
             }
-            return entity;
+            return storedEntity;
         }
     }
 
@@ -59,20 +66,15 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
             resultSet.insertRow();
             return true;
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }
 
     @Override
     public boolean update(E entity, E storedEntity) {
-        E approvedEntity;
-        try {
-            approvedEntity = approveFromStorage(storedEntity);
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement statementForUpdate = dml.getUpdatableSelect(connection, approvedEntity);
+             PreparedStatement statementForUpdate = dml.getUpdatableSelect(connection, storedEntity);
              ResultSet resultSetUpdate = statementForUpdate.executeQuery()) {
             if (!resultSetUpdate.next()) {
                 return false;
@@ -84,20 +86,15 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
             }
             return true;
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }
 
     @Override
     public boolean delete(E entity) {
-        E approvedEntity;
-        try {
-            approvedEntity = approveFromStorage(entity);
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement statement = dml.getUpdatableSelect(connection, approvedEntity);
+             PreparedStatement statement = dml.getUpdatableSelect(connection, entity);
              ResultSet resultSet = statement.executeQuery()) {
             if (!resultSet.next()) {
                 return false;
@@ -105,6 +102,7 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
             resultSet.deleteRow();
             return true;
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -140,9 +138,17 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
     public E approveFromStorage(E entity) {
         checkEntity(entity);
         if (entity.getId() == 0) {
-            E readEntity = select(entity);
-            checkEntity(readEntity);
-            return readEntity;
+            Connection connection;
+            try {
+                connection = connectionPool.getConnection();
+                PreparedStatement statement = dml.getSelect(connection, entity);
+                E readEntity = select(statement);
+                checkEntity(readEntity);
+                return readEntity;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return getNullEntity();
+            }
         } else {
             return entity;
         }

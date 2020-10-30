@@ -11,7 +11,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.tables.PhonesTable;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 
 public class AccountsPhonesDml extends OneToManyDml<Account, Phone> {
-    private static final String SELECT_BY_ACCOUNT = buildQuery().selectJoin(AccountsTable.TABLE, PhonesTable.TABLE,
+    private static final String SELECT_BY_ACCOUNT = buildQuery().selectJoin(PhonesTable.TABLE, AccountsTable.TABLE,
             AccountsTable.ID, PhonesTable.OWNER).where(PhonesTable.OWNER).build();
 
     @Override

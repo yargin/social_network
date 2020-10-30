@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.Objects;
 
 import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.PhonesTable.*;
@@ -21,15 +22,17 @@ public class BatchPhonesDml extends PhonesDml implements BatchDml<Phone> {
     private final Dao<Account> accountDao = getDbFactory().getAccountDao();
 
     @Override
-    public PreparedStatement batchSelectForInsert(Connection connection, Collection<Phone> entities) throws SQLException {
+    public PreparedStatement batchSelectForInsert(Connection connection, Collection<Phone> phones) throws SQLException {
         StringBuilder numberBuilder = new StringBuilder();
         String select;
-        if (entities.isEmpty()) {
+        if (phones.isEmpty()) {
             throw new IllegalArgumentException();
         } else {
-            for (Phone phone : entities) {
-                Account account = phone.getOwner();
-                account = accountDao.approveFromStorage(account);
+            Account account = null;
+            for (Phone phone : phones) {
+                if (!Objects.equals(account, phone.getOwner())) {
+                    account = accountDao.approveFromStorage(phone.getOwner());
+                }
                 phone.setOwner(account);
                 numberBuilder.append(phone.getNumber()).append(", ");
             }
@@ -40,8 +43,20 @@ public class BatchPhonesDml extends PhonesDml implements BatchDml<Phone> {
     }
 
     @Override
-    public PreparedStatement batchSelectForDelete(Connection connection, Collection<Phone> entities)
+    public PreparedStatement batchSelectForDelete(Connection connection, Collection<Phone> phones)
             throws SQLException {
-        return BatchDeletionHelper.batchSelectUpdate(connection, entities, TABLE, ID);
+        StringBuilder numberBuilder = new StringBuilder();
+        String select;
+        if (phones.isEmpty()) {
+            throw new IllegalArgumentException();
+        } else {
+            for (Phone phone : phones) {
+                String number = phone.getNumber();
+                numberBuilder.append(number).append(", ");
+            }
+            String numbers = numberBuilder.substring(0, numberBuilder.length() - 2);
+            select = buildQuery().select(TABLE).whereIn(new String[]{NUMBER}, new String[]{numbers}).build();
+        }
+        return connection.prepareStatement(select, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
     }
 }

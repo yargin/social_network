@@ -26,6 +26,7 @@ public class AccountsFriendshipsDaoTest {
     public AccountsFriendshipsDaoTest() {
         friend = ACCOUNT_DAO.select(1);
         noFriends = ACCOUNT_DAO.select(4);
+        FRIENDSHIP_DAO.create(friend, ACCOUNT_DAO.select(3));
     }
 
     @Test

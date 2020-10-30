@@ -53,7 +53,7 @@ public class GroupModeratorsDml extends ManyToManyDml<Account, Group> {
 
     @Override
     public void updateRow(ResultSet resultSet, long firstId, long secondId) throws SQLException {
-        resultSet.updateLong(GroupsMembersTable.ACCOUNT_ID, firstId);
-        resultSet.updateLong(GroupsMembersTable.GROUP_ID, secondId);
+        resultSet.updateLong(GroupsModeratorsTable.ACCOUNT_ID, firstId);
+        resultSet.updateLong(GroupsModeratorsTable.GROUP_ID, secondId);
     }
 }

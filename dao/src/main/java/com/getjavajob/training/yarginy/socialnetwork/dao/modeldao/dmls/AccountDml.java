@@ -27,7 +27,7 @@ public class AccountDml extends AbstractDml<Account> {
     public PreparedStatement getSelect(Connection connection, Account account) throws SQLException {
         PreparedStatement statement;
         if (isNull(account)) {
-            statement = connection.prepareStatement(SELECT_ALL);
+            statement = connection.prepareStatement(SELECT_ALL, ResultSet.TYPE_FORWARD_ONLY);
         } else if (account.getId() > 0) {
             statement = connection.prepareStatement(SELECT_BY_ID);
             statement.setLong(1, account.getId());
@@ -44,11 +44,6 @@ public class AccountDml extends AbstractDml<Account> {
                 ResultSet.CONCUR_UPDATABLE);
         statement.setString(1, account.getEmail());
         return statement;
-    }
-
-    @FunctionalInterface
-    interface Setter<E> {
-        void set(E value) throws SQLException;
     }
 
     @Override

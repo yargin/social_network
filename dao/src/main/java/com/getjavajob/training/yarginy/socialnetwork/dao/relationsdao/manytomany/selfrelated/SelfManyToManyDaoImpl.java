@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class SelfManyToManyDaoImpl<E extends Entity> implements SelfManyToManyDao<E> {
@@ -46,6 +47,7 @@ public class SelfManyToManyDaoImpl<E extends Entity> implements SelfManyToManyDa
             resultSet.insertRow();
             return true;
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -66,6 +68,7 @@ public class SelfManyToManyDaoImpl<E extends Entity> implements SelfManyToManyDa
             }
             return true;
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }

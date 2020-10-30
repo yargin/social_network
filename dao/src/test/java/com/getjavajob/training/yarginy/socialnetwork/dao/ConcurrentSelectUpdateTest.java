@@ -21,8 +21,7 @@ import static org.junit.Assert.assertFalse;
 
 public class ConcurrentSelectUpdateTest {
     private static final String CLASS = "AccountDaoTest";
-    private static final DbFactory DB_FACTORY = AbstractDbFactory.getDbFactory();
-    private static final int PHONES_NUMBER = 1000;
+    private static final int PHONES_NUMBER = 10000;
     private final AccountDao accountDao = new AccountDaoImpl();
     private final PhoneDao firstPhoneDao = new PhoneDaoImpl();
     private final PhoneDao secondPhoneDao = new PhoneDaoImpl();
@@ -71,8 +70,8 @@ public class ConcurrentSelectUpdateTest {
                 inFirstBlock = false;
             }
         });
-        firstThread.start();
         sleep(400);
+        firstThread.start();
         Phone secondPhone = new PhoneImpl("123123", account);
         Thread secondThread = new Thread(() -> {
             if (inSecondBlock) {

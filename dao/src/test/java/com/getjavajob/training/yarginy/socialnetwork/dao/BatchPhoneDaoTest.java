@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class BatchPhoneDaoTest {
     private final AccountDao accountDao = new AccountDaoImpl();
@@ -48,14 +49,12 @@ public class BatchPhoneDaoTest {
         phoneDao.create(testPhones);
         testPhones = phoneDao.selectPhonesByOwner(testAccount);
         testPhones.add(new PhoneImpl("777-777", testAccount));
-        assertFalse(phoneDao.delete(testPhones));
-        System.out.println("delete phones: " + phoneDao.selectPhonesByOwner(testAccount));
+        assertTrue(phoneDao.delete(testPhones));
     }
 
     @Test
     public void testCreateManyPhonesAndOneExisting() {
         phoneDao.create(testPhones.iterator().next());
         assertFalse(phoneDao.create(testPhones));
-        System.out.println("create phones: " + phoneDao.selectPhonesByOwner(testAccount));
     }
 }

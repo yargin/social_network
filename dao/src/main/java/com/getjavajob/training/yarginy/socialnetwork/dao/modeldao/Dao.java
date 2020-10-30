@@ -2,6 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
 
+import java.sql.SQLException;
 import java.util.Collection;
 
 /**

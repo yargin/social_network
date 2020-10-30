@@ -122,8 +122,8 @@ public abstract class CommonDbFactory implements DbFactory {
     }
 
     @Override
-    public OneToManyDao<Account, Phone> getAccountsPhones(Dao<Account> accountDao, BatchDao<Phone> phoneDao) {
-        return new OneToManyDaoImpl<>(connectionPool, new AccountsPhonesDml(), accountDao, phoneDao);
+    public OneToManyDao<Account, Phone> getAccountsPhones(Dao<Account> accountDao) {
+        return new OneToManyDaoImpl<>(connectionPool, new AccountsPhonesDml(), accountDao);
     }
 
     @Override
@@ -137,8 +137,8 @@ public abstract class CommonDbFactory implements DbFactory {
     }
 
     @Override
-    public OneToManyDao<Account, Group> getAccountsOwnedGroupsDao(Dao<Account> accountDao, BatchDao<Group> groupDao) {
-        return new OneToManyDaoImpl<>(connectionPool, new AccountsGroupsDml(), accountDao, groupDao);
+    public OneToManyDao<Account, Group> getAccountsOwnedGroupsDao(Dao<Account> accountDao) {
+        return new OneToManyDaoImpl<>(connectionPool, new AccountsGroupsDml(), accountDao);
     }
 
     @Override

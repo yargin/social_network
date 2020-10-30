@@ -23,8 +23,7 @@ public class AccountsGroupsTest {
     public static final DbFactory FACTORY = AbstractDbFactory.getDbFactory();
     public static final Dao<Account> ACCOUNT_DAO = FACTORY.getAccountDao();
     public static final BatchDao<Group> GROUP_DAO = FACTORY.getGroupDao();
-    public static final OneToManyDao<Account, Group> ACCOUNTS_GROUPS = FACTORY.getAccountsOwnedGroupsDao(ACCOUNT_DAO,
-            GROUP_DAO);
+    public static final OneToManyDao<Account, Group> ACCOUNTS_GROUPS = FACTORY.getAccountsOwnedGroupsDao(ACCOUNT_DAO);
 
     @Test
     public void testSelectGroups() {
