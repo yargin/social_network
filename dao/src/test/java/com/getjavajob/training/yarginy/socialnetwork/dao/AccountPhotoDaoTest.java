@@ -12,7 +12,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -58,19 +61,21 @@ public class AccountPhotoDaoTest {
 
     @Test
     public void testUpdate() throws IOException {
-//        setPhoto(accountPhoto, "test2.png");
-//        assertTrue(accountPhotoDao.update(accountPhoto));
-//        AccountPhoto testAccountPhoto = accountPhotoDao.select(account);
-//        assertEquals(accountPhoto, testAccountPhoto);
-//        printPassed(CLASS, "testUpdate");
+        setPhoto(accountPhoto, "test2.png");
+        AccountPhoto testAccountPhoto = accountPhotoDao.select(account);
+        assertTrue(accountPhotoDao.update(testAccountPhoto, accountPhoto));
+        testAccountPhoto = accountPhotoDao.select(account);
+        assertEquals(accountPhoto, testAccountPhoto);
+        printPassed(CLASS, "testUpdate");
     }
 
     @Test
     public void testUpdateNonExisting() {
         Account testAccount = account;
+        AccountPhoto testAccountPhoto = accountPhotoDao.select(account);
         testAccount.setId(TEST_ID);
         accountPhoto.setOwner(testAccount);
-        assertFalse(accountPhotoDao.update(accountPhoto));
+        assertFalse(accountPhotoDao.update(testAccountPhoto, accountPhoto));
         printPassed(CLASS, "testUpdateNonExisting");
     }
 

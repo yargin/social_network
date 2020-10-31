@@ -30,5 +30,5 @@ public interface BatchDao<E extends Entity> extends Dao<E> {
     /**
      *
      */
-    boolean update(Collection<E> storedEntities, Collection<E> newEntities);
+    boolean update(Collection<E> newEntities, Collection<E> storedEntities);
 }

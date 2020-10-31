@@ -41,7 +41,6 @@ public class AccountPhotoImpl implements AccountPhoto {
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
-        //convert to buffImage, resize, save byte array
     }
 
     @Override
@@ -79,7 +78,9 @@ public class AccountPhotoImpl implements AccountPhoto {
         }
         if (o instanceof AccountPhoto) {
             AccountPhoto accountPhoto = (AccountPhoto) o;
-            return Objects.equals(accountPhoto.getOwner(), account) && Arrays.equals(accountPhoto.getPhoto(), photo);
+            boolean photoEquals = Arrays.equals(accountPhoto.getPhoto(), photo);
+            boolean accountsEquals = Objects.equals(accountPhoto.getOwner(), account);
+            return photoEquals && accountsEquals;
         }
         return false;
     }

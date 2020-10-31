@@ -80,8 +80,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean updateAccount(Account account) {
-        return accountDao.update(account);
+    public boolean updateAccount(Account account, Account storedAccount) {
+        return accountDao.update(account, storedAccount);
     }
 
     @Override

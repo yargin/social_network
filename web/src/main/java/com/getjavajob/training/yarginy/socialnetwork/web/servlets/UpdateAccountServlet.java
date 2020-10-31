@@ -1,7 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.servlets;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountInfoService;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountInfoServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
@@ -15,15 +14,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.UpdateFieldHelper.*;
 import static java.util.Objects.isNull;
 
 public class UpdateAccountServlet extends HttpServlet {
-    private static final String STORED_PHONE_LIST = "storedPhoneList";
     private static final String UPDATE_SUCCESS_URL = Pages.MY_WALL;
     private final AccountInfoService accountInfoService = new AccountInfoServiceImpl();
     private final ThreadLocal<Boolean> paramsAccepted = new ThreadLocal<>();
@@ -56,12 +52,10 @@ public class UpdateAccountServlet extends HttpServlet {
         HttpSession session = req.getSession();
 
         AccountInfoDTO accountInfoDTO = (AccountInfoDTO) session.getAttribute(Attributes.ACCOUNT_INFO);
-        if (isNull(accountInfoDTO)) {
+        AccountInfoDTO storedAccountInfoDTO = (AccountInfoDTO) session.getAttribute(Attributes.STORED_ACCOUNT_INFO);
+        if (isNull(accountInfoDTO) || isNull(storedAccountInfoDTO)) {
             redirect(req, resp, Pages.LOGOUT);
             return;
-        }
-        if (isNull(session.getAttribute(STORED_PHONE_LIST))) {
-            session.setAttribute(STORED_PHONE_LIST, new ArrayList<>(accountInfoDTO.getPhones()));
         }
 
         getValuesFromParams(req, accountInfoDTO, paramsAccepted);
@@ -71,17 +65,17 @@ public class UpdateAccountServlet extends HttpServlet {
         if (!accepted) {
             doGet(req, resp);
         } else {
-            update(req, resp, accountInfoDTO);
+            update(req, resp, accountInfoDTO, storedAccountInfoDTO);
             paramsAccepted.remove();
         }
     }
 
-    private void update(HttpServletRequest req, HttpServletResponse resp, AccountInfoDTO accountInfoDTO) throws
+    private void update(HttpServletRequest req, HttpServletResponse resp, AccountInfoDTO accountInfoDTO,
+                        AccountInfoDTO storedAccountInfoDTO) throws
             ServletException, IOException {
         boolean updated;
         try {
-            Collection<Phone> oldPhoneList = (Collection<Phone>) req.getSession().getAttribute(STORED_PHONE_LIST);
-            updated = accountInfoService.update(accountInfoDTO, oldPhoneList);
+            updated = accountInfoService.update(accountInfoDTO, storedAccountInfoDTO);
         } catch (IncorrectDataException e) {
             handleInfoExceptions(req, resp, e, this::doGet);
             return;

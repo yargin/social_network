@@ -47,6 +47,8 @@ public abstract class NullEntitiesFactory {
     }
 
     public static AccountPhoto getNullAccountPhoto() {
-        return new AccountPhotoImpl();
+        AccountPhoto accountPhoto = new AccountPhotoImpl();
+        accountPhoto.setOwner(getNullAccount());
+        return accountPhoto;
     }
 }

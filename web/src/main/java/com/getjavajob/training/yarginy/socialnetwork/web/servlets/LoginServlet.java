@@ -7,13 +7,16 @@ import com.getjavajob.training.yarginy.socialnetwork.service.AuthServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.*;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData.WRONG_EMAIL;
 import static com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData.WRONG_PASSWORD;
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirectToReferer;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 import static java.util.Objects.isNull;
 
 public class LoginServlet extends HttpServlet {
@@ -51,6 +54,7 @@ public class LoginServlet extends HttpServlet {
         req.getSession().setAttribute(USER_ID, account.getId());
         req.getSession().setAttribute(USER_ROLE, account.getRole());
         req.getSession().setAttribute(USER_EMAIL, account.getEmail());
+        req.getSession().setAttribute(USER_SURNAME, account.getSurname());
     }
 
     @Override

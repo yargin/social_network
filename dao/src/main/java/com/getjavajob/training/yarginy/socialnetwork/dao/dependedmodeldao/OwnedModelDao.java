@@ -1,14 +1,14 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.dependedmodeldao;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.OwnedEntity;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.OwnedEntity;
 
 public interface OwnedModelDao<O extends Entity, E extends OwnedEntity<O>> {
     E select(O owner);
 
     boolean create(E ownedEntity);
 
-    boolean update(E ownedEntity);
+    boolean update(E ownedEntity, E storedOwnedEntity);
 
     boolean delete(E ownedEntity);
 

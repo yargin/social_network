@@ -75,13 +75,13 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
     public boolean update(E entity, E storedEntity) {
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement statementForUpdate = dml.getUpdatableSelect(connection, storedEntity);
-             ResultSet resultSetUpdate = statementForUpdate.executeQuery()) {
-            if (!resultSetUpdate.next()) {
+             ResultSet resultSet = statementForUpdate.executeQuery()) {
+            if (!resultSet.next()) {
                 return false;
             }
-            dml.updateRow(resultSetUpdate, entity, storedEntity);
-            resultSetUpdate.updateRow();
-            if (resultSetUpdate.next()) {
+            dml.updateRow(resultSet, entity, storedEntity);
+            resultSet.updateRow();
+            if (resultSet.next()) {
                 throw new IllegalStateException("statement returned more then one row");
             }
             return true;
@@ -112,11 +112,11 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement statement = dml.getSelect(connection, null);
              ResultSet resultSet = statement.executeQuery()) {
-            Collection<E> all = new ArrayList<>();
+            Collection<E> entities = new ArrayList<>();
             while (resultSet.next()) {
-                all.add(dml.selectFromRow(resultSet));
+                entities.add(dml.selectFromRow(resultSet));
             }
-            return all;
+            return entities;
         } catch (SQLException e) {
             throw new IllegalStateException(e);
         }

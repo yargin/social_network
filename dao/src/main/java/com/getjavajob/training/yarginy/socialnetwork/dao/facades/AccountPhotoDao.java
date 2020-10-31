@@ -8,7 +8,7 @@ public interface AccountPhotoDao {
 
     boolean create(AccountPhoto accountPhoto);
 
-    boolean update(AccountPhoto accountPhoto);
+    boolean update(AccountPhoto accountPhoto, AccountPhoto storedAccountPhoto);
 
     boolean delete(AccountPhoto accountPhoto);
 

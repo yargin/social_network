@@ -16,5 +16,5 @@ public interface OwnedEntityDml<O extends Entity, E extends OwnedEntity<O>> {
 
     E   selectFromRow(ResultSet resultSet, O owner) throws SQLException, IOException;
 
-    void updateRow(ResultSet resultSet, E ownedEntity) throws SQLException;
+    void updateRow(ResultSet resultSet, E ownedEntity, E storedOwnedEntity) throws SQLException;
 }

@@ -17,7 +17,7 @@ public interface AccountService {
 
     boolean createAccount(Account account, Collection<Phone> phones);
 
-    boolean updateAccount(Account account);
+    boolean updateAccount(Account account, Account storedAccount);
 
     boolean deleteAccount(Account account);
 

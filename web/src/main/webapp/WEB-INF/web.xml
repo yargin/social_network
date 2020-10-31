@@ -98,4 +98,13 @@
         <servlet-name>updateAccount</servlet-name>
         <url-pattern>/updateInfo</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>groups</servlet-name>
+        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.GroupListServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>groups</servlet-name>
+        <url-pattern>/groups</url-pattern>
+    </servlet-mapping>
 </web-app>

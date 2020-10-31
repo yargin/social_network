@@ -21,8 +21,6 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.U
 import static java.util.Objects.isNull;
 
 public class RegisterServlet extends HttpServlet {
-    private static final String EMAIL_DUPLICATE = "emailDuplicate";
-    private static final String PHONE_DUPLICATE = "phoneDuplicate";
     private static final String REG_SUCCESS_URL = Pages.MY_WALL;
     private static final AuthService AUTH_SERVICE = new AuthServiceImpl();
     private final ThreadLocal<Boolean> paramsAccepted = new ThreadLocal<>();
@@ -63,6 +61,7 @@ public class RegisterServlet extends HttpServlet {
             doGet(req, resp);
         } else {
             register(req, resp, accountInfoDTO, password);
+            paramsAccepted.remove();
         }
     }
 

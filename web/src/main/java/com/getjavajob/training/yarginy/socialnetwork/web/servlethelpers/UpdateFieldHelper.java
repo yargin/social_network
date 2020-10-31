@@ -35,8 +35,6 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 import static java.util.Objects.isNull;
 
 public final class UpdateFieldHelper {
-    private static final int PHONES_SIZE = 2;
-
     private UpdateFieldHelper() {
     }
 
@@ -104,7 +102,8 @@ public final class UpdateFieldHelper {
         AccountInfoDTO accountInfo = (AccountInfoDTO) session.getAttribute(ACCOUNT_INFO);
         if (isNull(accountInfo)) {
             accountInfo = accountInfoCreator.get();
-            session.setAttribute(ACCOUNT_INFO, accountInfo);
+            session.setAttribute(ACCOUNT_INFO, accountInfoCreator.get());
+            session.setAttribute(STORED_ACCOUNT_INFO, accountInfoCreator.get());
         }
         return accountInfo;
     }

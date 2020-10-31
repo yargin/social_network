@@ -46,20 +46,20 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     }
 
     @Override
-    public boolean update(AccountInfoDTO accountInfoDTO, Collection<Phone> oldPhonesList) {
+    public boolean update(AccountInfoDTO accountInfo, AccountInfoDTO storedAccountInfo) {
         try (Transaction transaction = transactionManager.getTransaction()) {
-            Account account = accountInfoDTO.getAccount();
-            if (!accountDao.update(account)) {
+            Account account = accountInfo.getAccount();
+            if (!accountDao.update(account, storedAccountInfo.getAccount())) {
                 transaction.rollback();
                 throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
             }
 
-            if (!phoneDao.update(oldPhonesList, accountInfoDTO.getPhones())) {
+            if (!phoneDao.update(storedAccountInfo.getPhones(), accountInfo.getPhones())) {
                 transaction.rollback();
                 throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
             }
 
-            if (!accountPhotoDao.update(accountInfoDTO.getAccountPhoto())) {
+            if (!accountPhotoDao.update(storedAccountInfo.getAccountPhoto(), accountInfo.getAccountPhoto())) {
                 transaction.rollback();
                 throw new IncorrectDataException(IncorrectData.UPLOADING_ERROR);
             }

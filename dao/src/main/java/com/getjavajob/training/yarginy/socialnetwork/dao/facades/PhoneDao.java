@@ -16,7 +16,7 @@ public interface PhoneDao {
 
     boolean delete(Phone phone);
 
-    boolean update(Collection<Phone> storedPhones, Collection<Phone> newPhones);
+    boolean update(Collection<Phone> newPhones, Collection<Phone> storedPhones);
 
     boolean delete(Collection<Phone> phones);
 

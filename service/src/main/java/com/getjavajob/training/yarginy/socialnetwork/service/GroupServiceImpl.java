@@ -27,13 +27,13 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Collection<Group> getAllGroups(Account account) {
+    public Collection<Group> getAllGroups() {
         return groupDao.selectAll();
     }
 
     @Override
     public Collection<Group> getNonJoinedGroups(Account account) {
-        Collection<Group> groups = getAllGroups(account);
+        Collection<Group> groups = getAllGroups();
         groups.removeAll(getAccountGroups(account));
         return groups;
     }

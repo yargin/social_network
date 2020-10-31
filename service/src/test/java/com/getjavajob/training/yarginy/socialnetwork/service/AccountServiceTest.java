@@ -32,6 +32,7 @@ public class AccountServiceTest {
     private final AccountService accountService = new AccountServiceImpl(accountDao, phoneDao, friendsDao,
             accountsInGroups, accountPhotoDao, transactionManager);
     private Account account;
+    private Account storedAccount;
     private Collection<Phone> phones;
 
     @Before
@@ -84,10 +85,10 @@ public class AccountServiceTest {
     @Test
     public void testUpdateAccount() {
         when(transactionManager.getTransaction()).thenReturn(transaction);
-        when(accountDao.update(account)).thenReturn(true);
-        assertTrue(accountService.updateAccount(account));
-        when(accountDao.update(account)).thenReturn(false);
-        assertFalse(accountService.updateAccount(account));
+        when(accountDao.update(account, storedAccount)).thenReturn(true);
+        assertTrue(accountService.updateAccount(account, storedAccount));
+        when(accountDao.update(account, storedAccount)).thenReturn(false);
+        assertFalse(accountService.updateAccount(account, storedAccount));
         printPassed(CLASS, "testUpdateAccount");
     }
 

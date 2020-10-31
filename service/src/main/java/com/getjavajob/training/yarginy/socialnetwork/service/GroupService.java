@@ -12,7 +12,7 @@ public interface GroupService {
 
     Collection<Group> getAccountGroups(Account account);
 
-    Collection<Group> getAllGroups(Account account);
+    Collection<Group> getAllGroups();
 
     Collection<Group> getNonJoinedGroups(Account account);
 

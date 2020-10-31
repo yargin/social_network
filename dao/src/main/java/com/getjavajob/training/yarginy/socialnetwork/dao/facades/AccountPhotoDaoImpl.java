@@ -22,8 +22,8 @@ public class AccountPhotoDaoImpl implements AccountPhotoDao {
     }
 
     @Override
-    public boolean update(AccountPhoto accountPhoto) {
-        return accountPhotoDao.update(accountPhoto);
+    public boolean update(AccountPhoto accountPhoto, AccountPhoto storedAccountPhoto) {
+        return accountPhotoDao.update(storedAccountPhoto, accountPhoto);
     }
 
     @Override
