@@ -7,8 +7,6 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,7 +19,7 @@ import static org.junit.Assert.assertFalse;
 
 public class ConcurrentSelectUpdateTest {
     private static final String CLASS = "AccountDaoTest";
-    private static final int PHONES_NUMBER = 10000;
+    private static final int PHONES_NUMBER = 4000;
     private final AccountDao accountDao = new AccountDaoImpl();
     private final PhoneDao firstPhoneDao = new PhoneDaoImpl();
     private final PhoneDao secondPhoneDao = new PhoneDaoImpl();
@@ -41,7 +39,6 @@ public class ConcurrentSelectUpdateTest {
     }
 
     @Test
-    //todo
     public void tryToDelete() {
         Account account = accountDao.select(1);
         Collection<Phone> phones = new ArrayList<>();

@@ -13,4 +13,10 @@ public interface GroupsMembersDao {
     boolean joinGroup(Account account, Group second);
 
     boolean leaveGroup(Account account, Group second);
+
+    Collection<Account> selectRequests(Group group);
+
+    boolean createRequest(Account account, Group group);
+
+    boolean removeRequest(Account account, Group group);
 }

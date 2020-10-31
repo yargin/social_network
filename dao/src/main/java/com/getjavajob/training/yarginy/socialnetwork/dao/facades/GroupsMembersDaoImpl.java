@@ -15,6 +15,8 @@ public class GroupsMembersDaoImpl implements GroupsMembersDao {
     private final BatchDao<Group> groupDao = getDbFactory().getGroupDao();
     private final ManyToManyDao<Account, Group> groupMembershipDao = getDbFactory().getGroupMembershipDao(accountDao,
             groupDao);
+    private final ManyToManyDao<Account, Group> membershipRequestsDao = getDbFactory().getGroupRequests(accountDao,
+            groupDao);
 
     @Override
     public Collection<Group> selectAccountGroups(Account account) {
@@ -34,5 +36,20 @@ public class GroupsMembersDaoImpl implements GroupsMembersDao {
     @Override
     public boolean leaveGroup(Account account, Group group) {
         return groupMembershipDao.delete(account, group);
+    }
+
+    @Override
+    public Collection<Account> selectRequests(Group group) {
+        return membershipRequestsDao.selectBySecond(group);
+    }
+
+    @Override
+    public boolean createRequest(Account account, Group group) {
+        return membershipRequestsDao.create(account, group);
+    }
+
+    @Override
+    public boolean removeRequest(Account account, Group group) {
+        return membershipRequestsDao.delete(account, group);
     }
 }

@@ -4,11 +4,11 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Objects;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper.stringOptional;
 import static java.util.Objects.isNull;
 
 public class AccountPhotoImpl implements AccountPhoto {
@@ -41,6 +41,7 @@ public class AccountPhotoImpl implements AccountPhoto {
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
+        //convert to buffImage, resize, save byte array
     }
 
     @Override

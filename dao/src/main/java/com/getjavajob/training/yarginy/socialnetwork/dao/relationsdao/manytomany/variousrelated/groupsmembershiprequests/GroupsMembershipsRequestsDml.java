@@ -7,7 +7,6 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.AccountDm
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.GroupDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.ManyToManyDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable;
-import com.getjavajob.training.yarginy.socialnetwork.dao.tables.GroupsMembersTable;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.GroupsTable;
 
 import java.sql.ResultSet;
@@ -18,14 +17,14 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuild
 
 public class GroupsMembershipsRequestsDml extends ManyToManyDml<Account, Group> {
     private static final String SELECT_MEMBERS = buildQuery().selectJoin(AccountsTable.TABLE, TABLE, AccountsTable.ID,
-            ACCOUNT_ID).where(ACCOUNT_ID).build();
+            ACCOUNT_ID).where(GROUP_ID).build();
     private static final String SELECT_GROUPS = buildQuery().selectJoin(GroupsTable.TABLE, TABLE, GroupsTable.ID,
-            GROUP_ID).where(GroupsMembersTable.ACCOUNT_ID).build();
+            GROUP_ID).where(ACCOUNT_ID).build();
     private static final String SELECT = buildQuery().select(TABLE).where(ACCOUNT_ID).and(GROUP_ID).build();
 
     @Override
     protected String getSecondSelectQuery() {
-        return SELECT_MEMBERS;
+        return SELECT_GROUPS;
     }
 
     @Override
@@ -35,7 +34,7 @@ public class GroupsMembershipsRequestsDml extends ManyToManyDml<Account, Group> 
 
     @Override
     protected String getFirstSelectQuery() {
-        return SELECT_GROUPS;
+        return SELECT_MEMBERS;
     }
 
     @Override

@@ -9,6 +9,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Collections;
+
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
@@ -18,22 +20,23 @@ public class GroupModeratorsTest {
     private final GroupsModeratorsDao groupsModeratorsDao = new GroupsModeratorsDaoImpl();
     private final AccountDao accountDao = new AccountDaoImpl();
     private final GroupDao groupDao = new GroupDaoImpl();
-    private Account owner = new AccountImpl("firstTest", "test", "first@test.test");
-    private Account moderator = new AccountImpl("secondTEst", "test", "second@test.test");
-    private Group group = new GroupImpl("testGroup", owner);
+    private final Account owner = new AccountImpl("firstTest", "test", "first@test.test");
+    private final Account moderator = new AccountImpl("secondTEst", "test", "second@test.test");
+    private final Group group = new GroupImpl("testGroup", owner);
 
     @Before
     public void initTestValues() {
         accountDao.create(owner);
         accountDao.create(moderator);
-        assert groupDao.create(group);
+        groupDao.create(group);
     }
 
     @After
     public void deleteTestValues() {
-        assert groupDao.delete(group);
-        assert accountDao.delete(moderator);
-        assert accountDao.delete(owner);
+        groupsModeratorsDao.deleteGroupModerator(moderator, group);
+        groupDao.delete(group);
+        accountDao.delete(moderator);
+        accountDao.delete(owner);
     }
 
     @Test
@@ -47,5 +50,11 @@ public class GroupModeratorsTest {
         groupsModeratorsDao.addGroupModerator(moderator, group);
         assertTrue(groupsModeratorsDao.deleteGroupModerator(moderator, group));
         assertEquals(emptyList(), groupsModeratorsDao.selectModerators(group));
+    }
+
+    @Test
+    public void testSelectModerators() {
+        groupsModeratorsDao.addGroupModerator(moderator, group);
+        assertEquals(Collections.singletonList(moderator), groupsModeratorsDao.selectModerators(group));
     }
 }
