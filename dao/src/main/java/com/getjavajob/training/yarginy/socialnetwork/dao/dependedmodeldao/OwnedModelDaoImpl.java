@@ -33,6 +33,7 @@ public class OwnedModelDaoImpl<O extends Entity, E extends OwnedEntity<O>> imple
             if (!resultSet.next()) {
                 return dml.getNullEntity();
             }
+            checkOneRecordSelected(resultSet);
             return dml.selectFromRow(resultSet, owner);
         } catch (SQLException | IOException e) {
             throw new IllegalStateException(e);
@@ -73,7 +74,9 @@ public class OwnedModelDaoImpl<O extends Entity, E extends OwnedEntity<O>> imple
         //todo
         boolean performed = true;
         if (!ownedEntity.equals(storedOwnedEntity)) {
-            delete(storedOwnedEntity);
+            if (!delete(storedOwnedEntity)) {
+                return false;
+            }
             performed = create(ownedEntity);
         }
         return performed;
@@ -87,6 +90,7 @@ public class OwnedModelDaoImpl<O extends Entity, E extends OwnedEntity<O>> imple
             if (!resultSet.next()) {
                 return false;
             }
+            checkOneRecordSelected(resultSet);
             resultSet.deleteRow();
             return true;
         } catch (SQLException e) {
@@ -104,5 +108,13 @@ public class OwnedModelDaoImpl<O extends Entity, E extends OwnedEntity<O>> imple
     @Override
     public E getNullEntity() {
         return dml.getNullEntity();
+    }
+
+    private void checkOneRecordSelected(ResultSet resultSet) throws SQLException {
+        if (resultSet.next()) {
+            throw new IllegalStateException("statement returned more then one row");
+        } else {
+            resultSet.previous();
+        }
     }
 }

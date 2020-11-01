@@ -11,7 +11,8 @@ import java.util.Collection;
 
 public abstract class OneToManyDml<O extends Entity, M extends Entity> {
     public Collection<M> selectByOne(Connection connection, O entity) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(getSelectQuery())) {
+        try (PreparedStatement statement = connection.prepareStatement(getSelectQuery(), ResultSet.
+                TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
             statement.setLong(1, entity.getId());
             try (ResultSet resultSet = statement.executeQuery()) {
                 return getManyDml().selectEntities(resultSet);

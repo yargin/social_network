@@ -1,9 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.password;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.ConnectionPool;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.DaoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dml;
 
@@ -13,11 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 
-import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
-
 public class PasswordDao extends DaoImpl<Password> {
-    private final Dao<Account> accountDao = getDbFactory().getAccountDao();
-
     public PasswordDao(ConnectionPool connectionPool, Dml<Password> passwordDml) {
         super(connectionPool, passwordDml);
     }
@@ -35,7 +29,7 @@ public class PasswordDao extends DaoImpl<Password> {
     @Override
     public boolean update(Password password, Password storedPassword) {
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement statement = dml.getUpdatableSelect(connection, storedPassword);
+             PreparedStatement statement = dml.getSelect(connection, storedPassword, true);
              ResultSet resultSet = statement.executeQuery()) {
             if (!resultSet.next()) {
                 return false;

@@ -18,7 +18,7 @@ public final class SessionAttributesHelper {
         Account account = new AccountImpl();
         account.setName((String) session.getAttribute(USER_NAME));
         account.setId((long) session.getAttribute(USER_ID));
-        Role role = Role.valueOf((String) session.getAttribute(USER_ROLE));
+        Role role = (Role) session.getAttribute(USER_ROLE);
         account.setRole(role);
         account.setEmail((String) session.getAttribute(USER_EMAIL));
         account.setSurname((String) session.getAttribute(USER_SURNAME));

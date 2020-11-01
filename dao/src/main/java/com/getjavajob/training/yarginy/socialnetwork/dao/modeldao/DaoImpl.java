@@ -32,7 +32,7 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
     @Override
     public E select(E entityToSelect) {
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement statement = dml.getSelect(connection, entityToSelect)) {
+             PreparedStatement statement = dml.getSelect(connection, entityToSelect, false)) {
             return select(statement);
         } catch (SQLException e) {
             throw new IllegalStateException(e);
@@ -44,18 +44,15 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
             if (!resultSet.next()) {
                 return dml.getNullEntity();
             }
-            E storedEntity = dml.selectFromRow(resultSet);
-            if (resultSet.next()) {
-                throw new IllegalStateException("statement returned more then one row");
-            }
-            return storedEntity;
+            checkOneRecordSelected(resultSet);
+            return dml.selectFromRow(resultSet);
         }
     }
 
     @Override
     public boolean create(E entity) {
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement statement = dml.getUpdatableSelect(connection, entity);
+             PreparedStatement statement = dml.getSelect(connection, entity, true);
              ResultSet resultSet = statement.executeQuery()) {
             if (resultSet.next()) {
                 return false;
@@ -74,16 +71,14 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
     @Override
     public boolean update(E entity, E storedEntity) {
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement statementForUpdate = dml.getUpdatableSelect(connection, storedEntity);
+             PreparedStatement statementForUpdate = dml.getSelect(connection, storedEntity, true);
              ResultSet resultSet = statementForUpdate.executeQuery()) {
             if (!resultSet.next()) {
                 return false;
             }
+            checkOneRecordSelected(resultSet);
             dml.updateRow(resultSet, entity, storedEntity);
             resultSet.updateRow();
-            if (resultSet.next()) {
-                throw new IllegalStateException("statement returned more then one row");
-            }
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -94,7 +89,7 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
     @Override
     public boolean delete(E entity) {
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement statement = dml.getUpdatableSelect(connection, entity);
+             PreparedStatement statement = dml.getSelect(connection, entity, true);
              ResultSet resultSet = statement.executeQuery()) {
             if (!resultSet.next()) {
                 return false;
@@ -110,7 +105,7 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
     @Override
     public Collection<E> selectAll() {
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement statement = dml.getSelect(connection, null);
+             PreparedStatement statement = dml.getSelect(connection, null, false);
              ResultSet resultSet = statement.executeQuery()) {
             Collection<E> entities = new ArrayList<>();
             while (resultSet.next()) {
@@ -141,7 +136,7 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
             Connection connection;
             try {
                 connection = connectionPool.getConnection();
-                PreparedStatement statement = dml.getSelect(connection, entity);
+                PreparedStatement statement = dml.getSelect(connection, entity, false);
                 E readEntity = select(statement);
                 checkEntity(readEntity);
                 return readEntity;
@@ -151,6 +146,14 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
             }
         } else {
             return entity;
+        }
+    }
+
+    private void checkOneRecordSelected(ResultSet resultSet) throws SQLException {
+        if (resultSet.next()) {
+            throw new IllegalStateException("statement returned more then one row");
+        } else {
+            resultSet.previous();
         }
     }
 }

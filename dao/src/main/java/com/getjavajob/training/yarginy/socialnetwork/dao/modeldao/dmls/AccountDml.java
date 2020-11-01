@@ -6,7 +6,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.addit
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AbstractDml;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,26 +23,28 @@ public class AccountDml extends AbstractDml<Account> {
     private static final String SELECT_BY_EMAIL = buildQuery().select(TABLE).where(EMAIL).build();
 
     @Override
-    public PreparedStatement getSelect(Connection connection, Account account) throws SQLException {
-        PreparedStatement statement;
-        if (isNull(account)) {
-            statement = connection.prepareStatement(SELECT_ALL, ResultSet.TYPE_FORWARD_ONLY);
-        } else if (account.getId() > 0) {
-            statement = connection.prepareStatement(SELECT_BY_ID);
-            statement.setLong(1, account.getId());
-        } else {
-            statement = connection.prepareStatement(SELECT_BY_EMAIL);
-            statement.setString(1, account.getEmail());
-        }
-        return statement;
+    protected String getSelectById() {
+        return SELECT_BY_ID;
     }
 
     @Override
-    public PreparedStatement getUpdatableSelect(Connection connection, Account account) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(SELECT_BY_EMAIL, ResultSet.TYPE_SCROLL_INSENSITIVE,
-                ResultSet.CONCUR_UPDATABLE);
+    protected String getSelectAll() {
+        return SELECT_ALL;
+    }
+
+    @Override
+    protected String getSelectByAltKey() {
+        return SELECT_BY_EMAIL;
+    }
+
+    @Override
+    protected String getSelectForUpdate() {
+        return SELECT_BY_EMAIL;
+    }
+
+    @Override
+    protected void setAltKeyParams(PreparedStatement statement, Account account) throws SQLException {
         statement.setString(1, account.getEmail());
-        return statement;
     }
 
     @Override

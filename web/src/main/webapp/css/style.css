@@ -123,6 +123,12 @@ html, body, ul, li {
     justify-content: center;
 }
 
+.post strong {
+    margin-right: 10px;
+    margin-left: 10px;
+    color: black;
+}
+
 .post input, select {
     margin-top: 10px;
     display: inline-block;

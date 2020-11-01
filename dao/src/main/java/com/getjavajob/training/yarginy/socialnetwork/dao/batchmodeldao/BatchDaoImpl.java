@@ -63,9 +63,17 @@ public class BatchDaoImpl<E extends Entity> extends DaoImpl<E> implements BatchD
     public boolean update(Collection<E> storedEntities, Collection<E> newEntities) {
         Collection<E> entitiesToDelete = new ArrayList<>(storedEntities);
         entitiesToDelete.removeAll(newEntities);
-        delete(entitiesToDelete);
-        newEntities.removeAll(storedEntities);
-        create(newEntities);
+        try {
+            if (!delete(entitiesToDelete)) {
+                throw new AssertionError();
+            }
+            newEntities.removeAll(storedEntities);
+            if (!create(newEntities)) {
+                throw new AssertionError();
+            }
+        } catch (AssertionError e) {
+            return false;
+        }
         return true;
     }
 }

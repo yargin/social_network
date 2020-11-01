@@ -12,7 +12,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneIm
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.additionaldata.PhoneExchanger;
-import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -271,7 +270,7 @@ public final class UpdateFieldHelper {
             req.setAttribute(PHONE_DUPLICATE, e.getType().getPropertyKey());
         }
         if (e.getType() == IncorrectData.UPLOADING_ERROR) {
-            req.setAttribute(Attributes.PHONE_DUPLICATE, e.getType().getPropertyKey());
+            req.setAttribute(UPLOAD_ERROR, e.getType().getPropertyKey());
         }
         doGet.accept(req, resp);
     }

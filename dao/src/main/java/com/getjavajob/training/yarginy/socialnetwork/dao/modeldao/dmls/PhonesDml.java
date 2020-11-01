@@ -8,7 +8,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additio
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AbstractDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,26 +29,28 @@ public class PhonesDml extends AbstractDml<Phone> {
     private final AccountDml accountDml = new AccountDml();
 
     @Override
-    public PreparedStatement getUpdatableSelect(Connection connection, Phone phone) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(SELECT_UPDATE, ResultSet.TYPE_SCROLL_INSENSITIVE,
-                ResultSet.CONCUR_UPDATABLE);
-        statement.setString(1, phone.getNumber());
-        return statement;
+    protected String getSelectById() {
+        return SELECT_BY_ID;
     }
 
     @Override
-    public PreparedStatement getSelect(Connection connection, Phone phone) throws SQLException {
-        PreparedStatement statement;
-        if (isNull(phone)) {
-            statement = connection.prepareStatement(SELECT_ALL);
-        } else if (phone.getId() > 0) {
-            statement = connection.prepareStatement(SELECT_BY_ID);
-            statement.setLong(1, phone.getId());
-        } else {
-            statement = connection.prepareStatement(SELECT_BY_NUMBER);
-            statement.setString(1, phone.getNumber());
-        }
-        return statement;
+    protected String getSelectAll() {
+        return SELECT_ALL;
+    }
+
+    @Override
+    protected String getSelectByAltKey() {
+        return SELECT_BY_NUMBER;
+    }
+
+    @Override
+    protected String getSelectForUpdate() {
+        return SELECT_UPDATE;
+    }
+
+    @Override
+    protected void setAltKeyParams(PreparedStatement statement, Phone phone) throws SQLException {
+        statement.setString(1, phone.getNumber());
     }
 
     @Override

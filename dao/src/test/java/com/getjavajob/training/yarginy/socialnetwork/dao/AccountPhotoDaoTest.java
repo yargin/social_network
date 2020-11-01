@@ -71,9 +71,10 @@ public class AccountPhotoDaoTest {
 
     @Test
     public void testUpdateNonExisting() {
-        Account testAccount = account;
-        AccountPhoto testAccountPhoto = accountPhotoDao.select(account);
+        Account testAccount = new AccountImpl("test2", "test2@test2.test");
+        testAccount.setSurname("test2");
         testAccount.setId(TEST_ID);
+        AccountPhoto testAccountPhoto = accountPhotoDao.select(account);
         accountPhoto.setOwner(testAccount);
         assertFalse(accountPhotoDao.update(testAccountPhoto, accountPhoto));
         printPassed(CLASS, "testUpdateNonExisting");

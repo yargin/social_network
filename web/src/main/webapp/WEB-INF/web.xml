@@ -101,7 +101,7 @@
 
     <servlet>
         <servlet-name>groups</servlet-name>
-        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.GroupListServlet</servlet-class>
+        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.GroupsListServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>groups</servlet-name>

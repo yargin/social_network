@@ -3,7 +3,6 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AbstractDml;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,13 +10,28 @@ import java.util.Collection;
 
 public class MessageDml extends AbstractDml<Account> {
     @Override
-    public PreparedStatement getUpdatableSelect(Connection connection, Account storedEntity) throws SQLException {
+    protected String getSelectById() {
         return null;
     }
 
     @Override
-    public PreparedStatement getSelect(Connection connection, Account entity) throws SQLException {
+    protected String getSelectAll() {
         return null;
+    }
+
+    @Override
+    protected String getSelectByAltKey() {
+        return null;
+    }
+
+    @Override
+    protected String getSelectForUpdate() {
+        return null;
+    }
+
+    @Override
+    protected void setAltKeyParams(PreparedStatement statement, Account entity) throws SQLException {
+
     }
 
     @Override

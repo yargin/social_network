@@ -7,7 +7,6 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AbstractDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.AccountDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,18 +23,28 @@ public class PasswordDml extends AbstractDml<Password> {
     public static final AccountDml ACCOUNT_DML = new AccountDml();
 
     @Override
-    public PreparedStatement getUpdatableSelect(Connection connection, Password password) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(SELECT_UPDATE, ResultSet.TYPE_SCROLL_INSENSITIVE,
-                ResultSet.CONCUR_UPDATABLE);
-        statement.setString(1, password.getAccount().getEmail());
-        return statement;
+    protected String getSelectById() {
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public PreparedStatement getSelect(Connection connection, Password password) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(SELECT);
+    protected String getSelectAll() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    protected String getSelectByAltKey() {
+        return SELECT;
+    }
+
+    @Override
+    protected String getSelectForUpdate() {
+        return SELECT_UPDATE;
+    }
+
+    @Override
+    protected void setAltKeyParams(PreparedStatement statement, Password password) throws SQLException {
         statement.setString(1, password.getAccount().getEmail());
-        return statement;
     }
 
     @Override

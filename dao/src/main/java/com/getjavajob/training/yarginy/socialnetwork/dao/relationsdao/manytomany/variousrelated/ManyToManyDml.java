@@ -25,7 +25,8 @@ public abstract class ManyToManyDml<F extends Entity, S extends Entity> {
     protected abstract Dml<S> getSecondDml();
 
     public Collection<F> selectBySecond(Connection connection, long secondId) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(getFirstSelectQuery())) {
+        try (PreparedStatement statement = connection.prepareStatement(getFirstSelectQuery(),
+                ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
             statement.setLong(1, secondId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 Dml<F> firstDml = getFirstDml();

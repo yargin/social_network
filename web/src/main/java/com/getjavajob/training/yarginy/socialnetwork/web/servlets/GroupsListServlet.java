@@ -15,17 +15,17 @@ import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.SessionAttributesHelper.getAccountFromSession;
 
-public class GroupListServlet extends HttpServlet {
+public class GroupsListServlet extends HttpServlet {
     public static final String GROUPS = "groups";
+    public static final String ALL_GROUPS_LIST = "allgroups";
     private final GroupService groupService = new GroupServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Account account = getAccountFromSession(req);
 
-
         String jsp;
-        if ("unjoined".equals(req.getParameter(GROUPS))) {
+        if ("true".equals(req.getParameter(ALL_GROUPS_LIST))) {
             jsp = Jsps.UNJOINED_GROUPS;
             Collection<Group> unjoinedGroups = groupService.getNonJoinedGroups(account);
             req.setAttribute(GROUPS, unjoinedGroups);

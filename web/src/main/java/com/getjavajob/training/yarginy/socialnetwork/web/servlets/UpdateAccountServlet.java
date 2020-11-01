@@ -61,7 +61,6 @@ public class UpdateAccountServlet extends HttpServlet {
         getValuesFromParams(req, accountInfoDTO, paramsAccepted);
 
         boolean accepted = paramsAccepted.get();
-        paramsAccepted.remove();
         if (!accepted) {
             doGet(req, resp);
         } else {

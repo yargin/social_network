@@ -27,7 +27,8 @@ public class FriendshipDml extends SelfManyToManyDml<Account> {
 
     @Override
     public Collection<Account> select(Connection connection, long id) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID)) {
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID, ResultSet.TYPE_SCROLL_INSENSITIVE,
+                ResultSet.CONCUR_READ_ONLY)) {
             statement.setLong(1, id);
             statement.setLong(2, id);
             return selectFromStatement(statement);

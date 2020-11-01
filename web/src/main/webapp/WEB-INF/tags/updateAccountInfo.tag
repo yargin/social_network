@@ -94,6 +94,5 @@
 
         <button type="submit" name="save" value="save"><fmt:message key="button.save" bundle="${label}"/></button>
         <button type="submit" name="save" value="cancel"><fmt:message key="button.cancel" bundle="${label}"/></button>
-        <%--        <a href="${context}/mywall"><button type="button"><fmt:message key="button.cancel" bundle="${label}"/></button></a>--%>
     </form>
 </div>

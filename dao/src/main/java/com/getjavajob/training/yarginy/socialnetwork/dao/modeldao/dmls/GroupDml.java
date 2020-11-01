@@ -7,7 +7,6 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AbstractDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,7 +17,6 @@ import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEn
 import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.GroupsTable.*;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
-import static java.util.Objects.isNull;
 
 public class GroupDml extends AbstractDml<Group> {
     private static final String SELECT_ALL = buildQuery().select(TABLE).build();
@@ -31,26 +29,28 @@ public class GroupDml extends AbstractDml<Group> {
     private final Dao<Account> accountDao = getDbFactory().getAccountDao();
 
     @Override
-    public PreparedStatement getSelect(Connection connection, Group group) throws SQLException {
-        PreparedStatement statement;
-        if (isNull(group)) {
-            statement = connection.prepareStatement(SELECT_ALL);
-        } else if (group.getId() > 0) {
-            statement = connection.prepareStatement(SELECT_BY_ID);
-            statement.setLong(1, group.getId());
-        } else {
-            statement = connection.prepareStatement(SELECT_BY_NAME);
-            statement.setString(1, group.getName());
-        }
-        return statement;
+    protected String getSelectById() {
+        return SELECT_BY_ID;
     }
 
     @Override
-    public PreparedStatement getUpdatableSelect(Connection connection, Group group) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(SELECT_UPDATE, ResultSet.TYPE_SCROLL_INSENSITIVE,
-                ResultSet.CONCUR_UPDATABLE);
+    protected String getSelectAll() {
+        return SELECT_ALL;
+    }
+
+    @Override
+    protected String getSelectByAltKey() {
+        return SELECT_BY_NAME;
+    }
+
+    @Override
+    protected String getSelectForUpdate() {
+        return SELECT_UPDATE;
+    }
+
+    @Override
+    protected void setAltKeyParams(PreparedStatement statement, Group group) throws SQLException {
         statement.setString(1, group.getName());
-        return statement;
     }
 
     @Override
