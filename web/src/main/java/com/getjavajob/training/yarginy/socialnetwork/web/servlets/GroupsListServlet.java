@@ -24,15 +24,15 @@ public class GroupsListServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Account account = getAccountFromSession(req);
 
-        String jsp;
+        String jsp = Jsps.GROUPS_LIST;
         if ("true".equals(req.getParameter(ALL_GROUPS_LIST))) {
-            jsp = Jsps.UNJOINED_GROUPS;
             Collection<Group> unjoinedGroups = groupService.getNonJoinedGroups(account);
             req.setAttribute(GROUPS, unjoinedGroups);
+            req.setAttribute(ALL_GROUPS_LIST, "true");
         } else {
-            jsp = Jsps.JOINED_GROUPS;
             Collection<Group> joinedGroups = groupService.getAccountGroups(account);
             req.setAttribute(GROUPS, joinedGroups);
+            req.removeAttribute(ALL_GROUPS_LIST);
         }
         req.getRequestDispatcher(jsp).forward(req, resp);
     }

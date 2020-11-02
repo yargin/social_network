@@ -4,6 +4,6 @@
 
 <common:layout>
     <div class="post">
-        <common:updateAccountInfo/>
+        <common:accountInfoUpdate/>
     </div>
 </common:layout>

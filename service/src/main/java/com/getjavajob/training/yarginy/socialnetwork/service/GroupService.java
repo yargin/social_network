@@ -33,4 +33,6 @@ public interface GroupService {
     boolean createGroup(Group group);
 
     boolean removeGroup(Group group);
+
+    boolean updateGroup(Group group, Group storedGroup);
 }

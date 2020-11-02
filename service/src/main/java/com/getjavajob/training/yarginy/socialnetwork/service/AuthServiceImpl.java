@@ -63,7 +63,7 @@ public class AuthServiceImpl implements AuthService {
                 transaction.rollback();
                 throw new RuntimeException();
             }
-            if (!isNull(accountPhoto)) {
+            if (!isNull(accountPhoto) && !isNull(accountPhoto.getPhoto())) {
                 accountPhoto.setOwner(account);
                 if (!accountPhotoDao.create(accountPhoto)) {
                     transaction.rollback();

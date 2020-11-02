@@ -76,7 +76,7 @@
         <br>
         <c:if test="${not empty errcity}"><fmt:message key="${errcity}" bundle="${error}"/><br></c:if>
 
-        <common:updatePhones/>
+        <common:phonesUpdate/>
 
         <c:if test="${not empty photo}">
             <img src="data:image/jpeg;base64, ${photo}">

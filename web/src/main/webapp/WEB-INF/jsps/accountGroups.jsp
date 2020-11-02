@@ -4,8 +4,10 @@
 <%@ taglib prefix="common" tagdir="/WEB-INF/tags" %>
 <fmt:setBundle basename="label"/>
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
-
 <common:layout>
+    <a href="${context}/creategroup">
+        <button><fmt:message key="label.createGroup"/></button>
+    </a><br>
     <div class="post">
         <c:choose>
             <c:when test="${empty allgroups}">
@@ -18,4 +20,5 @@
             </c:otherwise>
         </c:choose>
     </div>
+    <common:groupsList/>
 </common:layout>

@@ -35,6 +35,11 @@ public class MessageDml extends AbstractDml<Account> {
     }
 
     @Override
+    public Account selectViewFromRow(ResultSet resultSet) throws SQLException {
+        return null;
+    }
+
+    @Override
     public Account selectFromRow(ResultSet resultSet) throws SQLException {
         return null;
     }

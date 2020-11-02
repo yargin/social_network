@@ -16,7 +16,7 @@ import java.io.IOException;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
 
-public class DeleteAccountServlet  extends HttpServlet {
+public class AccountDeleteServlet extends HttpServlet {
     private final AccountService accountService = new AccountServiceImpl();
 
     @Override

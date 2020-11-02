@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
-public class MyWallServlet extends HttpServlet {
+public class AccountWallServlet extends HttpServlet {
     private static final AccountService ACCOUNT_SERVICE = new AccountServiceImpl();
 
     @Override

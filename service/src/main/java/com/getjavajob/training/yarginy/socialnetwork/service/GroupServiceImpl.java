@@ -82,4 +82,9 @@ public class GroupServiceImpl implements GroupService {
     public boolean removeGroup(Group group) {
         return groupDao.delete(group);
     }
+
+    @Override
+    public boolean updateGroup(Group group, Group storedGroup) {
+        return groupDao.update(group, storedGroup);
+    }
 }

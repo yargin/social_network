@@ -8,7 +8,7 @@
 
 <common:layout>
     <c:if test="${not empty user}">
-    <common:myInfo/>
+    <common:accountInfo/>
         <div>
             <c:if test="${not empty updateAble}">
                 <a href="${context}/updateInfo"><fmt:message key="label.updateInfo"/></a><br>

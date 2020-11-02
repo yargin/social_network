@@ -54,14 +54,20 @@ public class PhonesDml extends AbstractDml<Phone> {
     }
 
     @Override
-    public Phone selectFromRow(ResultSet resultSet) throws SQLException {
+    public Phone selectViewFromRow(ResultSet resultSet) throws SQLException {
         Phone phone = new PhoneImpl();
         phone.setId(resultSet.getLong(ID));
         phone.setNumber(resultSet.getString(NUMBER));
         if (!isNull(resultSet.getString(TYPE))) {
             phone.setType(PhoneType.valueOf(resultSet.getString(TYPE)));
         }
-        Account owner = accountDml.selectFromRow(resultSet);
+        return phone;
+    }
+
+    @Override
+    public Phone selectFromRow(ResultSet resultSet) throws SQLException {
+        Phone phone = selectViewFromRow(resultSet);
+        Account owner = accountDml.selectViewFromRow(resultSet);
         phone.setOwner(owner);
         return phone;
     }
@@ -70,7 +76,7 @@ public class PhonesDml extends AbstractDml<Phone> {
     public Collection<Phone> selectEntities(ResultSet resultSet) throws SQLException {
         Collection<Phone> phones = new ArrayList<>();
         while (resultSet.next()) {
-            Phone phone = selectFromRow(resultSet);
+            Phone phone = selectViewFromRow(resultSet);
             phones.add(phone);
         }
         return phones;

@@ -16,10 +16,10 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
-import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.UpdateFieldHelper.*;
+import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.UpdateAccountFieldsHelper.*;
 import static java.util.Objects.isNull;
 
-public class UpdateAccountServlet extends HttpServlet {
+public class AccountUpdateServlet extends HttpServlet {
     private static final String UPDATE_SUCCESS_URL = Pages.MY_WALL;
     private final AccountInfoService accountInfoService = new AccountInfoServiceImpl();
     private final ThreadLocal<Boolean> paramsAccepted = new ThreadLocal<>();
@@ -33,7 +33,7 @@ public class UpdateAccountServlet extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + UPDATE_SUCCESS_URL);
             return;
         }
-        AccountInfoDTO accountInfoDTO = accountInfoDTOInit(req, () -> accountInfoService.select(id));
+        AccountInfoDTO accountInfoDTO = accountInfoDTOInit(req, () -> accountInfoService.select(id), true);
         initAccountAttributes(req, accountInfoDTO);
 
         req.setAttribute(Attributes.TARGET, Pages.UPDATE_ACCOUNT);

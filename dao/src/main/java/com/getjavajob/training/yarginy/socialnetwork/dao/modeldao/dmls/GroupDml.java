@@ -54,12 +54,20 @@ public class GroupDml extends AbstractDml<Group> {
     }
 
     @Override
-    public Group selectFromRow(ResultSet resultSet) throws SQLException {
+    public Group selectViewFromRow(ResultSet resultSet) throws SQLException {
         Group group = new GroupImpl();
         group.setId(resultSet.getLong(ID));
         group.setName(resultSet.getString(NAME));
+        group.setPhotoPreview(resultSet.getBytes(PHOTO_PREVIEW));
+        group.setPhoto(resultSet.getBytes(PHOTO));
+        return group;
+    }
+
+    @Override
+    public Group selectFromRow(ResultSet resultSet) throws SQLException {
+        Group group = selectViewFromRow(resultSet);
         group.setDescription(resultSet.getString(DESCRIPTION));
-        Account owner = accountDml.selectFromRow(resultSet);
+        Account owner = accountDml.selectViewFromRow(resultSet);
         group.setOwner(owner);
         return group;
     }
@@ -68,6 +76,8 @@ public class GroupDml extends AbstractDml<Group> {
     public void updateRow(ResultSet resultSet, Group group, Group storedGroup) throws SQLException {
         updateFieldIfDiffers(group::getName, storedGroup::getName, resultSet::updateString, NAME);
         updateFieldIfDiffers(group::getDescription, storedGroup::getDescription, resultSet::updateString, DESCRIPTION);
+        updateFieldIfDiffers(group::getPhoto, storedGroup::getPhoto, resultSet::updateBytes, PHOTO);
+        updateFieldIfDiffers(group::getPhotoPreview, storedGroup::getPhotoPreview, resultSet::updateBytes, PHOTO_PREVIEW);
         Account owner = accountDao.approveFromStorage(group.getOwner());
         group.setOwner(owner);
         updateFieldIfDiffers(group::getOwner, storedGroup::getOwner, resultSet::updateLong, OWNER, Account::getId);
@@ -77,7 +87,7 @@ public class GroupDml extends AbstractDml<Group> {
     public Collection<Group> selectEntities(ResultSet resultSet) throws SQLException {
         Collection<Group> communities = new ArrayList<>();
         while (resultSet.next()) {
-            Group group = selectFromRow(resultSet);
+            Group group = selectViewFromRow(resultSet);
             communities.add(group);
         }
         return communities;

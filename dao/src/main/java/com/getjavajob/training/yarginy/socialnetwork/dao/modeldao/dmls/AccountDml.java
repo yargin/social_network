@@ -48,11 +48,18 @@ public class AccountDml extends AbstractDml<Account> {
     }
 
     @Override
-    public Account selectFromRow(ResultSet resultSet) throws SQLException {
+    public Account selectViewFromRow(ResultSet resultSet) throws SQLException {
         Account account = new AccountImpl();
         account.setId(resultSet.getLong(ID));
         account.setName(resultSet.getString(NAME));
         account.setSurname(resultSet.getString(SURNAME));
+        account.setEmail(resultSet.getString(EMAIL));
+        return account;
+    }
+
+    @Override
+    public Account selectFromRow(ResultSet resultSet) throws SQLException {
+        Account account = selectViewFromRow(resultSet);
         account.setPatronymic(resultSet.getString(PATRONYMIC));
         if (!isNull(resultSet.getString(SEX))) {
             account.setSex(Sex.valueOf(resultSet.getString(SEX)));
@@ -63,7 +70,6 @@ public class AccountDml extends AbstractDml<Account> {
         if (!isNull(resultSet.getDate(REGISTRATION_DATE))) {
             account.setRegistrationDate(resultSet.getDate(REGISTRATION_DATE));
         }
-        account.setEmail(resultSet.getString(EMAIL));
         account.setAdditionalEmail(resultSet.getString(ADDITIONAL_EMAIL));
         if (!isNull(resultSet.getString(ROLE))) {
             account.setRole(Role.valueOf(resultSet.getString(ROLE)));
@@ -98,7 +104,7 @@ public class AccountDml extends AbstractDml<Account> {
     public Collection<Account> selectEntities(ResultSet resultSet) throws SQLException {
         Collection<Account> accounts = new ArrayList<>();
         while (resultSet.next()) {
-            Account account = selectFromRow(resultSet);
+            Account account = selectViewFromRow(resultSet);
             accounts.add(account);
         }
         return accounts;

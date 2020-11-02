@@ -12,29 +12,6 @@ import java.util.Collection;
  * @param <E> {@link Entity} inheritor to work with
  */
 public interface Dml<E extends Entity> {
-//    /**
-//     * retrieves {@link PreparedStatement} which execution result will be {@link E} found by it's alternate key. Used
-//     * for insertion, modification & deletion
-//     * <br>BE CAREFUL - use only with Try-with-resources or Finally block
-//     *
-//     * @param connection {@link Connection} specified connection to make {@link PreparedStatement}
-//     * @param entity     {@link E} containing data to search by alternate key
-//     * @return {@link PreparedStatement} that selects {@link E} found by identifier
-//     */
-//    PreparedStatement getSelect(Connection connection, E entity) throws SQLException;
-//
-//    /**
-//     * retrieves {@link PreparedStatement} which execution result will be {@link E} found by it's alternate key. Used
-//     * for insertion, modification & deletion
-//     * <br>BE CAREFUL - use only with Try-with-resources or Finally block
-//     *
-//     * @param connection   {@link Connection} specified connection to make {@link PreparedStatement}
-//     * @param storedEntity {@link E} that is stored
-//     * @return updatable {@link PreparedStatement} with query that selects {@link E} found by identifier
-//     */
-//    PreparedStatement getUpdatableSelect(Connection connection, E storedEntity) throws SQLException;
-
-
     PreparedStatement getSelect(Connection connection, E entity, boolean updatable) throws SQLException;
 
 
@@ -44,6 +21,8 @@ public interface Dml<E extends Entity> {
      * @param resultSet specified {@link ResultSet}
      */
     E selectFromRow(ResultSet resultSet) throws SQLException;
+
+    E selectViewFromRow(ResultSet resultSet) throws SQLException;
 
     /**
      * retrieves {@link Collection}<{@link E}> from specified {@link ResultSet}

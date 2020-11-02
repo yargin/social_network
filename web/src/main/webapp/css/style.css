@@ -129,6 +129,11 @@ html, body, ul, li {
     color: black;
 }
 
+.post a {
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
 .post input, select {
     margin-top: 10px;
     display: inline-block;

@@ -1,17 +1,24 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.models.group;
 
+import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
+import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.AbstractEntity;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper.*;
 import static java.util.Objects.isNull;
 
 public class GroupImpl extends AbstractEntity implements Group {
+    private static final int MAX_PHOTO_SIZE = 16000000;
     private String name;
     private String description;
     private Account owner;
+    private byte[] photo;
+    private byte[] photoPreview;
 
     public GroupImpl() {
     }
@@ -59,6 +66,40 @@ public class GroupImpl extends AbstractEntity implements Group {
     @Override
     public void setDescription(String description) {
         this.description = stringOptional(description);
+    }
+
+    @Override
+    public byte[] getPhoto() {
+        return photo;
+    }
+
+    @Override
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
+    }
+
+    @Override
+    public void setPhoto(InputStream photo) {
+        try {
+            int size = photo.available();
+            if (size > MAX_PHOTO_SIZE) {
+                throw new IncorrectDataException(IncorrectData.FILE_TOO_LARGE);
+            }
+            this.photo = new byte[photo.available()];
+            photo.read(this.photo);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    @Override
+    public byte[] getPhotoPreview() {
+        return photoPreview;
+    }
+
+    @Override
+    public void setPhotoPreview(byte[] photoPreview) {
+        this.photoPreview = photoPreview;
     }
 
     @Override

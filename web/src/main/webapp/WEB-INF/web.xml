@@ -43,7 +43,7 @@
 
     <servlet>
         <servlet-name>myWall</servlet-name>
-        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.MyWallServlet</servlet-class>
+        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.AccountWallServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>myWall</servlet-name>
@@ -52,7 +52,7 @@
 
     <servlet>
         <servlet-name>register</servlet-name>
-        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.RegisterServlet</servlet-class>
+        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.AccountRegisterServlet</servlet-class>
         <multipart-config>
         </multipart-config>
     </servlet>
@@ -81,7 +81,7 @@
 
     <servlet>
         <servlet-name>deleteAccount</servlet-name>
-        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.DeleteAccountServlet</servlet-class>
+        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.AccountDeleteServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>deleteAccount</servlet-name>
@@ -90,7 +90,7 @@
 
     <servlet>
         <servlet-name>updateAccount</servlet-name>
-        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.UpdateAccountServlet</servlet-class>
+        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.AccountUpdateServlet</servlet-class>
         <multipart-config>
         </multipart-config>
     </servlet>
@@ -106,5 +106,23 @@
     <servlet-mapping>
         <servlet-name>groups</servlet-name>
         <url-pattern>/groups</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>groupWall</servlet-name>
+        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.GroupWallServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>groupWall</servlet-name>
+        <url-pattern>/group</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>createGroup</servlet-name>
+        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.GroupCreationServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>createGroup</servlet-name>
+        <url-pattern>/creategroup</url-pattern>
     </servlet-mapping>
 </web-app>

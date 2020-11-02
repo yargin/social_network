@@ -6,8 +6,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.
 import com.getjavajob.training.yarginy.socialnetwork.dao.dependedmodeldao.OwnedEntityDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -40,11 +38,7 @@ public class AccountPhotoDml implements OwnedEntityDml<Account, AccountPhoto> {
         Account account = accountDao.approveFromStorage(owner);
         AccountPhoto accountPhoto = new AccountPhotoImpl();
         accountPhoto.setOwner(account);
-        try (InputStream inputStream = resultSet.getBinaryStream(PHOTO)) {
-            accountPhoto.setPhoto(inputStream);
-        } catch (IOException e) {
-            throw new IllegalStateException();
-        }
+        accountPhoto.setPhoto(resultSet.getBytes(PHOTO));
         return accountPhoto;
     }
 

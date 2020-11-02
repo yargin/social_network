@@ -33,8 +33,8 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.R
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 import static java.util.Objects.isNull;
 
-public final class UpdateFieldHelper {
-    private UpdateFieldHelper() {
+public final class UpdateAccountFieldsHelper {
+    private UpdateAccountFieldsHelper() {
     }
 
     /**
@@ -60,13 +60,13 @@ public final class UpdateFieldHelper {
         }
     }
 
-    public static void setPhotoFromParam(HttpServletRequest req, AccountPhoto accountPhoto, String param,
+    public static void setPhotoFromParam(HttpServletRequest req, Consumer<InputStream> setter, String param,
                                          ThreadLocal<Boolean> paramsAccepted) throws IOException, ServletException {
         Part imagePart = req.getPart(param);
         if (!isNull(imagePart)) {
             try (InputStream inputStream = imagePart.getInputStream()) {
                 if (inputStream.available() > 0) {
-                    accountPhoto.setPhoto(inputStream);
+                    setter.accept(inputStream);
                 }
             } catch (IOException e) {
                 throw new IncorrectDataException(IncorrectData.UPLOADING_ERROR);
@@ -96,13 +96,16 @@ public final class UpdateFieldHelper {
         }
     }
 
-    public static AccountInfoDTO accountInfoDTOInit(HttpServletRequest req, Supplier<AccountInfoDTO> accountInfoCreator) {
+    public static AccountInfoDTO accountInfoDTOInit(HttpServletRequest req, Supplier<AccountInfoDTO> accountInfoCreator,
+                                                    boolean initStored) {
         HttpSession session = req.getSession();
         AccountInfoDTO accountInfo = (AccountInfoDTO) session.getAttribute(ACCOUNT_INFO);
         if (isNull(accountInfo)) {
             accountInfo = accountInfoCreator.get();
             session.setAttribute(ACCOUNT_INFO, accountInfoCreator.get());
-            session.setAttribute(STORED_ACCOUNT_INFO, accountInfoCreator.get());
+            if (initStored) {
+                session.setAttribute(STORED_ACCOUNT_INFO, accountInfoCreator.get());
+            }
         }
         return accountInfo;
     }
@@ -233,7 +236,7 @@ public final class UpdateFieldHelper {
         Collection<Phone> workPhones = getPhonesFromParams(req, WORK_PHONES, PhoneType.WORK, paramsAccepted);
 
         AccountPhoto accountPhoto = accountInfoDTO.getAccountPhoto();
-        setPhotoFromParam(req, accountPhoto, PHOTO_ATTRIBUTE, paramsAccepted);
+        setPhotoFromParam(req, accountPhoto::setPhoto, PHOTO_ATTRIBUTE, paramsAccepted);
 
         if (Boolean.TRUE.equals(paramsAccepted.get())) {
             Collection<Phone> phones = accountInfoDTO.getPhones();
@@ -254,11 +257,6 @@ public final class UpdateFieldHelper {
         } else {
             doGet.accept(req, resp);
         }
-    }
-
-    @FunctionalInterface
-    public interface DoGetWrapper {
-        void accept(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException;
     }
 
     public static void handleInfoExceptions(HttpServletRequest req, HttpServletResponse resp, IncorrectDataException e,

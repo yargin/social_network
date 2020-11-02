@@ -26,7 +26,7 @@ public abstract class AbstractDml<E extends Entity> implements Dml<E> {
     protected <V> void updateFieldIfDiffers(Supplier<V> valueGetter, Supplier<V> storedValueGetter,
                                             ResultSetUpdater<V> updater, String column) throws SQLException {
         V value = valueGetter.get();
-        if (!isNull(value) && !Objects.equals(value, storedValueGetter.get())) {
+        if (!Objects.equals(value, storedValueGetter.get())) {
             updater.update(column, value);
         }
     }
@@ -47,7 +47,7 @@ public abstract class AbstractDml<E extends Entity> implements Dml<E> {
                                                ResultSetUpdater<T> updater, String column,
                                                Function<V, T> objToSqlTransformer) throws SQLException {
         V value = valueGetter.get();
-        if (!isNull(value) && !Objects.equals(value, storedValueGetter.get())) {
+        if (!Objects.equals(value, storedValueGetter.get())) {
             updater.update(column, objToSqlTransformer.apply(value));
         }
     }

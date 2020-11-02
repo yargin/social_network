@@ -5,7 +5,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.factories.CommonDbFacto
 public class HerokuJawsDBFactory extends CommonDbFactory {
     private static final String DB_CONNECTION_FILE = "connections/JawsDBConnection.properties";
     private static final String SCRIPTS_DIR = "./src/main/resources/scripts/MySQL/";
-    private static final int CONNECTIONS = 8;
+    private static final int CONNECTIONS = 6;
 
     @Override
     protected void loadJDBCDriver() {

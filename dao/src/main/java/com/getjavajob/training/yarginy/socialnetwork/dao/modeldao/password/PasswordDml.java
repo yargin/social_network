@@ -48,6 +48,11 @@ public class PasswordDml extends AbstractDml<Password> {
     }
 
     @Override
+    public Password selectViewFromRow(ResultSet resultSet) throws SQLException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public Password selectFromRow(ResultSet resultSet) throws SQLException {
         Password password = new PasswordImpl();
         Account account = ACCOUNT_DML.selectFromRow(resultSet);

@@ -17,10 +17,10 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
-import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.UpdateFieldHelper.*;
+import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.UpdateAccountFieldsHelper.*;
 import static java.util.Objects.isNull;
 
-public class RegisterServlet extends HttpServlet {
+public class AccountRegisterServlet extends HttpServlet {
     private static final String REG_SUCCESS_URL = Pages.MY_WALL;
     private static final AuthService AUTH_SERVICE = new AuthServiceImpl();
     private final ThreadLocal<Boolean> paramsAccepted = new ThreadLocal<>();
@@ -35,7 +35,7 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
 
-        AccountInfoDTO accountInfoDTO = accountInfoDTOInit(req, AccountInfoDTO::new);
+        AccountInfoDTO accountInfoDTO = accountInfoDTOInit(req, AccountInfoDTO::new, false);
         initAccountAttributes(req, accountInfoDTO);
 
         req.setAttribute(Attributes.TARGET, Pages.REGISTER);
