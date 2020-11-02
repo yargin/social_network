@@ -9,7 +9,10 @@ import java.io.IOException;
 
 import static java.util.Objects.isNull;
 
-public class RedirectHelper {
+public final class RedirectHelper {
+    private RedirectHelper() {
+    }
+
     public static void redirect(HttpServletRequest req, HttpServletResponse resp, String page) throws IOException {
         String location = req.getContextPath() + page;
         resp.sendRedirect(location);

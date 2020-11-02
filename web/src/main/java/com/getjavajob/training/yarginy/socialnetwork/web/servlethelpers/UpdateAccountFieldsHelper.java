@@ -90,12 +90,6 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
         return phoneExchangers;
     }
 
-    private <E> void setAttribute(HttpServletRequest req, String param, Supplier<E> getter) {
-        if (isNull(req.getAttribute(param)) && !isNull(getter.get())) {
-            req.setAttribute(param, getter.get());
-        }
-    }
-
     /**
      * initialises depended on configuration parameters such as sex-value & phone-fields
      *

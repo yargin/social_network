@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.ERR;
 import static java.util.Objects.isNull;
@@ -57,9 +58,9 @@ public class UpdateFieldsHelper {
     protected void setStringFromParam(Consumer<String> setter, String param, HttpServletRequest req,
                                       ThreadLocal<Boolean> paramsAccepted) {
         String enteredValue = req.getParameter(param);
-        if (!isNull(enteredValue)) {
+//        if (!isNull(enteredValue)) {
             setFromParam(setter, param, req, paramsAccepted, enteredValue);
-        }
+//        }
     }
 
     protected <E> void setFromParam(Consumer<E> setter, String param, HttpServletRequest req,
@@ -70,6 +71,12 @@ public class UpdateFieldsHelper {
             req.setAttribute(ERR + param, e.getType().getPropertyKey());
             paramsAccepted.set(false);
             req.setAttribute(param, value);
+        }
+    }
+
+    protected <E> void setAttribute(HttpServletRequest req, String param, Supplier<E> getter) {
+        if (isNull(req.getAttribute(param)) && !isNull(getter.get())) {
+            req.setAttribute(param, getter.get());
         }
     }
 }

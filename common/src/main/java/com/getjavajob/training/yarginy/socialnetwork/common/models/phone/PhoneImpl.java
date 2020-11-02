@@ -26,7 +26,7 @@ public class PhoneImpl extends AbstractEntity implements Phone {
 
     @Override
     public String getNumber() {
-        return phoneMandatory(number);
+        return number;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class PhoneImpl extends AbstractEntity implements Phone {
 
     @Override
     public PhoneType getType() {
-        return objectMandatory(type);
+        return type;
     }
 
     @Override
@@ -46,7 +46,7 @@ public class PhoneImpl extends AbstractEntity implements Phone {
 
     @Override
     public Account getOwner() {
-        return objectMandatory(owner);
+        return owner;
     }
 
     public void setOwner(Account owner) {

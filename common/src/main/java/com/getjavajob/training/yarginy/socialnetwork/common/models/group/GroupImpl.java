@@ -40,7 +40,7 @@ public class GroupImpl extends AbstractEntity implements Group {
 
     @Override
     public String getName() {
-        return stringMandatory(name);
+        return name;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class GroupImpl extends AbstractEntity implements Group {
 
     @Override
     public String getDescription() {
-        return stringOptional(description);
+        return description;
     }
 
     @Override

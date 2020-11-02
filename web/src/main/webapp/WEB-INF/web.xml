@@ -120,6 +120,8 @@
     <servlet>
         <servlet-name>createGroup</servlet-name>
         <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.GroupCreationServlet</servlet-class>
+        <multipart-config>
+        </multipart-config>
     </servlet>
     <servlet-mapping>
         <servlet-name>createGroup</servlet-name>

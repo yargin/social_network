@@ -19,4 +19,5 @@ public final class Attributes {
     public static final String EMAIL_DUPLICATE = "emailDuplicate";
     public static final String PHONE_DUPLICATE = "phoneDuplicate";
     public static final String UPLOAD_ERROR = "uploadError";
+    public static final String GROUP = "group";
 }
