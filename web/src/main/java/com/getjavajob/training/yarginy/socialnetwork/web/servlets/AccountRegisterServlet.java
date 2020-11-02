@@ -5,6 +5,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Pass
 import com.getjavajob.training.yarginy.socialnetwork.service.AuthService;
 import com.getjavajob.training.yarginy.socialnetwork.service.AuthServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
+import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.UpdateAccountFieldsHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
@@ -17,12 +18,12 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
-import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.UpdateAccountFieldsHelper.*;
 import static java.util.Objects.isNull;
 
 public class AccountRegisterServlet extends HttpServlet {
     private static final String REG_SUCCESS_URL = Pages.MY_WALL;
     private static final AuthService AUTH_SERVICE = new AuthServiceImpl();
+    private final UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper();
     private final ThreadLocal<Boolean> paramsAccepted = new ThreadLocal<>();
 
     @Override
@@ -35,8 +36,8 @@ public class AccountRegisterServlet extends HttpServlet {
             return;
         }
 
-        AccountInfoDTO accountInfoDTO = accountInfoDTOInit(req, AccountInfoDTO::new, false);
-        initAccountAttributes(req, accountInfoDTO);
+        AccountInfoDTO accountInfoDTO = updater.accountInfoDTOInit(req, AccountInfoDTO::new, false);
+        updater.initAccountAttributes(req, accountInfoDTO);
 
         req.setAttribute(Attributes.TARGET, Pages.REGISTER);
 
@@ -53,9 +54,9 @@ public class AccountRegisterServlet extends HttpServlet {
             return;
         }
 
-        getValuesFromParams(req, accountInfoDTO, paramsAccepted);
+        updater.getValuesFromParams(req, accountInfoDTO, paramsAccepted);
 
-        Password password = getPassword(req, accountInfoDTO.getAccount(), paramsAccepted);
+        Password password = updater.getPassword(req, accountInfoDTO.getAccount(), paramsAccepted);
 
         if (!paramsAccepted.get()) {
             doGet(req, resp);
@@ -71,9 +72,9 @@ public class AccountRegisterServlet extends HttpServlet {
         try {
             registered = AUTH_SERVICE.register(accountInfoDTO, password);
         } catch (IncorrectDataException e) {
-            handleInfoExceptions(req, resp, e, this::doGet);
+            updater.handleInfoExceptions(req, resp, e, this::doGet);
             return;
         }
-        acceptActionOrRetry(req, resp, registered, REG_SUCCESS_URL, this::doGet);
+        updater.acceptActionOrRetry(req, resp, registered, REG_SUCCESS_URL, this::doGet);
     }
 }

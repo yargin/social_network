@@ -25,9 +25,8 @@ public class UpdateFieldsHelper {
      * @param fromParamToValue transforms string parameter into applicable object
      * @param <E>              value's type
      */
-    public static <E> void setObjectFromParam(Consumer<E> setter, String param,
-                                              HttpServletRequest req, ThreadLocal<Boolean> paramsAccepted,
-                                              Function<String, E> fromParamToValue) {
+    protected <E> void setObjectFromParam(Consumer<E> setter, String param, HttpServletRequest req,
+                                          ThreadLocal<Boolean> paramsAccepted, Function<String, E> fromParamToValue) {
         String enteredValue = req.getParameter(param);
         if (!isNull(enteredValue)) {
             E value = null;
@@ -38,8 +37,8 @@ public class UpdateFieldsHelper {
         }
     }
 
-    public static void setPhotoFromParam(HttpServletRequest req, Consumer<InputStream> setter, String param,
-                                         ThreadLocal<Boolean> paramsAccepted) throws IOException, ServletException {
+    protected void setPhotoFromParam(Consumer<InputStream> setter, String param, HttpServletRequest req,
+                                     ThreadLocal<Boolean> paramsAccepted) throws IOException, ServletException {
         Part imagePart = req.getPart(param);
         if (!isNull(imagePart)) {
             try (InputStream inputStream = imagePart.getInputStream()) {
@@ -55,16 +54,16 @@ public class UpdateFieldsHelper {
         }
     }
 
-    private static void setStringFromParam(Consumer<String> setter, String param, HttpServletRequest req,
-                                           ThreadLocal<Boolean> paramsAccepted) {
+    protected void setStringFromParam(Consumer<String> setter, String param, HttpServletRequest req,
+                                      ThreadLocal<Boolean> paramsAccepted) {
         String enteredValue = req.getParameter(param);
         if (!isNull(enteredValue)) {
             setFromParam(setter, param, req, paramsAccepted, enteredValue);
         }
     }
 
-    private static <E> void setFromParam(Consumer<E> setter, String param, HttpServletRequest req,
-                                         ThreadLocal<Boolean> paramsAccepted, E value) {
+    protected <E> void setFromParam(Consumer<E> setter, String param, HttpServletRequest req,
+                                    ThreadLocal<Boolean> paramsAccepted, E value) {
         try {
             setter.accept(value);
         } catch (IncorrectDataException e) {

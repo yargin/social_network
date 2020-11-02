@@ -17,14 +17,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.Part;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Date;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -33,71 +29,9 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.R
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 import static java.util.Objects.isNull;
 
-public final class UpdateAccountFieldsHelper {
-    private UpdateAccountFieldsHelper() {
-    }
-
-    /**
-     * gets class E object from request parameter & sets it into model object
-     *
-     * @param setter           puts received value into model-object
-     * @param param            request parameter's name to receive value
-     * @param req              request with parameter
-     * @param paramsAccepted   flag that value was successfully set
-     * @param fromParamToValue transforms string parameter into applicable object
-     * @param <E>              value's type
-     */
-    public static <E> void setObjectFromParam(Consumer<E> setter, String param,
-                                              HttpServletRequest req, ThreadLocal<Boolean> paramsAccepted,
-                                              Function<String, E> fromParamToValue) {
-        String enteredValue = req.getParameter(param);
-        if (!isNull(enteredValue)) {
-            E value = null;
-            if (!isNull(fromParamToValue)) {
-                value = fromParamToValue.apply(enteredValue);
-            }
-            setFromParam(setter, param, req, paramsAccepted, value);
-        }
-    }
-
-    public static void setPhotoFromParam(HttpServletRequest req, Consumer<InputStream> setter, String param,
-                                         ThreadLocal<Boolean> paramsAccepted) throws IOException, ServletException {
-        Part imagePart = req.getPart(param);
-        if (!isNull(imagePart)) {
-            try (InputStream inputStream = imagePart.getInputStream()) {
-                if (inputStream.available() > 0) {
-                    setter.accept(inputStream);
-                }
-            } catch (IOException e) {
-                throw new IncorrectDataException(IncorrectData.UPLOADING_ERROR);
-            } catch (IncorrectDataException e) {
-                paramsAccepted.set(false);
-                req.setAttribute(ERR + param, e.getType().getPropertyKey());
-            }
-        }
-    }
-
-    private static void setStringFromParam(Consumer<String> setter, String param, HttpServletRequest req,
-                                           ThreadLocal<Boolean> paramsAccepted) {
-        String enteredValue = req.getParameter(param);
-        if (!isNull(enteredValue)) {
-            setFromParam(setter, param, req, paramsAccepted, enteredValue);
-        }
-    }
-
-    private static <E> void setFromParam(Consumer<E> setter, String param, HttpServletRequest req,
-                                         ThreadLocal<Boolean> paramsAccepted, E value) {
-        try {
-            setter.accept(value);
-        } catch (IncorrectDataException e) {
-            req.setAttribute(ERR + param, e.getType().getPropertyKey());
-            paramsAccepted.set(false);
-            req.setAttribute(param, value);
-        }
-    }
-
-    public static AccountInfoDTO accountInfoDTOInit(HttpServletRequest req, Supplier<AccountInfoDTO> accountInfoCreator,
-                                                    boolean initStored) {
+public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
+    public AccountInfoDTO accountInfoDTOInit(HttpServletRequest req, Supplier<AccountInfoDTO> accountInfoCreator,
+                                             boolean initStored) {
         HttpSession session = req.getSession();
         AccountInfoDTO accountInfo = (AccountInfoDTO) session.getAttribute(ACCOUNT_INFO);
         if (isNull(accountInfo)) {
@@ -110,7 +44,7 @@ public final class UpdateAccountFieldsHelper {
         return accountInfo;
     }
 
-    public static void initAccountAttributes(HttpServletRequest req, AccountInfoDTO accountInfo) {
+    public void initAccountAttributes(HttpServletRequest req, AccountInfoDTO accountInfo) {
         initSex(req);
 
         Account account = accountInfo.getAccount();
@@ -144,8 +78,8 @@ public final class UpdateAccountFieldsHelper {
         }
     }
 
-    private static Collection<PhoneExchanger> createPhoneExchangers(Collection<Phone> phones, String param,
-                                                                    PhoneType type) {
+    private Collection<PhoneExchanger> createPhoneExchangers(Collection<Phone> phones, String param,
+                                                             PhoneType type) {
         AtomicInteger i = new AtomicInteger(0);
         Collection<PhoneExchanger> phoneExchangers = phones.stream().filter(phone -> type.equals(phone.getType())).
                 map(phone -> {
@@ -156,7 +90,7 @@ public final class UpdateAccountFieldsHelper {
         return phoneExchangers;
     }
 
-    private static <E> void setAttribute(HttpServletRequest req, String param, Supplier<E> getter) {
+    private <E> void setAttribute(HttpServletRequest req, String param, Supplier<E> getter) {
         if (isNull(req.getAttribute(param)) && !isNull(getter.get())) {
             req.setAttribute(param, getter.get());
         }
@@ -167,13 +101,13 @@ public final class UpdateAccountFieldsHelper {
      *
      * @param req {@link HttpServletRequest} to set attributes into
      */
-    public static void initSex(HttpServletRequest req) {
+    public void initSex(HttpServletRequest req) {
         req.setAttribute("male", Sex.MALE.toString());
         req.setAttribute("female", Sex.FEMALE.toString());
     }
 
-    private static Collection<Phone> getPhonesFromParams(HttpServletRequest req, String attribute, PhoneType type,
-                                                         ThreadLocal<Boolean> paramsAccepted) {
+    private Collection<Phone> getPhonesFromParams(HttpServletRequest req, String attribute, PhoneType type,
+                                                  ThreadLocal<Boolean> paramsAccepted) {
         AccountInfoDTO accountInfo = (AccountInfoDTO) req.getSession().getAttribute(ACCOUNT_INFO);
         Account account = accountInfo.getAccount();
         Collection<PhoneExchanger> phoneExchangers = (Collection<PhoneExchanger>) req.getSession().getAttribute(attribute);
@@ -201,7 +135,7 @@ public final class UpdateAccountFieldsHelper {
         return phones;
     }
 
-    public static Password getPassword(HttpServletRequest req, Account account, ThreadLocal<Boolean> paramsAccepted) {
+    public Password getPassword(HttpServletRequest req, Account account, ThreadLocal<Boolean> paramsAccepted) {
         Password password = new PasswordImpl();
         password.setAccount(account);
         setStringFromParam(password::setPassword, "password", req, paramsAccepted);
@@ -217,7 +151,7 @@ public final class UpdateAccountFieldsHelper {
         }
     }
 
-    public static void getValuesFromParams(HttpServletRequest req, AccountInfoDTO accountInfoDTO, ThreadLocal<Boolean>
+    public void getValuesFromParams(HttpServletRequest req, AccountInfoDTO accountInfoDTO, ThreadLocal<Boolean>
             paramsAccepted) throws IOException, ServletException {
         Account account = accountInfoDTO.getAccount();
         setStringFromParam(account::setName, "name", req, paramsAccepted);
@@ -236,7 +170,7 @@ public final class UpdateAccountFieldsHelper {
         Collection<Phone> workPhones = getPhonesFromParams(req, WORK_PHONES, PhoneType.WORK, paramsAccepted);
 
         AccountPhoto accountPhoto = accountInfoDTO.getAccountPhoto();
-        setPhotoFromParam(req, accountPhoto::setPhoto, PHOTO_ATTRIBUTE, paramsAccepted);
+        setPhotoFromParam(accountPhoto::setPhoto, PHOTO_ATTRIBUTE, req, paramsAccepted);
 
         if (Boolean.TRUE.equals(paramsAccepted.get())) {
             Collection<Phone> phones = accountInfoDTO.getPhones();
@@ -246,8 +180,8 @@ public final class UpdateAccountFieldsHelper {
         }
     }
 
-    public static void acceptActionOrRetry(HttpServletRequest req, HttpServletResponse resp, boolean updated,
-                                           String successUrl, DoGetWrapper doGet) throws IOException, ServletException {
+    public void acceptActionOrRetry(HttpServletRequest req, HttpServletResponse resp, boolean updated,
+                                    String successUrl, DoGetWrapper doGet) throws IOException, ServletException {
         if (updated) {
             HttpSession session = req.getSession();
             session.removeAttribute(ACCOUNT_INFO);
@@ -259,8 +193,8 @@ public final class UpdateAccountFieldsHelper {
         }
     }
 
-    public static void handleInfoExceptions(HttpServletRequest req, HttpServletResponse resp, IncorrectDataException e,
-                                            DoGetWrapper doGet) throws ServletException, IOException {
+    public void handleInfoExceptions(HttpServletRequest req, HttpServletResponse resp, IncorrectDataException e,
+                                     DoGetWrapper doGet) throws ServletException, IOException {
         if (e.getType() == IncorrectData.EMAIL_DUPLICATE) {
             req.setAttribute(EMAIL_DUPLICATE, e.getType().getPropertyKey());
         }
