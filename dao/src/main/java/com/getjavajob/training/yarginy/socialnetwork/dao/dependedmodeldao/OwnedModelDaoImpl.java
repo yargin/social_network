@@ -74,9 +74,7 @@ public class OwnedModelDaoImpl<O extends Entity, E extends OwnedEntity<O>> imple
         //todo
         boolean performed = true;
         if (!ownedEntity.equals(storedOwnedEntity)) {
-            if (!delete(storedOwnedEntity)) {
-                return false;
-            }
+                delete(storedOwnedEntity);
             performed = create(ownedEntity);
         }
         return performed;

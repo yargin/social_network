@@ -5,7 +5,6 @@ import com.getjavajob.training.yarginy.socialnetwork.service.AccountInfoService;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountInfoServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.UpdateAccountFieldsHelper;
-import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 
@@ -17,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 import static java.util.Objects.isNull;
 
 public class AccountUpdateServlet extends HttpServlet {
@@ -27,34 +27,37 @@ public class AccountUpdateServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession();
-
-        Long id = (Long) session.getAttribute(Attributes.USER_ID);
-        if (isNull(id)) {
-            resp.sendRedirect(req.getContextPath() + UPDATE_SUCCESS_URL);
+        long requestedUserId = updater.getRequestedUserId(req, resp);
+        if (requestedUserId == 0) {
             return;
         }
-        AccountInfoDTO accountInfoDTO = updater.accountInfoDTOInit(req, () -> accountInfoService.select(id), true);
+        updater.checkUpdatePermissions(req, requestedUserId);
+
+        AccountInfoDTO accountInfoDTO = updater.accountInfoDTOInit(req, () -> accountInfoService.select(requestedUserId));
         updater.initAccountAttributes(req, accountInfoDTO);
 
-        req.setAttribute(Attributes.TARGET, Pages.UPDATE_ACCOUNT);
+        req.setAttribute(TARGET, Pages.UPDATE_ACCOUNT);
 
         req.getRequestDispatcher(Jsps.UPDATE_ACCOUNT).forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        long requestedId = updater.getRequestedUserId(req, resp);
+        if (requestedId == 0) {
+            return;
+        }
+
         if ("cancel".equals(req.getParameter("save"))) {
-            updater.acceptActionOrRetry(req, resp, true, UPDATE_SUCCESS_URL, null);
+            updater.acceptActionOrRetry(req, resp, true, UPDATE_SUCCESS_URL, null, USER_ID, "" + requestedId);
             return;
         }
 
         paramsAccepted.set(true);
         HttpSession session = req.getSession();
 
-        AccountInfoDTO accountInfoDTO = (AccountInfoDTO) session.getAttribute(Attributes.ACCOUNT_INFO);
-        AccountInfoDTO storedAccountInfoDTO = (AccountInfoDTO) session.getAttribute(Attributes.STORED_ACCOUNT_INFO);
-        if (isNull(accountInfoDTO) || isNull(storedAccountInfoDTO)) {
+        AccountInfoDTO accountInfoDTO = (AccountInfoDTO) session.getAttribute(ACCOUNT_INFO);
+        if (isNull(accountInfoDTO)) {
             redirect(req, resp, Pages.LOGOUT);
             return;
         }
@@ -62,17 +65,17 @@ public class AccountUpdateServlet extends HttpServlet {
         updater.getValuesFromParams(req, accountInfoDTO, paramsAccepted);
 
         boolean accepted = paramsAccepted.get();
+        paramsAccepted.remove();
         if (!accepted) {
             doGet(req, resp);
         } else {
+            AccountInfoDTO storedAccountInfoDTO = accountInfoService.select(requestedId);
             update(req, resp, accountInfoDTO, storedAccountInfoDTO);
-            paramsAccepted.remove();
         }
     }
 
     private void update(HttpServletRequest req, HttpServletResponse resp, AccountInfoDTO accountInfoDTO,
-                        AccountInfoDTO storedAccountInfoDTO) throws
-            ServletException, IOException {
+                        AccountInfoDTO storedAccountInfoDTO) throws ServletException, IOException {
         boolean updated;
         try {
             updated = accountInfoService.update(accountInfoDTO, storedAccountInfoDTO);
@@ -80,6 +83,7 @@ public class AccountUpdateServlet extends HttpServlet {
             updater.handleInfoExceptions(req, resp, e, this::doGet);
             return;
         }
-        updater.acceptActionOrRetry(req, resp, updated, UPDATE_SUCCESS_URL, this::doGet);
+        String requestedId = req.getParameter(USER_ID);
+        updater.acceptActionOrRetry(req, resp, updated, UPDATE_SUCCESS_URL, this::doGet, USER_ID, requestedId);
     }
 }

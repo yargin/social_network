@@ -20,4 +20,6 @@ public final class Attributes {
     public static final String PHONE_DUPLICATE = "phoneDuplicate";
     public static final String UPLOAD_ERROR = "uploadError";
     public static final String GROUP = "group";
+    public static final String REQUESTED_ID = "id";
+    public static final String NAME_DUPLICATE = "nameDuplicate";
 }

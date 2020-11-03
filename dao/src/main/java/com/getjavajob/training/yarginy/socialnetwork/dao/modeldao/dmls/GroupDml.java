@@ -67,6 +67,7 @@ public class GroupDml extends AbstractDml<Group> {
     public Group selectFromRow(ResultSet resultSet) throws SQLException {
         Group group = selectViewFromRow(resultSet);
         group.setDescription(resultSet.getString(DESCRIPTION));
+        group.setCreationDate(resultSet.getDate(CREATION_DATE));
         Account owner = accountDml.selectViewFromRow(resultSet);
         group.setOwner(owner);
         return group;
@@ -76,6 +77,7 @@ public class GroupDml extends AbstractDml<Group> {
     public void updateRow(ResultSet resultSet, Group group, Group storedGroup) throws SQLException {
         updateFieldIfDiffers(group::getName, storedGroup::getName, resultSet::updateString, NAME);
         updateFieldIfDiffers(group::getDescription, storedGroup::getDescription, resultSet::updateString, DESCRIPTION);
+        updateFieldIfDiffers(group::getCreationDate, storedGroup::getCreationDate, resultSet::updateDate, CREATION_DATE);
         updateFieldIfDiffers(group::getPhoto, storedGroup::getPhoto, resultSet::updateBytes, PHOTO);
         updateFieldIfDiffers(group::getPhotoPreview, storedGroup::getPhotoPreview, resultSet::updateBytes, PHOTO_PREVIEW);
         Account owner = accountDao.approveFromStorage(group.getOwner());

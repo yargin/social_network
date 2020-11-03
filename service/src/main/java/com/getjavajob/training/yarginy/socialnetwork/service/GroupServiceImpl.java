@@ -1,9 +1,13 @@
 package com.getjavajob.training.yarginy.socialnetwork.service;
 
+import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
+import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.*;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Collection;
 
 public class GroupServiceImpl implements GroupService {
@@ -75,7 +79,11 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public boolean createGroup(Group group) {
-        return groupDao.create(group);
+        group.setCreationDate(Date.valueOf(LocalDate.now()));
+        if (!groupDao.create(group)) {
+            throw new IncorrectDataException(IncorrectData.GROUP_DUPLICATE);
+        }
+        return true;
     }
 
     @Override

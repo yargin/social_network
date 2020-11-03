@@ -4,7 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountServiceImpl;
-import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
+import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.UpdateAccountFieldsHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 
@@ -17,22 +17,24 @@ import java.io.IOException;
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
 
 public class AccountDeleteServlet extends HttpServlet {
+    private final UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper();
     private final AccountService accountService = new AccountServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        long userId = (long) req.getSession().getAttribute(Attributes.USER_ID);
-        String userEmail = (String) req.getSession().getAttribute(Attributes.USER_EMAIL);
+        long requestedUserId = updater.getRequestedUserId(req, resp);
+        if (requestedUserId == 0) {
+            return;
+        }
+        updater.checkUpdatePermissions(req, requestedUserId);
+
         Account accountToDelete = new AccountImpl();
-        accountToDelete.setId(userId);
-        accountToDelete.setEmail(userEmail);
+        accountToDelete.setId(requestedUserId);
         boolean deleted = accountService.deleteAccount(accountToDelete);
         if (deleted) {
-            req.getSession().invalidate();
-            redirect(req, resp, Pages.LOGOUT);
+            redirect(req, resp, Pages.MY_WALL);
         } else {
             req.getRequestDispatcher(Jsps.ERROR).forward(req, resp);
         }
-
     }
 }

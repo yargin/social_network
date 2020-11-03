@@ -3,6 +3,7 @@ package com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.AccountPhoto;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
@@ -12,6 +13,8 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneIm
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.additionaldata.PhoneExchanger;
+import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
+import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -30,16 +33,12 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 import static java.util.Objects.isNull;
 
 public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
-    public AccountInfoDTO accountInfoDTOInit(HttpServletRequest req, Supplier<AccountInfoDTO> accountInfoCreator,
-                                             boolean initStored) {
+    public AccountInfoDTO accountInfoDTOInit(HttpServletRequest req, Supplier<AccountInfoDTO> accountInfoCreator) {
         HttpSession session = req.getSession();
         AccountInfoDTO accountInfo = (AccountInfoDTO) session.getAttribute(ACCOUNT_INFO);
         if (isNull(accountInfo)) {
             accountInfo = accountInfoCreator.get();
             session.setAttribute(ACCOUNT_INFO, accountInfoCreator.get());
-            if (initStored) {
-                session.setAttribute(STORED_ACCOUNT_INFO, accountInfoCreator.get());
-            }
         }
         return accountInfo;
     }
@@ -86,7 +85,7 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
                     i.getAndIncrement();
                     return new PhoneExchanger(param + i, phone.getNumber(), "");
                 }).collect(Collectors.toList());
-        phoneExchangers.add(new PhoneExchanger(param + phones.size(), "", ""));
+        phoneExchangers.add(new PhoneExchanger(param + i.incrementAndGet(), "", ""));
         return phoneExchangers;
     }
 
@@ -166,12 +165,17 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
         AccountPhoto accountPhoto = accountInfoDTO.getAccountPhoto();
         setPhotoFromParam(accountPhoto::setPhoto, PHOTO_ATTRIBUTE, req, paramsAccepted);
 
-        if (Boolean.TRUE.equals(paramsAccepted.get())) {
-            Collection<Phone> phones = accountInfoDTO.getPhones();
-            phones.clear();
-            phones.addAll(privatePhones);
-            phones.addAll(workPhones);
-        }
+        Collection<Phone> phones = accountInfoDTO.getPhones();
+        phones.clear();
+        phones.addAll(privatePhones);
+        phones.addAll(workPhones);
+    }
+
+    public void acceptActionOrRetry(HttpServletRequest req, HttpServletResponse resp, boolean updated,
+                                    String successUrl, DoGetWrapper doGet, String param, String value) throws
+            IOException, ServletException {
+        String url = successUrl + '?' + param + '=' + value;
+        acceptActionOrRetry(req, resp, updated, url, doGet);
     }
 
     public void acceptActionOrRetry(HttpServletRequest req, HttpServletResponse resp, boolean updated,
@@ -199,5 +203,36 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
             req.setAttribute(UPLOAD_ERROR, e.getType().getPropertyKey());
         }
         doGet.accept(req, resp);
+    }
+
+    public long getRequestedUserId(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String stringRequestedId = req.getParameter(Attributes.USER_ID);
+        long requestedUserId;
+        try {
+            requestedUserId = Long.parseLong(stringRequestedId);
+        } catch (NumberFormatException e) {
+            long sessionId = (long) req.getSession().getAttribute(USER_ID);
+            RedirectHelper.redirect(req, resp, Pages.MY_WALL, USER_ID, "" + sessionId);
+            return 0;
+        }
+        if (requestedUserId < 1) {
+            long sessionId = (long) req.getSession().getAttribute(USER_ID);
+            RedirectHelper.redirect(req, resp, Pages.MY_WALL, USER_ID, "" + sessionId);
+            return 0;
+        }
+        return requestedUserId;
+    }
+
+    public boolean checkUpdatePermissions(HttpServletRequest req, long requestedUserId) {
+        HttpSession session = req.getSession();
+        long sessionUserId = (long) session.getAttribute(Attributes.USER_ID);
+        Role sessionRole = (Role) session.getAttribute(Attributes.USER_ROLE);
+        if (sessionUserId == requestedUserId || (!isNull(sessionRole) && (Role.ADMIN.equals(sessionRole)))) {
+            req.setAttribute("updateAble", true);
+            req.setAttribute("userId", requestedUserId);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

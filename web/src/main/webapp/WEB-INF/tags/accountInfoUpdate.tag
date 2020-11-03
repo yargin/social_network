@@ -7,7 +7,8 @@
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 
 <div class="info">
-    <form action="${context}${target}" method="post" enctype="multipart/form-data">
+    <form action="${context}${target}?userId=${userId}" method="post" enctype="multipart/form-data">
+        <%--        <input type="hidden" name="userId" value="${userId}">--%>
 
         <label><fmt:message key="form.name" bundle="${label}"/></label>
         <input type="text" name="name"

@@ -7,6 +7,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Date;
 import java.util.Objects;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper.*;
@@ -17,6 +18,7 @@ public class GroupImpl extends AbstractEntity implements Group {
     private String name;
     private String description;
     private Account owner;
+    private Date creationDate;
     private byte[] photo;
     private byte[] photoPreview;
 
@@ -90,6 +92,16 @@ public class GroupImpl extends AbstractEntity implements Group {
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
+    }
+
+    @Override
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    @Override
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
     @Override

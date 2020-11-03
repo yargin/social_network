@@ -86,6 +86,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean deleteAccount(Account account) {
+        if (isNull(account.getEmail())) {
+            account = accountDao.select(account);
+        }
         return accountDao.delete(account);
     }
 

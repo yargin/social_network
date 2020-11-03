@@ -36,7 +36,7 @@ public class AccountRegisterServlet extends HttpServlet {
             return;
         }
 
-        AccountInfoDTO accountInfoDTO = updater.accountInfoDTOInit(req, AccountInfoDTO::new, false);
+        AccountInfoDTO accountInfoDTO = updater.accountInfoDTOInit(req, AccountInfoDTO::new);
         updater.initAccountAttributes(req, accountInfoDTO);
 
         req.setAttribute(Attributes.TARGET, Pages.REGISTER);

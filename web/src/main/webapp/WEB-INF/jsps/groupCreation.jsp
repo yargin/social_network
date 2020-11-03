@@ -11,15 +11,17 @@
     <div class="post">
         <form action="${context}/creategroup" method="post" enctype="multipart/form-data">
             <input type="text" name="name"
-                   <c:if test="${not empty name}">value="${name}"</c:if>
+                   <c:if test="${not empty group.name}">value="${name}"</c:if>
                    placeholder="<fmt:message key="form.groupName" bundle="${label}"/>" required>
             <br>
             <c:if test="${not empty errname}"><fmt:message key="${errname}" bundle="${error}"/><br></c:if>
-            <br>
+            <c:if test="${not empty nameDuplicate}"><fmt:message key="${nameDuplicate}" bundle="${error}"/><br></c:if>
             <textarea name="description"
-                      <c:if test="${not empty description}">value="${description}"</c:if>
-                      placeholder="<fmt:message key="form.description" bundle="${label}"/>"></textarea>
+                      placeholder="<fmt:message key="form.description" bundle="${label}"/>"
+            ><c:if test="${not empty description}">${description}</c:if></textarea>
             <br>
+
+
             <c:if test="${not empty photo}">
                 <img src="data:image/jpeg;base64, ${photo}">
                 <br>

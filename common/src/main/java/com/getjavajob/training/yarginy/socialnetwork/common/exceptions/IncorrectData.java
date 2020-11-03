@@ -8,7 +8,7 @@ public enum IncorrectData {
     TOO_YOUNG("error.tooYoung"), TOO_OLD("error.tooOld"),
     SAME_ADDITIONAL_EMAIL("error.sameAdditionalEmail"), EMAIL_DUPLICATE("error.accountDuplicate"),
     PHONE_DUPLICATE("error.phoneDuplicate"), FILE_TOO_LARGE("error.fileTooLarge"),
-    UPLOADING_ERROR("error.failedToUpload");
+    UPLOADING_ERROR("error.failedToUpload"), GROUP_DUPLICATE("error.groupDuplicate");
 
     private final String propertyKey;
 
