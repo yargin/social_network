@@ -8,6 +8,7 @@ public final class Jsps {
     public static final String UPDATE_ACCOUNT = "/WEB-INF/jsps/updateAccount.jsp";
     public static final String GROUPS_LIST = "/WEB-INF/jsps/accountGroups.jsp";
     public static final String GROUP_CREATION = "/WEB-INF/jsps/groupCreation.jsp";
+    public static final String GROUP_INFO = "/WEB-INF/jsps/groupInfo.jsp";
 
     private Jsps() {
     }

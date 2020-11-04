@@ -5,9 +5,11 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
+import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import java.io.IOException;
@@ -98,5 +100,23 @@ public class UpdateFieldsHelper {
         long id = (long) session.getAttribute(USER_ID);
         account.setId(id);
         return account;
+    }
+
+    public long getRequestedUserId(HttpServletRequest req, HttpServletResponse resp, String idParameter) throws IOException {
+        String stringRequestedId = req.getParameter(idParameter);
+        long requestedUserId;
+        try {
+            requestedUserId = Long.parseLong(stringRequestedId);
+        } catch (NumberFormatException e) {
+            long sessionId = (long) req.getSession().getAttribute(USER_ID);
+            RedirectHelper.redirect(req, resp, Pages.MY_WALL, USER_ID, "" + sessionId);
+            return 0;
+        }
+        if (requestedUserId < 1) {
+            long sessionId = (long) req.getSession().getAttribute(USER_ID);
+            RedirectHelper.redirect(req, resp, Pages.MY_WALL, USER_ID, "" + sessionId);
+            return 0;
+        }
+        return requestedUserId;
     }
 }

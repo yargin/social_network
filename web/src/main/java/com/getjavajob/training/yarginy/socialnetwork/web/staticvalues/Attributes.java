@@ -1,9 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.staticvalues;
 
 public final class Attributes {
-    private Attributes() {
-    }
-
+    public static final String GROUP_ID = "groupId";
     public static final String USER_ID = "userId";
     public static final String USER_NAME = "userName";
     public static final String USER_ROLE = "userRole";
@@ -22,4 +20,7 @@ public final class Attributes {
     public static final String GROUP = "group";
     public static final String REQUESTED_ID = "id";
     public static final String NAME_DUPLICATE = "nameDuplicate";
+
+    private Attributes() {
+    }
 }

@@ -25,7 +25,12 @@ public class MessageDml extends AbstractDml<Account> {
     }
 
     @Override
-    protected String getSelectForUpdate() {
+    protected String getSelectForUpdateByAltKey() {
+        return null;
+    }
+
+    @Override
+    protected String getSelectForUpdateById() {
         return null;
     }
 

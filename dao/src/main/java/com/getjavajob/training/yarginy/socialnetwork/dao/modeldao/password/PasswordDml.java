@@ -38,8 +38,13 @@ public class PasswordDml extends AbstractDml<Password> {
     }
 
     @Override
-    protected String getSelectForUpdate() {
+    protected String getSelectForUpdateByAltKey() {
         return SELECT_UPDATE;
+    }
+
+    @Override
+    protected String getSelectForUpdateById() {
+        throw new UnsupportedOperationException();
     }
 
     @Override

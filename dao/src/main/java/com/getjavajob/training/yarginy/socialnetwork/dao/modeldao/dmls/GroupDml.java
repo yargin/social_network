@@ -24,7 +24,8 @@ public class GroupDml extends AbstractDml<Group> {
             AccountsTable.ID).where(ID).build();
     private static final String SELECT_BY_NAME = buildQuery().selectJoin(TABLE, AccountsTable.TABLE, OWNER,
             AccountsTable.ID).where(NAME).build();
-    private static final String SELECT_UPDATE = buildQuery().select(TABLE).where(NAME).build();
+    private static final String SELECT_UPDATE_BY_NAME = buildQuery().select(TABLE).where(NAME).build();
+    private static final String SELECT_UPDATE_BY_ID = buildQuery().select(TABLE).where(ID).build();
     private final AccountDml accountDml = new AccountDml();
     private final Dao<Account> accountDao = getDbFactory().getAccountDao();
 
@@ -44,8 +45,13 @@ public class GroupDml extends AbstractDml<Group> {
     }
 
     @Override
-    protected String getSelectForUpdate() {
-        return SELECT_UPDATE;
+    protected String getSelectForUpdateByAltKey() {
+        return SELECT_UPDATE_BY_NAME;
+    }
+
+    @Override
+    protected String getSelectForUpdateById() {
+        return SELECT_UPDATE_BY_ID;
     }
 
     @Override

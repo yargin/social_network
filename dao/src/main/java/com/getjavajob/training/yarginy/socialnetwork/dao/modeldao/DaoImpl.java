@@ -69,6 +69,7 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
     }
 
     //todo what is select for update and why i'am using it
+    //but i don't use select for update...
     @Override
     public boolean update(E entity, E storedEntity) {
         try (Connection connection = connectionPool.getConnection();

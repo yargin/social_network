@@ -8,6 +8,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Date;
+import java.util.Base64;
 import java.util.Objects;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper.*;
@@ -92,6 +93,14 @@ public class GroupImpl extends AbstractEntity implements Group {
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
+    }
+
+    @Override
+    public String getHtmlPhoto() {
+        if (!isNull(photo)) {
+            return Base64.getEncoder().encodeToString(photo);
+        }
+        return "";
     }
 
     @Override

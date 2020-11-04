@@ -48,7 +48,11 @@ public abstract class AbstractDml<E extends Entity> implements Dml<E> {
                                                Function<V, T> objToSqlTransformer) throws SQLException {
         V value = valueGetter.get();
         if (!Objects.equals(value, storedValueGetter.get())) {
-            updater.update(column, objToSqlTransformer.apply(value));
+            if (value == null) {
+                updater.update(column, null);
+            } else {
+                updater.update(column, objToSqlTransformer.apply(value));
+            }
         }
     }
 
@@ -72,7 +76,9 @@ public abstract class AbstractDml<E extends Entity> implements Dml<E> {
 
     protected abstract String getSelectByAltKey();
 
-    protected abstract String getSelectForUpdate();
+    protected abstract String getSelectForUpdateByAltKey();
+
+    protected abstract String getSelectForUpdateById();
 
     protected abstract void setAltKeyParams(PreparedStatement statement, E entity) throws SQLException;
 
@@ -92,8 +98,11 @@ public abstract class AbstractDml<E extends Entity> implements Dml<E> {
         } else if (!updatable) {
             statement = createPreparedStatement(connection, getSelectByAltKey(), false);
             setAltKeyParams(statement, entity);
+        } else if (id > 0) {
+            statement = createPreparedStatement(connection, getSelectForUpdateById(), true);
+            statement.setLong(1, id);
         } else {
-            statement = createPreparedStatement(connection, getSelectForUpdate(), true);
+            statement = createPreparedStatement(connection, getSelectForUpdateByAltKey(), true);
             setAltKeyParams(statement, entity);
         }
         return statement;

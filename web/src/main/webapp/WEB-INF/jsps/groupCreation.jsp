@@ -7,10 +7,12 @@
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 <input type="hidden" value="${group}" name="group"/>
 
+<% request.setAttribute("savedPhoto", request.getAttribute("savedPhoto")); %>
 <common:layout>
     <div class="post">
         <form action="${context}/creategroup" method="post" enctype="multipart/form-data">
-            <input type="text" name="name"
+
+        <input type="text" name="name"
                    <c:if test="${not empty group.name}">value="${name}"</c:if>
                    placeholder="<fmt:message key="form.groupName" bundle="${label}"/>" required>
             <br>
@@ -20,7 +22,6 @@
                       placeholder="<fmt:message key="form.description" bundle="${label}"/>"
             ><c:if test="${not empty description}">${description}</c:if></textarea>
             <br>
-
 
             <c:if test="${not empty photo}">
                 <img src="data:image/jpeg;base64, ${photo}">

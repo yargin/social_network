@@ -21,7 +21,8 @@ import static java.util.Objects.isNull;
 public class PhonesDml extends AbstractDml<Phone> {
     public static final String SELECT_ALL = buildQuery().selectJoin(TABLE, AccountsTable.TABLE, OWNER, AccountsTable.ID).
             build();
-    public static final String SELECT_UPDATE = buildQuery().select(TABLE).where(NUMBER).build();
+    public static final String SELECT_UPDATE_BY_NUMBER = buildQuery().select(TABLE).where(NUMBER).build();
+    public static final String SELECT_UPDATE_BY_ID = buildQuery().select(TABLE).where(ID).build();
     public static final String SELECT_BY_ID = buildQuery().selectJoin(TABLE, AccountsTable.TABLE, OWNER,
             AccountsTable.ID).where(ID).build();
     public static final String SELECT_BY_NUMBER = buildQuery().selectJoin(TABLE, AccountsTable.TABLE, OWNER,
@@ -44,8 +45,13 @@ public class PhonesDml extends AbstractDml<Phone> {
     }
 
     @Override
-    protected String getSelectForUpdate() {
-        return SELECT_UPDATE;
+    protected String getSelectForUpdateByAltKey() {
+        return SELECT_UPDATE_BY_NUMBER;
+    }
+
+    @Override
+    protected String getSelectForUpdateById() {
+        return SELECT_UPDATE_BY_ID;
     }
 
     @Override

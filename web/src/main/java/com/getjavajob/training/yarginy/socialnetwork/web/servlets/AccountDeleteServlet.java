@@ -5,6 +5,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.UpdateAccountFieldsHelper;
+import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 
@@ -22,7 +23,7 @@ public class AccountDeleteServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        long requestedUserId = updater.getRequestedUserId(req, resp);
+        long requestedUserId = updater.getRequestedUserId(req, resp, Attributes.USER_ID);
         if (requestedUserId == 0) {
             return;
         }

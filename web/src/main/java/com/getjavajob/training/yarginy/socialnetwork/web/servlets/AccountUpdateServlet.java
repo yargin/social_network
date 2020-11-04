@@ -27,13 +27,17 @@ public class AccountUpdateServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        long requestedUserId = updater.getRequestedUserId(req, resp);
+        long requestedUserId = updater.getRequestedUserId(req, resp, USER_ID);
         if (requestedUserId == 0) {
             return;
         }
         updater.checkUpdatePermissions(req, requestedUserId);
 
-        AccountInfoDTO accountInfoDTO = updater.accountInfoDTOInit(req, () -> accountInfoService.select(requestedUserId));
+        AccountInfoDTO accountInfoDTO = updater.accountInfoDTOInit(req, resp, () -> accountInfoService.select(
+                requestedUserId));
+        if (isNull(accountInfoDTO)) {
+            return;
+        }
         updater.initAccountAttributes(req, accountInfoDTO);
 
         req.setAttribute(TARGET, Pages.UPDATE_ACCOUNT);
@@ -43,7 +47,7 @@ public class AccountUpdateServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        long requestedId = updater.getRequestedUserId(req, resp);
+        long requestedId = updater.getRequestedUserId(req, resp, USER_ID);
         if (requestedId == 0) {
             return;
         }

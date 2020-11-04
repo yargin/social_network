@@ -38,8 +38,13 @@ public class AccountDml extends AbstractDml<Account> {
     }
 
     @Override
-    protected String getSelectForUpdate() {
+    protected String getSelectForUpdateByAltKey() {
         return SELECT_BY_EMAIL;
+    }
+
+    @Override
+    protected String getSelectForUpdateById() {
+        return SELECT_BY_ID;
     }
 
     @Override

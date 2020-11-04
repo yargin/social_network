@@ -29,7 +29,7 @@ public class UpdateGroupFieldsHelper extends UpdateFieldsHelper {
         setStringFromParam(group::setDescription, "description", req, paramsAccepted);
         setPhotoFromParam(group::setPhoto, "photo", req, paramsAccepted);
         if (isNull(group.getPhoto())) {
-            group.setPhoto((byte[]) req.getSession().getAttribute("savedPhoto"));
+            group.setPhoto((byte[]) req.getAttribute("savedPhoto"));
         }
     }
 
@@ -41,7 +41,8 @@ public class UpdateGroupFieldsHelper extends UpdateFieldsHelper {
         if (!isNull(photoBytes)) {
             String photo = Base64.getEncoder().encodeToString(photoBytes);
             req.setAttribute("photo", photo);
-            req.getSession().setAttribute("savedPhoto", photoBytes);
+            req.setAttribute("savedPhoto", photoBytes);
+//            req.getSession().setAttribute("savedPhoto", photoBytes);
         }
     }
 

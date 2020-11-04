@@ -25,6 +25,8 @@ public interface Group extends Entity {
 
     byte[] getPhoto();
 
+    String getHtmlPhoto();
+
     void setPhoto(InputStream photo);
 
     void setPhoto(byte[] photo);

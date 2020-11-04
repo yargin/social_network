@@ -33,12 +33,19 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 import static java.util.Objects.isNull;
 
 public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
-    public AccountInfoDTO accountInfoDTOInit(HttpServletRequest req, Supplier<AccountInfoDTO> accountInfoCreator) {
+    public AccountInfoDTO accountInfoDTOInit(HttpServletRequest req, HttpServletResponse resp, Supplier<AccountInfoDTO>
+            accountInfoCreator) throws IOException {
         HttpSession session = req.getSession();
         AccountInfoDTO accountInfo = (AccountInfoDTO) session.getAttribute(ACCOUNT_INFO);
         if (isNull(accountInfo)) {
             accountInfo = accountInfoCreator.get();
-            session.setAttribute(ACCOUNT_INFO, accountInfoCreator.get());
+            try {
+                session.setAttribute(ACCOUNT_INFO, accountInfoCreator.get());
+            } catch (IllegalArgumentException e) {
+                long sessionId = (long) session.getAttribute(USER_ID);
+                RedirectHelper.redirect(req, resp, Pages.MY_WALL, USER_ID, "" + sessionId);
+                return null;
+            }
         }
         return accountInfo;
     }
@@ -203,24 +210,6 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
             req.setAttribute(UPLOAD_ERROR, e.getType().getPropertyKey());
         }
         doGet.accept(req, resp);
-    }
-
-    public long getRequestedUserId(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String stringRequestedId = req.getParameter(Attributes.USER_ID);
-        long requestedUserId;
-        try {
-            requestedUserId = Long.parseLong(stringRequestedId);
-        } catch (NumberFormatException e) {
-            long sessionId = (long) req.getSession().getAttribute(USER_ID);
-            RedirectHelper.redirect(req, resp, Pages.MY_WALL, USER_ID, "" + sessionId);
-            return 0;
-        }
-        if (requestedUserId < 1) {
-            long sessionId = (long) req.getSession().getAttribute(USER_ID);
-            RedirectHelper.redirect(req, resp, Pages.MY_WALL, USER_ID, "" + sessionId);
-            return 0;
-        }
-        return requestedUserId;
     }
 
     public boolean checkUpdatePermissions(HttpServletRequest req, long requestedUserId) {

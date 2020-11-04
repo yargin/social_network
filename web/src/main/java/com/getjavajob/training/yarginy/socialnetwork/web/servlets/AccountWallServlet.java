@@ -19,6 +19,7 @@ import java.util.Base64;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER_ID;
 import static java.util.Objects.isNull;
 
 public class AccountWallServlet extends HttpServlet {
@@ -27,7 +28,7 @@ public class AccountWallServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        long requestedUserId = updater.getRequestedUserId(req, resp);
+        long requestedUserId = updater.getRequestedUserId(req, resp, USER_ID);
         if (requestedUserId == 0) {
             return;
         }
