@@ -138,4 +138,13 @@
         <servlet-name>updateGroup</servlet-name>
         <url-pattern>/updategroup</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>deleteGroup</servlet-name>
+        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.GroupDeleteServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>deleteGroup</servlet-name>
+        <url-pattern>/deletegroup</url-pattern>
+    </servlet-mapping>
 </web-app>

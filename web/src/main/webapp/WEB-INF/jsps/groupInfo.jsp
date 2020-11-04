@@ -25,5 +25,8 @@
         </c:choose>
     </div>
     <br>
-    <a href="${context}/updategroup?groupId=${group.getId()}"><fmt:message key="label.updateInfo"/></a>
+    <c:if test="${not empty moderator}">
+        <a href="${context}/updategroup?groupId=${group.getId()}"><fmt:message key="label.updateInfo"/></a><br>
+        <a href="${context}/deletegroup?groupId=${group.getId()}"><fmt:message key="label.deleteGroup"/></a>
+    </c:if>
 </common:layout>

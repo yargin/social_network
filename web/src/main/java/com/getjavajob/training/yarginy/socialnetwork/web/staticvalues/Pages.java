@@ -10,6 +10,7 @@ public final class Pages extends HttpServlet {
     public static final String DELETE_ACCOUNT = "/deleteAccount";
     public static final String UPDATE_ACCOUNT = "/updateInfo";
     public static final String GROUP = "/group";
+    public static final String GROUPS = "/groups";
 
     private Pages() {
     }
