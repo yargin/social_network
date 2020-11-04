@@ -93,6 +93,9 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public boolean updateGroup(Group group, Group storedGroup) {
-        return groupDao.update(group, storedGroup);
+        if (!groupDao.update(group, storedGroup)) {
+            throw new IncorrectDataException(IncorrectData.GROUP_DUPLICATE);
+        }
+        return true;
     }
 }

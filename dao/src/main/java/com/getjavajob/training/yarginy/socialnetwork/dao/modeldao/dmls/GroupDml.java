@@ -17,6 +17,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEn
 import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.GroupsTable.*;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
+import static java.util.Objects.isNull;
 
 public class GroupDml extends AbstractDml<Group> {
     private static final String SELECT_ALL = buildQuery().select(TABLE).build();
@@ -85,7 +86,10 @@ public class GroupDml extends AbstractDml<Group> {
         updateFieldIfDiffers(group::getDescription, storedGroup::getDescription, resultSet::updateString, DESCRIPTION);
         updateFieldIfDiffers(group::getCreationDate, storedGroup::getCreationDate, resultSet::updateDate, CREATION_DATE);
         updateFieldIfDiffers(group::getPhoto, storedGroup::getPhoto, resultSet::updateBytes, PHOTO);
-        updateFieldIfDiffers(group::getPhotoPreview, storedGroup::getPhotoPreview, resultSet::updateBytes, PHOTO_PREVIEW);
+//        updateFieldIfDiffers(group::getPhotoPreview, storedGroup::getPhotoPreview, resultSet::updateBytes, PHOTO_PREVIEW);
+        if (isNull(group.getOwner())) {
+            return;
+        }
         Account owner = accountDao.approveFromStorage(group.getOwner());
         group.setOwner(owner);
         updateFieldIfDiffers(group::getOwner, storedGroup::getOwner, resultSet::updateLong, OWNER, Account::getId);

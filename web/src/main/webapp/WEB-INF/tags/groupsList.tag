@@ -2,5 +2,5 @@
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 
 <c:forEach items="${groups}" var="group">
-    <a href="${context}/group?id=${group.id}">${group.name}</a><br>
+    <a href="${context}/group?groupId=${group.id}">${group.name}</a><br>
 </c:forEach>

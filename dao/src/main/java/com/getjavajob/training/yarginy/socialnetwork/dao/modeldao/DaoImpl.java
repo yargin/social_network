@@ -83,7 +83,6 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
             resultSet.updateRow();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
             return false;
         }
     }

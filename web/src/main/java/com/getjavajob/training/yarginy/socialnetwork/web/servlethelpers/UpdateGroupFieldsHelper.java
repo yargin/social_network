@@ -14,8 +14,7 @@ import java.util.Base64;
 import java.util.function.Supplier;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.NAME_DUPLICATE;
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.SAVED_PHOTO;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 import static java.util.Objects.isNull;
 
 public class UpdateGroupFieldsHelper extends UpdateFieldsHelper {
@@ -57,6 +56,7 @@ public class UpdateGroupFieldsHelper extends UpdateFieldsHelper {
         if (updated) {
             HttpSession session = req.getSession();
             session.removeAttribute(SAVED_PHOTO);
+            session.removeAttribute(GROUP);
             redirect(req, resp, updateSuccessUrl);
         } else {
             doGet.accept(req, resp);

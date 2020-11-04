@@ -8,7 +8,6 @@
 
 <div class="info">
     <form action="${context}${target}?userId=${userId}" method="post" enctype="multipart/form-data">
-        <%--        <input type="hidden" name="userId" value="${userId}">--%>
 
         <label><fmt:message key="form.name" bundle="${label}"/></label>
         <input type="text" name="name"
@@ -95,5 +94,6 @@
 
         <button type="submit" name="save" value="save"><fmt:message key="button.save" bundle="${label}"/></button>
         <button type="submit" name="save" value="cancel"><fmt:message key="button.cancel" bundle="${label}"/></button>
+
     </form>
 </div>

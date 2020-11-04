@@ -127,4 +127,15 @@
         <servlet-name>createGroup</servlet-name>
         <url-pattern>/creategroup</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>updateGroup</servlet-name>
+        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.GroupUpdateServlet</servlet-class>
+        <multipart-config>
+        </multipart-config>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>updateGroup</servlet-name>
+        <url-pattern>/updategroup</url-pattern>
+    </servlet-mapping>
 </web-app>

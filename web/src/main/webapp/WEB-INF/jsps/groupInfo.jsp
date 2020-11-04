@@ -10,7 +10,8 @@
         <fmt:message key="form.groupName"/> : ${group.getName()}<br>
         <fmt:message key="form.description"/> : ${group.getDescription()}<br>
         <fmt:message key="label.groupCreationDate"/> : ${group.getCreationDate()}<br>
-        <fmt:message key="form.patronymic"/> : ${user.getPatronymic()}<br>
+        <fmt:message key="label.creator"/> :
+        <a href="${context}/mywall?userId=${owner.getId()}">${owner.getName()} ${owner.getSurname()}</a>
     </div>
 
     <div class="info">
@@ -19,9 +20,10 @@
                 <img src="data:image/jpeg;base64, ${group.getHtmlPhoto()}">
             </c:when>
             <c:otherwise>
-                <img src="${context}/img/emptyAvatar.jpg.jpg">
+                <img src="${context}/img/emptyAvatar.jpg">
             </c:otherwise>
         </c:choose>
     </div>
     <br>
+    <a href="${context}/updategroup?groupId=${group.getId()}"><fmt:message key="label.updateInfo"/></a>
 </common:layout>
