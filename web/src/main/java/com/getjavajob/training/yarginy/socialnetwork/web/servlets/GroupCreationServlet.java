@@ -1,6 +1,5 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.servlets;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
@@ -9,6 +8,7 @@ import com.getjavajob.training.yarginy.socialnetwork.service.GroupServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.UpdateGroupFieldsHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
+import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,52 +16,44 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.NAME_DUPLICATE;
-
 public class GroupCreationServlet extends HttpServlet {
-    private final String REG_SUCCESS_URL = "/group";
     private final GroupService groupService = new GroupServiceImpl();
-    private final UpdateGroupFieldsHelper updater = new UpdateGroupFieldsHelper();
-    private final ThreadLocal<Boolean> paramsAccepted = new ThreadLocal<>();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Group group = updater.getOrCreateGroupAttribute(req, GroupImpl::new);
-        updater.initGroupAttributes(req, group);
+        UpdateGroupFieldsHelper updater = new UpdateGroupFieldsHelper(req, resp, Attributes.GROUP_ID, Pages.GROUP);
+        Group group = updater.getOrCreateGroupAttribute(GroupImpl::new);
+        updater.initGroupAttributes(group);
         req.getRequestDispatcher(Jsps.GROUP_CREATION).forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        UpdateGroupFieldsHelper updater = new UpdateGroupFieldsHelper(req, resp, Attributes.GROUP_ID, Pages.GROUP);
         Group group = new GroupImpl();
-        paramsAccepted.set(true);
-        updater.getValuesFromParams(req, group, paramsAccepted);
+        updater.getValuesFromParams(group);
 
-        boolean accepted = paramsAccepted.get();
-        paramsAccepted.remove();
+        boolean accepted = updater.isParamsAccepted();
+        req.setAttribute(Attributes.GROUP, group);
         if (accepted) {
-            group.setOwner(updater.getAccountFromSession(req));
-            createGroup(req, resp, group);
+            group.setOwner(updater.getAccountFromSession());
+            createGroup(updater, group);
         } else {
             req.setAttribute(Attributes.GROUP, group);
             doGet(req, resp);
         }
     }
 
-    private void createGroup(HttpServletRequest req, HttpServletResponse resp, Group group) throws IOException,
-            ServletException {
+    private void createGroup(UpdateGroupFieldsHelper updater, Group group) throws IOException, ServletException {
         boolean created;
         try {
             created = groupService.createGroup(group);
         } catch (IncorrectDataException e) {
-            if (e.getType() == IncorrectData.GROUP_DUPLICATE) {
-                req.setAttribute(NAME_DUPLICATE, e.getType().getPropertyKey());
-            }
-            doGet(req, resp);
+            updater.handleInfoExceptions(e, this::doGet);
             return;
         }
         Group createdGroup = groupService.selectGroup(group);
-        updater.acceptActionOrRetry(req, resp, created, REG_SUCCESS_URL, this::doGet, "groupId", "" +
-                createdGroup.getId());
+        updater.setSuccessUrl(Pages.GROUP, Attributes.GROUP_ID, "" + createdGroup.getId());
+        updater.acceptActionOrRetry(created, this::doGet);
     }
 }

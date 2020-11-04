@@ -20,25 +20,22 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 import static java.util.Objects.isNull;
 
 public class AccountUpdateServlet extends HttpServlet {
-    private static final String UPDATE_SUCCESS_URL = Pages.MY_WALL;
     private final AccountInfoService accountInfoService = new AccountInfoServiceImpl();
-    private final UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper();
-    private final ThreadLocal<Boolean> paramsAccepted = new ThreadLocal<>();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        long requestedUserId = updater.getRequestedUserId(req, resp, USER_ID);
+        UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp, USER_ID, Pages.MY_WALL);
+        long requestedUserId = updater.getRequestedUserId(USER_ID);
         if (requestedUserId == 0) {
             return;
         }
-        updater.checkUpdatePermissions(req, requestedUserId);
+        updater.checkUpdatePermissions(requestedUserId);
 
-        AccountInfoDTO accountInfoDTO = updater.accountInfoDTOInit(req, resp, () -> accountInfoService.select(
-                requestedUserId));
+        AccountInfoDTO accountInfoDTO = updater.accountInfoDTOInit(() -> accountInfoService.select(requestedUserId));
         if (isNull(accountInfoDTO)) {
             return;
         }
-        updater.initAccountAttributes(req, accountInfoDTO);
+        updater.initAccountAttributes(accountInfoDTO);
 
         req.setAttribute(TARGET, Pages.UPDATE_ACCOUNT);
 
@@ -47,17 +44,17 @@ public class AccountUpdateServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        long requestedId = updater.getRequestedUserId(req, resp, USER_ID);
+        UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp, USER_ID, Pages.MY_WALL);
+        long requestedId = updater.getRequestedUserId(USER_ID);
         if (requestedId == 0) {
             return;
         }
 
         if ("cancel".equals(req.getParameter("save"))) {
-            updater.acceptActionOrRetry(req, resp, true, UPDATE_SUCCESS_URL, null, USER_ID, "" + requestedId);
+            updater.acceptActionOrRetry(true, null);
             return;
         }
 
-        paramsAccepted.set(true);
         HttpSession session = req.getSession();
 
         AccountInfoDTO accountInfoDTO = (AccountInfoDTO) session.getAttribute(ACCOUNT_INFO);
@@ -66,28 +63,26 @@ public class AccountUpdateServlet extends HttpServlet {
             return;
         }
 
-        updater.getValuesFromParams(req, accountInfoDTO, paramsAccepted);
+        updater.getValuesFromParams(accountInfoDTO);
 
-        boolean accepted = paramsAccepted.get();
-        paramsAccepted.remove();
+        boolean accepted = updater.isParamsAccepted();
         if (!accepted) {
             doGet(req, resp);
         } else {
             AccountInfoDTO storedAccountInfoDTO = accountInfoService.select(requestedId);
-            update(req, resp, accountInfoDTO, storedAccountInfoDTO);
+            update(updater, accountInfoDTO, storedAccountInfoDTO);
         }
     }
 
-    private void update(HttpServletRequest req, HttpServletResponse resp, AccountInfoDTO accountInfoDTO,
+    private void update(UpdateAccountFieldsHelper updater, AccountInfoDTO accountInfoDTO,
                         AccountInfoDTO storedAccountInfoDTO) throws ServletException, IOException {
         boolean updated;
         try {
             updated = accountInfoService.update(accountInfoDTO, storedAccountInfoDTO);
         } catch (IncorrectDataException e) {
-            updater.handleInfoExceptions(req, resp, e, this::doGet);
+            updater.handleInfoExceptions(e, this::doGet);
             return;
         }
-        String requestedId = req.getParameter(USER_ID);
-        updater.acceptActionOrRetry(req, resp, updated, UPDATE_SUCCESS_URL, this::doGet, USER_ID, requestedId);
+        updater.acceptActionOrRetry(updated, this::doGet);
     }
 }

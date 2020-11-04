@@ -9,6 +9,7 @@ import com.getjavajob.training.yarginy.socialnetwork.service.AccountServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.UpdateAccountFieldsHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
+import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -24,15 +25,15 @@ import static java.util.Objects.isNull;
 
 public class AccountWallServlet extends HttpServlet {
     private static final AccountService ACCOUNT_SERVICE = new AccountServiceImpl();
-    private final UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        long requestedUserId = updater.getRequestedUserId(req, resp, USER_ID);
+        UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp, USER_ID, Pages.MY_WALL);
+        long requestedUserId = updater.getRequestedUserId(USER_ID);
         if (requestedUserId == 0) {
             return;
         }
-        updater.checkUpdatePermissions(req, requestedUserId);
+        updater.checkUpdatePermissions(requestedUserId);
 
         AccountInfoDTO accountInfoDTO = ACCOUNT_SERVICE.getAccountInfo(requestedUserId);
 

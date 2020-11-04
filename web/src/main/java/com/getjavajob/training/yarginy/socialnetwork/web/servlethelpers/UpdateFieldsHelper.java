@@ -22,30 +22,40 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 import static java.util.Objects.isNull;
 
 public class UpdateFieldsHelper {
-    /**
-     * gets class E object from request parameter & sets it into model object
-     *
-     * @param setter           puts received value into model-object
-     * @param param            request parameter's name to receive value
-     * @param req              request with parameter
-     * @param paramsAccepted   flag that value was successfully set
-     * @param fromParamToValue transforms string parameter into applicable object
-     * @param <E>              value's type
-     */
-    protected <E> void setObjectFromParam(Consumer<E> setter, String param, HttpServletRequest req,
-                                          ThreadLocal<Boolean> paramsAccepted, Function<String, E> fromParamToValue) {
+    protected final HttpServletRequest req;
+    protected final HttpServletResponse resp;
+    protected String updateSuccessUrl;
+    protected String updateFailUrl;
+    protected boolean paramsAccepted = true;
+
+    public UpdateFieldsHelper(HttpServletRequest req, HttpServletResponse resp, String param, String successUrl) {
+        this.req = req;
+        this.resp = resp;
+        String stringRequestedId = req.getParameter(param);
+        if (!isNull(stringRequestedId)) {
+            setSuccessUrl(successUrl, param, stringRequestedId);
+        } else {
+            updateSuccessUrl = successUrl;
+        }
+        updateFailUrl = Pages.MY_WALL;
+    }
+
+    public void setSuccessUrl(String successUrl, String param, String value) {
+        updateSuccessUrl = successUrl + '?' + param + '=' + value;
+    }
+
+    protected <E> void setObjectFromParam(Consumer<E> setter, String param, Function<String, E> fromParamToValue) {
         String enteredValue = req.getParameter(param);
         if (!isNull(enteredValue) && !enteredValue.isEmpty()) {
             E value = null;
             if (!isNull(fromParamToValue)) {
                 value = fromParamToValue.apply(enteredValue);
             }
-            setFromParam(setter, param, req, paramsAccepted, value);
+            setFromParam(setter, param, value);
         }
     }
 
-    protected void setPhotoFromParam(Consumer<InputStream> setter, String param, HttpServletRequest req,
-                                     ThreadLocal<Boolean> paramsAccepted) throws IOException, ServletException {
+    protected void setPhotoFromParam(Consumer<InputStream> setter, String param) throws IOException, ServletException {
         Part imagePart = req.getPart(param);
         if (!isNull(imagePart)) {
             try (InputStream inputStream = imagePart.getInputStream()) {
@@ -55,38 +65,36 @@ public class UpdateFieldsHelper {
             } catch (IOException e) {
                 throw new IncorrectDataException(IncorrectData.UPLOADING_ERROR);
             } catch (IncorrectDataException e) {
-                paramsAccepted.set(false);
+                paramsAccepted = false;
                 req.setAttribute(ERR + param, e.getType().getPropertyKey());
             }
         }
     }
 
-    protected void setStringFromParam(Consumer<String> setter, String param, HttpServletRequest req,
-                                      ThreadLocal<Boolean> paramsAccepted) {
+    protected void setStringFromParam(Consumer<String> setter, String param) {
         String enteredValue = req.getParameter(param);
         if (!isNull(enteredValue)) {
-            setFromParam(setter, param, req, paramsAccepted, enteredValue);
+            setFromParam(setter, param, enteredValue);
         }
     }
 
-    protected <E> void setFromParam(Consumer<E> setter, String param, HttpServletRequest req,
-                                    ThreadLocal<Boolean> paramsAccepted, E value) {
+    protected <E> void setFromParam(Consumer<E> setter, String param, E value) {
         try {
             setter.accept(value);
         } catch (IncorrectDataException e) {
             req.setAttribute(ERR + param, e.getType().getPropertyKey());
-            paramsAccepted.set(false);
+            paramsAccepted = false;
             req.setAttribute(param, value);
         }
     }
 
-    protected <E> void setAttribute(HttpServletRequest req, String param, Supplier<E> getter) {
+    protected <E> void setAttribute(String param, Supplier<E> getter) {
         if (isNull(req.getAttribute(param)) && !isNull(getter.get())) {
             req.setAttribute(param, getter.get());
         }
     }
 
-    public Account getAccountFromSession(HttpServletRequest req) {
+    public Account getAccountFromSession() {
         Account account = new AccountImpl();
         HttpSession session = req.getSession();
         String name = (String) session.getAttribute(USER_NAME);
@@ -102,7 +110,7 @@ public class UpdateFieldsHelper {
         return account;
     }
 
-    public long getRequestedUserId(HttpServletRequest req, HttpServletResponse resp, String idParameter) throws IOException {
+    public long getRequestedUserId(String idParameter) throws IOException {
         String stringRequestedId = req.getParameter(idParameter);
         long requestedUserId;
         try {
@@ -113,10 +121,13 @@ public class UpdateFieldsHelper {
             return 0;
         }
         if (requestedUserId < 1) {
-            long sessionId = (long) req.getSession().getAttribute(USER_ID);
-            RedirectHelper.redirect(req, resp, Pages.MY_WALL, USER_ID, "" + sessionId);
+            RedirectHelper.redirect(req, resp, updateFailUrl);
             return 0;
         }
         return requestedUserId;
+    }
+
+    public boolean isParamsAccepted() {
+        return paramsAccepted;
     }
 }

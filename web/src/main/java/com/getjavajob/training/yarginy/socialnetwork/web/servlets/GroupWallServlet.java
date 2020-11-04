@@ -6,6 +6,7 @@ import com.getjavajob.training.yarginy.socialnetwork.service.GroupServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.UpdateFieldsHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
+import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,12 +15,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class GroupWallServlet extends HttpServlet {
-    private final UpdateFieldsHelper updater = new UpdateFieldsHelper();
     private final GroupService groupService = new GroupServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        long requestedId = updater.getRequestedUserId(req, resp, Attributes.GROUP_ID);
+        UpdateFieldsHelper updater = new UpdateFieldsHelper(req, resp, Attributes.GROUP_ID, Pages.GROUP);
+        long requestedId = updater.getRequestedUserId(Attributes.GROUP_ID);
         Group group = groupService.selectGroup(requestedId);
         req.setAttribute("group", group);
         req.setAttribute("owner", group.getOwner());

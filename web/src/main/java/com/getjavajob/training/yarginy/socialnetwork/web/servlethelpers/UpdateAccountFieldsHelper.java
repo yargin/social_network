@@ -14,7 +14,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additio
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.additionaldata.PhoneExchanger;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
-import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -33,8 +32,11 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 import static java.util.Objects.isNull;
 
 public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
-    public AccountInfoDTO accountInfoDTOInit(HttpServletRequest req, HttpServletResponse resp, Supplier<AccountInfoDTO>
-            accountInfoCreator) throws IOException {
+    public UpdateAccountFieldsHelper(HttpServletRequest req, HttpServletResponse resp, String param, String successUrl) {
+        super(req, resp, param, successUrl);
+    }
+
+    public AccountInfoDTO accountInfoDTOInit(Supplier<AccountInfoDTO> accountInfoCreator) throws IOException {
         HttpSession session = req.getSession();
         AccountInfoDTO accountInfo = (AccountInfoDTO) session.getAttribute(ACCOUNT_INFO);
         if (isNull(accountInfo)) {
@@ -42,29 +44,28 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
             try {
                 session.setAttribute(ACCOUNT_INFO, accountInfoCreator.get());
             } catch (IllegalArgumentException e) {
-                long sessionId = (long) session.getAttribute(USER_ID);
-                RedirectHelper.redirect(req, resp, Pages.MY_WALL, USER_ID, "" + sessionId);
+                RedirectHelper.redirect(req, resp, updateFailUrl);
                 return null;
             }
         }
         return accountInfo;
     }
 
-    public void initAccountAttributes(HttpServletRequest req, AccountInfoDTO accountInfo) {
-        initSex(req);
+    public void initAccountAttributes(AccountInfoDTO accountInfo) {
+        initSex();
 
         Account account = accountInfo.getAccount();
-        setAttribute(req, "name", account::getName);
-        setAttribute(req, "surname", account::getSurname);
-        setAttribute(req, "patronymic", account::getPatronymic);
-        setAttribute(req, "sex", account::getSex);
-        setAttribute(req, "email", account::getEmail);
-        setAttribute(req, "additionalEmail", account::getAdditionalEmail);
-        setAttribute(req, "birthDate", account::getBirthDate);
-        setAttribute(req, "icq", account::getIcq);
-        setAttribute(req, "skype", account::getSkype);
-        setAttribute(req, "country", account::getCountry);
-        setAttribute(req, "city", account::getCity);
+        setAttribute("name", account::getName);
+        setAttribute("surname", account::getSurname);
+        setAttribute("patronymic", account::getPatronymic);
+        setAttribute("sex", account::getSex);
+        setAttribute("email", account::getEmail);
+        setAttribute("additionalEmail", account::getAdditionalEmail);
+        setAttribute("birthDate", account::getBirthDate);
+        setAttribute("icq", account::getIcq);
+        setAttribute("skype", account::getSkype);
+        setAttribute("country", account::getCountry);
+        setAttribute("city", account::getCity);
 
         AccountPhoto accountPhoto = accountInfo.getAccountPhoto();
         if (!isNull(accountPhoto.getPhoto())) {
@@ -96,18 +97,12 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
         return phoneExchangers;
     }
 
-    /**
-     * initialises depended on configuration parameters such as sex-value & phone-fields
-     *
-     * @param req {@link HttpServletRequest} to set attributes into
-     */
-    public void initSex(HttpServletRequest req) {
+    public void initSex() {
         req.setAttribute("male", Sex.MALE.toString());
         req.setAttribute("female", Sex.FEMALE.toString());
     }
 
-    private Collection<Phone> getPhonesFromParams(HttpServletRequest req, String attribute, PhoneType type,
-                                                  ThreadLocal<Boolean> paramsAccepted) {
+    private Collection<Phone> getPhonesFromParams(String attribute, PhoneType type) {
         AccountInfoDTO accountInfo = (AccountInfoDTO) req.getSession().getAttribute(ACCOUNT_INFO);
         Account account = accountInfo.getAccount();
         Collection<PhoneExchanger> phoneExchangers = (Collection<PhoneExchanger>) req.getSession().getAttribute(attribute);
@@ -128,49 +123,48 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
                     phones.add(phone);
                 } catch (IncorrectDataException e) {
                     phoneExchanger.setError(e.getType().getPropertyKey());
-                    paramsAccepted.set(false);
+                    paramsAccepted = false;
                 }
             }
         }
         return phones;
     }
 
-    public Password getPassword(HttpServletRequest req, Account account, ThreadLocal<Boolean> paramsAccepted) {
+    public Password getPassword(Account account) {
         Password password = new PasswordImpl();
         password.setAccount(account);
-        setStringFromParam(password::setPassword, "password", req, paramsAccepted);
+        setStringFromParam(password::setPassword, "password");
         Password confirmPassword = new PasswordImpl();
         confirmPassword.setAccount(account);
-        setStringFromParam(confirmPassword::setPassword, "confirmPassword", req, paramsAccepted);
+        setStringFromParam(confirmPassword::setPassword, "confirmPassword");
         if (!Objects.equals(password, confirmPassword)) {
             req.setAttribute("passNotMatch", "error.passwordNotMatch");
-            paramsAccepted.set(false);
+            paramsAccepted = false;
             return getNullPassword();
         } else {
             return password;
         }
     }
 
-    public void getValuesFromParams(HttpServletRequest req, AccountInfoDTO accountInfoDTO, ThreadLocal<Boolean>
-            paramsAccepted) throws IOException, ServletException {
+    public void getValuesFromParams(AccountInfoDTO accountInfoDTO) throws IOException, ServletException {
         Account account = accountInfoDTO.getAccount();
-        setStringFromParam(account::setName, "name", req, paramsAccepted);
-        setStringFromParam(account::setSurname, "surname", req, paramsAccepted);
-        setStringFromParam(account::setPatronymic, "patronymic", req, paramsAccepted);
-        setObjectFromParam(account::setSex, "sex", req, paramsAccepted, Sex::valueOf);
-        setStringFromParam(account::setEmail, "email", req, paramsAccepted);
-        setStringFromParam(account::setAdditionalEmail, "additionalEmail", req, paramsAccepted);
-        setObjectFromParam(account::setBirthDate, "birthDate", req, paramsAccepted, Date::valueOf);
-        setStringFromParam(account::setIcq, "icq", req, paramsAccepted);
-        setStringFromParam(account::setSkype, "skype", req, paramsAccepted);
-        setStringFromParam(account::setCountry, "country", req, paramsAccepted);
-        setStringFromParam(account::setCity, "city", req, paramsAccepted);
+        setStringFromParam(account::setName, "name");
+        setStringFromParam(account::setSurname, "surname");
+        setStringFromParam(account::setPatronymic, "patronymic");
+        setObjectFromParam(account::setSex, "sex", Sex::valueOf);
+        setStringFromParam(account::setEmail, "email");
+        setStringFromParam(account::setAdditionalEmail, "additionalEmail");
+        setObjectFromParam(account::setBirthDate, "birthDate", Date::valueOf);
+        setStringFromParam(account::setIcq, "icq");
+        setStringFromParam(account::setSkype, "skype");
+        setStringFromParam(account::setCountry, "country");
+        setStringFromParam(account::setCity, "city");
 
-        Collection<Phone> privatePhones = getPhonesFromParams(req, PRIVATE_PHONES, PhoneType.PRIVATE, paramsAccepted);
-        Collection<Phone> workPhones = getPhonesFromParams(req, WORK_PHONES, PhoneType.WORK, paramsAccepted);
+        Collection<Phone> privatePhones = getPhonesFromParams(PRIVATE_PHONES, PhoneType.PRIVATE);
+        Collection<Phone> workPhones = getPhonesFromParams(WORK_PHONES, PhoneType.WORK);
 
         AccountPhoto accountPhoto = accountInfoDTO.getAccountPhoto();
-        setPhotoFromParam(accountPhoto::setPhoto, PHOTO_ATTRIBUTE, req, paramsAccepted);
+        setPhotoFromParam(accountPhoto::setPhoto, PHOTO_ATTRIBUTE);
 
         Collection<Phone> phones = accountInfoDTO.getPhones();
         phones.clear();
@@ -178,28 +172,19 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
         phones.addAll(workPhones);
     }
 
-    public void acceptActionOrRetry(HttpServletRequest req, HttpServletResponse resp, boolean updated,
-                                    String successUrl, DoGetWrapper doGet, String param, String value) throws
-            IOException, ServletException {
-        String url = successUrl + '?' + param + '=' + value;
-        acceptActionOrRetry(req, resp, updated, url, doGet);
-    }
-
-    public void acceptActionOrRetry(HttpServletRequest req, HttpServletResponse resp, boolean updated,
-                                    String successUrl, DoGetWrapper doGet) throws IOException, ServletException {
+    public void acceptActionOrRetry(boolean updated, DoGetWrapper doGet) throws IOException, ServletException {
         if (updated) {
             HttpSession session = req.getSession();
             session.removeAttribute(ACCOUNT_INFO);
             session.removeAttribute(PRIVATE_PHONES);
             session.removeAttribute(WORK_PHONES);
-            redirect(req, resp, successUrl);
+            redirect(req, resp, updateSuccessUrl);
         } else {
             doGet.accept(req, resp);
         }
     }
 
-    public void handleInfoExceptions(HttpServletRequest req, HttpServletResponse resp, IncorrectDataException e,
-                                     DoGetWrapper doGet) throws ServletException, IOException {
+    public void handleInfoExceptions(IncorrectDataException e, DoGetWrapper doGet) throws ServletException, IOException {
         if (e.getType() == IncorrectData.EMAIL_DUPLICATE) {
             req.setAttribute(EMAIL_DUPLICATE, e.getType().getPropertyKey());
         }
@@ -212,7 +197,7 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
         doGet.accept(req, resp);
     }
 
-    public boolean checkUpdatePermissions(HttpServletRequest req, long requestedUserId) {
+    public boolean checkUpdatePermissions(long requestedUserId) {
         HttpSession session = req.getSession();
         long sessionUserId = (long) session.getAttribute(Attributes.USER_ID);
         Role sessionRole = (Role) session.getAttribute(Attributes.USER_ROLE);

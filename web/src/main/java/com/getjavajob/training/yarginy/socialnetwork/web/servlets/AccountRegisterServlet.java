@@ -18,29 +18,28 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER_ID;
 import static java.util.Objects.isNull;
 
 public class AccountRegisterServlet extends HttpServlet {
-    private static final String REG_SUCCESS_URL = Pages.MY_WALL;
     private static final AuthService AUTH_SERVICE = new AuthServiceImpl();
-    private final UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper();
-    private final ThreadLocal<Boolean> paramsAccepted = new ThreadLocal<>();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp, USER_ID, Pages.MY_WALL);
         HttpSession session = req.getSession();
 
         String userName = (String) session.getAttribute(Attributes.USER_NAME);
         if (!isNull(userName)) {
-            resp.sendRedirect(req.getContextPath() + REG_SUCCESS_URL);
+            resp.sendRedirect(req.getContextPath() + Pages.MY_WALL);
             return;
         }
 
-        AccountInfoDTO accountInfoDTO = updater.accountInfoDTOInit(req, resp, AccountInfoDTO::new);
+        AccountInfoDTO accountInfoDTO = updater.accountInfoDTOInit(AccountInfoDTO::new);
         if (isNull(accountInfoDTO)) {
             return;
         }
-        updater.initAccountAttributes(req, accountInfoDTO);
+        updater.initAccountAttributes(accountInfoDTO);
 
         req.setAttribute(Attributes.TARGET, Pages.REGISTER);
 
@@ -49,7 +48,7 @@ public class AccountRegisterServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        paramsAccepted.set(true);
+        UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp, USER_ID, Pages.MY_WALL);
 
         AccountInfoDTO accountInfoDTO = (AccountInfoDTO) req.getSession().getAttribute(Attributes.ACCOUNT_INFO);
         if (isNull(accountInfoDTO)) {
@@ -57,27 +56,27 @@ public class AccountRegisterServlet extends HttpServlet {
             return;
         }
 
-        updater.getValuesFromParams(req, accountInfoDTO, paramsAccepted);
+        updater.getValuesFromParams(accountInfoDTO);
 
-        Password password = updater.getPassword(req, accountInfoDTO.getAccount(), paramsAccepted);
+        Password password = updater.getPassword(accountInfoDTO.getAccount());
 
-        if (!paramsAccepted.get()) {
+        boolean accepted = updater.isParamsAccepted();
+        if (!accepted) {
             doGet(req, resp);
         } else {
-            register(req, resp, accountInfoDTO, password);
-            paramsAccepted.remove();
+            register(updater, accountInfoDTO, password);
         }
     }
 
-    private void register(HttpServletRequest req, HttpServletResponse resp, AccountInfoDTO accountInfoDTO, Password
-            password) throws IOException, ServletException {
+    private void register(UpdateAccountFieldsHelper updater, AccountInfoDTO accountInfoDTO, Password password) throws
+            IOException, ServletException {
         boolean registered;
         try {
             registered = AUTH_SERVICE.register(accountInfoDTO, password);
         } catch (IncorrectDataException e) {
-            updater.handleInfoExceptions(req, resp, e, this::doGet);
+            updater.handleInfoExceptions(e, this::doGet);
             return;
         }
-        updater.acceptActionOrRetry(req, resp, registered, REG_SUCCESS_URL, this::doGet);
+        updater.acceptActionOrRetry(registered, this::doGet);
     }
 }

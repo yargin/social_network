@@ -18,16 +18,16 @@ import java.io.IOException;
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
 
 public class AccountDeleteServlet extends HttpServlet {
-    private final UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper();
     private final AccountService accountService = new AccountServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        long requestedUserId = updater.getRequestedUserId(req, resp, Attributes.USER_ID);
+        UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp, Attributes.USER_ID, Pages.MY_WALL);
+        long requestedUserId = updater.getRequestedUserId(Attributes.USER_ID);
         if (requestedUserId == 0) {
             return;
         }
-        updater.checkUpdatePermissions(req, requestedUserId);
+        updater.checkUpdatePermissions(requestedUserId);
 
         Account accountToDelete = new AccountImpl();
         accountToDelete.setId(requestedUserId);
