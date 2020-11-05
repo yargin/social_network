@@ -52,4 +52,9 @@ public class GroupsMembersDaoImpl implements GroupsMembersDao {
     public boolean removeRequest(Account account, Group group) {
         return membershipRequestsDao.delete(account, group);
     }
+
+    @Override
+    public boolean isMember(Account account, Group group) {
+        return groupMembershipDao.relationExists(account, group);
+    }
 }

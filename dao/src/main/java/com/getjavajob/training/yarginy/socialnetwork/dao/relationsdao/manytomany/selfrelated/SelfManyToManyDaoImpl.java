@@ -8,7 +8,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class SelfManyToManyDaoImpl<E extends Entity> implements SelfManyToManyDao<E> {
@@ -27,6 +26,19 @@ public class SelfManyToManyDaoImpl<E extends Entity> implements SelfManyToManyDa
         long id = dao.approveFromStorage(entity).getId();
         try (Connection connection = connectionPool.getConnection()) {
             return manyToManyDml.select(connection, id);
+        } catch (SQLException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    @Override
+    public boolean relationExists(E first, E second) {
+        long firstId = dao.approveFromStorage(first).getId();
+        long secondId = dao.approveFromStorage(second).getId();
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement statement = manyToManyDml.getSelectStatement(connection, firstId, secondId);
+             ResultSet resultSet = statement.executeQuery()) {
+            return resultSet.next();
         } catch (SQLException e) {
             throw new IllegalStateException(e);
         }

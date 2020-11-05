@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.web.servlets;
+package com.getjavajob.training.yarginy.socialnetwork.web.servlets.group;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
@@ -36,7 +36,7 @@ public class GroupUpdateServlet extends HttpServlet {
         req.setAttribute("owner", group.getOwner());
 
         Account account = accessHelper.getAccountFromSession(req);
-        if (accessHelper.isAbleToManage(group, account)) {
+        if (accessHelper.isModerator(group, account)) {
             req.getRequestDispatcher(Jsps.GROUP_UPDATE).forward(req, resp);
         } else {
             redirectToReferer(req, resp);
@@ -55,7 +55,7 @@ public class GroupUpdateServlet extends HttpServlet {
         group.setPhoto(storedGroup.getPhoto());
         group.setId(requestedId);
         Account account = accessHelper.getAccountFromSession(req);
-        if (!accessHelper.isAbleToManage(group, account)) {
+        if (!accessHelper.isModerator(group, account)) {
             redirectToReferer(req, resp);
             return;
         }

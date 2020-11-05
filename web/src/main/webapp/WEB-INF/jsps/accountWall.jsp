@@ -11,8 +11,8 @@
     <common:accountInfo/>
         <div>
             <c:if test="${not empty updateAble}">
-                <a href="${context}/updateInfo?userId=${userId}"><fmt:message key="label.updateInfo"/></a><br>
-                <a href="${context}/deleteAccount?userId=${userId}"><fmt:message key="label.deleteAccount"/></a>
+                <a href="${context}/updateInfo?id=${userId}"><fmt:message key="label.updateInfo"/></a><br>
+                <a href="${context}/deleteAccount?id=${userId}"><fmt:message key="label.deleteAccount"/></a>
             </c:if>
         </div>
     </c:if>

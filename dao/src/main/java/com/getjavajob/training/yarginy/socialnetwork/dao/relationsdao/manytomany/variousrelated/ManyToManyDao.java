@@ -27,6 +27,8 @@ public interface ManyToManyDao<F extends Entity, S extends Entity> {
      */
     Collection<F> selectBySecond(S second);
 
+    boolean relationExists(F first, S second);
+
     /**
      * creates new relation between two {@link Entity}
      *

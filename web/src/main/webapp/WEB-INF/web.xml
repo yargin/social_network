@@ -20,15 +20,6 @@
     </jsp-config>
 
     <filter>
-        <filter-name>CharacterSetFilter</filter-name>
-        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.CharacterSetFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>CharacterSetFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
-    <filter>
         <filter-name>AuthFilter</filter-name>
         <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.AuthFilter</filter-class>
         <init-param>
@@ -39,6 +30,34 @@
     <filter-mapping>
         <filter-name>AuthFilter</filter-name>
         <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>CharacterSetFilter</filter-name>
+        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.CharacterSetFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CharacterSetFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>AccountIdFilter</filter-name>
+        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.AccountWallFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AccountIdFilter</filter-name>
+        <url-pattern>/mywall</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>RequestedIdFilter</filter-name>
+        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.RequestedIdValidationFilter
+        </filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>RequestedIdFilter</filter-name>
+        <url-pattern>/deleteAccount|/updateInfo|/mywall</url-pattern>
     </filter-mapping>
 
     <servlet>
@@ -101,7 +120,8 @@
 
     <servlet>
         <servlet-name>groups</servlet-name>
-        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.GroupsListServlet</servlet-class>
+        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.group.GroupsListServlet
+        </servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>groups</servlet-name>
@@ -110,7 +130,7 @@
 
     <servlet>
         <servlet-name>groupWall</servlet-name>
-        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.GroupWallServlet</servlet-class>
+        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.group.GroupWallServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>groupWall</servlet-name>
@@ -119,7 +139,8 @@
 
     <servlet>
         <servlet-name>createGroup</servlet-name>
-        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.GroupCreationServlet</servlet-class>
+        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.group.GroupCreationServlet
+        </servlet-class>
         <multipart-config>
         </multipart-config>
     </servlet>
@@ -130,7 +151,8 @@
 
     <servlet>
         <servlet-name>updateGroup</servlet-name>
-        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.GroupUpdateServlet</servlet-class>
+        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.group.GroupUpdateServlet
+        </servlet-class>
         <multipart-config>
         </multipart-config>
     </servlet>
@@ -141,10 +163,51 @@
 
     <servlet>
         <servlet-name>deleteGroup</servlet-name>
-        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.GroupDeleteServlet</servlet-class>
+        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.group.GroupDeleteServlet
+        </servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>deleteGroup</servlet-name>
         <url-pattern>/deletegroup</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>groupMembers</servlet-name>
+        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.group.GroupMembersServlet
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>groupMembers</servlet-name>
+        <url-pattern>/groupMembers</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>groupMembersRequests</servlet-name>
+        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.group.GroupMemberRequestsServlet
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>groupMembersRequests</servlet-name>
+        <url-pattern>/grouprequests</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>groupModeratorRequests</servlet-name>
+        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.group.GroupModeratorRequestsServlet
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>groupModeratorRequests</servlet-name>
+        <url-pattern>/moderatorequests</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>groupModerators</servlet-name>
+        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.group.GroupModeratorsServlet
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>groupModerators</servlet-name>
+        <url-pattern>/moderators</url-pattern>
     </servlet-mapping>
 </web-app>

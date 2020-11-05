@@ -25,10 +25,8 @@ public class AccountUpdateServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp, USER_ID, Pages.MY_WALL);
-        long requestedUserId = updater.getRequestedUserId(USER_ID);
-        if (requestedUserId == 0) {
-            return;
-        }
+        long requestedUserId = (long) req.getAttribute(REQUESTED_ID);
+
         updater.checkUpdatePermissions(requestedUserId);
 
         AccountInfoDTO accountInfoDTO = updater.accountInfoDTOInit(() -> accountInfoService.select(requestedUserId));
@@ -45,10 +43,7 @@ public class AccountUpdateServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp, USER_ID, Pages.MY_WALL);
-        long requestedId = updater.getRequestedUserId(USER_ID);
-        if (requestedId == 0) {
-            return;
-        }
+        long requestedId = (long) req.getAttribute(REQUESTED_ID);
 
         if ("cancel".equals(req.getParameter("save"))) {
             updater.acceptActionOrRetry(true, null);

@@ -44,6 +44,19 @@ public class ManyToManyDaoImpl<F extends Entity, S extends Entity> implements Ma
     }
 
     @Override
+    public boolean relationExists(F first, S second) {
+        long firstId = firstDao.approveFromStorage(first).getId();
+        long secondId = secondDao.approveFromStorage(second).getId();
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement statement = manyToManyDml.getSelectStatement(connection, firstId, secondId);
+             ResultSet resultSet = statement.executeQuery()) {
+            return resultSet.next();
+        } catch (SQLException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    @Override
     public boolean create(F first, S second) {
         long firstId = firstDao.approveFromStorage(first).getId();
         long secondId = secondDao.approveFromStorage(second).getId();

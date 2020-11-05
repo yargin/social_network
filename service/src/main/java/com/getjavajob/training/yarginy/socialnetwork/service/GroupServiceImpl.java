@@ -98,4 +98,19 @@ public class GroupServiceImpl implements GroupService {
         }
         return true;
     }
+
+    @Override
+    public Collection<Account> selectMembers(Group group) {
+        return groupDao.selectMembers(group);
+    }
+
+    @Override
+    public boolean isMember(Account account, Group group) {
+        return membersDao.isMember(account, group);
+    }
+
+    @Override
+    public boolean isModerator(Account account, Group group) {
+        return moderatorsDao.isModerator(account, group);
+    }
 }

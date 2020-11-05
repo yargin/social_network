@@ -10,7 +10,6 @@ import java.util.Collection;
  * @param <E> entity type
  */
 public interface SelfManyToManyDao<E extends Entity> {
-    //todo think about reuse many-to-many
     /**
      * selects all participants related to {@link Entity}
      *
@@ -27,6 +26,8 @@ public interface SelfManyToManyDao<E extends Entity> {
      * @return true if successfully created, false if relationship already exists
      */
     boolean create(E first, E second);
+
+    boolean relationExists(E first, E second);
 
     /**
      * deletes relation between two {@link Entity}

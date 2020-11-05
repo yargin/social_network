@@ -20,6 +20,7 @@ import java.util.Base64;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTED_ID;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER_ID;
 import static java.util.Objects.isNull;
 
@@ -29,10 +30,9 @@ public class AccountWallServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp, USER_ID, Pages.MY_WALL);
-        long requestedUserId = updater.getRequestedUserId(USER_ID);
-        if (requestedUserId == 0) {
-            return;
-        }
+        Object idObj = req.getAttribute(REQUESTED_ID);
+        long requestedUserId = (long) req.getAttribute(REQUESTED_ID);
+
         updater.checkUpdatePermissions(requestedUserId);
 
         AccountInfoDTO accountInfoDTO = ACCOUNT_SERVICE.getAccountInfo(requestedUserId);

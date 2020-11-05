@@ -19,4 +19,6 @@ public interface GroupsMembersDao {
     boolean createRequest(Account account, Group group);
 
     boolean removeRequest(Account account, Group group);
+
+    boolean isMember(Account account, Group group);
 }

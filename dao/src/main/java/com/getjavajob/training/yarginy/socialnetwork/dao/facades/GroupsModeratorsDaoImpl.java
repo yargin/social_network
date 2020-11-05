@@ -17,6 +17,11 @@ public class GroupsModeratorsDaoImpl implements GroupsModeratorsDao {
             groupDao);
 
     @Override
+    public boolean isModerator(Account account, Group group) {
+        return groupModerators.relationExists(account, group);
+    }
+
+    @Override
     public Collection<Account> selectModerators(Group group) {
         return groupModerators.selectBySecond(group);
     }
