@@ -3,7 +3,6 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.SelfManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.ManyToManyDao;
@@ -15,12 +14,10 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.Abstra
 
 public class AccountDaoImpl implements AccountDao {
     private final Dao<Account> accountDao = getDbFactory().getAccountDao();
-    private final BatchDao<Group> groupDao = getDbFactory().getGroupDao();
     private final OneToManyDao<Account, Group> accountGroupsDao = getDbFactory().getAccountsOwnedGroupsDao(accountDao);
-    private final ManyToManyDao<Account, Group> accountsInGroupsDao = getDbFactory().getGroupMembershipDao(accountDao,
-            groupDao);
+    private final ManyToManyDao<Account, Group> accountsInGroupsDao = getDbFactory().getGroupMembershipDao();
     private final OneToManyDao<Account, Phone> accountPhonesDao = getDbFactory().getAccountsPhones(accountDao);
-    private final SelfManyToManyDao<Account> accountFriendsDao = getDbFactory().getFriendshipDao(accountDao);
+    private final SelfManyToManyDao<Account> accountFriendsDao = getDbFactory().getFriendshipDao();
 
     @Override
     public Account select(long id) {
@@ -63,8 +60,8 @@ public class AccountDaoImpl implements AccountDao {
     }
 
     @Override
-    public Collection<Group> getGroupMembership(Account account) {
-        return accountsInGroupsDao.selectByFirst(account);
+    public Collection<Group> getGroupMembership(long accountId) {
+        return accountsInGroupsDao.selectByFirst(accountId);
     }
 
     @Override
@@ -73,7 +70,7 @@ public class AccountDaoImpl implements AccountDao {
     }
 
     @Override
-    public Collection<Account> getFriends(Account account) {
-        return accountFriendsDao.select(account);
+    public Collection<Account> getFriends(long accountId) {
+        return accountFriendsDao.select(accountId);
     }
 }

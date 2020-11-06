@@ -3,7 +3,6 @@ package com.getjavajob.training.yarginy.socialnetwork.dao;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
@@ -22,8 +21,7 @@ public class AccountsInGroupsTest {
     private static final String CLASS = "AccountDaoTest";
     private static final Dao<Account> ACCOUNT_DAO = DB_FACTORY.getAccountDao();
     private static final BatchDao<Group> GROUP_DAO = DB_FACTORY.getGroupDao();
-    private static final ManyToManyDao<Account, Group> MEMBERSHIP_DAO = DB_FACTORY.getGroupMembershipDao(ACCOUNT_DAO,
-            GROUP_DAO);
+    private static final ManyToManyDao<Account, Group> MEMBERSHIP_DAO = DB_FACTORY.getGroupMembershipDao();
     private static Account account;
     private static Group group;
 
@@ -31,9 +29,9 @@ public class AccountsInGroupsTest {
     public void testJoinGroup() {
         account = ACCOUNT_DAO.select(3);
         group = GROUP_DAO.select(1);
-        boolean actual = MEMBERSHIP_DAO.create(account, group);
+        boolean actual = MEMBERSHIP_DAO.create(account.getId(), group.getId());
         assertSame(true, actual);
-        MEMBERSHIP_DAO.delete(account, group);
+        MEMBERSHIP_DAO.delete(account.getId(), group.getId());
         printPassed(CLASS, "testJoinGroup");
     }
 
@@ -41,7 +39,7 @@ public class AccountsInGroupsTest {
     public void testJoinAlreadyJoinedGroup() {
         account = ACCOUNT_DAO.select(1);
         group = GROUP_DAO.select(2);
-        boolean actual = MEMBERSHIP_DAO.create(account, group);
+        boolean actual = MEMBERSHIP_DAO.create(account.getId(), group.getId());
         assertSame(false, actual);
         printPassed(CLASS, "testJoinAlreadyJoinedGroup");
     }
@@ -50,10 +48,10 @@ public class AccountsInGroupsTest {
     public void testLeaveGroup() {
         account = ACCOUNT_DAO.select(1);
         group = GROUP_DAO.select(2);
-        boolean actual = MEMBERSHIP_DAO.delete(account, group);
+        boolean actual = MEMBERSHIP_DAO.delete(account.getId(), group.getId());
         assertSame(true, actual);
         printPassed(CLASS, "testLeaveGroup");
-        MEMBERSHIP_DAO.create(account, group);
+        MEMBERSHIP_DAO.create(account.getId(), group.getId());
     }
 
     @Test
@@ -62,7 +60,7 @@ public class AccountsInGroupsTest {
         expected.add(ACCOUNT_DAO.select(1));
         expected.add(ACCOUNT_DAO.select(2));
         group = GROUP_DAO.select(1);
-        Collection<Account> actual = MEMBERSHIP_DAO.selectBySecond(group);
+        Collection<Account> actual = MEMBERSHIP_DAO.selectBySecond(group.getId());
         assertEquals(expected, actual);
         printPassed(CLASS, "selectMembers");
     }
@@ -73,7 +71,7 @@ public class AccountsInGroupsTest {
         expected.add(GROUP_DAO.select(1));
         expected.add(GROUP_DAO.select(2));
         account = ACCOUNT_DAO.select(1);
-        Collection<Group> actual = MEMBERSHIP_DAO.selectByFirst(account);
+        Collection<Group> actual = MEMBERSHIP_DAO.selectByFirst(account.getId());
         assertEquals(expected, actual);
         printPassed(CLASS, "selectGroups");
     }

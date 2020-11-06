@@ -1,16 +1,15 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 
 import java.util.Collection;
 
 public interface GroupsModeratorsDao {
-    Collection<Account> selectModerators(Group group);
+    Collection<Account> selectModerators(long groupId);
 
-    boolean addGroupModerator(Account account, Group group);
+    boolean addGroupModerator(long accountId, long groupId);
 
-    boolean deleteGroupModerator(Account account, Group group);
+    boolean deleteGroupModerator(long accountId, long groupId);
 
     boolean isModerator(long accountId, long groupId);
 }

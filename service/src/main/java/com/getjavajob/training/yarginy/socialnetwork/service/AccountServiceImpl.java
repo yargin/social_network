@@ -11,7 +11,6 @@ import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
@@ -22,22 +21,18 @@ public class AccountServiceImpl implements AccountService {
     private final AccountDao accountDao;
     private final PhoneDao phoneDao;
     private final AccountsFriendshipsDao friendshipDao;
-    private final GroupsMembersDao groupsMembersDao;
     private final AccountPhotoDao accountPhotoDao;
-    private Collection<Account> friends = new ArrayList<>();
 
     public AccountServiceImpl() {
-        this(new AccountDaoImpl(), new PhoneDaoImpl(), new AccountsFriendshipsDaoImpl(), new GroupsMembersDaoImpl(), new
-                AccountPhotoDaoImpl(), new TransactionManager());
+        this(new AccountDaoImpl(), new PhoneDaoImpl(), new AccountsFriendshipsDaoImpl(), new AccountPhotoDaoImpl(),
+                new TransactionManager());
     }
 
     public AccountServiceImpl(AccountDao accountDao, PhoneDao phoneDao, AccountsFriendshipsDao friendshipDao,
-                              GroupsMembersDao groupsMembersDao, AccountPhotoDao accountPhotoDao,
-                              TransactionManager transactionManager) {
+                              AccountPhotoDao accountPhotoDao, TransactionManager transactionManager) {
         this.accountDao = accountDao;
         this.phoneDao = phoneDao;
         this.friendshipDao = friendshipDao;
-        this.groupsMembersDao = groupsMembersDao;
         this.transactionManager = transactionManager;
         this.accountPhotoDao = accountPhotoDao;
     }
@@ -93,25 +88,13 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean addFriend(Account account, Account friend) {
-        if (friendshipDao.createFriendship(account, friend)) {
-            if (!isNull(friends) && !friends.add(friend)) {
-                friends = null;
-            }
-            return true;
-        }
-        return false;
+    public boolean addFriend(long firstId, long secondId) {
+        return friendshipDao.createFriendship(firstId, secondId);
     }
 
     @Override
-    public boolean removeFriend(Account account, Account friend) {
-        if (friendshipDao.removeFriendship(account, friend)) {
-            if (!isNull(friends) && !friends.remove(friend)) {
-                friends = null;
-            }
-            return true;
-        }
-        return false;
+    public boolean removeFriend(long firstId, long secondId) {
+        return friendshipDao.removeFriendship(firstId, secondId);
     }
 
     @Override
@@ -125,8 +108,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Collection<Account> getFriends(Account account) {
-        return friendshipDao.selectFriends(account);
+    public Collection<Account> getFriends(long accountId) {
+        return friendshipDao.selectFriends(accountId);
     }
 
     @Override
@@ -153,5 +136,10 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public boolean updatePhones(Collection<Phone> phones, Account account) {
         return false;
+    }
+
+    @Override
+    public boolean createFriendshipRequest(long requester, long receiver) {
+        return friendshipDao.createRequest(requester, receiver);
     }
 }

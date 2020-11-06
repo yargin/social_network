@@ -6,19 +6,19 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import java.util.Collection;
 
 public interface GroupsMembersDao {
-    Collection<Group> selectAccountGroups(Account account);
+    Collection<Group> selectAccountGroups(long accountId);
 
-    Collection<Account> selectMembers(Group second);
+    Collection<Account> selectMembers(long groupId);
 
-    boolean joinGroup(Account account, Group second);
+    boolean joinGroup(long accountId, long groupId);
 
-    boolean leaveGroup(Account account, Group second);
+    boolean leaveGroup(long accountId, long groupId);
 
-    Collection<Account> selectRequests(Group group);
+    Collection<Account> selectRequests(long groupId);
 
-    boolean createRequest(Account account, Group group);
+    boolean createRequest(long accountId, long groupId);
 
-    boolean removeRequest(Account account, Group group);
+    boolean removeRequest(long accountId, long groupId);
 
     boolean isMember(long accountId, long groupId);
 }

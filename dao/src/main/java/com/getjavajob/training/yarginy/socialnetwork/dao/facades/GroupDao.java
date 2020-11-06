@@ -22,9 +22,9 @@ public interface GroupDao {
 
     Group getNullGroup();
 
-    Collection<Account> selectMembers(Group group);
+    Collection<Account> selectMembers(long groupId);
 
-    boolean addMember(Group group, Account account);
+    boolean addMember(long groupId, long accountId);
 
-    boolean removeMember(Group group, Account account);
+    boolean removeMember(long groupId, long accountId);
 }

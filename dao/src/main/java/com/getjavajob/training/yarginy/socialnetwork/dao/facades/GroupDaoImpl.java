@@ -16,8 +16,7 @@ public class GroupDaoImpl implements GroupDao {
     private final Dao<Account> accountDao = getDbFactory().getAccountDao();
     private final OneToManyDao<Account, Group> accountsOwnedGroupsDao = getDbFactory().getAccountsOwnedGroupsDao(
             accountDao);
-    private final ManyToManyDao<Account, Group> accountsGroupMembershipDao = getDbFactory().getGroupMembershipDao(
-            accountDao, groupDao);
+    private final ManyToManyDao<Account, Group> accountsGroupMembershipDao = getDbFactory().getGroupMembershipDao();
 
     @Override
     public Group select(long id) {
@@ -60,17 +59,17 @@ public class GroupDaoImpl implements GroupDao {
     }
 
     @Override
-    public Collection<Account> selectMembers(Group group) {
-        return accountsGroupMembershipDao.selectBySecond(group);
+    public Collection<Account> selectMembers(long groupId) {
+        return accountsGroupMembershipDao.selectBySecond(groupId);
     }
 
     @Override
-    public boolean addMember(Group group, Account account) {
-        return accountsGroupMembershipDao.create(account, group);
+    public boolean addMember(long groupId, long accountId) {
+        return accountsGroupMembershipDao.create(accountId, groupId);
     }
 
     @Override
-    public boolean removeMember(Group group, Account account) {
-        return accountsGroupMembershipDao.delete(account, group);
+    public boolean removeMember(long groupId, long accountId) {
+        return accountsGroupMembershipDao.delete(accountId, groupId);
     }
 }

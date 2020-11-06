@@ -23,44 +23,41 @@ public class FriendshipsRequestsDaoTest {
 
     @Before
     public void initTestValues() {
-        assert accountDao.create(firstAccount);
-        assert accountDao.create(secondAccount);
-//        firstAccount = accountDao.select(firstAccount);
-//        secondAccount = accountDao.select(secondAccount);
+        accountDao.create(firstAccount);
+        firstAccount = accountDao.select(firstAccount);
+        accountDao.create(secondAccount);
+        secondAccount = accountDao.select(secondAccount);
     }
 
     @After
     public void deleteTestValues() {
-//        firstAccount = accountDao.select(firstAccount);
-//        secondAccount = accountDao.select(secondAccount);
-        accountsFriendshipsDao.deleteRequest(firstAccount, secondAccount);
-        assert accountDao.delete(firstAccount);
-        assert accountDao.delete(secondAccount);
+        accountsFriendshipsDao.deleteRequest(firstAccount.getId(), secondAccount.getId());
+        accountDao.delete(firstAccount);
+        accountDao.delete(secondAccount);
     }
 
     @Test
     public void testCreateFriendshipRequest() {
         Collection<Account> accounts = accountDao.selectAll();
-        assertTrue(accountsFriendshipsDao.createRequest(firstAccount, secondAccount));
+        assertTrue(accountsFriendshipsDao.createRequest(firstAccount.getId(), secondAccount.getId()));
     }
 
     @Test
     public void testCreateExistingRequest() {
-        assert accountsFriendshipsDao.createRequest(firstAccount, secondAccount);
-        assertFalse(accountsFriendshipsDao.createRequest(firstAccount, secondAccount));
+        assert accountsFriendshipsDao.createRequest(firstAccount.getId(), secondAccount.getId());
+        assertFalse(accountsFriendshipsDao.createRequest(firstAccount.getId(), secondAccount.getId()));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testCreateRequestToNonExistingAccount() {
-        Account account = new AccountImpl("test", "test", "test@test.test");
-        assertFalse(accountsFriendshipsDao.createRequest(firstAccount, account));
+        assertFalse(accountsFriendshipsDao.createRequest(firstAccount.getId(), 0));
     }
 
     @Test
     public void testSelectRequests() {
-        accountsFriendshipsDao.createRequest(firstAccount, secondAccount);
+        accountsFriendshipsDao.createRequest(firstAccount.getId(), secondAccount.getId());
         Collection<Account> expected = new ArrayList<>();
         expected.add(firstAccount);
-        assertEquals(expected, accountsFriendshipsDao.selectRequests(secondAccount));
+        assertEquals(expected, accountsFriendshipsDao.selectRequests(secondAccount.getId()));
     }
 }

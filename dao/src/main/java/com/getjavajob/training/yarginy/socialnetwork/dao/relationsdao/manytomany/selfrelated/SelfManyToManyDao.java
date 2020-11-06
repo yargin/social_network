@@ -16,25 +16,25 @@ public interface SelfManyToManyDao<E extends Entity> {
      * @param entity {@link Entity} that other participants related to
      * @return {@link Collection} of participants
      */
-    Collection<E> select(E entity);
+    Collection<E> select(long id);
 
     /**
      * creates new relation between two {@link Entity}
      *
-     * @param first  member of relationship
-     * @param second member of relationship
+     * @param firstId  member of relationship
+     * @param secondId member of relationship
      * @return true if successfully created, false if relationship already exists
      */
-    boolean create(E first, E second);
+    boolean create(long firstId, long secondId);
 
     boolean relationExists(long firstId, long secondId);
 
     /**
      * deletes relation between two {@link Entity}
      *
-     * @param first  member of relationship
-     * @param second member of relationship
+     * @param firstId  member of relationship
+     * @param secondId member of relationship
      * @return true if successfully deleted, false if relationship doesn't exist
      */
-    boolean delete(E first, E second);
+    boolean delete(long firstId, long secondId);
 }

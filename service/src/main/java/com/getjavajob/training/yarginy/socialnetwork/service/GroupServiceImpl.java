@@ -26,8 +26,8 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Collection<Group> getAccountGroups(Account account) {
-        return membersDao.selectAccountGroups(account);
+    public Collection<Group> getAccountGroups(long accountId) {
+        return membersDao.selectAccountGroups(accountId);
     }
 
     @Override
@@ -36,45 +36,45 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Collection<Group> getNonJoinedGroups(Account account) {
+    public Collection<Group> getNonJoinedGroups(long accountId) {
         Collection<Group> groups = getAllGroups();
-        groups.removeAll(getAccountGroups(account));
+        groups.removeAll(getAccountGroups(accountId));
         return groups;
     }
 
     @Override
-    public boolean joinGroup(Account account, Group group) {
-        return groupDao.addMember(group, account);
+    public boolean joinGroup(long accountId, long groupId) {
+        return groupDao.addMember(groupId, accountId);
     }
 
     @Override
-    public boolean leaveGroup(Account account, Group group) {
-        return groupDao.removeMember(group, account);
+    public boolean leaveGroup(long accountId, long groupId) {
+        return groupDao.removeMember(groupId, accountId);
     }
 
     @Override
-    public boolean sendGroupRequest(Account account, Group group) {
-        return membersDao.createRequest(account, group);
+    public boolean sendGroupRequest(long accountId, long groupId) {
+        return membersDao.createRequest(accountId, groupId);
     }
 
     @Override
-    public Collection<Account> getGroupRequests(Group group) {
-        return membersDao.selectRequests(group);
+    public Collection<Account> getGroupRequests(long groupId) {
+        return membersDao.selectRequests(groupId);
     }
 
     @Override
-    public Collection<Account> getModerators(Group group) {
-        return moderatorsDao.selectModerators(group);
+    public Collection<Account> getModerators(long groupId) {
+        return moderatorsDao.selectModerators(groupId);
     }
 
     @Override
-    public boolean addModerator(Account account, Group group) {
-        return moderatorsDao.addGroupModerator(account, group);
+    public boolean addModerator(long accountId, long groupId) {
+        return moderatorsDao.addGroupModerator(accountId, groupId);
     }
 
     @Override
-    public boolean removeModerator(Account account, Group group) {
-        return moderatorsDao.deleteGroupModerator(account, group);
+    public boolean removeModerator(long accountId, long groupId) {
+        return moderatorsDao.deleteGroupModerator(accountId, groupId);
     }
 
     @Override
@@ -100,8 +100,8 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Collection<Account> selectMembers(Group group) {
-        return groupDao.selectMembers(group);
+    public Collection<Account> selectMembers(long groupId) {
+        return groupDao.selectMembers(groupId);
     }
 
     @Override

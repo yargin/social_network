@@ -8,24 +8,48 @@
 
 <common:layout>
     <common:accountInfo/>
-    <c:if test="${not empty writer}">
+    <c:if test="${not empty owner or not empty admin}">
         <div>
             <a href="${context}/updateInfo?id=${id}"><fmt:message key="label.updateInfo"/></a><br>
             <a href="${context}/deleteAccount?id=${id}"><fmt:message key="label.deleteAccount"/></a>
         </div>
     </c:if>
-    <c:if test="${not empty reader}">
-        <div>
-            <a href="#">Wall</a><br>
-            <a href="#">Private message</a><br>
-        </div>
-        <c:forEach items="${posts}" var="post">
-            <div class="post">
-                <common:wallMessage/>
-            </div>
-        </c:forEach>
-    </c:if>
-    <c:if test="${empty reader}">
-        <a href="#">Add To friends</a>
-    </c:if>
+    <div>
+        <c:if test="${not empty friend or not empty admin or not empty owner}">
+            <a href="#">
+                <button type="submit" name="wall">Wall</button>
+            </a>
+        </c:if>
+        <c:if test="${empty friend and empty owner}">
+            <a href="${context}/addfriend?id1=${sessionScope.userId}&id2=${id}">
+                <button type="submit" name="addFriend">Add to friends</button>
+            </a>
+        </c:if>
+        <c:if test="${not empty admin or not empty owner}">
+            <a href="#">
+                <button type="submit" name="requests">Friendship requests</button>
+            </a>
+        </c:if>
+        <c:if test="${not empty friend or not empty admin and empty owner}">
+            <a href="#">
+                <button type="submit" name="message">Private message</button>
+            </a>
+        </c:if>
+        <c:if test="${not empty admin or not empty owner or not empty friend}">
+            <a href="#">
+                <button type="submit" name="friends">Friends list</button>
+            </a>
+        </c:if>
+        <c:if test="${not empty admin or not empty owner}">
+            <a href="#">
+                <button type="submit" name="dialogs">Private dialogs</button>
+            </a>
+        </c:if>
+    </div>
+
+    <%--        <c:forEach items="${posts}" var="post">--%>
+    <%--            <div class="post">--%>
+    <%--                <common:wallMessage/>--%>
+    <%--            </div>--%>
+    <%--        </c:forEach>--%>
 </common:layout>

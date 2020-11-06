@@ -20,20 +20,23 @@ public class GroupModeratorsTest {
     private final GroupsModeratorsDao groupsModeratorsDao = new GroupsModeratorsDaoImpl();
     private final AccountDao accountDao = new AccountDaoImpl();
     private final GroupDao groupDao = new GroupDaoImpl();
-    private final Account owner = new AccountImpl("firstTest", "test", "first@test.test");
-    private final Account moderator = new AccountImpl("secondTEst", "test", "second@test.test");
-    private final Group group = new GroupImpl("testGroup", owner);
+    private Account owner = new AccountImpl("firstTest", "test", "first@test.test");
+    private Account moderator = new AccountImpl("secondTEst", "test", "second@test.test");
+    private Group group = new GroupImpl("testGroup", owner);
 
     @Before
     public void initTestValues() {
         accountDao.create(owner);
+        owner = accountDao.select(owner);
         accountDao.create(moderator);
+        moderator = accountDao.select(moderator);
         groupDao.create(group);
+        group = groupDao.select(group);
     }
 
     @After
     public void deleteTestValues() {
-        groupsModeratorsDao.deleteGroupModerator(moderator, group);
+        groupsModeratorsDao.deleteGroupModerator(moderator.getId(), group.getId());
         groupDao.delete(group);
         accountDao.delete(moderator);
         accountDao.delete(owner);
@@ -41,20 +44,20 @@ public class GroupModeratorsTest {
 
     @Test
     public void testCreateModerator() {
-        assertTrue(groupsModeratorsDao.addGroupModerator(moderator, group));
-        assertEquals(singletonList(moderator), groupsModeratorsDao.selectModerators(group));
+        assertTrue(groupsModeratorsDao.addGroupModerator(moderator.getId(), group.getId()));
+        assertEquals(singletonList(moderator), groupsModeratorsDao.selectModerators(group.getId()));
     }
 
     @Test
     public void testDeleteModerator() {
-        groupsModeratorsDao.addGroupModerator(moderator, group);
-        assertTrue(groupsModeratorsDao.deleteGroupModerator(moderator, group));
-        assertEquals(emptyList(), groupsModeratorsDao.selectModerators(group));
+        groupsModeratorsDao.addGroupModerator(moderator.getId(), group.getId());
+        assertTrue(groupsModeratorsDao.deleteGroupModerator(moderator.getId(), group.getId()));
+        assertEquals(emptyList(), groupsModeratorsDao.selectModerators(group.getId()));
     }
 
     @Test
     public void testSelectModerators() {
-        groupsModeratorsDao.addGroupModerator(moderator, group);
-        assertEquals(Collections.singletonList(moderator), groupsModeratorsDao.selectModerators(group));
+        groupsModeratorsDao.addGroupModerator(moderator.getId(), group.getId());
+        assertEquals(Collections.singletonList(moderator), groupsModeratorsDao.selectModerators(group.getId()));
     }
 }

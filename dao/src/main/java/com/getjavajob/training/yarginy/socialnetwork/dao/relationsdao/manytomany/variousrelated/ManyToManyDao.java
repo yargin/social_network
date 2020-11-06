@@ -17,33 +17,31 @@ public interface ManyToManyDao<F extends Entity, S extends Entity> {
      * @param first {@link Entity} that second participants related to
      * @return {@link Collection} of second participants
      */
-    Collection<S> selectByFirst(F first);
+    Collection<S> selectByFirst(long firstId);
 
     /**
      * selects all first participants related to first {@link Entity}
      *
-     * @param second {@link Entity} that first participants related to
+     * @param secondId {@link Entity} that first participants related to
      * @return {@link Collection} of first participants
      */
-    Collection<F> selectBySecond(S second);
+    Collection<F> selectBySecond(long secondId);
 
     boolean relationExists(long firstId, long secondId);
 
     /**
      * creates new relation between two {@link Entity}
      *
-     * @param first  member of relationship
-     * @param second member of relationship
      * @return true if successfully created, false if relationship already exists
      */
-    boolean create(F first, S second);
+    boolean create(long firstId, long secondId);
 
     /**
      * deletes relation between two {@link Entity}
      *
-     * @param first  member of relationship
-     * @param second member of relationship
+     * @param firstId  member's id of relationship
+     * @param secondId member's id of relationship
      * @return true if successfully deleted, false if relationship doesn't exist
      */
-    boolean delete(F first, S second);
+    boolean delete(long firstId, long secondId);
 }

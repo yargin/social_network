@@ -21,15 +21,15 @@ public interface AccountService {
 
     boolean deleteAccount(Account account);
 
-    boolean addFriend(Account account, Account friend);
+    boolean addFriend(long firstId, long secondId);
 
-    boolean removeFriend(Account account, Account friend);
+    boolean removeFriend(long firstId, long secondId);
 
     boolean isFriend(long firstId, long secondId);
 
     Collection<Account> getAll(Account account);
 
-    Collection<Account> getFriends(Account account);
+    Collection<Account> getFriends(long accountId);
 
     boolean addPhone(Account account, Phone phone);
 
@@ -41,5 +41,5 @@ public interface AccountService {
 
     boolean updatePhones(Collection<Phone> phones, Account account);
 
-    //todo logic for group
+    boolean createFriendshipRequest(long requester, long receiver);
 }

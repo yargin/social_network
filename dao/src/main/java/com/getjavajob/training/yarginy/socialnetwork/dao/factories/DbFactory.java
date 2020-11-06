@@ -22,9 +22,9 @@ public interface DbFactory {
 
     BatchDao<Group> getGroupDao();
 
-    SelfManyToManyDao<Account> getFriendshipDao(Dao<Account> accountDao);
+    SelfManyToManyDao<Account> getFriendshipDao();
 
-    ManyToManyDao<Account, Group> getGroupMembershipDao(Dao<Account> accountDao, BatchDao<Group> groupDao);
+    ManyToManyDao<Account, Group> getGroupMembershipDao();
 
     BatchDao<Phone> getPhoneDao();
 
@@ -40,9 +40,9 @@ public interface DbFactory {
 
     OwnedModelDao<Account, AccountPhoto> getAccountPhotoDao(Dao<Account> accountDao);
 
-    ManyToManyDao<Account, Group> getGroupModerators(Dao<Account> accountDao, BatchDao<Group> groupDao);
+    ManyToManyDao<Account, Group> getGroupModerators();
 
-    ManyToManyDao<Account, Group> getGroupRequests(Dao<Account> accountDao, BatchDao<Group> groupBatchDao);
+    ManyToManyDao<Account, Group> getGroupRequests();
 
-    ManyToManyDao<Account, Account> getFriendshipRequests(Dao<Account> accountDao);
+    ManyToManyDao<Account, Account> getFriendshipRequests();
 }

@@ -5,17 +5,17 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import java.util.Collection;
 
 public interface AccountsFriendshipsDao {
-    Collection<Account> selectFriends(Account account);
+    Collection<Account> selectFriends(long id);
 
-    boolean createFriendship(Account firstAccount, Account secondAccount);
+    boolean createFriendship(long firstId, long secondId);
 
-    boolean removeFriendship(Account firstAccount, Account secondAccount);
+    boolean removeFriendship(long firstId, long secondId);
 
     boolean areFriends(long firstId, long secondId);
 
-    boolean createRequest(Account requester, Account receiver);
+    boolean createRequest(long requesterId, long receiverId);
 
-    boolean deleteRequest(Account requester, Account receiver);
+    boolean deleteRequest(long requesterId, long receiverId);
 
-    Collection<Account> selectRequests(Account account);
+    Collection<Account> selectRequests(long receiverId);
 }

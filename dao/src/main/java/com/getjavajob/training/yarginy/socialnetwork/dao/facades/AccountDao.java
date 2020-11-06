@@ -23,9 +23,9 @@ public interface AccountDao {
 
     Collection<Group> getOwnedGroups(Account account);
 
-    Collection<Group> getGroupMembership(Account account);
+    Collection<Group> getGroupMembership(long accountId);
 
     Collection<Phone> getPhones(Account account);
 
-    Collection<Account> getFriends(Account account);
+    Collection<Account> getFriends(long accountId);
 }

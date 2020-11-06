@@ -1,7 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
@@ -19,26 +18,26 @@ public class AccountsFriendshipsDaoTest {
     private static final DbFactory dbFactory = AbstractDbFactory.getDbFactory();
     private static final String CLASS = "AccountDaoTest";
     private static final Dao<Account> ACCOUNT_DAO = dbFactory.getAccountDao();
-    private static final SelfManyToManyDao<Account> FRIENDSHIP_DAO = dbFactory.getFriendshipDao(ACCOUNT_DAO);
+    private static final SelfManyToManyDao<Account> FRIENDSHIP_DAO = dbFactory.getFriendshipDao();
     private final Account friend;
     private final Account noFriends;
 
     public AccountsFriendshipsDaoTest() {
         friend = ACCOUNT_DAO.select(1);
         noFriends = ACCOUNT_DAO.select(4);
-        FRIENDSHIP_DAO.create(friend, ACCOUNT_DAO.select(3));
+        FRIENDSHIP_DAO.create(friend.getId(), ACCOUNT_DAO.select(3).getId());
     }
 
     @Test
     public void testSelectNoFriends() {
-        Collection<Account> friends = FRIENDSHIP_DAO.select(noFriends);
+        Collection<Account> friends = FRIENDSHIP_DAO.select(noFriends.getId());
         assertSame(true, friends.isEmpty());
         printPassed(CLASS, "testSelectNoFriends");
     }
 
     @Test
     public void testSelectFriends() {
-        Collection<Account> friends = FRIENDSHIP_DAO.select(friend);
+        Collection<Account> friends = FRIENDSHIP_DAO.select(friend.getId());
         Collection<Account> expected = new ArrayList<>();
         expected.add(ACCOUNT_DAO.select(2));
         expected.add(ACCOUNT_DAO.select(3));
@@ -48,10 +47,7 @@ public class AccountsFriendshipsDaoTest {
 
     @Test
     public void testNonExistingAccount() {
-        Account nonExistingAccount = new AccountImpl();
-        nonExistingAccount.setId(666);
-        nonExistingAccount.setEmail("email@that.doesnt.exist");
-        Collection<Account> friends = FRIENDSHIP_DAO.select(nonExistingAccount);
+        Collection<Account> friends = FRIENDSHIP_DAO.select(0);
         assertSame(true, friends.isEmpty());
         printPassed(CLASS, "testNonExistingAccount");
     }
@@ -60,9 +56,9 @@ public class AccountsFriendshipsDaoTest {
     public void createAndDeleteFriendship() {
         Account firstFriend = ACCOUNT_DAO.select(3);
         Account secondFriend = ACCOUNT_DAO.select(2);
-        boolean created = FRIENDSHIP_DAO.create(firstFriend, secondFriend);
+        boolean created = FRIENDSHIP_DAO.create(firstFriend.getId(), secondFriend.getId());
         assertSame(true, created);
-        boolean deleted = FRIENDSHIP_DAO.delete(firstFriend, secondFriend);
+        boolean deleted = FRIENDSHIP_DAO.delete(firstFriend.getId(), secondFriend.getId());
         assertSame(true, deleted);
         printPassed(CLASS, "createAndDeleteFriendship");
     }
@@ -71,7 +67,7 @@ public class AccountsFriendshipsDaoTest {
     public void createExistingFriendship() {
         Account firstFriend = ACCOUNT_DAO.select(1);
         Account secondFriend = ACCOUNT_DAO.select(2);
-        boolean created = FRIENDSHIP_DAO.create(firstFriend, secondFriend);
+        boolean created = FRIENDSHIP_DAO.create(firstFriend.getId(), secondFriend.getId());
         assertSame(false, created);
         printPassed(CLASS, "createExistingFriendship");
     }
@@ -80,7 +76,7 @@ public class AccountsFriendshipsDaoTest {
     public void deleteNonExistingFriendship() {
         Account firstFriend = ACCOUNT_DAO.select(3);
         Account secondFriend = ACCOUNT_DAO.select(2);
-        boolean deleted = FRIENDSHIP_DAO.delete(firstFriend, secondFriend);
+        boolean deleted = FRIENDSHIP_DAO.delete(firstFriend.getId(), secondFriend.getId());
         assertSame(false, deleted);
         printPassed(CLASS, "deleteNonExistingFriendship");
     }

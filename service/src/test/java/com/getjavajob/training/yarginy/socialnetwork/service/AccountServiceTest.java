@@ -25,12 +25,11 @@ public class AccountServiceTest {
     private final AccountDao accountDao = mock(AccountDao.class);
     private final AccountsFriendshipsDao friendsDao = mock(AccountsFriendshipsDao.class);
     private final PhoneDao phoneDao = mock(PhoneDao.class);
-    private final GroupsMembersDao accountsInGroups = mock(GroupsMembersDao.class);
     private final Transaction transaction = mock(Transaction.class);
     private final TransactionManager transactionManager = mock(TransactionManager.class);
     private final AccountPhotoDao accountPhotoDao = mock(AccountPhotoDao.class);
     private final AccountService accountService = new AccountServiceImpl(accountDao, phoneDao, friendsDao,
-            accountsInGroups, accountPhotoDao, transactionManager);
+            accountPhotoDao, transactionManager);
     private Account account;
     private Account storedAccount;
     private Collection<Phone> phones;
@@ -103,26 +102,26 @@ public class AccountServiceTest {
 
     @Test
     public void testAddFriend() {
-        when(friendsDao.createFriendship(account, new AccountImpl("friend", "first@mail.com"))).thenReturn(false);
-        assertFalse(accountService.addFriend(account, new AccountImpl("friend", "first@mail.com")));
-        when(friendsDao.createFriendship(account, new AccountImpl("third", "third@mail.com"))).thenReturn(true);
-        assertTrue(accountService.addFriend(account, new AccountImpl("friend", "third@mail.com")));
+        when(friendsDao.createFriendship(account.getId(), 13)).thenReturn(false);
+        assertFalse(accountService.addFriend(account.getId(), 13));
+        when(friendsDao.createFriendship(account.getId(), 11)).thenReturn(true);
+        assertTrue(accountService.addFriend(account.getId(), 11));
         printPassed(CLASS, "testAddFriend");
     }
 
     @Test
     public void testRemoveFriend() {
-        when(friendsDao.removeFriendship(account, new AccountImpl("friend", "first@mail.com"))).thenReturn(true);
-        assertTrue(accountService.removeFriend(account, new AccountImpl("friend", "first@mail.com")));
-        when(friendsDao.removeFriendship(account, new AccountImpl("third", "third@mail.com"))).thenReturn(false);
-        assertFalse(accountService.removeFriend(account, new AccountImpl("friend", "third@mail.com")));
+        when(friendsDao.removeFriendship(account.getId(), 14)).thenReturn(true);
+        assertTrue(accountService.removeFriend(account.getId(), 14));
+        when(friendsDao.removeFriendship(account.getId(), 11)).thenReturn(false);
+        assertFalse(accountService.removeFriend(account.getId(), 11));
         printPassed(CLASS, "testRemoveFriend");
     }
 
     @Test
     public void testGetFriends() {
         List<Account> emptyFriends = new ArrayList<>();
-        assertEquals(emptyFriends, accountService.getFriends(account));
+        assertEquals(emptyFriends, accountService.getFriends(account.getId()));
         printPassed(CLASS, "testGetFriends");
     }
 

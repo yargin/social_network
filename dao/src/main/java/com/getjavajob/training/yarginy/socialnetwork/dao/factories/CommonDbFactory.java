@@ -107,13 +107,13 @@ public abstract class CommonDbFactory implements DbFactory {
     }
 
     @Override
-    public ManyToManyDao<Account, Group> getGroupMembershipDao(Dao<Account> accountDao, BatchDao<Group> groupDao) {
-        return new ManyToManyDaoImpl<>(connectionPool, new GroupsMembersDml(), accountDao, groupDao);
+    public ManyToManyDao<Account, Group> getGroupMembershipDao() {
+        return new ManyToManyDaoImpl<>(connectionPool, new GroupsMembersDml());
     }
 
     @Override
-    public SelfManyToManyDao<Account> getFriendshipDao(Dao<Account> accountDao) {
-        return new SelfManyToManyDaoImpl<>(connectionPool, new FriendshipDml(), accountDao);
+    public SelfManyToManyDao<Account> getFriendshipDao() {
+        return new SelfManyToManyDaoImpl<>(connectionPool, new FriendshipDml());
     }
 
     @Override
@@ -147,17 +147,17 @@ public abstract class CommonDbFactory implements DbFactory {
     }
 
     @Override
-    public ManyToManyDao<Account, Group> getGroupModerators(Dao<Account> accountDao, BatchDao<Group> groupDao) {
-        return new ManyToManyDaoImpl<>(connectionPool, new GroupModeratorsDml(), accountDao, groupDao);
+    public ManyToManyDao<Account, Group> getGroupModerators() {
+        return new ManyToManyDaoImpl<>(connectionPool, new GroupModeratorsDml());
     }
 
     @Override
-    public ManyToManyDao<Account, Group> getGroupRequests(Dao<Account> accountDao, BatchDao<Group> groupDao) {
-        return new ManyToManyDaoImpl<>(connectionPool, new GroupsMembershipsRequestsDml(), accountDao, groupDao);
+    public ManyToManyDao<Account, Group> getGroupRequests() {
+        return new ManyToManyDaoImpl<>(connectionPool, new GroupsMembershipsRequestsDml());
     }
 
     @Override
-    public ManyToManyDao<Account, Account> getFriendshipRequests(Dao<Account> accountDao) {
-        return new ManyToManyDaoImpl<>(connectionPool, new AccountsFriendshipsRequestsDml(), accountDao, accountDao);
+    public ManyToManyDao<Account, Account> getFriendshipRequests() {
+        return new ManyToManyDaoImpl<>(connectionPool, new AccountsFriendshipsRequestsDml());
     }
 }

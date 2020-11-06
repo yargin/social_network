@@ -10,29 +10,29 @@ public interface GroupService {
 
     Group selectGroup(long id);
 
-    Collection<Group> getAccountGroups(Account account);
+    Collection<Group> getAccountGroups(long accountId);
 
     Collection<Group> getAllGroups();
 
-    Collection<Group> getNonJoinedGroups(Account account);
+    Collection<Group> getNonJoinedGroups(long accountId);
 
-    boolean joinGroup(Account account, Group group);
+    boolean joinGroup(long accountId, long groupId);
 
-    boolean leaveGroup(Account account, Group group);
+    boolean leaveGroup(long accountId, long groupId);
 
-    boolean sendGroupRequest(Account account, Group group);
+    boolean sendGroupRequest(long accountId, long groupId);
 
-    Collection<Account> getGroupRequests(Group group);
+    Collection<Account> getGroupRequests(long groupId);
 
-    Collection<Account> getModerators(Group group);
+    Collection<Account> getModerators(long groupId);
 
     boolean isModerator(long accountId, long groupId);
 
-    boolean addModerator(Account account, Group group);
+    boolean addModerator(long accountId, long groupId);
 
-    boolean removeModerator(Account account, Group group);
+    boolean removeModerator(long accountId, long groupId);
 
-    Collection<Account> selectMembers(Group group);
+    Collection<Account> selectMembers(long groupId);
 
     boolean isMember(long accountId, long groupId);
 
