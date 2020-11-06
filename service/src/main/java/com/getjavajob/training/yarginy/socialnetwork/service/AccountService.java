@@ -25,6 +25,8 @@ public interface AccountService {
 
     boolean removeFriend(Account account, Account friend);
 
+    boolean isFriend(long firstId, long secondId);
+
     Collection<Account> getAll(Account account);
 
     Collection<Account> getFriends(Account account);

@@ -26,7 +26,7 @@ public interface GroupService {
 
     Collection<Account> getModerators(Group group);
 
-    boolean isModerator(Account account, Group group);
+    boolean isModerator(long accountId, long groupId);
 
     boolean addModerator(Account account, Group group);
 
@@ -34,7 +34,7 @@ public interface GroupService {
 
     Collection<Account> selectMembers(Group group);
 
-    boolean isMember(Account account, Group group);
+    boolean isMember(long accountId, long groupId);
 
     boolean createGroup(Group group);
 

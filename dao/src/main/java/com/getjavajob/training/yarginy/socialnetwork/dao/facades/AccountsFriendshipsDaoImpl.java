@@ -30,6 +30,11 @@ public class AccountsFriendshipsDaoImpl implements AccountsFriendshipsDao {
     }
 
     @Override
+    public boolean areFriends(long firstId, long secondId) {
+        return friendshipDao.relationExists(firstId, secondId);
+    }
+
+    @Override
     public boolean createRequest(Account requester, Account receiver) {
         return friendshipRequestsDao.create(requester, receiver);
     }

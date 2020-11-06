@@ -12,10 +12,11 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER_ID;
 import static java.util.Objects.isNull;
 
-public class AccountWallFilter implements Filter {
+public class AccountWallIdSetterFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException,
             ServletException {
+        System.out.println(this.getClass());
         if (isNull(request.getParameter(REQUESTED_ID))) {
             HttpServletRequest req = (HttpServletRequest) request;
             HttpServletResponse resp = (HttpServletResponse) response;

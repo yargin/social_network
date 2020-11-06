@@ -4,8 +4,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountServiceImpl;
-import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.UpdateAccountFieldsHelper;
-import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 
@@ -23,10 +21,7 @@ public class AccountDeleteServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp, Attributes.USER_ID, Pages.MY_WALL);
         long requestedUserId = (long) req.getAttribute(REQUESTED_ID);
-
-        updater.checkUpdatePermissions(requestedUserId);
 
         Account accountToDelete = new AccountImpl();
         accountToDelete.setId(requestedUserId);

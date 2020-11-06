@@ -27,7 +27,7 @@ public interface SelfManyToManyDao<E extends Entity> {
      */
     boolean create(E first, E second);
 
-    boolean relationExists(E first, E second);
+    boolean relationExists(long firstId, long secondId);
 
     /**
      * deletes relation between two {@link Entity}

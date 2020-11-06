@@ -27,8 +27,6 @@ public class AccountUpdateServlet extends HttpServlet {
         UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp, USER_ID, Pages.MY_WALL);
         long requestedUserId = (long) req.getAttribute(REQUESTED_ID);
 
-        updater.checkUpdatePermissions(requestedUserId);
-
         AccountInfoDTO accountInfoDTO = updater.accountInfoDTOInit(() -> accountInfoService.select(requestedUserId));
         if (isNull(accountInfoDTO)) {
             return;
@@ -42,7 +40,7 @@ public class AccountUpdateServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp, USER_ID, Pages.MY_WALL);
+        UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp, REQUESTED_ID, Pages.MY_WALL);
         long requestedId = (long) req.getAttribute(REQUESTED_ID);
 
         if ("cancel".equals(req.getParameter("save"))) {
@@ -52,7 +50,9 @@ public class AccountUpdateServlet extends HttpServlet {
 
         HttpSession session = req.getSession();
 
+        //todo move to get method to keep displayed before modification data
         AccountInfoDTO accountInfoDTO = (AccountInfoDTO) session.getAttribute(ACCOUNT_INFO);
+
         if (isNull(accountInfoDTO)) {
             redirect(req, resp, Pages.LOGOUT);
             return;

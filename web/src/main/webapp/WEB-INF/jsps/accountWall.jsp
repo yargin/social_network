@@ -7,18 +7,25 @@
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 
 <common:layout>
-    <c:if test="${not empty user}">
     <common:accountInfo/>
+    <c:if test="${not empty writer}">
         <div>
-            <c:if test="${not empty updateAble}">
-                <a href="${context}/updateInfo?id=${userId}"><fmt:message key="label.updateInfo"/></a><br>
-                <a href="${context}/deleteAccount?id=${userId}"><fmt:message key="label.deleteAccount"/></a>
-            </c:if>
+            <a href="${context}/updateInfo?id=${id}"><fmt:message key="label.updateInfo"/></a><br>
+            <a href="${context}/deleteAccount?id=${id}"><fmt:message key="label.deleteAccount"/></a>
         </div>
     </c:if>
-    <c:forEach items="${posts}" var="post">
-        <div class="post">
-            <common:wallMessage/>
+    <c:if test="${not empty reader}">
+        <div>
+            <a href="#">Wall</a><br>
+            <a href="#">Private message</a><br>
         </div>
-    </c:forEach>
+        <c:forEach items="${posts}" var="post">
+            <div class="post">
+                <common:wallMessage/>
+            </div>
+        </c:forEach>
+    </c:if>
+    <c:if test="${empty reader}">
+        <a href="#">Add To friends</a>
+    </c:if>
 </common:layout>

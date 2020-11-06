@@ -32,9 +32,7 @@ public class SelfManyToManyDaoImpl<E extends Entity> implements SelfManyToManyDa
     }
 
     @Override
-    public boolean relationExists(E first, E second) {
-        long firstId = dao.approveFromStorage(first).getId();
-        long secondId = dao.approveFromStorage(second).getId();
+    public boolean relationExists(long firstId, long secondId) {
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement statement = manyToManyDml.getSelectStatement(connection, firstId, secondId);
              ResultSet resultSet = statement.executeQuery()) {

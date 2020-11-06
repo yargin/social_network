@@ -105,12 +105,12 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public boolean isMember(Account account, Group group) {
-        return membersDao.isMember(account, group);
+    public boolean isMember(long accountId, long groupId) {
+        return membersDao.isMember(accountId, groupId);
     }
 
     @Override
-    public boolean isModerator(Account account, Group group) {
-        return moderatorsDao.isModerator(account, group);
+    public boolean isModerator(long accountId, long groupId) {
+        return moderatorsDao.isModerator(accountId, groupId);
     }
 }

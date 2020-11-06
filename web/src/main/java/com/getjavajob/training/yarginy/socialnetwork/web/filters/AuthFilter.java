@@ -1,8 +1,8 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.filters;
 
+import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
-import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -24,11 +24,10 @@ public class AuthFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException,
             ServletException {
+        System.out.println(this.getClass());
         HttpServletRequest req = (HttpServletRequest) request;
         HttpSession session = req.getSession(true);
         HttpServletResponse resp = (HttpServletResponse) response;
-
-        Long userId = (Long) session.getAttribute(Attributes.USER_ID);
 
         String path = req.getRequestURI();
         for (String ignored : ignoredPages) {
@@ -37,7 +36,15 @@ public class AuthFilter implements Filter {
                 return;
             }
         }
-        if (isNull(userId) || userId < 1) {
+
+        Object userIdObject = session.getAttribute(Attributes.USER_ID);
+        if (isNull(userIdObject)) {
+            RedirectHelper.redirect(req, resp, Pages.LOGIN);
+            return;
+        }
+        long userId = (long) userIdObject;
+
+        if (userId < 1) {
             RedirectHelper.redirect(req, resp, Pages.LOGIN);
             return;
         } else {

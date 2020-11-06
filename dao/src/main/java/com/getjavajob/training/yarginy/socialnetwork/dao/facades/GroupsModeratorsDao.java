@@ -12,5 +12,5 @@ public interface GroupsModeratorsDao {
 
     boolean deleteGroupModerator(Account account, Group group);
 
-    boolean isModerator(Account account, Group group);
+    boolean isModerator(long accountId, long groupId);
 }

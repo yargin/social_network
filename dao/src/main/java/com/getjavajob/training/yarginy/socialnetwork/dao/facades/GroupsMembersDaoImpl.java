@@ -54,7 +54,7 @@ public class GroupsMembersDaoImpl implements GroupsMembersDao {
     }
 
     @Override
-    public boolean isMember(Account account, Group group) {
-        return groupMembershipDao.relationExists(account, group);
+    public boolean isMember(long accountId, long groupId) {
+        return groupMembershipDao.relationExists(accountId, groupId);
     }
 }

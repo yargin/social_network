@@ -11,6 +11,8 @@ public interface AccountsFriendshipsDao {
 
     boolean removeFriendship(Account firstAccount, Account secondAccount);
 
+    boolean areFriends(long firstId, long secondId);
+
     boolean createRequest(Account requester, Account receiver);
 
     boolean deleteRequest(Account requester, Account receiver);

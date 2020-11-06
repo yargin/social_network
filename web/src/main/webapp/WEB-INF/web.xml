@@ -42,11 +42,11 @@
     </filter-mapping>
 
     <filter>
-        <filter-name>AccountIdFilter</filter-name>
-        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.AccountWallFilter</filter-class>
+        <filter-name>AccountIdSessionSetterFilter</filter-name>
+        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.AccountWallIdSetterFilter</filter-class>
     </filter>
     <filter-mapping>
-        <filter-name>AccountIdFilter</filter-name>
+        <filter-name>AccountIdSessionSetterFilter</filter-name>
         <url-pattern>/mywall</url-pattern>
     </filter-mapping>
 
@@ -57,8 +57,34 @@
     </filter>
     <filter-mapping>
         <filter-name>RequestedIdFilter</filter-name>
-        <url-pattern>/deleteAccount|/updateInfo|/mywall</url-pattern>
+        <url-pattern>/mywall</url-pattern>
+        <url-pattern>/updateInfo</url-pattern>
+        <url-pattern>/deleteAccount</url-pattern>
     </filter-mapping>
+
+    <filter>
+        <filter-name>AccountPermissionsSetter</filter-name>
+        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.AccountInfoAccessSetterFilter
+        </filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AccountPermissionsSetter</filter-name>
+        <url-pattern>/mywall</url-pattern>
+        <url-pattern>/updateInfo</url-pattern>
+        <url-pattern>/deleteAccount</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>AccountPermissionsChecker</filter-name>
+        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.AccountUpdateAccessCheckerFilter
+        </filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AccountPermissionsChecker</filter-name>
+        <url-pattern>/updateInfo</url-pattern>
+        <url-pattern>/deleteAccount</url-pattern>
+    </filter-mapping>
+
 
     <servlet>
         <servlet-name>myWall</servlet-name>

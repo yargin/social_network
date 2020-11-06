@@ -21,11 +21,11 @@ public class GroupManagementAccessHelper {
         if (Role.ADMIN.equals(account.getRole()) || Objects.equals(group.getOwner(), account)) {
             return true;
         }
-        return groupService.isModerator(account, group);
+        return groupService.isModerator(account.getId(), group.getId());
     }
 
     public boolean isMember(Group group, Account account) {
-        return groupService.isMember(account, group);
+        return groupService.isMember(account.getId(), group.getId());
     }
 
     public Account getAccountFromSession(HttpServletRequest req) {

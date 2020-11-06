@@ -20,5 +20,5 @@ public interface GroupsMembersDao {
 
     boolean removeRequest(Account account, Group group);
 
-    boolean isMember(Account account, Group group);
+    boolean isMember(long accountId, long groupId);
 }

@@ -20,9 +20,9 @@
         <img src="${context}/img/java.png" id="logo">
         <h1><fmt:message key="header"/></h1>
         <p class="welcome">
-            <c:if test="${not empty userName}">
-            <fmt:message key="layout.welcome"/>
-            <a href="${context}/mywall">${userName}</a>
+            <c:if test="${not empty sessionScope.user}">
+                <fmt:message key="layout.welcome"/>
+                <a href="${context}/mywall">${sessionScope.user.getName()}</a>
             </c:if>
         </p>
     </div>

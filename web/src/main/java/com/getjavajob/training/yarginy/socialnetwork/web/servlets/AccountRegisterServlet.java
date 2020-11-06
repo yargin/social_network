@@ -14,7 +14,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
@@ -27,13 +26,6 @@ public class AccountRegisterServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp, USER_ID, Pages.MY_WALL);
-        HttpSession session = req.getSession();
-
-        String userName = (String) session.getAttribute(Attributes.USER_NAME);
-        if (!isNull(userName)) {
-            resp.sendRedirect(req.getContextPath() + Pages.MY_WALL);
-            return;
-        }
 
         AccountInfoDTO accountInfoDTO = updater.accountInfoDTOInit(AccountInfoDTO::new);
         if (isNull(accountInfoDTO)) {

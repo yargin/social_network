@@ -16,7 +16,8 @@ import java.io.IOException;
 import static com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData.WRONG_EMAIL;
 import static com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData.WRONG_PASSWORD;
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirectToReferer;
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER_ID;
 import static java.util.Objects.isNull;
 
 public class LoginServlet extends HttpServlet {
@@ -50,11 +51,8 @@ public class LoginServlet extends HttpServlet {
     }
 
     private void assignSessionParameters(HttpServletRequest req, Account account) {
-        req.getSession().setAttribute(USER_NAME, account.getName());
+        req.getSession().setAttribute(USER, account);
         req.getSession().setAttribute(USER_ID, account.getId());
-        req.getSession().setAttribute(USER_ROLE, account.getRole());
-        req.getSession().setAttribute(USER_EMAIL, account.getEmail());
-        req.getSession().setAttribute(USER_SURNAME, account.getSurname());
     }
 
     @Override

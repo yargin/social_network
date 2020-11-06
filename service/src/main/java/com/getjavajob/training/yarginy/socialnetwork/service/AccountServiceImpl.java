@@ -115,6 +115,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public boolean isFriend(long firstId, long secondId) {
+        return friendshipDao.areFriends(firstId, secondId);
+    }
+
+    @Override
     public Collection<Account> getAll(Account account) {
         return accountDao.selectAll();
     }
