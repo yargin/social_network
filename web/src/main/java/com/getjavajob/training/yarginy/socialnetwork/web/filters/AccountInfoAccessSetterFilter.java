@@ -11,8 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTED_ID;
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 import static java.util.Objects.isNull;
 
 public class AccountInfoAccessSetterFilter implements Filter {
@@ -24,7 +23,15 @@ public class AccountInfoAccessSetterFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
         HttpSession session = req.getSession();
-        long requestedUserId = (long) req.getAttribute(REQUESTED_ID);
+
+        long requestedUserId;
+        Object objectId = req.getAttribute(REQUESTED_ID);
+        if (isNull(objectId)) {
+            requestedUserId = (long) req.getAttribute(SECOND_REQUESTED_ID);
+        } else {
+            requestedUserId = (long) req.getAttribute(REQUESTED_ID);
+        }
+
         Account account = (Account) session.getAttribute(USER);
 
         if (account.getId() == requestedUserId) {
@@ -40,7 +47,7 @@ public class AccountInfoAccessSetterFilter implements Filter {
     }
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
     }
 
     @Override

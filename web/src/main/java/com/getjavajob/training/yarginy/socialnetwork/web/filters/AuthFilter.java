@@ -24,7 +24,6 @@ public class AuthFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException,
             ServletException {
-        System.out.println(this.getClass());
         HttpServletRequest req = (HttpServletRequest) request;
         HttpSession session = req.getSession(true);
         HttpServletResponse resp = (HttpServletResponse) response;

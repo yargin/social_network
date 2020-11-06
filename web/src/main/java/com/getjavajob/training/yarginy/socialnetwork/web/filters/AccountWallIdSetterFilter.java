@@ -16,7 +16,6 @@ public class AccountWallIdSetterFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException,
             ServletException {
-        System.out.println(this.getClass());
         if (isNull(request.getParameter(REQUESTED_ID))) {
             HttpServletRequest req = (HttpServletRequest) request;
             HttpServletResponse resp = (HttpServletResponse) response;

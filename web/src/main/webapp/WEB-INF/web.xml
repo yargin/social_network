@@ -60,6 +60,7 @@
         <url-pattern>/mywall</url-pattern>
         <url-pattern>/updateInfo</url-pattern>
         <url-pattern>/deleteAccount</url-pattern>
+        <url-pattern>/friendsrequests</url-pattern>
     </filter-mapping>
 
     <filter>
@@ -81,6 +82,8 @@
         <url-pattern>/mywall</url-pattern>
         <url-pattern>/updateInfo</url-pattern>
         <url-pattern>/deleteAccount</url-pattern>
+        <url-pattern>/addfriend</url-pattern>
+        <url-pattern>/friendsrequests</url-pattern>
     </filter-mapping>
 
     <filter>
@@ -92,6 +95,8 @@
         <filter-name>AccountPermissionsChecker</filter-name>
         <url-pattern>/updateInfo</url-pattern>
         <url-pattern>/deleteAccount</url-pattern>
+        <url-pattern>/addfriend</url-pattern>
+        <url-pattern>/friendsrequests</url-pattern>
     </filter-mapping>
 
 
@@ -248,12 +253,23 @@
 
     <servlet>
         <servlet-name>createFriendshipRequest</servlet-name>
-        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.friendship.
-            FriendshipRequestCreationServlet
+        <servlet-class>
+            com.getjavajob.training.yarginy.socialnetwork.web.servlets.friendship.FriendshipRequestCreationServlet
         </servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>createFriendshipRequest</servlet-name>
         <url-pattern>/addfriend</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>friendshipRequestsList</servlet-name>
+        <servlet-class>
+            com.getjavajob.training.yarginy.socialnetwork.web.servlets.friendship.FriendshipRequestsListServlet
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>friendshipRequestsList</servlet-name>
+        <url-pattern>/friendsrequests</url-pattern>
     </servlet-mapping>
 </web-app>

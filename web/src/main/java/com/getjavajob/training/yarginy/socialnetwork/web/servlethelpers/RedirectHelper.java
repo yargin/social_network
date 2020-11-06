@@ -35,6 +35,6 @@ public final class RedirectHelper {
         if (referer.equals(url)) {
             referer = req.getContextPath();
         }
-        redirect(req, resp, referer);
+        resp.sendRedirect(referer);
     }
 }

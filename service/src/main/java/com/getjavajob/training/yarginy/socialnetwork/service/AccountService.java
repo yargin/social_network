@@ -42,4 +42,6 @@ public interface AccountService {
     boolean updatePhones(Collection<Phone> phones, Account account);
 
     boolean createFriendshipRequest(long requester, long receiver);
+
+    Collection<Account> getFriendshipRequests(long receiver);
 }

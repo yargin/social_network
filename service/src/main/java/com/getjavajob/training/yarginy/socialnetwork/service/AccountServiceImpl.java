@@ -14,8 +14,6 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Map;
 
-import static java.util.Objects.isNull;
-
 public class AccountServiceImpl implements AccountService {
     private final TransactionManager transactionManager;
     private final AccountDao accountDao;
@@ -81,25 +79,34 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean deleteAccount(Account account) {
-        if (isNull(account.getEmail())) {
-            account = accountDao.select(account);
-        }
         return accountDao.delete(account);
     }
 
     @Override
     public boolean addFriend(long firstId, long secondId) {
-        return friendshipDao.createFriendship(firstId, secondId);
+        try {
+            return friendshipDao.createFriendship(firstId, secondId);
+        } catch (IllegalArgumentException e) {
+            throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
+        }
     }
 
     @Override
     public boolean removeFriend(long firstId, long secondId) {
-        return friendshipDao.removeFriendship(firstId, secondId);
+        try {
+            return friendshipDao.removeFriendship(firstId, secondId);
+        } catch (IllegalArgumentException e) {
+            throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
+        }
     }
 
     @Override
     public boolean isFriend(long firstId, long secondId) {
-        return friendshipDao.areFriends(firstId, secondId);
+        try {
+            return friendshipDao.areFriends(firstId, secondId);
+        } catch (IllegalArgumentException e) {
+            throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
+        }
     }
 
     @Override
@@ -109,7 +116,11 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Collection<Account> getFriends(long accountId) {
-        return friendshipDao.selectFriends(accountId);
+        try {
+            return friendshipDao.selectFriends(accountId);
+        } catch (IllegalArgumentException e) {
+            throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
+        }
     }
 
     @Override
@@ -140,6 +151,15 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean createFriendshipRequest(long requester, long receiver) {
-        return friendshipDao.createRequest(requester, receiver);
+        try {
+            return friendshipDao.createRequest(requester, receiver);
+        } catch (IllegalArgumentException e) {
+            throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
+        }
+    }
+
+    @Override
+    public Collection<Account> getFriendshipRequests(long receiver) {
+        return friendshipDao.selectRequests(receiver);
     }
 }
