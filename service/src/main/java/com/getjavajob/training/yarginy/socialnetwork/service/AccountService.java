@@ -43,5 +43,7 @@ public interface AccountService {
 
     boolean createFriendshipRequest(long requester, long receiver);
 
+    boolean deleteFriendshipRequest(long requester, long receiver);
+
     Collection<Account> getFriendshipRequests(long receiver);
 }

@@ -5,7 +5,9 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.addit
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountServiceImpl;
 
-import javax.servlet.*;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -14,22 +16,20 @@ import java.io.IOException;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 import static java.util.Objects.isNull;
 
-public class AccountInfoAccessSetterFilter implements Filter {
+public class AccountInfoAccessSetterFilter extends HttpFilter {
     private final AccountService accountService = new AccountServiceImpl();
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException,
+    public void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain filterChain) throws IOException,
             ServletException {
-        HttpServletRequest req = (HttpServletRequest) request;
-        HttpServletResponse resp = (HttpServletResponse) response;
         HttpSession session = req.getSession();
 
         long requestedUserId;
         Object objectId = req.getAttribute(REQUESTED_ID);
         if (isNull(objectId)) {
-            requestedUserId = (long) req.getAttribute(SECOND_REQUESTED_ID);
+            requestedUserId = (long) req.getAttribute(RECEIVER_ID);
         } else {
-            requestedUserId = (long) req.getAttribute(REQUESTED_ID);
+            requestedUserId = (long) objectId;
         }
 
         Account account = (Account) session.getAttribute(USER);
@@ -44,13 +44,5 @@ public class AccountInfoAccessSetterFilter implements Filter {
             req.setAttribute("friend", true);
         }
         filterChain.doFilter(req, resp);
-    }
-
-    @Override
-    public void init(FilterConfig filterConfig) {
-    }
-
-    @Override
-    public void destroy() {
     }
 }

@@ -9,19 +9,19 @@
     <common:accountInfo/>
     <common:accountMenu/>
     <br><br>
+
     <div class="post">
         <c:forEach items="${requesters}" var="requester">
-            <div class="post">
+            <form action="${context}/acceptFriendship" method="post">
+                <a href="${context}/acceptFriendship">asdasdasdasdasd</a>
                 <a href="${context}/mywall?id=${requester.getId()}">
                         ${requester.getName()} ${requester.getSurname()}
                 </a>
-                <a href="#">
-                    <button name="accept" value="true"><fmt:message key="button.accept"/></button>
-                </a>
-                <a href="#">
-                    <button name="accept" value="false"><fmt:message key="button.decline"/></button>
-                </a>
-            </div>
+                <input type="hidden" value="${requester.getId()}" name="requesterId">
+                <input type="hidden" value="${user.getId()}" name="receiverId">
+                <button type="submit" name="accept" value="true"><fmt:message key="button.accept"/></button>
+                <button type="submit" name="accept" value="false"><fmt:message key="button.decline"/></button>
+            </form>
         </c:forEach>
     </div>
 </common:layout>

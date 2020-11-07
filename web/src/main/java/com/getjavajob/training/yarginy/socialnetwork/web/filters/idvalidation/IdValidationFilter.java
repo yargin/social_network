@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.web.filters;
+package com.getjavajob.training.yarginy.socialnetwork.web.filters.idvalidation;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

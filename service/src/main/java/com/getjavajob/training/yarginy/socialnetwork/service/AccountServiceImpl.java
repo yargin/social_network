@@ -84,10 +84,18 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean addFriend(long firstId, long secondId) {
-        try {
-            return friendshipDao.createFriendship(firstId, secondId);
-        } catch (IllegalArgumentException e) {
-            throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
+        try (Transaction transaction = transactionManager.getTransaction()) {
+            if (!friendshipDao.deleteRequest(firstId, secondId)) {
+                throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
+            }
+            if (!friendshipDao.createFriendship(firstId, secondId)) {
+                transaction.rollback();
+                throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
+            }
+            transaction.commit();
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 
@@ -153,6 +161,15 @@ public class AccountServiceImpl implements AccountService {
     public boolean createFriendshipRequest(long requester, long receiver) {
         try {
             return friendshipDao.createRequest(requester, receiver);
+        } catch (IllegalArgumentException e) {
+            throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
+        }
+    }
+
+    @Override
+    public boolean deleteFriendshipRequest(long requester, long receiver) {
+        try {
+            return friendshipDao.deleteRequest(requester, receiver);
         } catch (IllegalArgumentException e) {
             throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
         }

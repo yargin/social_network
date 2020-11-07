@@ -21,7 +21,7 @@
 
     <filter>
         <filter-name>AuthFilter</filter-name>
-        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.AuthFilter</filter-class>
+        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.common.AuthFilter</filter-class>
         <init-param>
             <param-name>pathToIgnore</param-name>
             <param-value>registration:login:css:img</param-value>
@@ -34,7 +34,7 @@
 
     <filter>
         <filter-name>CharacterSetFilter</filter-name>
-        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.CharacterSetFilter</filter-class>
+        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.common.CharacterSetFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>CharacterSetFilter</filter-name>
@@ -43,7 +43,9 @@
 
     <filter>
         <filter-name>AccountIdSessionSetterFilter</filter-name>
-        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.AccountWallIdSetterFilter</filter-class>
+        <filter-class>
+            com.getjavajob.training.yarginy.socialnetwork.web.filters.emptyidsetter.AccountWallIdSetterFilter
+        </filter-class>
     </filter>
     <filter-mapping>
         <filter-name>AccountIdSessionSetterFilter</filter-name>
@@ -52,7 +54,7 @@
 
     <filter>
         <filter-name>RequestedIdFilter</filter-name>
-        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.IdValidationFilter
+        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.idvalidation.IdValidationFilter
         </filter-class>
     </filter>
     <filter-mapping>
@@ -60,16 +62,19 @@
         <url-pattern>/mywall</url-pattern>
         <url-pattern>/updateInfo</url-pattern>
         <url-pattern>/deleteAccount</url-pattern>
-        <url-pattern>/friendsrequests</url-pattern>
+        <url-pattern>/friendsRequests</url-pattern>
+        <url-pattern>/privatemessage</url-pattern>
     </filter-mapping>
 
     <filter>
         <filter-name>TwoRequestedIdFilter</filter-name>
-        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.TwoIdValidationFilter</filter-class>
+        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.idvalidation.TwoIdValidationFilter
+        </filter-class>
     </filter>
     <filter-mapping>
         <filter-name>TwoRequestedIdFilter</filter-name>
         <url-pattern>/addfriend</url-pattern>
+        <url-pattern>/acceptFriendship</url-pattern>
     </filter-mapping>
 
     <filter>
@@ -83,22 +88,45 @@
         <url-pattern>/updateInfo</url-pattern>
         <url-pattern>/deleteAccount</url-pattern>
         <url-pattern>/addfriend</url-pattern>
-        <url-pattern>/friendsrequests</url-pattern>
+        <url-pattern>/acceptFriendship</url-pattern>
+        <url-pattern>/friendsRequests</url-pattern>
+        <url-pattern>/privatemessage</url-pattern>
+        <url-pattern>/friends</url-pattern>
+        <url-pattern>/dialogs</url-pattern>
     </filter-mapping>
 
     <filter>
-        <filter-name>AccountPermissionsChecker</filter-name>
-        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.AccountUpdateAccessCheckerFilter
+        <filter-name>OwnerChecker</filter-name>
+        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.OwnerCheckerFilter
         </filter-class>
     </filter>
     <filter-mapping>
-        <filter-name>AccountPermissionsChecker</filter-name>
+        <filter-name>OwnerChecker</filter-name>
         <url-pattern>/updateInfo</url-pattern>
         <url-pattern>/deleteAccount</url-pattern>
-        <url-pattern>/addfriend</url-pattern>
-        <url-pattern>/friendsrequests</url-pattern>
+        <url-pattern>/friendsRequests</url-pattern>
+        <url-pattern>/acceptFriendship</url-pattern>
     </filter-mapping>
 
+    <filter>
+        <filter-name>FriendChecker</filter-name>
+        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.FriendCheckerFilter
+        </filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>FriendChecker</filter-name>
+        <url-pattern>/privateMessage</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>OwnerFriendChecker</filter-name>
+        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.OwnerFriendCheckerFilter
+        </filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>OwnerFriendChecker</filter-name>
+        <url-pattern>/friends</url-pattern>
+    </filter-mapping>
 
     <servlet>
         <servlet-name>myWall</servlet-name>
@@ -263,6 +291,17 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>acceptFriendshipRequest</servlet-name>
+        <servlet-class>
+            com.getjavajob.training.yarginy.socialnetwork.web.servlets.friendship.FriendshipRequestAcceptServlet
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>acceptFriendshipRequest</servlet-name>
+        <url-pattern>/acceptFriendship</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>friendshipRequestsList</servlet-name>
         <servlet-class>
             com.getjavajob.training.yarginy.socialnetwork.web.servlets.friendship.FriendshipRequestsListServlet
@@ -270,6 +309,39 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>friendshipRequestsList</servlet-name>
-        <url-pattern>/friendsrequests</url-pattern>
+        <url-pattern>/friendsRequests</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>privateMessage</servlet-name>
+        <servlet-class>
+            com.getjavajob.training.yarginy.socialnetwork.web.servlets.friendship.PrivateMessageServlet
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>privateMessage</servlet-name>
+        <url-pattern>/privatemessage</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>friendsList</servlet-name>
+        <servlet-class>
+            com.getjavajob.training.yarginy.socialnetwork.web.servlets.friendship.FriendsListServlet
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>friendsList</servlet-name>
+        <url-pattern>/friends</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>dialogs</servlet-name>
+        <servlet-class>
+            com.getjavajob.training.yarginy.socialnetwork.web.servlets.friendship.DialogsServlet
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dialogs</servlet-name>
+        <url-pattern>/dialogs</url-pattern>
     </servlet-mapping>
 </web-app>

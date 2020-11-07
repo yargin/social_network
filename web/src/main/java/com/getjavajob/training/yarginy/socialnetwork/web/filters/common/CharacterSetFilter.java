@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.web.filters;
+package com.getjavajob.training.yarginy.socialnetwork.web.filters.common;
 
 import javax.servlet.*;
 import java.io.IOException;

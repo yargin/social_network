@@ -23,12 +23,12 @@ public class FriendshipRequestCreationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         long currentId = (long) req.getSession().getAttribute(Attributes.USER_ID);
-        long requesterId = (long) req.getAttribute(Attributes.FIRST_REQUESTED_ID);
+        long requesterId = (long) req.getAttribute(Attributes.REQUESTER_ID);
         if (currentId != requesterId) {
             redirectToReferer(req, resp);
             return;
         }
-        long receiverId = (long) req.getAttribute(Attributes.SECOND_REQUESTED_ID);
+        long receiverId = (long) req.getAttribute(Attributes.RECEIVER_ID);
 
         infoHelper.setAccountInfo(req, receiverId);
 

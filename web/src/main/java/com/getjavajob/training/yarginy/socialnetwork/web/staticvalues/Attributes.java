@@ -21,8 +21,8 @@ public final class Attributes {
     public static final String UPLOAD_ERROR = "uploadError";
     public static final String GROUP = "group";
     public static final String REQUESTED_ID = "id";
-    public static final String FIRST_REQUESTED_ID = "id1";
-    public static final String SECOND_REQUESTED_ID = "id2";
+    public static final String REQUESTER_ID = "requesterId";
+    public static final String RECEIVER_ID = "receiverId";
     public static final String NAME_DUPLICATE = "nameDuplicate";
     public static final String SAVED_PHOTO = "savedPhoto";
     public static final String MESSAGE = "message";

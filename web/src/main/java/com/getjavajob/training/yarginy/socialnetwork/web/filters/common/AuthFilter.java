@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.web.filters;
+package com.getjavajob.training.yarginy.socialnetwork.web.filters.common;
 
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
