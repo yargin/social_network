@@ -12,9 +12,4 @@
     <c:if test="${not empty error}"><fmt:message key="${error}" bundle="${error}"/></c:if>
     <c:if test="${not empty message}"><fmt:message key="${message}" bundle="${label}"/></c:if>
     <br><br>
-    admin ${admin}
-    <br><br>
-    owner ${owner}
-    <br><br>
-    friend ${friend}
 </common:layout>

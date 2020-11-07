@@ -11,15 +11,14 @@
     <br><br>
 
     <div class="post">
-        <c:forEach items="${requesters}" var="requester">
-            <form action="${context}/acceptFriendship" method="post">
-                <a href="${context}/mywall?id=${requester.getId()}">
-                        ${requester.getName()} ${requester.getSurname()}
+        <c:forEach items="${friends}" var="friend">
+            <form action="${context}/removeFriendship" method="post">
+                <a href="${context}/mywall?id=${friend.getId()}">
+                        ${friend.getName()} ${friend.getSurname()}
                 </a>
-                <input type="hidden" value="${requester.getId()}" name="requesterId">
+                <input type="hidden" value="${friend.getId()}" name="requesterId">
                 <input type="hidden" value="${user.getId()}" name="receiverId">
-                <button type="submit" name="accept" value="true"><fmt:message key="button.accept"/></button>
-                <button type="submit" name="accept" value="false"><fmt:message key="button.decline"/></button>
+                <button type="submit" name="accept"><fmt:message key="button.delete"/></button>
             </form>
             <br>
         </c:forEach>

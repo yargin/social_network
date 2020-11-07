@@ -12,6 +12,7 @@ public final class Pages extends HttpServlet {
     public static final String GROUP = "/group";
     public static final String GROUPS = "/groups";
     public static final String FRIENDSHIP_REQUESTS = "/friendsRequests";
+    public static final String FRIENDS = "/friends";
 
     private Pages() {
     }

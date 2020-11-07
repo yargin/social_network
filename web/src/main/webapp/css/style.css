@@ -127,6 +127,7 @@ html, body, ul, li {
     margin-right: 10px;
     margin-left: 10px;
     color: black;
+    /*font-weight: bold;*/
 }
 
 .post a {
@@ -161,13 +162,8 @@ html, body, ul, li {
     font-weight: bolder;
 }
 
-strong {
-    margin-left: 5px;
-    margin-right: 5px;
-}
-
 button {
-    padding: 5px 10px 5px 10px;
+    padding: 6px 10px 6px 10px;
     margin-top: 10px;
     background-color: #94d2d4;
     border: none;

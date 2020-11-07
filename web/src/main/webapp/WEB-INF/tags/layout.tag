@@ -31,7 +31,7 @@
     <div class="menu">
         <ul>
             <li><a href="${context}/mywall"><fmt:message key="menu.homepage"/></a></li>
-            <li><a href="#"><fmt:message key="menu.friends"/></a></li>
+            <li><a href="${context}/friends"><fmt:message key="menu.friends"/></a></li>
             <li><a href="#"><fmt:message key="menu.messages"/></a></li>
             <li><a href="${context}/groups"><fmt:message key="menu.groups"/></a></li>
             <li><a href="#"><fmt:message key="menu.photos"/></a></li>

@@ -12,6 +12,9 @@ public final class Jsps {
     public static final String GROUP_UPDATE = "/WEB-INF/jsps/groupUpdate.jsp";
     public static final String FRIENDSHIP_REQUEST = "/WEB-INF/jsps/accountPages/friendshipRequest.jsp";
     public static final String FRIENDSHIP_REQUESTS_LIST = "/WEB-INF/jsps/accountPages/friendshipRequestsList.jsp";
+    public static final String FRIENDS_LIST = "/WEB-INF/jsps/accountPages/friendsList.jsp";
+    public static final String DIALOGS = "/WEB-INF/jsps/accountPages/dialogs.jsp";
+    public static final String PRIVATE_MESSAGE = "/WEB-INF/jsps/accountPages/privateMessage.jsp";
 
     private Jsps() {
     }

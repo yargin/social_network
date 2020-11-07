@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.web.servlets.friendship;
+package com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.viewservlets;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
@@ -30,7 +30,6 @@ public class FriendshipRequestCreationServlet extends HttpServlet {
         }
         long receiverId = (long) req.getAttribute(Attributes.RECEIVER_ID);
 
-        infoHelper.setAccountInfo(req, receiverId);
 
         if (accountService.isFriend(requesterId, receiverId)) {
             req.setAttribute(Attributes.MESSAGE, "label.alreadyFriends");
@@ -47,6 +46,7 @@ public class FriendshipRequestCreationServlet extends HttpServlet {
             req.setAttribute(Attributes.MESSAGE, "label.requestSent");
         }
 
+        infoHelper.setAccountInfo(req, receiverId);
         req.setAttribute(TAB, "addFriend");
         req.getRequestDispatcher(Jsps.FRIENDSHIP_REQUEST).forward(req, resp);
     }

@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.web.servlets.friendship;
+package com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.actionservlets;
 
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountServiceImpl;
@@ -31,6 +31,6 @@ public class FriendshipRequestAcceptServlet extends HttpServlet {
         } else {
             accountService.deleteFriendshipRequest(requesterId, receiverId);
         }
-        redirect(req, resp, Pages.FRIENDSHIP_REQUESTS);
+        redirect(req, resp, Pages.FRIENDSHIP_REQUESTS, Attributes.REQUESTED_ID, "" + receiverId);
     }
 }
