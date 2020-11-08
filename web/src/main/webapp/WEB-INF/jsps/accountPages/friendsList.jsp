@@ -10,8 +10,8 @@
     <common:accountMenu/>
     <br><br>
 
-    <div class="post">
-        <c:forEach items="${friends}" var="friend">
+    <c:forEach items="${friends}" var="friend">
+        <div class="post">
             <form action="${context}/removeFriendship" method="post">
                 <a href="${context}/mywall?id=${friend.getId()}">
                         ${friend.getName()} ${friend.getSurname()}
@@ -20,7 +20,7 @@
                 <input type="hidden" value="${user.getId()}" name="receiverId">
                 <button type="submit" name="accept"><fmt:message key="button.delete"/></button>
             </form>
-            <br>
-        </c:forEach>
-    </div>
+        </div>
+        <br>
+    </c:forEach>
 </common:layout>

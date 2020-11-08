@@ -4,7 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 
 import java.util.Collection;
 
-public interface AccountsFriendshipsDao {
+public interface FriendshipsDao {
     Collection<Account> selectFriends(long id);
 
     boolean createFriendship(long firstId, long secondId);

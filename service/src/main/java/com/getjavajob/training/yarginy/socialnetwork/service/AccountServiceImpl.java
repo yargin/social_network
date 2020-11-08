@@ -18,15 +18,15 @@ public class AccountServiceImpl implements AccountService {
     private final TransactionManager transactionManager;
     private final AccountDao accountDao;
     private final PhoneDao phoneDao;
-    private final AccountsFriendshipsDao friendshipDao;
+    private final FriendshipsDao friendshipDao;
     private final AccountPhotoDao accountPhotoDao;
 
     public AccountServiceImpl() {
-        this(new AccountDaoImpl(), new PhoneDaoImpl(), new AccountsFriendshipsDaoImpl(), new AccountPhotoDaoImpl(),
+        this(new AccountDaoImpl(), new PhoneDaoImpl(), new FriendshipsDaoImpl(), new AccountPhotoDaoImpl(),
                 new TransactionManager());
     }
 
-    public AccountServiceImpl(AccountDao accountDao, PhoneDao phoneDao, AccountsFriendshipsDao friendshipDao,
+    public AccountServiceImpl(AccountDao accountDao, PhoneDao phoneDao, FriendshipsDao friendshipDao,
                               AccountPhotoDao accountPhotoDao, TransactionManager transactionManager) {
         this.accountDao = accountDao;
         this.phoneDao = phoneDao;

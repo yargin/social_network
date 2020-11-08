@@ -21,8 +21,10 @@ public class FriendshipDml extends SelfManyToManyDml<Account> {
             SECOND_ACCOUNT).union().selectColumn(TABLE, SECOND_ACCOUNT).where(FIRST_ACCOUNT).build();
     private static final String SELECT_BY_ID = buildQuery().joinSubSelect(AccountsTable.TABLE, SUB_SELECT,
             AccountsTable.ID, ALIAS).build();
-    private static final String SELECT_BY_BOTH = buildQuery().select(TABLE).where(FIRST_ACCOUNT).and(SECOND_ACCOUNT).
+    private static final String SELECT_BY_BOTH2 = buildQuery().select(TABLE).where(FIRST_ACCOUNT).and(SECOND_ACCOUNT).
             build();
+    private static final String SELECT_BY_BOTH = "SELECT * FROM " + TABLE + " WHERE (" + FIRST_ACCOUNT + " = ? AND " +
+            SECOND_ACCOUNT + " = ?) OR (" + SECOND_ACCOUNT + " = ? AND " + FIRST_ACCOUNT + " = ?);";
     private static final AccountDml ACCOUNT_DML = new AccountDml();
 
     @Override
@@ -52,6 +54,8 @@ public class FriendshipDml extends SelfManyToManyDml<Account> {
                 ResultSet.CONCUR_UPDATABLE);
         statement.setLong(1, firstId);
         statement.setLong(2, secondId);
+        statement.setLong(3, firstId);
+        statement.setLong(4, secondId);
         return statement;
     }
 

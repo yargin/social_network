@@ -142,7 +142,7 @@ html, body, ul, li {
 }
 
 .post img {
-    max-height: 200px;
+    max-height: 150px;
     max-width: 150px;
     overflow: hidden;
     margin-left: 20px;

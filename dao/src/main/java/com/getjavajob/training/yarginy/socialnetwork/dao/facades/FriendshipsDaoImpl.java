@@ -8,7 +8,7 @@ import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
 
-public class AccountsFriendshipsDaoImpl implements AccountsFriendshipsDao {
+public class FriendshipsDaoImpl implements FriendshipsDao {
     private final SelfManyToManyDao<Account> friendshipDao = getDbFactory().getFriendshipDao();
     private final ManyToManyDao<Account, Account> friendshipRequestsDao = getDbFactory().getFriendshipRequests();
 

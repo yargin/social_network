@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 public class AccountServiceTest {
     private static final String CLASS = "AccountServiceTest";
     private final AccountDao accountDao = mock(AccountDao.class);
-    private final AccountsFriendshipsDao friendsDao = mock(AccountsFriendshipsDao.class);
+    private final FriendshipsDao friendsDao = mock(FriendshipsDao.class);
     private final PhoneDao phoneDao = mock(PhoneDao.class);
     private final Transaction transaction = mock(Transaction.class);
     private final TransactionManager transactionManager = mock(TransactionManager.class);
