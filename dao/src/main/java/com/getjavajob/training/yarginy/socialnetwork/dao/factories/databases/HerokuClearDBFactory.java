@@ -6,7 +6,7 @@ public class HerokuClearDBFactory extends CommonDbFactory {
     private static final String DB_CONNECTION_FILE = "connections/ClearDBConnection.properties";
     private static final String SCRIPTS_DIR = "./src/main/resources/scripts/MySQL/";
     private static final String CREATION_SCRIPT = "run_creation.sql";
-    private static final int CONNECTIONS = 10;
+    private static final int CONNECTIONS = 6;
 
     @Override
     protected void loadJDBCDriver() {

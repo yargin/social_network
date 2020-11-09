@@ -25,7 +25,7 @@ public class PrivateMessageServlet extends HttpServlet {
         //todo
 
         infoHelper.setAccountInfo(req, requestedId);
-        req.setAttribute(TAB, "privateMessage");
+        req.setAttribute(TAB, "privatemessage");
         req.getRequestDispatcher(Jsps.DIALOGS).forward(req, resp);
     }
 

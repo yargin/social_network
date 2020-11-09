@@ -1,6 +1,5 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 
 import java.util.Collection;
@@ -22,7 +21,7 @@ public interface PhoneDao {
 
     Collection<Phone> selectAll();
 
-    Collection<Phone> selectPhonesByOwner(Account account);
+    Collection<Phone> selectPhonesByOwner(long accountId);
 
     Phone getNullPhone();
 

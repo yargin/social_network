@@ -13,14 +13,21 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuild
 public class AccountsGroupsDml extends OneToManyDml<Account, Group> {
     private static final String SELECT_BY_ACCOUNT = buildQuery().selectJoin(AccountsTable.TABLE, GroupsTable.TABLE,
             AccountsTable.ID, GroupsTable.OWNER).where(GroupsTable.OWNER).build();
+    private static final String SELECT_BY_BOTH = buildQuery().selectJoin(AccountsTable.TABLE, GroupsTable.TABLE,
+            AccountsTable.ID, GroupsTable.OWNER).where(GroupsTable.OWNER).and(GroupsTable.ID).build();
 
     @Override
-    protected String getSelectQuery() {
+    protected String getSelectByOneQuery() {
         return SELECT_BY_ACCOUNT;
     }
 
     @Override
     protected Dml<Group> getManyDml() {
         return new GroupDml();
+    }
+
+    @Override
+    protected String getSelectByBothQuery() {
+        return SELECT_BY_BOTH;
     }
 }

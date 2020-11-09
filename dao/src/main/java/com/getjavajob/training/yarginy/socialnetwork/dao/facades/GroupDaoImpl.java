@@ -49,8 +49,13 @@ public class GroupDaoImpl implements GroupDao {
     }
 
     @Override
-    public Collection<Group> selectGroupsByOwner(Account account) {
-        return accountsOwnedGroupsDao.selectMany(account);
+    public Collection<Group> selectGroupsByOwner(long accountId) {
+        return accountsOwnedGroupsDao.selectMany(accountId);
+    }
+
+    @Override
+    public boolean isOwner(long groupId, long accountId) {
+        return accountsOwnedGroupsDao.relationExists(groupId, accountId);
     }
 
     @Override

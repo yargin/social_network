@@ -34,7 +34,7 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     @Override
     public AccountInfoDTO select(Account account) {
         Account storedAccount = accountDao.select(account);
-        Collection<Phone> phones = phoneDao.selectPhonesByOwner(storedAccount);
+        Collection<Phone> phones = phoneDao.selectPhonesByOwner(storedAccount.getId());
         AccountPhoto accountPhoto = accountPhotoDao.select(storedAccount);
         return new AccountInfoDTO(storedAccount, accountPhoto, phones);
     }
@@ -42,7 +42,7 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     @Override
     public AccountInfoDTO select(long id) {
         Account storedAccount = accountDao.select(id);
-        Collection<Phone> phones = phoneDao.selectPhonesByOwner(storedAccount);
+        Collection<Phone> phones = phoneDao.selectPhonesByOwner(storedAccount.getId());
         AccountPhoto accountPhoto = accountPhotoDao.select(storedAccount);
         return new AccountInfoDTO(storedAccount, accountPhoto, phones);
     }

@@ -102,10 +102,12 @@ public class AccountServiceTest {
 
     @Test
     public void testAddFriend() {
+        when(friendsDao.deleteRequest(account.getId(), 13)).thenReturn(true);
         when(friendsDao.createFriendship(account.getId(), 13)).thenReturn(false);
         assertFalse(accountService.addFriend(account.getId(), 13));
-        when(friendsDao.createFriendship(account.getId(), 11)).thenReturn(true);
-        assertTrue(accountService.addFriend(account.getId(), 11));
+//        when(friendsDao.deleteRequest(account.getId(), 11)).thenReturn(true);
+//        when(friendsDao.createFriendship(account.getId(), 11)).thenReturn(true);
+//        assertTrue(accountService.addFriend(account.getId(), 11));
         printPassed(CLASS, "testAddFriend");
     }
 
@@ -150,8 +152,9 @@ public class AccountServiceTest {
         Phone secondPhone = new PhoneImpl();
         secondPhone.setNumber("33111");
         Collection<Phone> phones = asList(firstPhone, secondPhone);
-        when(phoneDao.selectPhonesByOwner(account)).thenReturn(phones);
-        Collection<Phone> actualPhones = accountService.getPhones(account);
+        account = accountDao.select(account);
+        when(phoneDao.selectPhonesByOwner(account.getId())).thenReturn(phones);
+        Collection<Phone> actualPhones = accountService.getPhones(account.getId());
         System.out.println(actualPhones);
         assertEquals(phones, actualPhones);
         printPassed(CLASS, "testGetPhones");

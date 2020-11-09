@@ -33,7 +33,7 @@ public class BatchUpdateTest {
         phoneDao.delete(secondPhone);
         Collection<Phone> phones = asList(firstPhone, secondPhone);
         phoneDao.create(phones);
-        Collection<Phone> allAccountPhones = accountPhones.selectMany(account);
+        Collection<Phone> allAccountPhones = accountPhones.selectMany(1);
         assertTrue(allAccountPhones.containsAll(phones));
         assertTrue(phoneDao.delete(phones));
         phoneDao.delete(firstPhone);

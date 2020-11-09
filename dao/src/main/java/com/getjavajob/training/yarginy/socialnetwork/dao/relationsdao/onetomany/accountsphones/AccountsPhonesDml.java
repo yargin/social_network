@@ -15,12 +15,17 @@ public class AccountsPhonesDml extends OneToManyDml<Account, Phone> {
             AccountsTable.ID, PhonesTable.OWNER).where(PhonesTable.OWNER).build();
 
     @Override
-    protected String getSelectQuery() {
+    protected String getSelectByOneQuery() {
         return SELECT_BY_ACCOUNT;
     }
 
     @Override
     protected Dml<Phone> getManyDml() {
         return new PhonesDml();
+    }
+
+    @Override
+    protected String getSelectByBothQuery() {
+        throw new UnsupportedOperationException();
     }
 }

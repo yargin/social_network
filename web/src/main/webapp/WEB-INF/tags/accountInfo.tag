@@ -39,7 +39,7 @@
 <br>
 <c:if test="${not empty owner or not empty admin}">
     <div>
-        <a href="${context}/updateInfo?id=${id}"><fmt:message key="label.updateInfo"/></a><br>
+        <a href="${context}/updateinfo?id=${id}"><fmt:message key="label.updateInfo"/></a><br>
         <a href="${context}/deleteAccount?id=${id}"><fmt:message key="label.deleteAccount"/></a>
     </div>
 </c:if>

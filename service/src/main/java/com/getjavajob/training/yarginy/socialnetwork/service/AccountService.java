@@ -35,7 +35,7 @@ public interface AccountService {
 
     boolean removePhone(Phone phone);
 
-    Collection<Phone> getPhones(Account account);
+    Collection<Phone> getPhones(long accountId);
 
     Map<Account, Collection<Phone>> getAllWithPhones();
 

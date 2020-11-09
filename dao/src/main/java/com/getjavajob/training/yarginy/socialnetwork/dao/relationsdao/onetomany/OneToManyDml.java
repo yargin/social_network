@@ -10,17 +10,30 @@ import java.sql.SQLException;
 import java.util.Collection;
 
 public abstract class OneToManyDml<O extends Entity, M extends Entity> {
-    public Collection<M> selectByOne(Connection connection, O entity) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(getSelectQuery(), ResultSet.
+    public Collection<M> selectByOne(Connection connection, long oneId) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(getSelectByOneQuery(), ResultSet.
                 TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
-            statement.setLong(1, entity.getId());
+            statement.setLong(1, oneId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 return getManyDml().selectEntities(resultSet);
             }
         }
     }
 
-    protected abstract String getSelectQuery();
+    public boolean selectByBoth(Connection connection, long oneId, long manyId) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(getSelectByBothQuery(), ResultSet.
+                TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
+            statement.setLong(1, oneId);
+            statement.setLong(2, manyId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                return resultSet.next();
+            }
+        }
+    }
+
+    protected abstract String getSelectByBothQuery();
+
+    protected abstract String getSelectByOneQuery();
 
     protected abstract Dml<M> getManyDml();
 }

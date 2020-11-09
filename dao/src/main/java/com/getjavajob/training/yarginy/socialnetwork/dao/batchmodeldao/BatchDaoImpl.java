@@ -37,7 +37,6 @@ public class BatchDaoImpl<E extends Entity> extends DaoImpl<E> implements BatchD
             }
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
             return false;
         }
     }

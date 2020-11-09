@@ -56,8 +56,8 @@ public class PhoneDaoImpl implements PhoneDao {
     }
 
     @Override
-    public Collection<Phone> selectPhonesByOwner(Account account) {
-        return accountsPhonesDao.selectMany(account);
+    public Collection<Phone> selectPhonesByOwner(long accountId) {
+        return accountsPhonesDao.selectMany(accountId);
     }
 
     @Override

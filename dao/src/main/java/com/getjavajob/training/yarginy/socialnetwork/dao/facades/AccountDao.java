@@ -21,11 +21,11 @@ public interface AccountDao {
 
     Account getNullAccount();
 
-    Collection<Group> getOwnedGroups(Account account);
+    Collection<Group> getOwnedGroups(long accountId);
 
     Collection<Group> getGroupMembership(long accountId);
 
-    Collection<Phone> getPhones(Account account);
+    Collection<Phone> getPhones(long accountId);
 
     Collection<Account> getFriends(long accountId);
 }

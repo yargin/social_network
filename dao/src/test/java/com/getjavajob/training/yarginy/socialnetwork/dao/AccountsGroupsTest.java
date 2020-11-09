@@ -27,8 +27,7 @@ public class AccountsGroupsTest {
 
     @Test
     public void testSelectGroups() {
-        Account account = new AccountImpl("test account", "test@test.com");
-        account.setSurname("test surname");
+        Account account = new AccountImpl("test account", "test surname", "test@test.com");
         ACCOUNT_DAO.create(account);
         account = ACCOUNT_DAO.select(account);
         Group firstGroup = new GroupImpl("first test group", account);
@@ -38,7 +37,7 @@ public class AccountsGroupsTest {
         GROUP_DAO.create(secondGroup);
         secondGroup = GROUP_DAO.select(secondGroup);
         List<Group> expectedGroups = asList(firstGroup, secondGroup);
-        Collection<Group> actualGroups = ACCOUNTS_GROUPS.selectMany(account);
+        Collection<Group> actualGroups = ACCOUNTS_GROUPS.selectMany(account.getId());
         assertEquals(expectedGroups, actualGroups);
         printPassed(CLASS, "testSelectGroups");
         ACCOUNT_DAO.delete(account);

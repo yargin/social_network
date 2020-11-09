@@ -16,6 +16,8 @@ public interface GroupService {
 
     Collection<Group> getNonJoinedGroups(long accountId);
 
+    boolean isOwner(long accountId, long groupId);
+
     boolean joinGroup(long accountId, long groupId);
 
     boolean leaveGroup(long accountId, long groupId);

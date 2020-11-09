@@ -38,7 +38,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public AccountInfoDTO getAccountInfo(long id) {
         Account account = accountDao.select(id);
-        Collection<Phone> phones = phoneDao.selectPhonesByOwner(account);
+        Collection<Phone> phones = phoneDao.selectPhonesByOwner(id);
         AccountPhoto accountPhoto = accountPhotoDao.select(account);
         return new AccountInfoDTO(account, accountPhoto, phones);
     }
@@ -143,8 +143,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Collection<Phone> getPhones(Account account) {
-        return phoneDao.selectPhonesByOwner(account);
+    public Collection<Phone> getPhones(long accountId) {
+        return phoneDao.selectPhonesByOwner(accountId);
     }
 
     @Override

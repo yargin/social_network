@@ -18,7 +18,9 @@ public interface GroupDao {
 
     Collection<Group> selectAll();
 
-    Collection<Group> selectGroupsByOwner(Account account);
+    Collection<Group> selectGroupsByOwner(long accountId);
+
+    boolean isOwner(long groupId, long accountId);
 
     Group getNullGroup();
 

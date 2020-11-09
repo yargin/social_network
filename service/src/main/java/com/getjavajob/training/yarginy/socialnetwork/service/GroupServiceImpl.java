@@ -43,6 +43,11 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    public boolean isOwner(long accountId, long groupId) {
+        return groupDao.isOwner(groupId, accountId);
+    }
+
+    @Override
     public boolean joinGroup(long accountId, long groupId) {
         return groupDao.addMember(groupId, accountId);
     }

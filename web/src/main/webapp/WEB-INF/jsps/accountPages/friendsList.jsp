@@ -12,7 +12,7 @@
 
     <c:forEach items="${friends}" var="friend">
         <div class="post">
-            <form action="${context}/removeFriendship" method="post">
+            <form action="${context}/removefriendship" method="post">
                 <a href="${context}/mywall?id=${friend.getId()}">
                         ${friend.getName()} ${friend.getSurname()}
                 </a>

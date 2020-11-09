@@ -39,7 +39,7 @@ public class BatchPhoneDaoTest {
 
     @After
     public void deleteAccountAndPhones() {
-        testPhones = phoneDao.selectPhonesByOwner(testAccount);
+        testPhones = phoneDao.selectPhonesByOwner(testAccount.getId());
         phoneDao.delete(testPhones);
         accountDao.delete(testAccount);
     }
@@ -47,7 +47,7 @@ public class BatchPhoneDaoTest {
     @Test
     public void testDeleteManyPhonesAndOneNonExisting() {
         phoneDao.create(testPhones);
-        testPhones = phoneDao.selectPhonesByOwner(testAccount);
+        testPhones = phoneDao.selectPhonesByOwner(testAccount.getId());
         testPhones.add(new PhoneImpl("777-777", testAccount));
         assertTrue(phoneDao.delete(testPhones));
     }

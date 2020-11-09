@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.web.filters;
+package com.getjavajob.training.yarginy.socialnetwork.web.filters.accountinfoaccess;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
@@ -33,14 +33,15 @@ public class AccountInfoAccessSetterFilter extends HttpFilter {
         }
 
         Account account = (Account) session.getAttribute(USER);
+        long requesterId = account.getId();
 
-        if (account.getId() == requestedUserId) {
+        if (requesterId == requestedUserId) {
             req.setAttribute("owner", true);
         }
         if ((!isNull(account.getRole()) && (Role.ADMIN.equals(account.getRole())))) {
             req.setAttribute("admin", true);
         }
-        if (accountService.isFriend(account.getId(), requestedUserId)) {
+        if (accountService.isFriend(requesterId, requestedUserId)) {
             req.setAttribute("friend", true);
         }
         filterChain.doFilter(req, resp);

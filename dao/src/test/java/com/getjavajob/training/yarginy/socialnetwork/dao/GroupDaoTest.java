@@ -5,6 +5,8 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
@@ -121,5 +123,15 @@ public class GroupDaoTest {
         assertSame(true, actual);
         assertEquals(GROUP_DAO.getNullEntity(), GROUP_DAO.select(GROUP));
         printPassed(CLASS, "testDeleteGroup");
+    }
+
+    @Test
+    public void testOwner() {
+        GROUP_DAO.create(GROUP);
+        Group group = GROUP_DAO.select(GROUP);
+        Account account = ACCOUNT_DAO.select(3);
+        GroupDao groupDao = new GroupDaoImpl();
+        assertTrue(groupDao.isOwner(group.getId(), account.getId()));
+        GROUP_DAO.delete(GROUP);
     }
 }

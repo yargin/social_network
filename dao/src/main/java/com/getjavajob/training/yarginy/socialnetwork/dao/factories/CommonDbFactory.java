@@ -123,7 +123,7 @@ public abstract class CommonDbFactory implements DbFactory {
 
     @Override
     public OneToManyDao<Account, Phone> getAccountsPhones(Dao<Account> accountDao) {
-        return new OneToManyDaoImpl<>(connectionPool, new AccountsPhonesDml(), accountDao);
+        return new OneToManyDaoImpl<>(connectionPool, new AccountsPhonesDml());
     }
 
     @Override
@@ -138,7 +138,7 @@ public abstract class CommonDbFactory implements DbFactory {
 
     @Override
     public OneToManyDao<Account, Group> getAccountsOwnedGroupsDao(Dao<Account> accountDao) {
-        return new OneToManyDaoImpl<>(connectionPool, new AccountsGroupsDml(), accountDao);
+        return new OneToManyDaoImpl<>(connectionPool, new AccountsGroupsDml());
     }
 
     @Override

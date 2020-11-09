@@ -55,8 +55,8 @@ public class AccountDaoImpl implements AccountDao {
     }
 
     @Override
-    public Collection<Group> getOwnedGroups(Account account) {
-        return accountGroupsDao.selectMany(account);
+    public Collection<Group> getOwnedGroups(long accountId) {
+        return accountGroupsDao.selectMany(accountId);
     }
 
     @Override
@@ -65,8 +65,8 @@ public class AccountDaoImpl implements AccountDao {
     }
 
     @Override
-    public Collection<Phone> getPhones(Account account) {
-        return accountPhonesDao.selectMany(account);
+    public Collection<Phone> getPhones(long accountId) {
+        return accountPhonesDao.selectMany(accountId);
     }
 
     @Override

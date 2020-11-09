@@ -14,7 +14,7 @@ public interface ManyToManyDao<F extends Entity, S extends Entity> {
     /**
      * selects all second participants related to first {@link Entity}
      *
-     * @param first {@link Entity} that second participants related to
+     * @param firstId {@link Entity} that second participants related to
      * @return {@link Collection} of second participants
      */
     Collection<S> selectByFirst(long firstId);
