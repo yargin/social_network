@@ -5,7 +5,7 @@
 
 <c:forEach items="${groups}" var="group">
     <c:if test="${empty allgroups}">
-        <a href="${context}/group?groupId=${group.id}">${group.name}</a>
+        <a href="${context}/group?id=${group.id}">${group.name}</a>
         <c:if test="${not empty owner or not empty admin}">
             <form action="${context}/leavegroup" method="post">
                 <input type="hidden" name="requesterId" value="${id}">
@@ -16,7 +16,7 @@
         <br>
     </c:if>
     <c:if test="${not empty allgroups}">
-        <a href="${context}/group?groupId=${group.id}">${group.name}</a>
+        <a href="${context}/group?id=${group.id}">${group.name}</a>
         <c:if test="${not empty owner or not empty admin}">
             <form action="${context}/joingroup" method="post">
                 <input type="hidden" name="requesterId" value="${id}">

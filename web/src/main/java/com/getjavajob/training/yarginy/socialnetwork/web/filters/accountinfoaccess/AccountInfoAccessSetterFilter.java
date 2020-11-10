@@ -32,18 +32,19 @@ public class AccountInfoAccessSetterFilter extends HttpFilter {
             requestedUserId = (long) objectId;
         }
 
-        Account account = (Account) session.getAttribute(USER);
-        long requesterId = account.getId();
-
+        long requesterId = (long) session.getAttribute(USER_ID);
         if (requesterId == requestedUserId) {
             req.setAttribute("owner", true);
-        }
-        if ((!isNull(account.getRole()) && (Role.ADMIN.equals(account.getRole())))) {
-            req.setAttribute("admin", true);
         }
         if (accountService.isFriend(requesterId, requestedUserId)) {
             req.setAttribute("friend", true);
         }
+
+        Account account = (Account) session.getAttribute(USER);
+        if ((!isNull(account.getRole()) && (Role.ADMIN.equals(account.getRole())))) {
+            req.setAttribute("admin", true);
+        }
+
         filterChain.doFilter(req, resp);
     }
 }

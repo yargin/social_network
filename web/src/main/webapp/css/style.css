@@ -151,8 +151,9 @@ html, body, ul, li {
 .post p, label {
     font-family: 'Tahoma', serif;
     font-weight: normal;
-    font-size: 13px;
+    font-size: 12px;
     color: black;
+    padding: 6px 10px 6px 10px;
 }
 
 #error {
@@ -162,19 +163,10 @@ html, body, ul, li {
     font-weight: bolder;
 }
 
-/*button {*/
-/*    padding: 6px 10px 6px 10px;*/
-/*    margin-top: 10px;*/
-/*    background-color: #94d2d4;*/
-/*    border: none;*/
-/*    border-radius: 1px;*/
-/*    cursor: pointer;*/
-/*}*/
-
-.post button {
-    padding: 3px 7px 3px 7px;
+button {
+    padding: 6px 10px 6px 10px;
     margin-top: 10px;
-    font-size: 12px;
+    background-color: #94d2d4;
     border: none;
     border-radius: 1px;
     cursor: pointer;

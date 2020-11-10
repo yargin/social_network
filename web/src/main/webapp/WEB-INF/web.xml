@@ -42,26 +42,16 @@
     </filter-mapping>
 
     <filter>
-        <filter-name>AccountIdSessionSetterFilter</filter-name>
+        <filter-name>SessionIdSetterFilter</filter-name>
         <filter-class>
-            com.getjavajob.training.yarginy.socialnetwork.web.filters.emptyidsetter.AccountWallIdSetterFilter
+            com.getjavajob.training.yarginy.socialnetwork.web.filters.emptyidsetter.SessionIdSetterFilter
         </filter-class>
     </filter>
     <filter-mapping>
-        <filter-name>AccountIdSessionSetterFilter</filter-name>
+        <filter-name>SessionIdSetterFilter</filter-name>
         <url-pattern>/mywall</url-pattern>
         <url-pattern>/friends</url-pattern>
         <url-pattern>/dialogs</url-pattern>
-    </filter-mapping>
-
-    <filter>
-        <filter-name>GroupListIdSessionSetterFilter</filter-name>
-        <filter-class>
-            com.getjavajob.training.yarginy.socialnetwork.web.filters.emptyidsetter.GroupsListIdSetterFilter
-        </filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>GroupListIdSessionSetterFilter</filter-name>
         <url-pattern>/groups</url-pattern>
     </filter-mapping>
 
@@ -80,6 +70,9 @@
         <url-pattern>/friends</url-pattern>
         <url-pattern>/dialogs</url-pattern>
         <url-pattern>/groups</url-pattern>
+        <url-pattern>/group</url-pattern>
+        <url-pattern>/updategroup</url-pattern>
+        <url-pattern>/deletegroup</url-pattern>
     </filter-mapping>
 
     <filter>
@@ -96,6 +89,7 @@
         <url-pattern>/joingroup</url-pattern>
     </filter-mapping>
 
+    <!-- permissions for account wall-->
     <filter>
         <filter-name>AccountPermissionsSetter</filter-name>
         <filter-class>
@@ -157,6 +151,20 @@
         <url-pattern>/groups</url-pattern>
     </filter-mapping>
 
+    <!-- permissions for group-->
+    <filter>
+        <filter-name>GroupPermissionsSetter</filter-name>
+        <filter-class>
+            com.getjavajob.training.yarginy.socialnetwork.web.filters.groupinfoaccess.GroupInfoAccessSetterFilter
+        </filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>GroupPermissionsSetter</filter-name>
+        <url-pattern>/group</url-pattern>
+    </filter-mapping>
+
+
+    <!-- servlets-->
     <servlet>
         <servlet-name>myWall</servlet-name>
         <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.AccountWallServlet</servlet-class>

@@ -75,6 +75,7 @@ public class GroupDml extends AbstractDml<Group> {
         Group group = selectViewFromRow(resultSet);
         group.setDescription(resultSet.getString(DESCRIPTION));
         group.setCreationDate(resultSet.getDate(CREATION_DATE));
+        group.setPhoto(resultSet.getBytes(PHOTO));
         Account owner = accountDml.selectViewFromRow(resultSet);
         group.setOwner(owner);
         return group;
@@ -85,7 +86,7 @@ public class GroupDml extends AbstractDml<Group> {
         updateFieldIfDiffers(group::getName, storedGroup::getName, resultSet::updateString, NAME);
         updateFieldIfDiffers(group::getDescription, storedGroup::getDescription, resultSet::updateString, DESCRIPTION);
         updateFieldIfDiffers(group::getCreationDate, storedGroup::getCreationDate, resultSet::updateDate, CREATION_DATE);
-//        updateFieldIfDiffers(group::getPhoto, storedGroup::getPhoto, resultSet::updateBytes, PHOTO);
+        updateFieldIfDiffers(group::getPhoto, storedGroup::getPhoto, resultSet::updateBytes, PHOTO);
 //        updateFieldIfDiffers(group::getPhotoPreview, storedGroup::getPhotoPreview, resultSet::updateBytes, PHOTO_PREVIEW);
         if (isNull(group.getOwner())) {
             return;

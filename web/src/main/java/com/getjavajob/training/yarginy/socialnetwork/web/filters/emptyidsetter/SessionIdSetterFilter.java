@@ -14,13 +14,24 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER_ID;
 import static java.util.Objects.isNull;
 
-public class AccountWallIdSetterFilter extends HttpFilter {
+public class SessionIdSetterFilter extends HttpFilter {
     @Override
     public void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain filterChain) throws IOException,
             ServletException {
-        if (isNull(req.getParameter(REQUESTED_ID))) {
+        String uri = req.getRequestURI();
+        String page = "";
+        if (uri.contains("mywall")) {
+            page = Pages.MY_WALL;
+        } else if (uri.contains("friends")) {
+            page = Pages.FRIENDS;
+        } else if (uri.contains("dialogs")) {
+            page = Pages.DIALOGS;
+        } else if (uri.contains("groups")) {
+            page = Pages.GROUPS;
+        }
+        if (isNull(req.getParameter(REQUESTED_ID)) && !page.isEmpty()) {
             long requestedId = (long) req.getSession().getAttribute(USER_ID);
-            redirect(req, resp, Pages.MY_WALL, REQUESTED_ID, "" + requestedId);
+            redirect(req, resp, page, REQUESTED_ID, "" + requestedId);
             return;
         }
         filterChain.doFilter(req, resp);

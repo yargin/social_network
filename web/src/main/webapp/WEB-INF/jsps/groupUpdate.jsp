@@ -8,12 +8,13 @@
 
 <common:layout>
     <div class="info">
-        <form action="${context}/updategroup?groupId=${group.getId()}" method="post" enctype="multipart/form-data">
+        <form action="${context}/updategroup?id=${group.getId()}" method="post" enctype="multipart/form-data">
             <label><fmt:message key="form.groupName" bundle="${label}"/> : </label>
             <input type="text" name="name" value="${group.getName()}">
             <br>
             <c:if test="${not empty errname}"><fmt:message key="${errname}" bundle="${error}"/><br></c:if>
             <c:if test="${not empty nameDuplicate}"><fmt:message key="${nameDuplicate}" bundle="${error}"/><br></c:if>
+            <br>
 
             <label><fmt:message key="form.description" bundle="${label}"/> : </label>
             <textarea name="description">${group.getDescription()}</textarea>
@@ -24,10 +25,10 @@
                 <fmt:message key="form.chooseAnother" bundle="${label}"/>
                 <br>
             </c:if>
-            <input type="file" placeholder="asd" name="photo" accept="image/*"
-            <c:if test="${not empty group.getHtmlPhoto()}">
-                   value="${group.getHtmlPhoto()}"
-            </c:if>
+            <input type="file" name="photo" accept="image/*"
+                <%--            <c:if test="${not empty group.getHtmlPhoto()}">--%>
+                <%--                   value="${group.getHtmlPhoto()}"--%>
+                <%--            </c:if>--%>
                    title="<fmt:message key="form.uploadImage" bundle="${label}"/>">
             <br>
             <button type="submit" name="save" value="save"><fmt:message key="button.save" bundle="${label}"/></button>

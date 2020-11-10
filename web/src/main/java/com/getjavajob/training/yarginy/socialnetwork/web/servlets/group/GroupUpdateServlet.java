@@ -1,12 +1,10 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.servlets.group;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupServiceImpl;
-import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.GroupManagementAccessHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.UpdateGroupFieldsHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
@@ -18,60 +16,54 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirectToReferer;
+import static java.util.Objects.isNull;
 
 public class GroupUpdateServlet extends HttpServlet {
     private final GroupService groupService = new GroupServiceImpl();
-    private final GroupManagementAccessHelper accessHelper = new GroupManagementAccessHelper();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UpdateGroupFieldsHelper updater = new UpdateGroupFieldsHelper(req, resp, Attributes.GROUP_ID, Pages.GROUP);
-        long requestedId = updater.getRequestedUserId(Attributes.GROUP_ID);
-        if (requestedId == 0) {
-            return;
-        }
-        Group group = updater.getOrCreateGroupAttribute(() -> groupService.selectGroup(requestedId));
-        req.setAttribute("group", group);
-        req.setAttribute("owner", group.getOwner());
+        long requestedId = (long) req.getAttribute(Attributes.REQUESTED_ID);
 
-        Account account = accessHelper.getAccountFromSession(req);
-        if (accessHelper.isModerator(group, account)) {
-            req.getRequestDispatcher(Jsps.GROUP_UPDATE).forward(req, resp);
-        } else {
-            redirectToReferer(req, resp);
+        //select at first visit
+        Group group = updater.getOrCreateGroup(() -> groupService.selectGroup(requestedId));
+
+        //save to session if wasn't
+        if (isNull(req.getSession().getAttribute(Attributes.GROUP))) {
+            req.getSession().setAttribute(Attributes.GROUP, group);
         }
+
+        req.getRequestDispatcher(Jsps.GROUP_UPDATE).forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UpdateGroupFieldsHelper updater = new UpdateGroupFieldsHelper(req, resp, Attributes.GROUP_ID, Pages.GROUP);
-        long requestedId = updater.getRequestedUserId(Attributes.GROUP_ID);
-        if (requestedId == 0) {
+        if ("cancel".equals(req.getParameter("save"))) {
+            updater.acceptActionOrRetry(true, null);
             return;
         }
-        Group storedGroup = groupService.selectGroup(requestedId);
+        long requestedId = (long) req.getAttribute(Attributes.REQUESTED_ID);
+        Group storedGroup = (Group) req.getSession().getAttribute(Attributes.GROUP);
         Group group = new GroupImpl();
+
+        //for further views
         group.setPhoto(storedGroup.getPhoto());
         group.setId(requestedId);
-        Account account = accessHelper.getAccountFromSession(req);
-        if (!accessHelper.isModerator(group, account)) {
-            redirectToReferer(req, resp);
-            return;
-        }
 
         updater.getValuesFromParams(group);
         boolean accepted = updater.isParamsAccepted();
         req.setAttribute(Attributes.GROUP, group);
         if (!accepted) {
-            req.setAttribute(Attributes.GROUP, group);
             doGet(req, resp);
         } else {
             updateGroup(updater, group, storedGroup);
         }
     }
 
-    private void updateGroup(UpdateGroupFieldsHelper updater, Group group, Group storedGroup) throws ServletException, IOException {
+    private void updateGroup(UpdateGroupFieldsHelper updater, Group group, Group storedGroup) throws ServletException,
+            IOException {
         boolean updated;
         try {
             updated = groupService.updateGroup(group, storedGroup);

@@ -14,7 +14,8 @@ import java.util.Base64;
 import java.util.function.Supplier;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.GROUP;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.NAME_DUPLICATE;
 import static java.util.Objects.isNull;
 
 public class UpdateGroupFieldsHelper extends UpdateFieldsHelper {
@@ -22,10 +23,12 @@ public class UpdateGroupFieldsHelper extends UpdateFieldsHelper {
         super(req, resp, idParam, successUrl);
     }
 
-    public Group getOrCreateGroupAttribute(Supplier<Group> groupCreator) {
+    public Group getOrCreateGroup(Supplier<Group> groupCreator) {
         Group group = (Group) req.getAttribute(Attributes.GROUP);
         if (isNull(group)) {
             group = groupCreator.get();
+            //set group for view if it wasn't in post
+            req.setAttribute(Attributes.GROUP, group);
         }
         return group;
     }
@@ -34,11 +37,6 @@ public class UpdateGroupFieldsHelper extends UpdateFieldsHelper {
         setStringFromParam(group::setName, "name");
         setStringFromParam(group::setDescription, "description");
         setPhotoFromParam(group::setPhoto, "photo");
-        if (group.getPhoto() != null) {
-            req.getSession().setAttribute(SAVED_PHOTO, group.getPhoto());
-        } else {
-            group.setPhoto((byte[]) req.getSession().getAttribute(SAVED_PHOTO));
-        }
     }
 
     public void initGroupAttributes(Group group) {
@@ -55,7 +53,6 @@ public class UpdateGroupFieldsHelper extends UpdateFieldsHelper {
     public void acceptActionOrRetry(boolean updated, DoGetWrapper doGet) throws IOException, ServletException {
         if (updated) {
             HttpSession session = req.getSession();
-            session.removeAttribute(SAVED_PHOTO);
             session.removeAttribute(GROUP);
             redirect(req, resp, updateSuccessUrl);
         } else {

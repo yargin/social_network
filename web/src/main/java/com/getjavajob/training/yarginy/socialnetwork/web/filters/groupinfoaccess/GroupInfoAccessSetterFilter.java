@@ -32,11 +32,11 @@ public class GroupInfoAccessSetterFilter extends HttpFilter {
         }
 
         Account account = (Account) session.getAttribute(USER);
-        long requesterId = account.getId();
-
         if ((!isNull(account.getRole()) && (Role.ADMIN.equals(account.getRole())))) {
             req.setAttribute("admin", true);
         }
+
+        long requesterId = account.getId();
         if (groupService.isOwner(requesterId, requestedGroupId)) {
             req.setAttribute("owner", true);
         }

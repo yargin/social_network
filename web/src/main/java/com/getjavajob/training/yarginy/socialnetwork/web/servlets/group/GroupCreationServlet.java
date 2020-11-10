@@ -22,7 +22,7 @@ public class GroupCreationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UpdateGroupFieldsHelper updater = new UpdateGroupFieldsHelper(req, resp, Attributes.GROUP_ID, Pages.GROUP);
-        Group group = updater.getOrCreateGroupAttribute(GroupImpl::new);
+        Group group = updater.getOrCreateGroup(GroupImpl::new);
         updater.initGroupAttributes(group);
         req.getRequestDispatcher(Jsps.GROUP_CREATION).forward(req, resp);
     }
