@@ -16,6 +16,8 @@ public interface GroupsMembersDao {
 
     Collection<Account> selectRequests(long groupId);
 
+    boolean isRequester(long accountId, long groupId);
+
     boolean createRequest(long accountId, long groupId);
 
     boolean removeRequest(long accountId, long groupId);

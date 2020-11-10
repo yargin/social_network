@@ -63,6 +63,11 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    public boolean isMembershipRequester(long accountId, long groupId) {
+        return membersDao.isRequester(accountId, groupId);
+    }
+
+    @Override
     public Collection<Account> getGroupRequests(long groupId) {
         return membersDao.selectRequests(groupId);
     }

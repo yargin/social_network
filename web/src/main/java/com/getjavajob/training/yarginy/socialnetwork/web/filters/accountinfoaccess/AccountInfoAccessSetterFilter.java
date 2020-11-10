@@ -41,7 +41,7 @@ public class AccountInfoAccessSetterFilter extends HttpFilter {
         }
 
         Account account = (Account) session.getAttribute(USER);
-        if ((!isNull(account.getRole()) && (Role.ADMIN.equals(account.getRole())))) {
+        if (Role.ADMIN.equals(account.getRole())) {
             req.setAttribute("admin", true);
         }
 

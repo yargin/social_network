@@ -38,6 +38,11 @@ public class GroupsMembersDaoImpl implements GroupsMembersDao {
     }
 
     @Override
+    public boolean isRequester(long accountId, long groupId) {
+        return membershipRequestsDao.relationExists(accountId, groupId);
+    }
+
+    @Override
     public boolean createRequest(long accountId, long groupId) {
         return membershipRequestsDao.create(accountId, groupId);
     }

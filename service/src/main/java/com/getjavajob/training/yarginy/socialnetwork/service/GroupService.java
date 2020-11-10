@@ -22,6 +22,8 @@ public interface GroupService {
 
     boolean leaveGroup(long accountId, long groupId);
 
+    boolean isMembershipRequester(long accountId, long groupId);
+
     boolean sendGroupRequest(long accountId, long groupId);
 
     Collection<Account> getGroupRequests(long groupId);

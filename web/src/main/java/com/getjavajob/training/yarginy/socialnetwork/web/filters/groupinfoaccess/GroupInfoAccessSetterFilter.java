@@ -40,11 +40,14 @@ public class GroupInfoAccessSetterFilter extends HttpFilter {
         if (groupService.isOwner(requesterId, requestedGroupId)) {
             req.setAttribute("owner", true);
         }
-        if (groupService.isModerator(requesterId, requestedGroupId)) {
-            req.setAttribute("moderator", true);
+        if (groupService.isMembershipRequester(requesterId, requestedGroupId)) {
+            req.setAttribute("requester", true);
         }
         if (groupService.isMember(requesterId, requestedGroupId)) {
             req.setAttribute("member", true);
+        }
+        if (groupService.isModerator(requesterId, requestedGroupId)) {
+            req.setAttribute("moderator", true);
         }
 
         chain.doFilter(req, resp);
