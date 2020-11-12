@@ -13,7 +13,7 @@
         </strong>
     </c:when>
     <c:otherwise>
-        <a href="${context}/groupwall?id=${group.id}">
+        <a href="${context}/group?id=${id}">
             <button type="button"><fmt:message key="button.wall"/></button>
         </a>
     </c:otherwise>
@@ -28,7 +28,7 @@
             </strong>
         </c:when>
         <c:otherwise>
-            <a href="${context}/grouprequests?id=${group.id}">
+            <a href="${context}/grouprequests?id=${id}">
                 <button type="button"><fmt:message key="label.requests"/></button>
             </a>
         </c:otherwise>
@@ -43,7 +43,7 @@
             </strong>
         </c:when>
         <c:otherwise>
-            <a href="${context}/members?id=${group.id}">
+            <a href="${context}/groupmembers?id=${id}">
                 <button type="button"><fmt:message key="label.members"/></button>
             </a>
         </c:otherwise>
@@ -58,9 +58,11 @@
             </strong>
         </c:when>
         <c:otherwise>
-            <a href="${context}/moderators?id=${group.id}">
+            <a href="${context}/moderators?id=${id}">
                 <button type="button"><fmt:message key="label.moderators"/></button>
             </a>
         </c:otherwise>
     </c:choose>
 </c:if>
+<br>
+<br>

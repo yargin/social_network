@@ -1,6 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.servlets.group;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
@@ -15,6 +16,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER;
 
 public class GroupCreationServlet extends HttpServlet {
     private final GroupService groupService = new GroupServiceImpl();
@@ -36,7 +39,7 @@ public class GroupCreationServlet extends HttpServlet {
         boolean accepted = updater.isParamsAccepted();
         req.setAttribute(Attributes.GROUP, group);
         if (accepted) {
-            group.setOwner(updater.getAccountFromSession());
+            group.setOwner((Account) req.getSession().getAttribute(USER));
             createGroup(updater, group);
         } else {
             req.setAttribute(Attributes.GROUP, group);

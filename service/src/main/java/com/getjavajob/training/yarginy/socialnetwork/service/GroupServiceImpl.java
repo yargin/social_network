@@ -5,6 +5,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.*;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.Transaction;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -14,6 +15,7 @@ public class GroupServiceImpl implements GroupService {
     private final GroupDao groupDao = new GroupDaoImpl();
     private final GroupsMembersDao membersDao = new GroupsMembersDaoImpl();
     private final GroupsModeratorsDao moderatorsDao = new GroupsModeratorsDaoImpl();
+    private final TransactionManager transactionManager = new TransactionManager();
 
     @Override
     public Group selectGroup(Group group) {
@@ -50,6 +52,27 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public boolean joinGroup(long accountId, long groupId) {
         return groupDao.addMember(groupId, accountId);
+    }
+
+    @Override
+    public boolean acceptRequest(long accountId, long groupId) {
+        try (Transaction transaction = transactionManager.getTransaction()) {
+            if (!membersDao.joinGroup(accountId, groupId)) {
+                return false;
+            }
+            if (!membersDao.removeRequest(accountId, groupId)) {
+                transaction.rollback();
+                return false;
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean declineRequest(long accountId, long groupId) {
+        return membersDao.removeRequest(accountId, groupId);
     }
 
     @Override
@@ -90,10 +113,24 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public boolean createGroup(Group group) {
         group.setCreationDate(Date.valueOf(LocalDate.now()));
-        if (!groupDao.create(group)) {
-            throw new IncorrectDataException(IncorrectData.GROUP_DUPLICATE);
+        try (Transaction transaction = transactionManager.getTransaction()) {
+            try {
+                if (!groupDao.create(group)) {
+                    throw new IncorrectDataException(IncorrectData.GROUP_DUPLICATE);
+                }
+                group = groupDao.select(group);
+                if (!groupDao.addMember(group.getOwner().getId(), group.getId()) ||
+                        !moderatorsDao.addGroupModerator(group.getOwner().getId(), group.getId())) {
+                    throw new IllegalArgumentException();
+                }
+            } catch (IllegalArgumentException e) {
+                transaction.rollback();
+                return false;
+            }
+            return true;
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
         }
-        return true;
     }
 
     @Override

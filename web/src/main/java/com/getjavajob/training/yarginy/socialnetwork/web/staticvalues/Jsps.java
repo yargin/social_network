@@ -16,6 +16,8 @@ public final class Jsps {
     public static final String DIALOGS = "/WEB-INF/jsps/accountPages/dialogs.jsp";
     public static final String PRIVATE_MESSAGE = "/WEB-INF/jsps/accountPages/privatemessage.jsp";
 
+    public static final String GROUP_JSP = "/WEB-INF/jsps/grouppages/group.jsp";
+
     private Jsps() {
     }
 }

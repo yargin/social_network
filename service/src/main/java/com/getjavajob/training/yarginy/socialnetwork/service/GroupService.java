@@ -20,6 +20,10 @@ public interface GroupService {
 
     boolean joinGroup(long accountId, long groupId);
 
+    boolean acceptRequest(long accountId, long groupId);
+
+    boolean declineRequest(long accountId, long groupId);
+
     boolean leaveGroup(long accountId, long groupId);
 
     boolean isMembershipRequester(long accountId, long groupId);

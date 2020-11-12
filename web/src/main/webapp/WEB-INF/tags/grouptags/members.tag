@@ -8,7 +8,7 @@
     <a href="${context}/mywall?id=${memberVar.getId()}">
             ${memberVar.getName()} ${memberVar.getSurname()}
     </a>
-    <form action="${context}/deletemember" method="post">
+    <form action="${context}/leavegroup" method="post">
         <input type="hidden" value="${memberVar.getId()}" name="requesterId">
         <input type="hidden" value="${id}" name="receiverId">
         <button type="submit"><fmt:message key="button.delete"/></button>

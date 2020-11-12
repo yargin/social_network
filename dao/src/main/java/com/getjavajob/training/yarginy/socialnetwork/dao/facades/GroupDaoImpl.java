@@ -54,7 +54,7 @@ public class GroupDaoImpl implements GroupDao {
     }
 
     @Override
-    public boolean isOwner(long groupId, long accountId) {
+    public boolean isOwner(long accountId, long groupId) {
         return accountsOwnedGroupsDao.relationExists(groupId, accountId);
     }
 
@@ -69,12 +69,12 @@ public class GroupDaoImpl implements GroupDao {
     }
 
     @Override
-    public boolean addMember(long groupId, long accountId) {
+    public boolean addMember(long accountId, long groupId) {
         return accountsGroupMembershipDao.create(accountId, groupId);
     }
 
     @Override
-    public boolean removeMember(long groupId, long accountId) {
+    public boolean removeMember(long accountId, long groupId) {
         return accountsGroupMembershipDao.delete(accountId, groupId);
     }
 }

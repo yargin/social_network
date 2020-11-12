@@ -20,13 +20,13 @@ public interface GroupDao {
 
     Collection<Group> selectGroupsByOwner(long accountId);
 
-    boolean isOwner(long groupId, long accountId);
+    boolean isOwner(long accountId, long groupId);
 
     Group getNullGroup();
 
     Collection<Account> selectMembers(long groupId);
 
-    boolean addMember(long groupId, long accountId);
+    boolean addMember(long accountId, long groupId);
 
-    boolean removeMember(long groupId, long accountId);
+    boolean removeMember(long accountId, long groupId);
 }
