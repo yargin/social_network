@@ -10,12 +10,14 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpoo
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Map;
 
 public class GroupServiceImpl implements GroupService {
     private final GroupDao groupDao = new GroupDaoImpl();
     private final GroupsMembersDao membersDao = new GroupsMembersDaoImpl();
     private final GroupsModeratorsDao moderatorsDao = new GroupsModeratorsDaoImpl();
     private final TransactionManager transactionManager = new TransactionManager();
+    private final DataSetsDao dataSetsDao = new DataSetsDaoImpl();
 
     @Override
     public Group selectGroup(Group group) {
@@ -77,7 +79,16 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public boolean leaveGroup(long accountId, long groupId) {
-        return groupDao.removeMember(groupId, accountId);
+        try (Transaction transaction = transactionManager.getTransaction()) {
+            moderatorsDao.deleteGroupModerator(accountId, groupId);
+            if (!groupDao.removeMember(groupId, accountId)) {
+                transaction.rollback();
+                return false;
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
@@ -159,5 +170,15 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public boolean isModerator(long accountId, long groupId) {
         return moderatorsDao.isModerator(accountId, groupId);
+    }
+
+    @Override
+    public Map<Account, Boolean> getGroupMembersModerators(long groupId) {
+        return dataSetsDao.getGroupMembersAreModerators(groupId);
+    }
+
+    @Override
+    public Map<Group, Boolean> getAllUnjoinedGroupsAreRequested(long accountId) {
+        return dataSetsDao.getAllUnjoinedGroupsAreRequested(accountId);
     }
 }

@@ -4,6 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 
 import java.util.Collection;
+import java.util.Map;
 
 public interface GroupService {
     Group selectGroup(Group group);
@@ -49,4 +50,8 @@ public interface GroupService {
     boolean removeGroup(Group group);
 
     boolean updateGroup(Group group, Group storedGroup);
+
+    Map<Account, Boolean> getGroupMembersModerators(long groupId);
+
+    Map<Group, Boolean> getAllUnjoinedGroupsAreRequested(long accountId);
 }

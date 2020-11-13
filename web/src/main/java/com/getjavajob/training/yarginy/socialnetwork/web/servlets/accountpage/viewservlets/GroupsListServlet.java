@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Map;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTED_ID;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.TAB;
@@ -27,7 +28,7 @@ public class GroupsListServlet extends HttpServlet {
         long accountId = (long) req.getAttribute(REQUESTED_ID);
 
         if ("true".equals(req.getParameter(ALL_GROUPS_LIST))) {
-            Collection<Group> unjoinedGroups = groupService.getNonJoinedGroups(accountId);
+            Map<Group, Boolean> unjoinedGroups = groupService.getAllUnjoinedGroupsAreRequested(accountId);
             req.setAttribute(GROUPS, unjoinedGroups);
             req.setAttribute(ALL_GROUPS_LIST, "true");
         } else {

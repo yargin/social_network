@@ -21,6 +21,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.DaoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.AccountDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.password.PasswordDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.password.PasswordDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.otherdao.DataSelectsDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.SelfManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.SelfManyToManyDaoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.friendship.FriendshipDml;
@@ -159,5 +160,10 @@ public abstract class CommonDbFactory implements DbFactory {
     @Override
     public ManyToManyDao<Account, Account> getFriendshipRequests() {
         return new ManyToManyDaoImpl<>(connectionPool, new AccountsFriendshipsRequestsDml());
+    }
+
+    @Override
+    public DataSelectsDao getDataSetsDao() {
+        return new DataSelectsDao(connectionPool);
     }
 }

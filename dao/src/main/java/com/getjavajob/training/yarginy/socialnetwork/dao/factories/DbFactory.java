@@ -10,6 +10,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.dependedmodeldao.OwnedM
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.ConnectionPool;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl.ScriptExecutor;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.otherdao.DataSelectsDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.SelfManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.ManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
@@ -45,4 +46,6 @@ public interface DbFactory {
     ManyToManyDao<Account, Group> getGroupRequests();
 
     ManyToManyDao<Account, Account> getFriendshipRequests();
+
+    DataSelectsDao getDataSetsDao();
 }

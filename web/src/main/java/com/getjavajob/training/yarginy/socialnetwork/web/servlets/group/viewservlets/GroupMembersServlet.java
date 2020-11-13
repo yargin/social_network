@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collection;
+import java.util.Map;
 
 public class GroupMembersServlet extends HttpServlet {
     private final GroupService groupService = new GroupServiceImpl();
@@ -20,7 +20,7 @@ public class GroupMembersServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         long requestedId = (long) req.getAttribute(Attributes.REQUESTED_ID);
-        Collection<Account> members = groupService.selectMembers(requestedId);
+        Map<Account, Boolean> members = groupService.getGroupMembersModerators(requestedId);
         req.setAttribute("members", members);
         Group group = groupService.selectGroup(requestedId);
         req.setAttribute("group", group);
