@@ -9,16 +9,18 @@
 
     <c:choose>
         <c:when test="${empty found}">
-            Nothing found
+            <fmt:message key="label.nothingFound"/>
         </c:when>
         <c:otherwise>
             <c:forEach var="foundItem" items="${found}">
                 <c:choose>
                     <c:when test="${foundItem.type.getTypeName() eq 'account'}">
-                        <a href="${context}/mywall?id=${foundItem.id}">user: ${foundItem.name}</a>
+                        <a href="${context}/mywall?id=${foundItem.id}">
+                            <fmt:message key="label.user"/>: ${foundItem.name}</a>
                     </c:when>
                     <c:otherwise>
-                        <a href="${context}/group?id=${foundItem.id}">group: ${foundItem.name}</a>
+                        <a href="${context}/group?id=${foundItem.id}">
+                            <fmt:message key="label.group"/>: ${foundItem.name}</a>
                     </c:otherwise>
                 </c:choose>
                 <br>
