@@ -11,11 +11,12 @@ import java.io.IOException;
 
 import static java.util.Objects.isNull;
 
-public class MemberModerOwnerCheckerFilter extends HttpFilter {
+public class RequesterMemberOrModerOwnerChecker extends HttpFilter {
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
-        if (!isNull(req.getAttribute("admin")) || !isNull(req.getAttribute("owner")) || !isNull(req.getAttribute("member")) ||
-                !isNull(req.getAttribute("moderator"))) {
+        if (!isNull(req.getAttribute("admin")) || !isNull(req.getAttribute("moderator")) ||
+                !isNull(req.getAttribute("owner")) ||
+                (!isNull(req.getAttribute("member")) && !isNull(req.getAttribute("requestOwner")))) {
             chain.doFilter(req, res);
         } else {
             res.sendRedirect(req.getContextPath() + Pages.MY_WALL);

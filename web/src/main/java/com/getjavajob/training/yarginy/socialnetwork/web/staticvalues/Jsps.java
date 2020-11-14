@@ -7,9 +7,6 @@ public final class Jsps {
     public static final String REGISTER = "/WEB-INF/jsps/registration.jsp";
     public static final String UPDATE_ACCOUNT = "/WEB-INF/jsps/accountUpdate.jsp";
     public static final String GROUPS_LIST = "/WEB-INF/jsps/accountPages/accountGroups.jsp";
-    public static final String GROUP_CREATION = "/WEB-INF/jsps/groupCreation.jsp";
-    public static final String GROUP_INFO = "/WEB-INF/jsps/groupInfo.jsp";
-    public static final String GROUP_UPDATE = "/WEB-INF/jsps/groupUpdate.jsp";
     public static final String FRIENDSHIP_REQUEST = "/WEB-INF/jsps/accountPages/friendshipRequest.jsp";
     public static final String FRIENDSHIP_REQUESTS_LIST = "/WEB-INF/jsps/accountPages/friendshipRequestsList.jsp";
     public static final String FRIENDS_LIST = "/WEB-INF/jsps/accountPages/friendsList.jsp";
@@ -17,6 +14,9 @@ public final class Jsps {
     public static final String PRIVATE_MESSAGE = "/WEB-INF/jsps/accountPages/privatemessage.jsp";
 
     public static final String GROUP_JSP = "/WEB-INF/jsps/grouppages/group.jsp";
+    public static final String GROUP_CREATION = "/WEB-INF/jsps/grouppages/groupCreation.jsp";
+    public static final String GROUP_INFO = "/WEB-INF/jsps/grouppages/groupInfo.jsp";
+    public static final String GROUP_UPDATE = "/WEB-INF/jsps/grouppages/groupUpdate.jsp";
 
     private Jsps() {
     }

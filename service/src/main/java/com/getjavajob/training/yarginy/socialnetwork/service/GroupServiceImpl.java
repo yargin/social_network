@@ -81,7 +81,7 @@ public class GroupServiceImpl implements GroupService {
     public boolean leaveGroup(long accountId, long groupId) {
         try (Transaction transaction = transactionManager.getTransaction()) {
             moderatorsDao.deleteGroupModerator(accountId, groupId);
-            if (!groupDao.removeMember(groupId, accountId)) {
+            if (!groupDao.removeMember(accountId, groupId)) {
                 transaction.rollback();
                 return false;
             }

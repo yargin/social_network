@@ -30,3 +30,10 @@
 <c:if test="${not empty admin or not empty owner}">
     <a href="${context}/deletegroup?id=${id}"><fmt:message key="label.deleteGroup"/></a><br>
 </c:if>
+<c:if test="${not empty member}">
+    <form action="${context}/leavegroup" method="post">
+        <input type="hidden" value="${sessionScope.userId}" name="requesterId">
+        <input type="hidden" value="${id}" name="receiverId">
+        <button type="submit"><fmt:message key="button.leaveGroup"/></button>
+    </form>
+</c:if>

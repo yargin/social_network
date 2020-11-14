@@ -37,6 +37,14 @@ public class GroupInfoAccessSetterFilter extends HttpFilter {
         }
 
         long requesterId = account.getId();
+
+        Object requesterObject = req.getAttribute(REQUESTER_ID);
+        if (!isNull(requesterObject)) {
+            if (requesterId == (long) requesterObject) {
+                req.setAttribute("requestOwner", true);
+            }
+        }
+
         if (groupService.isOwner(requesterId, requestedGroupId)) {
             req.setAttribute("owner", true);
         }

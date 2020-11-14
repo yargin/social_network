@@ -183,6 +183,16 @@
     <filter-mapping>
         <filter-name>MemberModerOwnerChecker</filter-name>
         <url-pattern>/groupmembers</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>RequesterMemberOrModerOwnerChecker</filter-name>
+        <filter-class>
+            com.getjavajob.training.yarginy.socialnetwork.web.filters.groupinfoaccess.RequesterMemberOrModerOwnerChecker
+        </filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>RequesterMemberOrModerOwnerChecker</filter-name>
         <url-pattern>/leavegroup</url-pattern>
     </filter-mapping>
 
