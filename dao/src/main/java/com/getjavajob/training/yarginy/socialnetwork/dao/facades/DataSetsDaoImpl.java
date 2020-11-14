@@ -2,6 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchableDto;
 import com.getjavajob.training.yarginy.socialnetwork.dao.otherdao.DataSelectsDao;
 
 import java.util.Map;
@@ -19,5 +20,10 @@ public class DataSetsDaoImpl implements DataSetsDao {
     @Override
     public Map<Group, Boolean> getAllUnjoinedGroupsAreRequested(long accountId) {
         return dataSelectsDao.getAllUnjoinedGroupsAreRequested(accountId);
+    }
+
+    @Override
+    public SearchableDto searchAccountsGroups(String searchString, int pageNumber) {
+        return dataSelectsDao.searchAccountsGroups(searchString, pageNumber);
     }
 }

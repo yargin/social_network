@@ -491,4 +491,15 @@
         <servlet-name>removeModerator</servlet-name>
         <url-pattern>/removemoderator</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>searchServlet</servlet-name>
+        <servlet-class>
+            com.getjavajob.training.yarginy.socialnetwork.web.servlets.SearchServlet
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>searchServlet</servlet-name>
+        <url-pattern>/search</url-pattern>
+    </servlet-mapping>
 </web-app>

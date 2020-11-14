@@ -19,12 +19,17 @@
     <div class="header">
         <img src="${context}/img/java.png" id="logo">
         <h1><fmt:message key="header"/></h1>
-        <p class="welcome">
-            <c:if test="${not empty sessionScope.user}">
+        <c:if test="${not empty sessionScope.user}">
+            <div>
                 <fmt:message key="layout.welcome"/>
                 <a href="${context}/mywall">${sessionScope.user.getName()}</a>
-            </c:if>
-        </p>
+                <form action="${context}/search">
+                    <input type="text" name="searchString" placeholder="<fmt:message key="button.searchHolder"/>">
+                    <input type="hidden" name="page" value="1">
+                    <button type="submit"><fmt:message key="button.search"/></button>
+                </form>
+            </div>
+        </c:if>
     </div>
 </div>
 <div class="wrapper">

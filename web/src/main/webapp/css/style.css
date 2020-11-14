@@ -38,6 +38,7 @@ html, body, ul, li {
 
 .header {
     min-height: 100px;
+    max-height: 200px;
     background: #94d2d4;
     text-align: left;
     vertical-align: middle;
@@ -47,16 +48,18 @@ html, body, ul, li {
     overflow: hidden;
     font-family: 'Quattrocento-Sans-Bold', serif;
     font-weight: normal;
-    position: relative;
     display: inline;
-    top: 35px;
-    left: 20px;
+    margin-left: 10px;
+    float: left;
+    /*border: 1px solid black;*/
 }
 
-.header p {
+.header div {
+    padding-top: 10px;
+    height: 100px;
     float: right;
     overflow: hidden;
-    display: inline;
+    display: inline-block;
 }
 
 .menu {

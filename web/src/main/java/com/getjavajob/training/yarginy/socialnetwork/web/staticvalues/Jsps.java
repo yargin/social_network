@@ -6,6 +6,8 @@ public final class Jsps {
     public static final String MY_WALL = "/WEB-INF/jsps/accountPages/accountWall.jsp";
     public static final String REGISTER = "/WEB-INF/jsps/registration.jsp";
     public static final String UPDATE_ACCOUNT = "/WEB-INF/jsps/accountUpdate.jsp";
+    public static final String GLOBAL_SEARCH = "/WEB-INF/jsps/globalSearch.jsp";
+
     public static final String GROUPS_LIST = "/WEB-INF/jsps/accountPages/accountGroups.jsp";
     public static final String FRIENDSHIP_REQUEST = "/WEB-INF/jsps/accountPages/friendshipRequest.jsp";
     public static final String FRIENDSHIP_REQUESTS_LIST = "/WEB-INF/jsps/accountPages/friendshipRequestsList.jsp";
