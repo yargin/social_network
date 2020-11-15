@@ -5,6 +5,8 @@
 <fmt:setBundle basename="label"/>
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 
+
+<%--todo refactor same as group--%>
 <common:layout>
     <common:accountInfo/>
     <common:accountMenu/>

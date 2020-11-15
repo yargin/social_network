@@ -152,7 +152,6 @@ public class AccountServiceTest {
         Phone secondPhone = new PhoneImpl();
         secondPhone.setNumber("33111");
         Collection<Phone> phones = asList(firstPhone, secondPhone);
-        account = accountDao.select(account);
         when(phoneDao.selectPhonesByOwner(account.getId())).thenReturn(phones);
         Collection<Phone> actualPhones = accountService.getPhones(account.getId());
         System.out.println(actualPhones);

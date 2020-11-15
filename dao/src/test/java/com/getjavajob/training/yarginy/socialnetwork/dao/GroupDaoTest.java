@@ -129,9 +129,8 @@ public class GroupDaoTest {
     public void testOwner() {
         GROUP_DAO.create(GROUP);
         Group group = GROUP_DAO.select(GROUP);
-        Account account = ACCOUNT_DAO.select(3);
         GroupDao groupDao = new GroupDaoImpl();
-        assertTrue(groupDao.isOwner(group.getId(), account.getId()));
+        assertTrue(groupDao.isOwner(3, group.getId()));
         GROUP_DAO.delete(GROUP);
     }
 }

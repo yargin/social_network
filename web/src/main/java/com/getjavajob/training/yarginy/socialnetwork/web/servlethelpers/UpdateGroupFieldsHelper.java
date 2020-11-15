@@ -3,7 +3,6 @@ package com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
-import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -14,8 +13,7 @@ import java.util.Base64;
 import java.util.function.Supplier;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.GROUP;
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.NAME_DUPLICATE;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 import static java.util.Objects.isNull;
 
 public class UpdateGroupFieldsHelper extends UpdateFieldsHelper {
@@ -24,11 +22,11 @@ public class UpdateGroupFieldsHelper extends UpdateFieldsHelper {
     }
 
     public Group getOrCreateGroup(Supplier<Group> groupCreator) {
-        Group group = (Group) req.getAttribute(Attributes.GROUP);
+        Group group = (Group) req.getAttribute(GROUP);
         if (isNull(group)) {
             group = groupCreator.get();
             //set group for view if it wasn't in post
-            req.setAttribute(Attributes.GROUP, group);
+            req.setAttribute(GROUP, group);
         }
         return group;
     }
@@ -36,7 +34,7 @@ public class UpdateGroupFieldsHelper extends UpdateFieldsHelper {
     public void getValuesFromParams(Group group) throws IOException, ServletException {
         setStringFromParam(group::setName, "name");
         setStringFromParam(group::setDescription, "description");
-        setPhotoFromParam(group::setPhoto, "photo");
+        setPhotoFromParam(group::setPhoto, PHOTO);
     }
 
     public void initGroupAttributes(Group group) {
@@ -46,7 +44,7 @@ public class UpdateGroupFieldsHelper extends UpdateFieldsHelper {
         byte[] photoBytes = group.getPhoto();
         if (!isNull(photoBytes)) {
             String photo = Base64.getEncoder().encodeToString(photoBytes);
-            req.setAttribute("photo", photo);
+            req.setAttribute(PHOTO, photo);
         }
     }
 
@@ -54,6 +52,7 @@ public class UpdateGroupFieldsHelper extends UpdateFieldsHelper {
         if (updated) {
             HttpSession session = req.getSession();
             session.removeAttribute(GROUP);
+            session.removeAttribute(PHOTO);
             redirect(req, resp, updateSuccessUrl);
         } else {
             doGet.accept(req, resp);

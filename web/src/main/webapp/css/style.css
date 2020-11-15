@@ -134,6 +134,7 @@ html, body, ul, li {
 }
 
 .post a {
+    display: inline;
     margin-right: 10px;
     margin-left: 10px;
 }
@@ -152,6 +153,7 @@ html, body, ul, li {
 }
 
 .post p, label {
+    overflow: hidden;
     font-family: 'Tahoma', serif;
     font-weight: normal;
     font-size: 12px;
@@ -177,4 +179,31 @@ button {
 
 button:hover {
     background-color: #b75208;
+}
+
+.message {
+    margin-top: 10px;
+    border: 1px solid #94d2d4;
+}
+
+.message div {
+    padding-left: 10px;
+    padding-right: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #94d2d4;
+    text-align: left;
+    overflow: hidden;
+    word-wrap: break-word;
+    /*word-break: break-all;*/
+}
+
+.message img {
+    max-height: 90px;
+    max-width: 90px;
+    float: right;
+    margin-left: 10px;
+    margin-right: 10px;
 }

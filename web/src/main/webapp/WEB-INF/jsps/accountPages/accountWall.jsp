@@ -9,4 +9,26 @@
 <common:layout>
     <common:accountInfo/>
     <common:accountMenu/>
+
+    <div class="message">
+        <div>
+            <p> date: 01-01-2001</p>
+            <p> author: <a href="#">User</a></p>
+                <%--    </div>--%>
+                <%--    <div class="post">--%>
+        </div>
+        <div>
+            <p>
+                <img src="${context}/img/emptyAvatar.jpg">
+                asdasdddddddasdasdasdasdasd
+                asdasdasdasdasdasdasdasd
+                asdasdasdasdasdasd
+                asdasdasdasdasd
+                asdasdasddddddddddddddddddddd
+                aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+            </p>
+        </div>
+    </div>
 </common:layout>

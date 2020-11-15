@@ -26,7 +26,8 @@ CREATE TABLE IF NOT EXISTS _Groups (
         name VARCHAR(50) NOT NULL UNIQUE,
         description VARCHAR(500),
         owner_id BIGINT UNSIGNED,
-        creation_date DATE
+        creation_date DATE,
+        photo MEDIUMBLOB
 );
 
 ALTER TABLE _Groups

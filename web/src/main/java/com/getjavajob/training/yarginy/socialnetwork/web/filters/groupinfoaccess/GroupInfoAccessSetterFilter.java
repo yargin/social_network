@@ -45,6 +45,7 @@ public class GroupInfoAccessSetterFilter extends HttpFilter {
             }
         }
 
+        //todo check if owner skip other checks
         if (groupService.isOwner(requesterId, requestedGroupId)) {
             req.setAttribute("owner", true);
         }

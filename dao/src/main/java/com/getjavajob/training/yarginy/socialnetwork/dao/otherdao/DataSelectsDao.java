@@ -97,12 +97,12 @@ public class DataSelectsDao {
         Collection<Searchable> entities = new ArrayList<>();
         SearchableDto searchableDto = new SearchableDto(entities);
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement statement = prepareSearchAccountsGroups(connection, '%' + searchString + '%', pageNumber);
-             ResultSet resultSet = statement.executeQuery()) {
+             PreparedStatement resultStatement = prepareSearchAccountsGroups(connection, '%' + searchString + '%',
+                     pageNumber);
+             PreparedStatement rowsNumberStatement = prepareRowsCount(connection, '%' + searchString + '%');
+             ResultSet resultSet = resultStatement.executeQuery();
+             ResultSet resultSetRowsNumber = rowsNumberStatement.executeQuery();) {
             while (resultSet.next()) {
-                if (searchableDto.getPages() == 0) {
-                    searchableDto.setPages(resultSet.getInt("rows_number"), LIMIT);
-                }
                 Searchable searchable = new SearchableImpl();
                 searchable.setId(resultSet.getLong("id"));
                 searchable.setName(resultSet.getString("name"));
@@ -113,6 +113,7 @@ public class DataSelectsDao {
                 }
                 entities.add(searchable);
             }
+            searchableDto.setPages(resultSetRowsNumber.getInt("rows_number"), LIMIT);
         } catch (SQLException e) {
             throw new IllegalStateException(e);
         }
@@ -121,13 +122,30 @@ public class DataSelectsDao {
 
     private PreparedStatement prepareSearchAccountsGroups(Connection connection, String searchString, int pageNumber)
             throws SQLException {
-        String query = "SELECT id, type, name, count(*) OVER() AS rows_number FROM " +
-                "(SELECT id, 'user' type, CONCAT(name, ' ', surname) name FROM accounts " +
+        String query = "SELECT id, type, name " +
+                " , count(*) OVER() " +
+                " AS rows_number FROM " +
+                " (SELECT id, 'user' type, CONCAT(name, ' ', surname) name FROM accounts " +
                 " WHERE UPPER(name) LIKE UPPER(?) or UPPER(surname) LIKE UPPER(?)" +
                 " UNION " +
                 " SELECT id, 'group' type, name name FROM _groups " +
                 " WHERE UPPER(name) LIKE UPPER(?) ) s " +
                 " LIMIT " + LIMIT + " OFFSET " + (pageNumber - 1) * LIMIT + ';';
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, searchString);
+        statement.setString(2, searchString);
+        statement.setString(3, searchString);
+        return statement;
+    }
+
+    private PreparedStatement prepareRowsCount(Connection connection, String searchString)
+            throws SQLException {
+        String query = "SELECT count(*) rows_number FROM " +
+                " (SELECT id, 'user' type, CONCAT(name, ' ', surname) name FROM accounts " +
+                " WHERE UPPER(name) LIKE UPPER(?) or UPPER(surname) LIKE UPPER(?)" +
+                " UNION " +
+                " SELECT id, 'group' type, name name FROM _groups " +
+                " WHERE UPPER(name) LIKE UPPER(?) ) s ;";
         PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, searchString);
         statement.setString(2, searchString);

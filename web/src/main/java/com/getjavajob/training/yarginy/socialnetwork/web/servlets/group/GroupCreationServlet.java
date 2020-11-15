@@ -7,7 +7,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupIm
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.UpdateGroupFieldsHelper;
-import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 
@@ -17,14 +16,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
+import static java.util.Objects.isNull;
 
 public class GroupCreationServlet extends HttpServlet {
     private final GroupService groupService = new GroupServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        UpdateGroupFieldsHelper updater = new UpdateGroupFieldsHelper(req, resp, Attributes.GROUP_ID, Pages.GROUP);
+        UpdateGroupFieldsHelper updater = new UpdateGroupFieldsHelper(req, resp, GROUP_ID, Pages.GROUP);
         Group group = updater.getOrCreateGroup(GroupImpl::new);
         updater.initGroupAttributes(group);
         req.getRequestDispatcher(Jsps.GROUP_CREATION).forward(req, resp);
@@ -32,17 +32,22 @@ public class GroupCreationServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        UpdateGroupFieldsHelper updater = new UpdateGroupFieldsHelper(req, resp, Attributes.GROUP_ID, Pages.GROUP);
+        UpdateGroupFieldsHelper updater = new UpdateGroupFieldsHelper(req, resp, GROUP_ID, Pages.GROUP);
         Group group = new GroupImpl();
         updater.getValuesFromParams(group);
+        if (!isNull(group.getPhoto())) {
+            req.getSession().setAttribute(PHOTO, group.getPhoto());
+        } else if (!isNull(req.getSession().getAttribute(PHOTO))) {
+            group.setPhoto((byte[]) req.getSession().getAttribute(PHOTO));
+        }
 
         boolean accepted = updater.isParamsAccepted();
-        req.setAttribute(Attributes.GROUP, group);
+        req.setAttribute(GROUP, group);
         if (accepted) {
             group.setOwner((Account) req.getSession().getAttribute(USER));
             createGroup(updater, group);
         } else {
-            req.setAttribute(Attributes.GROUP, group);
+            req.setAttribute(GROUP, group);
             doGet(req, resp);
         }
     }
@@ -56,7 +61,7 @@ public class GroupCreationServlet extends HttpServlet {
             return;
         }
         Group createdGroup = groupService.selectGroup(group);
-        updater.setSuccessUrl(Pages.GROUP, Attributes.GROUP_ID, "" + createdGroup.getId());
+        updater.setSuccessUrl(Pages.GROUP, GROUP_ID, "" + createdGroup.getId());
         updater.acceptActionOrRetry(created, this::doGet);
     }
 }
