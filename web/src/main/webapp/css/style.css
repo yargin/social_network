@@ -181,12 +181,14 @@ button:hover {
     background-color: #b75208;
 }
 
-.message {
+.wallMessage {
     margin-top: 10px;
-    border: 1px solid #94d2d4;
+    border-top: 1px solid #94d2d4;
+    border-left: 1px solid #94d2d4;
+    border-right: 1px solid #94d2d4;
 }
 
-.message div {
+.wallMessage div {
     padding-left: 10px;
     padding-right: 10px;
     display: flex;
@@ -200,7 +202,7 @@ button:hover {
     /*word-break: break-all;*/
 }
 
-.message img {
+.wallMessage img {
     max-height: 90px;
     max-width: 90px;
     float: right;

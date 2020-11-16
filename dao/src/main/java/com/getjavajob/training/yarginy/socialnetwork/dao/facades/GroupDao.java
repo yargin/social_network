@@ -10,6 +10,8 @@ public interface GroupDao {
 
     Group select(Group group);
 
+    Group getNullEntity();
+
     boolean create(Group group);
 
     boolean update(Group group, Group storedGroup);

@@ -30,6 +30,11 @@ public class AccountDaoImpl implements AccountDao {
     }
 
     @Override
+    public Account getNullEntity() {
+        return accountDao.getNullEntity();
+    }
+
+    @Override
     public boolean create(Account account) {
         return accountDao.create(account);
     }

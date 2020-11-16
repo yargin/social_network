@@ -130,6 +130,17 @@ ADD CONSTRAINT C_28 FOREIGN KEY (requester) REFERENCES Accounts (id) ON DELETE C
 ALTER TABLE Friendships_requests
 ADD CONSTRAINT C_29 FOREIGN KEY (receiver) REFERENCES Accounts (id) ON DELETE CASCADE;
 
+CREATE TABLE IF NOT EXISTS Wall_messages (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    author BIGINT UNSIGNED,
+    datetime DATETIME,
+    message VARCHAR(500),
+    photo MEDIUMBLOB
+);
+
+ALTER TABLE Wall_messages
+ADD CONSTRAINT C_30 FOREIGN KEY (author) REFERENCES Accounts (id) ON DELETE SET NULL;
+
 INSERT INTO Accounts (id, name, surname, email) VALUES
 (1, 'Vladimir', 'Lenin', 'rise@communism.su'),
 (2, 'dracula', 'NOSFERATU', 'drink@blood.com'),

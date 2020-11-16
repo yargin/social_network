@@ -29,6 +29,11 @@ public class GroupDaoImpl implements GroupDao {
     }
 
     @Override
+    public Group getNullEntity() {
+        return groupDao.getNullEntity();
+    }
+
+    @Override
     public boolean create(Group group) {
         return groupDao.create(group);
     }

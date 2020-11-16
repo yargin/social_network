@@ -11,6 +11,8 @@ public interface AccountDao {
 
     Account select(Account account);
 
+    Account getNullEntity();
+
     boolean create(Account account);
 
     boolean update(Account account, Account storedAccount);
