@@ -1,8 +1,5 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.factories;
 
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.databases.H2DbFactory;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.databases.HerokuClearDBFactory;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.databases.HerokuJawsDBFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.databases.MySqlDbFactory;
 
 import static java.util.Objects.isNull;

@@ -27,6 +27,7 @@ public final class Attributes {
     public static final String PHOTO = "photo";
     public static final String MESSAGE = "message";
     public static final String TAB = "tab";
+    public static final String REDACTOR = "redactor";
 
     private Attributes() {
     }

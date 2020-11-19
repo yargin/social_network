@@ -9,7 +9,7 @@ import java.util.Collection;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
 
 public class GroupsModeratorsDaoImpl implements GroupsModeratorsDao {
-    private final ManyToManyDao<Account, Group> groupModerators = getDbFactory().getGroupModerators();
+    private final ManyToManyDao<Account, Group> groupModerators = getDbFactory().getGroupModeratorsDao();
 
     @Override
     public boolean isModerator(long accountId, long groupId) {

@@ -3,6 +3,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.factories;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.AccountPhoto;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
@@ -41,11 +42,15 @@ public interface DbFactory {
 
     OwnedModelDao<Account, AccountPhoto> getAccountPhotoDao(Dao<Account> accountDao);
 
-    ManyToManyDao<Account, Group> getGroupModerators();
+    ManyToManyDao<Account, Group> getGroupModeratorsDao();
 
-    ManyToManyDao<Account, Group> getGroupRequests();
+    ManyToManyDao<Account, Group> getGroupRequestsDao();
 
-    ManyToManyDao<Account, Account> getFriendshipRequests();
+    ManyToManyDao<Account, Account> getFriendshipRequestsDao();
 
     DataSelectsDao getDataSetsDao();
+
+    Dao<Message> getAccountWallMessageDao();
+
+    OneToManyDao<Account, Message> getAccountWallMessagesDao();
 }

@@ -18,15 +18,16 @@ a:hover {
     color: #b75208;
 }
 
+textarea {
+    border-color: #2c5e99;
+}
+
 html, body, ul, li {
     margin: 0;
 }
 
 #logo {
-    float: left;
-    margin-left: 10px;
-    margin-top: 10px;
-    margin-right: 1%;
+    margin: 5px 1% 5px 10px;
     width: 45px;
 }
 
@@ -37,11 +38,12 @@ html, body, ul, li {
 }
 
 .header {
-    min-height: 100px;
-    max-height: 200px;
+    min-height: 90px;
     background: #94d2d4;
-    text-align: left;
-    vertical-align: middle;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
 }
 
 .header h1 {
@@ -51,12 +53,13 @@ html, body, ul, li {
     display: inline;
     margin-left: 10px;
     float: left;
+    word-wrap: break-word;
     /*border: 1px solid black;*/
 }
 
 .header div {
     padding-top: 10px;
-    height: 100px;
+    /*height: 100px;*/
     float: right;
     overflow: hidden;
     display: inline-block;
@@ -101,7 +104,6 @@ html, body, ul, li {
     max-width: 200px;
     margin-left: 20px;
     overflow: hidden;
-    margin-left: 20px;
 }
 
 .footer {
@@ -202,10 +204,16 @@ button:hover {
     /*word-break: break-all;*/
 }
 
+.wallMessage form {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    display: flex;
+    flex-direction: row;
+}
+
 .wallMessage img {
     max-height: 90px;
     max-width: 90px;
     float: right;
-    margin-left: 10px;
-    margin-right: 10px;
+    margin: 5px 10px;
 }

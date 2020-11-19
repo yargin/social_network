@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AbstractDml;
 
 import java.sql.PreparedStatement;
@@ -8,7 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 
-public class MessageDml extends AbstractDml<Account> {
+public class PrivateMessageDml extends AbstractDml<Message> {
+
     @Override
     protected String getSelectById() {
         return null;
@@ -35,32 +36,32 @@ public class MessageDml extends AbstractDml<Account> {
     }
 
     @Override
-    protected void setAltKeyParams(PreparedStatement statement, Account entity) throws SQLException {
+    protected void setAltKeyParams(PreparedStatement statement, Message entity) throws SQLException {
 
     }
 
     @Override
-    public Account selectViewFromRow(ResultSet resultSet) throws SQLException {
+    public Message selectFromRow(ResultSet resultSet) throws SQLException {
         return null;
     }
 
     @Override
-    public Account selectFromRow(ResultSet resultSet) throws SQLException {
+    public Message selectViewFromRow(ResultSet resultSet) throws SQLException {
         return null;
     }
 
     @Override
-    public Collection<Account> selectEntities(ResultSet resultSet) throws SQLException {
+    public Collection<Message> selectEntities(ResultSet resultSet) throws SQLException {
         return null;
     }
 
     @Override
-    public void updateRow(ResultSet resultSet, Account entity, Account storedEntity) throws SQLException {
+    public void updateRow(ResultSet resultSet, Message entity, Message storedEntity) throws SQLException {
 
     }
 
     @Override
-    public Account getNullEntity() {
+    public Message getNullEntity() {
         return null;
     }
 }

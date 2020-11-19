@@ -10,7 +10,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.Abstra
 
 public class FriendshipsDaoImpl implements FriendshipsDao {
     private final SelfManyToManyDao<Account> friendshipDao = getDbFactory().getFriendshipDao();
-    private final ManyToManyDao<Account, Account> friendshipRequestsDao = getDbFactory().getFriendshipRequests();
+    private final ManyToManyDao<Account, Account> friendshipRequestsDao = getDbFactory().getFriendshipRequestsDao();
 
     @Override
     public Collection<Account> selectFriends(long id) {

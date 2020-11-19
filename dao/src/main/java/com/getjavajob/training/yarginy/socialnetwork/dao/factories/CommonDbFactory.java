@@ -3,6 +3,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.factories;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.AccountPhoto;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
@@ -19,22 +20,24 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl.ScriptExe
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.DaoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.AccountDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.AccountWallMessageDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.password.PasswordDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.password.PasswordDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.otherdao.DataSelectsDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.SelfManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.SelfManyToManyDaoImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.friendship.FriendshipDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.dmls.FriendshipDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.ManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.ManyToManyDaoImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.accountsfriendshipsrequests.AccountsFriendshipsRequestsDml;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.groupmembers.GroupsMembersDml;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.groupmoderators.GroupModeratorsDml;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.groupsmembershiprequests.GroupsMembershipsRequestsDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.dmls.AccountsFriendshipsRequestsDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.dmls.GroupsMembersDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.dmls.GroupsMembershipsRequestsDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.dmls.GroupsModeratorsDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDaoImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.accountgroups.AccountsGroupsDml;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.accountsphones.AccountsPhonesDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.dmls.AccountGroupsDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.dmls.AccountPhonesDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.dmls.AccountWallMessagesDml;
 
 import java.util.Properties;
 
@@ -124,7 +127,7 @@ public abstract class CommonDbFactory implements DbFactory {
 
     @Override
     public OneToManyDao<Account, Phone> getAccountsPhones(Dao<Account> accountDao) {
-        return new OneToManyDaoImpl<>(connectionPool, new AccountsPhonesDml());
+        return new OneToManyDaoImpl<>(connectionPool, new AccountPhonesDml());
     }
 
     @Override
@@ -139,7 +142,7 @@ public abstract class CommonDbFactory implements DbFactory {
 
     @Override
     public OneToManyDao<Account, Group> getAccountsOwnedGroupsDao(Dao<Account> accountDao) {
-        return new OneToManyDaoImpl<>(connectionPool, new AccountsGroupsDml());
+        return new OneToManyDaoImpl<>(connectionPool, new AccountGroupsDml());
     }
 
     @Override
@@ -148,22 +151,32 @@ public abstract class CommonDbFactory implements DbFactory {
     }
 
     @Override
-    public ManyToManyDao<Account, Group> getGroupModerators() {
-        return new ManyToManyDaoImpl<>(connectionPool, new GroupModeratorsDml());
+    public ManyToManyDao<Account, Group> getGroupModeratorsDao() {
+        return new ManyToManyDaoImpl<>(connectionPool, new GroupsModeratorsDml());
     }
 
     @Override
-    public ManyToManyDao<Account, Group> getGroupRequests() {
+    public ManyToManyDao<Account, Group> getGroupRequestsDao() {
         return new ManyToManyDaoImpl<>(connectionPool, new GroupsMembershipsRequestsDml());
     }
 
     @Override
-    public ManyToManyDao<Account, Account> getFriendshipRequests() {
+    public ManyToManyDao<Account, Account> getFriendshipRequestsDao() {
         return new ManyToManyDaoImpl<>(connectionPool, new AccountsFriendshipsRequestsDml());
     }
 
     @Override
     public DataSelectsDao getDataSetsDao() {
         return new DataSelectsDao(connectionPool);
+    }
+
+    @Override
+    public Dao<Message> getAccountWallMessageDao() {
+        return new DaoImpl<>(connectionPool, new AccountWallMessageDml());
+    }
+
+    @Override
+    public OneToManyDao<Account, Message> getAccountWallMessagesDao() {
+        return new OneToManyDaoImpl<>(connectionPool, new AccountWallMessagesDml());
     }
 }

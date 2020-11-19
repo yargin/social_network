@@ -130,16 +130,33 @@ ADD CONSTRAINT C_28 FOREIGN KEY (requester) REFERENCES Accounts (id) ON DELETE C
 ALTER TABLE Friendships_requests
 ADD CONSTRAINT C_29 FOREIGN KEY (receiver) REFERENCES Accounts (id) ON DELETE CASCADE;
 
-CREATE TABLE IF NOT EXISTS Wall_messages (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    author BIGINT UNSIGNED,
-    datetime DATETIME,
-    message VARCHAR(500),
-    photo MEDIUMBLOB
+CREATE TABLE `account_wall_messages` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `author` bigint unsigned NOT NULL,
+  `message` varchar(500),
+  `image` mediumblob,
+  `account_wall_id` bigint unsigned NOT NULL,
+  `posted` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `C_32` (`account_wall_id`),
+  KEY `C_31` (`author`),
+  CONSTRAINT `C_31` FOREIGN KEY (`author`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `C_32` FOREIGN KEY (`account_wall_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-ALTER TABLE Wall_messages
-ADD CONSTRAINT C_30 FOREIGN KEY (author) REFERENCES Accounts (id) ON DELETE SET NULL;
+CREATE TABLE `account_private_messages` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `author` bigint unsigned NOT NULL,
+  `message` varchar(500),
+  `image` mediumblob,
+  `account_receiver_id` bigint unsigned NOT NULL,
+  `posted` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `C_34` (`account_receiver_id`),
+  KEY `C_33` (`author`),
+  CONSTRAINT `C_33` FOREIGN KEY (`author`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `C_34` FOREIGN KEY (`account_receiver_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+);
 
 INSERT INTO Accounts (id, name, surname, email) VALUES
 (1, 'Vladimir', 'Lenin', 'rise@communism.su'),

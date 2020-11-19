@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.web.servlets.additionaldata;
+package com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.additionaldata;
 
 /**
  * used for exchanging phones between servlets & jsps

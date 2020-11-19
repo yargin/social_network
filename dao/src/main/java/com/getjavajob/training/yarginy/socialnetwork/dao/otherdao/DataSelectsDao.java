@@ -113,6 +113,7 @@ public class DataSelectsDao {
                 }
                 entities.add(searchable);
             }
+            resultSetRowsNumber.next();
             searchableDto.setPages(resultSetRowsNumber.getInt("rows_number"), LIMIT);
         } catch (SQLException e) {
             throw new IllegalStateException(e);
@@ -123,8 +124,7 @@ public class DataSelectsDao {
     private PreparedStatement prepareSearchAccountsGroups(Connection connection, String searchString, int pageNumber)
             throws SQLException {
         String query = "SELECT id, type, name " +
-                " , count(*) OVER() " +
-                " AS rows_number FROM " +
+                " FROM " +
                 " (SELECT id, 'user' type, CONCAT(name, ' ', surname) name FROM accounts " +
                 " WHERE UPPER(name) LIKE UPPER(?) or UPPER(surname) LIKE UPPER(?)" +
                 " UNION " +

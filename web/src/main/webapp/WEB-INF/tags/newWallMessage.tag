@@ -5,17 +5,19 @@
 
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 
-<div class="wallMessage">
-    <form action="${context}/postMessage" enctype="multipart/form-data">
-        <%--        <input type="hidden" value="${user.getId()}" name="requesterId">--%>
-        <input type="hidden" value="${sessionScope.userId}" name="receiverId">
-        <textarea name="message" placeholder="asd">asdasd</textarea>
-        <input type="file" name="photo" accept="image/*"
-        <%--        <c:if test="${not empty photo}">--%>
-        <%--               value="${photo}"--%>
-        <%--        </c:if>--%>
-               title="<fmt:message key="form.uploadImage" bundle="${label}"/>">
+<div class="wallMessage" style="margin-left: 10%; margin-right: 10%;">
+    <form action="${context}/accountmessage" method="post" enctype="multipart/form-data"
+          style="">
+        <input type="hidden" value="${sessionScope.userId}" name="requesterId">
+        <input type="hidden" value="${id}" name="receiverId">
+        <input type="hidden" value="accountWall" name="type">
+        <textarea name="text" placeholder="asd"></textarea>
         <br>
-        <button><fmt:message key="button.create" bundle="${label}"/></button>
+        <input type="file" name="image" accept="image/*"
+               title="<fmt:message key="form.uploadImage"/>">
+        <br>
+        <button type="submit"><fmt:message key="button.send"/></button>
     </form>
+    <div>
+    </div>
 </div>

@@ -6,6 +6,8 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.
 import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.AccountPhotoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.message.MessageImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.PasswordImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
@@ -50,5 +52,11 @@ public abstract class NullEntitiesFactory {
         AccountPhoto accountPhoto = new AccountPhotoImpl();
         accountPhoto.setOwner(getNullAccount());
         return accountPhoto;
+    }
+
+    public static Message getNullMessage() {
+        Message message = new MessageImpl();
+        message.setAuthor(getNullAccount());
+        return message;
     }
 }

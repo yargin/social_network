@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.accountsphones;
+package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.dmls;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
@@ -10,7 +10,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.tables.PhonesTable;
 
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 
-public class AccountsPhonesDml extends OneToManyDml<Account, Phone> {
+public class AccountPhonesDml extends OneToManyDml<Account, Phone> {
     private static final String SELECT_BY_ACCOUNT = buildQuery().selectJoin(PhonesTable.TABLE, AccountsTable.TABLE,
             AccountsTable.ID, PhonesTable.OWNER).where(PhonesTable.OWNER).build();
 

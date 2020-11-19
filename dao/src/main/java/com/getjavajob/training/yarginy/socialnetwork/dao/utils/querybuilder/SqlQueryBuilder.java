@@ -129,7 +129,7 @@ public class SqlQueryBuilder {
                 query.append(") OR (").append(column[i]).append(" IN (").append(params[i]);
             }
         }
-        query.append(");");
+        query.append(')');
         return this;
     }
 
@@ -145,7 +145,7 @@ public class SqlQueryBuilder {
     }
 
     /**
-     * appends 'INSERT INTO <b>table</b> VALUES(?, ?, ... ,?);' to query
+     * appends 'INSERT INTO <b>table</b> VALUES(?, ?, ... ,?)' to query
      *
      * @param table         table to insert
      * @param columnsNumber number of columns
@@ -156,7 +156,7 @@ public class SqlQueryBuilder {
         for (int i = 1; i <= columnsNumber; i++) {
             query.append("?, ");
         }
-        query.append(");");
+        query.append(')');
         return this;
     }
 
@@ -169,5 +169,25 @@ public class SqlQueryBuilder {
         String result = query.toString();
         query = null;
         return result;
+    }
+
+    /**
+     * appends 'ORDER BY <b>column</b>' to query
+     *
+     * @return {@link String} resulting query
+     */
+    public SqlQueryBuilder orderBy(String column) {
+        query.append(" ORDER BY ").append(column);
+        return this;
+    }
+
+    /**
+     * appends 'ORDER BY <b>column</b> DESC' to query
+     *
+     * @return {@link String} resulting query
+     */
+    public SqlQueryBuilder orderByDesc(String column) {
+        query.append(" ORDER BY ").append(column).append(" DESC ");
+        return this;
     }
 }

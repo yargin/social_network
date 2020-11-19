@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.groupmoderators;
+package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.dmls;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
@@ -16,7 +16,7 @@ import java.sql.SQLException;
 
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 
-public class GroupModeratorsDml extends ManyToManyDml<Account, Group> {
+public class GroupsModeratorsDml extends ManyToManyDml<Account, Group> {
     private static final String SELECT_MODERATORS = buildQuery().selectJoin(AccountsTable.TABLE,
             GroupsModeratorsTable.TABLE, AccountsTable.ID, GroupsModeratorsTable.ACCOUNT_ID).
             where(GroupsModeratorsTable.GROUP_ID).build();

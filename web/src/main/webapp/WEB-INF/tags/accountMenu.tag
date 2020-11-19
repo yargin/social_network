@@ -15,7 +15,7 @@
                 </strong>
             </c:when>
             <c:otherwise>
-                <a href="${context}/mywall">
+                <a href="${context}/mywall?id=${id}">
                     <button type="button" name="wall"><fmt:message key="button.wall"/></button>
                 </a>
             </c:otherwise>

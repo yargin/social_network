@@ -19,8 +19,8 @@
     <div class="header">
         <img src="${context}/img/java.png" id="logo">
         <h1><fmt:message key="header"/></h1>
-        <c:if test="${not empty sessionScope.user}">
-            <div>
+        <div style="min-width: 300px;">
+            <c:if test="${not empty sessionScope.user}">
                 <fmt:message key="layout.welcome"/>
                 <a href="${context}/mywall">${sessionScope.user.getName()}</a>
                 <form action="${context}/search">
@@ -28,8 +28,8 @@
                     <input type="hidden" name="page" value="1">
                     <button type="submit"><fmt:message key="button.search"/></button>
                 </form>
-            </div>
-        </c:if>
+            </c:if>
+        </div>
     </div>
 </div>
 <div class="wrapper">

@@ -10,7 +10,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.Abstra
 
 public class GroupsMembersDaoImpl implements GroupsMembersDao {
     private final ManyToManyDao<Account, Group> groupMembershipDao = getDbFactory().getGroupMembershipDao();
-    private final ManyToManyDao<Account, Group> membershipRequestsDao = getDbFactory().getGroupRequests();
+    private final ManyToManyDao<Account, Group> membershipRequestsDao = getDbFactory().getGroupRequestsDao();
 
     @Override
     public Collection<Group> selectAccountGroups(long accountId) {

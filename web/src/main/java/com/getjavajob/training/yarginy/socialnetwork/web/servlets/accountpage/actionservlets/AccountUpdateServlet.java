@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.web.servlets;
+package com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.actionservlets;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountInfoService;
