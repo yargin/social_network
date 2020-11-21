@@ -4,7 +4,6 @@
 <fmt:setBundle basename="label"/>
 
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
-<c:set var="id" value="${user.getId()}"/>
 
 <div>
     <c:if test="${not empty friend or not empty admin or not empty owner}">

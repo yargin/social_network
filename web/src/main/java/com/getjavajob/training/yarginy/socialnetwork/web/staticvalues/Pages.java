@@ -14,6 +14,7 @@ public final class Pages extends HttpServlet {
     public static final String FRIENDSHIP_REQUESTS = "/friendsrequests";
     public static final String FRIENDS = "/friends";
     public static final String DIALOGS = "/dialogs";
+    public static final String DIALOG = "/dialog";
     public static final String GROUP_REQUESTS = "/grouprequests";
     public static final String GROUP_MEMBERS = "/groupmembers";
 

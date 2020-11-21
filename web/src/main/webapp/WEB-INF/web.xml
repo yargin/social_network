@@ -66,7 +66,6 @@
         <url-pattern>/updateinfo</url-pattern>
         <url-pattern>/deleteAccount</url-pattern>
         <url-pattern>/friendsrequests</url-pattern>
-        <url-pattern>/privatemessage</url-pattern>
         <url-pattern>/friends</url-pattern>
         <url-pattern>/dialogs</url-pattern>
         <url-pattern>/groups</url-pattern>
@@ -94,31 +93,21 @@
         <url-pattern>/leavegroup</url-pattern>
         <url-pattern>/addmoderator</url-pattern>
         <url-pattern>/removemoderator</url-pattern>
-        <url-pattern>/accountmessage</url-pattern>
+        <url-pattern>/addmessage</url-pattern>
         <url-pattern>/deletemessage</url-pattern>
     </filter-mapping>
 
     <!-- permission for message -->
     <filter>
-        <filter-name>MessageAuthorPermissionSetter</filter-name>
+        <filter-name>MessagePermissionChecker</filter-name>
         <filter-class>
-            com.getjavajob.training.yarginy.socialnetwork.web.filters.messageaccess.MessageAccessSetterFilter
+            com.getjavajob.training.yarginy.socialnetwork.web.filters.messageaccess.MessageAccessFilter
         </filter-class>
     </filter>
     <filter-mapping>
-        <filter-name>MessageAuthorPermissionSetter</filter-name>
+        <filter-name>MessagePermissionChecker</filter-name>
         <url-pattern>/deletemessage</url-pattern>
-    </filter-mapping>
-
-    <filter>
-        <filter-name>RedactorChecker</filter-name>
-        <filter-class>
-            com.getjavajob.training.yarginy.socialnetwork.web.filters.messageaccess.RedactorCheckerFilter
-        </filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>RedactorChecker</filter-name>
-        <url-pattern>/deletemessage</url-pattern>
+        <url-pattern>/addmessage</url-pattern>
     </filter-mapping>
 
     <!-- permissions for account wall-->
@@ -136,12 +125,10 @@
         <url-pattern>/addfriend</url-pattern>
         <url-pattern>/acceptfriendship</url-pattern>
         <url-pattern>/friendsrequests</url-pattern>
-        <url-pattern>/privatemessage</url-pattern>
         <url-pattern>/friends</url-pattern>
         <url-pattern>/dialogs</url-pattern>
         <url-pattern>/removefriendship</url-pattern>
         <url-pattern>/groups</url-pattern>
-        <url-pattern>/accountmessage</url-pattern>
     </filter-mapping>
 
     <filter>
@@ -158,15 +145,14 @@
         <url-pattern>/removefriendship</url-pattern>
     </filter-mapping>
 
-    <filter>
-        <filter-name>FriendChecker</filter-name>
-        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.accountinfoaccess.FriendCheckerFilter
-        </filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>FriendChecker</filter-name>
-        <url-pattern>/privatemessage</url-pattern>
-    </filter-mapping>
+    <!--    <filter>-->
+    <!--        <filter-name>FriendChecker</filter-name>-->
+    <!--        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.accountinfoaccess.FriendCheckerFilter-->
+    <!--        </filter-class>-->
+    <!--    </filter>-->
+    <!--    <filter-mapping>-->
+    <!--        <filter-name>FriendChecker</filter-name>-->
+    <!--    </filter-mapping>-->
 
     <filter>
         <filter-name>OwnerFriendChecker</filter-name>
@@ -178,7 +164,6 @@
         <filter-name>OwnerFriendChecker</filter-name>
         <url-pattern>/friends</url-pattern>
         <url-pattern>/groups</url-pattern>
-        <url-pattern>/accountmessage</url-pattern>
     </filter-mapping>
 
     <!-- permissions for group-->
@@ -540,22 +525,22 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>postMessage</servlet-name>
+        <servlet-name>addMessage</servlet-name>
         <servlet-class>
-            com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.actionservlets.AddAccountMessageServlet
+            com.getjavajob.training.yarginy.socialnetwork.web.servlets.messages.AddMessageServlet
         </servlet-class>
         <multipart-config>
         </multipart-config>
     </servlet>
     <servlet-mapping>
-        <servlet-name>postMessage</servlet-name>
-        <url-pattern>/accountmessage</url-pattern>
+        <servlet-name>addMessage</servlet-name>
+        <url-pattern>/addmessage</url-pattern>
     </servlet-mapping>
 
     <servlet>
         <servlet-name>deleteMessage</servlet-name>
         <servlet-class>
-            com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.actionservlets.DeleteAccountMessageServlet
+            com.getjavajob.training.yarginy.socialnetwork.web.servlets.messages.DeleteMessageServlet
         </servlet-class>
     </servlet>
     <servlet-mapping>

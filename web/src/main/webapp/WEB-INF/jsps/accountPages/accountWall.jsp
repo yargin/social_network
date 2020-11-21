@@ -12,37 +12,8 @@
     <common:accountMenu/>
 
     <c:if test="${not empty owner or not empty friend or not empty admin}">
-        <common:newWallMessage/>
-
-        <c:forEach var="message" items="${messages}">
-            <c:set var="author" value="${message.author}"/>
-            <div class="wallMessage" style="margin-left: 10%; margin-right: 10%;">
-                <div>
-                    <p><fmt:message key="label.date"/>: <fmt:formatDate value="${message.date}" type="both"/></p>
-                    <p><fmt:message key="label.author"/>:
-                        <a href="${context}/mywall?id=${author.id}">${author.name} ${author.surname}</a>
-                    </p>
-                    <div style="min-width: 50px; border-bottom: none;">
-                        <c:if test="${not empty admin or not empty owner or author.id == sessionScope.userId}">
-                            <form action="${context}/deletemessage" method="post" style="margin-bottom: 5px;">
-                                <input type="hidden" value="${user.id}" name="receiverId">
-                                <input type="hidden" value="${author.id}" name="requesterId">
-                                <input type="hidden" value="${message.id}" name="id">
-                                <button type="submit"><fmt:message key="button.delete"/></button>
-                            </form>
-                        </c:if>
-                    </div>
-                </div>
-                <div>
-                    <p>${message.text}</p>
-                    <c:set var="image" value="${message.getHtmlImage()}"/>
-                    <c:if test="${not empty image}">
-                        <img src="data:image/jpeg;base64, ${image}">
-                    </c:if>
-                </div>
-            </div>
-        </c:forEach>
-
+        <common:newMessage/>
+        <common:showMessages/>
     </c:if>
 
 </common:layout>

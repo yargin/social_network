@@ -20,7 +20,9 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl.ScriptExe
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.DaoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.AccountDml;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.AccountWallMessageDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.messages.AccountWallMessageDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.messages.GroupWallMessageDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.messages.PrivateMessageDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.password.PasswordDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.password.PasswordDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.otherdao.DataSelectsDao;
@@ -35,9 +37,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.dmls.GroupsModeratorsDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDaoImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.dmls.AccountGroupsDml;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.dmls.AccountPhonesDml;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.dmls.AccountWallMessagesDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.dmls.*;
 
 import java.util.Properties;
 
@@ -178,5 +178,25 @@ public abstract class CommonDbFactory implements DbFactory {
     @Override
     public OneToManyDao<Account, Message> getAccountWallMessagesDao() {
         return new OneToManyDaoImpl<>(connectionPool, new AccountWallMessagesDml());
+    }
+
+    @Override
+    public Dao<Message> getAccountPrivateMessageDao() {
+        return new DaoImpl<>(connectionPool, new PrivateMessageDml());
+    }
+
+    @Override
+    public OneToManyDao<Account, Message> getAccountPrivateMessagesDao() {
+        return new OneToManyDaoImpl<>(connectionPool, new AccountPrivateMessagesDml());
+    }
+
+    @Override
+    public Dao<Message> getGroupWallMessageDao() {
+        return new DaoImpl<>(connectionPool, new GroupWallMessageDml());
+    }
+
+    @Override
+    public OneToManyDao<Group, Message> getGroupWallMessagesDao() {
+        return new OneToManyDaoImpl<>(connectionPool, new GroupWallMessagesDml());
     }
 }

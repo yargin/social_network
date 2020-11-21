@@ -135,13 +135,13 @@ CREATE TABLE `account_wall_messages` (
   `author` bigint unsigned NOT NULL,
   `message` varchar(500),
   `image` mediumblob,
-  `account_wall_id` bigint unsigned NOT NULL,
+  `receiver_id` bigint unsigned NOT NULL,
   `posted` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `C_32` (`account_wall_id`),
+  KEY `C_32` (`receiver_id`),
   KEY `C_31` (`author`),
   CONSTRAINT `C_31` FOREIGN KEY (`author`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `C_32` FOREIGN KEY (`account_wall_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `C_32` FOREIGN KEY (`receiver_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE `account_private_messages` (
@@ -149,13 +149,27 @@ CREATE TABLE `account_private_messages` (
   `author` bigint unsigned NOT NULL,
   `message` varchar(500),
   `image` mediumblob,
-  `account_receiver_id` bigint unsigned NOT NULL,
+  `receiver_id` bigint unsigned NOT NULL,
   `posted` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `C_34` (`account_receiver_id`),
+  KEY `C_34` (`receiver_id`),
   KEY `C_33` (`author`),
   CONSTRAINT `C_33` FOREIGN KEY (`author`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `C_34` FOREIGN KEY (`account_receiver_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `C_34` FOREIGN KEY (`receiver_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE `group_wall_messages` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `author` bigint unsigned NOT NULL,
+  `message` varchar(500),
+  `image` mediumblob,
+  `receiver_id` bigint unsigned NOT NULL,
+  `posted` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `C_36` (`receiver_id`),
+  KEY `C_35` (`author`),
+  CONSTRAINT `C_35` FOREIGN KEY (`author`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `C_36` FOREIGN KEY (`receiver_id`) REFERENCES `_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 INSERT INTO Accounts (id, name, surname, email) VALUES

@@ -13,7 +13,7 @@
 
     <c:choose>
         <c:when test="${tab eq 'wall'}">
-            <group:wall/>
+            <group:groupWall/>
         </c:when>
         <c:when test="${tab eq 'requests'}">
             <group:requests/>
@@ -25,7 +25,7 @@
             <group:moderators/>
         </c:when>
         <c:otherwise>
-            <group:wall/>
+            <group:groupWall/>
         </c:otherwise>
     </c:choose>
 
