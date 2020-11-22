@@ -4,6 +4,8 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.AccountPhoto;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.AccountPhotoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.DialogImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
@@ -58,5 +60,13 @@ public abstract class NullEntitiesFactory {
         Message message = new MessageImpl();
         message.setAuthor(getNullAccount());
         return message;
+    }
+
+    public static Dialog getNullDialog() {
+        Dialog dialog = new DialogImpl();
+        dialog.setId(-1);
+        dialog.setFirstAccount(getNullAccount());
+        dialog.setSecondAccount(getNullAccount());
+        return dialog;
     }
 }

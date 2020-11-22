@@ -55,11 +55,6 @@ public class AccountDaoImpl implements AccountDao {
     }
 
     @Override
-    public Account getNullAccount() {
-        return accountDao.getNullEntity();
-    }
-
-    @Override
     public Collection<Group> getOwnedGroups(long accountId) {
         return accountGroupsDao.selectMany(accountId);
     }

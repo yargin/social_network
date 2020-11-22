@@ -144,20 +144,6 @@ CREATE TABLE `account_wall_messages` (
   CONSTRAINT `C_32` FOREIGN KEY (`receiver_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE `account_private_messages` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `author` bigint unsigned NOT NULL,
-  `message` varchar(500),
-  `image` mediumblob,
-  `receiver_id` bigint unsigned NOT NULL,
-  `posted` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `C_34` (`receiver_id`),
-  KEY `C_33` (`author`),
-  CONSTRAINT `C_33` FOREIGN KEY (`author`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `C_34` FOREIGN KEY (`receiver_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
 CREATE TABLE `group_wall_messages` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `author` bigint unsigned NOT NULL,
@@ -170,6 +156,28 @@ CREATE TABLE `group_wall_messages` (
   KEY `C_35` (`author`),
   CONSTRAINT `C_35` FOREIGN KEY (`author`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `C_36` FOREIGN KEY (`receiver_id`) REFERENCES `_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE dialogs (
+    id bigint unsigned auto_increment PRIMARY KEY,
+    first_id  bigint unsigned NOT NULL,
+    second_id bigint unsigned NOT NULL,
+    CONSTRAINT dialogs_accounts_id_fk FOREIGN KEY (first_id) REFERENCES accounts (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT dialogs_accounts_id_fk_2 FOREIGN KEY (second_id) REFERENCES accounts (id) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE `account_private_messages` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `author` bigint unsigned NOT NULL,
+  `message` varchar(500),
+  `image` mediumblob,
+  `receiver_id` bigint unsigned NOT NULL,
+  `posted` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `C_34` (`receiver_id`),
+  KEY `C_33` (`author`),
+  CONSTRAINT `C_33` FOREIGN KEY (`author`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `C_34` FOREIGN KEY (`receiver_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 INSERT INTO Accounts (id, name, surname, email) VALUES

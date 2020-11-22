@@ -1,6 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.dmls;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.AccountDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.SelfManyToManyDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable;
@@ -9,7 +10,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.FriendshipsTable.*;
@@ -23,7 +23,6 @@ public class FriendshipDml extends SelfManyToManyDml<Account> {
             AccountsTable.ID, ALIAS).build();
     private static final String SELECT_BY_BOTH = "SELECT * FROM " + TABLE + " WHERE (" + FIRST_ACCOUNT + " = ? AND " +
             SECOND_ACCOUNT + " = ?) OR (" + SECOND_ACCOUNT + " = ? AND " + FIRST_ACCOUNT + " = ?);";
-    private static final AccountDml ACCOUNT_DML = new AccountDml();
 
     @Override
     public Collection<Account> select(Connection connection, long id) throws SQLException {
@@ -35,15 +34,9 @@ public class FriendshipDml extends SelfManyToManyDml<Account> {
         }
     }
 
-    public Collection<Account> selectFromStatement(PreparedStatement statement) throws SQLException {
-        try (ResultSet resultSet = statement.executeQuery()) {
-            Collection<Account> accounts = new ArrayList<>();
-            while (resultSet.next()) {
-                Account account = ACCOUNT_DML.selectFromRow(resultSet);
-                accounts.add(account);
-            }
-            return accounts;
-        }
+    @Override
+    protected Dml<Account> getEntityDml() {
+        return new AccountDml();
     }
 
     @Override

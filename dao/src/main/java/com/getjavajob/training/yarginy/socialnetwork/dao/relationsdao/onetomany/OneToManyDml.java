@@ -14,6 +14,10 @@ public abstract class OneToManyDml<O extends Entity, M extends Entity> {
         try (PreparedStatement statement = connection.prepareStatement(getSelectByOneQuery(), ResultSet.
                 TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
             statement.setLong(1, oneId);
+            try {
+                statement.setLong(2, oneId);
+            } catch (SQLException ignore) {
+            }
             try (ResultSet resultSet = statement.executeQuery()) {
                 return getManyDml().selectEntities(resultSet);
             }
@@ -25,6 +29,10 @@ public abstract class OneToManyDml<O extends Entity, M extends Entity> {
                 TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
             statement.setLong(1, oneId);
             statement.setLong(2, manyId);
+            try {
+                statement.setLong(3, manyId);
+            } catch (SQLException ignore) {
+            }
             try (ResultSet resultSet = statement.executeQuery()) {
                 return resultSet.next();
             }

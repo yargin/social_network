@@ -21,8 +21,6 @@ public interface AccountDao {
 
     Collection<Account> selectAll();
 
-    Account getNullAccount();
-
     Collection<Group> getOwnedGroups(long accountId);
 
     Collection<Group> getGroupMembership(long accountId);

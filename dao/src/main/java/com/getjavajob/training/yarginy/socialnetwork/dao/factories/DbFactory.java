@@ -2,6 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.factories;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.AccountPhoto;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
@@ -61,4 +62,8 @@ public interface DbFactory {
     Dao<Message> getGroupWallMessageDao();
 
     OneToManyDao<Group, Message> getGroupWallMessagesDao();
+
+    Dao<Dialog> getDialogDao();
+
+    OneToManyDao<Account, Dialog> getAccountDialogsDao();
 }
