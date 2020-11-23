@@ -22,15 +22,8 @@ public class DialogsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         long requestedId = (long) req.getAttribute(Attributes.REQUESTED_ID);
 
-        //todo
-
         infoHelper.setAccountInfo(req, requestedId);
         req.setAttribute(TAB, "dialogs");
         req.getRequestDispatcher(Jsps.DIALOGS).forward(req, resp);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
     }
 }

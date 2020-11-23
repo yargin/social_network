@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
+package com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
@@ -50,7 +50,7 @@ public class AccountWallMessageDaoImpl implements AccountWallMessageDao {
     }
 
     @Override
-    public Collection<Message> getAccountWallMessages(long accountId) {
+    public Collection<Message> getMessages(long accountId) {
         return accountWallMessagesOneToManyDao.selectMany(accountId);
     }
 }

@@ -55,9 +55,9 @@ public interface DbFactory {
 
     OneToManyDao<Account, Message> getAccountWallMessagesDao();
 
-    Dao<Message> getAccountPrivateMessageDao();
+    Dao<Message> getDialogMessageDao();
 
-    OneToManyDao<Account, Message> getAccountPrivateMessagesDao();
+    OneToManyDao<Dialog, Message> getDialogsMessagesDao();
 
     Dao<Message> getGroupWallMessageDao();
 

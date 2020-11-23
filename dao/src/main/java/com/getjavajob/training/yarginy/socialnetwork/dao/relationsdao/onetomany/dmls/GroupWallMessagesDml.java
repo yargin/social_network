@@ -14,20 +14,20 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuild
 
 public class GroupWallMessagesDml extends OneToManyDml<Group, Message> {
     private final MessagesTable table = new GroupWallMessagesTable();
-    private final String SELECT_BY_BOTH = buildQuery().selectJoin(GroupsTable.TABLE, table.table, GroupsTable.ID,
+    private final String selectByBoth = buildQuery().selectJoin(GroupsTable.TABLE, table.table, GroupsTable.ID,
             table.receiverId).where(GroupsTable.ID).and(table.id).build();
-    private final String SELECT_BY_GROUP_WALL = buildQuery().selectJoin(AccountsTable.TABLE, table.table,
+    private final String selectByGroupWall = buildQuery().selectJoin(AccountsTable.TABLE, table.table,
             AccountsTable.ID, table.author).where(table.receiverId).orderByDesc(table.posted).build();
 
 
     @Override
     protected String getSelectByBothQuery() {
-        return SELECT_BY_BOTH;
+        return selectByBoth;
     }
 
     @Override
     protected String getSelectByOneQuery() {
-        return SELECT_BY_GROUP_WALL;
+        return selectByGroupWall;
     }
 
     @Override

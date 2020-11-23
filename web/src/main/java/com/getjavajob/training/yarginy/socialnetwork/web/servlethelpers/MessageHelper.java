@@ -4,8 +4,8 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.MessageImpl;
-import com.getjavajob.training.yarginy.socialnetwork.service.messages.AccountPrivateMessageServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.AccountWallMessageServiceImpl;
+import com.getjavajob.training.yarginy.socialnetwork.service.messages.DialogMessageServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.GroupWallMessageServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
@@ -16,31 +16,15 @@ import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static java.util.Objects.isNull;
-
 public class MessageHelper {
     private static final MessageService ACCOUNT_WALL_MESSAGE_SERVICE = new AccountWallMessageServiceImpl();
     private static final MessageService GROUP_WALL_MESSAGE_SERVICE = new GroupWallMessageServiceImpl();
-    private static final MessageService ACCOUNT_PRIVATE_MESSAGE_SERVICE = new AccountPrivateMessageServiceImpl();
+    private static final MessageService ACCOUNT_PRIVATE_MESSAGE_SERVICE = new DialogMessageServiceImpl();
 
     public static void addMessage(HttpServletRequest req) throws IOException, ServletException {
-        Message message = new MessageImpl();
-        long senderId = (long) req.getAttribute(Attributes.REQUESTER_ID);
+        Message message = getMessageFromRequest(req);
+
         long receiverId = (long) req.getAttribute(Attributes.RECEIVER_ID);
-        String text = req.getParameter("text");
-        Part part = req.getPart("image");
-        if (part.getSize() < 1 && text.trim().isEmpty()) {
-            return;
-        }
-        message.setText(text);
-        Account author = new AccountImpl();
-        author.setId(senderId);
-        if (!isNull(part)) {
-            try (InputStream inputStream = part.getInputStream()) {
-                message.setImage(inputStream);
-            }
-        }
-        message.setAuthor(author);
         message.setReceiverId(receiverId);
 
         String type = req.getParameter("type");
@@ -51,6 +35,23 @@ public class MessageHelper {
         } else if ("groupWall".equals(type)) {
             GROUP_WALL_MESSAGE_SERVICE.addMessage(message);
         }
+    }
+
+    public static Message getMessageFromRequest(HttpServletRequest req) throws IOException, ServletException {
+        Message message = new MessageImpl();
+        String text = req.getParameter("text");
+        Part part = req.getPart("image");
+        if (part.getSize() > 1 && !text.trim().isEmpty()) {
+            try (InputStream inputStream = part.getInputStream()) {
+                message.setImage(inputStream);
+            }
+        }
+        message.setText(text);
+        long senderId = (long) req.getAttribute(Attributes.REQUESTER_ID);
+        Account author = new AccountImpl();
+        author.setId(senderId);
+        message.setAuthor(author);
+        return message;
     }
 
     public static void deleteMessage(HttpServletRequest req) {

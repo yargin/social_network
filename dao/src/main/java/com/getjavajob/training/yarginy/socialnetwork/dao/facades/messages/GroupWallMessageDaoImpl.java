@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
+package com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
@@ -49,7 +49,7 @@ public class GroupWallMessageDaoImpl implements GroupWallMessageDao {
     }
 
     @Override
-    public Collection<Message> getGroupWallMessages(long accountId) {
-        return groupWallMessagesOneToManyDao.selectMany(accountId);
+    public Collection<Message> getMessages(long groupId) {
+        return groupWallMessagesOneToManyDao.selectMany(groupId);
     }
 }

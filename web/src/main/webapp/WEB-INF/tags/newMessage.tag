@@ -5,13 +5,16 @@
 
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 
-<div class="wallMessage" style="margin-left: 10%; margin-right: 10%;">
+<div class="wallMessage" style="margin-left: 10%; margin-right: 10%">
     <form action="${context}/addmessage" method="post" enctype="multipart/form-data"
           style="">
         <input type="hidden" value="${sessionScope.userId}" name="requesterId">
         <input type="hidden" value="${id}" name="receiverId">
         <input type="hidden" value="${type}" name="type">
-        <textarea name="text" placeholder="asd"></textarea>
+        <%--        display: flex; flex-direction: row;--%>
+        <div style=" border-bottom: none;">
+            <textarea name="text" placeholder="<fmt:message key="form.inputText"/>"></textarea>
+        </div>
         <br>
         <input type="file" name="image" accept="image/*"
                title="<fmt:message key="form.uploadImage"/>">

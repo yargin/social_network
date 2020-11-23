@@ -23,8 +23,8 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.DaoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.AccountDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.DialogDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.messages.AccountWallMessageDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.messages.DialogMessageDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.messages.GroupWallMessageDml;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.messages.PrivateMessageDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.password.PasswordDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.password.PasswordDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.otherdao.DataSelectsDao;
@@ -183,13 +183,13 @@ public abstract class CommonDbFactory implements DbFactory {
     }
 
     @Override
-    public Dao<Message> getAccountPrivateMessageDao() {
-        return new DaoImpl<>(connectionPool, new PrivateMessageDml());
+    public Dao<Message> getDialogMessageDao() {
+        return new DaoImpl<>(connectionPool, new DialogMessageDml());
     }
 
     @Override
-    public OneToManyDao<Account, Message> getAccountPrivateMessagesDao() {
-        return new OneToManyDaoImpl<>(connectionPool, new AccountPrivateMessagesDml());
+    public OneToManyDao<Dialog, Message> getDialogsMessagesDao() {
+        return new OneToManyDaoImpl<>(connectionPool, new DialogsMessagesDml());
     }
 
     @Override

@@ -207,8 +207,17 @@ button:hover {
 .wallMessage form {
     padding-top: 5px;
     padding-bottom: 5px;
-    display: flex;
-    flex-direction: column;
+}
+
+.wallMessage textarea {
+    margin-right: 10%;
+    margin-left: 10%;
+    overflow: hidden;
+    width: 100%;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box; /* Firefox, other Gecko */
+    box-sizing: border-box;
+    border-color: #94d2d4;
 }
 
 .wallMessage img {

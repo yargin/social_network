@@ -2,8 +2,6 @@ package com.getjavajob.training.yarginy.socialnetwork.web.filters.messageaccess;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
-import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
-import com.getjavajob.training.yarginy.socialnetwork.service.AccountServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupServiceImpl;
 
@@ -19,11 +17,11 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 import static java.util.Objects.isNull;
 
 public class MessageAccessFilter extends HttpFilter {
-    private final AccountService accountService = new AccountServiceImpl();
     private final GroupService groupService = new GroupServiceImpl();
 
     @Override
-    protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
+    protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException,
+            ServletException {
         long authorId = (long) req.getAttribute(REQUESTER_ID);
         long receiverId = (long) req.getAttribute(RECEIVER_ID);
         long currentUserId = (long) req.getSession().getAttribute(USER_ID);

@@ -1,18 +1,26 @@
 package com.getjavajob.training.yarginy.socialnetwork.service.messages;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountPrivateMessageDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountPrivateMessageDaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages.MessageDao;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
-public class AccountPrivateMessageServiceImpl implements MessageService {
-    AccountPrivateMessageDao messageDao = new AccountPrivateMessageDaoImpl();
+import static java.util.Objects.isNull;
+
+public abstract class AbstractMessageService implements MessageService {
+    private final MessageDao messageDao;
+
+    public AbstractMessageService(MessageDao messageDao) {
+        this.messageDao = messageDao;
+    }
 
     @Override
     public boolean addMessage(Message message) {
+        if (isNull(message.getImage()) && isNull(message.getText())) {
+            return false;
+        }
         message.setDate(Timestamp.valueOf(LocalDateTime.now().withNano(0)));
         return messageDao.create(message);
     }
@@ -23,7 +31,7 @@ public class AccountPrivateMessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Collection<Message> selectMessages(long accountId) {
-        return messageDao.getAccountPrivateMessages(accountId);
+    public Collection<Message> selectMessages(long id) {
+        return messageDao.getMessages(id);
     }
 }

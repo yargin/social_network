@@ -1,10 +1,10 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
+package com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 
 import java.util.Collection;
 
-public interface GroupWallMessageDao {
+public interface MessageDao {
     Message select(long id);
 
     Message select(Message message);
@@ -19,5 +19,5 @@ public interface GroupWallMessageDao {
 
     Message getNullMessage();
 
-    Collection<Message> getGroupWallMessages(long groupId);
+    Collection<Message> getMessages(long id);
 }

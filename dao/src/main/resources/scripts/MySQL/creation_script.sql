@@ -166,7 +166,7 @@ CREATE TABLE dialogs (
     CONSTRAINT dialogs_accounts_id_fk_2 FOREIGN KEY (second_id) REFERENCES accounts (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-CREATE TABLE `account_private_messages` (
+CREATE TABLE `dialogs_messages` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `author` bigint unsigned NOT NULL,
   `message` varchar(500),
@@ -177,7 +177,7 @@ CREATE TABLE `account_private_messages` (
   KEY `C_34` (`receiver_id`),
   KEY `C_33` (`author`),
   CONSTRAINT `C_33` FOREIGN KEY (`author`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `C_34` FOREIGN KEY (`receiver_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `C_34` FOREIGN KEY (`receiver_id`) REFERENCES `dialogs` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 INSERT INTO Accounts (id, name, surname, email) VALUES

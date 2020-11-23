@@ -95,6 +95,8 @@
         <url-pattern>/removemoderator</url-pattern>
         <url-pattern>/addmessage</url-pattern>
         <url-pattern>/deletemessage</url-pattern>
+        <url-pattern>/dialog</url-pattern>
+        <url-pattern>/createdialog</url-pattern>
     </filter-mapping>
 
     <!-- permission for message -->
@@ -415,17 +417,6 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>privatemessage</servlet-name>
-        <servlet-class>
-            com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.viewservlets.PrivateMessageServlet
-        </servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>privatemessage</servlet-name>
-        <url-pattern>/privatemessage</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
         <servlet-name>friendsList</servlet-name>
         <servlet-class>
             com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.viewservlets.FriendsListServlet
@@ -445,17 +436,6 @@
     <servlet-mapping>
         <servlet-name>removeFriendship</servlet-name>
         <url-pattern>/removefriendship</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>dialogs</servlet-name>
-        <servlet-class>
-            com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.viewservlets.DialogsServlet
-        </servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>dialogs</servlet-name>
-        <url-pattern>/dialogs</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -546,5 +526,40 @@
     <servlet-mapping>
         <servlet-name>deleteMessage</servlet-name>
         <url-pattern>/deletemessage</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>createDialog</servlet-name>
+        <servlet-class>
+            com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.actionservlets.CreateDialogServlet
+        </servlet-class>
+        <multipart-config>
+        </multipart-config>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>createDialog</servlet-name>
+        <url-pattern>/createdialog</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>dialogs</servlet-name>
+        <servlet-class>
+            com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.viewservlets.DialogsServlet
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dialogs</servlet-name>
+        <url-pattern>/dialogs</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>dialog</servlet-name>
+        <servlet-class>
+            com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.viewservlets.DialogMessagesServlet
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dialog</servlet-name>
+        <url-pattern>/dialog</url-pattern>
     </servlet-mapping>
 </web-app>

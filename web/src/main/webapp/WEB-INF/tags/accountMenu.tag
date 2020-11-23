@@ -68,13 +68,13 @@
 
     <c:if test="${not empty friend or not empty admin and empty owner}">
         <c:choose>
-            <c:when test="${tab eq 'privatemessage'}">
+            <c:when test="${tab eq 'dialog'}">
                 <strong>
                     <fmt:message key="button.privateMessage"/>
                 </strong>
             </c:when>
             <c:otherwise>
-                <a href="${context}/privatemessage?id=${id}">
+                <a href="${context}/dialog?requesterId=${sessionScope.userId}&receiverId=${id}&type=accountPrivate">
                     <button type="submit" name="message"><fmt:message key="button.privateMessage"/></button>
                 </a>
             </c:otherwise>

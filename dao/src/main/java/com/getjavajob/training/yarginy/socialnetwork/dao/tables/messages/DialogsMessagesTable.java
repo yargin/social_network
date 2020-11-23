@@ -1,8 +1,8 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.tables.messages;
 
-public final class AccountPrivateMessagesTable extends MessagesTable {
+public final class DialogsMessagesTable extends MessagesTable {
     @Override
     protected String getTableName() {
-        return "account_private_messages";
+        return "Dialogs_messages";
     }
 }
