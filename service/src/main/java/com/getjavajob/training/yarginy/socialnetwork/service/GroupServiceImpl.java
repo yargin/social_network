@@ -135,9 +135,9 @@ public class GroupServiceImpl implements GroupService {
                     throw new IllegalArgumentException();
                 }
             } catch (IllegalArgumentException e) {
-                transaction.rollback();
                 return false;
             }
+            transaction.commit();
             return true;
         } catch (Exception e) {
             throw new IllegalStateException(e);

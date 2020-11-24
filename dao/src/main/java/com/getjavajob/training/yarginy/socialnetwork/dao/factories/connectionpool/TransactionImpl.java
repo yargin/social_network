@@ -1,6 +1,5 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Savepoint;
 
@@ -10,6 +9,11 @@ public class TransactionImpl implements Transaction {
     public TransactionImpl(ConnectionProxy connectionProxy) {
         this.connectionProxy = connectionProxy;
         connectionProxy.setTransactional(true);
+        try {
+            connectionProxy.setAutoCommit(false);
+        } catch (SQLException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     @Override

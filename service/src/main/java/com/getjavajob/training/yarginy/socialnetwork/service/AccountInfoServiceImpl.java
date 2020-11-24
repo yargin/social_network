@@ -12,6 +12,7 @@ import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory.getNullAccountPhoto;
+import static java.util.Objects.isNull;
 
 public class AccountInfoServiceImpl implements AccountInfoService {
     private final AccountDao accountDao;
@@ -52,26 +53,22 @@ public class AccountInfoServiceImpl implements AccountInfoService {
         try (Transaction transaction = transactionManager.getTransaction()) {
             Account account = accountInfo.getAccount();
             if (!accountDao.update(account, storedAccountInfo.getAccount())) {
-                transaction.rollback();
                 throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
             }
 
             if (!phoneDao.update(storedAccountInfo.getPhones(), accountInfo.getPhones())) {
-                transaction.rollback();
                 throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
             }
 
             AccountPhoto accountPhoto = accountInfo.getAccountPhoto();
-            if (!getNullAccountPhoto().equals(accountPhoto)) {
+            if (!isNull(accountPhoto)) {
                 accountPhoto.setOwner(account);
                 if (getNullAccountPhoto().equals(storedAccountInfo.getAccountPhoto())) {
                     if (!accountPhotoDao.create(accountPhoto)) {
-                        transaction.rollback();
                         throw new IncorrectDataException(IncorrectData.UPLOADING_ERROR);
                     }
                 } else {
                     if (!accountPhotoDao.update(accountPhoto, storedAccountInfo.getAccountPhoto())) {
-                        transaction.rollback();
                         throw new IncorrectDataException(IncorrectData.UPLOADING_ERROR);
                     }
                 }

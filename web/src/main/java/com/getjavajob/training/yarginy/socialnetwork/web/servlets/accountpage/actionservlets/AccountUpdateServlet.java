@@ -12,10 +12,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 import static java.util.Objects.isNull;
 
@@ -48,15 +46,7 @@ public class AccountUpdateServlet extends HttpServlet {
             return;
         }
 
-        HttpSession session = req.getSession();
-
-        //todo move to get method to keep displayed before modification data
-        AccountInfoDTO accountInfoDTO = (AccountInfoDTO) session.getAttribute(ACCOUNT_INFO);
-
-        if (isNull(accountInfoDTO)) {
-            redirect(req, resp, Pages.LOGOUT);
-            return;
-        }
+        AccountInfoDTO accountInfoDTO = new AccountInfoDTO();
 
         updater.getValuesFromParams(accountInfoDTO);
 
@@ -64,7 +54,7 @@ public class AccountUpdateServlet extends HttpServlet {
         if (!accepted) {
             doGet(req, resp);
         } else {
-            AccountInfoDTO storedAccountInfoDTO = accountInfoService.select(requestedId);
+            AccountInfoDTO storedAccountInfoDTO = (AccountInfoDTO) req.getSession().getAttribute(ACCOUNT_INFO);
             update(updater, accountInfoDTO, storedAccountInfoDTO);
         }
     }

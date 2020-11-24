@@ -60,24 +60,17 @@ public class OwnedModelDaoImpl<O extends Entity, E extends OwnedEntity<O>> imple
 
     @Override
     public boolean update(E ownedEntity, E storedOwnedEntity) {
-//        try (Connection connection = connectionPool.getConnection();
-//             PreparedStatement statement = dml.getSelect(connection, ownedEntity.getOwner());
-//             ResultSet resultSet = statement.executeQuery()) {
-//            if (!resultSet.next()) {
-//                return false;
-//            }
-//            dml.updateRow(resultSet, ownedEntity, storedOwnedEntity);
-//            return true;
-//        } catch (SQLException e) {
-//            return false;
-//        }
-        //todo
-        boolean performed = true;
-        if (!ownedEntity.equals(storedOwnedEntity)) {
-                delete(storedOwnedEntity);
-            performed = create(ownedEntity);
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement statement = dml.getSelect(connection, ownedEntity.getOwner());
+             ResultSet resultSet = statement.executeQuery()) {
+            if (!resultSet.next()) {
+                return false;
+            }
+            dml.updateRow(resultSet, ownedEntity, storedOwnedEntity);
+            return true;
+        } catch (SQLException e) {
+            return false;
         }
-        return performed;
     }
 
     @Override
