@@ -14,11 +14,9 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTED_ID;
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.TAB;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 
 public class GroupsListServlet extends HttpServlet {
-    public static final String GROUPS = "groups";
     public static final String ALL_GROUPS_LIST = "allgroups";
     private final GroupService groupService = new GroupServiceImpl();
     private final AccountInfoHelper infoHelper = new AccountInfoHelper();

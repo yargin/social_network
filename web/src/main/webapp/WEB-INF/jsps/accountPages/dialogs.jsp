@@ -10,20 +10,20 @@
     <common:accountInfo/>
     <common:accountMenu/>
 
+    <br>
     <c:forEach var="dialog" items="${dialogs}">
         <c:choose>
             <c:when test="${dialog.getFirstAccount() eq user}">
-                <c:set value="${dialog.getFirstAccount()}" var="receiver"/>
-                <c:set value="${dialog.getSecondAccount()}" var="requester"/>
+                <c:set value="${dialog.getSecondAccount()}" var="talker"/>
             </c:when>
             <c:otherwise>
-                <c:set value="${dialog.getSecondAccount()}" var="receiver"/>
-                <c:set value="${dialog.getFirstAccount()}" var="requester"/>
+                <c:set value="${dialog.getFirstAccount()}" var="talker"/>
             </c:otherwise>
         </c:choose>
 
-        <a href="${context}/dialog?requester=${requester.getId()}&receiver=${receiver.getId()}">
-                ${requester.getName()} ${requester.getSurname()}
+        <a href="${context}/dialog?id=${dialog.id}">
+                ${talker.getName()} ${talker.getSurname()}
         </a>
+        <br><br>
     </c:forEach>
 </common:layout>

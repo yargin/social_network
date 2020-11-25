@@ -20,6 +20,7 @@ public final class Attributes {
     public static final String PHONE_DUPLICATE = "phoneDuplicate";
     public static final String UPLOAD_ERROR = "uploadError";
     public static final String GROUP = "group";
+    public static final String GROUPS = "groups";
     public static final String REQUESTED_ID = "id";
     public static final String REQUESTER_ID = "requesterId";
     public static final String RECEIVER_ID = "receiverId";
@@ -28,6 +29,7 @@ public final class Attributes {
     public static final String MESSAGE = "message";
     public static final String TAB = "tab";
     public static final String REDACTOR = "redactor";
+    public static final String DIALOGS = "dialogs";
 
     private Attributes() {
     }

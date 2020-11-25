@@ -95,12 +95,12 @@ public class GroupDml extends AbstractDml<Group> {
 
     @Override
     public Collection<Group> selectEntities(ResultSet resultSet) throws SQLException {
-        Collection<Group> communities = new ArrayList<>();
+        Collection<Group> groups = new ArrayList<>();
         while (resultSet.next()) {
             Group group = selectViewFromRow(resultSet);
-            communities.add(group);
+            groups.add(group);
         }
-        return communities;
+        return groups;
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.getjavajob.training.yarginy.socialnetwork.service;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.*;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.Transaction;
@@ -18,16 +19,19 @@ public class AccountServiceImpl implements AccountService {
     private final AccountDao accountDao;
     private final PhoneDao phoneDao;
     private final FriendshipsDao friendshipDao;
+    private final DialogDao dialogsDao;
 
     public AccountServiceImpl() {
-        this(new AccountDaoImpl(), new PhoneDaoImpl(), new FriendshipsDaoImpl(), new TransactionManager());
+        this(new AccountDaoImpl(), new PhoneDaoImpl(), new FriendshipsDaoImpl(), new DialogDaoImpl(),
+                new TransactionManager());
     }
 
-    public AccountServiceImpl(AccountDao accountDao, PhoneDao phoneDao, FriendshipsDao friendshipDao,
-                              TransactionManager transactionManager) {
+    public AccountServiceImpl(AccountDao accountDao, PhoneDao phoneDao, FriendshipsDao friendshipDao, DialogDao
+            dialogDao, TransactionManager transactionManager) {
         this.accountDao = accountDao;
         this.phoneDao = phoneDao;
         this.friendshipDao = friendshipDao;
+        this.dialogsDao = dialogDao;
         this.transactionManager = transactionManager;
     }
 
@@ -173,5 +177,10 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Collection<Account> getFriendshipRequests(long receiver) {
         return friendshipDao.selectRequests(receiver);
+    }
+
+    @Override
+    public Collection<Dialog> getDialogs(long accountId) {
+        return dialogsDao.selectDialogsByAccount(accountId);
     }
 }

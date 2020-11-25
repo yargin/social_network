@@ -18,8 +18,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
+import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirectToReferer;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTED_ID;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTER_ID;
+import static java.util.Objects.isNull;
 
 public class CreateDialogServlet extends HttpServlet {
     private final DialogService dialogService = new DialogServiceImpl();
@@ -36,6 +38,11 @@ public class CreateDialogServlet extends HttpServlet {
         dialog.setFirstAccount(author);
         dialog.setSecondAccount(receiver);
         Message message = MessageHelper.getMessageFromRequest(req);
+        String text = message.getText();
+        if ((isNull(text) || text.trim().isEmpty()) && isNull(message.getImage())) {
+            redirectToReferer(req, resp);
+            return;
+        }
         dialogService.create(dialog, message);
         dialog = dialogService.selectByAccounts(authorId, receiverId);
         redirect(req, resp, Pages.DIALOG + '?' + REQUESTED_ID + '=' + dialog.getId());

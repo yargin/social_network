@@ -2,6 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.service;
 
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 
@@ -46,4 +47,6 @@ public interface AccountService {
     boolean deleteFriendshipRequest(long requester, long receiver);
 
     Collection<Account> getFriendshipRequests(long receiver);
+
+    Collection<Dialog> getDialogs(long accountId);
 }

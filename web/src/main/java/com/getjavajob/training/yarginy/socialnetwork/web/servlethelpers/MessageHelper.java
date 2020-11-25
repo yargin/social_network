@@ -16,25 +16,33 @@ import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static java.util.Objects.isNull;
+
 public class MessageHelper {
     private static final MessageService ACCOUNT_WALL_MESSAGE_SERVICE = new AccountWallMessageServiceImpl();
     private static final MessageService GROUP_WALL_MESSAGE_SERVICE = new GroupWallMessageServiceImpl();
     private static final MessageService ACCOUNT_PRIVATE_MESSAGE_SERVICE = new DialogMessageServiceImpl();
 
-    public static void addMessage(HttpServletRequest req) throws IOException, ServletException {
+    public static boolean addMessage(HttpServletRequest req) throws IOException, ServletException {
         Message message = getMessageFromRequest(req);
+
+        String text = message.getText();
+        if ((isNull(text) || text.trim().isEmpty()) && isNull(message.getImage())) {
+            return false;
+        }
 
         long receiverId = (long) req.getAttribute(Attributes.RECEIVER_ID);
         message.setReceiverId(receiverId);
 
         String type = req.getParameter("type");
         if ("accountWall".equals(type)) {
-            ACCOUNT_WALL_MESSAGE_SERVICE.addMessage(message);
+            return ACCOUNT_WALL_MESSAGE_SERVICE.addMessage(message);
         } else if ("accountPrivate".equals(type)) {
-            ACCOUNT_PRIVATE_MESSAGE_SERVICE.addMessage(message);
+            return ACCOUNT_PRIVATE_MESSAGE_SERVICE.addMessage(message);
         } else if ("groupWall".equals(type)) {
-            GROUP_WALL_MESSAGE_SERVICE.addMessage(message);
+            return GROUP_WALL_MESSAGE_SERVICE.addMessage(message);
         }
+        throw new IllegalArgumentException("message type not specified");
     }
 
     public static Message getMessageFromRequest(HttpServletRequest req) throws IOException, ServletException {
