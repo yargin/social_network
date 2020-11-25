@@ -2,6 +2,8 @@ package com.getjavajob.training.yarginy.socialnetwork.web.filters.messageaccess;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
+import com.getjavajob.training.yarginy.socialnetwork.service.DialogService;
+import com.getjavajob.training.yarginy.socialnetwork.service.DialogServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupServiceImpl;
 
@@ -18,6 +20,7 @@ import static java.util.Objects.isNull;
 
 public class MessageAccessFilter extends HttpFilter {
     private final GroupService groupService = new GroupServiceImpl();
+    private final DialogService dialogService = new DialogServiceImpl();
 
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException,
@@ -41,7 +44,7 @@ public class MessageAccessFilter extends HttpFilter {
         if ("accountWall".equals(type)) {
             hasAccess = isAuthor || isReceiver;
         } else if ("accountPrivate".equals(type)) {
-            hasAccess = isAuthor;
+            hasAccess = isAuthor || dialogService.isTalker(currentUserId, receiverId);
         } else if ("groupWall".equals(type)) {
             hasAccess = isAuthor || groupService.isModerator(currentUserId, receiverId) || groupService.
                     isOwner(currentUserId, receiverId);

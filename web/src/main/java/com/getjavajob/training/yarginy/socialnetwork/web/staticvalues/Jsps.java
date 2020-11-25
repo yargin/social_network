@@ -12,13 +12,14 @@ public final class Jsps {
     public static final String FRIENDSHIP_REQUEST = "/WEB-INF/jsps/accountPages/friendshipRequest.jsp";
     public static final String FRIENDSHIP_REQUESTS_LIST = "/WEB-INF/jsps/accountPages/friendshipRequestsList.jsp";
     public static final String FRIENDS_LIST = "/WEB-INF/jsps/accountPages/friendsList.jsp";
-    public static final String DIALOGS = "/WEB-INF/jsps/accountPages/dialogs.jsp";
-    public static final String PRIVATE_MESSAGE = "/WEB-INF/jsps/accountPages/privateMessage.jsp";
 
     public static final String GROUP_JSP = "/WEB-INF/jsps/grouppages/group.jsp";
     public static final String GROUP_CREATION = "/WEB-INF/jsps/grouppages/groupCreation.jsp";
-    public static final String GROUP_INFO = "/WEB-INF/jsps/grouppages/groupInfo.jsp";
     public static final String GROUP_UPDATE = "/WEB-INF/jsps/grouppages/groupUpdate.jsp";
+
+    public static final String DIALOGS = "/WEB-INF/jsps/accountPages/dialogs.jsp";
+    public static final String DIALOG = "/WEB-INF/jsps/accountPages/dialog.jsp";
+    public static final String NEW_DIALOG = "/WEB-INF/jsps/accountPages/newDialog.jsp";
 
     private Jsps() {
     }

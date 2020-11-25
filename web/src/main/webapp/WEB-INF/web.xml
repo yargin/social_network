@@ -76,6 +76,7 @@
         <url-pattern>/grouprequests</url-pattern>
         <url-pattern>/moderators</url-pattern>
         <url-pattern>/deletemessage</url-pattern>
+        <url-pattern>/dialog</url-pattern>
     </filter-mapping>
 
     <filter>
@@ -95,8 +96,8 @@
         <url-pattern>/removemoderator</url-pattern>
         <url-pattern>/addmessage</url-pattern>
         <url-pattern>/deletemessage</url-pattern>
-        <url-pattern>/dialog</url-pattern>
         <url-pattern>/createdialog</url-pattern>
+        <url-pattern>/privatemessage</url-pattern>
     </filter-mapping>
 
     <!-- permission for message -->
@@ -561,5 +562,16 @@
     <servlet-mapping>
         <servlet-name>dialog</servlet-name>
         <url-pattern>/dialog</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>privateMessage</servlet-name>
+        <servlet-class>
+            com.getjavajob.training.yarginy.socialnetwork.web.servlets.messages.PrivateMessageServlet
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>privateMessage</servlet-name>
+        <url-pattern>/privatemessage</url-pattern>
     </servlet-mapping>
 </web-app>

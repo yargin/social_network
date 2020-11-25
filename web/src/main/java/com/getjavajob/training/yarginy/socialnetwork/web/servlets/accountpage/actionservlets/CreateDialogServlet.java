@@ -9,6 +9,7 @@ import com.getjavajob.training.yarginy.socialnetwork.service.DialogService;
 import com.getjavajob.training.yarginy.socialnetwork.service.DialogServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.MessageHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
+import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,14 +17,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirectToReferer;
+import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTED_ID;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTER_ID;
 
 public class CreateDialogServlet extends HttpServlet {
     private final DialogService dialogService = new DialogServiceImpl();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        long authorId = (long) req.getAttribute(Attributes.REQUESTER_ID);
+        long authorId = (long) req.getAttribute(REQUESTER_ID);
         long receiverId = (long) req.getAttribute(Attributes.RECEIVER_ID);
         Dialog dialog = new DialogImpl();
         Account author = new AccountImpl();
@@ -34,6 +37,7 @@ public class CreateDialogServlet extends HttpServlet {
         dialog.setSecondAccount(receiver);
         Message message = MessageHelper.getMessageFromRequest(req);
         dialogService.create(dialog, message);
-        redirectToReferer(req, resp);
+        dialog = dialogService.selectByAccounts(authorId, receiverId);
+        redirect(req, resp, Pages.DIALOG + '?' + REQUESTED_ID + '=' + dialog.getId());
     }
 }

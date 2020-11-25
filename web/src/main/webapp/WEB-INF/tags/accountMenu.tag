@@ -74,9 +74,12 @@
                 </strong>
             </c:when>
             <c:otherwise>
-                <a href="${context}/dialog?requesterId=${sessionScope.userId}&receiverId=${id}&type=accountPrivate">
-                    <button type="submit" name="message"><fmt:message key="button.privateMessage"/></button>
-                </a>
+                <form action="${context}/privatemessage" method="post" style="display: inline">
+                    <input type="hidden" name="requesterId" value="${sessionScope.userId}">
+                    <input type="hidden" name="receiverId" value="${id}">
+                    <input type="hidden" name="type" value="accountPrivate">
+                    <button type="submit"><fmt:message key="button.privateMessage"/></button>
+                </form>
             </c:otherwise>
         </c:choose>
     </c:if>

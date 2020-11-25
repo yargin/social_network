@@ -40,13 +40,13 @@ public class MessageHelper {
     public static Message getMessageFromRequest(HttpServletRequest req) throws IOException, ServletException {
         Message message = new MessageImpl();
         String text = req.getParameter("text");
+        message.setText(text);
         Part part = req.getPart("image");
-        if (part.getSize() > 1 && !text.trim().isEmpty()) {
+        if (part.getSize() > 1) {
             try (InputStream inputStream = part.getInputStream()) {
                 message.setImage(inputStream);
             }
         }
-        message.setText(text);
         long senderId = (long) req.getAttribute(Attributes.REQUESTER_ID);
         Account author = new AccountImpl();
         author.setId(senderId);

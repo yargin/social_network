@@ -6,5 +6,6 @@
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 
 <common:layout>
-    <common:groupInfo/>
+    <common:newMessage/>
+    <common:showMessages/>
 </common:layout>
