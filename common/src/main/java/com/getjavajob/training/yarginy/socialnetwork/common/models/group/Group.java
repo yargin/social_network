@@ -30,8 +30,4 @@ public interface Group extends Entity {
     void setPhoto(InputStream photo);
 
     void setPhoto(byte[] photo);
-
-    byte[] getPhotoPreview();
-
-    void setPhotoPreview(byte[] photoPreview);
 }

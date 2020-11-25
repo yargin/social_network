@@ -54,6 +54,7 @@ public class GroupUpdateServlet extends HttpServlet {
 
         updater.getValuesFromParams(group);
         boolean accepted = updater.isParamsAccepted();
+        //for next view
         req.setAttribute(Attributes.GROUP, group);
         if (!accepted) {
             doGet(req, resp);

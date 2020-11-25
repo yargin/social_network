@@ -3,7 +3,6 @@ package com.getjavajob.training.yarginy.socialnetwork.service;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.AccountPhoto;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.*;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.Transaction;
@@ -19,28 +18,24 @@ public class AccountServiceImpl implements AccountService {
     private final AccountDao accountDao;
     private final PhoneDao phoneDao;
     private final FriendshipsDao friendshipDao;
-    private final AccountPhotoDao accountPhotoDao;
 
     public AccountServiceImpl() {
-        this(new AccountDaoImpl(), new PhoneDaoImpl(), new FriendshipsDaoImpl(), new AccountPhotoDaoImpl(),
-                new TransactionManager());
+        this(new AccountDaoImpl(), new PhoneDaoImpl(), new FriendshipsDaoImpl(), new TransactionManager());
     }
 
     public AccountServiceImpl(AccountDao accountDao, PhoneDao phoneDao, FriendshipsDao friendshipDao,
-                              AccountPhotoDao accountPhotoDao, TransactionManager transactionManager) {
+                              TransactionManager transactionManager) {
         this.accountDao = accountDao;
         this.phoneDao = phoneDao;
         this.friendshipDao = friendshipDao;
         this.transactionManager = transactionManager;
-        this.accountPhotoDao = accountPhotoDao;
     }
 
     @Override
     public AccountInfoDTO getAccountInfo(long id) {
         Account account = accountDao.select(id);
         Collection<Phone> phones = phoneDao.selectPhonesByOwner(id);
-        AccountPhoto accountPhoto = accountPhotoDao.select(account);
-        return new AccountInfoDTO(account, accountPhoto, phones);
+        return new AccountInfoDTO(account, phones);
     }
 
     @Override

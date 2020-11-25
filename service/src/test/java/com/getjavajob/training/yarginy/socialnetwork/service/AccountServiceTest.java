@@ -5,7 +5,10 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.*;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.TransactionManager;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.Transaction;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,9 +30,8 @@ public class AccountServiceTest {
     private final PhoneDao phoneDao = mock(PhoneDao.class);
     private final Transaction transaction = mock(Transaction.class);
     private final TransactionManager transactionManager = mock(TransactionManager.class);
-    private final AccountPhotoDao accountPhotoDao = mock(AccountPhotoDao.class);
     private final AccountService accountService = new AccountServiceImpl(accountDao, phoneDao, friendsDao,
-            accountPhotoDao, transactionManager);
+            transactionManager);
     private Account account;
     private Account storedAccount;
     private Collection<Phone> phones;

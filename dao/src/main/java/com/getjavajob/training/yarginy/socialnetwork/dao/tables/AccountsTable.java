@@ -20,6 +20,7 @@ public final class AccountsTable {
     public static final String REGISTRATION_DATE = TABLE + '.' + "Registration_date";
     public static final String ROLE = TABLE + '.' + "Role";
     public static final String PASSWORD = TABLE + '.' + "Password";
+    public static final String PHOTO = TABLE + '.' + "Photo";
 
     private AccountsTable() {
     }

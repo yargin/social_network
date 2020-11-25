@@ -83,6 +83,7 @@ public class AccountDml extends AbstractDml<Account> {
         account.setSkype(resultSet.getString(SKYPE));
         account.setCity(resultSet.getString(CITY));
         account.setCountry(resultSet.getString(COUNTRY));
+        account.setPhoto(resultSet.getBytes(PHOTO));
         return account;
     }
 
@@ -103,6 +104,7 @@ public class AccountDml extends AbstractDml<Account> {
                 ADDITIONAL_EMAIL);
         updateFieldIfDiffers(account::getCountry, storedAccount::getCountry, resultSet::updateString, COUNTRY);
         updateFieldIfDiffers(account::getCity, storedAccount::getCity, resultSet::updateString, CITY);
+        updateFieldIfDiffers(account::getPhoto, storedAccount::getPhoto, resultSet::updateBytes, PHOTO);
     }
 
     @Override

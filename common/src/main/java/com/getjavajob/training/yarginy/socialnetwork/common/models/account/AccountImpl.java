@@ -6,13 +6,17 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.AbstractEntit
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Date;
+import java.util.Base64;
 import java.util.Objects;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper.*;
 import static java.util.Objects.isNull;
 
 public class AccountImpl extends AbstractEntity implements Account {
+    private static final int MAX_PHOTO_SIZE = 16000000;
     private String name;
     private String surname;
     private String patronymic;
@@ -26,6 +30,7 @@ public class AccountImpl extends AbstractEntity implements Account {
     private String skype;
     private String city;
     private String country;
+    private byte[] photo;
 
     public AccountImpl() {
     }
@@ -181,6 +186,38 @@ public class AccountImpl extends AbstractEntity implements Account {
     @Override
     public void setCountry(String country) {
         this.country = stringOptional(country);
+    }
+
+    @Override
+    public byte[] getPhoto() {
+        return photo;
+    }
+
+    @Override
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
+    }
+
+    @Override
+    public void setPhoto(InputStream photo) {
+        try {
+            int size = photo.available();
+            if (size > MAX_PHOTO_SIZE) {
+                throw new IncorrectDataException(IncorrectData.FILE_TOO_LARGE);
+            }
+            this.photo = new byte[photo.available()];
+            photo.read(this.photo);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    @Override
+    public String getHtmlPhoto() {
+        if (!isNull(photo)) {
+            return Base64.getEncoder().encodeToString(photo);
+        }
+        return "";
     }
 
     @Override

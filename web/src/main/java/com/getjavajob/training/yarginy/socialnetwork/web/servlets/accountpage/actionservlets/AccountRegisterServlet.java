@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.ACCOUNT_INFO;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER_ID;
 import static java.util.Objects.isNull;
 
@@ -27,10 +28,11 @@ public class AccountRegisterServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp, USER_ID, Pages.MY_WALL);
 
-        AccountInfoDTO accountInfoDTO = updater.accountInfoDTOInit(AccountInfoDTO::new);
-        if (isNull(accountInfoDTO)) {
-            return;
+        AccountInfoDTO accountInfoDTO = updater.getOrCreateAccountInfo(AccountInfoDTO::new);
+        if (isNull(req.getSession().getAttribute(ACCOUNT_INFO))) {
+            req.getSession().setAttribute(ACCOUNT_INFO, accountInfoDTO);
         }
+
         updater.initAccountAttributes(accountInfoDTO);
 
         req.setAttribute(Attributes.TARGET, Pages.REGISTER);
@@ -53,6 +55,7 @@ public class AccountRegisterServlet extends HttpServlet {
         Password password = updater.getPassword(accountInfoDTO.getAccount());
 
         boolean accepted = updater.isParamsAccepted();
+        req.setAttribute(ACCOUNT_INFO, accountInfoDTO);
         if (!accepted) {
             doGet(req, resp);
         } else {

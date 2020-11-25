@@ -4,8 +4,8 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
 
+import java.io.InputStream;
 import java.sql.Date;
-import java.time.LocalDate;
 
 /**
  * provides object model of relational entity Account
@@ -62,4 +62,12 @@ public interface Account extends Entity {
     void setCity(String city);
 
     void setCountry(String country);
+
+    byte[] getPhoto();
+
+    void setPhoto(InputStream photo);
+
+    void setPhoto(byte[] photo);
+
+    String getHtmlPhoto();
 }

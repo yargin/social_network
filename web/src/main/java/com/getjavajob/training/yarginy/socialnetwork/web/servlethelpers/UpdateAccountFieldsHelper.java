@@ -5,7 +5,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.AccountPhoto;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.PasswordImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
@@ -21,7 +20,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Date;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -36,17 +38,11 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
         super(req, resp, param, successUrl);
     }
 
-    public AccountInfoDTO accountInfoDTOInit(Supplier<AccountInfoDTO> accountInfoCreator) throws IOException {
-        HttpSession session = req.getSession();
-        AccountInfoDTO accountInfo = (AccountInfoDTO) session.getAttribute(ACCOUNT_INFO);
+    public AccountInfoDTO getOrCreateAccountInfo(Supplier<AccountInfoDTO> accountInfoCreator) {
+        AccountInfoDTO accountInfo = (AccountInfoDTO) req.getAttribute(ACCOUNT_INFO);
         if (isNull(accountInfo)) {
             accountInfo = accountInfoCreator.get();
-            try {
-                session.setAttribute(ACCOUNT_INFO, accountInfoCreator.get());
-            } catch (IllegalArgumentException e) {
-                RedirectHelper.redirect(req, resp, updateFailUrl);
-                return null;
-            }
+            req.setAttribute(ACCOUNT_INFO, accountInfoCreator.get());
         }
         return accountInfo;
     }
@@ -66,12 +62,7 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
         setAttribute("skype", account::getSkype);
         setAttribute("country", account::getCountry);
         setAttribute("city", account::getCity);
-
-        AccountPhoto accountPhoto = accountInfo.getAccountPhoto();
-        if (!isNull(accountPhoto.getPhoto())) {
-            String photo = Base64.getEncoder().encodeToString(accountPhoto.getPhoto());
-            req.setAttribute("photo", photo);
-        }
+        setAttribute("photo", account::getHtmlPhoto);
 
         Collection<Phone> phones = accountInfo.getPhones();
         HttpSession session = req.getSession();
@@ -159,12 +150,10 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
         setStringFromParam(account::setSkype, "skype");
         setStringFromParam(account::setCountry, "country");
         setStringFromParam(account::setCity, "city");
+        setPhotoFromParam(account::setPhoto, "photo");
 
         Collection<Phone> privatePhones = getPhonesFromParams(PRIVATE_PHONES, PhoneType.PRIVATE);
         Collection<Phone> workPhones = getPhonesFromParams(WORK_PHONES, PhoneType.WORK);
-
-        AccountPhoto accountPhoto = accountInfoDTO.getAccountPhoto();
-        setPhotoFromParam(accountPhoto::setPhoto, PHOTO_ATTRIBUTE);
 
         Collection<Phone> phones = accountInfoDTO.getPhones();
         phones.clear();
@@ -178,6 +167,7 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
             session.removeAttribute(ACCOUNT_INFO);
             session.removeAttribute(PRIVATE_PHONES);
             session.removeAttribute(WORK_PHONES);
+            session.removeAttribute(PHOTO);
             redirect(req, resp, updateSuccessUrl);
         } else {
             doGet.accept(req, resp);

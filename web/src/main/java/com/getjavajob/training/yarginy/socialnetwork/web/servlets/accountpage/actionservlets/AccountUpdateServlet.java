@@ -1,6 +1,8 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.actionservlets;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountInfoService;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountInfoServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
@@ -12,7 +14,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 import static java.util.Objects.isNull;
@@ -25,10 +29,13 @@ public class AccountUpdateServlet extends HttpServlet {
         UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp, USER_ID, Pages.MY_WALL);
         long requestedUserId = (long) req.getAttribute(REQUESTED_ID);
 
-        AccountInfoDTO accountInfoDTO = updater.accountInfoDTOInit(() -> accountInfoService.select(requestedUserId));
-        if (isNull(accountInfoDTO)) {
-            return;
+        //select at first visit
+        AccountInfoDTO accountInfoDTO = updater.getOrCreateAccountInfo(() -> accountInfoService.select(requestedUserId));
+        //save original to session if wasn't
+        if (isNull(req.getSession().getAttribute(ACCOUNT_INFO))) {
+            req.getSession().setAttribute(ACCOUNT_INFO, accountInfoDTO);
         }
+
         updater.initAccountAttributes(accountInfoDTO);
 
         req.setAttribute(TARGET, Pages.UPDATE_ACCOUNT);
@@ -39,22 +46,37 @@ public class AccountUpdateServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp, REQUESTED_ID, Pages.MY_WALL);
-        long requestedId = (long) req.getAttribute(REQUESTED_ID);
 
         if ("cancel".equals(req.getParameter("save"))) {
             updater.acceptActionOrRetry(true, null);
             return;
         }
 
-        AccountInfoDTO accountInfoDTO = new AccountInfoDTO();
+        HttpSession session = req.getSession();
+        AccountInfoDTO accountInfoDTO = new AccountInfoDTO(new AccountImpl(), new ArrayList<>());
+        AccountInfoDTO storedAccountInfoDTO = (AccountInfoDTO) session.getAttribute(ACCOUNT_INFO);
+        //set non updatable values
+        Account account = accountInfoDTO.getAccount();
+        Account storedAccount = storedAccountInfoDTO.getAccount();
+        account.setEmail(storedAccount.getEmail());
+        account.setRegistrationDate(storedAccount.getRegistrationDate());
 
         updater.getValuesFromParams(accountInfoDTO);
 
+        if (isNull(session.getAttribute(PHOTO))) {
+            session.setAttribute(PHOTO, storedAccount.getPhoto());
+        }
+        if (isNull(account.getPhoto())) {
+            account.setPhoto((byte[]) session.getAttribute(PHOTO));
+        } else {
+            session.setAttribute(PHOTO, account.getPhoto());
+        }
+
+        req.setAttribute(ACCOUNT_INFO, accountInfoDTO);
         boolean accepted = updater.isParamsAccepted();
         if (!accepted) {
             doGet(req, resp);
         } else {
-            AccountInfoDTO storedAccountInfoDTO = (AccountInfoDTO) req.getSession().getAttribute(ACCOUNT_INFO);
             update(updater, accountInfoDTO, storedAccountInfoDTO);
         }
     }

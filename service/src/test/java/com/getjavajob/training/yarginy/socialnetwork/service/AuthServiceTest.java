@@ -7,7 +7,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Pass
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.PasswordImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.TransactionManager;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import org.junit.Test;
@@ -40,7 +39,7 @@ public class AuthServiceTest {
         password.setPassword("123qwe123");
         password.setAccount(account);
         AuthService authService = new AuthServiceImpl();
-        boolean registered = authService.register(account, phones, null, password);
+        boolean registered = authService.register(account, phones, password);
         assertTrue(registered);
         ACCOUNT_DAO.delete(account);
         printPassed(CLASS, "testRegister");

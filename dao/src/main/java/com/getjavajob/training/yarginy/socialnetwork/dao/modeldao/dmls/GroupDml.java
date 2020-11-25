@@ -65,8 +65,6 @@ public class GroupDml extends AbstractDml<Group> {
         Group group = new GroupImpl();
         group.setId(resultSet.getLong(ID));
         group.setName(resultSet.getString(NAME));
-//        group.setPhotoPreview(resultSet.getBytes(PHOTO_PREVIEW));
-//        group.setPhoto(resultSet.getBytes(PHOTO));
         return group;
     }
 
@@ -87,7 +85,6 @@ public class GroupDml extends AbstractDml<Group> {
         updateFieldIfDiffers(group::getDescription, storedGroup::getDescription, resultSet::updateString, DESCRIPTION);
         updateFieldIfDiffers(group::getCreationDate, storedGroup::getCreationDate, resultSet::updateDate, CREATION_DATE);
         updateFieldIfDiffers(group::getPhoto, storedGroup::getPhoto, resultSet::updateBytes, PHOTO);
-//        updateFieldIfDiffers(group::getPhotoPreview, storedGroup::getPhotoPreview, resultSet::updateBytes, PHOTO_PREVIEW);
         if (isNull(group.getOwner())) {
             return;
         }

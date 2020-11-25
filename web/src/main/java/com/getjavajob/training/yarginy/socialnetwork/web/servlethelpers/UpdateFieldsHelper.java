@@ -53,17 +53,15 @@ public class UpdateFieldsHelper {
 
     protected void setPhotoFromParam(Consumer<InputStream> setter, String param) throws IOException, ServletException {
         Part imagePart = req.getPart(param);
-        if (!isNull(imagePart)) {
-            try (InputStream inputStream = imagePart.getInputStream()) {
-                if (inputStream.available() > 0) {
-                    setter.accept(inputStream);
-                }
-            } catch (IOException e) {
-                throw new IncorrectDataException(IncorrectData.UPLOADING_ERROR);
-            } catch (IncorrectDataException e) {
-                paramsAccepted = false;
-                req.setAttribute(ERR + param, e.getType().getPropertyKey());
+        try (InputStream inputStream = imagePart.getInputStream()) {
+            if (inputStream.available() > 0) {
+                setter.accept(inputStream);
             }
+        } catch (IOException e) {
+            throw new IncorrectDataException(IncorrectData.UPLOADING_ERROR);
+        } catch (IncorrectDataException e) {
+            paramsAccepted = false;
+            req.setAttribute(ERR + param, e.getType().getPropertyKey());
         }
     }
 

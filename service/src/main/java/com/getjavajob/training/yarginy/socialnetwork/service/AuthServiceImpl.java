@@ -4,7 +4,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.accountphoto.AccountPhoto;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.PasswordImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
@@ -18,37 +17,32 @@ import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory.getNullPassword;
 import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper.encrypt;
-import static java.util.Objects.isNull;
 
 public class AuthServiceImpl implements AuthService {
     private final TransactionManager transactionManager;
     private final AccountDao accountDao;
     private final PasswordDao passwordDao;
     private final PhoneDao phoneDao;
-    private final AccountPhotoDao accountPhotoDao;
 
     public AuthServiceImpl() {
-        this(new TransactionManager(), new AccountDaoImpl(), new PasswordDaoImpl(), new PhoneDaoImpl(),
-                new AccountPhotoDaoImpl());
+        this(new TransactionManager(), new AccountDaoImpl(), new PasswordDaoImpl(), new PhoneDaoImpl());
     }
 
     public AuthServiceImpl(TransactionManager transactionManager, AccountDao accountDao, PasswordDao passwordDao,
-                           PhoneDao phoneDao, AccountPhotoDao accountPhotoDao) {
+                           PhoneDao phoneDao) {
         this.transactionManager = transactionManager;
         this.accountDao = accountDao;
         this.passwordDao = passwordDao;
         this.phoneDao = phoneDao;
-        this.accountPhotoDao = accountPhotoDao;
     }
 
     @Override
     public boolean register(AccountInfoDTO accountInfoDTO, Password password) {
-        return register(accountInfoDTO.getAccount(), accountInfoDTO.getPhones(), accountInfoDTO.getAccountPhoto(),
-                password);
+        return register(accountInfoDTO.getAccount(), accountInfoDTO.getPhones(), password);
     }
 
     @Override
-    public boolean register(Account account, Collection<Phone> phones, AccountPhoto accountPhoto, Password password) {
+    public boolean register(Account account, Collection<Phone> phones, Password password) {
         try (Transaction transaction = transactionManager.getTransaction()) {
             account.setRegistrationDate(Date.valueOf(LocalDate.now()));
             if (!accountDao.create(account)) {
@@ -62,13 +56,6 @@ public class AuthServiceImpl implements AuthService {
             if (!passwordDao.create(password)) {
                 transaction.rollback();
                 throw new RuntimeException();
-            }
-            if (!isNull(accountPhoto) && !isNull(accountPhoto.getPhoto())) {
-                accountPhoto.setOwner(account);
-                if (!accountPhotoDao.create(accountPhoto)) {
-                    transaction.rollback();
-                    throw new IncorrectDataException(IncorrectData.UPLOADING_ERROR);
-                }
             }
             transaction.commit();
         } catch (IncorrectDataException e) {

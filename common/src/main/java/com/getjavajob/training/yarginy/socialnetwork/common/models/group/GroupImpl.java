@@ -114,16 +114,6 @@ public class GroupImpl extends AbstractEntity implements Group {
     }
 
     @Override
-    public byte[] getPhotoPreview() {
-        return photoPreview;
-    }
-
-    @Override
-    public void setPhotoPreview(byte[] photoPreview) {
-        this.photoPreview = photoPreview;
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (isNull(o)) {
             return false;
