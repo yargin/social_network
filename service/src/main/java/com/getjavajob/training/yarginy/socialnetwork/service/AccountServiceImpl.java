@@ -43,12 +43,12 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account getAccount(long id) {
+    public Account get(long id) {
         return accountDao.select(id);
     }
 
     @Override
-    public Account getAccount(Account account) {
+    public Account get(Account account) {
         return accountDao.select(account);
     }
 

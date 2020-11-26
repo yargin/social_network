@@ -14,7 +14,7 @@ public interface ManyToManyDao<F extends Entity, S extends Entity> {
     /**
      * selects all second participants related to first {@link Entity}
      *
-     * @param firstId {@link Entity} that second participants related to
+     * @param firstId id of {@link Entity} that second participants related to
      * @return {@link Collection} of second participants
      */
     Collection<S> selectByFirst(long firstId);
@@ -22,11 +22,18 @@ public interface ManyToManyDao<F extends Entity, S extends Entity> {
     /**
      * selects all first participants related to first {@link Entity}
      *
-     * @param secondId {@link Entity} that first participants related to
+     * @param secondId id of {@link Entity} that first participants related to
      * @return {@link Collection} of first participants
      */
     Collection<F> selectBySecond(long secondId);
 
+    /**
+     * examines that relation between two {@link Entity}
+     *
+     * @param firstId id of member of relationship
+     * @param secondId id of member of relationship
+     * @return true if exists otherwise false
+     */
     boolean relationExists(long firstId, long secondId);
 
     /**

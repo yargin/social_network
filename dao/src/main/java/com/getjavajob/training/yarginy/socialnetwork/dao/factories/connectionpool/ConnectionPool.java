@@ -14,7 +14,6 @@ public interface ConnectionPool {
      * commits updates on close. Otherwise commits updates on {@link Transaction#commit()}
      *
      * @return {@link Connection} to database
-     * @throws SQLException if db isn't available
      */
-    Connection getConnection() throws SQLException;
+    Connection getConnection();
 }

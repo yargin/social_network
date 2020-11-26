@@ -6,15 +6,15 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Messa
 import java.util.Collection;
 
 public interface DialogService {
-    Dialog select(long dialogId);
+    Dialog get(long dialogId);
 
-    Dialog select(Dialog dialog);
+    Dialog get(Dialog dialog);
 
     boolean create(Dialog dialog, Message message);
 
     boolean delete(Dialog dialog);
 
-    Dialog selectByAccounts(long firstAccountId, long secondAccountId);
+    Dialog getByTalkers(long firstAccountId, long secondAccountId);
 
     boolean isTalker(long accountId, long dialogId);
 

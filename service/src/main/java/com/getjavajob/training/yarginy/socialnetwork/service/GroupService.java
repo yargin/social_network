@@ -7,9 +7,9 @@ import java.util.Collection;
 import java.util.Map;
 
 public interface GroupService {
-    Group selectGroup(Group group);
+    Group get(Group group);
 
-    Group selectGroup(long id);
+    Group get(long id);
 
     Collection<Group> getAccountGroups(long accountId);
 

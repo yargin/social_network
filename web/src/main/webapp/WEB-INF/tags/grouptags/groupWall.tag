@@ -18,6 +18,6 @@
         <label><fmt:message key="label.requestSent"/></label><br><br>
     </c:if>
 <c:if test="${not empty owner or not empty admin or not empty member or not empty moderator}">
-    <common:newMessage/>
-    <common:showMessages/>
+    <common:messageCreate/>
+    <common:messagesShow/>
 </c:if>

@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.Collection;
 
 public abstract class OneToManyDml<O extends Entity, M extends Entity> {
-    public Collection<M> selectByOne(Connection connection, long oneId) throws SQLException {
+    public Collection<M> retrieveManyByOne(Connection connection, long oneId) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(getSelectByOneQuery(), ResultSet.
                 TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
             statement.setLong(1, oneId);
@@ -19,12 +19,12 @@ public abstract class OneToManyDml<O extends Entity, M extends Entity> {
             } catch (SQLException ignore) {
             }
             try (ResultSet resultSet = statement.executeQuery()) {
-                return getManyDml().selectEntities(resultSet);
+                return getManyDml().retrieveEntities(resultSet);
             }
         }
     }
 
-    public boolean selectByBoth(Connection connection, long oneId, long manyId) throws SQLException {
+    public boolean retrieveByBoth(Connection connection, long oneId, long manyId) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(getSelectByBothQuery(), ResultSet.
                 TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
             statement.setLong(1, oneId);

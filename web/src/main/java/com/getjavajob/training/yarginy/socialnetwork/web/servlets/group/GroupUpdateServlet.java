@@ -27,7 +27,7 @@ public class GroupUpdateServlet extends HttpServlet {
         long requestedId = (long) req.getAttribute(Attributes.REQUESTED_ID);
 
         //select at first visit
-        Group group = updater.getOrCreateGroup(() -> groupService.selectGroup(requestedId));
+        Group group = updater.getOrCreateGroup(() -> groupService.get(requestedId));
 
         //save to session if wasn't
         if (isNull(req.getSession().getAttribute(Attributes.GROUP))) {

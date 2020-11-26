@@ -21,7 +21,7 @@ public class ManyToManyDaoImpl<F extends Entity, S extends Entity> implements Ma
     @Override
     public Collection<S> selectByFirst(long firstId) {
         try (Connection connection = connectionPool.getConnection()) {
-            return manyToManyDml.selectByFirst(connection, firstId);
+            return manyToManyDml.retrieveByFirst(connection, firstId);
         } catch (SQLException e) {
             throw new IllegalArgumentException(e);
         }
@@ -30,7 +30,7 @@ public class ManyToManyDaoImpl<F extends Entity, S extends Entity> implements Ma
     @Override
     public Collection<F> selectBySecond(long secondId) {
         try (Connection connection = connectionPool.getConnection()) {
-            return manyToManyDml.selectBySecond(connection, secondId);
+            return manyToManyDml.retrieveBySecond(connection, secondId);
         } catch (SQLException e) {
             throw new IllegalArgumentException(e);
         }

@@ -5,7 +5,7 @@
 <c:set var="id" value="${group.getId()}"/>
 
 <c:forEach var="moderatorVar" items="${moderators}">
-    <a href="${context}/mywall?id=${moderatorVar.getId()}">
+    <a href="${context}/wall?id=${moderatorVar.getId()}">
             ${moderatorVar.getName()} ${moderatorVar.getSurname()}
     </a>
     <form action="${context}/removemoderator" method="post">

@@ -27,7 +27,7 @@ public class AccountDeleteServlet extends HttpServlet {
         accountToDelete.setId(requestedUserId);
         boolean deleted = accountService.deleteAccount(accountToDelete);
         if (deleted) {
-            redirect(req, resp, Pages.MY_WALL);
+            redirect(req, resp, Pages.WALL);
         } else {
             req.getRequestDispatcher(Jsps.ERROR).forward(req, resp);
         }

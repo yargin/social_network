@@ -49,7 +49,7 @@
     </filter>
     <filter-mapping>
         <filter-name>SessionIdSetterFilter</filter-name>
-        <url-pattern>/mywall</url-pattern>
+        <url-pattern>/wall</url-pattern>
         <url-pattern>/friends</url-pattern>
         <url-pattern>/dialogs</url-pattern>
         <url-pattern>/groups</url-pattern>
@@ -62,7 +62,7 @@
     </filter>
     <filter-mapping>
         <filter-name>RequestedIdFilter</filter-name>
-        <url-pattern>/mywall</url-pattern>
+        <url-pattern>/wall</url-pattern>
         <url-pattern>/updateinfo</url-pattern>
         <url-pattern>/deleteAccount</url-pattern>
         <url-pattern>/friendsrequests</url-pattern>
@@ -100,6 +100,18 @@
         <url-pattern>/privatemessage</url-pattern>
     </filter-mapping>
 
+<!--    permission for dialog-->
+    <filter>
+        <filter-name>DialogAccessFilter</filter-name>
+        <filter-class>
+            com.getjavajob.training.yarginy.socialnetwork.web.filters.dialogaccess.DialogAccessFilter
+        </filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>DialogAccessFilter</filter-name>
+        <url-pattern>/dialog</url-pattern>
+    </filter-mapping>
+
     <!-- permission for message -->
     <filter>
         <filter-name>MessagePermissionChecker</filter-name>
@@ -122,7 +134,7 @@
     </filter>
     <filter-mapping>
         <filter-name>AccountPermissionsSetter</filter-name>
-        <url-pattern>/mywall</url-pattern>
+        <url-pattern>/wall</url-pattern>
         <url-pattern>/updateinfo</url-pattern>
         <url-pattern>/deleteAccount</url-pattern>
         <url-pattern>/addfriend</url-pattern>
@@ -132,6 +144,9 @@
         <url-pattern>/dialogs</url-pattern>
         <url-pattern>/removefriendship</url-pattern>
         <url-pattern>/groups</url-pattern>
+        <url-pattern>/privatemessage</url-pattern>
+        <url-pattern>/dialogs</url-pattern>
+        <url-pattern>/createdialog</url-pattern>
     </filter-mapping>
 
     <filter>
@@ -146,16 +161,19 @@
         <url-pattern>/friendsrequests</url-pattern>
         <url-pattern>/acceptfriendship</url-pattern>
         <url-pattern>/removefriendship</url-pattern>
+        <url-pattern>/dialogs</url-pattern>
     </filter-mapping>
 
-    <!--    <filter>-->
-    <!--        <filter-name>FriendChecker</filter-name>-->
-    <!--        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.accountinfoaccess.FriendCheckerFilter-->
-    <!--        </filter-class>-->
-    <!--    </filter>-->
-    <!--    <filter-mapping>-->
-    <!--        <filter-name>FriendChecker</filter-name>-->
-    <!--    </filter-mapping>-->
+        <filter>
+            <filter-name>FriendChecker</filter-name>
+            <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.accountinfoaccess.FriendCheckerFilter
+            </filter-class>
+        </filter>
+        <filter-mapping>
+            <filter-name>FriendChecker</filter-name>
+            <url-pattern>/privatemessage</url-pattern>
+            <url-pattern>/createdialog</url-pattern>
+        </filter-mapping>
 
     <filter>
         <filter-name>OwnerFriendChecker</filter-name>
@@ -232,14 +250,14 @@
 
     <!-- servlets-->
     <servlet>
-        <servlet-name>myWall</servlet-name>
+        <servlet-name>wall</servlet-name>
         <servlet-class>
             com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.actionservlets.AccountWallServlet
         </servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>myWall</servlet-name>
-        <url-pattern>/mywall</url-pattern>
+        <servlet-name>wall</servlet-name>
+        <url-pattern>/wall</url-pattern>
     </servlet-mapping>
 
     <servlet>

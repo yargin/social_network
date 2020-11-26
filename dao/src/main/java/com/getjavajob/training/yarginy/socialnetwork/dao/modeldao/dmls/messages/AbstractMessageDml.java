@@ -62,7 +62,7 @@ public abstract class AbstractMessageDml extends AbstractDml<Message> {
     }
 
     @Override
-    public Message selectViewFromRow(ResultSet resultSet) throws SQLException {
+    public Message retrieveViewFromRow(ResultSet resultSet) throws SQLException {
         Message message = new MessageImpl();
         message.setId(resultSet.getLong(table.id));
         Account account = new AccountImpl();
@@ -78,15 +78,15 @@ public abstract class AbstractMessageDml extends AbstractDml<Message> {
     }
 
     @Override
-    public Message selectFromRow(ResultSet resultSet) throws SQLException {
-        return selectViewFromRow(resultSet);
+    public Message retrieveFromRow(ResultSet resultSet) throws SQLException {
+        return retrieveViewFromRow(resultSet);
     }
 
     @Override
-    public Collection<Message> selectEntities(ResultSet resultSet) throws SQLException {
+    public Collection<Message> retrieveEntities(ResultSet resultSet) throws SQLException {
         Collection<Message> messages = new ArrayList<>();
         while (resultSet.next()) {
-            messages.add(selectViewFromRow(resultSet));
+            messages.add(retrieveViewFromRow(resultSet));
         }
         return messages;
     }

@@ -18,7 +18,7 @@ public class FriendshipRequestAcceptServlet extends HttpServlet {
     private final AccountService accountService = new AccountServiceImpl();
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String accept = req.getParameter("accept");
         if (isNull(accept)) {
             redirect(req, resp, Pages.FRIENDSHIP_REQUESTS);

@@ -25,7 +25,7 @@ public class PrivateMessageServlet extends HttpServlet {
         long receiverId = (long) req.getAttribute(Attributes.RECEIVER_ID);
         long requesterId = (long) req.getAttribute(Attributes.REQUESTER_ID);
 
-        Dialog dialog = dialogService.selectByAccounts(receiverId, requesterId);
+        Dialog dialog = dialogService.getByTalkers(receiverId, requesterId);
         if (!Objects.equals(dialog, dialogService.getNullDialog())) {
             RedirectHelper.redirect(req, resp, Pages.DIALOG, REQUESTED_ID, "" + dialog.getId());
         } else {

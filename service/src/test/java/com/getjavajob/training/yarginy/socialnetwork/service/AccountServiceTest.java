@@ -45,13 +45,13 @@ public class AccountServiceTest {
     public void testGetAccount() {
         when(transactionManager.getTransaction()).thenReturn(transaction);
         when(accountDao.select(1)).thenReturn(account);
-        Account actualAccount = accountService.getAccount(1);
+        Account actualAccount = accountService.get(1);
         assertEquals(account, actualAccount);
         when(accountDao.select(account)).thenReturn(account);
-        actualAccount = accountService.getAccount(account);
+        actualAccount = accountService.get(account);
         assertEquals(account, actualAccount);
         when(accountDao.select(1)).thenReturn(account);
-        actualAccount = accountService.getAccount(1);
+        actualAccount = accountService.get(1);
         assertEquals(account, actualAccount);
         printPassed(CLASS, "testGetAccount");
     }

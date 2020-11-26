@@ -60,7 +60,7 @@ public class GroupCreationServlet extends HttpServlet {
             updater.handleInfoExceptions(e, this::doGet);
             return;
         }
-        Group createdGroup = groupService.selectGroup(group);
+        Group createdGroup = groupService.get(group);
         updater.setSuccessUrl(Pages.GROUP, GROUP_ID, "" + createdGroup.getId());
         updater.acceptActionOrRetry(created, this::doGet);
     }

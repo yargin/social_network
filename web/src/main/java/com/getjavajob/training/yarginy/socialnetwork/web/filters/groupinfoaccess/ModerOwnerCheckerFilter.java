@@ -18,7 +18,7 @@ public class ModerOwnerCheckerFilter extends HttpFilter {
                 getAttribute("moderator"))) {
             chain.doFilter(req, resp);
         } else {
-            resp.sendRedirect(req.getContextPath() + Pages.MY_WALL);
+            resp.sendRedirect(req.getContextPath() + Pages.WALL);
         }
     }
 }

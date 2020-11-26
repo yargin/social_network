@@ -19,7 +19,7 @@ public class RequesterMemberOrModerOwnerChecker extends HttpFilter {
                 (!isNull(req.getAttribute("member")) && !isNull(req.getAttribute("requestOwner")))) {
             chain.doFilter(req, res);
         } else {
-            res.sendRedirect(req.getContextPath() + Pages.MY_WALL);
+            res.sendRedirect(req.getContextPath() + Pages.WALL);
         }
     }
 }

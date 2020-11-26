@@ -101,7 +101,7 @@ public class DataSelectsDao {
                      pageNumber);
              PreparedStatement rowsNumberStatement = prepareRowsCount(connection, '%' + searchString + '%');
              ResultSet resultSet = resultStatement.executeQuery();
-             ResultSet resultSetRowsNumber = rowsNumberStatement.executeQuery();) {
+             ResultSet resultSetRowsNumber = rowsNumberStatement.executeQuery()) {
             while (resultSet.next()) {
                 Searchable searchable = new SearchableImpl();
                 searchable.setId(resultSet.getLong("id"));

@@ -1,6 +1,5 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
 
 import java.sql.*;
@@ -12,40 +11,56 @@ import java.util.Collection;
  * @param <E> {@link Entity} inheritor to work with
  */
 public interface Dml<E extends Entity> {
+    /**
+     * creates {@link PreparedStatement} used by {@link ResultSet} for CRUD operations
+     * select all {@link Entity} fields for CRUD
+     *
+     * @param connection {@link Connection}
+     * @param entity to select
+     * @param updatable flag telling if {@link PreparedStatement} will be used for update
+     * @return created {@link PreparedStatement}
+     * @throws SQLException
+     */
     PreparedStatement getSelect(Connection connection, E entity, boolean updatable) throws SQLException;
 
-
     /**
-     * retrieves {@link E} values from {@link ResultSet}'s current cursor position
+     * retrieves fields values from {@link ResultSet} into new {@link Entity} instance
      *
-     * @param resultSet specified {@link ResultSet}
+     * @param resultSet set of data to retrieve from
+     * @return retrieved {@link Entity}
+     * @throws SQLException
      */
-    E selectFromRow(ResultSet resultSet) throws SQLException;
-
-    E selectViewFromRow(ResultSet resultSet) throws SQLException;
+    E retrieveFromRow(ResultSet resultSet) throws SQLException;
 
     /**
-     * retrieves {@link Collection}<{@link E}> from specified {@link ResultSet}
+     * retrieves small portion(usually needed for toString() and equals())  of fields values from {@link ResultSet}
+     * into new {@link Entity} instance
      *
-     * @param resultSet specified {@link ResultSet}
-     * @return extracted {@link Collection}<{@link E}>
+     * @param resultSet set of data to retrieve from
+     * @return retrieved {@link Entity}
+     * @throws SQLException
      */
-    Collection<E> selectEntities(ResultSet resultSet) throws SQLException;
+    E retrieveViewFromRow(ResultSet resultSet) throws SQLException;
 
     /**
-     * updates row that given {@link ResultSet}'s cursor currently points to
+     * retrieves {@link Collection} of {@link Entity}s from set of data
      *
-     * @param resultSet    {@link ResultSet} with positioned cursor
-     * @param entity       {@link E}that need to be updated
-     * @param storedEntity {@link Entity} that is already stored. Used to detect differing fields that need to add
-     * @throws IncorrectDataException if entity's data is incorrect
+     * @param resultSet set of data to retrieve from
+     * @return new {@link Collection} of {@link Entity}s
+     * @throws SQLException
+     */
+    Collection<E> retrieveEntities(ResultSet resultSet) throws SQLException;
+
+    /**
+     * updates fields in storage. Fields to update are chosen regarding on comparing stored {@link Entity} and
+     * specified one
+     *
+     * @param resultSet view of stored data
+     * @param entity {@link Entity} with updated values
+     * @param storedEntity stored {@link Entity}
+     * @throws SQLException
      */
     void updateRow(ResultSet resultSet, E entity, E storedEntity) throws SQLException;
 
-    /**
-     * represents non-existing entity
-     *
-     * @return representation of non-existing {@link E}
-     */
     E getNullEntity();
 }

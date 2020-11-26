@@ -14,7 +14,7 @@
                 </strong>
             </c:when>
             <c:otherwise>
-                <a href="${context}/mywall?id=${id}">
+                <a href="${context}/wall?id=${id}">
                     <button type="button" name="wall"><fmt:message key="button.wall"/></button>
                 </a>
             </c:otherwise>
@@ -67,21 +67,12 @@
     </c:if>
 
     <c:if test="${not empty friend or not empty admin and empty owner}">
-        <c:choose>
-            <c:when test="${tab eq 'dialog'}">
-                <strong>
-                    <fmt:message key="button.privateMessage"/>
-                </strong>
-            </c:when>
-            <c:otherwise>
-                <form action="${context}/privatemessage" method="post" style="display: inline">
-                    <input type="hidden" name="requesterId" value="${sessionScope.userId}">
-                    <input type="hidden" name="receiverId" value="${id}">
-                    <input type="hidden" name="type" value="accountPrivate">
-                    <button type="submit"><fmt:message key="button.privateMessage"/></button>
-                </form>
-            </c:otherwise>
-        </c:choose>
+        <form action="${context}/privatemessage" method="post" style="display: inline">
+            <input type="hidden" name="requesterId" value="${sessionScope.userId}">
+            <input type="hidden" name="receiverId" value="${id}">
+            <input type="hidden" name="type" value="accountPrivate">
+            <button type="submit"><fmt:message key="button.privateMessage"/></button>
+        </form>
     </c:if>
 
     <c:if test="${not empty admin or not empty owner}">

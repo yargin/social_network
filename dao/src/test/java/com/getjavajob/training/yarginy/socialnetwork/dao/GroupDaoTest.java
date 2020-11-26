@@ -19,7 +19,6 @@ import static org.junit.Assert.*;
 public class GroupDaoTest {
     private static final String CLASS = "GroupDaoTest";
     private final GroupDao groupDao = new GroupDaoImpl();
-    ;
     private final AccountDao accountDao = new AccountDaoImpl();
     private final Group GROUP = new GroupImpl();
     private Account account = new AccountImpl("test", "test", "test@test.com");

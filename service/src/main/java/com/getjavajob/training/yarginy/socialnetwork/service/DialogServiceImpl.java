@@ -20,12 +20,12 @@ public class DialogServiceImpl implements DialogService {
     private final MessageService messageService = new DialogMessageServiceImpl();
 
     @Override
-    public Dialog select(long dialogId) {
+    public Dialog get(long dialogId) {
         return dialogDao.select(dialogId);
     }
 
     @Override
-    public Dialog select(Dialog dialog) {
+    public Dialog get(Dialog dialog) {
         return dialogDao.select(dialog);
     }
 
@@ -55,7 +55,7 @@ public class DialogServiceImpl implements DialogService {
     }
 
     @Override
-    public Dialog selectByAccounts(long firstAccountId, long secondAccountId) {
+    public Dialog getByTalkers(long firstAccountId, long secondAccountId) {
         Dialog dialog = new DialogImpl();
         Account firstAccount = new AccountImpl();
         firstAccount.setId(firstAccountId);

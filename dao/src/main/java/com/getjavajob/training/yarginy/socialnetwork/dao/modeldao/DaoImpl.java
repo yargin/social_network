@@ -45,7 +45,7 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
                 return dml.getNullEntity();
             }
             checkOneRecordSelected(resultSet);
-            return dml.selectFromRow(resultSet);
+            return dml.retrieveFromRow(resultSet);
         }
     }
 
@@ -108,7 +108,7 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
              ResultSet resultSet = statement.executeQuery()) {
             Collection<E> entities = new ArrayList<>();
             while (resultSet.next()) {
-                entities.add(dml.selectViewFromRow(resultSet));
+                entities.add(dml.retrieveViewFromRow(resultSet));
             }
             return entities;
         } catch (SQLException e) {

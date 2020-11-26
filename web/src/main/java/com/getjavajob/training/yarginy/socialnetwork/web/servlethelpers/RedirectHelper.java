@@ -24,11 +24,10 @@ public final class RedirectHelper {
         resp.sendRedirect(location);
     }
 
-    public static void redirectToReferer(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
-            IOException {
+    public static void redirectToReferer(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String referer = req.getHeader("Referer");
         if (isNull(referer) || referer.contains(Pages.LOGIN)) {
-            resp.sendRedirect(req.getContextPath() + Pages.MY_WALL);
+            resp.sendRedirect(req.getContextPath() + Pages.WALL);
             return;
         }
         String url = req.getRequestURL().toString();

@@ -23,7 +23,7 @@ public class GroupWallServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         long requestedId = (long) req.getAttribute(Attributes.REQUESTED_ID);
-        Group group = groupService.selectGroup(requestedId);
+        Group group = groupService.get(requestedId);
         Collection<Message> messages = groupWallMessageService.selectMessages(requestedId);
         req.setAttribute("messages", messages);
         req.setAttribute("group", group);

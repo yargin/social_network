@@ -44,7 +44,7 @@ public class CreateDialogServlet extends HttpServlet {
             return;
         }
         dialogService.create(dialog, message);
-        dialog = dialogService.selectByAccounts(authorId, receiverId);
+        dialog = dialogService.getByTalkers(authorId, receiverId);
         redirect(req, resp, Pages.DIALOG + '?' + REQUESTED_ID + '=' + dialog.getId());
     }
 }

@@ -12,9 +12,9 @@ import java.util.Map;
 public interface AccountService {
     AccountInfoDTO getAccountInfo(long id);
 
-    Account getAccount(long id);
+    Account get(long id);
 
-    Account getAccount(Account account);
+    Account get(Account account);
 
     boolean createAccount(Account account, Collection<Phone> phones);
 

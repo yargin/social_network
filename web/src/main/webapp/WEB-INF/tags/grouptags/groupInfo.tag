@@ -10,7 +10,7 @@
     <fmt:message key="form.description"/> : ${group.getDescription()}<br>
     <fmt:message key="label.groupCreationDate"/> : ${group.getCreationDate()}<br>
     <fmt:message key="label.creator"/> :
-    <a href="${context}/mywall?id=${ownerObject.getId()}">${ownerObject.getName()} ${ownerObject.getSurname()}</a>
+    <a href="${context}/wall?id=${ownerObject.getId()}">${ownerObject.getName()} ${ownerObject.getSurname()}</a>
 </div>
 
 <div class="info">
@@ -30,7 +30,7 @@
 <c:if test="${not empty admin or not empty owner}">
     <a href="${context}/deletegroup?id=${id}"><fmt:message key="label.deleteGroup"/></a><br>
 </c:if>
-<c:if test="${not empty member}">
+<c:if test="${not empty member and empty owner}">
     <form action="${context}/leavegroup" method="post">
         <input type="hidden" value="${sessionScope.userId}" name="requesterId">
         <input type="hidden" value="${id}" name="receiverId">

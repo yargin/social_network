@@ -27,7 +27,7 @@ public class GroupsModeratorsDml extends ManyToManyDml<Account, Group> {
             GroupsModeratorsTable.ACCOUNT_ID).and(GroupsModeratorsTable.GROUP_ID).build();
 
     @Override
-    protected String getSecondSelectQuery() {
+    protected String getSelectBySecondQuery() {
         return SELECT_GROUPS;
     }
 
@@ -37,7 +37,7 @@ public class GroupsModeratorsDml extends ManyToManyDml<Account, Group> {
     }
 
     @Override
-    protected String getFirstSelectQuery() {
+    protected String getSelectByFirstQuery() {
         return SELECT_MODERATORS;
     }
 

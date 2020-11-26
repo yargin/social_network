@@ -16,7 +16,7 @@ public class AuthFilter implements Filter {
     private String[] ignoredPages;
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
         String ignoredParam = filterConfig.getInitParameter("pathToIgnore");
         ignoredPages = ignoredParam.split(":");
     }
@@ -45,7 +45,6 @@ public class AuthFilter implements Filter {
 
         if (userId < 1) {
             RedirectHelper.redirect(req, resp, Pages.LOGIN);
-            return;
         } else {
             filterChain.doFilter(request, response);
         }

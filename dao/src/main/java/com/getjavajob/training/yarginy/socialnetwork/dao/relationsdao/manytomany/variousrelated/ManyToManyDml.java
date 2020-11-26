@@ -10,32 +10,32 @@ import java.sql.SQLException;
 import java.util.Collection;
 
 public abstract class ManyToManyDml<F extends Entity, S extends Entity> {
-    public Collection<S> selectByFirst(Connection connection, long firstId) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(getSecondSelectQuery())) {
+    public Collection<S> retrieveByFirst(Connection connection, long firstId) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(getSelectBySecondQuery())) {
             statement.setLong(1, firstId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 Dml<S> secondDml = getSecondDml();
-                return secondDml.selectEntities(resultSet);
+                return secondDml.retrieveEntities(resultSet);
             }
         }
     }
 
-    protected abstract String getSecondSelectQuery();
+    protected abstract String getSelectBySecondQuery();
 
     protected abstract Dml<S> getSecondDml();
 
-    public Collection<F> selectBySecond(Connection connection, long secondId) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(getFirstSelectQuery(),
+    public Collection<F> retrieveBySecond(Connection connection, long secondId) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(getSelectByFirstQuery(),
                 ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
             statement.setLong(1, secondId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 Dml<F> firstDml = getFirstDml();
-                return firstDml.selectEntities(resultSet);
+                return firstDml.retrieveEntities(resultSet);
             }
         }
     }
 
-    protected abstract String getFirstSelectQuery();
+    protected abstract String getSelectByFirstQuery();
 
     protected abstract Dml<F> getFirstDml();
 

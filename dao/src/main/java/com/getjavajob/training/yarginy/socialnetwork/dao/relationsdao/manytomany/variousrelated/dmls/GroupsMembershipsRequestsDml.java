@@ -23,7 +23,7 @@ public class GroupsMembershipsRequestsDml extends ManyToManyDml<Account, Group> 
     private static final String SELECT = buildQuery().select(TABLE).where(ACCOUNT_ID).and(GROUP_ID).build();
 
     @Override
-    protected String getSecondSelectQuery() {
+    protected String getSelectBySecondQuery() {
         return SELECT_GROUPS;
     }
 
@@ -33,7 +33,7 @@ public class GroupsMembershipsRequestsDml extends ManyToManyDml<Account, Group> 
     }
 
     @Override
-    protected String getFirstSelectQuery() {
+    protected String getSelectByFirstQuery() {
         return SELECT_MEMBERS;
     }
 

@@ -53,7 +53,7 @@ public class AccountDml extends AbstractDml<Account> {
     }
 
     @Override
-    public Account selectViewFromRow(ResultSet resultSet) throws SQLException {
+    public Account retrieveViewFromRow(ResultSet resultSet) throws SQLException {
         Account account = new AccountImpl();
         account.setId(resultSet.getLong(ID));
         account.setName(resultSet.getString(NAME));
@@ -63,8 +63,8 @@ public class AccountDml extends AbstractDml<Account> {
     }
 
     @Override
-    public Account selectFromRow(ResultSet resultSet) throws SQLException {
-        Account account = selectViewFromRow(resultSet);
+    public Account retrieveFromRow(ResultSet resultSet) throws SQLException {
+        Account account = retrieveViewFromRow(resultSet);
         account.setPatronymic(resultSet.getString(PATRONYMIC));
         if (!isNull(resultSet.getString(SEX))) {
             account.setSex(Sex.valueOf(resultSet.getString(SEX)));
@@ -108,10 +108,10 @@ public class AccountDml extends AbstractDml<Account> {
     }
 
     @Override
-    public Collection<Account> selectEntities(ResultSet resultSet) throws SQLException {
+    public Collection<Account> retrieveEntities(ResultSet resultSet) throws SQLException {
         Collection<Account> accounts = new ArrayList<>();
         while (resultSet.next()) {
-            Account account = selectViewFromRow(resultSet);
+            Account account = retrieveViewFromRow(resultSet);
             accounts.add(account);
         }
         return accounts;

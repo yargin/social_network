@@ -22,7 +22,7 @@ public class GroupModeratorsListServlet extends HttpServlet {
         long requestedId = (long) req.getAttribute(Attributes.REQUESTED_ID);
         Collection<Account> moderators = groupService.getModerators(requestedId);
         req.setAttribute("moderators", moderators);
-        Group group = groupService.selectGroup(requestedId);
+        Group group = groupService.get(requestedId);
         req.setAttribute("group", group);
         req.setAttribute("tab", "moderators");
         req.getRequestDispatcher(Jsps.GROUP_JSP).forward(req, resp);

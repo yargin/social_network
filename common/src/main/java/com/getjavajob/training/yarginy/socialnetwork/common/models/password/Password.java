@@ -15,7 +15,7 @@ public interface Password extends Entity {
     String getPassword();
 
     /**
-     * checks & encrypts password before assignation
+     * checks & encrypts password before assignment
      *
      * @param password to check, encrypt & assign
      */

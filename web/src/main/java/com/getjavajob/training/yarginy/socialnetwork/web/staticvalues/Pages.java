@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServlet;
 
 public final class Pages extends HttpServlet {
     public static final String LOGIN = "/login";
-    public static final String MY_WALL = "/mywall";
+    public static final String WALL = "/wall";
     public static final String LOGOUT = "/logout";
     public static final String REGISTER = "/registration";
     public static final String DELETE_ACCOUNT = "/deleteAccount";

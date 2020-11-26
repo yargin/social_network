@@ -28,7 +28,11 @@ public interface BatchDao<E extends Entity> extends Dao<E> {
     boolean delete(Collection<E> entities);
 
     /**
+     * updates batch of {@link Entity} regarding to stored batch of {@link Entity}
      *
+     * @param newEntities modified batch of {@link Entity}
+     * @param storedEntities stored batch of {@link Entity}
+     * @return true if update successful, false if not
      */
     boolean update(Collection<E> newEntities, Collection<E> storedEntities);
 }

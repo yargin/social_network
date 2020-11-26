@@ -5,7 +5,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelpe
 import org.junit.Test;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper.stringOptional;
-import static com.getjavajob.training.yarginy.socialnetwork.common.utils.TestResultPrinter.printPassed;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -18,7 +17,6 @@ public class DataCheckHelperTest {
     public void testStringTrim() {
         givenString = " aaAAaa   ";
         assertEquals("aaAAaa", stringOptional(givenString));
-        printPassed(CLASS, "testStringTrim");
     }
 
     @Test
@@ -27,7 +25,6 @@ public class DataCheckHelperTest {
         assertException(DataCheckHelper::stringMandatory);
         givenString = null;
         assertException(DataCheckHelper::stringMandatory);
-        printPassed(CLASS, "testStringPrepare");
     }
 
     @Test
@@ -48,7 +45,6 @@ public class DataCheckHelperTest {
         assertException(DataCheckHelper::emailOptional);
         givenString = "asd@asd.asd";
         assertNoException(DataCheckHelper::emailOptional);
-        printPassed(CLASS, "testEmailCheck");
     }
 
     @Test
@@ -69,7 +65,6 @@ public class DataCheckHelperTest {
         assertNoException(DataCheckHelper::phoneOptional);
         givenString = "12 ( 412 ) 41 24";
         assertNoException(DataCheckHelper::phoneOptional);
-        printPassed(CLASS, "testPhoneCheck");
     }
 
     @Test
@@ -84,7 +79,6 @@ public class DataCheckHelperTest {
         assertException(DataCheckHelper::passwordMandatory);
         givenString = "1a1a1a";
         assertNoException(DataCheckHelper::passwordMandatory);
-        printPassed(CLASS, "testPasswordCheck");
     }
 
     private void assertException(StringHandlerMethod method) {

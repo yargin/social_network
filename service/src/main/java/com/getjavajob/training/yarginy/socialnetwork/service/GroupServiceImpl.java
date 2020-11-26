@@ -20,12 +20,12 @@ public class GroupServiceImpl implements GroupService {
     private final DataSetsDao dataSetsDao = new DataSetsDaoImpl();
 
     @Override
-    public Group selectGroup(Group group) {
+    public Group get(Group group) {
         return groupDao.select(group);
     }
 
     @Override
-    public Group selectGroup(long id) {
+    public Group get(long id) {
         return groupDao.select(id);
     }
 
@@ -79,6 +79,9 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public boolean leaveGroup(long accountId, long groupId) {
+        if (groupDao.isOwner(accountId, groupId)) {
+            return false;
+        }
         try (Transaction transaction = transactionManager.getTransaction()) {
             moderatorsDao.deleteGroupModerator(accountId, groupId);
             if (!groupDao.removeMember(accountId, groupId)) {

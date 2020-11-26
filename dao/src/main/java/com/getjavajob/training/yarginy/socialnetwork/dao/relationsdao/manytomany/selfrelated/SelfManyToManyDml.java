@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public abstract class SelfManyToManyDml<E extends Entity> {
-    public abstract Collection<E> select(Connection connection, long id) throws SQLException;
+    public abstract Collection<E> retrieve(Connection connection, long id) throws SQLException;
 
     public abstract PreparedStatement getSelectStatement(Connection connection, long firstId, long secondId) throws
             SQLException;
@@ -23,7 +23,7 @@ public abstract class SelfManyToManyDml<E extends Entity> {
             Dml<E> entityDml = getEntityDml();
             Collection<E> entities = new ArrayList<>();
             while (resultSet.next()) {
-                E entity = entityDml.selectViewFromRow(resultSet);
+                E entity = entityDml.retrieveViewFromRow(resultSet);
                 entities.add(entity);
             }
             return entities;

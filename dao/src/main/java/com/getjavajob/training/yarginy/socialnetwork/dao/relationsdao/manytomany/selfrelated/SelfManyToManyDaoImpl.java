@@ -21,7 +21,7 @@ public class SelfManyToManyDaoImpl<E extends Entity> implements SelfManyToManyDa
     @Override
     public Collection<E> select(long id) {
         try (Connection connection = connectionPool.getConnection()) {
-            return manyToManyDml.select(connection, id);
+            return manyToManyDml.retrieve(connection, id);
         } catch (SQLException e) {
             throw new IllegalArgumentException(e);
         }

@@ -1,8 +1,5 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.tables;
 
-/**
- * table Groups_members columns
- */
 public final class GroupsMembersTable {
     public static final String TABLE = "Groups_members";
     public static final String ACCOUNT_ID = TABLE + '.' + "Account_id";

@@ -20,8 +20,8 @@ import static java.util.Objects.isNull;
 public class UpdateFieldsHelper {
     protected final HttpServletRequest req;
     protected final HttpServletResponse resp;
+    protected final String updateFailUrl;
     protected String updateSuccessUrl;
-    protected String updateFailUrl;
     protected boolean paramsAccepted = true;
 
     public UpdateFieldsHelper(HttpServletRequest req, HttpServletResponse resp, String param, String successUrl) {
@@ -33,7 +33,7 @@ public class UpdateFieldsHelper {
         } else {
             updateSuccessUrl = successUrl;
         }
-        updateFailUrl = Pages.MY_WALL;
+        updateFailUrl = Pages.WALL;
     }
 
     public void setSuccessUrl(String successUrl, String param, String value) {

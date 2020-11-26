@@ -67,12 +67,12 @@ public class DialogDml extends AbstractDml<Dialog> {
     }
 
     @Override
-    public Dialog selectFromRow(ResultSet resultSet) throws SQLException {
-        return selectViewFromRow(resultSet);
+    public Dialog retrieveFromRow(ResultSet resultSet) throws SQLException {
+        return retrieveViewFromRow(resultSet);
     }
 
     @Override
-    public Dialog selectViewFromRow(ResultSet resultSet) throws SQLException {
+    public Dialog retrieveViewFromRow(ResultSet resultSet) throws SQLException {
         Account firstAccount = getAccount(resultSet, FIRST_TABLE_ALIAS);
         Account secondAccount = getAccount(resultSet, SECOND_TABLE_ALIAS);
 
@@ -93,10 +93,10 @@ public class DialogDml extends AbstractDml<Dialog> {
     }
 
     @Override
-    public Collection<Dialog> selectEntities(ResultSet resultSet) throws SQLException {
+    public Collection<Dialog> retrieveEntities(ResultSet resultSet) throws SQLException {
         Collection<Dialog> dialogs = new ArrayList<>();
         while (resultSet.next()) {
-            dialogs.add(selectViewFromRow(resultSet));
+            dialogs.add(retrieveViewFromRow(resultSet));
         }
         return dialogs;
     }

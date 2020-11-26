@@ -61,7 +61,7 @@ public class GroupDml extends AbstractDml<Group> {
     }
 
     @Override
-    public Group selectViewFromRow(ResultSet resultSet) throws SQLException {
+    public Group retrieveViewFromRow(ResultSet resultSet) throws SQLException {
         Group group = new GroupImpl();
         group.setId(resultSet.getLong(ID));
         group.setName(resultSet.getString(NAME));
@@ -69,12 +69,12 @@ public class GroupDml extends AbstractDml<Group> {
     }
 
     @Override
-    public Group selectFromRow(ResultSet resultSet) throws SQLException {
-        Group group = selectViewFromRow(resultSet);
+    public Group retrieveFromRow(ResultSet resultSet) throws SQLException {
+        Group group = retrieveViewFromRow(resultSet);
         group.setDescription(resultSet.getString(DESCRIPTION));
         group.setCreationDate(resultSet.getDate(CREATION_DATE));
         group.setPhoto(resultSet.getBytes(PHOTO));
-        Account owner = accountDml.selectViewFromRow(resultSet);
+        Account owner = accountDml.retrieveViewFromRow(resultSet);
         group.setOwner(owner);
         return group;
     }
@@ -94,10 +94,10 @@ public class GroupDml extends AbstractDml<Group> {
     }
 
     @Override
-    public Collection<Group> selectEntities(ResultSet resultSet) throws SQLException {
+    public Collection<Group> retrieveEntities(ResultSet resultSet) throws SQLException {
         Collection<Group> groups = new ArrayList<>();
         while (resultSet.next()) {
-            Group group = selectViewFromRow(resultSet);
+            Group group = retrieveViewFromRow(resultSet);
             groups.add(group);
         }
         return groups;

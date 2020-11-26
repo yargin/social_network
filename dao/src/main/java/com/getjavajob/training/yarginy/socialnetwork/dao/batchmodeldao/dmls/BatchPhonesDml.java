@@ -2,7 +2,6 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.dmls;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDeletionHelper;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.PhonesDml;

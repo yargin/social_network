@@ -19,7 +19,7 @@ public class OneToManyDaoImpl<M extends Entity, O extends Entity> implements One
     @Override
     public Collection<M> selectMany(long oneId) {
         try (Connection connection = connectionPool.getConnection()) {
-            return oneToManyDml.selectByOne(connection, oneId);
+            return oneToManyDml.retrieveManyByOne(connection, oneId);
         } catch (SQLException e) {
             throw new IllegalStateException(e);
         }
@@ -28,7 +28,7 @@ public class OneToManyDaoImpl<M extends Entity, O extends Entity> implements One
     @Override
     public boolean relationExists(long manyId, long oneId) {
         try (Connection connection = connectionPool.getConnection()) {
-            return oneToManyDml.selectByBoth(connection, oneId, manyId);
+            return oneToManyDml.retrieveByBoth(connection, oneId, manyId);
         } catch (SQLException e) {
             throw new IllegalStateException(e);
         }

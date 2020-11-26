@@ -21,7 +21,7 @@ public class AccountsFriendshipsRequestsDml extends ManyToManyDml<Account, Accou
     private final AccountDml accountDml = new AccountDml();
 
     @Override
-    protected String getSecondSelectQuery() {
+    protected String getSelectBySecondQuery() {
         return SELECT_RECEIVERS;
     }
 
@@ -31,7 +31,7 @@ public class AccountsFriendshipsRequestsDml extends ManyToManyDml<Account, Accou
     }
 
     @Override
-    protected String getFirstSelectQuery() {
+    protected String getSelectByFirstQuery() {
         return SELECT_REQUESTERS;
     }
 

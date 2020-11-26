@@ -53,14 +53,14 @@ public class PasswordDml extends AbstractDml<Password> {
     }
 
     @Override
-    public Password selectViewFromRow(ResultSet resultSet) throws SQLException {
+    public Password retrieveViewFromRow(ResultSet resultSet) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Password selectFromRow(ResultSet resultSet) throws SQLException {
+    public Password retrieveFromRow(ResultSet resultSet) throws SQLException {
         Password password = new PasswordImpl();
-        Account account = ACCOUNT_DML.selectFromRow(resultSet);
+        Account account = ACCOUNT_DML.retrieveFromRow(resultSet);
         password.setAccount(account);
         password.setEncryptedPassword(resultSet.getString(PASSWORD));
         return password;
@@ -79,7 +79,7 @@ public class PasswordDml extends AbstractDml<Password> {
     }
 
     @Override
-    public Collection<Password> selectEntities(ResultSet resultSet) throws SQLException {
+    public Collection<Password> retrieveEntities(ResultSet resultSet) {
         throw new UnsupportedOperationException();
     }
 }

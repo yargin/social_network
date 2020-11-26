@@ -56,7 +56,7 @@ public class DialogImpl implements Dialog {
         return Objects.equals(getFirstAccount(), dialog.getFirstAccount()) &&
                 Objects.equals(getSecondAccount(), dialog.getSecondAccount()) ||
                 Objects.equals(getFirstAccount(), dialog.getSecondAccount()) &&
-                        Objects.equals(getSecondAccount(), dialog.getFirstAccount());
+                Objects.equals(getSecondAccount(), dialog.getFirstAccount());
     }
 
     @Override

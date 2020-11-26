@@ -4,6 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.AbstractEntity;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,7 +22,6 @@ public class GroupImpl extends AbstractEntity implements Group {
     private Account owner;
     private Date creationDate;
     private byte[] photo;
-    private byte[] photoPreview;
 
     public GroupImpl() {
     }
@@ -83,16 +83,7 @@ public class GroupImpl extends AbstractEntity implements Group {
 
     @Override
     public void setPhoto(InputStream photo) {
-        try {
-            int size = photo.available();
-            if (size > MAX_PHOTO_SIZE) {
-                throw new IncorrectDataException(IncorrectData.FILE_TOO_LARGE);
-            }
-            this.photo = new byte[photo.available()];
-            photo.read(this.photo);
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
-        }
+        this.photo = DataHandleHelper.readFile(photo, MAX_PHOTO_SIZE);
     }
 
     @Override

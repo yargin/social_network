@@ -13,7 +13,7 @@ public interface SelfManyToManyDao<E extends Entity> {
     /**
      * selects all participants related to {@link Entity}
      *
-     * @param entity {@link Entity} that other participants related to
+     * @param id {@link Entity}'s id that other participants related to
      * @return {@link Collection} of participants
      */
     Collection<E> select(long id);
@@ -27,6 +27,13 @@ public interface SelfManyToManyDao<E extends Entity> {
      */
     boolean create(long firstId, long secondId);
 
+    /**
+     * examines that relation between two {@link Entity}
+     *
+     * @param firstId  member of relationship
+     * @param secondId member of relationship
+     * @return true if exists otherwise false
+     */
     boolean relationExists(long firstId, long secondId);
 
     /**

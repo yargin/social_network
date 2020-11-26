@@ -28,7 +28,7 @@ public class DialogMessagesServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         long dialogId = (long) req.getAttribute(Attributes.REQUESTED_ID);
 
-        Dialog dialog = dialogService.select(dialogId);
+        Dialog dialog = dialogService.get(dialogId);
         if (Objects.equals(dialog, dialogService.getNullDialog())) {
             redirectToReferer(req, resp);
             return;

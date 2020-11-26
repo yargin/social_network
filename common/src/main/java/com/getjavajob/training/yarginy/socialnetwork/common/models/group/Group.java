@@ -6,6 +6,9 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import java.io.InputStream;
 import java.sql.Date;
 
+/**
+ * provides object model of relational entity Group
+ */
 public interface Group extends Entity {
     String getName();
 
