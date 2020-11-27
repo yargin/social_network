@@ -20,4 +20,7 @@
         <br>
         <button type="submit"><fmt:message key="button.send"/></button>
     </form>
+    <%-- bottom border --%>
+    <div>
+    </div>
 </div>

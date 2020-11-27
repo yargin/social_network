@@ -15,6 +15,7 @@ import java.io.IOException;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirectToReferer;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.TAB;
+import static java.util.Objects.isNull;
 
 public class FriendshipRequestCreationServlet extends HttpServlet {
     private final AccountService accountService = new AccountServiceImpl();
@@ -22,6 +23,11 @@ public class FriendshipRequestCreationServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if (!isNull(req.getAttribute("requester")) || !isNull(req.getAttribute("friend"))) {
+            redirectToReferer(req, resp);
+            return;
+        }
+
         long currentId = (long) req.getSession().getAttribute(Attributes.USER_ID);
         long requesterId = (long) req.getAttribute(Attributes.REQUESTER_ID);
         if (currentId != requesterId) {
@@ -30,24 +36,15 @@ public class FriendshipRequestCreationServlet extends HttpServlet {
         }
         long receiverId = (long) req.getAttribute(Attributes.RECEIVER_ID);
 
-
-        if (accountService.isFriend(requesterId, receiverId)) {
-            req.setAttribute(Attributes.MESSAGE, "label.alreadyFriends");
-        }
-        boolean created = false;
         try {
-            created = accountService.createFriendshipRequest(requesterId, receiverId);
+            req.setAttribute("created", accountService.createFriendshipRequest(requesterId, receiverId));
         } catch (IncorrectDataException e) {
             req.setAttribute(Attributes.ERROR, e.getType().getPropertyKey());
-        }
-        if (!created) {
-            req.setAttribute(Attributes.MESSAGE, "label.requestAlreadySent");
-        } else {
-            req.setAttribute(Attributes.MESSAGE, "label.requestSent");
         }
 
         infoHelper.setAccountInfo(req, receiverId);
         req.setAttribute(TAB, "addFriend");
+        req.setAttribute(Attributes.REQUESTED_ID, receiverId);
         req.getRequestDispatcher(Jsps.FRIENDSHIP_REQUEST).forward(req, resp);
     }
 }

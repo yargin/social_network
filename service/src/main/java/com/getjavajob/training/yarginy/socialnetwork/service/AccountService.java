@@ -46,6 +46,8 @@ public interface AccountService {
 
     boolean deleteFriendshipRequest(long requester, long receiver);
 
+    boolean isRequester(long requester, long receiver);
+
     Collection<Account> getFriendshipRequests(long receiver);
 
     Collection<Dialog> getDialogs(long accountId);

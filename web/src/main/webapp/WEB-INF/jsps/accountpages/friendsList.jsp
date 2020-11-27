@@ -8,8 +8,8 @@
 <common:layout>
     <common:accountInfo/>
     <common:accountMenu/>
-    <br><br>
 
+    <br><br>
     <c:forEach items="${friends}" var="friend">
         <div class="post">
             <form action="${context}/removefriendship" method="post">
@@ -23,4 +23,5 @@
         </div>
         <br>
     </c:forEach>
+
 </common:layout>

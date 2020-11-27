@@ -125,7 +125,7 @@
         <url-pattern>/addmessage</url-pattern>
     </filter-mapping>
 
-    <!-- permissions for account wall-->
+    <!-- permissions for account info -->
     <filter>
         <filter-name>AccountPermissionsSetter</filter-name>
         <filter-class>
@@ -164,16 +164,16 @@
         <url-pattern>/dialogs</url-pattern>
     </filter-mapping>
 
-        <filter>
-            <filter-name>FriendChecker</filter-name>
-            <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.accountinfoaccess.FriendCheckerFilter
-            </filter-class>
-        </filter>
-        <filter-mapping>
-            <filter-name>FriendChecker</filter-name>
-            <url-pattern>/privatemessage</url-pattern>
-            <url-pattern>/createdialog</url-pattern>
-        </filter-mapping>
+    <!--    <filter>-->
+    <!--        <filter-name>FriendChecker</filter-name>-->
+    <!--        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.accountinfoaccess.FriendCheckerFilter-->
+    <!--        </filter-class>-->
+    <!--    </filter>-->
+    <!--    <filter-mapping>-->
+    <!--        <filter-name>FriendChecker</filter-name>-->
+    <!--        <url-pattern>/privatemessage</url-pattern>-->
+    <!--        <url-pattern>/createdialog</url-pattern>-->
+    <!--    </filter-mapping>-->
 
     <filter>
         <filter-name>OwnerFriendChecker</filter-name>

@@ -43,6 +43,11 @@ public class FriendshipsDaoImpl implements FriendshipsDao {
     }
 
     @Override
+    public boolean isRequester(long requesterId, long receiverId) {
+        return friendshipRequestsDao.relationExists(requesterId, receiverId);
+    }
+
+    @Override
     public Collection<Account> selectRequests(long receiverId) {
         return friendshipRequestsDao.selectBySecond(receiverId);
     }

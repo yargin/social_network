@@ -8,8 +8,17 @@
 <common:layout>
     <common:accountInfo/>
     <common:accountMenu/>
+
     <br><br>
     <c:if test="${not empty error}"><fmt:message key="${error}" bundle="${error}"/></c:if>
-    <c:if test="${not empty message}"><fmt:message key="${message}" bundle="${label}"/></c:if>
+    <c:choose>
+        <c:when test="${created eq true}">
+            <fmt:message key="label.requestSent" bundle="${label}"/>
+        </c:when>
+        <c:otherwise>
+            <fmt:message key="label.requestAlreadySent" bundle="${label}"/>
+        </c:otherwise>
+    </c:choose>
     <br><br>
+
 </common:layout>

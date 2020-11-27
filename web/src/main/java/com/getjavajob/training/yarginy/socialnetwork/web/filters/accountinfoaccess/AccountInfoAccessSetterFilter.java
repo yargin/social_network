@@ -36,8 +36,11 @@ public class AccountInfoAccessSetterFilter extends HttpFilter {
         if (requesterId == requestedUserId) {
             req.setAttribute("owner", true);
         }
+
         if (accountService.isFriend(requesterId, requestedUserId)) {
             req.setAttribute("friend", true);
+        } else if (accountService.isRequester(requesterId, requestedUserId)) {
+            req.setAttribute("requester", true);
         }
 
         Account account = (Account) session.getAttribute(USER);

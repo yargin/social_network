@@ -175,6 +175,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public boolean isRequester(long requester, long receiver) {
+        return friendshipDao.isRequester(requester, receiver);
+    }
+
+    @Override
     public Collection<Account> getFriendshipRequests(long receiver) {
         return friendshipDao.selectRequests(receiver);
     }

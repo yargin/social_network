@@ -5,6 +5,7 @@ import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 
 import javax.servlet.*;
+import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -12,7 +13,7 @@ import java.io.IOException;
 
 import static java.util.Objects.isNull;
 
-public class AuthFilter implements Filter {
+public class AuthFilter extends HttpFilter {
     private String[] ignoredPages;
 
     @Override
@@ -48,10 +49,5 @@ public class AuthFilter implements Filter {
         } else {
             filterChain.doFilter(request, response);
         }
-    }
-
-    @Override
-    public void destroy() {
-
     }
 }

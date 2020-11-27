@@ -21,7 +21,7 @@
         </c:choose>
     </c:if>
 
-    <c:if test="${empty friend and empty owner}">
+    <c:if test="${empty friend and empty owner and empty requester}">
         <c:choose>
             <c:when test="${tab eq 'addFriend'}">
                 <strong>

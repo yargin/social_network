@@ -9,6 +9,7 @@
 <common:layout>
     <common:accountInfo/>
     <common:accountMenu/>
+
     <c:if test="${not empty friend or not empty owner or not empty admin}">
         <a href="${context}/creategroup">
             <button><fmt:message key="label.createGroup"/></button>
@@ -29,4 +30,5 @@
         </div>
         <common:groupsList/>
     </c:if>
+
 </common:layout>

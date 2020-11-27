@@ -17,5 +17,7 @@ public interface FriendshipsDao {
 
     boolean deleteRequest(long requesterId, long receiverId);
 
+    boolean isRequester(long requesterId, long receiverId);
+
     Collection<Account> selectRequests(long receiverId);
 }
