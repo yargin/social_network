@@ -1,13 +1,19 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.factories;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.group.Group;
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.Dao;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.ConnectionPool;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl.ScriptExecutor;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.selfrelated.SelfManyToManyDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.variousrelated.ManyToManyDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relations.onetomany.OneToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.otherdao.DataSelectsDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.SelfManyToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.ManyToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
 
 /**
  * stored entities abstract fabric. CRUD operations with entities are provided by *Dao objects
@@ -15,15 +21,45 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.relations.onetomany.One
 public interface DbFactory {
     Dao<Account> getAccountDao();
 
-    Dao<Group> getGroupDao();
+    BatchDao<Group> getGroupDao();
 
-    SelfManyToManyDao<Account> getFriendshipDao(Dao<Account> accountDao);
+    SelfManyToManyDao<Account> getFriendshipDao();
 
-    ManyToManyDao<Account, Group> getGroupMembershipDao(Dao<Account> accountDao, Dao<Group> groupDao);
+    ManyToManyDao<Account, Group> getGroupMembershipDao();
 
-    Dao<Phone> getPhoneDao();
+    BatchDao<Phone> getPhoneDao();
 
-    OneToManyDao<Account, Phone> getAccountsPhones(Dao<Account> accountDao, Dao<Phone> phoneDao);
+    OneToManyDao<Phone> getAccountsPhones(Dao<Account> accountDao);
+
+    Dao<Password> getPasswordDao();
 
     ScriptExecutor getScriptExecutor();
+
+    ConnectionPool getConnectionPool();
+
+    OneToManyDao<Group> getAccountsOwnedGroupsDao(Dao<Account> accountDao);
+
+    ManyToManyDao<Account, Group> getGroupModeratorsDao();
+
+    ManyToManyDao<Account, Group> getGroupRequestsDao();
+
+    ManyToManyDao<Account, Account> getFriendshipRequestsDao();
+
+    DataSelectsDao getDataSetsDao();
+
+    Dao<Message> getAccountWallMessageDao();
+
+    OneToManyDao<Message> getAccountWallMessagesDao();
+
+    Dao<Message> getDialogMessageDao();
+
+    OneToManyDao<Message> getDialogsMessagesDao();
+
+    Dao<Message> getGroupWallMessageDao();
+
+    OneToManyDao<Message> getGroupWallMessagesDao();
+
+    Dao<Dialog> getDialogDao();
+
+    OneToManyDao<Dialog> getAccountDialogsDao();
 }

@@ -1,0 +1,228 @@
+@font-face {
+    font-family: 'Quattrocento-Sans-Bold';
+    src:url('../font/Quattrocento-Sans-Bold.ttf.woff') format('woff'),
+    url('../font/Quattrocento-Sans-Bold.ttf.svg#Quattrocento-Sans-Bold') format('svg'),
+    url('../font/Quattrocento-Sans-Bold.ttf.eot'),
+    url('../font/Quattrocento-Sans-Bold.ttf.eot?#iefix') format('embedded-opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+a {
+    text-decoration: none;
+    color: #2c5e99;
+    font-weight: bolder;
+}
+
+a:hover {
+    color: #b75208;
+}
+
+textarea {
+    border-color: #2c5e99;
+}
+
+html, body, ul, li {
+    margin: 0;
+}
+
+#logo {
+    margin: 5px 1% 5px 10px;
+    width: 45px;
+}
+
+.wrapper {
+    margin: auto;
+    max-width: 1024px;
+    color: #2c5e99;
+}
+
+.header {
+    min-height: 90px;
+    background: #94d2d4;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.header h1 {
+    overflow: hidden;
+    font-family: 'Quattrocento-Sans-Bold', serif;
+    font-weight: normal;
+    display: inline;
+    margin-left: 10px;
+    float: left;
+    word-wrap: break-word;
+    /*border: 1px solid black;*/
+}
+
+.header div {
+    padding-top: 10px;
+    /*height: 100px;*/
+    float: right;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.menu {
+    float: left;
+    font-family: "Tahoma", serif;
+    font-size: 13px;
+}
+
+.menu ul {
+    padding: 0;
+    list-style-type: none;
+}
+
+.menu li {
+    margin: 10px 10px 10px 10px;
+}
+
+.content {
+    font-size: 13px;
+    font-family: "Tahoma", serif;
+    /*padding: 10px 10px 30px 30px;*/
+    padding: 1%;
+    min-height: 300px;
+    overflow: hidden;
+    /*display: flex;*/
+    justify-content: center;
+    text-align: center;
+    margin-right: 0;
+}
+
+.info {
+    display: inline-block;
+    text-align: left;
+}
+
+.info img {
+    float: right;
+    max-height: 200px;
+    max-width: 200px;
+    margin-left: 20px;
+    overflow: hidden;
+}
+
+.footer {
+    height: 20px;
+    background: #94d2d4;
+    font-family: 'Quattrocento-Sans-Bold', serif;
+}
+
+.footer p {
+    padding-top: 4px;
+    margin-left: 1%;
+    font-size: 11px;
+    text-align: center;
+}
+
+/*posts in content-container*/
+.post {
+    padding: 10px 20px 10px 10px;
+    text-align: center;
+    /*border: 1px solid black;*/
+    display: flex;
+    justify-content: center;
+}
+
+.post strong {
+    margin-right: 10px;
+    margin-left: 10px;
+    color: black;
+    /*font-weight: bold;*/
+}
+
+.post a {
+    display: inline;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.post input, select {
+    margin-top: 10px;
+    display: inline-block;
+    alignment: center;
+}
+
+.post img {
+    max-height: 150px;
+    max-width: 150px;
+    overflow: hidden;
+    margin-left: 20px;
+}
+
+.post p, label {
+    overflow: hidden;
+    font-family: 'Tahoma', serif;
+    font-weight: normal;
+    font-size: 12px;
+    color: black;
+    padding: 6px 10px 6px 10px;
+}
+
+#error {
+    font-family: "Tahoma", serif;
+    font-size: 15px;
+    color: #b75208;
+    font-weight: bolder;
+}
+
+button {
+    padding: 6px 10px 6px 10px;
+    margin-top: 10px;
+    background-color: #94d2d4;
+    border: none;
+    border-radius: 1px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #b75208;
+}
+
+.wallMessage {
+    margin-top: 10px;
+    border-top: 1px solid #94d2d4;
+    border-left: 1px solid #94d2d4;
+    border-right: 1px solid #94d2d4;
+}
+
+.wallMessage div {
+    padding-left: 10px;
+    padding-right: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #94d2d4;
+    text-align: left;
+    overflow: hidden;
+    word-wrap: break-word;
+    /*word-break: break-all;*/
+}
+
+.wallMessage form {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.wallMessage textarea {
+    margin-right: 10%;
+    margin-left: 10%;
+    overflow: hidden;
+    width: 100%;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box; /* Firefox, other Gecko */
+    box-sizing: border-box;
+    border-color: #94d2d4;
+}
+
+.wallMessage img {
+    max-height: 90px;
+    max-width: 90px;
+    float: right;
+    margin: 5px 10px;
+}

@@ -7,6 +7,8 @@ CREATE TABLE IF NOT EXISTS Accounts (
     patronymic VARCHAR(40),
     sex CHAR(6),
     birth_date DATE,
+    registration_date DATE,
+    role smallint,
     email VARCHAR(40) NOT NULL UNIQUE,
     additional_email VARCHAR(40) UNIQUE,
     icq VARCHAR(40),
@@ -24,6 +26,19 @@ CREATE TABLE IF NOT EXISTS _Groups (
 
 ALTER TABLE _Groups
 ADD CONSTRAINT C_11 FOREIGN KEY (owner_id) REFERENCES Accounts (id) ON DELETE CASCADE;
+
+CREATE TABLE IF NOT EXISTS Roles (
+    id TINYINT PRIMARY KEY,
+    role CHAR(7)
+);
+
+ALTER TABLE Accounts
+ADD CONSTRAINT C_22 FOREIGN KEY (role) REFERENCES Roles (id);
+
+INSERT INTO Roles (id, role) VALUES
+(1, 'admin'),
+(2, 'regular');
+
 
 CREATE TABLE IF NOT EXISTS Accounts_in_groups (
     account_id BIGINT UNSIGNED NOT NULL,
@@ -93,3 +108,20 @@ INSERT INTO Phones (number, type, owner_id) VALUES
 ('8 (921) 1234321', 'PRIVATE', 2),
 ('+7 (920) 123-23-32', 'WORK', 1),
 ('02', 'WORK', 1);
+
+CREATE TABLE Passwords (
+    email VARCHAR(40) NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+ALTER TABLE Passwords
+ADD CONSTRAINT C_20 PRIMARY KEY(email, password);
+
+ALTER TABLE Passwords
+ADD CONSTRAINT C_21 FOREIGN KEY (email) REFERENCES Accounts (email) ON DELETE CASCADE;
+
+INSERT INTO Passwords (email, password) VALUES
+('rise@communism.su', HASH('SHA256', STRINGTOUTF8('communism1'), 1)),
+('drink@blood.com', HASH('SHA256', STRINGTOUTF8('blood2'), 1)),
+('robot@power.com', HASH('SHA256', STRINGTOUTF8('power3'), 1)),
+('popovp@gmail.com', HASH('SHA256', STRINGTOUTF8('gmail4'), 1));

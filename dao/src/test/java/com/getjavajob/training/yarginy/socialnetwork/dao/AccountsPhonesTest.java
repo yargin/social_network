@@ -1,50 +1,50 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.phone.PhoneImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.Dao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relations.onetomany.OneToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoImpl;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.TestResultPrinter.printPassed;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class AccountsPhonesTest {
-    public static final String CLASS = "AccountsPhonesTest";
-    public static final DbFactory FACTORY = AbstractDbFactory.getDbFactory();
-    public static final Dao<Account> ACCOUNT_DAO = FACTORY.getAccountDao();
-    public static final Dao<Phone> PHONE_DAO = FACTORY.getPhoneDao();
-    public static final OneToManyDao<Account, Phone> ACCOUNTS_PHONES = FACTORY.getAccountsPhones(ACCOUNT_DAO, PHONE_DAO);
+    private static final String CLASS = "AccountsPhonesTest";
+    private static final AccountDao ACCOUNT_DAO = new AccountDaoImpl();
+    private static final PhoneDao PHONE_DAO = new PhoneDaoImpl();
+    private final Collection<Phone> phones = new ArrayList<>();
+    private Account account = new AccountImpl("test", "testtest", "test@test.test");
 
-    @Test
-    public void testSelectPhones() {
-        Account account = ACCOUNT_DAO.select(1);
-        List<Phone> expectedPhones = new ArrayList<>();
-        Phone phoneToAdd = new PhoneImpl();
-        phoneToAdd.setNumber("+7 (920) 123-23-32");
-        expectedPhones.add(phoneToAdd);
-        phoneToAdd = new PhoneImpl();
-        phoneToAdd.setNumber("02");
-        expectedPhones.add(phoneToAdd);
-        Collection<Phone> actualPhones = ACCOUNTS_PHONES.selectMany(account);
-        assertEquals(expectedPhones, actualPhones);
-        printPassed(CLASS, "testSelectPhones");
+    @Before
+    public void initTestValues() {
+        ACCOUNT_DAO.create(account);
+        account = ACCOUNT_DAO.select(account);
+        phones.add(new PhoneImpl("11111111111111111111111", account));
+        phones.add(new PhoneImpl("22222222222222222222222", account));
+    }
+
+    @After
+    public void deleteTestValues() {
+        ACCOUNT_DAO.delete(account);
+        PHONE_DAO.delete(phones);
     }
 
     @Test
-    public void testSelectAccount() {
-        Account expectedAccount = ACCOUNT_DAO.select(1);
-        //todo: select by identifier??
-        Phone phone = PHONE_DAO.select("+7 (920) 123-23-32");
-        Account actualAccount = ACCOUNTS_PHONES.selectOne(phone);
-        assertEquals(expectedAccount, actualAccount);
-        printPassed(CLASS, "testSelectAccount");
+    public void testSelectPhones() {
+        assertTrue(PHONE_DAO.create(phones));
+        Collection<Phone> actualPhones = PHONE_DAO.selectPhonesByOwner(account.getId());
+        assertEquals(phones, actualPhones);
+        printPassed(CLASS, "testSelectPhones");
     }
 }

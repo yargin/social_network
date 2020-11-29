@@ -1,128 +1,164 @@
 package com.getjavajob.training.yarginy.socialnetwork.service;
 
+import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
+import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.*;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.Transaction;
+import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.Dao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.selfrelated.SelfManyToManyDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relations.onetomany.OneToManyDao;
-
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-
-import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
-import static java.util.Objects.isNull;
 
 public class AccountServiceImpl implements AccountService {
-    private final DbFactory dbFactory;
-    private final Dao<Account> accountDao;
-    private final Dao<Phone> phoneDao;
-    private final OneToManyDao<Account, Phone> accountsPhonesDao;
-    private final SelfManyToManyDao<Account> friendshipDao;
-    private Collection<Account> friends;
+    private final TransactionManager transactionManager;
+    private final AccountDao accountDao;
+    private final PhoneDao phoneDao;
+    private final FriendshipsDao friendshipDao;
+    private final DialogDao dialogsDao;
 
     public AccountServiceImpl() {
-        dbFactory = getDbFactory();
-        accountDao = dbFactory.getAccountDao();
-        friendshipDao = dbFactory.getFriendshipDao(accountDao);
-        phoneDao = dbFactory.getPhoneDao();
-        accountsPhonesDao = dbFactory.getAccountsPhones(accountDao, phoneDao);
+        this(new AccountDaoImpl(), new PhoneDaoImpl(), new FriendshipsDaoImpl(), new DialogDaoImpl(),
+                new TransactionManager());
     }
 
-    public AccountServiceImpl(Dao<Account> accountDao, SelfManyToManyDao<Account> friendshipDao, Dao<Phone> phoneDao,
-                              OneToManyDao<Account, Phone> accountsPhonesDao) {
-        dbFactory = null;
+    public AccountServiceImpl(AccountDao accountDao, PhoneDao phoneDao, FriendshipsDao friendshipDao, DialogDao
+            dialogDao, TransactionManager transactionManager) {
         this.accountDao = accountDao;
-        this.friendshipDao = friendshipDao;
         this.phoneDao = phoneDao;
-        this.accountsPhonesDao = accountsPhonesDao;
+        this.friendshipDao = friendshipDao;
+        this.dialogsDao = dialogDao;
+        this.transactionManager = transactionManager;
     }
 
-    public Account getAccount(int id) {
+    @Override
+    public AccountInfoDTO getAccountInfo(long id) {
+        Account account = accountDao.select(id);
+        Collection<Phone> phones = phoneDao.selectPhonesByOwner(id);
+        return new AccountInfoDTO(account, phones);
+    }
+
+    @Override
+    public Account get(long id) {
         return accountDao.select(id);
     }
 
-    public Account getAccount(String email) {
-        return accountDao.select(email);
+    @Override
+    public Account get(Account account) {
+        return accountDao.select(account);
     }
 
-    public boolean createAccount(Account account) {
-        return accountDao.create(account);
+    @Override
+    public boolean createAccount(Account account, Collection<Phone> phones) {
+        try (Transaction transaction = transactionManager.getTransaction()) {
+            account.setRegistrationDate(Date.valueOf(LocalDate.now()));
+            if (!accountDao.create(account)) {
+                throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
+            }
+            if (!phoneDao.create(phones)) {
+                throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
+            }
+            transaction.commit();
+        } catch (IncorrectDataException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
+        return true;
     }
 
-    public boolean updateAccount(Account account) {
-        return accountDao.update(account);
+    @Override
+    public boolean updateAccount(Account account, Account storedAccount) {
+        return accountDao.update(account, storedAccount);
     }
 
+    @Override
     public boolean deleteAccount(Account account) {
         return accountDao.delete(account);
     }
 
-    public boolean addFriend(Account account, Account friend) {
-        if (friendshipDao.create(account, friend)) {
-            if (!isNull(friends) && !friends.add(friend)) {
-                friends = null;
+    @Override
+    public boolean addFriend(long firstId, long secondId) {
+        try (Transaction transaction = transactionManager.getTransaction()) {
+            if (!friendshipDao.deleteRequest(firstId, secondId)) {
+                throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
             }
+            if (!friendshipDao.createFriendship(firstId, secondId)) {
+                transaction.rollback();
+                throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
+            }
+            transaction.commit();
             return true;
+        } catch (Exception e) {
+            return false;
         }
-        return false;
     }
 
-    public boolean removeFriend(Account account, Account friend) {
-        if (friendshipDao.delete(account, friend)) {
-            if (!isNull(friends) && !friends.remove(friend)) {
-                friends = null;
-            }
-            return true;
+    @Override
+    public boolean removeFriend(long firstId, long secondId) {
+        try {
+            return friendshipDao.removeFriendship(firstId, secondId);
+        } catch (IllegalArgumentException e) {
+            throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
         }
-        return false;
     }
 
-    public Collection<Account> getFriends(Account account) {
-        if (isNull(friends)) {
-            friends = friendshipDao.select(account);
+    @Override
+    public boolean isFriend(long firstId, long secondId) {
+        try {
+            return friendshipDao.areFriends(firstId, secondId);
+        } catch (IllegalArgumentException e) {
+            throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
         }
-        return friends;
     }
 
     @Override
-    public Collection<Account> getAll(Account account) {
-        return accountDao.selectAll();
+    public Collection<Account> getFriends(long accountId) {
+        try {
+            return friendshipDao.selectFriends(accountId);
+        } catch (IllegalArgumentException e) {
+            throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
+        }
     }
 
     @Override
-    public boolean addPhone(Account account, Phone phone) {
-        phone.setOwner(account);
-        return phoneDao.create(phone);
+    public Collection<Phone> getPhones(long accountId) {
+        return phoneDao.selectPhonesByOwner(accountId);
     }
 
     @Override
-    public boolean removePhone(Phone phone) {
-        return phoneDao.delete(phone);
+    public boolean createFriendshipRequest(long requester, long receiver) {
+        try {
+            return friendshipDao.createRequest(requester, receiver);
+        } catch (IllegalArgumentException e) {
+            throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
+        }
     }
 
     @Override
-    public Collection<Phone> getPhones(Account account) {
-        return accountsPhonesDao.selectMany(account);
+    public boolean deleteFriendshipRequest(long requester, long receiver) {
+        try {
+            return friendshipDao.deleteRequest(requester, receiver);
+        } catch (IllegalArgumentException e) {
+            throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
+        }
     }
 
     @Override
-    public Map<Account, Collection<Phone>> getAllWithPhones() {
-        Collection<Phone> allPhones = phoneDao.selectAll();
-        Map<Account, Collection<Phone>> accountsPhones = new HashMap<>();
-        allPhones.forEach(a -> {
-            Collection<Phone> phones;
-            if (accountsPhones.containsKey(a.getOwner())) {
-                phones = accountsPhones.get(a.getOwner());
-            } else {
-                phones = new HashSet<>();
-                accountsPhones.put(a.getOwner(), phones);
-            }
-            phones.add(a);
-        });
-        return accountsPhones;
+    public boolean isRequester(long requester, long receiver) {
+        return friendshipDao.isRequester(requester, receiver);
+    }
+
+    @Override
+    public Collection<Account> getFriendshipRequests(long receiver) {
+        return friendshipDao.selectRequests(receiver);
+    }
+
+    @Override
+    public Collection<Dialog> getDialogs(long accountId) {
+        return dialogsDao.selectDialogsByAccount(accountId);
     }
 }

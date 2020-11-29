@@ -1,16 +1,18 @@
 package com.getjavajob.training.yarginy.socialnetwork.service;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.AccountImpl;
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.phone.PhoneImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.entities.Dao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relations.manytomany.selfrelated.SelfManyToManyDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relations.onetomany.OneToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.*;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.Transaction;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import static com.getjavajob.training.yarginy.socialnetwork.service.utils.TestResultPrinter.printPassed;
 import static java.util.Arrays.asList;
@@ -19,49 +21,73 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class AccountServiceTest {
-    public static final String CLASS = "AccountServiceTest";
-    private final Dao<Account> accountDao = mock(Dao.class);
-    private final Dao<Phone> phoneDao = mock(Dao.class);
-    private final SelfManyToManyDao<Account> friendsDao = mock(SelfManyToManyDao.class);
-    private final OneToManyDao<Account, Phone> accountsPhonesDao = mock(OneToManyDao.class);
-    private final AccountService accountService = new AccountServiceImpl(accountDao, friendsDao, phoneDao,
-            accountsPhonesDao);
+    private static final String CLASS = "AccountServiceTest";
+    private final AccountDao accountDao = mock(AccountDao.class);
+    private final FriendshipsDao friendsDao = mock(FriendshipsDao.class);
+    private final PhoneDao phoneDao = mock(PhoneDao.class);
+    private final DialogDao dialogDao = mock(DialogDao.class);
+    private final Transaction transaction = mock(Transaction.class);
+    private final TransactionManager transactionManager = mock(TransactionManager.class);
+    private final AccountService accountService = new AccountServiceImpl(accountDao, phoneDao, friendsDao, dialogDao,
+            transactionManager);
     private Account account;
+    private Account storedAccount;
+    private Collection<Phone> phones;
 
     @Before
     public void init() {
         account = new AccountImpl("Petr", "email@gjj.ru");
+        account.setId(555);
+        phones = asList(new PhoneImpl("123321", account), new PhoneImpl("123123", account));
     }
 
     @Test
     public void testGetAccount() {
+        when(transactionManager.getTransaction()).thenReturn(transaction);
         when(accountDao.select(1)).thenReturn(account);
-        Account actualAccount = accountService.getAccount(1);
+        Account actualAccount = accountService.get(1);
         assertEquals(account, actualAccount);
-        when(accountDao.select("email@gjj.ru")).thenReturn(account);
-        actualAccount = accountService.getAccount("email@gjj.ru");
+        when(accountDao.select(account)).thenReturn(account);
+        actualAccount = accountService.get(account);
         assertEquals(account, actualAccount);
         when(accountDao.select(1)).thenReturn(account);
-        actualAccount = accountService.getAccount(1);
+        actualAccount = accountService.get(1);
         assertEquals(account, actualAccount);
         printPassed(CLASS, "testGetAccount");
     }
 
     @Test
     public void testCreateAccount() {
+        when(transactionManager.getTransaction()).thenReturn(transaction);
         when(accountDao.create(account)).thenReturn(true);
-        assertTrue(accountService.createAccount(account));
-        when(accountDao.create(account)).thenReturn(false);
-        assertFalse(accountService.createAccount(account));
+        when(phoneDao.create(phones)).thenReturn(true);
+        assertTrue(accountService.createAccount(account, phones));
         printPassed(CLASS, "testCreateAccount");
+    }
+
+    @Test(expected = IncorrectDataException.class)
+    public void testCreateExistingAccount() {
+        when(transactionManager.getTransaction()).thenReturn(transaction);
+        when(accountDao.create(account)).thenReturn(false);
+        accountService.createAccount(account, phones);
+        printPassed(CLASS, "IncorrectDataException");
+    }
+
+    @Test(expected = IncorrectDataException.class)
+    public void testCreateExistingPhone() {
+        when(transactionManager.getTransaction()).thenReturn(transaction);
+        when(phoneDao.create(phones)).thenReturn(false);
+        accountService.createAccount(account, phones);
+        printPassed(CLASS, "testCreateExistingPhone");
     }
 
     @Test
     public void testUpdateAccount() {
-        when(accountDao.update(account)).thenReturn(true);
-        assertTrue(accountService.updateAccount(account));
-        when(accountDao.update(account)).thenReturn(false);
-        assertFalse(accountService.updateAccount(account));
+        when(transactionManager.getTransaction()).thenReturn(transaction);
+        when(accountDao.update(account, storedAccount)).thenReturn(true);
+        assertTrue(accountService.updateAccount(account, storedAccount));
+        when(accountDao.update(account, storedAccount)).thenReturn(false);
+        assertFalse(accountService.updateAccount(account, storedAccount));
         printPassed(CLASS, "testUpdateAccount");
     }
 
@@ -76,26 +102,28 @@ public class AccountServiceTest {
 
     @Test
     public void testAddFriend() {
-        when(friendsDao.create(account, new AccountImpl("friend", "first@mail.com"))).thenReturn(false);
-        assertFalse(accountService.addFriend(account, new AccountImpl("friend", "first@mail.com")));
-        when(friendsDao.create(account, new AccountImpl("third", "third@mail.com"))).thenReturn(true);
-        assertTrue(accountService.addFriend(account, new AccountImpl("friend", "third@mail.com")));
+        when(friendsDao.deleteRequest(account.getId(), 13)).thenReturn(true);
+        when(friendsDao.createFriendship(account.getId(), 13)).thenReturn(false);
+        assertFalse(accountService.addFriend(account.getId(), 13));
+//        when(friendsDao.deleteRequest(account.getId(), 11)).thenReturn(true);
+//        when(friendsDao.createFriendship(account.getId(), 11)).thenReturn(true);
+//        assertTrue(accountService.addFriend(account.getId(), 11));
         printPassed(CLASS, "testAddFriend");
     }
 
     @Test
     public void testRemoveFriend() {
-        when(friendsDao.delete(account, new AccountImpl("friend", "first@mail.com"))).thenReturn(true);
-        assertTrue(accountService.removeFriend(account, new AccountImpl("friend", "first@mail.com")));
-        when(friendsDao.delete(account, new AccountImpl("third", "third@mail.com"))).thenReturn(false);
-        assertFalse(accountService.removeFriend(account, new AccountImpl("friend", "third@mail.com")));
+        when(friendsDao.removeFriendship(account.getId(), 14)).thenReturn(true);
+        assertTrue(accountService.removeFriend(account.getId(), 14));
+        when(friendsDao.removeFriendship(account.getId(), 11)).thenReturn(false);
+        assertFalse(accountService.removeFriend(account.getId(), 11));
         printPassed(CLASS, "testRemoveFriend");
     }
 
     @Test
     public void testGetFriends() {
         List<Account> emptyFriends = new ArrayList<>();
-        assertEquals(emptyFriends, accountService.getFriends(account));
+        assertEquals(emptyFriends, accountService.getFriends(account.getId()));
         printPassed(CLASS, "testGetFriends");
     }
 
@@ -124,74 +152,10 @@ public class AccountServiceTest {
         Phone secondPhone = new PhoneImpl();
         secondPhone.setNumber("33111");
         Collection<Phone> phones = asList(firstPhone, secondPhone);
-        when(accountsPhonesDao.selectMany(account)).thenReturn(phones);
-        assertEquals(phones, accountService.getPhones(account));
+        when(phoneDao.selectPhonesByOwner(account.getId())).thenReturn(phones);
+        Collection<Phone> actualPhones = accountService.getPhones(account.getId());
+        System.out.println(actualPhones);
+        assertEquals(phones, actualPhones);
         printPassed(CLASS, "testGetPhones");
-    }
-
-    @Test
-    public void testGetAllWithPhones() {
-        Map<Account, Collection<Phone>> expected = new HashMap<>();
-        //all phones for mock
-        Collection<Phone> phones = new HashSet<>();
-
-        Account account = new AccountImpl("Vladimir", "rise@communism.com");
-        account.setId(1);
-        Phone phone = new PhoneImpl();
-        phone.setOwner(account);
-        phone.setNumber("02");
-        phones.add(phone);
-        Collection<Phone> accountPhones = new HashSet<>();
-        accountPhones.add(phone);
-        phone = new PhoneImpl();
-        phone.setOwner(account);
-        phone.setNumber("+7 (920) 123-23-32");
-        phones.add(phone);
-        accountPhones.add(phone);
-        expected.put(account, accountPhones);
-
-        account = new AccountImpl("dracula", "drink@blood.com");
-        account.setId(2);
-        phone = new PhoneImpl();
-        phone.setOwner(account);
-        phone.setNumber("8 (921) 1234321");
-        phones.add(phone);
-        accountPhones = new HashSet<>();
-        accountPhones.add(phone);
-        phone = new PhoneImpl();
-        phone.setOwner(account);
-        phone.setNumber("14-1414-14");
-        accountPhones.add(phone);
-        phones.add(phone);
-        expected.put(account, accountPhones);
-
-        account = new AccountImpl("Alan", "robot@power.com");
-        account.setId(3);
-        phone = new PhoneImpl();
-        phone.setOwner(account);
-        phone.setNumber("444-444-444");
-        phones.add(phone);
-        accountPhones = new HashSet<>();
-        accountPhones.add(phone);
-        phone = new PhoneImpl();
-        phone.setOwner(account);
-        phone.setNumber("+9 812 123 321");
-        phones.add(phone);
-        accountPhones.add(phone);
-        expected.put(account, accountPhones);
-
-        account = new AccountImpl("Petr", "popovp@gmail.com");
-        account.setId(3);
-        phone = new PhoneImpl();
-        phone.setOwner(account);
-        phone.setNumber("89218942");
-        phones.add(phone);
-        accountPhones = new HashSet<>();
-        accountPhones.add(phone);
-        expected.put(account, accountPhones);
-
-        when(phoneDao.selectAll()).thenReturn(phones);
-        assertEquals(expected, accountService.getAllWithPhones());
-        printPassed(CLASS, "testGetAllWithPhones");
     }
 }

@@ -1,36 +1,44 @@
 package com.getjavajob.training.yarginy.socialnetwork.service;
 
 
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.entities.phone.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 
+import java.io.Serializable;
 import java.util.Collection;
-import java.util.Map;
 
-public interface AccountService {
-    Account getAccount(int id);
+public interface AccountService extends Serializable {
+    AccountInfoDTO getAccountInfo(long id);
 
-    Account getAccount(String email);
+    Account get(long id);
 
-    boolean createAccount(Account account);
+    Account get(Account account);
 
-    boolean updateAccount(Account account);
+    boolean createAccount(Account account, Collection<Phone> phones);
+
+    boolean updateAccount(Account account, Account storedAccount);
 
     boolean deleteAccount(Account account);
 
-    boolean addFriend(Account account, Account friend);
+    boolean addFriend(long firstId, long secondId);
 
-    boolean removeFriend(Account account, Account friend);
+    boolean removeFriend(long firstId, long secondId);
 
-    Collection<Account> getAll(Account account);
+    boolean isFriend(long firstId, long secondId);
 
-    Collection<Account> getFriends(Account account);
+    Collection<Account> getFriends(long accountId);
 
-    boolean addPhone(Account account, Phone phone);
+    Collection<Phone> getPhones(long accountId);
 
-    boolean removePhone(Phone phone);
+    boolean createFriendshipRequest(long requester, long receiver);
 
-    Collection<Phone> getPhones(Account account);
+    boolean deleteFriendshipRequest(long requester, long receiver);
 
-    Map<Account, Collection<Phone>> getAllWithPhones();
+    boolean isRequester(long requester, long receiver);
+
+    Collection<Account> getFriendshipRequests(long receiver);
+
+    Collection<Dialog> getDialogs(long accountId);
 }

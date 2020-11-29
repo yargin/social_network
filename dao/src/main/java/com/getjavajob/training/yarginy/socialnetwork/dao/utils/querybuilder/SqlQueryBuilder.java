@@ -113,6 +113,27 @@ public class SqlQueryBuilder {
     }
 
     /**
+     * appends ' WHERE <b>column</b> IN (' to query
+     *
+     * @param column specified column
+     * @return {@link SqlQueryBuilder} having added ' WHERE <b>column</b> IN (' to query
+     */
+    public SqlQueryBuilder whereIn(String[] column, String[] params) {
+        int columnNumber = column.length;
+        if (columnNumber != params.length) {
+            throw new IllegalArgumentException("wrong arrays sizes");
+        }
+        query.append(" WHERE ").append(column[0]).append(" IN (").append(params[0]);
+        if (columnNumber > 1) {
+            for (int i = 1; i < params.length; i++) {
+                query.append(") OR (").append(column[i]).append(" IN (").append(params[i]);
+            }
+        }
+        query.append(')');
+        return this;
+    }
+
+    /**
      * appends ' AND <b>column</b> = ? ' to query
      *
      * @param column specified column
@@ -120,6 +141,22 @@ public class SqlQueryBuilder {
      */
     public SqlQueryBuilder and(String column) {
         query.append(" AND ").append(column).append(" = ?");
+        return this;
+    }
+
+    /**
+     * appends 'INSERT INTO <b>table</b> VALUES(?, ?, ... ,?)' to query
+     *
+     * @param table         table to insert
+     * @param columnsNumber number of columns
+     * @return
+     */
+    public SqlQueryBuilder insert(String table, int columnsNumber) {
+        query.append("INSERT INTO ").append(table).append(" VALUES(");
+        for (int i = 1; i <= columnsNumber; i++) {
+            query.append("?, ");
+        }
+        query.append(')');
         return this;
     }
 
@@ -132,5 +169,25 @@ public class SqlQueryBuilder {
         String result = query.toString();
         query = null;
         return result;
+    }
+
+    /**
+     * appends 'ORDER BY <b>column</b>' to query
+     *
+     * @return {@link String} resulting query
+     */
+    public SqlQueryBuilder orderBy(String column) {
+        query.append(" ORDER BY ").append(column);
+        return this;
+    }
+
+    /**
+     * appends 'ORDER BY <b>column</b> DESC' to query
+     *
+     * @return {@link String} resulting query
+     */
+    public SqlQueryBuilder orderByDesc(String column) {
+        query.append(" ORDER BY ").append(column).append(" DESC ");
+        return this;
     }
 }

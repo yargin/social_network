@@ -7,8 +7,8 @@ public class MySqlDbFactory extends CommonDbFactory {
     private static final String SCRIPTS_DIR = "./src/main/resources/scripts/MySQL/";
     private static final int CONNECTIONS = 4;
 
-    public MySqlDbFactory() {
-        //register driver
+    @Override
+    protected void loadJDBCDriver() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {

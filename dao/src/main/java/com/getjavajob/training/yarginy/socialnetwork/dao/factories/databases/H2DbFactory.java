@@ -9,6 +9,15 @@ public class H2DbFactory extends CommonDbFactory {
     private static final int CONNECTIONS = 2;
 
     @Override
+    protected void loadJDBCDriver() {
+        try {
+            Class.forName("org.h2.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    @Override
     protected String getConnectionFile() {
         return DB_CONNECTION_FILE;
     }
