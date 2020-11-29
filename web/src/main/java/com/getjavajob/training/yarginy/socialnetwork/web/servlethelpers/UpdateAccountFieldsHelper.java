@@ -3,7 +3,6 @@ package com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.PasswordImpl;
@@ -12,7 +11,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneIm
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.additionaldata.PhoneExchanger;
-import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -185,18 +183,5 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
             req.setAttribute(UPLOAD_ERROR, e.getType().getPropertyKey());
         }
         doGet.accept(req, resp);
-    }
-
-    public boolean checkUpdatePermissions(long requestedUserId) {
-        HttpSession session = req.getSession();
-        long sessionUserId = (long) session.getAttribute(Attributes.USER_ID);
-        Role sessionRole = (Role) session.getAttribute(Attributes.USER_ROLE);
-        if (sessionUserId == requestedUserId || (!isNull(sessionRole) && (Role.ADMIN.equals(sessionRole)))) {
-            req.setAttribute("updateAble", true);
-            req.setAttribute("userId", requestedUserId);
-            return true;
-        } else {
-            return false;
-        }
     }
 }

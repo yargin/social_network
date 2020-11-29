@@ -12,8 +12,6 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpoo
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.DialogMessageServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
 
-import java.util.Collection;
-
 public class DialogServiceImpl implements DialogService {
     private final TransactionManager transactionManager = new TransactionManager();
     private final DialogDao dialogDao = new DialogDaoImpl();
@@ -69,11 +67,6 @@ public class DialogServiceImpl implements DialogService {
     @Override
     public boolean isTalker(long accountId, long dialogId) {
         return dialogDao.isTalker(accountId, dialogId);
-    }
-
-    @Override
-    public Collection<Dialog> getAccountDialogs(long accountId) {
-        return dialogDao.selectDialogsByAccount(accountId);
     }
 
     @Override

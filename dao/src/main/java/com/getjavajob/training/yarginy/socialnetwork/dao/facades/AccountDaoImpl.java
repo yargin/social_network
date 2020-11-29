@@ -14,9 +14,9 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.Abstra
 
 public class AccountDaoImpl implements AccountDao {
     private final Dao<Account> accountDao = getDbFactory().getAccountDao();
-    private final OneToManyDao<Account, Group> accountGroupsDao = getDbFactory().getAccountsOwnedGroupsDao(accountDao);
+    private final OneToManyDao<Group> accountGroupsDao = getDbFactory().getAccountsOwnedGroupsDao(accountDao);
     private final ManyToManyDao<Account, Group> accountsInGroupsDao = getDbFactory().getGroupMembershipDao();
-    private final OneToManyDao<Account, Phone> accountPhonesDao = getDbFactory().getAccountsPhones(accountDao);
+    private final OneToManyDao<Phone> accountPhonesDao = getDbFactory().getAccountsPhones(accountDao);
     private final SelfManyToManyDao<Account> accountFriendsDao = getDbFactory().getFriendshipDao();
 
     @Override

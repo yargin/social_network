@@ -1,9 +1,11 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.models;
 
+import java.io.Serializable;
+
 /**
  * represents model as entity
  */
-public interface Entity {
+public interface Entity extends Serializable {
     /**
      * get entity's number unique identifier, usually auto-generated
      *

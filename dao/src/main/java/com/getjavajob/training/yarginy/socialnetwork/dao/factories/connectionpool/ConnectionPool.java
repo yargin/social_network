@@ -1,7 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 
 /**
  * provides {@link Connection}s to database bounded to current thread

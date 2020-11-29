@@ -3,6 +3,9 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpo
 public final class TransactionManagerImpl {
     private static ConnectionPoolImpl connectionPool;
 
+    private TransactionManagerImpl() {
+    }
+
     static void initConnectionPool(ConnectionPoolImpl connectionPool) {
         TransactionManagerImpl.connectionPool = connectionPool;
     }

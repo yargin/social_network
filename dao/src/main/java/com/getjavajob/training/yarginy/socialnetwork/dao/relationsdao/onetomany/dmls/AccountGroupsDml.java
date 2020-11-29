@@ -1,6 +1,5 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.dmls;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.GroupDml;
@@ -10,7 +9,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.tables.GroupsTable;
 
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 
-public class AccountGroupsDml extends OneToManyDml<Account, Group> {
+public class AccountGroupsDml extends OneToManyDml<Group> {
     private static final String SELECT_BY_ACCOUNT = buildQuery().selectJoin(AccountsTable.TABLE, GroupsTable.TABLE,
             AccountsTable.ID, GroupsTable.OWNER).where(GroupsTable.OWNER).build();
     private static final String SELECT_BY_BOTH = buildQuery().selectJoin(AccountsTable.TABLE, GroupsTable.TABLE,

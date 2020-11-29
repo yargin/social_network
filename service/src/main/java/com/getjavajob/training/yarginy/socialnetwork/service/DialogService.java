@@ -3,9 +3,9 @@ package com.getjavajob.training.yarginy.socialnetwork.service;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 
-import java.util.Collection;
+import java.io.Serializable;
 
-public interface DialogService {
+public interface DialogService extends Serializable {
     Dialog get(long dialogId);
 
     Dialog get(Dialog dialog);
@@ -17,8 +17,6 @@ public interface DialogService {
     Dialog getByTalkers(long firstAccountId, long secondAccountId);
 
     boolean isTalker(long accountId, long dialogId);
-
-    Collection<Dialog> getAccountDialogs(long accountId);
 
     Dialog getNullDialog();
 }

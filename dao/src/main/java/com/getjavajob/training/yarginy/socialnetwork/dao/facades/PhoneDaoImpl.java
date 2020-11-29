@@ -13,7 +13,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.Abstra
 public class PhoneDaoImpl implements PhoneDao {
     private final BatchDao<Phone> phoneDao = getDbFactory().getPhoneDao();
     private final Dao<Account> accountDao = getDbFactory().getAccountDao();
-    private final OneToManyDao<Account, Phone> accountsPhonesDao = getDbFactory().getAccountsPhones(accountDao);
+    private final OneToManyDao<Phone> accountsPhonesDao = getDbFactory().getAccountsPhones(accountDao);
 
     @Override
     public Phone select(long id) {

@@ -55,7 +55,7 @@ public class AuthServiceImpl implements AuthService {
             }
             if (!passwordDao.create(password)) {
                 transaction.rollback();
-                throw new RuntimeException();
+                throw new IllegalStateException();
             }
             transaction.commit();
         } catch (IncorrectDataException e) {

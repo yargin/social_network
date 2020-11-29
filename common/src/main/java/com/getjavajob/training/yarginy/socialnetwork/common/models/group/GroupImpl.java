@@ -1,12 +1,9 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.models.group;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
-import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.AbstractEntity;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Date;
 import java.util.Base64;

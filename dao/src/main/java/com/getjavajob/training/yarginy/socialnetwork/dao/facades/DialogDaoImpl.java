@@ -1,6 +1,5 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
@@ -11,7 +10,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.Abstra
 
 public class DialogDaoImpl implements DialogDao {
     private final Dao<Dialog> dialogDao = getDbFactory().getDialogDao();
-    private final OneToManyDao<Account, Dialog> accountDialogsDao = getDbFactory().getAccountDialogsDao();
+    private final OneToManyDao<Dialog> accountDialogsDao = getDbFactory().getAccountDialogsDao();
 
     @Override
     public Dialog select(long id) {

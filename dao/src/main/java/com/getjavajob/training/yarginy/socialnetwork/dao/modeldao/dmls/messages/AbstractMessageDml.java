@@ -18,7 +18,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEn
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 
 public abstract class AbstractMessageDml extends AbstractDml<Message> {
-    protected final MessagesTable table = getTable();
+    private final MessagesTable table = getTable();
     private final String selectAll = buildQuery().select(table.table).build();
     private final String selectById = buildQuery().selectJoin(table.table, AccountsTable.TABLE, table.author,
             AccountsTable.ID).where(table.id).build();

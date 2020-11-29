@@ -12,7 +12,6 @@ import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Map;
 
 public class AccountServiceImpl implements AccountService {
     private final TransactionManager transactionManager;
@@ -66,7 +65,7 @@ public class AccountServiceImpl implements AccountService {
         } catch (IncorrectDataException e) {
             throw e;
         } catch (Exception e) {
-            throw new IllegalStateException("couldn't start transaction");
+            throw new IllegalStateException(e);
         }
         return true;
     }
@@ -117,11 +116,6 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Collection<Account> getAll(Account account) {
-        return accountDao.selectAll();
-    }
-
-    @Override
     public Collection<Account> getFriends(long accountId) {
         try {
             return friendshipDao.selectFriends(accountId);
@@ -131,29 +125,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean addPhone(Account account, Phone phone) {
-        phone.setOwner(account);
-        return phoneDao.create(phone);
-    }
-
-    @Override
-    public boolean removePhone(Phone phone) {
-        return phoneDao.delete(phone);
-    }
-
-    @Override
     public Collection<Phone> getPhones(long accountId) {
         return phoneDao.selectPhonesByOwner(accountId);
-    }
-
-    @Override
-    public Map<Account, Collection<Phone>> getAllWithPhones() {
-        return null;
-    }
-
-    @Override
-    public boolean updatePhones(Collection<Phone> phones, Account account) {
-        return false;
     }
 
     @Override

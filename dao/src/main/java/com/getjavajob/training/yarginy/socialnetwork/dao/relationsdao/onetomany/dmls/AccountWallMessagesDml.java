@@ -1,6 +1,5 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.dmls;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.messages.AccountWallMessageDml;
@@ -11,7 +10,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.tables.messages.Message
 
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 
-public class AccountWallMessagesDml extends OneToManyDml<Account, Message> {
+public class AccountWallMessagesDml extends OneToManyDml<Message> {
     private final MessagesTable table = new AccountWallMessagesTable();
     private final String selectByBoth = buildQuery().selectJoin(AccountsTable.TABLE, table.table, AccountsTable.ID,
             table.receiverId).where(AccountsTable.ID).and(table.id).build();

@@ -5,14 +5,15 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
 /**
- * incapsulates account's information such as {@link Account} & {@link Account}'s {@link Phone}s
+ * holds account's information such as {@link Account} & {@link Account}'s {@link Phone}s
  */
-public class AccountInfoDTO {
+public class AccountInfoDTO implements Serializable {
     private final Account account;
     private final Collection<Phone> phones;
 

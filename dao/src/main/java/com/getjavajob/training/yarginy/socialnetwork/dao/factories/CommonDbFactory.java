@@ -124,7 +124,7 @@ public abstract class CommonDbFactory implements DbFactory {
     }
 
     @Override
-    public OneToManyDao<Account, Phone> getAccountsPhones(Dao<Account> accountDao) {
+    public OneToManyDao<Phone> getAccountsPhones(Dao<Account> accountDao) {
         return new OneToManyDaoImpl<>(connectionPool, new AccountPhonesDml());
     }
 
@@ -139,7 +139,7 @@ public abstract class CommonDbFactory implements DbFactory {
     }
 
     @Override
-    public OneToManyDao<Account, Group> getAccountsOwnedGroupsDao(Dao<Account> accountDao) {
+    public OneToManyDao<Group> getAccountsOwnedGroupsDao(Dao<Account> accountDao) {
         return new OneToManyDaoImpl<>(connectionPool, new AccountGroupsDml());
     }
 
@@ -169,7 +169,7 @@ public abstract class CommonDbFactory implements DbFactory {
     }
 
     @Override
-    public OneToManyDao<Account, Message> getAccountWallMessagesDao() {
+    public OneToManyDao<Message> getAccountWallMessagesDao() {
         return new OneToManyDaoImpl<>(connectionPool, new AccountWallMessagesDml());
     }
 
@@ -179,7 +179,7 @@ public abstract class CommonDbFactory implements DbFactory {
     }
 
     @Override
-    public OneToManyDao<Dialog, Message> getDialogsMessagesDao() {
+    public OneToManyDao<Message> getDialogsMessagesDao() {
         return new OneToManyDaoImpl<>(connectionPool, new DialogsMessagesDml());
     }
 
@@ -189,7 +189,7 @@ public abstract class CommonDbFactory implements DbFactory {
     }
 
     @Override
-    public OneToManyDao<Group, Message> getGroupWallMessagesDao() {
+    public OneToManyDao<Message> getGroupWallMessagesDao() {
         return new OneToManyDaoImpl<>(connectionPool, new GroupWallMessagesDml());
     }
 
@@ -199,7 +199,7 @@ public abstract class CommonDbFactory implements DbFactory {
     }
 
     @Override
-    public OneToManyDao<Account, Dialog> getAccountDialogsDao() {
+    public OneToManyDao<Dialog> getAccountDialogsDao() {
         return new OneToManyDaoImpl<>(connectionPool, new AccountDialogsDml());
     }
 }

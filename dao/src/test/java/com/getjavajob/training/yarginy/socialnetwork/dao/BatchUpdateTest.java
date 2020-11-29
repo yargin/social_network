@@ -20,7 +20,7 @@ public class BatchUpdateTest {
     public static final DbFactory DB_FACTORY = getDbFactory();
     private final Dao<Account> accountDao = DB_FACTORY.getAccountDao();
     private final BatchDao<Phone> phoneDao = DB_FACTORY.getPhoneDao();
-    private final OneToManyDao<Account, Phone> accountPhones = DB_FACTORY.getAccountsPhones(accountDao);
+    private final OneToManyDao<Phone> accountPhones = DB_FACTORY.getAccountsPhones(accountDao);
 
     @Test
     public void testCreateThenDelete() {

@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 
-public abstract class OneToManyDml<O extends Entity, M extends Entity> {
+public abstract class OneToManyDml<M extends Entity> {
     public Collection<M> retrieveManyByOne(Connection connection, long oneId) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(getSelectByOneQuery(), ResultSet.
                 TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {

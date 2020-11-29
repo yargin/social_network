@@ -63,7 +63,6 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
             resultSet.insertRow();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
             return false;
         }
     }
@@ -96,7 +95,6 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
             resultSet.deleteRow();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
             return false;
         }
     }
@@ -140,7 +138,6 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
                 checkEntity(readEntity);
                 return readEntity;
             } catch (SQLException e) {
-                e.printStackTrace();
                 return getNullEntity();
             }
         } else {

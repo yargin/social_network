@@ -50,13 +50,17 @@ public class DialogImpl implements Dialog {
         if (isNull(o)) {
             return false;
         }
-        if (this == o) return true;
-        if (!(o instanceof Dialog)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Dialog)) {
+            return false;
+        }
         Dialog dialog = (Dialog) o;
         return Objects.equals(getFirstAccount(), dialog.getFirstAccount()) &&
                 Objects.equals(getSecondAccount(), dialog.getSecondAccount()) ||
                 Objects.equals(getFirstAccount(), dialog.getSecondAccount()) &&
-                Objects.equals(getSecondAccount(), dialog.getFirstAccount());
+                        Objects.equals(getSecondAccount(), dialog.getFirstAccount());
     }
 
     @Override

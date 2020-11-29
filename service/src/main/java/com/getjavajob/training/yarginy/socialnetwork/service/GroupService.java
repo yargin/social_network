@@ -3,10 +3,11 @@ package com.getjavajob.training.yarginy.socialnetwork.service;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
 
-public interface GroupService {
+public interface GroupService extends Serializable {
     Group get(Group group);
 
     Group get(long id);
@@ -15,11 +16,7 @@ public interface GroupService {
 
     Collection<Group> getAllGroups();
 
-    Collection<Group> getNonJoinedGroups(long accountId);
-
     boolean isOwner(long accountId, long groupId);
-
-    boolean joinGroup(long accountId, long groupId);
 
     boolean acceptRequest(long accountId, long groupId);
 
@@ -40,8 +37,6 @@ public interface GroupService {
     boolean addModerator(long accountId, long groupId);
 
     boolean removeModerator(long accountId, long groupId);
-
-    Collection<Account> selectMembers(long groupId);
 
     boolean isMember(long accountId, long groupId);
 

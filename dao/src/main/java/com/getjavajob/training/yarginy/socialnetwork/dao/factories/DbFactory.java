@@ -29,7 +29,7 @@ public interface DbFactory {
 
     BatchDao<Phone> getPhoneDao();
 
-    OneToManyDao<Account, Phone> getAccountsPhones(Dao<Account> accountDao);
+    OneToManyDao<Phone> getAccountsPhones(Dao<Account> accountDao);
 
     Dao<Password> getPasswordDao();
 
@@ -37,7 +37,7 @@ public interface DbFactory {
 
     ConnectionPool getConnectionPool();
 
-    OneToManyDao<Account, Group> getAccountsOwnedGroupsDao(Dao<Account> accountDao);
+    OneToManyDao<Group> getAccountsOwnedGroupsDao(Dao<Account> accountDao);
 
     ManyToManyDao<Account, Group> getGroupModeratorsDao();
 
@@ -49,17 +49,17 @@ public interface DbFactory {
 
     Dao<Message> getAccountWallMessageDao();
 
-    OneToManyDao<Account, Message> getAccountWallMessagesDao();
+    OneToManyDao<Message> getAccountWallMessagesDao();
 
     Dao<Message> getDialogMessageDao();
 
-    OneToManyDao<Dialog, Message> getDialogsMessagesDao();
+    OneToManyDao<Message> getDialogsMessagesDao();
 
     Dao<Message> getGroupWallMessageDao();
 
-    OneToManyDao<Group, Message> getGroupWallMessagesDao();
+    OneToManyDao<Message> getGroupWallMessagesDao();
 
     Dao<Dialog> getDialogDao();
 
-    OneToManyDao<Account, Dialog> getAccountDialogsDao();
+    OneToManyDao<Dialog> getAccountDialogsDao();
 }

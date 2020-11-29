@@ -5,9 +5,10 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Pass
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 
+import java.io.Serializable;
 import java.util.Collection;
 
-public interface AuthService {
+public interface AuthService extends Serializable {
     boolean register(AccountInfoDTO accountInfoDTO, Password password);
 
     boolean register(Account account, Collection<Phone> phones, Password password);

@@ -21,9 +21,9 @@
             <br>
             <button type="submit"><fmt:message key="button.send"/></button>
         </form>
-    </div>
-    <%-- bottom border --%>
-    <div>
+            <%-- bottom border --%>
+        <div>
+        </div>
     </div>
 
 </common:layout>

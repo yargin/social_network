@@ -4,7 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
 
 import java.util.Collection;
 
-public interface OneToManyDao<O extends Entity, M extends Entity> {
+public interface OneToManyDao<M extends Entity> {
     /**
      * selects all participants related to specified {@link Entity}
      *

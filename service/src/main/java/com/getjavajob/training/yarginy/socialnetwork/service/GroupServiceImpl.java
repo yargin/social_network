@@ -40,20 +40,8 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Collection<Group> getNonJoinedGroups(long accountId) {
-        Collection<Group> groups = getAllGroups();
-        groups.removeAll(getAccountGroups(accountId));
-        return groups;
-    }
-
-    @Override
     public boolean isOwner(long accountId, long groupId) {
         return groupDao.isOwner(groupId, accountId);
-    }
-
-    @Override
-    public boolean joinGroup(long accountId, long groupId) {
-        return groupDao.addMember(groupId, accountId);
     }
 
     @Override
@@ -132,9 +120,9 @@ public class GroupServiceImpl implements GroupService {
                 if (!groupDao.create(group)) {
                     throw new IncorrectDataException(IncorrectData.GROUP_DUPLICATE);
                 }
-                group = groupDao.select(group);
-                if (!groupDao.addMember(group.getOwner().getId(), group.getId()) ||
-                        !moderatorsDao.addGroupModerator(group.getOwner().getId(), group.getId())) {
+                Group createdGroup = groupDao.select(group);
+                if (!groupDao.addMember(createdGroup.getOwner().getId(), createdGroup.getId()) ||
+                        !moderatorsDao.addGroupModerator(createdGroup.getOwner().getId(), createdGroup.getId())) {
                     throw new IllegalArgumentException();
                 }
             } catch (IllegalArgumentException e) {
@@ -158,11 +146,6 @@ public class GroupServiceImpl implements GroupService {
             throw new IncorrectDataException(IncorrectData.GROUP_DUPLICATE);
         }
         return true;
-    }
-
-    @Override
-    public Collection<Account> selectMembers(long groupId) {
-        return groupDao.selectMembers(groupId);
     }
 
     @Override

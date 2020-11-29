@@ -56,14 +56,6 @@ public abstract class AbstractDml<E extends Entity> implements Dml<E> {
         }
     }
 
-    /**
-     * represents update-cell-method in {@link ResultSet}
-     */
-    @FunctionalInterface
-    public interface ResultSetUpdater<E> {
-        void update(String column, E value) throws SQLException;
-    }
-
     public PreparedStatement createPreparedStatement(Connection connection, String query, boolean updatable) throws
             SQLException {
         return connection.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -106,5 +98,13 @@ public abstract class AbstractDml<E extends Entity> implements Dml<E> {
             setAltKeyParams(statement, entity);
         }
         return statement;
+    }
+
+    /**
+     * represents update-cell-method in {@link ResultSet}
+     */
+    @FunctionalInterface
+    public interface ResultSetUpdater<E> {
+        void update(String column, E value) throws SQLException;
     }
 }

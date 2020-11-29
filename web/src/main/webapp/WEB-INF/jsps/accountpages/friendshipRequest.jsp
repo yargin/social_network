@@ -3,14 +3,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="common" tagdir="/WEB-INF/tags" %>
 <fmt:setBundle basename="label" var="label"/>
-<fmt:setBundle basename="error" var="error"/>
+<fmt:setBundle basename="error" var="errorBundle"/>
 
 <common:layout>
     <common:accountInfo/>
     <common:accountMenu/>
 
     <br><br>
-    <c:if test="${not empty error}"><fmt:message key="${error}" bundle="${error}"/></c:if>
+    <c:if test="${not empty error}"><fmt:message key="${error}" bundle="${errorBundle}"/></c:if>
     <c:choose>
         <c:when test="${created eq true}">
             <fmt:message key="label.requestSent" bundle="${label}"/>

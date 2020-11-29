@@ -6,10 +6,10 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 
+import java.io.Serializable;
 import java.util.Collection;
-import java.util.Map;
 
-public interface AccountService {
+public interface AccountService extends Serializable {
     AccountInfoDTO getAccountInfo(long id);
 
     Account get(long id);
@@ -28,19 +28,9 @@ public interface AccountService {
 
     boolean isFriend(long firstId, long secondId);
 
-    Collection<Account> getAll(Account account);
-
     Collection<Account> getFriends(long accountId);
 
-    boolean addPhone(Account account, Phone phone);
-
-    boolean removePhone(Phone phone);
-
     Collection<Phone> getPhones(long accountId);
-
-    Map<Account, Collection<Phone>> getAllWithPhones();
-
-    boolean updatePhones(Collection<Phone> phones, Account account);
 
     boolean createFriendshipRequest(long requester, long receiver);
 

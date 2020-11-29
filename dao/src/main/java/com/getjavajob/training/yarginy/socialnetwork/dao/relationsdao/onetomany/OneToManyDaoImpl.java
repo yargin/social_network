@@ -7,11 +7,11 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collection;
 
-public class OneToManyDaoImpl<M extends Entity, O extends Entity> implements OneToManyDao<O, M> {
+public class OneToManyDaoImpl<M extends Entity> implements OneToManyDao<M> {
     private final ConnectionPool connectionPool;
-    private final OneToManyDml<O, M> oneToManyDml;
+    private final OneToManyDml<M> oneToManyDml;
 
-    public OneToManyDaoImpl(ConnectionPool connectionPool, OneToManyDml<O, M> oneToManyDml) {
+    public OneToManyDaoImpl(ConnectionPool connectionPool, OneToManyDml<M> oneToManyDml) {
         this.connectionPool = connectionPool;
         this.oneToManyDml = oneToManyDml;
     }

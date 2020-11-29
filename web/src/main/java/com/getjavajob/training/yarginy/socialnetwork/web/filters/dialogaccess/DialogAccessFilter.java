@@ -14,7 +14,6 @@ import java.io.IOException;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirectToReferer;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER;
 import static java.util.Objects.isNull;
 
 public class DialogAccessFilter extends HttpFilter {

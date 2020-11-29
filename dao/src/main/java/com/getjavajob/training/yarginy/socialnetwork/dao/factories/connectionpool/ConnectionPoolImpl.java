@@ -11,7 +11,7 @@ import java.util.concurrent.BlockingQueue;
 
 import static java.util.Objects.isNull;
 
-public class ConnectionPoolImpl implements ConnectionPool {
+public final class ConnectionPoolImpl implements ConnectionPool {
     private static ConnectionPoolImpl connectionPoolImpl;
     private final BlockingQueue<ConnectionProxy> connectionsQueue;
     private final ThreadLocal<ConnectionProxy> threadConnection;

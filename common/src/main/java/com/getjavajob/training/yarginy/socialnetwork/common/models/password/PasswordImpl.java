@@ -28,8 +28,7 @@ public class PasswordImpl implements Password {
 
     @Override
     public void setPassword(String password) {
-        password = passwordMandatory(password);
-        this.password = encrypt(password);
+        this.password = encrypt(passwordMandatory(password));
     }
 
     @Override
@@ -49,8 +48,12 @@ public class PasswordImpl implements Password {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         PasswordImpl password1 = (PasswordImpl) o;
         return Objects.equals(account, password1.account) && Objects.equals(password, password1.password);
     }

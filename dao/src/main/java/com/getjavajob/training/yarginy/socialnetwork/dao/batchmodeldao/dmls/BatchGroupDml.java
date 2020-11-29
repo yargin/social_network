@@ -6,7 +6,6 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.GroupDml;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.Collection;
 
 public class BatchGroupDml extends GroupDml implements BatchDml<Group> {

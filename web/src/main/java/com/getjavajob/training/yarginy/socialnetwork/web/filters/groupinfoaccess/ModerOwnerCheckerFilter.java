@@ -12,6 +12,7 @@ import java.io.IOException;
 import static java.util.Objects.isNull;
 
 public class ModerOwnerCheckerFilter extends HttpFilter {
+    @Override
     public void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) throws ServletException,
             IOException {
         if (!isNull(req.getAttribute("admin")) || !isNull(req.getAttribute("owner")) || !isNull(req.

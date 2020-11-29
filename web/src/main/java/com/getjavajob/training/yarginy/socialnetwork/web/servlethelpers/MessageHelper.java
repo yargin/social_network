@@ -18,10 +18,13 @@ import java.io.InputStream;
 
 import static java.util.Objects.isNull;
 
-public class MessageHelper {
+public final class MessageHelper {
     private static final MessageService ACCOUNT_WALL_MESSAGE_SERVICE = new AccountWallMessageServiceImpl();
     private static final MessageService GROUP_WALL_MESSAGE_SERVICE = new GroupWallMessageServiceImpl();
     private static final MessageService ACCOUNT_PRIVATE_MESSAGE_SERVICE = new DialogMessageServiceImpl();
+
+    private MessageHelper() {
+    }
 
     public static boolean addMessage(HttpServletRequest req) throws IOException, ServletException {
         Message message = getMessageFromRequest(req);

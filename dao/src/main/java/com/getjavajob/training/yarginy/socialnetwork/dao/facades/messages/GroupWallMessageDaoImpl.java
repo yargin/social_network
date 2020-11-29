@@ -1,6 +1,5 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
@@ -11,7 +10,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.Abstra
 
 public class GroupWallMessageDaoImpl implements GroupWallMessageDao {
     private final Dao<Message> groupWallMessageDao = getDbFactory().getGroupWallMessageDao();
-    private final OneToManyDao<Group, Message> groupWallMessagesOneToManyDao = getDbFactory().getGroupWallMessagesDao();
+    private final OneToManyDao<Message> groupWallMessagesOneToManyDao = getDbFactory().getGroupWallMessagesDao();
 
     @Override
     public Message select(long id) {

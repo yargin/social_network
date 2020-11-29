@@ -9,7 +9,10 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class DataHandleHelper {
+public final class DataHandleHelper {
+    private DataHandleHelper() {
+    }
+
     public static String encrypt(String stringToEncrypt) {
         MessageDigest md = null;
         try {
