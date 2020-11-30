@@ -25,6 +25,17 @@ public class SqlQueryBuilder {
     }
 
     /**
+     * appends 'SELECT table.field1, table.field2 ... FROM <b>table</b>' to query
+     *
+     * @param table specified table
+     * @return {@link SqlQueryBuilder} having added 'SELECT table.field1, table.field2 ... FROM <b>table</b>' to query
+     */
+    public SqlQueryBuilder selectView(String viewFields, String table) {
+        query.append("SELECT ").append(viewFields).append(" FROM ").append(table);
+        return this;
+    }
+
+    /**
      * appends 'SELECT <b>column</b> FROM <b>table</b>' to query
      *
      * @param table  specified table
@@ -62,6 +73,24 @@ public class SqlQueryBuilder {
     public SqlQueryBuilder selectJoin(String leftTable, String rightTable, String leftColumn, String rightColumn) {
         query.append(SELECT_ALL).append(leftTable).append(" JOIN ").append(rightTable).append(" ON ").
                 append(leftColumn).append(" = ").append(rightColumn);
+        return this;
+    }
+
+    /**
+     * appends 'SELECT rightTable.field1, rightTable.field2 ..., leftTable.* FROM <b>leftTable</b> JOIN <b>rightTable</b>
+     * ON <b>leftColumn</b> = <b>rightColumn</b>' to query
+     *
+     * @param leftTable   specified left table
+     * @param rightTable  specified right table
+     * @param leftColumn  specified left column
+     * @param rightColumn specified right column
+     * @return {@link SqlQueryBuilder} having added 'SELECT * FROM <b>leftTable</b> JOIN <b>rightTable</b> ON
+     * <b>leftColumn</b> = <b>rightColumn</b>' to query
+     */
+    public SqlQueryBuilder selectLeftFullRightView(String leftTable, String rightTable, String rightFields,
+                                                   String leftColumn, String rightColumn) {
+        query.append("SELECT ").append(rightFields).append(", ").append(leftTable).append(".* FROM ").append(leftTable).
+                append(" JOIN ").append(rightTable).append(" ON ").append(leftColumn).append(" = ").append(rightColumn);
         return this;
     }
 

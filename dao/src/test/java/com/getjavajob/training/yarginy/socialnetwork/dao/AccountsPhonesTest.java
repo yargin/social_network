@@ -15,12 +15,10 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.TestResultPrinter.printPassed;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class AccountsPhonesTest {
-    private static final String CLASS = "AccountsPhonesTest";
     private static final AccountDao ACCOUNT_DAO = new AccountDaoImpl();
     private static final PhoneDao PHONE_DAO = new PhoneDaoImpl();
     private final Collection<Phone> phones = new ArrayList<>();
@@ -45,6 +43,5 @@ public class AccountsPhonesTest {
         assertTrue(PHONE_DAO.create(phones));
         Collection<Phone> actualPhones = PHONE_DAO.selectPhonesByOwner(account.getId());
         assertEquals(phones, actualPhones);
-        printPassed(CLASS, "testSelectPhones");
     }
 }

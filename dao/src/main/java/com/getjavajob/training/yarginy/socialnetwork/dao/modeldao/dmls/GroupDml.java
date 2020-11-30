@@ -21,10 +21,10 @@ import static java.util.Objects.isNull;
 
 public class GroupDml extends AbstractDml<Group> {
     private static final String SELECT_ALL = buildQuery().select(TABLE).build();
-    private static final String SELECT_BY_ID = buildQuery().selectJoin(TABLE, AccountsTable.TABLE, OWNER,
-            AccountsTable.ID).where(ID).build();
-    private static final String SELECT_BY_NAME = buildQuery().selectJoin(TABLE, AccountsTable.TABLE, OWNER,
-            AccountsTable.ID).where(NAME).build();
+    private static final String SELECT_BY_ID = buildQuery().selectLeftFullRightView(TABLE, AccountsTable.TABLE,
+            AccountsTable.VIEW_FIELDS, OWNER, AccountsTable.ID).where(ID).build();
+    private static final String SELECT_BY_NAME = buildQuery().selectLeftFullRightView(TABLE, AccountsTable.TABLE,
+            AccountsTable.VIEW_FIELDS, OWNER, AccountsTable.ID).where(NAME).build();
     private static final String SELECT_UPDATE_BY_NAME = buildQuery().select(TABLE).where(NAME).build();
     private static final String SELECT_UPDATE_BY_ID = buildQuery().select(TABLE).where(ID).build();
     private final AccountDml accountDml = new AccountDml();

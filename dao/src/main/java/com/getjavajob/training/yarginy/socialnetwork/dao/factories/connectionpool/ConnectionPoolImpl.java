@@ -1,21 +1,24 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool;
 
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
 import java.util.Properties;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.logging.Logger;
 
 import static java.util.Objects.isNull;
 
-public final class ConnectionPoolImpl implements ConnectionPool {
+public final class ConnectionPoolImpl implements DataSource {
     private static ConnectionPoolImpl connectionPoolImpl;
     private final BlockingQueue<ConnectionProxy> connectionsQueue;
     private final ThreadLocal<ConnectionProxy> threadConnection;
-    private final int capacity;
 
     private ConnectionPoolImpl(String propertiesFile, int capacity) {
         Properties properties = new Properties();
@@ -24,7 +27,6 @@ public final class ConnectionPoolImpl implements ConnectionPool {
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
-        this.capacity = capacity;
         connectionsQueue = new ArrayBlockingQueue<>(capacity);
         threadConnection = new ThreadLocal<>();
         boolean put;
@@ -78,7 +80,43 @@ public final class ConnectionPoolImpl implements ConnectionPool {
         return getConnectionProxy();
     }
 
-    public int getCapacity() {
-        return capacity;
+    @Override
+    public Connection getConnection(String username, String password) throws SQLException {
+        throw new UnsupportedOperationException("not supported");
+    }
+
+    @Override
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        throw new UnsupportedOperationException("not supported");
+    }
+
+    @Override
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        throw new UnsupportedOperationException("not supported");
+    }
+
+    @Override
+    public PrintWriter getLogWriter() throws SQLException {
+        throw new UnsupportedOperationException("not supported");
+    }
+
+    @Override
+    public void setLogWriter(PrintWriter out) throws SQLException {
+        throw new UnsupportedOperationException("not supported");
+    }
+
+    @Override
+    public int getLoginTimeout() throws SQLException {
+        throw new UnsupportedOperationException("not supported");
+    }
+
+    @Override
+    public void setLoginTimeout(int seconds) throws SQLException {
+        throw new UnsupportedOperationException("not supported");
+    }
+
+    @Override
+    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+        throw new UnsupportedOperationException("not supported");
     }
 }

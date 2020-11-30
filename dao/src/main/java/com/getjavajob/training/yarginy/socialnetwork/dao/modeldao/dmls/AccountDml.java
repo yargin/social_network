@@ -18,7 +18,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuild
 import static java.util.Objects.isNull;
 
 public class AccountDml extends AbstractDml<Account> {
-    private static final String SELECT_ALL = buildQuery().select(TABLE).build();
+    private static final String SELECT_ALL = buildQuery().selectView(VIEW_FIELDS, TABLE).build();
     private static final String SELECT_BY_ID = buildQuery().select(TABLE).where(ID).build();
     private static final String SELECT_BY_EMAIL = buildQuery().select(TABLE).where(EMAIL).build();
 

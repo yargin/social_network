@@ -18,7 +18,15 @@ public final class AccountsTable {
     public static final String ROLE = TABLE + '.' + "Role";
     public static final String PASSWORD = TABLE + '.' + "Password";
     public static final String PHOTO = TABLE + '.' + "Photo";
+    public static final String VIEW_FIELDS = ID + ", " + NAME + ", " + SURNAME + ", " + EMAIL;
 
     private AccountsTable() {
+    }
+
+    public static String getViewFieldsWithAlias(String alias) {
+        return alias + ".id id" + alias + ", " +
+                alias + ".name name" + alias + ", " +
+                alias + ".surname surname" + alias + ", " +
+                alias + ".email email" + alias;
     }
 }

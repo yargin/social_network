@@ -1,6 +1,5 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
@@ -11,7 +10,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.Abstra
 
 public class DialogMessageDaoImpl implements DialogMessageDao {
     private final Dao<Message> dialogMessageDao = getDbFactory().getDialogMessageDao();
-    private final OneToManyDao<Dialog, Message> dialogsMessagesDao = getDbFactory().getDialogsMessagesDao();
+    private final OneToManyDao<Message> dialogsMessagesDao = getDbFactory().getDialogsMessagesDao();
 
     @Override
     public Message select(long id) {

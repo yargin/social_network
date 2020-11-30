@@ -7,7 +7,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Messa
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.ConnectionPool;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl.ScriptExecutor;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.otherdao.DataSelectsDao;
@@ -34,8 +33,6 @@ public interface DbFactory {
     Dao<Password> getPasswordDao();
 
     ScriptExecutor getScriptExecutor();
-
-    ConnectionPool getConnectionPool();
 
     OneToManyDao<Group> getAccountsOwnedGroupsDao(Dao<Account> accountDao);
 

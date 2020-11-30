@@ -22,12 +22,13 @@ public class DialogDml extends AbstractDml<Dialog> {
     private static final String SECOND_TABLE_ALIAS = "a2";
     private static final String SELECT_ALL = buildQuery().select(TABLE).build();
 
-    private static final String SELECT_BY_ID = "SELECT * FROM Dialogs JOIN Accounts a1 ON Dialogs.first_id = a1.id " +
-            "JOIN Accounts a2 ON Dialogs.second_id = a2.id WHERE Dialogs.id = ? ";
-    private static final String SELECT_BY_ALT_KEY = "SELECT * FROM " + TABLE + " JOIN " + AccountsTable.TABLE + ' ' +
-            FIRST_TABLE_ALIAS + " ON " + FIRST_ID + " = a1.id JOIN " + AccountsTable.TABLE + ' ' +
-            SECOND_TABLE_ALIAS + " ON " + SECOND_ID + " = a2.id WHERE (" + FIRST_ID + " = ? AND " +
-            SECOND_ID + " = ?) OR (" + SECOND_ID + "  = ? AND " + FIRST_ID + " = ?)";
+    private static final String SELECT_BY_ID = "SELECT " + ID + ", " + AccountsTable.getViewFieldsWithAlias("a1") + ", " +
+            AccountsTable.getViewFieldsWithAlias("a2") + " FROM Dialogs JOIN Accounts a1 ON Dialogs.first_id = a1.id " +
+            "JOIN Accounts as a2 ON Dialogs.second_id = a2.id WHERE Dialogs.id = ? ";
+    private static final String SELECT_BY_ALT_KEY = "SELECT " + ID + ", " + AccountsTable.getViewFieldsWithAlias("a1") +
+            ", " + AccountsTable.getViewFieldsWithAlias("a2") + " FROM " + TABLE + " JOIN " + AccountsTable.TABLE +
+            " a1 ON " + FIRST_ID + " = a1.id JOIN " + AccountsTable.TABLE + " a2 ON " + SECOND_ID + " = a2.id WHERE (" +
+            FIRST_ID + " = ? AND " + SECOND_ID + " = ?) OR (" + SECOND_ID + "  = ? AND " + FIRST_ID + " = ?)";
 
     private static final String SELECT_UPDATE_BY_ID = buildQuery().select(TABLE).where(ID).build();
     private static final String SELECT_UPDATE_BY_ALT_KEY = "SELECT * FROM " + TABLE + " WHERE (" + FIRST_ID +
@@ -83,12 +84,12 @@ public class DialogDml extends AbstractDml<Dialog> {
         return dialog;
     }
 
-    private Account getAccount(ResultSet resultSet, String tableAlias) throws SQLException {
+    private Account getAccount(ResultSet resultSet, String alias) throws SQLException {
         Account secondAccount = new AccountImpl();
-        secondAccount.setId(resultSet.getLong(tableAlias + '.' + "id"));
-        secondAccount.setName(resultSet.getString(tableAlias + '.' + "name"));
-        secondAccount.setSurname(resultSet.getString(tableAlias + '.' + "surname"));
-        secondAccount.setEmail(resultSet.getString(tableAlias + '.' + "email"));
+        secondAccount.setId(resultSet.getLong("id" + alias));
+        secondAccount.setName(resultSet.getString("name" + alias));
+        secondAccount.setSurname(resultSet.getString("surname" + alias));
+        secondAccount.setEmail(resultSet.getString("email" + alias));
         return secondAccount;
     }
 

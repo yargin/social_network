@@ -10,8 +10,6 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDaoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.dmls.BatchGroupDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.dmls.BatchPhonesDml;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.ConnectionPool;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.ConnectionPoolImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl.ScriptExecutor;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl.ScriptExecutorImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
@@ -37,30 +35,20 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDaoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.dmls.*;
 
-import java.util.Properties;
+import javax.sql.DataSource;
 
 import static java.util.Objects.isNull;
 
 public abstract class CommonDbFactory implements DbFactory {
-    private final ConnectionPool connectionPool;
+    private final DataSource dataSource;
     private ScriptExecutor scriptExecutor;
 
-    public CommonDbFactory() {
-        loadJDBCDriver();
-        connectionPool = ConnectionPoolImpl.getConnectionPool(getConnectionFile(), getConnectionsCapacity());
+    public CommonDbFactory(DataSource dataSource) {
+        this.dataSource = dataSource;
         if (runScriptOnStart()) {
             getScriptExecutor().executeScript(getStartingScript());
         }
     }
-
-    protected abstract void loadJDBCDriver();
-
-    /**
-     * gives file name storing {@link Properties} for connection
-     *
-     * @return {@link String} representation of file name
-     */
-    protected abstract String getConnectionFile();
 
     /**
      * provides directory storing scripts. Used only to cut script file name. User free to leave it empty, but on-use
@@ -83,123 +71,111 @@ public abstract class CommonDbFactory implements DbFactory {
      */
     protected abstract boolean runScriptOnStart();
 
-    /**
-     * specifies number of possible concurrent connections
-     *
-     * @return concurrent connections capacity
-     */
-    protected abstract int getConnectionsCapacity();
-
     @Override
     public ScriptExecutor getScriptExecutor() {
         if (isNull(scriptExecutor)) {
-            scriptExecutor = new ScriptExecutorImpl(connectionPool, getScriptDirectory());
+            scriptExecutor = new ScriptExecutorImpl(dataSource, getScriptDirectory());
         }
         return scriptExecutor;
     }
 
     @Override
     public Dao<Account> getAccountDao() {
-        return new DaoImpl<>(connectionPool, new AccountDml());
+        return new DaoImpl<>(dataSource, new AccountDml());
     }
 
     @Override
     public BatchDao<Group> getGroupDao() {
-        return new BatchDaoImpl<>(connectionPool, new BatchGroupDml());
+        return new BatchDaoImpl<>(dataSource, new BatchGroupDml());
     }
 
     @Override
     public ManyToManyDao<Account, Group> getGroupMembershipDao() {
-        return new ManyToManyDaoImpl<>(connectionPool, new GroupsMembersDml());
+        return new ManyToManyDaoImpl<>(dataSource, new GroupsMembersDml());
     }
 
     @Override
     public SelfManyToManyDao<Account> getFriendshipDao() {
-        return new SelfManyToManyDaoImpl<>(connectionPool, new FriendshipDml());
+        return new SelfManyToManyDaoImpl<>(dataSource, new FriendshipDml());
     }
 
     @Override
     public BatchDao<Phone> getPhoneDao() {
-        return new BatchDaoImpl<>(connectionPool, new BatchPhonesDml());
+        return new BatchDaoImpl<>(dataSource, new BatchPhonesDml());
     }
 
     @Override
     public OneToManyDao<Phone> getAccountsPhones(Dao<Account> accountDao) {
-        return new OneToManyDaoImpl<>(connectionPool, new AccountPhonesDml());
+        return new OneToManyDaoImpl<>(dataSource, new AccountPhonesDml());
     }
 
     @Override
     public Dao<Password> getPasswordDao() {
-        return new PasswordDao(connectionPool, new PasswordDml());
-    }
-
-    @Override
-    public ConnectionPool getConnectionPool() {
-        return connectionPool;
+        return new PasswordDao(dataSource, new PasswordDml());
     }
 
     @Override
     public OneToManyDao<Group> getAccountsOwnedGroupsDao(Dao<Account> accountDao) {
-        return new OneToManyDaoImpl<>(connectionPool, new AccountGroupsDml());
+        return new OneToManyDaoImpl<>(dataSource, new AccountGroupsDml());
     }
 
     @Override
     public ManyToManyDao<Account, Group> getGroupModeratorsDao() {
-        return new ManyToManyDaoImpl<>(connectionPool, new GroupsModeratorsDml());
+        return new ManyToManyDaoImpl<>(dataSource, new GroupsModeratorsDml());
     }
 
     @Override
     public ManyToManyDao<Account, Group> getGroupRequestsDao() {
-        return new ManyToManyDaoImpl<>(connectionPool, new GroupsMembershipsRequestsDml());
+        return new ManyToManyDaoImpl<>(dataSource, new GroupsMembershipsRequestsDml());
     }
 
     @Override
     public ManyToManyDao<Account, Account> getFriendshipRequestsDao() {
-        return new ManyToManyDaoImpl<>(connectionPool, new AccountsFriendshipsRequestsDml());
+        return new ManyToManyDaoImpl<>(dataSource, new AccountsFriendshipsRequestsDml());
     }
 
     @Override
     public DataSelectsDao getDataSetsDao() {
-        return new DataSelectsDao(connectionPool);
+        return new DataSelectsDao(dataSource);
     }
 
     @Override
     public Dao<Message> getAccountWallMessageDao() {
-        return new DaoImpl<>(connectionPool, new AccountWallMessageDml());
+        return new DaoImpl<>(dataSource, new AccountWallMessageDml());
     }
 
     @Override
     public OneToManyDao<Message> getAccountWallMessagesDao() {
-        return new OneToManyDaoImpl<>(connectionPool, new AccountWallMessagesDml());
+        return new OneToManyDaoImpl<>(dataSource, new AccountWallMessagesDml());
     }
 
     @Override
     public Dao<Message> getDialogMessageDao() {
-        return new DaoImpl<>(connectionPool, new DialogMessageDml());
+        return new DaoImpl<>(dataSource, new DialogMessageDml());
     }
 
     @Override
     public OneToManyDao<Message> getDialogsMessagesDao() {
-        return new OneToManyDaoImpl<>(connectionPool, new DialogsMessagesDml());
+        return new OneToManyDaoImpl<>(dataSource, new DialogsMessagesDml());
     }
 
     @Override
     public Dao<Message> getGroupWallMessageDao() {
-        return new DaoImpl<>(connectionPool, new GroupWallMessageDml());
+        return new DaoImpl<>(dataSource, new GroupWallMessageDml());
     }
 
     @Override
     public OneToManyDao<Message> getGroupWallMessagesDao() {
-        return new OneToManyDaoImpl<>(connectionPool, new GroupWallMessagesDml());
+        return new OneToManyDaoImpl<>(dataSource, new GroupWallMessagesDml());
     }
 
     @Override
     public Dao<Dialog> getDialogDao() {
-        return new DaoImpl<>(connectionPool, new DialogDml());
+        return new DaoImpl<>(dataSource, new DialogDml());
     }
 
     @Override
     public OneToManyDao<Dialog> getAccountDialogsDao() {
-        return new OneToManyDaoImpl<>(connectionPool, new AccountDialogsDml());
+        return new OneToManyDaoImpl<>(dataSource, new AccountDialogsDml());
     }
 }

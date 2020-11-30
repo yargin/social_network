@@ -13,11 +13,9 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.TestResultPrinter.printPassed;
 import static org.junit.Assert.*;
 
 public class FriendshipsDaoTest {
-    private static final String CLASS = "AccountDaoTest";
     private static final AccountDao ACCOUNT_DAO = new AccountDaoImpl();
     private static final FriendshipsDao FRIENDSHIP_DAO = new FriendshipsDaoImpl();
     private Account friend = new AccountImpl("testFriend", "testSurname", "testFriend@test.test");
@@ -41,7 +39,6 @@ public class FriendshipsDaoTest {
     public void testSelectNoFriends() {
         Collection<Account> friends = FRIENDSHIP_DAO.selectFriends(0);
         assertSame(true, friends.isEmpty());
-        printPassed(CLASS, "testSelectNoFriends");
     }
 
     @Test
@@ -56,14 +53,12 @@ public class FriendshipsDaoTest {
         expected.add(ACCOUNT_DAO.select(friend.getId()));
         friends = FRIENDSHIP_DAO.selectFriends(account.getId());
         assertEquals(expected, friends);
-        printPassed(CLASS, "testSelectFriends");
     }
 
     @Test
     public void testNonExistingAccount() {
         Collection<Account> friends = FRIENDSHIP_DAO.selectFriends(0);
         assertSame(true, friends.isEmpty());
-        printPassed(CLASS, "testNonExistingAccount");
     }
 
     @Test
@@ -75,7 +70,6 @@ public class FriendshipsDaoTest {
         FRIENDSHIP_DAO.createFriendship(account.getId(), friend.getId());
         deleted = FRIENDSHIP_DAO.removeFriendship(friend.getId(), account.getId());
         assertTrue(deleted);
-        printPassed(CLASS, "createAndDeleteFriendship");
     }
 
     @Test
@@ -85,13 +79,11 @@ public class FriendshipsDaoTest {
         assertFalse(created);
         created = FRIENDSHIP_DAO.createFriendship(friend.getId(), account.getId());
         assertFalse(created);
-        printPassed(CLASS, "createExistingFriendship");
     }
 
     @Test
     public void deleteNonExistingFriendship() {
         boolean deleted = FRIENDSHIP_DAO.removeFriendship(account.getId(), friend.getId());
         assertFalse(deleted);
-        printPassed(CLASS, "deleteNonExistingFriendship");
     }
 }

@@ -2,8 +2,8 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao;
 
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.ConnectionPool;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,11 +14,11 @@ import java.util.Collection;
 import static java.util.Objects.isNull;
 
 public class DaoImpl<E extends Entity> implements Dao<E> {
-    protected final ConnectionPool connectionPool;
+    protected final DataSource dataSource;
     protected final Dml<E> dml;
 
-    public DaoImpl(ConnectionPool connectionPool, Dml<E> dml) {
-        this.connectionPool = connectionPool;
+    public DaoImpl(DataSource dataSource, Dml<E> dml) {
+        this.dataSource = dataSource;
         this.dml = dml;
     }
 
@@ -31,7 +31,7 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
 
     @Override
     public E select(E entityToSelect) {
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = dml.getSelect(connection, entityToSelect, false)) {
             return select(statement);
         } catch (SQLException e) {
@@ -51,7 +51,7 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
 
     @Override
     public boolean create(E entity) {
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = dml.getSelect(connection, entity, true);
              ResultSet resultSet = statement.executeQuery()) {
             if (resultSet.next()) {
@@ -69,7 +69,7 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
 
     @Override
     public boolean update(E entity, E storedEntity) {
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement statementForUpdate = dml.getSelect(connection, storedEntity, true);
              ResultSet resultSet = statementForUpdate.executeQuery()) {
             if (!resultSet.next()) {
@@ -86,7 +86,7 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
 
     @Override
     public boolean delete(E entity) {
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = dml.getSelect(connection, entity, true);
              ResultSet resultSet = statement.executeQuery()) {
             if (!resultSet.next()) {
@@ -101,7 +101,7 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
 
     @Override
     public Collection<E> selectAll() {
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = dml.getSelect(connection, null, false);
              ResultSet resultSet = statement.executeQuery()) {
             Collection<E> entities = new ArrayList<>();
@@ -132,7 +132,7 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
         if (entity.getId() == 0) {
             Connection connection;
             try {
-                connection = connectionPool.getConnection();
+                connection = dataSource.getConnection();
                 PreparedStatement statement = dml.getSelect(connection, entity, false);
                 E readEntity = select(statement);
                 checkEntity(readEntity);
