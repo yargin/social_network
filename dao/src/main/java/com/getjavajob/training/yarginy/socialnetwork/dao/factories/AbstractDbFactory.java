@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.factories;
 
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.databases.JndiDbFactory;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.databases.HerokuJawsDbFactory;
 
 import static java.util.Objects.isNull;
 
@@ -15,7 +15,7 @@ public abstract class AbstractDbFactory {
 
     public static DbFactory getDbFactory() {
         if (isNull(dbFactory)) {
-            dbFactory = new JndiDbFactory();
+            dbFactory = new HerokuJawsDbFactory();
         }
         return dbFactory;
     }

@@ -16,12 +16,10 @@ import java.time.LocalDate;
 import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
-import static com.getjavajob.training.yarginy.socialnetwork.service.utils.TestResultPrinter.printPassed;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertTrue;
 
 public class AuthServiceTest {
-    public static final String CLASS = "AuthServiceTest";
     public static final DbFactory DB_FACTORY = getDbFactory();
     public static final Dao<Account> ACCOUNT_DAO = DB_FACTORY.getAccountDao();
 
@@ -42,6 +40,5 @@ public class AuthServiceTest {
         boolean registered = authService.register(account, phones, password);
         assertTrue(registered);
         ACCOUNT_DAO.delete(account);
-        printPassed(CLASS, "testRegister");
     }
 }
