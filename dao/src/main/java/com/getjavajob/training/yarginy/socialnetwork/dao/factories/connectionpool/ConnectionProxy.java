@@ -7,17 +7,17 @@ import java.util.concurrent.Executor;
 
 public class ConnectionProxy implements Connection {
     private final Connection connection;
-    private final ConnectionPoolImpl connectionPool;
+    private final AbstractDataSource abstractDataSource;
     private boolean transactional;
 
-    public ConnectionProxy(Connection connection, ConnectionPoolImpl connectionPool) {
+    public ConnectionProxy(Connection connection, AbstractDataSource abstractDataSource) {
         this.connection = connection;
         try {
             connection.setAutoCommit(false);
         } catch (SQLException e) {
             throw new IllegalStateException(e);
         }
-        this.connectionPool = connectionPool;
+        this.abstractDataSource = abstractDataSource;
     }
 
     public void setTransactional(boolean transactional) {
@@ -39,7 +39,7 @@ public class ConnectionProxy implements Connection {
     public void close() throws SQLException {
         if (!transactional) {
             commit();
-            connectionPool.closeConnectionProxy();
+            abstractDataSource.closeConnection();
         }
     }
 

@@ -17,17 +17,6 @@ public class MySqlDbFactory extends CommonDbFactory {
     }
 
     private static DataSource init() {
-        //todo
-//        Object dataSourceObject = null;
-//        try {
-//            Context initialContext = new InitialContext();
-//            Context envContext = (Context) initialContext.lookup("java:/comp/env");
-//            dataSourceObject = envContext.lookup("jdbc/MySql");
-//        } catch (NamingException e) {
-//            e.printStackTrace();
-//        }
-//        return  (DataSource) dataSourceObject;
-
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {

@@ -5,13 +5,13 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpoo
 
 import javax.sql.DataSource;
 
-public class HerokuJawsDBFactory extends CommonDbFactory {
+public class HerokuJawsDbFactory extends CommonDbFactory {
     private static final String DB_CONNECTION_FILE = "connections/JawsDBConnection.properties";
     private static final String SCRIPTS_DIR = "./src/main/resources/scripts/MySQL/";
     private static final int CONNECTIONS = 6;
     private static final DataSource DATA_SOURCE = init();
 
-    public HerokuJawsDBFactory() {
+    public HerokuJawsDbFactory() {
         super(DATA_SOURCE);
     }
 

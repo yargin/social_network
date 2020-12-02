@@ -7,7 +7,7 @@
               url="jdbc:h2:mem:test"/>
     <!--              DB_CLOSE_DELAY="-1"-->
 
-    <Resource name="jdbc/MySql" auth="Container" type="javax.sql.DataSource"
+    <Resource name="jdbc/Local-MySql" auth="Container" type="javax.sql.DataSource"
               maxTotal="10" minIdle="2" maxWaitMillis="10000"
               username="root" password="12131415a" driverClassName="com.mysql.cj.jdbc.Driver"
               url="jdbc:mysql://localhost:3306/social_network?serverTimezone=UTC"/>
@@ -16,7 +16,7 @@
     <!--              useSSL="false"-->
     <!--              allowPublicKeyRetrieval="true"-->
 
-    <Resource name="jdbc/JawsDb" auth="Container" type="javax.sql.DataSource"
+    <Resource name="jdbc/Heroku-Jaws" auth="Container" type="javax.sql.DataSource"
               maxTotal="6" minIdle="2" maxWaitMillis="10000"
               username="ob3tdoreg91spqkc" password="tpkl0gslmimomhgg" driverClassName="com.mysql.cj.jdbc.Driver"
               url="jdbc:mysql://q2gen47hi68k1yrb.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/crmpcpc571dqa7ra"/>
