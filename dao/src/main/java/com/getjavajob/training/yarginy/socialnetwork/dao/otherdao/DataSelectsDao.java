@@ -10,6 +10,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.Se
 import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchableType;
 
 import javax.sql.DataSource;
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,7 +20,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DataSelectsDao {
+public class DataSelectsDao implements Serializable {
     private static final int LIMIT = 10;
     private final DataSource data;
 

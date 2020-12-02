@@ -2,6 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytoman
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Collection;
  *
  * @param <E> entity type
  */
-public interface SelfManyToManyDao<E extends Entity> {
+public interface SelfManyToManyDao<E extends Entity> extends Serializable {
     /**
      * selects all participants related to {@link Entity}
      *

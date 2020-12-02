@@ -2,6 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
 
+import java.io.Serializable;
 import java.sql.*;
 import java.util.Collection;
 
@@ -10,14 +11,14 @@ import java.util.Collection;
  *
  * @param <E> {@link Entity} inheritor to work with
  */
-public interface Dml<E extends Entity> {
+public interface Dml<E extends Entity> extends Serializable {
     /**
      * creates {@link PreparedStatement} used by {@link ResultSet} for CRUD operations
      * select all {@link Entity} fields for CRUD
      *
      * @param connection {@link Connection}
-     * @param entity to select
-     * @param updatable flag telling if {@link PreparedStatement} will be used for update
+     * @param entity     to select
+     * @param updatable  flag telling if {@link PreparedStatement} will be used for update
      * @return created {@link PreparedStatement}
      * @throws SQLException
      */

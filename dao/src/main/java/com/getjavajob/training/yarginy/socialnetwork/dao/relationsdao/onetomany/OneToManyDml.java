@@ -3,13 +3,14 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dml;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 
-public abstract class OneToManyDml<M extends Entity> {
+public abstract class OneToManyDml<M extends Entity> implements Serializable {
     public Collection<M> retrieveManyByOne(Connection connection, long oneId) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(getSelectByOneQuery(), ResultSet.
                 TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {

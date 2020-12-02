@@ -4,9 +4,10 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchableDto;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public interface DataSetsDao {
+public interface DataSetsDao extends Serializable {
     Map<Account, Boolean> getGroupMembersAreModerators(long groupId);
 
     Map<Group, Boolean> getAllUnjoinedGroupsAreRequested(long accountId);

@@ -2,6 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Collection;
  *
  * @param <E> {@link Entity} inheritor
  */
-public interface Dao<E extends Entity> {
+public interface Dao<E extends Entity> extends Serializable {
     /**
      * retrieves {@link E} specified by id
      *

@@ -3,9 +3,10 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 
+import java.io.Serializable;
 import java.util.Collection;
 
-public interface GroupsMembersDao {
+public interface GroupsMembersDao extends Serializable {
     Collection<Group> selectAccountGroups(long accountId);
 
     Collection<Account> selectMembers(long groupId);

@@ -13,10 +13,9 @@ public class ApplicationStartupListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         try {
-            System.out.println("application started");
             Context initialContext = new InitialContext();
             Context envContext = (Context) initialContext.lookup("java:/comp/env");
-            DataSource dataSource = (DataSource) envContext.lookup("jdbc/Local-MySql");
+            DataSource dataSource = (DataSource) envContext.lookup("jdbc/Heroku-Jaws");
             DataSourceHolder.setDataSource(dataSource);
         } catch (NamingException e) {
             e.printStackTrace();
@@ -25,6 +24,5 @@ public class ApplicationStartupListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-
     }
 }

@@ -3,13 +3,14 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytoman
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dml;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 
-public abstract class ManyToManyDml<F extends Entity, S extends Entity> {
+public abstract class ManyToManyDml<F extends Entity, S extends Entity> implements Serializable {
     public Collection<S> retrieveByFirst(Connection connection, long firstId) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(getSelectBySecondQuery())) {
             statement.setLong(1, firstId);
