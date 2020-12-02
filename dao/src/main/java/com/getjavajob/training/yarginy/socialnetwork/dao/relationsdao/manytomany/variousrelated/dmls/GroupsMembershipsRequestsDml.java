@@ -20,7 +20,7 @@ public class GroupsMembershipsRequestsDml extends ManyToManyDml<Account, Group> 
             ACCOUNT_ID).where(GROUP_ID).build();
     private static final String SELECT_GROUPS = buildQuery().selectJoin(GroupsTable.TABLE, TABLE, GroupsTable.ID,
             GROUP_ID).where(ACCOUNT_ID).build();
-    private static final String SELECT = buildQuery().select(TABLE).where(ACCOUNT_ID).and(GROUP_ID).build();
+    private static final String SELECT = buildQuery().selectAll(TABLE).where(ACCOUNT_ID).and(GROUP_ID).build();
 
     @Override
     protected String getSelectBySecondQuery() {

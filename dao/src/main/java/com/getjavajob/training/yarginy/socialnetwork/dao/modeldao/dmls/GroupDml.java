@@ -20,13 +20,13 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuild
 import static java.util.Objects.isNull;
 
 public class GroupDml extends AbstractDml<Group> {
-    private static final String SELECT_ALL = buildQuery().select(TABLE).build();
+    private static final String SELECT_ALL = buildQuery().selectAll(TABLE).build();
     private static final String SELECT_BY_ID = buildQuery().selectLeftFullRightView(TABLE, AccountsTable.TABLE,
             AccountsTable.VIEW_FIELDS, OWNER, AccountsTable.ID).where(ID).build();
     private static final String SELECT_BY_NAME = buildQuery().selectLeftFullRightView(TABLE, AccountsTable.TABLE,
             AccountsTable.VIEW_FIELDS, OWNER, AccountsTable.ID).where(NAME).build();
-    private static final String SELECT_UPDATE_BY_NAME = buildQuery().select(TABLE).where(NAME).build();
-    private static final String SELECT_UPDATE_BY_ID = buildQuery().select(TABLE).where(ID).build();
+    private static final String SELECT_UPDATE_BY_NAME = buildQuery().selectAll(TABLE).where(NAME).build();
+    private static final String SELECT_UPDATE_BY_ID = buildQuery().selectAll(TABLE).where(ID).build();
     private final AccountDml accountDml = new AccountDml();
     private final Dao<Account> accountDao = getDbFactory().getAccountDao();
 

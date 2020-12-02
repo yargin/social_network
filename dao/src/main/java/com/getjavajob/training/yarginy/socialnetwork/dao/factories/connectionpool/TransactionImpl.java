@@ -1,9 +1,10 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool;
 
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.sql.Savepoint;
 
-public class TransactionImpl implements Transaction {
+public class TransactionImpl implements Transaction, Serializable {
     private final ConnectionProxy connectionProxy;
 
     public TransactionImpl(ConnectionProxy connectionProxy) {

@@ -12,7 +12,7 @@ import static java.util.Objects.isNull;
 public abstract class AbstractMessageService implements MessageService {
     private final MessageDao messageDao;
 
-    public AbstractMessageService(MessageDao messageDao) {
+    protected AbstractMessageService(MessageDao messageDao) {
         this.messageDao = messageDao;
     }
 

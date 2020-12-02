@@ -1,6 +1,8 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.tables.messages;
 
-public abstract class MessagesTable {
+import java.io.Serializable;
+
+public abstract class MessagesTable implements Serializable {
     public final String table;
     public final String id;
     public final String author;
@@ -9,7 +11,7 @@ public abstract class MessagesTable {
     public final String receiverId;
     public final String posted;
 
-    public MessagesTable() {
+    protected MessagesTable() {
         table = getTableName();
         id = table + '.' + "Id";
         author = table + '.' + "author";

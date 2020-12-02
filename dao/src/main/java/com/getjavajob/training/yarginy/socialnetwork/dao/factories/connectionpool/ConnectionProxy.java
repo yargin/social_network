@@ -1,11 +1,12 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool;
 
+import java.io.Serializable;
 import java.sql.*;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
-public class ConnectionProxy implements Connection {
+public class ConnectionProxy implements Connection, Serializable {
     private final Connection connection;
     private final AbstractDataSource abstractDataSource;
     private boolean transactional;

@@ -19,14 +19,14 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuild
 
 public abstract class AbstractMessageDml extends AbstractDml<Message> {
     private final MessagesTable table = getTable();
-    private final String selectAll = buildQuery().select(table.table).build();
+    private final String selectAll = buildQuery().selectAll(table.table).build();
     private final String selectById = buildQuery().selectLeftFullRightView(table.table, AccountsTable.TABLE,
             AccountsTable.VIEW_FIELDS, table.author, AccountsTable.ID).where(table.id).build();
     private final String selectByAltKey = buildQuery().selectLeftFullRightView(table.table, AccountsTable.TABLE,
             AccountsTable.VIEW_FIELDS, table.author, AccountsTable.ID).where(table.author).and(table.receiverId).
             and(table.posted).build();
-    private final String selectUpdateById = buildQuery().select(table.table).where(table.id).build();
-    private final String selectUpdateByAltKey = buildQuery().select(table.table).where(table.author).and(
+    private final String selectUpdateById = buildQuery().selectAll(table.table).where(table.id).build();
+    private final String selectUpdateByAltKey = buildQuery().selectAll(table.table).where(table.author).and(
             table.receiverId).and(table.posted).build();
 
     protected abstract MessagesTable getTable();

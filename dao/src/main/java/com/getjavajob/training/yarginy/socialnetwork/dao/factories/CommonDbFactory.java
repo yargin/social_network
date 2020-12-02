@@ -43,7 +43,7 @@ public abstract class CommonDbFactory implements DbFactory {
     private final DataSource dataSource;
     private ScriptExecutor scriptExecutor;
 
-    public CommonDbFactory(DataSource dataSource) {
+    protected CommonDbFactory(DataSource dataSource) {
         this.dataSource = dataSource;
         if (runScriptOnStart()) {
             getScriptExecutor().executeScript(getStartingScript());

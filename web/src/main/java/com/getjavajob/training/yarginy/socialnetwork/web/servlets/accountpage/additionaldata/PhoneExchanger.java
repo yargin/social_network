@@ -1,10 +1,12 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.additionaldata;
 
+import java.io.Serializable;
+
 /**
  * used for exchanging phones between servlets & jsps
  * contains param-name, phone & error
  */
-public class PhoneExchanger {
+public class PhoneExchanger implements Serializable {
     private String paramName;
     private String value;
     private String error;

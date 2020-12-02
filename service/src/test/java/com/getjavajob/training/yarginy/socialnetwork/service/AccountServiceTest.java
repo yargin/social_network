@@ -105,9 +105,6 @@ public class AccountServiceTest {
         when(friendsDao.deleteRequest(account.getId(), 13)).thenReturn(true);
         when(friendsDao.createFriendship(account.getId(), 13)).thenReturn(false);
         assertFalse(accountService.addFriend(account.getId(), 13));
-//        when(friendsDao.deleteRequest(account.getId(), 11)).thenReturn(true);
-//        when(friendsDao.createFriendship(account.getId(), 11)).thenReturn(true);
-//        assertTrue(accountService.addFriend(account.getId(), 11));
         printPassed(CLASS, "testAddFriend");
     }
 

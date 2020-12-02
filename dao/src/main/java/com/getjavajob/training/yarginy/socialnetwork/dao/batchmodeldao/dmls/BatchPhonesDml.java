@@ -14,7 +14,8 @@ import java.util.Collection;
 import java.util.Objects;
 
 import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
-import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.PhonesTable.*;
+import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.PhonesTable.NUMBER;
+import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.PhonesTable.TABLE;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 
 public class BatchPhonesDml extends PhonesDml implements BatchDml<Phone> {
@@ -36,7 +37,7 @@ public class BatchPhonesDml extends PhonesDml implements BatchDml<Phone> {
                 numberBuilder.append(phone.getNumber()).append(", ");
             }
             String numbers = numberBuilder.substring(0, numberBuilder.length() - 2);
-            select = buildQuery().select(TABLE).whereIn(new String[]{NUMBER}, new String[]{numbers}).build();
+            select = buildQuery().selectAll(TABLE).whereIn(new String[]{NUMBER}, new String[]{numbers}).build();
         }
         return connection.prepareStatement(select, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
     }
@@ -54,7 +55,7 @@ public class BatchPhonesDml extends PhonesDml implements BatchDml<Phone> {
                 numberBuilder.append(number).append(", ");
             }
             String numbers = numberBuilder.substring(0, numberBuilder.length() - 2);
-            select = buildQuery().select(TABLE).whereIn(new String[]{NUMBER}, new String[]{numbers}).build();
+            select = buildQuery().selectAll(TABLE).whereIn(new String[]{NUMBER}, new String[]{numbers}).build();
         }
         return connection.prepareStatement(select, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
     }

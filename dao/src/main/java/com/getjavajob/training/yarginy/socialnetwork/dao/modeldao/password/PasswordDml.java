@@ -19,7 +19,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuild
 public class PasswordDml extends AbstractDml<Password> {
     public static final String SELECT = buildQuery().selectJoin(TABLE, AccountsTable.TABLE, EMAIL, AccountsTable.EMAIL).
             where(EMAIL).build();
-    public static final String SELECT_UPDATE = buildQuery().select(TABLE).where(EMAIL).build();
+    public static final String SELECT_UPDATE = buildQuery().selectAll(TABLE).where(EMAIL).build();
     public static final AccountDml ACCOUNT_DML = new AccountDml();
 
     @Override

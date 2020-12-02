@@ -10,8 +10,6 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static java.util.Objects.isNull;
-
 public abstract class AbstractDml<E extends Entity> implements Dml<E> {
     /**
      * stores value by <b>updater</b> if it differs from stored
@@ -82,7 +80,7 @@ public abstract class AbstractDml<E extends Entity> implements Dml<E> {
         } catch (UnsupportedOperationException | NullPointerException e) {
             id = 0;
         }
-        if (!updatable && isNull(entity)) {
+        if (!updatable && id == 0) {
             statement = createPreparedStatement(connection, getSelectAll(), false);
         } else if (!updatable && id > 0) {
             statement = createPreparedStatement(connection, getSelectById(), false);

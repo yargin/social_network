@@ -2,8 +2,11 @@ package com.getjavajob.training.yarginy.socialnetwork.common.datasource;
 
 import javax.sql.DataSource;
 
-public class DataSourceHolder {
+public final class DataSourceHolder {
     private static DataSource dataSource;
+
+    private DataSourceHolder() {
+    }
 
     public static DataSource getDataSource() {
         return dataSource;

@@ -1,7 +1,5 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.filters.dialogaccess;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.service.DialogService;
 import com.getjavajob.training.yarginy.socialnetwork.service.DialogServiceImpl;
 
@@ -12,9 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.AccountInfoHelper.isAdmin;
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirectToReferer;
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
-import static java.util.Objects.isNull;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTED_ID;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER_ID;
 
 public class DialogAccessFilter extends HttpFilter {
     private final DialogService dialogService = new DialogServiceImpl();
@@ -24,10 +23,7 @@ public class DialogAccessFilter extends HttpFilter {
         long dialogId = (long) req.getAttribute(REQUESTED_ID);
         long currentUserId = (long) req.getSession().getAttribute(USER_ID);
 
-        Account account = (Account) req.getSession().getAttribute(USER);
-        if ((!isNull(account.getRole()) && (Role.ADMIN.equals(account.getRole())))) {
-            req.setAttribute("admin", true);
-            chain.doFilter(req, res);
+        if (isAdmin(req, res, chain)) {
             return;
         }
         if (dialogService.isTalker(currentUserId, dialogId)) {

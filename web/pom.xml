@@ -34,7 +34,6 @@
             <groupId>javax.servlet</groupId>
             <artifactId>jsp-api</artifactId>
             <version>2.0</version>
-            <!--            <scope>provided</scope>-->
         </dependency>
 
         <dependency>
@@ -109,13 +108,12 @@
                     <appName>yarginy-socnet</appName>
                     <processTypes>
                         <web>
-                            @formatter:off
+<!--                            @formatter:off-->
                             java $JAVA_OPTS -cp target/dependency/webapp-runner.jar:target/dependency/tomcat-dbcp.jar webapp.runner.launch.Main --enable-naming --context-xml target/web-1.0.0-SNAPSHOT/META-INF/context.xml $WEBAPP_RUNNER_OPTS --port $PORT target/web-1.0.0-SNAPSHOT.war</web>
-                        <!-- @formatter:on -->
+<!--                        @formatter:on-->
                     </processTypes>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
 </project>
