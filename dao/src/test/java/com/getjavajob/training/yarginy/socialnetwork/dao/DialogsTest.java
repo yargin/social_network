@@ -17,6 +17,10 @@ import java.util.Collection;
 import static org.junit.Assert.*;
 
 public class DialogsTest {
+    static {
+        TestDataSourceInitializer.initDataSource();
+    }
+
     private final DialogDao dialogDao = new DialogDaoImpl();
     private final AccountDao accountDao = new AccountDaoImpl();
     private Account firstAccount = new AccountImpl("test1", "test1", "test1@test.test");

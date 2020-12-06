@@ -1,19 +1,21 @@
-CREATE TABLE IF NOT EXISTS Accounts(
-                                       id                BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                                       name              VARCHAR(40) NOT NULL,
-                                       surname           VARCHAR(40) NOT NULL,
-                                       patronymic        VARCHAR(40),
-                                       sex               CHAR(6),
-                                       birth_date        DATE,
-                                       registration_date DATE,
-                                       role              CHAR(5) DEFAULT 'USER',
-                                       email             VARCHAR(40) NOT NULL UNIQUE,
-                                       additional_email  VARCHAR(40) UNIQUE,
-                                       icq               VARCHAR(40),
-                                       skype             VARCHAR(40),
-                                       city              VARCHAR(40),
-                                       country           VARCHAR(40),
-                                       photo             MEDIUMBLOB
+CREATE TABLE IF NOT EXISTS
+    Accounts
+(
+    id                BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name              VARCHAR(40) NOT NULL,
+    surname           VARCHAR(40) NOT NULL,
+    patronymic        VARCHAR(40),
+    sex               CHAR(6),
+    birth_date        DATE,
+    registration_date DATE,
+    role              CHAR(5) DEFAULT 'USER',
+    email             VARCHAR(40) NOT NULL UNIQUE,
+    additional_email  VARCHAR(40) UNIQUE,
+    icq               VARCHAR(40),
+    skype             VARCHAR(40),
+    city              VARCHAR(40),
+    country           VARCHAR(40),
+    photo             MEDIUMBLOB
 );
 
 ALTER TABLE Accounts
@@ -147,13 +149,14 @@ CREATE TABLE `account_wall_messages`
     `message`     varchar(500),
     `image`       mediumblob,
     `receiver_id` bigint unsigned NOT NULL,
-    `posted`      datetime        NOT NULL,
-    PRIMARY KEY (`id`),
-    KEY `C_32` (`receiver_id`),
-    KEY `C_31` (`author`),
-    CONSTRAINT `C_31` FOREIGN KEY (`author`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `C_32` FOREIGN KEY (`receiver_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+    `posted`      datetime        NOT NULL
 );
+
+ALTER TABLE account_wall_messages
+    ADD CONSTRAINT C_31 FOREIGN KEY (author) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE account_wall_messages
+    ADD CONSTRAINT C_32 FOREIGN KEY (receiver_id) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 CREATE TABLE `group_wall_messages`
 (
@@ -162,13 +165,14 @@ CREATE TABLE `group_wall_messages`
     `message`     varchar(500),
     `image`       mediumblob,
     `receiver_id` bigint unsigned NOT NULL,
-    `posted`      datetime        NOT NULL,
-    PRIMARY KEY (`id`),
-    KEY `C_36` (`receiver_id`),
-    KEY `C_35` (`author`),
-    CONSTRAINT `C_35` FOREIGN KEY (`author`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `C_36` FOREIGN KEY (`receiver_id`) REFERENCES `_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+    `posted`      datetime        NOT NULL
 );
+
+ALTER TABLE group_wall_messages
+    ADD CONSTRAINT C_35 FOREIGN KEY (author) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE group_wall_messages
+    ADD CONSTRAINT C_36 FOREIGN KEY (receiver_id) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 CREATE TABLE dialogs
 (
@@ -187,10 +191,12 @@ CREATE TABLE `dialogs_messages`
     `image`       mediumblob,
     `receiver_id` bigint unsigned NOT NULL,
     `posted`      datetime        NOT NULL,
-    PRIMARY KEY (`id`),
-    KEY `C_34` (`receiver_id`),
-    KEY `C_33` (`author`),
-    CONSTRAINT `C_33` FOREIGN KEY (`author`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `C_34` FOREIGN KEY (`receiver_id`) REFERENCES `dialogs` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+    PRIMARY KEY (`id`)
 );
+
+ALTER TABLE dialogs_messages
+    ADD CONSTRAINT C_33 FOREIGN KEY (author) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE dialogs_messages
+    ADD CONSTRAINT C_34 FOREIGN KEY (receiver_id) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 

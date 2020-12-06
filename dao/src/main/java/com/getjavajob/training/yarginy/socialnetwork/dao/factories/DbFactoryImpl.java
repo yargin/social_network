@@ -1,5 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.factories;
 
+import com.getjavajob.training.yarginy.socialnetwork.common.datasource.DataSourceHolder;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
@@ -10,8 +11,8 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDaoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.dmls.BatchGroupDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.dmls.BatchPhonesDml;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl.ScriptExecutor;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl.ScriptExecutorImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.TransactionManager;
+import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.DataSourceProxy;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.DaoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.AccountDml;
@@ -35,48 +36,16 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDaoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.dmls.*;
 
-import javax.sql.DataSource;
+public class DbFactoryImpl implements DbFactory {
+    private DataSourceProxy dataSource;
 
-import static java.util.Objects.isNull;
-
-public abstract class CommonDbFactory implements DbFactory {
-    private final DataSource dataSource;
-    private ScriptExecutor scriptExecutor;
-
-    protected CommonDbFactory(DataSource dataSource) {
-        this.dataSource = dataSource;
-        if (runScriptOnStart()) {
-            getScriptExecutor().executeScript(getStartingScript());
-        }
+    public DbFactoryImpl() {
+        this.dataSource = new DataSourceProxy(DataSourceHolder.getDataSource());
     }
 
-    /**
-     * provides directory storing scripts. Used only to cut script file name. User free to leave it empty, but on-use
-     * will have to specify path to script
-     *
-     * @return path to directory storing scripts
-     */
-    protected abstract String getScriptDirectory();
-
-    /**
-     * provides file with script that will be executed at right after factory creation if
-     * {@link CommonDbFactory#runScriptOnStart()} returns true
-     *
-     * @return script file name
-     */
-    protected abstract String getStartingScript();
-
-    /**
-     * tells {@link CommonDbFactory} to execute starting script or not
-     */
-    protected abstract boolean runScriptOnStart();
-
     @Override
-    public ScriptExecutor getScriptExecutor() {
-        if (isNull(scriptExecutor)) {
-            scriptExecutor = new ScriptExecutorImpl(dataSource, getScriptDirectory());
-        }
-        return scriptExecutor;
+    public TransactionManager getTransactionManager() {
+        return dataSource.getTransactionManager();
     }
 
     @Override

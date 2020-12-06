@@ -1,19 +1,20 @@
-CREATE TABLE IF NOT EXISTS Accounts(
-                                       id                BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                                       name              VARCHAR(40) NOT NULL,
-                                       surname           VARCHAR(40) NOT NULL,
-                                       patronymic        VARCHAR(40),
-                                       sex               CHAR(6),
-                                       birth_date        DATE,
-                                       registration_date DATE,
-                                       role              CHAR(5) DEFAULT 'USER',
-                                       email             VARCHAR(40) NOT NULL UNIQUE,
-                                       additional_email  VARCHAR(40) UNIQUE,
-                                       icq               VARCHAR(40),
-                                       skype             VARCHAR(40),
-                                       city              VARCHAR(40),
-                                       country           VARCHAR(40),
-                                       photo             MEDIUMBLOB
+CREATE TABLE IF NOT EXISTS Accounts
+(
+    id                BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name              VARCHAR(40) NOT NULL,
+    surname           VARCHAR(40) NOT NULL,
+    patronymic        VARCHAR(40),
+    sex               CHAR(6),
+    birth_date        DATE,
+    registration_date DATE,
+    role              CHAR(5) DEFAULT 'USER',
+    email             VARCHAR(40) NOT NULL UNIQUE,
+    additional_email  VARCHAR(40) UNIQUE,
+    icq               VARCHAR(40),
+    skype             VARCHAR(40),
+    city              VARCHAR(40),
+    country           VARCHAR(40),
+    photo             MEDIUMBLOB
 );
 
 ALTER TABLE Accounts

@@ -16,7 +16,7 @@ public class GroupServiceImpl implements GroupService {
     private final GroupDao groupDao = new GroupDaoImpl();
     private final GroupsMembersDao membersDao = new GroupsMembersDaoImpl();
     private final GroupsModeratorsDao moderatorsDao = new GroupsModeratorsDaoImpl();
-    private final TransactionManager transactionManager = new TransactionManager();
+    private final TransactionManager transactionManager = new TransactionManagerImpl();
     private final DataSetsDao dataSetsDao = new DataSetsDaoImpl();
 
     @Override

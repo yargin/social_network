@@ -15,10 +15,11 @@ public class ApplicationStartupListener implements ServletContextListener {
         try {
             Context initialContext = new InitialContext();
             Context envContext = (Context) initialContext.lookup("java:/comp/env");
-            DataSource dataSource = (DataSource) envContext.lookup("jdbc/Heroku-Jaws");
+            DataSource dataSource = (DataSource) envContext.lookup("jdbc/Local-MySql");
             DataSourceHolder.setDataSource(dataSource);
         } catch (NamingException e) {
             e.printStackTrace();
+            throw new IllegalStateException(e);
         }
     }
 

@@ -14,7 +14,10 @@ import java.util.Collections;
 import static org.junit.Assert.*;
 
 public class GroupMembershipRequestsTest {
-    private final GroupsModeratorsDao groupsModeratorsDao = new GroupsModeratorsDaoImpl();
+    static {
+        TestDataSourceInitializer.initDataSource();
+    }
+
     private final AccountDao accountDao = new AccountDaoImpl();
     private final GroupDao groupDao = new GroupDaoImpl();
     private final GroupsMembersDao groupsMembersDao = new GroupsMembersDaoImpl();

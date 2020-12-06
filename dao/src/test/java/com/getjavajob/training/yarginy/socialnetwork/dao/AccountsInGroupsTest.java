@@ -15,6 +15,10 @@ import java.util.Collection;
 import static org.junit.Assert.*;
 
 public class AccountsInGroupsTest {
+    static {
+        TestDataSourceInitializer.initDataSource();
+    }
+
     private static final AccountDao ACCOUNT_DAO = new AccountDaoImpl();
     private static final GroupDao GROUP_DAO = new GroupDaoImpl();
     private static final GroupsMembersDao GROUPS_MEMBERS_DAO = new GroupsMembersDaoImpl();

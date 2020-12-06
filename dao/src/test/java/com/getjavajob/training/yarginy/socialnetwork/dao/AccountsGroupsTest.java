@@ -19,6 +19,10 @@ import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 
 public class AccountsGroupsTest {
+    static {
+        TestDataSourceInitializer.initDataSource();
+    }
+
     public static final AccountDao ACCOUNT_DAO = new AccountDaoImpl();
     public static final GroupDao GROUP_DAO = new GroupDaoImpl();
     private Account account;

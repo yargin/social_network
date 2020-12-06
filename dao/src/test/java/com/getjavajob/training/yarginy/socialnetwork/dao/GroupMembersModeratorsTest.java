@@ -14,6 +14,10 @@ import java.util.Map;
 import static org.junit.Assert.*;
 
 public class GroupMembersModeratorsTest {
+    static {
+        TestDataSourceInitializer.initDataSource();
+    }
+
     private final DataSetsDao dataSetsDao = new DataSetsDaoImpl();
     private final AccountDao accountDao = new AccountDaoImpl();
     private final GroupDao groupDao = new GroupDaoImpl();

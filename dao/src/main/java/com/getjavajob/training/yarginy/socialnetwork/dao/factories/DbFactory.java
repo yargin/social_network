@@ -7,7 +7,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Messa
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl.ScriptExecutor;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.TransactionManager;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.otherdao.DataSelectsDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.SelfManyToManyDao;
@@ -18,6 +18,8 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.
  * stored entities abstract fabric. CRUD operations with entities are provided by *Dao objects
  */
 public interface DbFactory {
+    TransactionManager getTransactionManager();
+
     Dao<Account> getAccountDao();
 
     BatchDao<Group> getGroupDao();
@@ -31,8 +33,6 @@ public interface DbFactory {
     OneToManyDao<Phone> getAccountsPhones(Dao<Account> accountDao);
 
     Dao<Password> getPasswordDao();
-
-    ScriptExecutor getScriptExecutor();
 
     OneToManyDao<Group> getAccountsOwnedGroupsDao(Dao<Account> accountDao);
 

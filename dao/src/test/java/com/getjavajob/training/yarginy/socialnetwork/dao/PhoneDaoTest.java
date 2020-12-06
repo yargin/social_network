@@ -16,6 +16,10 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class PhoneDaoTest {
+    static {
+        TestDataSourceInitializer.initDataSource();
+    }
+
     private static final PhoneDao PHONE_DAO = new PhoneDaoImpl();
     private static final AccountDao ACCOUNT_DAO = new AccountDaoImpl();
     private static final Phone PHONE = new PhoneImpl();

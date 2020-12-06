@@ -19,6 +19,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class BatchPhoneDaoTest {
+    static {
+        TestDataSourceInitializer.initDataSource();
+    }
+
     private final AccountDao accountDao = new AccountDaoImpl();
     private final PhoneDao phoneDao = new PhoneDaoImpl();
     private Collection<Phone> testPhones = new ArrayList<>();

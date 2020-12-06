@@ -15,6 +15,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class GroupsListAreRequestedTest {
+    static {
+        TestDataSourceInitializer.initDataSource();
+    }
+
     private final DataSetsDao dataSetsDao = new DataSetsDaoImpl();
     private final GroupsMembersDao membersDao = new GroupsMembersDaoImpl();
     private final AccountDao accountDao = new AccountDaoImpl();
@@ -28,7 +32,7 @@ public class GroupsListAreRequestedTest {
     private Group group5 = new GroupImpl("testGroup5", owner);
 
     @Before
-    public void testValuesInit() {
+    public void initTestValues() {
         accountDao.create(account);
         account = accountDao.select(account);
         accountDao.create(owner);

@@ -8,12 +8,13 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Messa
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogDaoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.TransactionManager;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.TransactionManagerImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.Transaction;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.DialogMessageServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
 
 public class DialogServiceImpl implements DialogService {
-    private final TransactionManager transactionManager = new TransactionManager();
+    private final TransactionManager transactionManager = new TransactionManagerImpl();
     private final DialogDao dialogDao = new DialogDaoImpl();
     private final MessageService messageService = new DialogMessageServiceImpl();
 

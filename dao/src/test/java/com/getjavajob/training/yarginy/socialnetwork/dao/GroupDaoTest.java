@@ -16,6 +16,10 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class GroupDaoTest {
+    static {
+        TestDataSourceInitializer.initDataSource();
+    }
+
     private final GroupDao groupDao = new GroupDaoImpl();
     private final AccountDao accountDao = new AccountDaoImpl();
     private final Group GROUP = new GroupImpl();

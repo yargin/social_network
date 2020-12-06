@@ -3,9 +3,8 @@ package com.getjavajob.training.yarginy.socialnetwork.dao;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoImpl;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,8 +12,12 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class AccountDaoTest {
-    private static final DbFactory DB_FACTORY = AbstractDbFactory.getDbFactory();
-    private static final Dao<Account> ACCOUNT_DAO = DB_FACTORY.getAccountDao();
+    private static final AccountDao ACCOUNT_DAO = new AccountDaoImpl();
+
+    static {
+        TestDataSourceInitializer.initDataSource();
+    }
+
     private static final Account ACCOUNT = new AccountImpl();
 
     @Before

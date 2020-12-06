@@ -16,6 +16,10 @@ import java.util.Collection;
 import static org.junit.Assert.*;
 
 public class FriendshipsRequestsDaoTest {
+    static {
+        TestDataSourceInitializer.initDataSource();
+    }
+
     private final FriendshipsDao friendshipsDao = new FriendshipsDaoImpl();
     private final AccountDao accountDao = new AccountDaoImpl();
     private Account firstAccount = new AccountImpl("firstTest", "test", "first@test.test");

@@ -19,6 +19,10 @@ import static java.util.Arrays.asList;
 import static org.junit.Assert.assertTrue;
 
 public class BatchUpdateTest {
+    static {
+        TestDataSourceInitializer.initDataSource();
+    }
+
     private final AccountDao accountDao = new AccountDaoImpl();
     private final PhoneDao phoneDao = new PhoneDaoImpl();
     private Account account = new AccountImpl("test", "test", "test@test.test");

@@ -19,6 +19,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class AccountsPhonesTest {
+    static {
+        TestDataSourceInitializer.initDataSource();
+    }
+
     private static final AccountDao ACCOUNT_DAO = new AccountDaoImpl();
     private static final PhoneDao PHONE_DAO = new PhoneDaoImpl();
     private final Collection<Phone> phones = new ArrayList<>();

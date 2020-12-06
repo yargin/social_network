@@ -4,24 +4,24 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.PasswordImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
 import static org.junit.Assert.*;
 
 public class PasswordDaoTest {
-    private static final DbFactory DB_FACTORY = AbstractDbFactory.getDbFactory();
+    private static final DbFactory DB_FACTORY = getDbFactory();
     private static final Dao<Password> PASSWORD_DAO = DB_FACTORY.getPasswordDao();
     private static final Dao<Account> ACCOUNT_DAO = DB_FACTORY.getAccountDao();
     private static final Account ACCOUNT = new AccountImpl();
     private static final Password PASSWORD = new PasswordImpl();
 
     @BeforeClass
-    public static void initTestData() {
+    public static void initTestValues() {
         ACCOUNT.setEmail("password@test.com");
         ACCOUNT.setName("testAccount");
         ACCOUNT.setSurname("testSurname");
@@ -32,7 +32,7 @@ public class PasswordDaoTest {
     }
 
     @AfterClass
-    public static void deleteTestData() {
+    public static void deleteTestValues() {
         assert ACCOUNT_DAO.delete(ACCOUNT);
     }
 
