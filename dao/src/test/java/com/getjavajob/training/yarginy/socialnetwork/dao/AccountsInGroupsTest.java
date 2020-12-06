@@ -5,8 +5,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.*;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,12 +12,13 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.TestResultPrinter.printPassed;
 import static org.junit.Assert.*;
 
 public class AccountsInGroupsTest {
-    private static final DbFactory DB_FACTORY = AbstractDbFactory.getDbFactory();
-    private static final String CLASS = "AccountDaoTest";
+    static {
+        TestDataSourceInitializer.initDataSource();
+    }
+
     private static final AccountDao ACCOUNT_DAO = new AccountDaoImpl();
     private static final GroupDao GROUP_DAO = new GroupDaoImpl();
     private static final GroupsMembersDao GROUPS_MEMBERS_DAO = new GroupsMembersDaoImpl();
@@ -49,7 +48,6 @@ public class AccountsInGroupsTest {
         boolean actual = GROUPS_MEMBERS_DAO.joinGroup(account.getId(), group.getId());
         assertTrue(actual);
         GROUPS_MEMBERS_DAO.leaveGroup(account.getId(), group.getId());
-        printPassed(CLASS, "testJoinGroup");
     }
 
     @Test
@@ -58,7 +56,6 @@ public class AccountsInGroupsTest {
         boolean actual = GROUPS_MEMBERS_DAO.joinGroup(account.getId(), group.getId());
         assertFalse(actual);
         GROUPS_MEMBERS_DAO.leaveGroup(account.getId(), group.getId());
-        printPassed(CLASS, "testJoinAlreadyJoinedGroup");
     }
 
     @Test
@@ -66,7 +63,6 @@ public class AccountsInGroupsTest {
         GROUPS_MEMBERS_DAO.joinGroup(account.getId(), group.getId());
         boolean actual = GROUPS_MEMBERS_DAO.leaveGroup(account.getId(), group.getId());
         assertTrue(actual);
-        printPassed(CLASS, "testLeaveGroup");
     }
 
     @Test
@@ -77,7 +73,6 @@ public class AccountsInGroupsTest {
         Collection<Account> actual = GROUPS_MEMBERS_DAO.selectMembers(group.getId());
         assertEquals(expected, actual);
         GROUPS_MEMBERS_DAO.leaveGroup(account.getId(), group.getId());
-        printPassed(CLASS, "selectMembers");
     }
 
     @Test
@@ -88,6 +83,5 @@ public class AccountsInGroupsTest {
         Collection<Group> actual = GROUPS_MEMBERS_DAO.selectAccountGroups(account.getId());
         assertEquals(expected, actual);
         GROUPS_MEMBERS_DAO.leaveGroup(account.getId(), group.getId());
-        printPassed(CLASS, "selectGroups");
     }
 }

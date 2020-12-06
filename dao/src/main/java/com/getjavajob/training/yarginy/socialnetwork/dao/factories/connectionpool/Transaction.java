@@ -1,8 +1,9 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool;
 
+import java.io.Serializable;
 import java.sql.Savepoint;
 
-public interface Transaction extends AutoCloseable {
+public interface Transaction extends AutoCloseable, Serializable {
     /**
      * applies changes. Doesn't close connection or transaction
      */

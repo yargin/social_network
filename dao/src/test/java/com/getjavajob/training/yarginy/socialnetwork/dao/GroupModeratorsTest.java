@@ -17,6 +17,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class GroupModeratorsTest {
+    static {
+        TestDataSourceInitializer.initDataSource();
+    }
+
     private final GroupsModeratorsDao groupsModeratorsDao = new GroupsModeratorsDaoImpl();
     private final AccountDao accountDao = new AccountDaoImpl();
     private final GroupDao groupDao = new GroupDaoImpl();

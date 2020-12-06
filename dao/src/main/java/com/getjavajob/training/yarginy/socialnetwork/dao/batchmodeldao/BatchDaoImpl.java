@@ -1,9 +1,9 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.ConnectionPool;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.DaoImpl;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,8 +14,8 @@ import java.util.Collection;
 public class BatchDaoImpl<E extends Entity> extends DaoImpl<E> implements BatchDao<E> {
     private final BatchDml<E> batchDml;
 
-    public BatchDaoImpl(ConnectionPool connectionPool, BatchDml<E> batchDml) {
-        super(connectionPool, batchDml);
+    public BatchDaoImpl(DataSource dataSource, BatchDml<E> batchDml) {
+        super(dataSource, batchDml);
         this.batchDml = batchDml;
     }
 
@@ -24,7 +24,7 @@ public class BatchDaoImpl<E extends Entity> extends DaoImpl<E> implements BatchD
         if (entities.isEmpty()) {
             return true;
         }
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = batchDml.batchSelectForInsert(connection, entities);
              ResultSet resultSet = statement.executeQuery()) {
             if (resultSet.next()) {
@@ -46,7 +46,7 @@ public class BatchDaoImpl<E extends Entity> extends DaoImpl<E> implements BatchD
         if (entities.isEmpty()) {
             return true;
         }
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = batchDml.batchSelectForDelete(connection, entities);
              ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {

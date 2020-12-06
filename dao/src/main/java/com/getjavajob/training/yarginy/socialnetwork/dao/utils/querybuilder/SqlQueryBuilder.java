@@ -3,6 +3,8 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder;
 public class SqlQueryBuilder {
     private StringBuilder query = new StringBuilder();
     public static final String SELECT_ALL = "SELECT * FROM ";
+    public static final String SELECT = "SELECT ";
+    public static final String EQUAL = " = ";
 
     /**
      * creates new {@link SqlQueryBuilder} for further query creation
@@ -19,8 +21,19 @@ public class SqlQueryBuilder {
      * @param table specified table
      * @return {@link SqlQueryBuilder} having added 'SELECT * FROM <b>table</b>' to query
      */
-    public SqlQueryBuilder select(String table) {
+    public SqlQueryBuilder selectAll(String table) {
         query.append(SELECT_ALL).append(table);
+        return this;
+    }
+
+    /**
+     * appends 'SELECT table.field1, table.field2 ... FROM <b>table</b>' to query
+     *
+     * @param table specified table
+     * @return {@link SqlQueryBuilder} having added 'SELECT table.field1, table.field2 ... FROM <b>table</b>' to query
+     */
+    public SqlQueryBuilder selectView(String viewFields, String table) {
+        query.append(SELECT).append(viewFields).append(" FROM ").append(table);
         return this;
     }
 
@@ -32,7 +45,7 @@ public class SqlQueryBuilder {
      * @return {@link SqlQueryBuilder} having added 'SELECT <b>column</b> FROM <b>table</b>' to query
      */
     public SqlQueryBuilder selectColumn(String table, String column) {
-        query.append("SELECT ").append(column).append(" FROM ").append(table);
+        query.append(SELECT).append(column).append(" FROM ").append(table);
         return this;
     }
 
@@ -45,7 +58,7 @@ public class SqlQueryBuilder {
      * @return {@link SqlQueryBuilder} having added 'SELECT <b>column</b> <b>alias</b> FROM <b>table</b>' to query
      */
     public SqlQueryBuilder selectColumn(String table, String column, String alias) {
-        query.append("SELECT ").append(column).append(' ').append(alias).append(' ').append(" FROM ").append(table);
+        query.append(SELECT).append(column).append(' ').append(alias).append(' ').append(" FROM ").append(table);
         return this;
     }
 
@@ -61,7 +74,25 @@ public class SqlQueryBuilder {
      */
     public SqlQueryBuilder selectJoin(String leftTable, String rightTable, String leftColumn, String rightColumn) {
         query.append(SELECT_ALL).append(leftTable).append(" JOIN ").append(rightTable).append(" ON ").
-                append(leftColumn).append(" = ").append(rightColumn);
+                append(leftColumn).append(EQUAL).append(rightColumn);
+        return this;
+    }
+
+    /**
+     * appends 'SELECT rightTable.field1, rightTable.field2 ..., leftTable.* FROM <b>leftTable</b> JOIN <b>rightTable</b>
+     * ON <b>leftColumn</b> = <b>rightColumn</b>' to query
+     *
+     * @param leftTable   specified left table
+     * @param rightTable  specified right table
+     * @param leftColumn  specified left column
+     * @param rightColumn specified right column
+     * @return {@link SqlQueryBuilder} having added 'SELECT * FROM <b>leftTable</b> JOIN <b>rightTable</b> ON
+     * <b>leftColumn</b> = <b>rightColumn</b>' to query
+     */
+    public SqlQueryBuilder selectLeftFullRightView(String leftTable, String rightTable, String rightFields,
+                                                   String leftColumn, String rightColumn) {
+        query.append(SELECT).append(rightFields).append(", ").append(leftTable).append(".* FROM ").append(leftTable).
+                append(" JOIN ").append(rightTable).append(" ON ").append(leftColumn).append(EQUAL).append(rightColumn);
         return this;
     }
 
@@ -76,7 +107,7 @@ public class SqlQueryBuilder {
      */
     public SqlQueryBuilder join(String joinedTable, String leftColumn, String joinedColumn) {
         query.append(" JOIN ").append(joinedTable).append(" ON ").
-                append(leftColumn).append(" = ").append(joinedColumn);
+                append(leftColumn).append(EQUAL).append(joinedColumn);
         return this;
     }
 
@@ -92,7 +123,7 @@ public class SqlQueryBuilder {
      */
     public SqlQueryBuilder joinSubSelect(String leftTable, String subSelect, String leftColumn, String alias) {
         query.append(SELECT_ALL).append(leftTable).append(" JOIN (").append(subSelect).append(" ) ").
-                append("s ON ").append(leftColumn).append(" = ").append("s.").append(alias);
+                append("s ON ").append(leftColumn).append(EQUAL).append("s.").append(alias);
         return this;
     }
 
@@ -149,7 +180,7 @@ public class SqlQueryBuilder {
      *
      * @param table         table to insert
      * @param columnsNumber number of columns
-     * @return
+     * @return {@link SqlQueryBuilder} having added 'INSERT INTO <b>table</b> VALUES(?, ?, ... ,?)'
      */
     public SqlQueryBuilder insert(String table, int columnsNumber) {
         query.append("INSERT INTO ").append(table).append(" VALUES(");

@@ -13,14 +13,11 @@ import java.sql.SQLException;
 import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.FriendshipsTable.*;
-import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 
 public class FriendshipDml extends SelfManyToManyDml<Account> {
-    private static final String ALIAS = "acc_id";
-    private static final String SUB_SELECT = buildQuery().selectColumn(TABLE, FIRST_ACCOUNT, ALIAS).where(
-            SECOND_ACCOUNT).union().selectColumn(TABLE, SECOND_ACCOUNT).where(FIRST_ACCOUNT).build();
-    private static final String SELECT_BY_ID = buildQuery().joinSubSelect(AccountsTable.TABLE, SUB_SELECT,
-            AccountsTable.ID, ALIAS).build();
+    private static final String SELECT_BY_ID = "SELECT " + AccountsTable.VIEW_FIELDS + " FROM Accounts WHERE id IN " +
+            "(SELECT first_account acc_id FROM Friendships WHERE second_account = ? UNION " +
+            " SELECT second_account acc_id FROM Friendships WHERE first_account = ?)";
     private static final String SELECT_BY_BOTH = "SELECT * FROM " + TABLE + " WHERE (" + FIRST_ACCOUNT + " = ? AND " +
             SECOND_ACCOUNT + " = ?) OR (" + SECOND_ACCOUNT + " = ? AND " + FIRST_ACCOUNT + " = ?);";
 

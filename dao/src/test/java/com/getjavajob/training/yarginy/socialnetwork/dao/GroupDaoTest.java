@@ -13,11 +13,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.TestResultPrinter.printPassed;
 import static org.junit.Assert.*;
 
 public class GroupDaoTest {
-    private static final String CLASS = "GroupDaoTest";
+    static {
+        TestDataSourceInitializer.initDataSource();
+    }
+
     private final GroupDao groupDao = new GroupDaoImpl();
     private final AccountDao accountDao = new AccountDaoImpl();
     private final Group GROUP = new GroupImpl();
@@ -40,7 +42,6 @@ public class GroupDaoTest {
     @Test
     public void testCreateGroup() {
         assertTrue(groupDao.create(GROUP));
-        printPassed(CLASS, "testCreateGroup");
     }
 
     @Test
@@ -50,7 +51,6 @@ public class GroupDaoTest {
             groupDao.create(GROUP);
         } catch (IncorrectDataException e) {
             assertFalse(false);
-            printPassed(CLASS, "testNullFieldCreate");
         }
     }
 
@@ -58,7 +58,6 @@ public class GroupDaoTest {
     public void testCreateExistingGroup() {
         groupDao.create(GROUP);
         assertFalse(groupDao.create(GROUP));
-        printPassed(CLASS, "testCreateExistingGroup");
     }
 
     @Test
@@ -78,14 +77,12 @@ public class GroupDaoTest {
         assertEquals(GROUP, actual);
         actual = groupDao.select(actual.getId());
         assertEquals(GROUP, actual);
-        printPassed(CLASS, "testSelectGroup");
     }
 
     @Test
     public void testSelectNonExistingGroup() {
         Group actual = groupDao.select(GROUP);
         assertEquals(groupDao.getNullEntity(), actual);
-        printPassed(CLASS, "testSelectNonExistingGroup");
     }
 
     @Test
@@ -97,7 +94,6 @@ public class GroupDaoTest {
         assertTrue(groupDao.update(GROUP, storedGroup));
         storedGroup = groupDao.select(GROUP);
         assertEquals(newDescription, storedGroup.getDescription());
-        printPassed(CLASS, "testUpdateGroup");
     }
 
     @Test
@@ -105,7 +101,6 @@ public class GroupDaoTest {
         Group nonExisting = new GroupImpl();
         nonExisting.setName("non existing group");
         assertFalse(groupDao.update(nonExisting, nonExisting));
-        printPassed(CLASS, "testUpdateNonExistingGroup");
     }
 
     @Test
@@ -113,7 +108,6 @@ public class GroupDaoTest {
         Group nonExisting = new GroupImpl();
         nonExisting.setName("non existing group");
         assertFalse(groupDao.delete(nonExisting));
-        printPassed(CLASS, "testDeleteNonExisting");
     }
 
     @Test
@@ -121,7 +115,6 @@ public class GroupDaoTest {
         groupDao.create(GROUP);
         assertTrue(groupDao.delete(GROUP));
         assertEquals(groupDao.getNullEntity(), groupDao.select(GROUP));
-        printPassed(CLASS, "testDeleteGroup");
     }
 
     @Test

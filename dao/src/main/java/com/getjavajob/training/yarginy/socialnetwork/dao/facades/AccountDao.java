@@ -4,9 +4,10 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 
+import java.io.Serializable;
 import java.util.Collection;
 
-public interface AccountDao {
+public interface AccountDao extends Serializable {
     Account select(long id);
 
     Account select(Account account);

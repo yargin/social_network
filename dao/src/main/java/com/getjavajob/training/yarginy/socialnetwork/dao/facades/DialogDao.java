@@ -2,9 +2,10 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
 
+import java.io.Serializable;
 import java.util.Collection;
 
-public interface DialogDao {
+public interface DialogDao extends Serializable {
     Dialog select(long id);
 
     Dialog select(Dialog dialog);

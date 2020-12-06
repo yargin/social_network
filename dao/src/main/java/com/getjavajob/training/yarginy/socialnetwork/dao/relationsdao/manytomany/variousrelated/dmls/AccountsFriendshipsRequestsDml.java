@@ -17,7 +17,7 @@ public class AccountsFriendshipsRequestsDml extends ManyToManyDml<Account, Accou
             REQUESTER).where(RECEIVER).build();
     private static final String SELECT_RECEIVERS = buildQuery().selectJoin(AccountsTable.TABLE, TABLE, AccountsTable.ID,
             RECEIVER).where(REQUESTER).build();
-    private static final String SELECT = buildQuery().select(TABLE).where(REQUESTER).and(RECEIVER).build();
+    private static final String SELECT = buildQuery().selectAll(TABLE).where(REQUESTER).and(RECEIVER).build();
     private final AccountDml accountDml = new AccountDml();
 
     @Override

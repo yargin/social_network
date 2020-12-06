@@ -3,20 +3,21 @@ package com.getjavajob.training.yarginy.socialnetwork.dao;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoImpl;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.TestResultPrinter.printPassed;
 import static org.junit.Assert.*;
 
 public class AccountDaoTest {
-    private static final String CLASS = "AccountDaoTest";
-    private static final DbFactory DB_FACTORY = AbstractDbFactory.getDbFactory();
-    private static final Dao<Account> ACCOUNT_DAO = DB_FACTORY.getAccountDao();
+    private static final AccountDao ACCOUNT_DAO = new AccountDaoImpl();
+
+    static {
+        TestDataSourceInitializer.initDataSource();
+    }
+
     private static final Account ACCOUNT = new AccountImpl();
 
     @Before
@@ -52,7 +53,6 @@ public class AccountDaoTest {
         ACCOUNT.setEmail("email@site.site");
         actual = ACCOUNT_DAO.create(ACCOUNT);
         assertSame(true, actual);
-        printPassed(CLASS, "testCreateAccount");
     }
 
     @Test
@@ -60,7 +60,6 @@ public class AccountDaoTest {
         ACCOUNT_DAO.create(ACCOUNT);
         boolean actual = ACCOUNT_DAO.create(ACCOUNT);
         assertSame(false, actual);
-        printPassed(CLASS, "testCreateExistingAccount");
     }
 
     @Test
@@ -70,7 +69,6 @@ public class AccountDaoTest {
         assertEquals(ACCOUNT, actual);
         actual = ACCOUNT_DAO.select(actual);
         assertEquals(ACCOUNT, actual);
-        printPassed(CLASS, "testSelectAccount");
     }
 
     @Test
@@ -80,7 +78,6 @@ public class AccountDaoTest {
         assertEquals(ACCOUNT_DAO.getNullEntity(), actual);
         actual = ACCOUNT_DAO.select(actual);
         assertEquals(ACCOUNT_DAO.getNullEntity(), actual);
-        printPassed(CLASS, "testSelectNonExistingAccount");
     }
 
     @Test
@@ -93,7 +90,6 @@ public class AccountDaoTest {
         assertSame(true, actual);
         Account storageAccount = ACCOUNT_DAO.select(ACCOUNT);
         assertEquals(newPatronymic, storageAccount.getPatronymic());
-        printPassed(CLASS, "testUpdateAccount");
     }
 
     @Test
@@ -102,7 +98,6 @@ public class AccountDaoTest {
         nonExisting.setEmail("email@that.doesnt.exist");
         boolean actual = ACCOUNT_DAO.update(nonExisting, nonExisting);
         assertSame(false, actual);
-        printPassed(CLASS, "testUpdateNonExistingAccount");
     }
 
     @Test
@@ -112,7 +107,6 @@ public class AccountDaoTest {
         boolean actual;
         actual = ACCOUNT_DAO.delete(nonExisting);
         assertSame(false, actual);
-        printPassed(CLASS, "testDeleteNonExisting");
     }
 
     @Test
@@ -120,6 +114,5 @@ public class AccountDaoTest {
         ACCOUNT_DAO.create(ACCOUNT);
         assertTrue(ACCOUNT_DAO.delete(ACCOUNT));
         assertEquals(ACCOUNT_DAO.getNullEntity(), ACCOUNT_DAO.select(ACCOUNT));
-        printPassed(CLASS, "testDeleteAccount");
     }
 }

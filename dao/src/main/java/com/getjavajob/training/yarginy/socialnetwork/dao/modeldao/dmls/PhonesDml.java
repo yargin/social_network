@@ -21,12 +21,12 @@ import static java.util.Objects.isNull;
 public class PhonesDml extends AbstractDml<Phone> {
     public static final String SELECT_ALL = buildQuery().selectJoin(TABLE, AccountsTable.TABLE, OWNER, AccountsTable.ID).
             build();
-    public static final String SELECT_UPDATE_BY_NUMBER = buildQuery().select(TABLE).where(NUMBER).build();
-    public static final String SELECT_UPDATE_BY_ID = buildQuery().select(TABLE).where(ID).build();
-    public static final String SELECT_BY_ID = buildQuery().selectJoin(TABLE, AccountsTable.TABLE, OWNER,
-            AccountsTable.ID).where(ID).build();
-    public static final String SELECT_BY_NUMBER = buildQuery().selectJoin(TABLE, AccountsTable.TABLE, OWNER,
-            AccountsTable.ID).where(NUMBER).build();
+    public static final String SELECT_UPDATE_BY_NUMBER = buildQuery().selectAll(TABLE).where(NUMBER).build();
+    public static final String SELECT_UPDATE_BY_ID = buildQuery().selectAll(TABLE).where(ID).build();
+    public static final String SELECT_BY_ID = buildQuery().selectLeftFullRightView(TABLE, AccountsTable.TABLE,
+            AccountsTable.VIEW_FIELDS, OWNER, AccountsTable.ID).where(ID).build();
+    public static final String SELECT_BY_NUMBER = buildQuery().selectLeftFullRightView(TABLE, AccountsTable.TABLE,
+            AccountsTable.VIEW_FIELDS, OWNER, AccountsTable.ID).where(NUMBER).build();
     private final AccountDml accountDml = new AccountDml();
 
     @Override

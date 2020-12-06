@@ -1,23 +1,24 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool;
 
+import java.io.Serializable;
 import java.sql.*;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
-public class ConnectionProxy implements Connection {
+public class ConnectionProxy implements Connection, Serializable {
     private final Connection connection;
-    private final ConnectionPoolImpl connectionPool;
+    private final DataSourceProxy dataSourceProxy;
     private boolean transactional;
 
-    public ConnectionProxy(Connection connection, ConnectionPoolImpl connectionPool) {
+    public ConnectionProxy(Connection connection, DataSourceProxy dataSourceProxy) {
         this.connection = connection;
         try {
             connection.setAutoCommit(false);
         } catch (SQLException e) {
             throw new IllegalStateException(e);
         }
-        this.connectionPool = connectionPool;
+        this.dataSourceProxy = dataSourceProxy;
     }
 
     public void setTransactional(boolean transactional) {
@@ -39,7 +40,7 @@ public class ConnectionProxy implements Connection {
     public void close() throws SQLException {
         if (!transactional) {
             commit();
-            connectionPool.closeConnectionProxy();
+            dataSourceProxy.closeConnection();
         }
     }
 

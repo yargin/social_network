@@ -21,7 +21,7 @@ public class GroupsMembersDml extends ManyToManyDml<Account, Group> {
     private static final String SELECT_GROUPS = buildQuery().selectJoin(GroupsTable.TABLE, GroupsMembersTable.TABLE,
             GroupsTable.ID, GroupsMembersTable.GROUP_ID).join(AccountsTable.TABLE, GroupsTable.OWNER, AccountsTable.ID).
             where(GroupsMembersTable.ACCOUNT_ID).build();
-    private static final String SELECT = buildQuery().select(GroupsMembersTable.TABLE).where(GroupsMembersTable.ACCOUNT_ID).
+    private static final String SELECT = buildQuery().selectAll(GroupsMembersTable.TABLE).where(GroupsMembersTable.ACCOUNT_ID).
             and(GroupsMembersTable.GROUP_ID).build();
 
     @Override

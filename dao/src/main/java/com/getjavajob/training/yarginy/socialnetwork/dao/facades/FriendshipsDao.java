@@ -2,9 +2,10 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 
+import java.io.Serializable;
 import java.util.Collection;
 
-public interface FriendshipsDao {
+public interface FriendshipsDao extends Serializable {
     Collection<Account> selectFriends(long id);
 
     boolean createFriendship(long firstId, long secondId);

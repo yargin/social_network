@@ -2,9 +2,10 @@ package com.getjavajob.training.yarginy.socialnetwork.service.messages;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 
+import java.io.Serializable;
 import java.util.Collection;
 
-public interface MessageService {
+public interface MessageService extends Serializable {
     boolean addMessage(Message message);
 
     boolean deleteMessage(Message message);

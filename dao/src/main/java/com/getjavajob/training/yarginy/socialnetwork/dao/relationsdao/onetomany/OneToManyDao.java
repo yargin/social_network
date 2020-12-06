@@ -2,9 +2,10 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
 
+import java.io.Serializable;
 import java.util.Collection;
 
-public interface OneToManyDao<M extends Entity> {
+public interface OneToManyDao<M extends Entity> extends Serializable {
     /**
      * selects all participants related to specified {@link Entity}
      *

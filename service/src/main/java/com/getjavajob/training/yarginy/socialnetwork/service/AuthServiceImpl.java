@@ -25,7 +25,7 @@ public class AuthServiceImpl implements AuthService {
     private final PhoneDao phoneDao;
 
     public AuthServiceImpl() {
-        this(new TransactionManager(), new AccountDaoImpl(), new PasswordDaoImpl(), new PhoneDaoImpl());
+        this(new TransactionManagerImpl(), new AccountDaoImpl(), new PasswordDaoImpl(), new PhoneDaoImpl());
     }
 
     public AuthServiceImpl(TransactionManager transactionManager, AccountDao accountDao, PasswordDao passwordDao,

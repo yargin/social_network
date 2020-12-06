@@ -16,7 +16,7 @@ public class GroupServiceImpl implements GroupService {
     private final GroupDao groupDao = new GroupDaoImpl();
     private final GroupsMembersDao membersDao = new GroupsMembersDaoImpl();
     private final GroupsModeratorsDao moderatorsDao = new GroupsModeratorsDaoImpl();
-    private final TransactionManager transactionManager = new TransactionManager();
+    private final TransactionManager transactionManager = new TransactionManagerImpl();
     private final DataSetsDao dataSetsDao = new DataSetsDaoImpl();
 
     @Override
@@ -116,16 +116,7 @@ public class GroupServiceImpl implements GroupService {
     public boolean createGroup(Group group) {
         group.setCreationDate(Date.valueOf(LocalDate.now()));
         try (Transaction transaction = transactionManager.getTransaction()) {
-            try {
-                if (!groupDao.create(group)) {
-                    throw new IncorrectDataException(IncorrectData.GROUP_DUPLICATE);
-                }
-                Group createdGroup = groupDao.select(group);
-                if (!groupDao.addMember(createdGroup.getOwner().getId(), createdGroup.getId()) ||
-                        !moderatorsDao.addGroupModerator(createdGroup.getOwner().getId(), createdGroup.getId())) {
-                    throw new IllegalArgumentException();
-                }
-            } catch (IllegalArgumentException e) {
+            if (!createAndJoinOwner(group)) {
                 return false;
             }
             transaction.commit();
@@ -133,6 +124,22 @@ public class GroupServiceImpl implements GroupService {
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
+    }
+
+    private boolean createAndJoinOwner(Group group) {
+        try {
+            if (!groupDao.create(group)) {
+                throw new IncorrectDataException(IncorrectData.GROUP_DUPLICATE);
+            }
+            Group createdGroup = groupDao.select(group);
+            if (!groupDao.addMember(createdGroup.getOwner().getId(), createdGroup.getId()) ||
+                    !moderatorsDao.addGroupModerator(createdGroup.getOwner().getId(), createdGroup.getId())) {
+                throw new IllegalArgumentException();
+            }
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+        return true;
     }
 
     @Override

@@ -22,7 +22,7 @@ public class AccountServiceImpl implements AccountService {
 
     public AccountServiceImpl() {
         this(new AccountDaoImpl(), new PhoneDaoImpl(), new FriendshipsDaoImpl(), new DialogDaoImpl(),
-                new TransactionManager());
+                new TransactionManagerImpl());
     }
 
     public AccountServiceImpl(AccountDao accountDao, PhoneDao phoneDao, FriendshipsDao friendshipDao, DialogDao

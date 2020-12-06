@@ -1,18 +1,20 @@
-CREATE TABLE IF NOT EXISTS Accounts (
-        id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(40) NOT NULL,
-        surname VARCHAR(40) NOT NULL,
-        patronymic VARCHAR(40),
-        sex CHAR(6),
-        birth_date DATE,
-        registration_date DATE,
-        role CHAR(5) DEFAULT 'USER',
-        email VARCHAR(40) NOT NULL UNIQUE,
-        additional_email VARCHAR(40) UNIQUE,
-        icq VARCHAR(40),
-        skype VARCHAR(40),
-        city VARCHAR(40),
-        country VARCHAR(40)
+CREATE TABLE IF NOT EXISTS Accounts
+(
+    id                BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name              VARCHAR(40) NOT NULL,
+    surname           VARCHAR(40) NOT NULL,
+    patronymic        VARCHAR(40),
+    sex               CHAR(6),
+    birth_date        DATE,
+    registration_date DATE,
+    role              CHAR(5) DEFAULT 'USER',
+    email             VARCHAR(40) NOT NULL UNIQUE,
+    additional_email  VARCHAR(40) UNIQUE,
+    icq               VARCHAR(40),
+    skype             VARCHAR(40),
+    city              VARCHAR(40),
+    country           VARCHAR(40),
+    photo             MEDIUMBLOB
 );
 
 ALTER TABLE Accounts
@@ -21,21 +23,23 @@ ADD CHECK (sex IN ('MALE', 'FEMALE'));
 ALTER TABLE Accounts
 ADD CHECK (role IN ('ADMIN', 'USER'));
 
-CREATE TABLE IF NOT EXISTS _Groups (
-        id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(50) NOT NULL UNIQUE,
-        description VARCHAR(500),
-        owner_id BIGINT UNSIGNED,
-        creation_date DATE,
-        photo MEDIUMBLOB
+CREATE TABLE IF NOT EXISTS _Groups
+(
+    id            BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name          VARCHAR(50) NOT NULL UNIQUE,
+    description   VARCHAR(500),
+    owner_id      BIGINT UNSIGNED,
+    creation_date DATE,
+    photo         MEDIUMBLOB
 );
 
 ALTER TABLE _Groups
 ADD CONSTRAINT C_11 FOREIGN KEY (owner_id) REFERENCES Accounts (id) ON DELETE CASCADE ON UPDATE CASCADE;
 
-CREATE TABLE IF NOT EXISTS Groups_members (
-        account_id BIGINT UNSIGNED,
-        group_id BIGINT UNSIGNED
+CREATE TABLE IF NOT EXISTS Groups_members
+(
+    account_id BIGINT UNSIGNED,
+    group_id   BIGINT UNSIGNED
 );
 
 ALTER TABLE Groups_members
@@ -47,10 +51,11 @@ ADD CONSTRAINT C_13 FOREIGN KEY (account_id) REFERENCES Accounts (id) ON DELETE 
 ALTER TABLE Groups_members
 ADD CONSTRAINT C_14 FOREIGN KEY (group_id) REFERENCES _Groups (id) ON DELETE CASCADE;
 
-CREATE TABLE IF NOT EXISTS Friendships (
-        first_account BIGINT UNSIGNED,
-        second_account BIGINT UNSIGNED,
-        PRIMARY KEY(first_account, second_account)
+CREATE TABLE IF NOT EXISTS Friendships
+(
+    first_account  BIGINT UNSIGNED,
+    second_account BIGINT UNSIGNED,
+    PRIMARY KEY (first_account, second_account)
 );
 
 ALTER TABLE Friendships
@@ -62,11 +67,12 @@ ADD CONSTRAINT C_17 FOREIGN KEY (second_account) REFERENCES Accounts (id) ON DEL
 ALTER TABLE Friendships
 ADD CHECK (first_account != second_account);
 
-CREATE TABLE IF NOT EXISTS Phones (
-        id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-        number VARCHAR(50) NOT NULL UNIQUE,
-        type CHAR(7),
-        owner_id BIGINT UNSIGNED NOT NULL
+CREATE TABLE IF NOT EXISTS Phones
+(
+    id       BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    number   VARCHAR(50)     NOT NULL UNIQUE,
+    type     CHAR(7),
+    owner_id BIGINT UNSIGNED NOT NULL
 );
 
 ALTER TABLE Phones
@@ -144,18 +150,19 @@ CREATE TABLE `account_wall_messages` (
   CONSTRAINT `C_32` FOREIGN KEY (`receiver_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE `group_wall_messages` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `author` bigint unsigned NOT NULL,
-  `message` varchar(500),
-  `image` mediumblob,
-  `receiver_id` bigint unsigned NOT NULL,
-  `posted` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `C_36` (`receiver_id`),
-  KEY `C_35` (`author`),
-  CONSTRAINT `C_35` FOREIGN KEY (`author`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `C_36` FOREIGN KEY (`receiver_id`) REFERENCES `_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+CREATE TABLE `group_wall_messages`
+(
+    `id`          bigint unsigned NOT NULL AUTO_INCREMENT,
+    `author`      bigint unsigned NOT NULL,
+    `message`     varchar(500),
+    `image`       mediumblob,
+    `receiver_id` bigint unsigned NOT NULL,
+    `posted`      datetime        NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `C_36` (`receiver_id`),
+    KEY `C_35` (`author`),
+    CONSTRAINT `C_35` FOREIGN KEY (`author`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `C_36` FOREIGN KEY (`receiver_id`) REFERENCES `_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE dialogs (
@@ -166,50 +173,17 @@ CREATE TABLE dialogs (
     CONSTRAINT dialogs_accounts_id_fk_2 FOREIGN KEY (second_id) REFERENCES accounts (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-CREATE TABLE `dialogs_messages` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `author` bigint unsigned NOT NULL,
-  `message` varchar(500),
-  `image` mediumblob,
-  `receiver_id` bigint unsigned NOT NULL,
-  `posted` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `C_34` (`receiver_id`),
-  KEY `C_33` (`author`),
-  CONSTRAINT `C_33` FOREIGN KEY (`author`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `C_34` FOREIGN KEY (`receiver_id`) REFERENCES `dialogs` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+CREATE TABLE `dialogs_messages`
+(
+    `id`          bigint unsigned NOT NULL AUTO_INCREMENT,
+    `author`      bigint unsigned NOT NULL,
+    `message`     varchar(500),
+    `image`       mediumblob,
+    `receiver_id` bigint unsigned NOT NULL,
+    `posted`      datetime        NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `C_34` (`receiver_id`),
+    KEY `C_33` (`author`),
+    CONSTRAINT `C_33` FOREIGN KEY (`author`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `C_34` FOREIGN KEY (`receiver_id`) REFERENCES `dialogs` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
-INSERT INTO Accounts (id, name, surname, email) VALUES
-(1, 'Vladimir', 'Lenin', 'rise@communism.su'),
-(2, 'dracula', 'NOSFERATU', 'drink@blood.com'),
-(3, 'Alan', 'Turing','robot@power.com'),
-(4, 'Petr', 'Popov', 'popovp@gmail.com');
-
-INSERT INTO _Groups (id, name, description, owner_id, creation_date) VALUES
-(1, 'USSR fans', 'building Communism', 1, '2020-01-01'),
-(2, 'machine learning', '', 2, '2018-12-31');
-
-INSERT INTO Groups_members VALUES
-(1, 1), (2, 1), (3, 2), (1, 2);
-
-INSERT INTO Friendships VALUES
-(1, 2), (1, 3);
-
-INSERT INTO Groups_moderators VALUES
-(1, 2), (1, 1);
-
-INSERT INTO Passwords (email, password) VALUES
-('rise@communism.su', SHA2('communism1', 0)),
-('drink@blood.com', SHA2('blood2', 0)),
-('robot@power.com', SHA2('power3', 0)),
-('popovp@gmail.com', SHA2('gmail4', 0));
-
-INSERT INTO Phones (number, type, owner_id) VALUES
-('89218942', 'PRIVATE', 4),
-('+9 812 123 321', 'WORK', 3),
-('444-444-444', 'PRIVATE', 3),
-('14-1414-14', 'WORK', 2),
-('8 (921) 1234321', 'PRIVATE', 2),
-('+7 (920) 123-23-32', 'WORK', 1),
-('02', 'WORK', 1);

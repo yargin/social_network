@@ -5,33 +5,37 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
-import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoImpl;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
-import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.TestResultPrinter.printPassed;
 import static org.junit.Assert.*;
 
 public class PhoneDaoTest {
-    private static final DbFactory DB_FACTORY = AbstractDbFactory.getDbFactory();
-    private static final String CLASS = "GroupDaoTest";
-    private static final BatchDao<Phone> PHONE_DAO = DB_FACTORY.getPhoneDao();
-    private static final Dao<Account> ACCOUNT_DAO = DB_FACTORY.getAccountDao();
+    static {
+        TestDataSourceInitializer.initDataSource();
+    }
+
+    private static final PhoneDao PHONE_DAO = new PhoneDaoImpl();
+    private static final AccountDao ACCOUNT_DAO = new AccountDaoImpl();
     private static final Phone PHONE = new PhoneImpl();
 
-    @BeforeClass
-    public static void initParams() {
+    @Before
+    public void initTestValues() {
         PHONE.setNumber("123321");
-        PHONE.setOwner(ACCOUNT_DAO.select(1));
+        Account account = new AccountImpl("test", "test", "test@test.test");
+        ACCOUNT_DAO.create(account);
+        account = ACCOUNT_DAO.select(account);
+        PHONE.setOwner(account);
         PHONE.setType(PhoneType.PRIVATE);
     }
 
-    @AfterClass
-    public static void clearDb() {
+    @After
+    public void deleteTestValues() {
         PHONE_DAO.delete(PHONE);
     }
 
@@ -39,14 +43,12 @@ public class PhoneDaoTest {
     public void testCreatePhone() {
         PHONE_DAO.delete(PHONE);
         assertTrue(PHONE_DAO.create(PHONE));
-        printPassed(CLASS, "testCreatePhone");
     }
 
     @Test
     public void testCreateExisting() {
         PHONE_DAO.create(PHONE);
         assertFalse(PHONE_DAO.create(PHONE));
-        printPassed(CLASS, "testCreateExisting");
     }
 
     @Test
@@ -61,7 +63,6 @@ public class PhoneDaoTest {
             assertTrue(true);
         }
         PHONE.setOwner(ACCOUNT_DAO.select(1));
-        printPassed(CLASS, "testCreateWrongOwner");
     }
 
     @Test
@@ -69,13 +70,11 @@ public class PhoneDaoTest {
         PHONE_DAO.create(PHONE);
         Phone actual = PHONE_DAO.select(PHONE);
         assertEquals(PHONE, actual);
-        printPassed(CLASS, "testSelectPhone");
     }
 
     @Test
     public void testSelectNonExisting() {
-        assertEquals(PHONE_DAO.getNullEntity(), PHONE_DAO.select(99999999));
-        printPassed(CLASS, "testSelectNonExisting");
+        assertEquals(PHONE_DAO.getNullPhone(), PHONE_DAO.select(99999999));
     }
 
     @Test
@@ -83,7 +82,6 @@ public class PhoneDaoTest {
         PHONE_DAO.create(PHONE);
         PHONE.setType(PhoneType.PRIVATE);
         assertTrue(PHONE_DAO.update(PHONE, PHONE_DAO.select(PHONE)));
-        printPassed(CLASS, "testUpdatePhone");
     }
 
     @Test
@@ -91,14 +89,12 @@ public class PhoneDaoTest {
         Phone nonExisting = new PhoneImpl();
         nonExisting.setNumber("000000");
         assertFalse(PHONE_DAO.update(nonExisting, nonExisting));
-        printPassed(CLASS, "testUpdateNonExisting");
     }
 
     @Test
     public void testDeletePhone() {
         PHONE_DAO.create(PHONE);
         assertTrue(PHONE_DAO.delete(PHONE));
-        printPassed(CLASS, "testDeletePhone");
     }
 
     @Test
@@ -106,6 +102,5 @@ public class PhoneDaoTest {
         Phone nonExisting = new PhoneImpl();
         nonExisting.setNumber("000000");
         assertFalse(PHONE_DAO.delete(nonExisting));
-        printPassed(CLASS, "testDeleteNonExisting");
     }
 }

@@ -8,8 +8,9 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.Se
 import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchableDto;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchableImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchableType;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.ConnectionPool;
 
+import javax.sql.DataSource;
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,17 +20,17 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DataSelectsDao {
+public class DataSelectsDao implements Serializable {
     private static final int LIMIT = 10;
-    private final ConnectionPool connectionPool;
+    private final DataSource data;
 
-    public DataSelectsDao(ConnectionPool connectionPool) {
-        this.connectionPool = connectionPool;
+    public DataSelectsDao(DataSource data) {
+        this.data = data;
     }
 
     public Map<Account, Boolean> getGroupMembersModerators(long groupId) {
         Map<Account, Boolean> membersModerators = new HashMap<>();
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = data.getConnection();
              PreparedStatement statement = prepareGroupMembersModerators(groupId, connection);
              ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
@@ -62,7 +63,7 @@ public class DataSelectsDao {
     public Map<Group, Boolean> getAllUnjoinedGroupsAreRequested(long accountId) {
         Map<Group, Boolean> unjoinedGroupsAreRequested = new HashMap<>();
 
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = data.getConnection();
              PreparedStatement statement = prepareAllUnjoinedGroupsAreRequested(accountId, connection);
              ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
@@ -96,7 +97,7 @@ public class DataSelectsDao {
     public SearchableDto searchAccountsGroups(String searchString, int pageNumber) {
         Collection<Searchable> entities = new ArrayList<>();
         SearchableDto searchableDto = new SearchableDto(entities);
-        try (Connection connection = connectionPool.getConnection();
+        try (Connection connection = data.getConnection();
              PreparedStatement resultStatement = prepareSearchAccountsGroups(connection, '%' + searchString + '%',
                      pageNumber);
              PreparedStatement rowsNumberStatement = prepareRowsCount(connection, '%' + searchString + '%');

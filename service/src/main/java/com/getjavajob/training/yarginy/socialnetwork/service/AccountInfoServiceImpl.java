@@ -16,7 +16,7 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     private final TransactionManager transactionManager;
 
     public AccountInfoServiceImpl() {
-        this(new TransactionManager(), new AccountDaoImpl(), new PhoneDaoImpl());
+        this(new TransactionManagerImpl(), new AccountDaoImpl(), new PhoneDaoImpl());
     }
 
     public AccountInfoServiceImpl(TransactionManager transactionManager, AccountDao accountDao, PhoneDao phoneDao) {
