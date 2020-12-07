@@ -14,10 +14,9 @@ public class TestDataSourceInitializer {
         if (!isNull(DataSourceHolder.getDataSource())) {
             return;
         }
+
         BasicDataSource dataSource = new BasicDataSource();
-
         dataSource.setDriver(new org.h2.Driver());
-
         dataSource.setUrl("jdbc:h2:mem:test?user=sa&DB_CLOSE_DELAY=-1&MODE=MYSQL");
 
         DataSourceHolder.setDataSource(dataSource);
