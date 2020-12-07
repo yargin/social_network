@@ -1,10 +1,12 @@
-package com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.actionservlets;
+package com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.viewservlets;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.AccountWallMessageServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.AccountInfoHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,8 +19,15 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.TAB;
 
 public class AccountWallServlet extends HttpServlet {
-    private final AccountInfoHelper infoHelper = new AccountInfoHelper();
-    private final MessageService accountMessageService = new AccountWallMessageServiceImpl();
+    private AccountInfoHelper infoHelper;
+    private MessageService accountMessageService;
+
+    @Override
+    public void init() {
+        WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+        infoHelper = context.getBean(AccountInfoHelper.class);
+        accountMessageService = context.getBean(AccountWallMessageServiceImpl.class);
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -4,10 +4,18 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
 
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:springContext.xml</param-value>
+    </context-param>
+
     <listener>
         <listener-class>
             com.getjavajob.training.yarginy.socialnetwork.web.listeners.ApplicationStartupListener
         </listener-class>
+    </listener>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
     <welcome-file-list>
@@ -258,7 +266,7 @@
     <servlet>
         <servlet-name>wall</servlet-name>
         <servlet-class>
-            com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.actionservlets.AccountWallServlet
+            com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.viewservlets.AccountWallServlet
         </servlet-class>
     </servlet>
     <servlet-mapping>

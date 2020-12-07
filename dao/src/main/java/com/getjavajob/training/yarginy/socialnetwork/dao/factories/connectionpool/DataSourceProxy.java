@@ -45,7 +45,6 @@ public class DataSourceProxy implements DataSource, Serializable {
                 e.printStackTrace();
                 throw new IllegalStateException(e);
             }
-            ;
             localConnection.set(connectionProxy);
         }
         return connectionProxy;
