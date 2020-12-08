@@ -35,6 +35,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDaoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.dmls.*;
+import org.springframework.context.annotation.Bean;
 
 public class DbFactoryImpl implements DbFactory {
     private DataSourceProxy dataSource;
@@ -109,6 +110,7 @@ public class DbFactoryImpl implements DbFactory {
     }
 
     @Override
+    @Bean
     public Dao<Message> getAccountWallMessageDao() {
         return new DaoImpl<>(dataSource, new AccountWallMessageDml());
     }
