@@ -5,6 +5,7 @@ import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageSer
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.AccountInfoHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.ServletException;
@@ -21,6 +22,7 @@ public class AccountWallServlet extends HttpServlet {
     @Autowired
     private AccountInfoHelper infoHelper;
     @Autowired
+    @Qualifier("accountWallMessageService")
     private MessageService accountMessageService;
 
     @Override
