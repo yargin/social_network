@@ -1,12 +1,11 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.viewservlets;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
-import com.getjavajob.training.yarginy.socialnetwork.service.messages.AccountWallMessageServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.AccountInfoHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -19,14 +18,14 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.TAB;
 
 public class AccountWallServlet extends HttpServlet {
+    @Autowired
     private AccountInfoHelper infoHelper;
+    @Autowired
     private MessageService accountMessageService;
 
     @Override
     public void init() {
-        WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
-        infoHelper = context.getBean(AccountInfoHelper.class);
-        accountMessageService = context.getBean(AccountWallMessageServiceImpl.class);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, getServletContext());
     }
 
     @Override

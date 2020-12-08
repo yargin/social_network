@@ -2,18 +2,21 @@
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:jee="http://www.springframework.org/schema/jee"
        xmlns="http://www.springframework.org/schema/beans"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.springframework.org/schema/jee
-       http://www.springframework.org/schema/jee/spring-jee.xsd">
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
     <!-- bean definitions here -->
     <jee:jndi-lookup id="idDataSource"
                      jndi-name="jdbc/Local-MySql"
                      expected-type="javax.sql.DataSource"/>
 
-    <bean id="accountInfoHelper"
-          class="com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.AccountInfoHelper"/>
-    <bean id="accountWallMessages"
-          class="com.getjavajob.training.yarginy.socialnetwork.service.messages.AccountWallMessageServiceImpl"/>
+    <context:component-scan base-package="com.getjavajob.training.yarginy.socialnetwork.web"/>
+    <context:component-scan base-package="com.getjavajob.training.yarginy.socialnetwork.service"/>
+    <context:component-scan base-package="com.getjavajob.training.yarginy.socialnetwork.dao"/>
+    <!--    <bean id="accountInfoHelper"-->
+    <!--          class="com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.AccountInfoHelper"/>-->
+    <!--    <bean id="accountWallMessages"-->
+    <!--          class="com.getjavajob.training.yarginy.socialnetwork.service.messages.AccountWallMessageServiceImpl"/>-->
 </beans>

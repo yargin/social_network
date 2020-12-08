@@ -7,6 +7,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additio
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -19,8 +20,13 @@ import java.util.stream.Collectors;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER;
 import static java.util.Objects.isNull;
 
+@Component
 public class AccountInfoHelper {
+    //todo inject
     private static final AccountService ACCOUNT_SERVICE = new AccountServiceImpl();
+
+    public AccountInfoHelper() {
+    }
 
     public void setAccountInfo(HttpServletRequest req, long requestedUserId) {
         AccountInfoDTO accountInfoDTO = ACCOUNT_SERVICE.getAccountInfo(requestedUserId);
