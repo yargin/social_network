@@ -7,11 +7,11 @@ import com.getjavajob.training.yarginy.socialnetwork.service.AccountInfoService;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountInfoServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.UpdateAccountFieldsHelper;
+import com.getjavajob.training.yarginy.socialnetwork.web.servlets.AbstractGetPostServlet;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -21,11 +21,11 @@ import java.util.ArrayList;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 import static java.util.Objects.isNull;
 
-public class AccountUpdateServlet extends HttpServlet {
+public class AccountUpdateServlet extends AbstractGetPostServlet {
     private final AccountInfoService accountInfoService = new AccountInfoServiceImpl();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void safeDoGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp, USER_ID, Pages.WALL);
         long requestedUserId = (long) req.getAttribute(REQUESTED_ID);
 
@@ -44,7 +44,7 @@ public class AccountUpdateServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void safeDoPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp, REQUESTED_ID, Pages.WALL);
 
         if ("cancel".equals(req.getParameter("save"))) {
@@ -75,7 +75,7 @@ public class AccountUpdateServlet extends HttpServlet {
         req.setAttribute(ACCOUNT_INFO, accountInfoDTO);
         boolean accepted = updater.isParamsAccepted();
         if (!accepted) {
-            doGet(req, resp);
+            safeDoGet(req, resp);
         } else {
             update(updater, accountInfoDTO, storedAccountInfoDTO);
         }
@@ -87,9 +87,9 @@ public class AccountUpdateServlet extends HttpServlet {
         try {
             updated = accountInfoService.update(accountInfoDTO, storedAccountInfoDTO);
         } catch (IncorrectDataException e) {
-            updater.handleInfoExceptions(e, this::doGet);
+            updater.handleInfoExceptions(e, this::safeDoGet);
             return;
         }
-        updater.acceptActionOrRetry(updated, this::doGet);
+        updater.acceptActionOrRetry(updated, this::safeDoGet);
     }
 }

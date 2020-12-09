@@ -6,22 +6,22 @@ import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.GroupWallMessageServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
+import com.getjavajob.training.yarginy.socialnetwork.web.servlets.AbstractGetServlet;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collection;
 
-public class GroupWallServlet extends HttpServlet {
+public class GroupWallServlet extends AbstractGetServlet {
     private final GroupService groupService = new GroupServiceImpl();
     private final MessageService groupWallMessageService = new GroupWallMessageServiceImpl();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void safeDoGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         long requestedId = (long) req.getAttribute(Attributes.REQUESTED_ID);
         Group group = groupService.get(requestedId);
         Collection<Message> messages = groupWallMessageService.selectMessages(requestedId);

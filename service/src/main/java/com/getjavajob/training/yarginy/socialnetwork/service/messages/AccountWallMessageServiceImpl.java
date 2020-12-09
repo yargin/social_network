@@ -1,11 +1,14 @@
 package com.getjavajob.training.yarginy.socialnetwork.service.messages;
 
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages.AccountWallMessageDaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages.MessageDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service("accountWallMessageService")
 public class AccountWallMessageServiceImpl extends AbstractMessageService {
-    public AccountWallMessageServiceImpl() {
-        super(new AccountWallMessageDaoImpl());
+    @Autowired
+    public AccountWallMessageServiceImpl(@Qualifier("accountWallMessageFacade") MessageDao messageDao) {
+        super(messageDao);
     }
 }

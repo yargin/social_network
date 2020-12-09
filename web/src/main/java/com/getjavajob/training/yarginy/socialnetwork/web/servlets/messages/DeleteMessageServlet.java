@@ -1,18 +1,28 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.servlets.messages;
 
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.MessageHelper;
+import com.getjavajob.training.yarginy.socialnetwork.web.servlets.AbstractPostServlet;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirectToReferer;
 
-public class DeleteMessageServlet extends HttpServlet {
+public class DeleteMessageServlet extends AbstractPostServlet {
+    private MessageHelper messageHelper;
+
+    @Autowired
+    @Qualifier("accountWallMessageService")
+    public void setMessageHelper(MessageHelper messageHelper) {
+        this.messageHelper = messageHelper;
+    }
+
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        MessageHelper.deleteMessage(req);
+    protected void safeDoPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        messageHelper.deleteMessage(req);
         redirectToReferer(req, resp);
     }
 }

@@ -6,12 +6,12 @@ import com.getjavajob.training.yarginy.socialnetwork.service.AuthService;
 import com.getjavajob.training.yarginy.socialnetwork.service.AuthServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.UpdateAccountFieldsHelper;
+import com.getjavajob.training.yarginy.socialnetwork.web.servlets.AbstractGetPostServlet;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -21,11 +21,11 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER_ID;
 import static java.util.Objects.isNull;
 
-public class AccountRegisterServlet extends HttpServlet {
+public class AccountRegisterServlet extends AbstractGetPostServlet {
     private static final AuthService AUTH_SERVICE = new AuthServiceImpl();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void safeDoGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp, USER_ID, Pages.WALL);
 
         AccountInfoDTO accountInfoDTO = updater.getOrCreateAccountInfo(AccountInfoDTO::new);
@@ -41,7 +41,7 @@ public class AccountRegisterServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    protected void safeDoPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp, USER_ID, Pages.WALL);
 
         AccountInfoDTO accountInfoDTO = (AccountInfoDTO) req.getSession().getAttribute(Attributes.ACCOUNT_INFO);
@@ -57,7 +57,7 @@ public class AccountRegisterServlet extends HttpServlet {
         boolean accepted = updater.isParamsAccepted();
         req.setAttribute(ACCOUNT_INFO, accountInfoDTO);
         if (!accepted) {
-            doGet(req, resp);
+            safeDoGet(req, resp);
         } else {
             register(updater, accountInfoDTO, password);
         }
@@ -69,9 +69,9 @@ public class AccountRegisterServlet extends HttpServlet {
         try {
             registered = AUTH_SERVICE.register(accountInfoDTO, password);
         } catch (IncorrectDataException e) {
-            updater.handleInfoExceptions(e, this::doGet);
+            updater.handleInfoExceptions(e, this::safeDoGet);
             return;
         }
-        updater.acceptActionOrRetry(registered, this::doGet);
+        updater.acceptActionOrRetry(registered, this::safeDoGet);
     }
 }

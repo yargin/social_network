@@ -1,14 +1,14 @@
-package com.getjavajob.training.yarginy.socialnetwork.web.servlets;
+package com.getjavajob.training.yarginy.socialnetwork.web.servlets.other;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.service.AuthService;
 import com.getjavajob.training.yarginy.socialnetwork.service.AuthServiceImpl;
+import com.getjavajob.training.yarginy.socialnetwork.web.servlets.AbstractGetPostServlet;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -20,14 +20,14 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER_ID;
 import static java.util.Objects.isNull;
 
-public class LoginServlet extends HttpServlet {
+public class LoginServlet extends AbstractGetPostServlet {
     private static final String ERROR = "logerror";
     private static final String EMAIL = "email";
     private static final String PASSWORD = "password";
     private final AuthService authService = new AuthServiceImpl();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void safeDoGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String email = null;
         String password = null;
         Cookie[] cookies = req.getCookies();
@@ -56,7 +56,7 @@ public class LoginServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void safeDoPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Account account;
         String email = null;
         String password;
@@ -82,7 +82,7 @@ public class LoginServlet extends HttpServlet {
                 default:
                     break;
             }
-            doGet(req, resp);
+            safeDoGet(req, resp);
             return;
         }
 

@@ -289,7 +289,7 @@
 
     <servlet>
         <servlet-name>login</servlet-name>
-        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.LoginServlet</servlet-class>
+        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.other.LoginServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>login</servlet-name>
@@ -298,7 +298,7 @@
 
     <servlet>
         <servlet-name>logout</servlet-name>
-        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.LogoutServlet</servlet-class>
+        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.other.LogoutServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>logout</servlet-name>
@@ -529,7 +529,7 @@
     <servlet>
         <servlet-name>searchServlet</servlet-name>
         <servlet-class>
-            com.getjavajob.training.yarginy.socialnetwork.web.servlets.SearchServlet
+            com.getjavajob.training.yarginy.socialnetwork.web.servlets.other.SearchServlet
         </servlet-class>
     </servlet>
     <servlet-mapping>

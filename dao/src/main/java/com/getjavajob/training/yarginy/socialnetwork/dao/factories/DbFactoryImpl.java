@@ -15,9 +15,9 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.facades.TransactionMana
 import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.DataSourceProxy;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.DaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.AccountDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.DialogDml;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.messages.AccountWallMessageDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.messages.DialogMessageDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.messages.GroupWallMessageDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.password.PasswordDao;
@@ -35,8 +35,12 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDaoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.dmls.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
+@Configuration
 public class DbFactoryImpl implements DbFactory {
     private DataSourceProxy dataSource;
 
@@ -110,9 +114,10 @@ public class DbFactoryImpl implements DbFactory {
     }
 
     @Override
-    @Bean
-    public Dao<Message> getAccountWallMessageDao() {
-        return new DaoImpl<>(dataSource, new AccountWallMessageDml());
+    @Bean("accountWallMessageDao")
+    @Autowired
+    public Dao<Message> getAccountWallMessageDao(@Qualifier("accountWallMessageDml") Dml<Message> abstractDml) {
+        return new DaoImpl<>(dataSource, abstractDml);
     }
 
     @Override

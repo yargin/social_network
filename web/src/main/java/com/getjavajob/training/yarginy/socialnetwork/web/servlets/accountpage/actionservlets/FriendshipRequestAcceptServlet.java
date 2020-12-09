@@ -2,10 +2,10 @@ package com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.a
 
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountServiceImpl;
+import com.getjavajob.training.yarginy.socialnetwork.web.servlets.AbstractPostServlet;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -13,11 +13,11 @@ import java.io.IOException;
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
 import static java.util.Objects.isNull;
 
-public class FriendshipRequestAcceptServlet extends HttpServlet {
+public class FriendshipRequestAcceptServlet extends AbstractPostServlet {
     private final AccountService accountService = new AccountServiceImpl();
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void safeDoPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String accept = req.getParameter("accept");
         if (isNull(accept)) {
             redirect(req, resp, Pages.FRIENDSHIP_REQUESTS);

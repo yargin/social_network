@@ -12,9 +12,8 @@
                      expected-type="javax.sql.DataSource"/>
 
     <!-- bean definitions here -->
-    <import resource="serviceSpringConfig.xml"/>
+    <import resource="classpath:serviceSpringConfig.xml"/>
     <context:component-scan base-package="com.getjavajob.training.yarginy.socialnetwork.web"/>
-    <context:component-scan base-package="com.getjavajob.training.yarginy.socialnetwork.dao"/>
     <!--    <bean id="accountInfoHelper"-->
     <!--          class="com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.AccountInfoHelper"/>-->
     <!--    <bean id="accountWallMessages"-->

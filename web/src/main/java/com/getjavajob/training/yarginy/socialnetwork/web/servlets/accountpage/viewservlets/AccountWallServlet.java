@@ -3,13 +3,12 @@ package com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.v
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.AccountInfoHelper;
+import com.getjavajob.training.yarginy.socialnetwork.web.servlets.AbstractGetServlet;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -18,20 +17,23 @@ import java.util.Collection;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTED_ID;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.TAB;
 
-public class AccountWallServlet extends HttpServlet {
-    @Autowired
+public class AccountWallServlet extends AbstractGetServlet {
     private AccountInfoHelper infoHelper;
-    @Autowired
-    @Qualifier("accountWallMessageService")
     private MessageService accountMessageService;
 
-    @Override
-    public void init() {
-        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, getServletContext());
+    @Autowired
+    public void setInfoHelper(AccountInfoHelper infoHelper) {
+        this.infoHelper = infoHelper;
+    }
+
+    @Autowired
+    @Qualifier("accountWallMessageService")
+    public void setAccountMessageService(MessageService accountMessageService) {
+        this.accountMessageService = accountMessageService;
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void safeDoGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         long requestedUserId = (long) req.getAttribute(REQUESTED_ID);
 
         infoHelper.setAccountInfo(req, requestedUserId);

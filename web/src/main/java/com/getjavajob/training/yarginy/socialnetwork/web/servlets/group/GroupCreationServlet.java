@@ -7,11 +7,11 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupIm
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.UpdateGroupFieldsHelper;
+import com.getjavajob.training.yarginy.socialnetwork.web.servlets.AbstractGetPostServlet;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -19,11 +19,11 @@ import java.io.IOException;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 import static java.util.Objects.isNull;
 
-public class GroupCreationServlet extends HttpServlet {
+public class GroupCreationServlet extends AbstractGetPostServlet {
     private final GroupService groupService = new GroupServiceImpl();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void safeDoGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UpdateGroupFieldsHelper updater = new UpdateGroupFieldsHelper(req, resp, GROUP_ID, Pages.GROUP);
         Group group = updater.getOrCreateGroup(GroupImpl::new);
         updater.initGroupAttributes(group);
@@ -31,7 +31,7 @@ public class GroupCreationServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void safeDoPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UpdateGroupFieldsHelper updater = new UpdateGroupFieldsHelper(req, resp, GROUP_ID, Pages.GROUP);
         Group group = new GroupImpl();
         updater.getValuesFromParams(group);
@@ -48,7 +48,7 @@ public class GroupCreationServlet extends HttpServlet {
             createGroup(updater, group);
         } else {
             req.setAttribute(GROUP, group);
-            doGet(req, resp);
+            safeDoGet(req, resp);
         }
     }
 
@@ -57,11 +57,11 @@ public class GroupCreationServlet extends HttpServlet {
         try {
             created = groupService.createGroup(group);
         } catch (IncorrectDataException e) {
-            updater.handleInfoExceptions(e, this::doGet);
+            updater.handleInfoExceptions(e, this::safeDoGet);
             return;
         }
         Group createdGroup = groupService.get(group);
         updater.setSuccessUrl(Pages.GROUP, GROUP_ID, "" + createdGroup.getId());
-        updater.acceptActionOrRetry(created, this::doGet);
+        updater.acceptActionOrRetry(created, this::safeDoGet);
     }
 }

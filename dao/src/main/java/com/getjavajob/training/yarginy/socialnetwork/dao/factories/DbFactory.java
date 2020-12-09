@@ -9,6 +9,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.TransactionManager;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.otherdao.DataSelectsDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.SelfManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.ManyToManyDao;
@@ -44,7 +45,7 @@ public interface DbFactory {
 
     DataSelectsDao getDataSetsDao();
 
-    Dao<Message> getAccountWallMessageDao();
+    Dao<Message> getAccountWallMessageDao(Dml<Message> abstractDml);
 
     OneToManyDao<Message> getAccountWallMessagesDao();
 
