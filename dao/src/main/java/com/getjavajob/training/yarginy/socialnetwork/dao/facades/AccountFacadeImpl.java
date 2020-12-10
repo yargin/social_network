@@ -7,17 +7,44 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.SelfManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.ManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
-import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
+@Component("accountDaoFacade")
+public class AccountFacadeImpl implements AccountFacade {
+    private Dao<Account> accountDao;
+    private OneToManyDao<Group> accountGroupsDao;
+    private ManyToManyDao<Account, Group> accountsInGroupsDao;
+    private OneToManyDao<Phone> accountPhonesDao;
+    private SelfManyToManyDao<Account> accountFriendsDao;
 
-public class AccountDaoImpl implements AccountDao {
-    private final Dao<Account> accountDao = getDbFactory().getAccountDao();
-    private final OneToManyDao<Group> accountGroupsDao = getDbFactory().getAccountsOwnedGroupsDao(accountDao);
-    private final ManyToManyDao<Account, Group> accountsInGroupsDao = getDbFactory().getGroupMembershipDao();
-    private final OneToManyDao<Phone> accountPhonesDao = getDbFactory().getAccountsPhones(accountDao);
-    private final SelfManyToManyDao<Account> accountFriendsDao = getDbFactory().getFriendshipDao();
+    @Autowired
+    public void setAccountDao(Dao<Account> accountDao) {
+        this.accountDao = accountDao;
+    }
+
+    @Autowired
+    public void setAccountGroupsDao(@Qualifier("accountOwnerGroupsDao") OneToManyDao<Group> accountGroupsDao) {
+        this.accountGroupsDao = accountGroupsDao;
+    }
+
+    @Autowired
+    public void setAccountsInGroupsDao(@Qualifier("groupMembershipDao") ManyToManyDao<Account, Group> accountsInGroupsDao) {
+        this.accountsInGroupsDao = accountsInGroupsDao;
+    }
+
+    @Autowired
+    public void setAccountPhonesDao(@Qualifier("accountPhonesDao") OneToManyDao<Phone> accountPhonesDao) {
+        this.accountPhonesDao = accountPhonesDao;
+    }
+
+    @Autowired
+    public void setAccountFriendsDao(SelfManyToManyDao<Account> accountFriendsDao) {
+        this.accountFriendsDao = accountFriendsDao;
+    }
 
     @Override
     public Account select(long id) {

@@ -7,57 +7,150 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Messa
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.TransactionManager;
+import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.dmls.BatchGroupDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.dmls.BatchPhonesDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.DaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.AccountDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.DialogDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.messages.AccountWallMessageDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.messages.DialogMessageDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.messages.GroupWallMessageDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.password.PasswordDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.password.PasswordDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.otherdao.DataSelectsDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.SelfManyToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.SelfManyToManyDaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.dmls.FriendshipDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.ManyToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.ManyToManyDaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.dmls.FriendshipsRequestsDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.dmls.GroupsMembersDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.dmls.GroupsMembershipsRequestsDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.dmls.GroupsModeratorsDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.dmls.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-/**
- * stored entities abstract fabric. CRUD operations with entities are provided by *Dao objects
- */
-public interface DbFactory {
-    TransactionManager getTransactionManager();
+import javax.sql.DataSource;
 
-    Dao<Account> getAccountDao();
+@Configuration
+public class DbFactory {
+    private DataSource dataSource;
 
-    BatchDao<Group> getGroupDao();
+    @Autowired
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
-    SelfManyToManyDao<Account> getFriendshipDao();
+    @Bean("accountDao")
+    @Autowired
+    public Dao<Account> getAccountDao(AccountDml dml) {
+        return new DaoImpl<>(dataSource, dml);
+    }
 
-    ManyToManyDao<Account, Group> getGroupMembershipDao();
+    @Bean("groupDao")
+    @Autowired
+    public BatchDao<Group> getGroupDao(BatchGroupDml dml) {
+        return new BatchDaoImpl<>(dataSource, dml);
+    }
 
-    BatchDao<Phone> getPhoneDao();
+    @Bean("groupMembershipDao")
+    @Autowired
+    public ManyToManyDao<Account, Group> getGroupMembershipDao(GroupsMembersDml dml) {
+        return new ManyToManyDaoImpl<>(dataSource, dml);
+    }
 
-    OneToManyDao<Phone> getAccountsPhones(Dao<Account> accountDao);
+    @Bean("friendshipDao")
+    @Autowired
+    public SelfManyToManyDao<Account> getFriendshipDao(FriendshipDml dml) {
+        return new SelfManyToManyDaoImpl<>(dataSource, dml);
+    }
 
-    Dao<Password> getPasswordDao();
+    @Bean("phonesDao")
+    @Autowired
+    public BatchDao<Phone> getPhoneDao(BatchPhonesDml dml) {
+        return new BatchDaoImpl<>(dataSource, dml);
+    }
 
-    OneToManyDao<Group> getAccountsOwnedGroupsDao(Dao<Account> accountDao);
+    @Bean("accountPhonesDao")
+    @Autowired
+    public OneToManyDao<Phone> getAccountsPhones(AccountPhonesDml dml) {
+        return new OneToManyDaoImpl<>(dataSource, dml);
+    }
 
-    ManyToManyDao<Account, Group> getGroupModeratorsDao();
+    @Bean("passwordDao")
+    @Autowired
+    public Dao<Password> getPasswordDao(PasswordDml dml) {
+        return new PasswordDao(dataSource, dml);
+    }
 
-    ManyToManyDao<Account, Group> getGroupRequestsDao();
+    @Bean("accountOwnerGroupsDao")
+    @Autowired
+    public OneToManyDao<Group> getAccountsOwnedGroupsDao(AccountGroupsDml dml) {
+        return new OneToManyDaoImpl<>(dataSource, dml);
+    }
 
-    ManyToManyDao<Account, Account> getFriendshipRequestsDao();
+    @Bean("groupModeratorsDao")
+    @Autowired
+    public ManyToManyDao<Account, Group> getGroupModeratorsDao(GroupsModeratorsDml dml) {
+        return new ManyToManyDaoImpl<>(dataSource, dml);
+    }
 
-    DataSelectsDao getDataSetsDao();
+    @Bean("groupRequestsDao")
+    @Autowired
+    public ManyToManyDao<Account, Group> getGroupRequestsDao(GroupsMembershipsRequestsDml dml) {
+        return new ManyToManyDaoImpl<>(dataSource, dml);
+    }
 
-    Dao<Message> getAccountWallMessageDao(Dml<Message> abstractDml);
+    @Bean("friendshipRequestsDao")
+    @Autowired
+    public ManyToManyDao<Account, Account> getFriendshipRequestsDao(FriendshipsRequestsDml dml) {
+        return new ManyToManyDaoImpl<>(dataSource, dml);
+    }
 
-    OneToManyDao<Message> getAccountWallMessagesDao();
+    @Bean("accountWallMessageDao")
+    @Autowired
+    public Dao<Message> getAccountWallMessageDao(AccountWallMessageDml dml) {
+        return new DaoImpl<>(dataSource, dml);
+    }
 
-    Dao<Message> getDialogMessageDao();
+    @Bean("accountWallMessagesDao")
+    public OneToManyDao<Message> getAccountWallMessagesDao(AccountWallMessagesDml dml) {
+        return new OneToManyDaoImpl<>(dataSource, dml);
+    }
 
-    OneToManyDao<Message> getDialogsMessagesDao();
+    @Bean("dialogMessageDao")
+    public Dao<Message> getDialogMessageDao(DialogMessageDml dml) {
+        return new DaoImpl<>(dataSource, dml);
+    }
 
-    Dao<Message> getGroupWallMessageDao();
+    @Bean("dialogMessagesDao")
+    public OneToManyDao<Message> getDialogsMessagesDao(DialogsMessagesDml dml) {
+        return new OneToManyDaoImpl<>(dataSource, dml);
+    }
 
-    OneToManyDao<Message> getGroupWallMessagesDao();
+    @Bean("groupWallMessageDao")
+    public Dao<Message> getGroupWallMessageDao(GroupWallMessageDml dml) {
+        return new DaoImpl<>(dataSource, dml);
+    }
 
-    Dao<Dialog> getDialogDao();
+    @Bean("groupWallMessagesDao")
+    public OneToManyDao<Message> getGroupWallMessagesDao(GroupWallMessagesDml dml) {
+        return new OneToManyDaoImpl<>(dataSource, dml);
+    }
 
-    OneToManyDao<Dialog> getAccountDialogsDao();
+    @Bean("dialogDao")
+    public Dao<Dialog> getDialogDao(DialogDml dml) {
+        return new DaoImpl<>(dataSource, dml);
+    }
+
+    @Bean("dialogsDao")
+    public OneToManyDao<Dialog> getAccountDialogsDao(AccountDialogsDml dml) {
+        return new OneToManyDaoImpl<>(dataSource, dml);
+    }
 }

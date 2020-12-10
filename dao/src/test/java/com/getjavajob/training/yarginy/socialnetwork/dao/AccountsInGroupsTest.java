@@ -19,9 +19,9 @@ public class AccountsInGroupsTest {
         TestDataSourceInitializer.initDataSource();
     }
 
-    private static final AccountDao ACCOUNT_DAO = new AccountDaoImpl();
-    private static final GroupDao GROUP_DAO = new GroupDaoImpl();
-    private static final GroupsMembersDao GROUPS_MEMBERS_DAO = new GroupsMembersDaoImpl();
+    private static final AccountFacade ACCOUNT_DAO = new AccountFacadeImpl();
+    private static final GroupFacade GROUP_DAO = new GroupFacadeImpl();
+    private static final GroupsMembersFacade GROUPS_MEMBERS_DAO = new GroupsMembersFacadeImpl();
     private Account account = new AccountImpl("test", "test", "test@test.test");
     private Account owner = new AccountImpl("testOwner", "testOwner", "testOwner@test.test");
     private Group group = new GroupImpl("testGroup", owner);

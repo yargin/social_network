@@ -6,9 +6,11 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.PhonesDml
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.PhonesTable;
+import org.springframework.stereotype.Component;
 
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 
+@Component("accountPhonesDml")
 public class AccountPhonesDml extends OneToManyDml<Phone> {
     private static final String SELECT_BY_ACCOUNT = buildQuery().selectJoin(PhonesTable.TABLE, AccountsTable.TABLE,
             AccountsTable.ID, PhonesTable.OWNER).where(PhonesTable.OWNER).build();

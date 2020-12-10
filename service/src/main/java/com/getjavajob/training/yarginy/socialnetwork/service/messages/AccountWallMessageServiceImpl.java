@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service("accountWallMessageService")
 public class AccountWallMessageServiceImpl extends AbstractMessageService {
     @Autowired
-    public AccountWallMessageServiceImpl(@Qualifier("accountWallMessageFacade") MessageDao messageDao) {
+    public AccountWallMessageServiceImpl(@Qualifier("accountWallMessageDaoFacade") MessageDao messageDao) {
         super(messageDao);
     }
 }

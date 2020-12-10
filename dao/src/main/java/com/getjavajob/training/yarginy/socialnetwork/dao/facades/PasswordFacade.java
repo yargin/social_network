@@ -4,7 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Pass
 
 import java.io.Serializable;
 
-public interface PasswordDao extends Serializable {
+public interface PasswordFacade extends Serializable {
     Password select(Password password);
 
     boolean create(Password password);

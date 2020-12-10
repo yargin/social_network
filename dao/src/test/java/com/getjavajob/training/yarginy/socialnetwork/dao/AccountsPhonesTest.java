@@ -4,10 +4,10 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacadeImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneFacadeImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,8 +23,8 @@ public class AccountsPhonesTest {
         TestDataSourceInitializer.initDataSource();
     }
 
-    private static final AccountDao ACCOUNT_DAO = new AccountDaoImpl();
-    private static final PhoneDao PHONE_DAO = new PhoneDaoImpl();
+    private static final AccountFacade ACCOUNT_DAO = new AccountFacadeImpl();
+    private static final PhoneFacade PHONE_DAO = new PhoneFacadeImpl();
     private final Collection<Phone> phones = new ArrayList<>();
     private Account account = new AccountImpl("test", "testtest", "test@test.test");
 

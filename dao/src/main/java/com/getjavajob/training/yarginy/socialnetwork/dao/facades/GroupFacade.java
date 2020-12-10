@@ -6,7 +6,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import java.io.Serializable;
 import java.util.Collection;
 
-public interface GroupDao extends Serializable {
+public interface GroupFacade extends Serializable {
     Group select(long id);
 
     Group select(Group group);

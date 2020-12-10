@@ -3,20 +3,20 @@ package com.getjavajob.training.yarginy.socialnetwork.dao;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacadeImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class AccountDaoTest {
+public class AccountFacadeTest {
     static {
         TestDataSourceInitializer.initDataSource();
     }
 
-    private static final AccountDao ACCOUNT_DAO = new AccountDaoImpl();
+    private static final AccountFacade ACCOUNT_DAO = new AccountFacadeImpl();
     private static final Account ACCOUNT = new AccountImpl();
 
     @After

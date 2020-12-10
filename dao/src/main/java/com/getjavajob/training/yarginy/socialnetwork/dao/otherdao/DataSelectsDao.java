@@ -8,6 +8,9 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.Se
 import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchableDto;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchableImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchableType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.io.Serializable;
@@ -20,11 +23,13 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+@Component("dataSetsDao")
 public class DataSelectsDao implements Serializable {
     private static final int LIMIT = 10;
-    private final DataSource data;
+    private DataSource data;
 
-    public DataSelectsDao(DataSource data) {
+    @Autowired
+    public void setData(@Qualifier("dataSource") DataSource data) {
         this.data = data;
     }
 

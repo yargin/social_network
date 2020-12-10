@@ -6,6 +6,8 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Pass
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AbstractDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.AccountDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,11 +18,17 @@ import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEn
 import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.PasswordTable.*;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 
+@Component
 public class PasswordDml extends AbstractDml<Password> {
     public static final String SELECT = buildQuery().selectJoin(TABLE, AccountsTable.TABLE, EMAIL, AccountsTable.EMAIL).
             where(EMAIL).build();
     public static final String SELECT_UPDATE = buildQuery().selectAll(TABLE).where(EMAIL).build();
-    public static final AccountDml ACCOUNT_DML = new AccountDml();
+    private AccountDml accountDml;
+
+    @Autowired
+    public PasswordDml(AccountDml accountDml) {
+        this.accountDml = accountDml;
+    }
 
     @Override
     protected String getSelectById() {
@@ -60,7 +68,7 @@ public class PasswordDml extends AbstractDml<Password> {
     @Override
     public Password retrieveFromRow(ResultSet resultSet) throws SQLException {
         Password password = new PasswordImpl();
-        Account account = ACCOUNT_DML.retrieveFromRow(resultSet);
+        Account account = accountDml.retrieveFromRow(resultSet);
         password.setAccount(account);
         password.setEncryptedPassword(resultSet.getString(PASSWORD));
         return password;

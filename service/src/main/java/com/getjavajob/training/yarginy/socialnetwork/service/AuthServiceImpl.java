@@ -20,20 +20,20 @@ import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHan
 
 public class AuthServiceImpl implements AuthService {
     private final TransactionManager transactionManager;
-    private final AccountDao accountDao;
-    private final PasswordDao passwordDao;
-    private final PhoneDao phoneDao;
+    private final AccountFacade accountFacade;
+    private final PasswordFacade passwordFacade;
+    private final PhoneFacade phoneFacade;
 
     public AuthServiceImpl() {
-        this(new TransactionManagerImpl(), new AccountDaoImpl(), new PasswordDaoImpl(), new PhoneDaoImpl());
+        this(new TransactionManagerImpl(), new AccountFacadeImpl(), new PasswordFacadeImpl(), new PhoneFacadeImpl());
     }
 
-    public AuthServiceImpl(TransactionManager transactionManager, AccountDao accountDao, PasswordDao passwordDao,
-                           PhoneDao phoneDao) {
+    public AuthServiceImpl(TransactionManager transactionManager, AccountFacade accountFacade, PasswordFacade passwordFacade,
+                           PhoneFacade phoneFacade) {
         this.transactionManager = transactionManager;
-        this.accountDao = accountDao;
-        this.passwordDao = passwordDao;
-        this.phoneDao = phoneDao;
+        this.accountFacade = accountFacade;
+        this.passwordFacade = passwordFacade;
+        this.phoneFacade = phoneFacade;
     }
 
     @Override
@@ -43,26 +43,23 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean register(Account account, Collection<Phone> phones, Password password) {
-        try (Transaction transaction = transactionManager.getTransaction()) {
+//        try (Transaction transaction = transactionManager.getTransaction()) {
             account.setRegistrationDate(Date.valueOf(LocalDate.now()));
-            if (!accountDao.create(account)) {
-                transaction.rollback();
+            if (!accountFacade.create(account)) {
                 throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
             }
-            if (!phoneDao.create(phones)) {
-                transaction.rollback();
+            if (!phoneFacade.create(phones)) {
                 throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
             }
-            if (!passwordDao.create(password)) {
-                transaction.rollback();
+            if (!passwordFacade.create(password)) {
                 throw new IllegalStateException();
             }
-            transaction.commit();
-        } catch (IncorrectDataException e) {
-            throw e;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//            transaction.commit();
+//        } catch (IncorrectDataException e) {
+//            throw e;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         return true;
     }
 
@@ -73,7 +70,7 @@ public class AuthServiceImpl implements AuthService {
         account.setEmail(email);
         passwordObject.setAccount(account);
         passwordObject.setPassword(password);
-        passwordObject = passwordDao.select(passwordObject);
+        passwordObject = passwordFacade.select(passwordObject);
         if (passwordObject.equals(getNullPassword())) {
             throw new IncorrectDataException(IncorrectData.WRONG_EMAIL);
         }

@@ -7,6 +7,8 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneIm
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AbstractDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,6 +20,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.PhonesTab
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 import static java.util.Objects.isNull;
 
+@Component("phonesDml")
 public class PhonesDml extends AbstractDml<Phone> {
     public static final String SELECT_ALL = buildQuery().selectJoin(TABLE, AccountsTable.TABLE, OWNER, AccountsTable.ID).
             build();
@@ -27,7 +30,12 @@ public class PhonesDml extends AbstractDml<Phone> {
             AccountsTable.VIEW_FIELDS, OWNER, AccountsTable.ID).where(ID).build();
     public static final String SELECT_BY_NUMBER = buildQuery().selectLeftFullRightView(TABLE, AccountsTable.TABLE,
             AccountsTable.VIEW_FIELDS, OWNER, AccountsTable.ID).where(NUMBER).build();
-    private final AccountDml accountDml = new AccountDml();
+    private AccountDml accountDml;
+
+    @Autowired
+    public void setAccountDml(AccountDml accountDml) {
+        this.accountDml = accountDml;
+    }
 
     @Override
     protected String getSelectById() {

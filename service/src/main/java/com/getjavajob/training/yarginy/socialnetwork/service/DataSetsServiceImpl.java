@@ -1,14 +1,14 @@
 package com.getjavajob.training.yarginy.socialnetwork.service;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchableDto;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DataSetsDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DataSetsDaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DataSetsFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DataSetsFacadeImpl;
 
 public class DataSetsServiceImpl implements DataSetsService {
-    private final DataSetsDao dataSetsDao = new DataSetsDaoImpl();
+    private final DataSetsFacade dataSetsFacade = new DataSetsFacadeImpl();
 
     @Override
     public SearchableDto searchAccountsGroups(String searchString, int pageNumber) {
-        return dataSetsDao.searchAccountsGroups(searchString, pageNumber);
+        return dataSetsFacade.searchAccountsGroups(searchString, pageNumber);
     }
 }

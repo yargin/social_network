@@ -6,6 +6,8 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupIm
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AbstractDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,11 +16,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory.getNullGroup;
-import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.GroupsTable.*;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 import static java.util.Objects.isNull;
 
+@Component("groupDml")
 public class GroupDml extends AbstractDml<Group> {
     private static final String SELECT_ALL = buildQuery().selectAll(TABLE).build();
     private static final String SELECT_BY_ID = buildQuery().selectLeftFullRightView(TABLE, AccountsTable.TABLE,
@@ -27,8 +29,18 @@ public class GroupDml extends AbstractDml<Group> {
             AccountsTable.VIEW_FIELDS, OWNER, AccountsTable.ID).where(NAME).build();
     private static final String SELECT_UPDATE_BY_NAME = buildQuery().selectAll(TABLE).where(NAME).build();
     private static final String SELECT_UPDATE_BY_ID = buildQuery().selectAll(TABLE).where(ID).build();
-    private final AccountDml accountDml = new AccountDml();
-    private final Dao<Account> accountDao = getDbFactory().getAccountDao();
+    private AccountDml accountDml;
+    private Dao<Account> accountDao;
+
+    @Autowired
+    public void setAccountDml(AccountDml accountDml) {
+        this.accountDml = accountDml;
+    }
+
+    @Autowired
+    public void setAccountDao(Dao<Account> accountDao) {
+        this.accountDao = accountDao;
+    }
 
     @Override
     protected String getSelectById() {

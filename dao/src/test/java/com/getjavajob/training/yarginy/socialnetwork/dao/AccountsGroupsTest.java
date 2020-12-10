@@ -4,10 +4,10 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacadeImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupFacadeImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,9 +22,8 @@ public class AccountsGroupsTest {
     static {
         TestDataSourceInitializer.initDataSource();
     }
-
-    public static final AccountDao ACCOUNT_DAO = new AccountDaoImpl();
-    public static final GroupDao GROUP_DAO = new GroupDaoImpl();
+    public static final AccountFacade ACCOUNT_DAO = new AccountFacadeImpl();
+    public static final GroupFacade GROUP_DAO = new GroupFacadeImpl();
     private Account account;
     private Group firstGroup;
     private Group secondGroup;

@@ -9,12 +9,14 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.GroupsMembersTable;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.GroupsTable;
+import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 
+@Component("groupMembershipDml")
 public class GroupsMembersDml extends ManyToManyDml<Account, Group> {
     private static final String SELECT_MEMBERS = buildQuery().selectJoin(AccountsTable.TABLE, GroupsMembersTable.TABLE,
             AccountsTable.ID, GroupsMembersTable.ACCOUNT_ID).where(GroupsMembersTable.GROUP_ID).build();

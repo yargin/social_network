@@ -3,14 +3,27 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.SelfManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.ManyToManyDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
-import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
+@Component("friendshipsDaoFacade")
+public class FriendshipsFacadeImpl implements FriendshipsFacade {
+    private SelfManyToManyDao<Account> friendshipDao;
+    private ManyToManyDao<Account, Account> friendshipRequestsDao;
 
-public class FriendshipsDaoImpl implements FriendshipsDao {
-    private final SelfManyToManyDao<Account> friendshipDao = getDbFactory().getFriendshipDao();
-    private final ManyToManyDao<Account, Account> friendshipRequestsDao = getDbFactory().getFriendshipRequestsDao();
+    @Autowired
+    public void setFriendshipDao(SelfManyToManyDao<Account> friendshipDao) {
+        this.friendshipDao = friendshipDao;
+    }
+
+    @Autowired
+    public void setFriendshipRequestsDao(@Qualifier("friendshipRequestsDao")
+                                                     ManyToManyDao<Account, Account> friendshipRequestsDao) {
+        this.friendshipRequestsDao = friendshipRequestsDao;
+    }
 
     @Override
     public Collection<Account> selectFriends(long id) {

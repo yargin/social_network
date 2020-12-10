@@ -5,6 +5,9 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.PhonesDml;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,13 +16,18 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Objects;
 
-import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.PhonesTable.NUMBER;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.PhonesTable.TABLE;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 
+@Component
 public class BatchPhonesDml extends PhonesDml implements BatchDml<Phone> {
-    private final Dao<Account> accountDao = getDbFactory().getAccountDao();
+    private final Dao<Account> accountDao;
+
+    @Autowired
+    public BatchPhonesDml(@Qualifier("accountDao") Dao<Account> accountDao) {
+        this.accountDao = accountDao;
+    }
 
     @Override
     public PreparedStatement batchSelectForInsert(Connection connection, Collection<Phone> phones) throws SQLException {

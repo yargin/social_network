@@ -9,18 +9,19 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 
-import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
-
-@Repository("accountWallMessageFacade")
+@Repository("accountWallMessageDaoFacade")
 public class AccountWallMessageDaoImpl implements AccountWallMessageDao {
-
     private final Dao<Message> accountWallMessageDao;
-    private final OneToManyDao<Message> accountWallMessagesOneToManyDao = getDbFactory().
-            getAccountWallMessagesDao();
+    private OneToManyDao<Message> accountWallMessagesOneToManyDao;
 
     @Autowired
     public AccountWallMessageDaoImpl(@Qualifier("accountWallMessageDao") Dao<Message> accountWallMessageDao) {
         this.accountWallMessageDao = accountWallMessageDao;
+    }
+
+    @Autowired
+    public void setAccountWallMessagesOneToManyDao(@Qualifier("accountWallMessagesDao") OneToManyDao<Message> accountWallMessagesOneToManyDao) {
+        this.accountWallMessagesOneToManyDao = accountWallMessagesOneToManyDao;
     }
 
     @Override

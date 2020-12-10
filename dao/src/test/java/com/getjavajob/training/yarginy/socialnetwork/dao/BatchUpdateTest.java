@@ -5,10 +5,10 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacadeImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneFacadeImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,19 +23,19 @@ public class BatchUpdateTest {
         TestDataSourceInitializer.initDataSource();
     }
 
-    private final AccountDao accountDao = new AccountDaoImpl();
-    private final PhoneDao phoneDao = new PhoneDaoImpl();
+    private final AccountFacade accountFacade = new AccountFacadeImpl();
+    private final PhoneFacade phoneFacade = new PhoneFacadeImpl();
     private Account account = new AccountImpl("test", "test", "test@test.test");
 
     @Before
     public void initTestValues() {
-        accountDao.create(account);
-        account = accountDao.select(account);
+        accountFacade.create(account);
+        account = accountFacade.select(account);
     }
 
     @After
     public void deleteTestValues() {
-        accountDao.delete(account);
+        accountFacade.delete(account);
     }
 
     @Test
@@ -44,14 +44,14 @@ public class BatchUpdateTest {
         firstPhone.setType(PhoneType.PRIVATE);
         Phone secondPhone = new PhoneImpl("89218942", account);
         secondPhone.setType(PhoneType.PRIVATE);
-        phoneDao.delete(firstPhone);
-        phoneDao.delete(secondPhone);
+        phoneFacade.delete(firstPhone);
+        phoneFacade.delete(secondPhone);
         Collection<Phone> phones = asList(firstPhone, secondPhone);
-        phoneDao.create(phones);
-        Collection<Phone> allAccountPhones = phoneDao.selectPhonesByOwner(account.getId());
+        phoneFacade.create(phones);
+        Collection<Phone> allAccountPhones = phoneFacade.selectPhonesByOwner(account.getId());
         assertTrue(allAccountPhones.containsAll(phones));
-        assertTrue(phoneDao.delete(phones));
-        phoneDao.delete(firstPhone);
-        phoneDao.delete(secondPhone);
+        assertTrue(phoneFacade.delete(phones));
+        phoneFacade.delete(firstPhone);
+        phoneFacade.delete(secondPhone);
     }
 }

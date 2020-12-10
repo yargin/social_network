@@ -10,12 +10,14 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.GroupsMembersTable;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.GroupsModeratorsTable;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.GroupsTable;
+import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 
+@Component("groupModeratorsDml")
 public class GroupsModeratorsDml extends ManyToManyDml<Account, Group> {
     private static final String SELECT_MODERATORS = buildQuery().selectJoin(AccountsTable.TABLE,
             GroupsModeratorsTable.TABLE, AccountsTable.ID, GroupsModeratorsTable.ACCOUNT_ID).

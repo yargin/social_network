@@ -5,7 +5,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import java.io.Serializable;
 import java.util.Collection;
 
-public interface FriendshipsDao extends Serializable {
+public interface FriendshipsFacade extends Serializable {
     Collection<Account> selectFriends(long id);
 
     boolean createFriendship(long firstId, long secondId);

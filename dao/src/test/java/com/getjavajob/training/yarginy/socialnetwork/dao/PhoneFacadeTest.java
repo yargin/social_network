@@ -5,23 +5,23 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacadeImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneFacadeImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class PhoneDaoTest {
+public class PhoneFacadeTest {
     static {
         TestDataSourceInitializer.initDataSource();
     }
 
-    private static final PhoneDao PHONE_DAO = new PhoneDaoImpl();
-    private static final AccountDao ACCOUNT_DAO = new AccountDaoImpl();
+    private static final PhoneFacade PHONE_DAO = new PhoneFacadeImpl();
+    private static final AccountFacade ACCOUNT_DAO = new AccountFacadeImpl();
     private static final Phone PHONE = new PhoneImpl();
 
     @Before

@@ -7,21 +7,19 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Pass
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.PasswordImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.DbFactory;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacadeImpl;
 import org.junit.Test;
 
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Collection;
 
-import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertTrue;
 
 public class AuthServiceTest {
-    public static final DbFactory DB_FACTORY = getDbFactory();
-    public static final Dao<Account> ACCOUNT_DAO = DB_FACTORY.getAccountDao();
+    public static final AccountFacade ACCOUNT_DAO = new AccountFacadeImpl();
 
     @Test
     public void testRegister() {

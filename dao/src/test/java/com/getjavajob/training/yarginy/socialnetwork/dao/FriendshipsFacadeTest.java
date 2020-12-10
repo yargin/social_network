@@ -2,10 +2,10 @@ package com.getjavajob.training.yarginy.socialnetwork.dao;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsDaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacadeImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsFacadeImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,13 +15,13 @@ import java.util.Collection;
 
 import static org.junit.Assert.*;
 
-public class FriendshipsDaoTest {
+public class FriendshipsFacadeTest {
     static {
         TestDataSourceInitializer.initDataSource();
     }
 
-    private static final AccountDao ACCOUNT_DAO = new AccountDaoImpl();
-    private static final FriendshipsDao FRIENDSHIP_DAO = new FriendshipsDaoImpl();
+    private static final AccountFacade ACCOUNT_DAO = new AccountFacadeImpl();
+    private static final FriendshipsFacade FRIENDSHIP_DAO = new FriendshipsFacadeImpl();
     private Account friend = new AccountImpl("testFriend", "testSurname", "testFriend@test.test");
     private Account account = new AccountImpl("testAccount", "testSurname", "test@test.test");
 

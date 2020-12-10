@@ -5,6 +5,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AbstractDml;
+import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,6 +18,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsT
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 import static java.util.Objects.isNull;
 
+@Component("accountDml")
 public class AccountDml extends AbstractDml<Account> {
     private static final String SELECT_ALL = buildQuery().selectView(VIEW_FIELDS, TABLE).build();
     private static final String SELECT_BY_ID = buildQuery().selectAll(TABLE).where(ID).build();

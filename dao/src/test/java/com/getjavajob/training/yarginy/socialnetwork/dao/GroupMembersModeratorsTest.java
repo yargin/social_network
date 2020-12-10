@@ -18,10 +18,10 @@ public class GroupMembersModeratorsTest {
         TestDataSourceInitializer.initDataSource();
     }
 
-    private final DataSetsDao dataSetsDao = new DataSetsDaoImpl();
-    private final AccountDao accountDao = new AccountDaoImpl();
-    private final GroupDao groupDao = new GroupDaoImpl();
-    private final GroupsModeratorsDao moderatorsDao = new GroupsModeratorsDaoImpl();
+    private final DataSetsFacade dataSetsFacade = new DataSetsFacadeImpl();
+    private final AccountFacade accountFacade = new AccountFacadeImpl();
+    private final GroupFacade groupFacade = new GroupFacadeImpl();
+    private final GroupsModeratorsFacade moderatorsDao = new GroupsModeratorsFacadeImpl();
     private Account account1 = new AccountImpl("test1", "test1", "test1@test.test");
     private Account account2 = new AccountImpl("test2", "test2", "test2@test.test");
     private Account account3 = new AccountImpl("test3", "test3", "test3@test.test");
@@ -30,36 +30,36 @@ public class GroupMembersModeratorsTest {
 
     @Before
     public void testValuesInit() {
-        accountDao.create(account1);
-        account1 = accountDao.select(account1);
-        accountDao.create(account2);
-        account2 = accountDao.select(account2);
-        accountDao.create(account3);
-        account3 = accountDao.select(account3);
-        accountDao.create(account4);
-        account4 = accountDao.select(account4);
-        groupDao.create(group);
-        group = groupDao.select(group);
-        groupDao.addMember(account1.getId(), group.getId());
-        groupDao.addMember(account2.getId(), group.getId());
-        groupDao.addMember(account3.getId(), group.getId());
-        groupDao.addMember(account4.getId(), group.getId());
+        accountFacade.create(account1);
+        account1 = accountFacade.select(account1);
+        accountFacade.create(account2);
+        account2 = accountFacade.select(account2);
+        accountFacade.create(account3);
+        account3 = accountFacade.select(account3);
+        accountFacade.create(account4);
+        account4 = accountFacade.select(account4);
+        groupFacade.create(group);
+        group = groupFacade.select(group);
+        groupFacade.addMember(account1.getId(), group.getId());
+        groupFacade.addMember(account2.getId(), group.getId());
+        groupFacade.addMember(account3.getId(), group.getId());
+        groupFacade.addMember(account4.getId(), group.getId());
         moderatorsDao.addGroupModerator(account1.getId(), group.getId());
         moderatorsDao.addGroupModerator(account2.getId(), group.getId());
     }
 
     @After
     public void deleteTestValues() {
-        accountDao.delete(account1);
-        accountDao.delete(account2);
-        accountDao.delete(account3);
-        accountDao.delete(account4);
-        groupDao.delete(group);
+        accountFacade.delete(account1);
+        accountFacade.delete(account2);
+        accountFacade.delete(account3);
+        accountFacade.delete(account4);
+        groupFacade.delete(group);
     }
 
     @Test
     public void testGetMembersModerators() {
-        Map<Account, Boolean> membersModerators = dataSetsDao.getGroupMembersAreModerators(group.getId());
+        Map<Account, Boolean> membersModerators = dataSetsFacade.getGroupMembersAreModerators(group.getId());
         assertTrue(membersModerators.get(account1));
         assertTrue(membersModerators.get(account2));
         assertFalse(membersModerators.get(account3));

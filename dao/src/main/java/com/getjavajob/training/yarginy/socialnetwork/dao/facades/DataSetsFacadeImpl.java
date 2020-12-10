@@ -4,13 +4,20 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchableDto;
 import com.getjavajob.training.yarginy.socialnetwork.dao.otherdao.DataSelectsDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
 
-public class DataSetsDaoImpl implements DataSetsDao {
-    private final DataSelectsDao dataSelectsDao = getDbFactory().getDataSetsDao();
+@Component("dataSetDaoFacade")
+public class DataSetsFacadeImpl implements DataSetsFacade {
+    private DataSelectsDao dataSelectsDao;
+
+    @Autowired
+    public void setDataSelectsDao(DataSelectsDao dataSelectsDao) {
+        this.dataSelectsDao = dataSelectsDao;
+    }
 
     @Override
     public Map<Account, Boolean> getGroupMembersAreModerators(long groupId) {

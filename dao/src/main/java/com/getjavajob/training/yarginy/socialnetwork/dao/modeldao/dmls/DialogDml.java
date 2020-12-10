@@ -6,6 +6,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.DialogImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AbstractDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable;
+import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,6 +18,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEn
 import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.DialogsTable.*;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 
+@Component("dialogDml")
 public class DialogDml extends AbstractDml<Dialog> {
     private static final String FIRST_TABLE_ALIAS = "a1";
     private static final String SECOND_TABLE_ALIAS = "a2";

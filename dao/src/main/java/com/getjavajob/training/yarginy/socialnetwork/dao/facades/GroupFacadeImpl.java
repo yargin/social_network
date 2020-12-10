@@ -2,55 +2,68 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
-import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.ManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
-import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
+@Component("groupDaoFacade")
+public class GroupFacadeImpl implements GroupFacade {
+    private GroupFacade groupFacade;
+    private OneToManyDao<Group> accountsOwnedGroupsDao;
+    private ManyToManyDao<Account, Group> accountsGroupMembershipDao;
 
-public class GroupDaoImpl implements GroupDao {
-    private final BatchDao<Group> groupDao = getDbFactory().getGroupDao();
-    private final Dao<Account> accountDao = getDbFactory().getAccountDao();
-    private final OneToManyDao<Group> accountsOwnedGroupsDao = getDbFactory().getAccountsOwnedGroupsDao(
-            accountDao);
-    private final ManyToManyDao<Account, Group> accountsGroupMembershipDao = getDbFactory().getGroupMembershipDao();
+    @Autowired
+    public void setGroupFacade(GroupFacade groupFacade) {
+        this.groupFacade = groupFacade;
+    }
+
+    @Autowired
+    public void setAccountsOwnedGroupsDao(@Qualifier("accountOwnerGroupsDao") OneToManyDao<Group> accountsOwnedGroupsDao) {
+        this.accountsOwnedGroupsDao = accountsOwnedGroupsDao;
+    }
+
+    @Autowired
+    public void setAccountsGroupMembershipDao(@Qualifier("groupMembershipDao") ManyToManyDao<Account, Group> accountsGroupMembershipDao) {
+        this.accountsGroupMembershipDao = accountsGroupMembershipDao;
+    }
 
     @Override
     public Group select(long id) {
-        return groupDao.select(id);
+        return groupFacade.select(id);
     }
 
     @Override
     public Group select(Group group) {
-        return groupDao.select(group);
+        return groupFacade.select(group);
     }
 
     @Override
     public Group getNullEntity() {
-        return groupDao.getNullEntity();
+        return groupFacade.getNullEntity();
     }
 
     @Override
     public boolean create(Group group) {
-        return groupDao.create(group);
+        return groupFacade.create(group);
     }
 
     @Override
     public boolean update(Group group, Group storedGroup) {
-        return groupDao.update(group, storedGroup);
+        return groupFacade.update(group, storedGroup);
     }
 
     @Override
     public boolean delete(Group group) {
-        return groupDao.delete(group);
+        return groupFacade.delete(group);
     }
 
     @Override
     public Collection<Group> selectAll() {
-        return groupDao.selectAll();
+        return groupFacade.selectAll();
     }
 
     @Override
@@ -65,7 +78,7 @@ public class GroupDaoImpl implements GroupDao {
 
     @Override
     public Group getNullGroup() {
-        return groupDao.getNullEntity();
+        return groupFacade.getNullEntity();
     }
 
     @Override

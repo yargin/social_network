@@ -3,14 +3,27 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
-import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
-
+@Component("groupWallMessageDaoFacade")
 public class GroupWallMessageDaoImpl implements GroupWallMessageDao {
-    private final Dao<Message> groupWallMessageDao = getDbFactory().getGroupWallMessageDao();
-    private final OneToManyDao<Message> groupWallMessagesOneToManyDao = getDbFactory().getGroupWallMessagesDao();
+    private Dao<Message> groupWallMessageDao;
+    private OneToManyDao<Message> groupWallMessagesOneToManyDao;
+
+    @Autowired
+    public void setGroupWallMessageDao(Dao<Message> groupWallMessageDao) {
+        this.groupWallMessageDao = groupWallMessageDao;
+    }
+
+    @Autowired
+    public void setGroupWallMessagesOneToManyDao(@Qualifier("groupWallMessagesDao")OneToManyDao<Message>
+                                                             groupWallMessagesOneToManyDao) {
+        this.groupWallMessagesOneToManyDao = groupWallMessagesOneToManyDao;
+    }
 
     @Override
     public Message select(long id) {

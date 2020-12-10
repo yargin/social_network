@@ -7,9 +7,11 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.messages.DialogsMessagesTable;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.messages.MessagesTable;
+import org.springframework.stereotype.Component;
 
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 
+@Component("dialogsMessagesDml")
 public class DialogsMessagesDml extends OneToManyDml<Message> {
     private final MessagesTable table = new DialogsMessagesTable();
     private final String selectByBoth = buildQuery().selectJoin(AccountsTable.TABLE, table.table, AccountsTable.ID,

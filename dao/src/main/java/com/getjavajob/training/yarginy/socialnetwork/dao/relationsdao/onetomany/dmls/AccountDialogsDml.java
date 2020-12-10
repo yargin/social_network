@@ -6,7 +6,9 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.DialogDml
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.DialogsTable;
+import org.springframework.stereotype.Component;
 
+@Component("accountDialogDml")
 public class AccountDialogsDml extends OneToManyDml<Dialog> {
     private static final String SELECT_BY_BOTH = "SELECT " + AccountsTable.getViewFieldsWithAlias("a1") + ", " +
             AccountsTable.getViewFieldsWithAlias("a2") + " FROM Dialogs JOIN Accounts a1 ON a1.Id = Dialogs.first_id " +

@@ -15,86 +15,86 @@ import java.util.Collection;
 
 public class AccountServiceImpl implements AccountService {
     private final TransactionManager transactionManager;
-    private final AccountDao accountDao;
-    private final PhoneDao phoneDao;
-    private final FriendshipsDao friendshipDao;
-    private final DialogDao dialogsDao;
+    private final AccountFacade accountFacade;
+    private final PhoneFacade phoneFacade;
+    private final FriendshipsFacade friendshipDao;
+    private final DialogFacade dialogsDao;
 
     public AccountServiceImpl() {
-        this(new AccountDaoImpl(), new PhoneDaoImpl(), new FriendshipsDaoImpl(), new DialogDaoImpl(),
+        this(new AccountFacadeImpl(), new PhoneFacadeImpl(), new FriendshipsFacadeImpl(), new DialogFacadeImpl(),
                 new TransactionManagerImpl());
     }
 
-    public AccountServiceImpl(AccountDao accountDao, PhoneDao phoneDao, FriendshipsDao friendshipDao, DialogDao
-            dialogDao, TransactionManager transactionManager) {
-        this.accountDao = accountDao;
-        this.phoneDao = phoneDao;
+    public AccountServiceImpl(AccountFacade accountFacade, PhoneFacade phoneFacade, FriendshipsFacade friendshipDao, DialogFacade
+            dialogFacade, TransactionManager transactionManager) {
+        this.accountFacade = accountFacade;
+        this.phoneFacade = phoneFacade;
         this.friendshipDao = friendshipDao;
-        this.dialogsDao = dialogDao;
+        this.dialogsDao = dialogFacade;
         this.transactionManager = transactionManager;
     }
 
     @Override
     public AccountInfoDTO getAccountInfo(long id) {
-        Account account = accountDao.select(id);
-        Collection<Phone> phones = phoneDao.selectPhonesByOwner(id);
+        Account account = accountFacade.select(id);
+        Collection<Phone> phones = phoneFacade.selectPhonesByOwner(id);
         return new AccountInfoDTO(account, phones);
     }
 
     @Override
     public Account get(long id) {
-        return accountDao.select(id);
+        return accountFacade.select(id);
     }
 
     @Override
     public Account get(Account account) {
-        return accountDao.select(account);
+        return accountFacade.select(account);
     }
 
     @Override
     public boolean createAccount(Account account, Collection<Phone> phones) {
-        try (Transaction transaction = transactionManager.getTransaction()) {
+//        try (Transaction transaction = transactionManager.getTransaction()) {
             account.setRegistrationDate(Date.valueOf(LocalDate.now()));
-            if (!accountDao.create(account)) {
+            if (!accountFacade.create(account)) {
                 throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
             }
-            if (!phoneDao.create(phones)) {
+            if (!phoneFacade.create(phones)) {
                 throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
             }
-            transaction.commit();
-        } catch (IncorrectDataException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
-        }
+//            transaction.commit();
+//        } catch (IncorrectDataException e) {
+//            throw e;
+//        } catch (Exception e) {
+//            throw new IllegalStateException(e);
+//        }
         return true;
     }
 
     @Override
     public boolean updateAccount(Account account, Account storedAccount) {
-        return accountDao.update(account, storedAccount);
+        return accountFacade.update(account, storedAccount);
     }
 
     @Override
     public boolean deleteAccount(Account account) {
-        return accountDao.delete(account);
+        return accountFacade.delete(account);
     }
 
     @Override
     public boolean addFriend(long firstId, long secondId) {
-        try (Transaction transaction = transactionManager.getTransaction()) {
+//        try (Transaction transaction = transactionManager.getTransaction()) {
             if (!friendshipDao.deleteRequest(firstId, secondId)) {
                 throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
             }
             if (!friendshipDao.createFriendship(firstId, secondId)) {
-                transaction.rollback();
+//                transaction.rollback();
                 throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
             }
-            transaction.commit();
+//            transaction.commit();
             return true;
-        } catch (Exception e) {
-            return false;
-        }
+//        } catch (Exception e) {
+//            return false;
+//        }
     }
 
     @Override
@@ -126,7 +126,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Collection<Phone> getPhones(long accountId) {
-        return phoneDao.selectPhonesByOwner(accountId);
+        return phoneFacade.selectPhonesByOwner(accountId);
     }
 
     @Override

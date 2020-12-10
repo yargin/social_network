@@ -3,14 +3,26 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
-import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
+@Component("dialogDaoFacade")
+public class DialogFacadeImpl implements DialogFacade {
+    private Dao<Dialog> dialogDao;
+    private OneToManyDao<Dialog> accountDialogsDao;
 
-public class DialogDaoImpl implements DialogDao {
-    private final Dao<Dialog> dialogDao = getDbFactory().getDialogDao();
-    private final OneToManyDao<Dialog> accountDialogsDao = getDbFactory().getAccountDialogsDao();
+    @Autowired
+    public void setDialogDao(Dao<Dialog> dialogDao) {
+        this.dialogDao = dialogDao;
+    }
+
+    @Autowired
+    public void setAccountDialogsDao(@Qualifier("dialogsDao") OneToManyDao<Dialog> accountDialogsDao) {
+        this.accountDialogsDao = accountDialogsDao;
+    }
 
     @Override
     public Dialog select(long id) {

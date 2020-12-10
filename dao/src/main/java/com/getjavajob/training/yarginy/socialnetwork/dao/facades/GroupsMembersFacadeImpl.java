@@ -3,14 +3,28 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.ManyToManyDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
-import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
+@Component("groupsMembersDaoFacade")
+public class GroupsMembersFacadeImpl implements GroupsMembersFacade {
+    private ManyToManyDao<Account, Group> groupMembershipDao;
+    private ManyToManyDao<Account, Group> membershipRequestsDao;
 
-public class GroupsMembersDaoImpl implements GroupsMembersDao {
-    private final ManyToManyDao<Account, Group> groupMembershipDao = getDbFactory().getGroupMembershipDao();
-    private final ManyToManyDao<Account, Group> membershipRequestsDao = getDbFactory().getGroupRequestsDao();
+    @Autowired
+    public void setGroupMembershipDao(@Qualifier("groupMembershipDao")
+                                                  ManyToManyDao<Account, Group> groupMembershipDao) {
+        this.groupMembershipDao = groupMembershipDao;
+    }
+
+    @Autowired
+    public void setMembershipRequestsDao(@Qualifier("groupRequestsDao") ManyToManyDao<Account, Group>
+                                                     membershipRequestsDao) {
+        this.membershipRequestsDao = membershipRequestsDao;
+    }
 
     @Override
     public Collection<Group> selectAccountGroups(long accountId) {

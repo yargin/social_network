@@ -2,11 +2,17 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
+@Component("passwordDaoFacade")
+public class PasswordFacadeImpl implements PasswordFacade {
+    private Dao<Password> passwordDao;
 
-public class PasswordDaoImpl implements PasswordDao {
-    private final Dao<Password> passwordDao = getDbFactory().getPasswordDao();
+    @Autowired
+    public void setPasswordDao(Dao<Password> passwordDao) {
+        this.passwordDao = passwordDao;
+    }
 
     @Override
     public Password select(Password password) {

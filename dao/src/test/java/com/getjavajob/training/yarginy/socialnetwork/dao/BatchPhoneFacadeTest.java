@@ -4,10 +4,10 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacadeImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneFacadeImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,21 +18,21 @@ import java.util.Collection;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class BatchPhoneDaoTest {
+public class BatchPhoneFacadeTest {
     static {
         TestDataSourceInitializer.initDataSource();
     }
 
-    private final AccountDao accountDao = new AccountDaoImpl();
-    private final PhoneDao phoneDao = new PhoneDaoImpl();
+    private final AccountFacade accountFacade = new AccountFacadeImpl();
+    private final PhoneFacade phoneFacade = new PhoneFacadeImpl();
     private Collection<Phone> testPhones = new ArrayList<>();
     private Account testAccount = new AccountImpl("test", "test@test.test");
 
     @Before
     public void initAccountAndPhones() {
         testAccount.setSurname("tester");
-        accountDao.create(testAccount);
-        testAccount = accountDao.select(testAccount);
+        accountFacade.create(testAccount);
+        testAccount = accountFacade.select(testAccount);
         testPhones.add(new PhoneImpl("111-111", testAccount));
         testPhones.add(new PhoneImpl("222-222", testAccount));
         testPhones.add(new PhoneImpl("333-333", testAccount));
@@ -43,22 +43,22 @@ public class BatchPhoneDaoTest {
 
     @After
     public void deleteAccountAndPhones() {
-        testPhones = phoneDao.selectPhonesByOwner(testAccount.getId());
-        phoneDao.delete(testPhones);
-        accountDao.delete(testAccount);
+        testPhones = phoneFacade.selectPhonesByOwner(testAccount.getId());
+        phoneFacade.delete(testPhones);
+        accountFacade.delete(testAccount);
     }
 
     @Test
     public void testDeleteManyPhonesAndOneNonExisting() {
-        phoneDao.create(testPhones);
-        testPhones = phoneDao.selectPhonesByOwner(testAccount.getId());
+        phoneFacade.create(testPhones);
+        testPhones = phoneFacade.selectPhonesByOwner(testAccount.getId());
         testPhones.add(new PhoneImpl("777-777", testAccount));
-        assertTrue(phoneDao.delete(testPhones));
+        assertTrue(phoneFacade.delete(testPhones));
     }
 
     @Test
     public void testCreateManyPhonesAndOneExisting() {
-        phoneDao.create(testPhones.iterator().next());
-        assertFalse(phoneDao.create(testPhones));
+        phoneFacade.create(testPhones.iterator().next());
+        assertFalse(phoneFacade.create(testPhones));
     }
 }

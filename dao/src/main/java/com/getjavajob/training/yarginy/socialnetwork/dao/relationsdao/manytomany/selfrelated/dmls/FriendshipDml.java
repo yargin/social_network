@@ -5,6 +5,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.AccountDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.SelfManyToManyDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable;
+import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,6 +15,7 @@ import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.FriendshipsTable.*;
 
+@Component("friendshipDml")
 public class FriendshipDml extends SelfManyToManyDml<Account> {
     private static final String SELECT_BY_ID = "SELECT " + AccountsTable.VIEW_FIELDS + " FROM Accounts WHERE id IN " +
             "(SELECT first_account acc_id FROM Friendships WHERE second_account = ? UNION " +

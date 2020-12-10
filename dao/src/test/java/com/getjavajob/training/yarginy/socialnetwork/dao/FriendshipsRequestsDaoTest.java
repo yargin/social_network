@@ -2,10 +2,10 @@ package com.getjavajob.training.yarginy.socialnetwork.dao;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsDaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacadeImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsFacadeImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,48 +20,48 @@ public class FriendshipsRequestsDaoTest {
         TestDataSourceInitializer.initDataSource();
     }
 
-    private final FriendshipsDao friendshipsDao = new FriendshipsDaoImpl();
-    private final AccountDao accountDao = new AccountDaoImpl();
+    private final FriendshipsFacade friendshipsFacade = new FriendshipsFacadeImpl();
+    private final AccountFacade accountFacade = new AccountFacadeImpl();
     private Account firstAccount = new AccountImpl("firstTest", "test", "first@test.test");
     private Account secondAccount = new AccountImpl("secondTest", "test", "second@test.test");
 
     @Before
     public void initTestValues() {
-        accountDao.create(firstAccount);
-        firstAccount = accountDao.select(firstAccount);
-        accountDao.create(secondAccount);
-        secondAccount = accountDao.select(secondAccount);
+        accountFacade.create(firstAccount);
+        firstAccount = accountFacade.select(firstAccount);
+        accountFacade.create(secondAccount);
+        secondAccount = accountFacade.select(secondAccount);
     }
 
     @After
     public void deleteTestValues() {
-        friendshipsDao.deleteRequest(firstAccount.getId(), secondAccount.getId());
-        accountDao.delete(firstAccount);
-        accountDao.delete(secondAccount);
+        friendshipsFacade.deleteRequest(firstAccount.getId(), secondAccount.getId());
+        accountFacade.delete(firstAccount);
+        accountFacade.delete(secondAccount);
     }
 
     @Test
     public void testCreateFriendshipRequest() {
-        Collection<Account> accounts = accountDao.selectAll();
-        assertTrue(friendshipsDao.createRequest(firstAccount.getId(), secondAccount.getId()));
+        Collection<Account> accounts = accountFacade.selectAll();
+        assertTrue(friendshipsFacade.createRequest(firstAccount.getId(), secondAccount.getId()));
     }
 
     @Test
     public void testCreateExistingRequest() {
-        assert friendshipsDao.createRequest(firstAccount.getId(), secondAccount.getId());
-        assertFalse(friendshipsDao.createRequest(firstAccount.getId(), secondAccount.getId()));
+        assert friendshipsFacade.createRequest(firstAccount.getId(), secondAccount.getId());
+        assertFalse(friendshipsFacade.createRequest(firstAccount.getId(), secondAccount.getId()));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testCreateRequestToNonExistingAccount() {
-        assertFalse(friendshipsDao.createRequest(firstAccount.getId(), 0));
+        assertFalse(friendshipsFacade.createRequest(firstAccount.getId(), 0));
     }
 
     @Test
     public void testSelectRequests() {
-        friendshipsDao.createRequest(firstAccount.getId(), secondAccount.getId());
+        friendshipsFacade.createRequest(firstAccount.getId(), secondAccount.getId());
         Collection<Account> expected = new ArrayList<>();
         expected.add(firstAccount);
-        assertEquals(expected, friendshipsDao.selectRequests(secondAccount.getId()));
+        assertEquals(expected, friendshipsFacade.selectRequests(secondAccount.getId()));
     }
 }

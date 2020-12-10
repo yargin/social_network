@@ -13,7 +13,6 @@ import static java.util.Objects.isNull;
 public abstract class AbstractMessageService implements MessageService {
     private final MessageDao messageDao;
 
-    @Autowired
     protected AbstractMessageService(MessageDao messageDao) {
         this.messageDao = messageDao;
     }

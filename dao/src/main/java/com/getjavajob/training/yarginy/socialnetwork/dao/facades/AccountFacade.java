@@ -7,7 +7,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import java.io.Serializable;
 import java.util.Collection;
 
-public interface AccountDao extends Serializable {
+public interface AccountFacade extends Serializable {
     Account select(long id);
 
     Account select(Account account);

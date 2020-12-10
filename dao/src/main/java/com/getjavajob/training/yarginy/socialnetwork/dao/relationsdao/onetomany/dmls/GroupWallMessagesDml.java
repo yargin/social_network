@@ -8,9 +8,11 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.GroupsTable;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.messages.GroupWallMessagesTable;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.messages.MessagesTable;
+import org.springframework.stereotype.Component;
 
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 
+@Component("groupWallMessagesDml")
 public class GroupWallMessagesDml extends OneToManyDml<Message> {
     private final MessagesTable table = new GroupWallMessagesTable();
     private final String selectByBoth = buildQuery().selectJoin(GroupsTable.TABLE, table.table, GroupsTable.ID,

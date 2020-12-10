@@ -11,50 +11,50 @@ import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 import java.util.Collection;
 
 public class AccountInfoServiceImpl implements AccountInfoService {
-    private final AccountDao accountDao;
-    private final PhoneDao phoneDao;
+    private final AccountFacade accountFacade;
+    private final PhoneFacade phoneFacade;
     private final TransactionManager transactionManager;
 
     public AccountInfoServiceImpl() {
-        this(new TransactionManagerImpl(), new AccountDaoImpl(), new PhoneDaoImpl());
+        this(new TransactionManagerImpl(), new AccountFacadeImpl(), new PhoneFacadeImpl());
     }
 
-    public AccountInfoServiceImpl(TransactionManager transactionManager, AccountDao accountDao, PhoneDao phoneDao) {
+    public AccountInfoServiceImpl(TransactionManager transactionManager, AccountFacade accountFacade, PhoneFacade phoneFacade) {
         this.transactionManager = transactionManager;
-        this.accountDao = accountDao;
-        this.phoneDao = phoneDao;
+        this.accountFacade = accountFacade;
+        this.phoneFacade = phoneFacade;
     }
 
     @Override
     public AccountInfoDTO select(Account account) {
-        Account storedAccount = accountDao.select(account);
-        Collection<Phone> phones = phoneDao.selectPhonesByOwner(storedAccount.getId());
+        Account storedAccount = accountFacade.select(account);
+        Collection<Phone> phones = phoneFacade.selectPhonesByOwner(storedAccount.getId());
         return new AccountInfoDTO(storedAccount, phones);
     }
 
     @Override
     public AccountInfoDTO select(long id) {
-        Account storedAccount = accountDao.select(id);
-        Collection<Phone> phones = phoneDao.selectPhonesByOwner(storedAccount.getId());
+        Account storedAccount = accountFacade.select(id);
+        Collection<Phone> phones = phoneFacade.selectPhonesByOwner(storedAccount.getId());
         return new AccountInfoDTO(storedAccount, phones);
     }
 
     @Override
     public boolean update(AccountInfoDTO accountInfo, AccountInfoDTO storedAccountInfo) {
-        try (Transaction transaction = transactionManager.getTransaction()) {
+//        try (Transaction transaction = transactionManager.getTransaction()) {
             Account account = accountInfo.getAccount();
-            if (!accountDao.update(account, storedAccountInfo.getAccount())) {
+            if (!accountFacade.update(account, storedAccountInfo.getAccount())) {
                 throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
             }
-            if (!phoneDao.update(storedAccountInfo.getPhones(), accountInfo.getPhones())) {
+            if (!phoneFacade.update(storedAccountInfo.getPhones(), accountInfo.getPhones())) {
                 throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
             }
-            transaction.commit();
+//            transaction.commit();
             return true;
-        } catch (IncorrectDataException e) {
-            throw e;
-        } catch (Exception e) {
-            return false;
-        }
+//        } catch (IncorrectDataException e) {
+//            throw e;
+//        } catch (Exception e) {
+//            return false;
+//        }
     }
 }
