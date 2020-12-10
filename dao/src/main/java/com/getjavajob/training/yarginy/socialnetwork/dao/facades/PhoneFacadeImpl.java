@@ -4,23 +4,18 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
 @Component("phoneDaoFacade")
 public class PhoneFacadeImpl implements PhoneFacade {
-    private BatchDao<Phone> phoneDao;
-    private OneToManyDao<Phone> accountsPhonesDao;
+    private final BatchDao<Phone> phoneDao;
+    private final OneToManyDao<Phone> accountsPhonesDao;
 
     @Autowired
-    public void setPhoneDao(BatchDao<Phone> phoneDao) {
+    public PhoneFacadeImpl(BatchDao<Phone> phoneDao, OneToManyDao<Phone> accountsPhonesDao) {
         this.phoneDao = phoneDao;
-    }
-
-    @Autowired
-    public void setAccountsPhonesDao(@Qualifier("accountPhonesDao") OneToManyDao<Phone> accountsPhonesDao) {
         this.accountsPhonesDao = accountsPhonesDao;
     }
 

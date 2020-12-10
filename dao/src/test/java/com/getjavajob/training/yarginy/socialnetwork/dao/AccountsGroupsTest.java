@@ -5,12 +5,11 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacadeImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupFacadeImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collection;
 import java.util.List;
@@ -22,8 +21,11 @@ public class AccountsGroupsTest {
     static {
         TestDataSourceInitializer.initDataSource();
     }
-    public static final AccountFacade ACCOUNT_DAO = new AccountFacadeImpl();
-    public static final GroupFacade GROUP_DAO = new GroupFacadeImpl();
+
+    @Autowired
+    public static AccountFacade accountFacade;
+    @Autowired
+    public GroupFacade groupFacade;
     private Account account;
     private Group firstGroup;
     private Group secondGroup;
@@ -31,29 +33,29 @@ public class AccountsGroupsTest {
     @Before
     public void initTestValues() {
         account = new AccountImpl("test account", "test surname", "test@test.com");
-        ACCOUNT_DAO.create(account);
-        account = ACCOUNT_DAO.select(account);
+        accountFacade.create(account);
+        account = accountFacade.select(account);
 
         firstGroup = new GroupImpl("first test group", account);
-        GROUP_DAO.create(firstGroup);
-        firstGroup = GROUP_DAO.select(firstGroup);
+        groupFacade.create(firstGroup);
+        firstGroup = groupFacade.select(firstGroup);
 
         secondGroup = new GroupImpl("second test group", account);
-        GROUP_DAO.create(secondGroup);
-        secondGroup = GROUP_DAO.select(secondGroup);
+        groupFacade.create(secondGroup);
+        secondGroup = groupFacade.select(secondGroup);
     }
 
     @After
     public void deleteTestValues() {
-        ACCOUNT_DAO.delete(account);
-        GROUP_DAO.delete(firstGroup);
-        GROUP_DAO.delete(secondGroup);
+        accountFacade.delete(account);
+        groupFacade.delete(firstGroup);
+        groupFacade.delete(secondGroup);
     }
 
     @Test
     public void testSelectGroups() {
         List<Group> expectedGroups = asList(firstGroup, secondGroup);
-        Collection<Group> actualGroups = ACCOUNT_DAO.getOwnedGroups(account.getId());
+        Collection<Group> actualGroups = accountFacade.getOwnedGroups(account.getId());
         assertEquals(expectedGroups, actualGroups);
     }
 }

@@ -3,13 +3,13 @@ package com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.a
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.service.AuthService;
-import com.getjavajob.training.yarginy.socialnetwork.service.AuthServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.UpdateAccountFieldsHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.AbstractGetPostServlet;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +22,12 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 import static java.util.Objects.isNull;
 
 public class AccountRegisterServlet extends AbstractGetPostServlet {
-    private static final AuthService AUTH_SERVICE = new AuthServiceImpl();
+    private AuthService authService;
+
+    @Autowired
+    public void setAuthService(AuthService authService) {
+        this.authService = authService;
+    }
 
     @Override
     protected void safeDoGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -67,7 +72,7 @@ public class AccountRegisterServlet extends AbstractGetPostServlet {
             IOException, ServletException {
         boolean registered;
         try {
-            registered = AUTH_SERVICE.register(accountInfoDTO, password);
+            registered = authService.register(accountInfoDTO, password);
         } catch (IncorrectDataException e) {
             updater.handleInfoExceptions(e, this::safeDoGet);
             return;

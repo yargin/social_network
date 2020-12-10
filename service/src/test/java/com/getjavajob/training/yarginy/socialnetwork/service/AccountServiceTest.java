@@ -26,8 +26,8 @@ public class AccountServiceTest {
     private final DialogFacade dialogFacade = mock(DialogFacade.class);
     private final Transaction transaction = mock(Transaction.class);
     private final TransactionManager transactionManager = mock(TransactionManager.class);
-    private final AccountService accountService = new AccountServiceImpl(accountFacade, phoneFacade, friendsDao, dialogFacade,
-            transactionManager);
+    private final AccountService accountService = new AccountServiceImpl(accountFacade, phoneFacade, friendsDao,
+            dialogFacade);
     private Account account;
     private Account storedAccount;
     private Collection<Phone> phones;

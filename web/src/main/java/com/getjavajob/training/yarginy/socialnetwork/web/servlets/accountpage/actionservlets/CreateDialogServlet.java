@@ -6,7 +6,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.DialogImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.service.DialogService;
-import com.getjavajob.training.yarginy.socialnetwork.service.DialogServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.MessageHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.AbstractPostServlet;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
@@ -25,8 +24,13 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 import static java.util.Objects.isNull;
 
 public class CreateDialogServlet extends AbstractPostServlet {
-    private final DialogService dialogService = new DialogServiceImpl();
+    private DialogService dialogService;
     private MessageHelper messageHelper;
+
+    @Autowired
+    public void setDialogService(DialogService dialogService) {
+        this.dialogService = dialogService;
+    }
 
     @Autowired
     public void setMessageHelper(MessageHelper messageHelper) {

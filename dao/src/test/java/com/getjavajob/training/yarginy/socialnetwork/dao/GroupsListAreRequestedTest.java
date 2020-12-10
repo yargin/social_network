@@ -4,10 +4,14 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.*;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DataSetsFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsMembersFacade;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
 
@@ -19,10 +23,14 @@ public class GroupsListAreRequestedTest {
         TestDataSourceInitializer.initDataSource();
     }
 
-    private final DataSetsFacade dataSetsFacade = new DataSetsFacadeImpl();
-    private final GroupsMembersFacade membersDao = new GroupsMembersFacadeImpl();
-    private final AccountFacade accountFacade = new AccountFacadeImpl();
-    private final GroupFacade groupFacade = new GroupFacadeImpl();
+    @Autowired
+    private DataSetsFacade dataSetsFacade;
+    @Autowired
+    private GroupsMembersFacade membersDao;
+    @Autowired
+    private GroupFacade groupFacade;
+    @Autowired
+    private AccountFacade accountFacade;
     private Account account = new AccountImpl("test", "test", "test@test.test");
     private Account owner = new AccountImpl("testOwner", "testOwner", "testOwner@test.test");
     private Group group1 = new GroupImpl("testGroup1", owner);

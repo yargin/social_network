@@ -4,20 +4,34 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.*;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.Transaction;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DataSetsFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsMembersFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsModeratorsFacade;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Map;
 
+@Service
 public class GroupServiceImpl implements GroupService {
-    private final GroupFacade groupFacade = new GroupFacadeImpl();
-    private final GroupsMembersFacade membersDao = new GroupsMembersFacadeImpl();
-    private final GroupsModeratorsFacade moderatorsDao = new GroupsModeratorsFacadeImpl();
-    private final TransactionManager transactionManager = new TransactionManagerImpl();
-    private final DataSetsFacade dataSetsFacade = new DataSetsFacadeImpl();
+    //    private final TransactionManager transactionManager = new TransactionManagerImpl();
+    private final GroupFacade groupFacade;
+    private final GroupsMembersFacade membersDao;
+    private final GroupsModeratorsFacade moderatorsDao;
+    private final DataSetsFacade dataSetsFacade;
+
+    @Autowired
+    public GroupServiceImpl(GroupFacade groupFacade, GroupsMembersFacade membersDao,
+                            GroupsModeratorsFacade moderatorsDao, DataSetsFacade dataSetsFacade) {
+        this.groupFacade = groupFacade;
+        this.membersDao = membersDao;
+        this.moderatorsDao = moderatorsDao;
+        this.dataSetsFacade = dataSetsFacade;
+    }
 
     @Override
     public Group get(Group group) {
@@ -47,13 +61,13 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public boolean acceptRequest(long accountId, long groupId) {
 //        try (Transaction transaction = transactionManager.getTransaction()) {
-            if (!membersDao.joinGroup(accountId, groupId)) {
-                return false;
-            }
-            if (!membersDao.removeRequest(accountId, groupId)) {
-                return false;
-            }
-            return true;
+        if (!membersDao.joinGroup(accountId, groupId)) {
+            return false;
+        }
+        if (!membersDao.removeRequest(accountId, groupId)) {
+            return false;
+        }
+        return true;
 //        } catch (Exception e) {
 //            return false;
 //        }
@@ -70,11 +84,11 @@ public class GroupServiceImpl implements GroupService {
             return false;
         }
 //        try (Transaction transaction = transactionManager.getTransaction()) {
-            moderatorsDao.deleteGroupModerator(accountId, groupId);
-            if (!groupFacade.removeMember(accountId, groupId)) {
-                return false;
-            }
-            return true;
+        moderatorsDao.deleteGroupModerator(accountId, groupId);
+        if (!groupFacade.removeMember(accountId, groupId)) {
+            return false;
+        }
+        return true;
 //        } catch (Exception e) {
 //            return false;
 //        }
@@ -114,11 +128,11 @@ public class GroupServiceImpl implements GroupService {
     public boolean createGroup(Group group) {
         group.setCreationDate(Date.valueOf(LocalDate.now()));
 //        try (Transaction transaction = transactionManager.getTransaction()) {
-            if (!createAndJoinOwner(group)) {
-                return false;
-            }
+        if (!createAndJoinOwner(group)) {
+            return false;
+        }
 //            transaction.commit();
-            return true;
+        return true;
 //        } catch (Exception e) {
 //            throw new IllegalStateException(e);
 //        }

@@ -6,12 +6,11 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacadeImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneFacadeImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collection;
 
@@ -23,8 +22,10 @@ public class BatchUpdateTest {
         TestDataSourceInitializer.initDataSource();
     }
 
-    private final AccountFacade accountFacade = new AccountFacadeImpl();
-    private final PhoneFacade phoneFacade = new PhoneFacadeImpl();
+    @Autowired
+    private PhoneFacade phoneFacade;
+    @Autowired
+    private AccountFacade accountFacade;
     private Account account = new AccountImpl("test", "test", "test@test.test");
 
     @Before

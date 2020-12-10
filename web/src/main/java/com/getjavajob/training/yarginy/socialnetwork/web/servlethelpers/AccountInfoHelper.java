@@ -5,8 +5,8 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.addit
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
-import com.getjavajob.training.yarginy.socialnetwork.service.AccountServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
@@ -22,14 +22,15 @@ import static java.util.Objects.isNull;
 
 @Component
 public class AccountInfoHelper {
-    //todo inject
-    private static final AccountService ACCOUNT_SERVICE = new AccountServiceImpl();
+    private AccountService accountService;
 
-    public AccountInfoHelper() {
+    @Autowired
+    public void setAccountService(AccountService accountService) {
+        this.accountService = accountService;
     }
 
     public void setAccountInfo(HttpServletRequest req, long requestedUserId) {
-        AccountInfoDTO accountInfoDTO = ACCOUNT_SERVICE.getAccountInfo(requestedUserId);
+        AccountInfoDTO accountInfoDTO = accountService.getAccountInfo(requestedUserId);
 
         Account account = accountInfoDTO.getAccount();
         req.setAttribute("user", account);

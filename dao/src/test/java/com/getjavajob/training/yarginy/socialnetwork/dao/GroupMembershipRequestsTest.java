@@ -4,10 +4,13 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.*;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsMembersFacade;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collections;
 
@@ -18,9 +21,12 @@ public class GroupMembershipRequestsTest {
         TestDataSourceInitializer.initDataSource();
     }
 
-    private final AccountFacade accountFacade = new AccountFacadeImpl();
-    private final GroupFacade groupFacade = new GroupFacadeImpl();
-    private final GroupsMembersFacade groupsMembersFacade = new GroupsMembersFacadeImpl();
+    @Autowired
+    private GroupFacade groupFacade;
+    @Autowired
+    private GroupsMembersFacade groupsMembersFacade;
+    @Autowired
+    private AccountFacade accountFacade;
     private Account requester = new AccountImpl("firstTest", "test", "first@test.test");
     private Account owner = new AccountImpl("secondTest", "test", "second@test.test");
     private Group group = new GroupImpl("testGroup", owner);

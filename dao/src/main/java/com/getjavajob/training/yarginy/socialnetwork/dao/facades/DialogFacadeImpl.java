@@ -11,16 +11,12 @@ import java.util.Collection;
 
 @Component("dialogDaoFacade")
 public class DialogFacadeImpl implements DialogFacade {
-    private Dao<Dialog> dialogDao;
-    private OneToManyDao<Dialog> accountDialogsDao;
+    private final Dao<Dialog> dialogDao;
+    private final OneToManyDao<Dialog> accountDialogsDao;
 
     @Autowired
-    public void setDialogDao(Dao<Dialog> dialogDao) {
+    public DialogFacadeImpl(Dao<Dialog> dialogDao, @Qualifier("dialogsDao") OneToManyDao<Dialog> accountDialogsDao) {
         this.dialogDao = dialogDao;
-    }
-
-    @Autowired
-    public void setAccountDialogsDao(@Qualifier("dialogsDao") OneToManyDao<Dialog> accountDialogsDao) {
         this.accountDialogsDao = accountDialogsDao;
     }
 

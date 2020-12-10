@@ -5,12 +5,11 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacadeImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneFacadeImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,29 +22,31 @@ public class AccountsPhonesTest {
         TestDataSourceInitializer.initDataSource();
     }
 
-    private static final AccountFacade ACCOUNT_DAO = new AccountFacadeImpl();
-    private static final PhoneFacade PHONE_DAO = new PhoneFacadeImpl();
+    @Autowired
+    private AccountFacade accountFacade;
+    @Autowired
+    private PhoneFacade phoneFacade;
     private final Collection<Phone> phones = new ArrayList<>();
     private Account account = new AccountImpl("test", "testtest", "test@test.test");
 
     @Before
     public void initTestValues() {
-        ACCOUNT_DAO.create(account);
-        account = ACCOUNT_DAO.select(account);
+        accountFacade.create(account);
+        account = accountFacade.select(account);
         phones.add(new PhoneImpl("11111111111111111111111", account));
         phones.add(new PhoneImpl("22222222222222222222222", account));
     }
 
     @After
     public void deleteTestValues() {
-        ACCOUNT_DAO.delete(account);
-        PHONE_DAO.delete(phones);
+        accountFacade.delete(account);
+        phoneFacade.delete(phones);
     }
 
     @Test
     public void testSelectPhones() {
-        assertTrue(PHONE_DAO.create(phones));
-        Collection<Phone> actualPhones = PHONE_DAO.selectPhonesByOwner(account.getId());
+        assertTrue(phoneFacade.create(phones));
+        Collection<Phone> actualPhones = phoneFacade.selectPhonesByOwner(account.getId());
         assertEquals(phones, actualPhones);
     }
 }

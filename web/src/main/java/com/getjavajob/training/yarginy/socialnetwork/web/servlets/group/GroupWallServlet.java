@@ -3,12 +3,12 @@ package com.getjavajob.training.yarginy.socialnetwork.web.servlets.group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
-import com.getjavajob.training.yarginy.socialnetwork.service.GroupServiceImpl;
-import com.getjavajob.training.yarginy.socialnetwork.service.messages.GroupWallMessageServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.AbstractGetServlet;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -17,8 +17,18 @@ import java.io.IOException;
 import java.util.Collection;
 
 public class GroupWallServlet extends AbstractGetServlet {
-    private final GroupService groupService = new GroupServiceImpl();
-    private final MessageService groupWallMessageService = new GroupWallMessageServiceImpl();
+    private GroupService groupService;
+    private MessageService groupWallMessageService;
+
+    @Autowired
+    public void setGroupService(GroupService groupService) {
+        this.groupService = groupService;
+    }
+
+    @Autowired
+    public void setGroupWallMessageService(@Qualifier("groupWallMessageService") MessageService groupWallMessageService) {
+        this.groupWallMessageService = groupWallMessageService;
+    }
 
     @Override
     protected void safeDoGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

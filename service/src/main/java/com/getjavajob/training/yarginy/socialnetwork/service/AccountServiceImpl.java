@@ -5,33 +5,33 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.*;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.Transaction;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneFacade;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Collection;
 
+@Service
 public class AccountServiceImpl implements AccountService {
-    private final TransactionManager transactionManager;
+    //    private final TransactionManager transactionManager;
     private final AccountFacade accountFacade;
     private final PhoneFacade phoneFacade;
     private final FriendshipsFacade friendshipDao;
     private final DialogFacade dialogsDao;
 
-    public AccountServiceImpl() {
-        this(new AccountFacadeImpl(), new PhoneFacadeImpl(), new FriendshipsFacadeImpl(), new DialogFacadeImpl(),
-                new TransactionManagerImpl());
-    }
-
-    public AccountServiceImpl(AccountFacade accountFacade, PhoneFacade phoneFacade, FriendshipsFacade friendshipDao, DialogFacade
-            dialogFacade, TransactionManager transactionManager) {
+    @Autowired
+    public AccountServiceImpl(AccountFacade accountFacade, PhoneFacade phoneFacade, FriendshipsFacade friendshipDao,
+                              DialogFacade dialogFacade) {
         this.accountFacade = accountFacade;
         this.phoneFacade = phoneFacade;
         this.friendshipDao = friendshipDao;
         this.dialogsDao = dialogFacade;
-        this.transactionManager = transactionManager;
     }
 
     @Override
@@ -54,13 +54,13 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public boolean createAccount(Account account, Collection<Phone> phones) {
 //        try (Transaction transaction = transactionManager.getTransaction()) {
-            account.setRegistrationDate(Date.valueOf(LocalDate.now()));
-            if (!accountFacade.create(account)) {
-                throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
-            }
-            if (!phoneFacade.create(phones)) {
-                throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
-            }
+        account.setRegistrationDate(Date.valueOf(LocalDate.now()));
+        if (!accountFacade.create(account)) {
+            throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
+        }
+        if (!phoneFacade.create(phones)) {
+            throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
+        }
 //            transaction.commit();
 //        } catch (IncorrectDataException e) {
 //            throw e;
@@ -83,15 +83,15 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public boolean addFriend(long firstId, long secondId) {
 //        try (Transaction transaction = transactionManager.getTransaction()) {
-            if (!friendshipDao.deleteRequest(firstId, secondId)) {
-                throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
-            }
-            if (!friendshipDao.createFriendship(firstId, secondId)) {
+        if (!friendshipDao.deleteRequest(firstId, secondId)) {
+            throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
+        }
+        if (!friendshipDao.createFriendship(firstId, secondId)) {
 //                transaction.rollback();
-                throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
-            }
+            throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
+        }
 //            transaction.commit();
-            return true;
+        return true;
 //        } catch (Exception e) {
 //            return false;
 //        }

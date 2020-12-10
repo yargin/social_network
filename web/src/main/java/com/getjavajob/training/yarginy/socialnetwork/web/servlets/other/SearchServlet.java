@@ -2,9 +2,9 @@ package com.getjavajob.training.yarginy.socialnetwork.web.servlets.other;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchableDto;
 import com.getjavajob.training.yarginy.socialnetwork.service.DataSetsService;
-import com.getjavajob.training.yarginy.socialnetwork.service.DataSetsServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.AbstractGetServlet;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +14,12 @@ import java.io.IOException;
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirectToReferer;
 
 public class SearchServlet extends AbstractGetServlet {
-    private final DataSetsService dataSetsService = new DataSetsServiceImpl();
+    private DataSetsService dataSetsService;
+
+    @Autowired
+    public void setDataSetsService(DataSetsService dataSetsService) {
+        this.dataSetsService = dataSetsService;
+    }
 
     @Override
     protected void safeDoGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

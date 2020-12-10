@@ -4,23 +4,23 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.*;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.Transaction;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneFacade;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 
+@Service
 public class AccountInfoServiceImpl implements AccountInfoService {
     private final AccountFacade accountFacade;
     private final PhoneFacade phoneFacade;
-    private final TransactionManager transactionManager;
+//    private final TransactionManager transactionManager;
 
-    public AccountInfoServiceImpl() {
-        this(new TransactionManagerImpl(), new AccountFacadeImpl(), new PhoneFacadeImpl());
-    }
 
-    public AccountInfoServiceImpl(TransactionManager transactionManager, AccountFacade accountFacade, PhoneFacade phoneFacade) {
-        this.transactionManager = transactionManager;
+    @Autowired
+    public AccountInfoServiceImpl(AccountFacade accountFacade, PhoneFacade phoneFacade) {
         this.accountFacade = accountFacade;
         this.phoneFacade = phoneFacade;
     }
@@ -42,15 +42,15 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     @Override
     public boolean update(AccountInfoDTO accountInfo, AccountInfoDTO storedAccountInfo) {
 //        try (Transaction transaction = transactionManager.getTransaction()) {
-            Account account = accountInfo.getAccount();
-            if (!accountFacade.update(account, storedAccountInfo.getAccount())) {
-                throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
-            }
-            if (!phoneFacade.update(storedAccountInfo.getPhones(), accountInfo.getPhones())) {
-                throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
-            }
+        Account account = accountInfo.getAccount();
+        if (!accountFacade.update(account, storedAccountInfo.getAccount())) {
+            throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
+        }
+        if (!phoneFacade.update(storedAccountInfo.getPhones(), accountInfo.getPhones())) {
+            throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
+        }
 //            transaction.commit();
-            return true;
+        return true;
 //        } catch (IncorrectDataException e) {
 //            throw e;
 //        } catch (Exception e) {

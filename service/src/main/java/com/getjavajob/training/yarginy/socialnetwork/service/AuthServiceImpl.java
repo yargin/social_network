@@ -7,9 +7,12 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.PasswordImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.*;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.Transaction;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PasswordFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneFacade;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -18,19 +21,15 @@ import java.util.Collection;
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory.getNullPassword;
 import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper.encrypt;
 
+@Service("authService")
 public class AuthServiceImpl implements AuthService {
-    private final TransactionManager transactionManager;
+    //    private final TransactionManager transactionManager;
     private final AccountFacade accountFacade;
     private final PasswordFacade passwordFacade;
     private final PhoneFacade phoneFacade;
 
-    public AuthServiceImpl() {
-        this(new TransactionManagerImpl(), new AccountFacadeImpl(), new PasswordFacadeImpl(), new PhoneFacadeImpl());
-    }
-
-    public AuthServiceImpl(TransactionManager transactionManager, AccountFacade accountFacade, PasswordFacade passwordFacade,
-                           PhoneFacade phoneFacade) {
-        this.transactionManager = transactionManager;
+    @Autowired
+    public AuthServiceImpl(AccountFacade accountFacade, PasswordFacade passwordFacade, PhoneFacade phoneFacade) {
         this.accountFacade = accountFacade;
         this.passwordFacade = passwordFacade;
         this.phoneFacade = phoneFacade;
@@ -44,16 +43,16 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public boolean register(Account account, Collection<Phone> phones, Password password) {
 //        try (Transaction transaction = transactionManager.getTransaction()) {
-            account.setRegistrationDate(Date.valueOf(LocalDate.now()));
-            if (!accountFacade.create(account)) {
-                throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
-            }
-            if (!phoneFacade.create(phones)) {
-                throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
-            }
-            if (!passwordFacade.create(password)) {
-                throw new IllegalStateException();
-            }
+        account.setRegistrationDate(Date.valueOf(LocalDate.now()));
+        if (!accountFacade.create(account)) {
+            throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
+        }
+        if (!phoneFacade.create(phones)) {
+            throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
+        }
+        if (!passwordFacade.create(password)) {
+            throw new IllegalStateException();
+        }
 //            transaction.commit();
 //        } catch (IncorrectDataException e) {
 //            throw e;

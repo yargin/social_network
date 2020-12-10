@@ -1,7 +1,8 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.filters.dialogaccess;
 
 import com.getjavajob.training.yarginy.socialnetwork.service.DialogService;
-import com.getjavajob.training.yarginy.socialnetwork.service.DialogServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -16,7 +17,17 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER_ID;
 
 public class DialogAccessFilter extends HttpFilter {
-    private final DialogService dialogService = new DialogServiceImpl();
+    private DialogService dialogService;
+
+    @Autowired
+    public void setDialogService(DialogService dialogService) {
+        this.dialogService = dialogService;
+    }
+
+    @Override
+    public void init() {
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, getServletContext());
+    }
 
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {

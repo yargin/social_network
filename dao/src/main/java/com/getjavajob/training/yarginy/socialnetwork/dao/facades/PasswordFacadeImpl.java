@@ -3,14 +3,15 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component("passwordDaoFacade")
 public class PasswordFacadeImpl implements PasswordFacade {
-    private Dao<Password> passwordDao;
+    private final Dao<Password> passwordDao;
 
     @Autowired
-    public void setPasswordDao(Dao<Password> passwordDao) {
+    public PasswordFacadeImpl(@Qualifier("passwordDao") Dao<Password> passwordDao) {
         this.passwordDao = passwordDao;
     }
 

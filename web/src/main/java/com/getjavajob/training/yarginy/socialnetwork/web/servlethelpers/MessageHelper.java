@@ -4,11 +4,8 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.MessageImpl;
-import com.getjavajob.training.yarginy.socialnetwork.service.messages.DialogMessageServiceImpl;
-import com.getjavajob.training.yarginy.socialnetwork.service.messages.GroupWallMessageServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
@@ -23,12 +20,15 @@ import static java.util.Objects.isNull;
 @Component
 public final class MessageHelper {
     private final MessageService accountWallMessageService;
-    private static final MessageService GROUP_WALL_MESSAGE_SERVICE = new GroupWallMessageServiceImpl();
-    private static final MessageService ACCOUNT_PRIVATE_MESSAGE_SERVICE = new DialogMessageServiceImpl();
+    private final MessageService groupWallMessageService;
+    private final MessageService accountPrivateMessageService;
 
-    @Autowired
-    public MessageHelper(@Qualifier("accountWallMessageService") MessageService accountWallMessageService) {
+    public MessageHelper(@Qualifier("accountWallMessageService") MessageService accountWallMessageService,
+                         @Qualifier("groupWallMessageService") MessageService groupWallMessageService,
+                         @Qualifier("dialogMessageService") MessageService accountPrivateMessageService) {
         this.accountWallMessageService = accountWallMessageService;
+        this.groupWallMessageService = groupWallMessageService;
+        this.accountPrivateMessageService = accountPrivateMessageService;
     }
 
     public boolean addMessage(HttpServletRequest req) throws IOException, ServletException {
@@ -46,9 +46,9 @@ public final class MessageHelper {
         if ("accountWall".equals(type)) {
             return accountWallMessageService.addMessage(message);
         } else if ("accountPrivate".equals(type)) {
-            return ACCOUNT_PRIVATE_MESSAGE_SERVICE.addMessage(message);
+            return accountPrivateMessageService.addMessage(message);
         } else if ("groupWall".equals(type)) {
-            return GROUP_WALL_MESSAGE_SERVICE.addMessage(message);
+            return groupWallMessageService.addMessage(message);
         }
         throw new IllegalArgumentException("message type not specified");
     }
@@ -78,9 +78,9 @@ public final class MessageHelper {
         if ("accountWall".equals(type)) {
             accountWallMessageService.deleteMessage(message);
         } else if ("accountPrivate".equals(type)) {
-            ACCOUNT_PRIVATE_MESSAGE_SERVICE.deleteMessage(message);
+            accountPrivateMessageService.deleteMessage(message);
         } else if ("groupWall".equals(type)) {
-            GROUP_WALL_MESSAGE_SERVICE.deleteMessage(message);
+            groupWallMessageService.deleteMessage(message);
         }
     }
 }

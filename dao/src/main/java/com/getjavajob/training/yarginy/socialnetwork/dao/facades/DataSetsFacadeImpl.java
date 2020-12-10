@@ -12,10 +12,10 @@ import java.util.Map;
 
 @Component("dataSetDaoFacade")
 public class DataSetsFacadeImpl implements DataSetsFacade {
-    private DataSelectsDao dataSelectsDao;
+    private final DataSelectsDao dataSelectsDao;
 
     @Autowired
-    public void setDataSelectsDao(DataSelectsDao dataSelectsDao) {
+    public DataSetsFacadeImpl(DataSelectsDao dataSelectsDao) {
         this.dataSelectsDao = dataSelectsDao;
     }
 

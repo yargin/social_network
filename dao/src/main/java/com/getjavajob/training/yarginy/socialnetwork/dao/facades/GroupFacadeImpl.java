@@ -2,6 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.ManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,58 +13,52 @@ import java.util.Collection;
 
 @Component("groupDaoFacade")
 public class GroupFacadeImpl implements GroupFacade {
-    private GroupFacade groupFacade;
-    private OneToManyDao<Group> accountsOwnedGroupsDao;
-    private ManyToManyDao<Account, Group> accountsGroupMembershipDao;
+    private final Dao<Group> groupDao;
+    private final OneToManyDao<Group> accountsOwnedGroupsDao;
+    private final ManyToManyDao<Account, Group> accountsGroupMembershipDao;
 
     @Autowired
-    public void setGroupFacade(GroupFacade groupFacade) {
-        this.groupFacade = groupFacade;
-    }
-
-    @Autowired
-    public void setAccountsOwnedGroupsDao(@Qualifier("accountOwnerGroupsDao") OneToManyDao<Group> accountsOwnedGroupsDao) {
+    public GroupFacadeImpl(Dao<Group> groupDao,
+                           @Qualifier("accountOwnerGroupsDao") OneToManyDao<Group> accountsOwnedGroupsDao,
+                           @Qualifier("groupMembershipDao") ManyToManyDao<Account, Group> accountsGroupMembershipDao) {
+        this.groupDao = groupDao;
         this.accountsOwnedGroupsDao = accountsOwnedGroupsDao;
-    }
-
-    @Autowired
-    public void setAccountsGroupMembershipDao(@Qualifier("groupMembershipDao") ManyToManyDao<Account, Group> accountsGroupMembershipDao) {
         this.accountsGroupMembershipDao = accountsGroupMembershipDao;
     }
 
     @Override
     public Group select(long id) {
-        return groupFacade.select(id);
+        return groupDao.select(id);
     }
 
     @Override
     public Group select(Group group) {
-        return groupFacade.select(group);
+        return groupDao.select(group);
     }
 
     @Override
     public Group getNullEntity() {
-        return groupFacade.getNullEntity();
+        return groupDao.getNullEntity();
     }
 
     @Override
     public boolean create(Group group) {
-        return groupFacade.create(group);
+        return groupDao.create(group);
     }
 
     @Override
     public boolean update(Group group, Group storedGroup) {
-        return groupFacade.update(group, storedGroup);
+        return groupDao.update(group, storedGroup);
     }
 
     @Override
     public boolean delete(Group group) {
-        return groupFacade.delete(group);
+        return groupDao.delete(group);
     }
 
     @Override
     public Collection<Group> selectAll() {
-        return groupFacade.selectAll();
+        return groupDao.selectAll();
     }
 
     @Override
@@ -78,7 +73,7 @@ public class GroupFacadeImpl implements GroupFacade {
 
     @Override
     public Group getNullGroup() {
-        return groupFacade.getNullEntity();
+        return groupDao.getNullEntity();
     }
 
     @Override

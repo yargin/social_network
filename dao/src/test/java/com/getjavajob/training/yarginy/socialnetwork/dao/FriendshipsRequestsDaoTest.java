@@ -3,12 +3,11 @@ package com.getjavajob.training.yarginy.socialnetwork.dao;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacadeImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsFacadeImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,8 +19,10 @@ public class FriendshipsRequestsDaoTest {
         TestDataSourceInitializer.initDataSource();
     }
 
-    private final FriendshipsFacade friendshipsFacade = new FriendshipsFacadeImpl();
-    private final AccountFacade accountFacade = new AccountFacadeImpl();
+    @Autowired
+    private FriendshipsFacade friendshipsFacade;
+    @Autowired
+    private AccountFacade accountFacade;
     private Account firstAccount = new AccountImpl("firstTest", "test", "first@test.test");
     private Account secondAccount = new AccountImpl("secondTest", "test", "second@test.test");
 

@@ -3,12 +3,12 @@ package com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.v
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.service.DialogService;
-import com.getjavajob.training.yarginy.socialnetwork.service.DialogServiceImpl;
-import com.getjavajob.training.yarginy.socialnetwork.service.messages.DialogMessageServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.AbstractGetServlet;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -21,8 +21,18 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.R
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.TAB;
 
 public class DialogMessagesServlet extends AbstractGetServlet {
-    private final DialogService dialogService = new DialogServiceImpl();
-    private final MessageService messageService = new DialogMessageServiceImpl();
+    private DialogService dialogService;
+    private MessageService messageService;
+
+    @Autowired
+    public void setDialogService(DialogService dialogService) {
+        this.dialogService = dialogService;
+    }
+
+    @Autowired
+    public void setMessageService(@Qualifier("dialogMessageService") MessageService messageService) {
+        this.messageService = messageService;
+    }
 
     @Override
     protected void safeDoGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

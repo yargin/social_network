@@ -11,10 +11,10 @@ import java.util.Collection;
 
 @Component("groupsModeratorsDaoFacade")
 public class GroupsModeratorsFacadeImpl implements GroupsModeratorsFacade {
-    private ManyToManyDao<Account, Group> groupModerators;
+    private final ManyToManyDao<Account, Group> groupModerators;
 
     @Autowired
-    public void setGroupModerators(@Qualifier("groupModeratorsDao") ManyToManyDao<Account, Group> groupModerators) {
+    public GroupsModeratorsFacadeImpl(@Qualifier("groupModeratorsDao") ManyToManyDao<Account, Group> groupModerators) {
         this.groupModerators = groupModerators;
     }
 

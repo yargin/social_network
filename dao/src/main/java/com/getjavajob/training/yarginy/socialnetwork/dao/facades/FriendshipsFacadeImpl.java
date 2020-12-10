@@ -11,17 +11,13 @@ import java.util.Collection;
 
 @Component("friendshipsDaoFacade")
 public class FriendshipsFacadeImpl implements FriendshipsFacade {
-    private SelfManyToManyDao<Account> friendshipDao;
-    private ManyToManyDao<Account, Account> friendshipRequestsDao;
+    private final SelfManyToManyDao<Account> friendshipDao;
+    private final ManyToManyDao<Account, Account> friendshipRequestsDao;
 
     @Autowired
-    public void setFriendshipDao(SelfManyToManyDao<Account> friendshipDao) {
+    public FriendshipsFacadeImpl(SelfManyToManyDao<Account> friendshipDao,
+                                 @Qualifier("friendshipRequestsDao") ManyToManyDao<Account, Account> friendshipRequestsDao) {
         this.friendshipDao = friendshipDao;
-    }
-
-    @Autowired
-    public void setFriendshipRequestsDao(@Qualifier("friendshipRequestsDao")
-                                                     ManyToManyDao<Account, Account> friendshipRequestsDao) {
         this.friendshipRequestsDao = friendshipRequestsDao;
     }
 

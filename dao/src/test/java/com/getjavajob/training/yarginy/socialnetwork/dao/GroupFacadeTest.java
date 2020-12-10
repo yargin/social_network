@@ -6,12 +6,11 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacadeImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupFacadeImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.Assert.*;
 
@@ -20,8 +19,10 @@ public class GroupFacadeTest {
         TestDataSourceInitializer.initDataSource();
     }
 
-    private final GroupFacade groupFacade = new GroupFacadeImpl();
-    private final AccountFacade accountFacade = new AccountFacadeImpl();
+    @Autowired
+    private GroupFacade groupFacade;
+    @Autowired
+    private AccountFacade accountFacade;
     private final Group GROUP = new GroupImpl();
     private Account account = new AccountImpl("test", "test", "test@test.com");
 

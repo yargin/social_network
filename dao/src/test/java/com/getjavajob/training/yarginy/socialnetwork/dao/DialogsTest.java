@@ -5,12 +5,11 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.DialogImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacadeImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogFacadeImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collection;
 
@@ -21,8 +20,10 @@ public class DialogsTest {
         TestDataSourceInitializer.initDataSource();
     }
 
-    private final DialogFacade dialogFacade = new DialogFacadeImpl();
-    private final AccountFacade accountFacade = new AccountFacadeImpl();
+    @Autowired
+    private DialogFacade dialogFacade;
+    @Autowired
+    private AccountFacade accountFacade;
     private Account firstAccount = new AccountImpl("test1", "test1", "test1@test.test");
     private Account secondAccount = new AccountImpl("test2", "test2", "test2@test.test");
     private Dialog dialog = new DialogImpl(firstAccount, secondAccount);

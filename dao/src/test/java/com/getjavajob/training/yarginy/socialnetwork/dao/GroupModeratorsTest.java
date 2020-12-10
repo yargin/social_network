@@ -4,10 +4,13 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.*;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsModeratorsFacade;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collections;
 
@@ -21,9 +24,12 @@ public class GroupModeratorsTest {
         TestDataSourceInitializer.initDataSource();
     }
 
-    private final GroupsModeratorsFacade groupsModeratorsFacade = new GroupsModeratorsFacadeImpl();
-    private final AccountFacade accountFacade = new AccountFacadeImpl();
-    private final GroupFacade groupFacade = new GroupFacadeImpl();
+    @Autowired
+    private GroupsModeratorsFacade groupsModeratorsFacade;
+    @Autowired
+    private GroupFacade groupFacade;
+    @Autowired
+    private AccountFacade accountFacade;
     private Account owner = new AccountImpl("firstTest", "test", "first@test.test");
     private Account moderator = new AccountImpl("secondTEst", "test", "second@test.test");
     private Group group = new GroupImpl("testGroup", owner);

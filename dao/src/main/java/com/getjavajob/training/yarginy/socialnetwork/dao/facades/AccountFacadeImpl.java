@@ -15,34 +15,21 @@ import java.util.Collection;
 
 @Component("accountDaoFacade")
 public class AccountFacadeImpl implements AccountFacade {
-    private Dao<Account> accountDao;
-    private OneToManyDao<Group> accountGroupsDao;
-    private ManyToManyDao<Account, Group> accountsInGroupsDao;
-    private OneToManyDao<Phone> accountPhonesDao;
-    private SelfManyToManyDao<Account> accountFriendsDao;
+    private final Dao<Account> accountDao;
+    private final OneToManyDao<Group> accountGroupsDao;
+    private final ManyToManyDao<Account, Group> accountsInGroupsDao;
+    private final OneToManyDao<Phone> accountPhonesDao;
+    private final SelfManyToManyDao<Account> accountFriendsDao;
 
     @Autowired
-    public void setAccountDao(Dao<Account> accountDao) {
+    public AccountFacadeImpl(Dao<Account> accountDao, OneToManyDao<Group> accountGroupsDao,
+                             @Qualifier("groupMembershipDao") ManyToManyDao<Account, Group> accountsInGroupsDao,
+                             OneToManyDao<Phone> accountPhonesDao,
+                             SelfManyToManyDao<Account> accountFriendsDao) {
         this.accountDao = accountDao;
-    }
-
-    @Autowired
-    public void setAccountGroupsDao(@Qualifier("accountOwnerGroupsDao") OneToManyDao<Group> accountGroupsDao) {
         this.accountGroupsDao = accountGroupsDao;
-    }
-
-    @Autowired
-    public void setAccountsInGroupsDao(@Qualifier("groupMembershipDao") ManyToManyDao<Account, Group> accountsInGroupsDao) {
         this.accountsInGroupsDao = accountsInGroupsDao;
-    }
-
-    @Autowired
-    public void setAccountPhonesDao(@Qualifier("accountPhonesDao") OneToManyDao<Phone> accountPhonesDao) {
         this.accountPhonesDao = accountPhonesDao;
-    }
-
-    @Autowired
-    public void setAccountFriendsDao(SelfManyToManyDao<Account> accountFriendsDao) {
         this.accountFriendsDao = accountFriendsDao;
     }
 
