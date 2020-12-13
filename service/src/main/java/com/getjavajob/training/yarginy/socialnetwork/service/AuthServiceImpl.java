@@ -7,9 +7,9 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.PasswordImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PasswordFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PasswordDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,15 +24,15 @@ import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHan
 @Service("authService")
 public class AuthServiceImpl implements AuthService {
     //    private final TransactionManager transactionManager;
-    private final AccountFacade accountFacade;
-    private final PasswordFacade passwordFacade;
-    private final PhoneFacade phoneFacade;
+    private final AccountDaoFacade accountDaoFacade;
+    private final PasswordDaoFacade passwordDaoFacade;
+    private final PhoneDaoFacade phoneDaoFacade;
 
     @Autowired
-    public AuthServiceImpl(AccountFacade accountFacade, PasswordFacade passwordFacade, PhoneFacade phoneFacade) {
-        this.accountFacade = accountFacade;
-        this.passwordFacade = passwordFacade;
-        this.phoneFacade = phoneFacade;
+    public AuthServiceImpl(AccountDaoFacade accountDaoFacade, PasswordDaoFacade passwordDaoFacade, PhoneDaoFacade phoneDaoFacade) {
+        this.accountDaoFacade = accountDaoFacade;
+        this.passwordDaoFacade = passwordDaoFacade;
+        this.phoneDaoFacade = phoneDaoFacade;
     }
 
     @Override
@@ -44,13 +44,13 @@ public class AuthServiceImpl implements AuthService {
     public boolean register(Account account, Collection<Phone> phones, Password password) {
 //        try (Transaction transaction = transactionManager.getTransaction()) {
         account.setRegistrationDate(Date.valueOf(LocalDate.now()));
-        if (!accountFacade.create(account)) {
+        if (!accountDaoFacade.create(account)) {
             throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
         }
-        if (!phoneFacade.create(phones)) {
+        if (!phoneDaoFacade.create(phones)) {
             throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
         }
-        if (!passwordFacade.create(password)) {
+        if (!passwordDaoFacade.create(password)) {
             throw new IllegalStateException();
         }
 //            transaction.commit();
@@ -69,7 +69,7 @@ public class AuthServiceImpl implements AuthService {
         account.setEmail(email);
         passwordObject.setAccount(account);
         passwordObject.setPassword(password);
-        passwordObject = passwordFacade.select(passwordObject);
+        passwordObject = passwordDaoFacade.select(passwordObject);
         if (passwordObject.equals(getNullPassword())) {
             throw new IncorrectDataException(IncorrectData.WRONG_EMAIL);
         }

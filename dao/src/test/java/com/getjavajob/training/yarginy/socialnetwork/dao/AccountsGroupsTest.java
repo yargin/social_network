@@ -4,12 +4,15 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacade;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Collection;
 import java.util.List;
@@ -17,15 +20,13 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:daoSpringConfig.xml")
 public class AccountsGroupsTest {
-    static {
-        TestDataSourceInitializer.initDataSource();
-    }
-
     @Autowired
-    public static AccountFacade accountFacade;
+    public AccountDaoFacade accountDaoFacade;
     @Autowired
-    public GroupFacade groupFacade;
+    public GroupDaoFacade groupDaoFacade;
     private Account account;
     private Group firstGroup;
     private Group secondGroup;
@@ -33,29 +34,29 @@ public class AccountsGroupsTest {
     @Before
     public void initTestValues() {
         account = new AccountImpl("test account", "test surname", "test@test.com");
-        accountFacade.create(account);
-        account = accountFacade.select(account);
+        accountDaoFacade.create(account);
+        account = accountDaoFacade.select(account);
 
         firstGroup = new GroupImpl("first test group", account);
-        groupFacade.create(firstGroup);
-        firstGroup = groupFacade.select(firstGroup);
+        groupDaoFacade.create(firstGroup);
+        firstGroup = groupDaoFacade.select(firstGroup);
 
         secondGroup = new GroupImpl("second test group", account);
-        groupFacade.create(secondGroup);
-        secondGroup = groupFacade.select(secondGroup);
+        groupDaoFacade.create(secondGroup);
+        secondGroup = groupDaoFacade.select(secondGroup);
     }
 
     @After
     public void deleteTestValues() {
-        accountFacade.delete(account);
-        groupFacade.delete(firstGroup);
-        groupFacade.delete(secondGroup);
+        accountDaoFacade.delete(account);
+        groupDaoFacade.delete(firstGroup);
+        groupDaoFacade.delete(secondGroup);
     }
 
     @Test
     public void testSelectGroups() {
         List<Group> expectedGroups = asList(firstGroup, secondGroup);
-        Collection<Group> actualGroups = accountFacade.getOwnedGroups(account.getId());
+        Collection<Group> actualGroups = accountDaoFacade.getOwnedGroups(account.getId());
         assertEquals(expectedGroups, actualGroups);
     }
 }

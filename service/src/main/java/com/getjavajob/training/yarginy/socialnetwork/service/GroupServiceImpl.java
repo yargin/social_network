@@ -4,10 +4,10 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DataSetsFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsMembersFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsModeratorsFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DataSetsDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsMembersDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsModeratorsDaoFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,28 +19,28 @@ import java.util.Map;
 @Service
 public class GroupServiceImpl implements GroupService {
     //    private final TransactionManager transactionManager = new TransactionManagerImpl();
-    private final GroupFacade groupFacade;
-    private final GroupsMembersFacade membersDao;
-    private final GroupsModeratorsFacade moderatorsDao;
-    private final DataSetsFacade dataSetsFacade;
+    private final GroupDaoFacade groupDaoFacade;
+    private final GroupsMembersDaoFacade membersDao;
+    private final GroupsModeratorsDaoFacade moderatorsDao;
+    private final DataSetsDaoFacade dataSetsDaoFacade;
 
     @Autowired
-    public GroupServiceImpl(GroupFacade groupFacade, GroupsMembersFacade membersDao,
-                            GroupsModeratorsFacade moderatorsDao, DataSetsFacade dataSetsFacade) {
-        this.groupFacade = groupFacade;
+    public GroupServiceImpl(GroupDaoFacade groupDaoFacade, GroupsMembersDaoFacade membersDao,
+                            GroupsModeratorsDaoFacade moderatorsDao, DataSetsDaoFacade dataSetsDaoFacade) {
+        this.groupDaoFacade = groupDaoFacade;
         this.membersDao = membersDao;
         this.moderatorsDao = moderatorsDao;
-        this.dataSetsFacade = dataSetsFacade;
+        this.dataSetsDaoFacade = dataSetsDaoFacade;
     }
 
     @Override
     public Group get(Group group) {
-        return groupFacade.select(group);
+        return groupDaoFacade.select(group);
     }
 
     @Override
     public Group get(long id) {
-        return groupFacade.select(id);
+        return groupDaoFacade.select(id);
     }
 
     @Override
@@ -50,12 +50,12 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public Collection<Group> getAllGroups() {
-        return groupFacade.selectAll();
+        return groupDaoFacade.selectAll();
     }
 
     @Override
     public boolean isOwner(long accountId, long groupId) {
-        return groupFacade.isOwner(groupId, accountId);
+        return groupDaoFacade.isOwner(groupId, accountId);
     }
 
     @Override
@@ -80,12 +80,12 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public boolean leaveGroup(long accountId, long groupId) {
-        if (groupFacade.isOwner(accountId, groupId)) {
+        if (groupDaoFacade.isOwner(accountId, groupId)) {
             return false;
         }
 //        try (Transaction transaction = transactionManager.getTransaction()) {
         moderatorsDao.deleteGroupModerator(accountId, groupId);
-        if (!groupFacade.removeMember(accountId, groupId)) {
+        if (!groupDaoFacade.removeMember(accountId, groupId)) {
             return false;
         }
         return true;
@@ -140,11 +140,11 @@ public class GroupServiceImpl implements GroupService {
 
     private boolean createAndJoinOwner(Group group) {
         try {
-            if (!groupFacade.create(group)) {
+            if (!groupDaoFacade.create(group)) {
                 throw new IncorrectDataException(IncorrectData.GROUP_DUPLICATE);
             }
-            Group createdGroup = groupFacade.select(group);
-            if (!groupFacade.addMember(createdGroup.getOwner().getId(), createdGroup.getId()) ||
+            Group createdGroup = groupDaoFacade.select(group);
+            if (!groupDaoFacade.addMember(createdGroup.getOwner().getId(), createdGroup.getId()) ||
                     !moderatorsDao.addGroupModerator(createdGroup.getOwner().getId(), createdGroup.getId())) {
                 throw new IllegalArgumentException();
             }
@@ -156,12 +156,12 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public boolean removeGroup(Group group) {
-        return groupFacade.delete(group);
+        return groupDaoFacade.delete(group);
     }
 
     @Override
     public boolean updateGroup(Group group, Group storedGroup) {
-        if (!groupFacade.update(group, storedGroup)) {
+        if (!groupDaoFacade.update(group, storedGroup)) {
             throw new IncorrectDataException(IncorrectData.GROUP_DUPLICATE);
         }
         return true;
@@ -179,11 +179,11 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public Map<Account, Boolean> getGroupMembersModerators(long groupId) {
-        return dataSetsFacade.getGroupMembersAreModerators(groupId);
+        return dataSetsDaoFacade.getGroupMembersAreModerators(groupId);
     }
 
     @Override
     public Map<Group, Boolean> getAllUnjoinedGroupsAreRequested(long accountId) {
-        return dataSetsFacade.getAllUnjoinedGroupsAreRequested(accountId);
+        return dataSetsDaoFacade.getAllUnjoinedGroupsAreRequested(accountId);
     }
 }

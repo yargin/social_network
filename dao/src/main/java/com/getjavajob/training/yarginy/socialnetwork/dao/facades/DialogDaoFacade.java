@@ -5,7 +5,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog
 import java.io.Serializable;
 import java.util.Collection;
 
-public interface DialogFacade extends Serializable {
+public interface DialogDaoFacade extends Serializable {
     Dialog select(long id);
 
     Dialog select(Dialog dialog);

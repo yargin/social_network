@@ -20,14 +20,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class AccountServiceTest {
-    private final AccountFacade accountFacade = mock(AccountFacade.class);
-    private final FriendshipsFacade friendsDao = mock(FriendshipsFacade.class);
-    private final PhoneFacade phoneFacade = mock(PhoneFacade.class);
-    private final DialogFacade dialogFacade = mock(DialogFacade.class);
+    private final AccountDaoFacade accountDaoFacade = mock(AccountDaoFacade.class);
+    private final FriendshipsDaoFacade friendsDao = mock(FriendshipsDaoFacade.class);
+    private final PhoneDaoFacade phoneDaoFacade = mock(PhoneDaoFacade.class);
+    private final DialogDaoFacade dialogDaoFacade = mock(DialogDaoFacade.class);
     private final Transaction transaction = mock(Transaction.class);
     private final TransactionManager transactionManager = mock(TransactionManager.class);
-    private final AccountService accountService = new AccountServiceImpl(accountFacade, phoneFacade, friendsDao,
-            dialogFacade);
+    private final AccountService accountService = new AccountServiceImpl(accountDaoFacade, phoneDaoFacade, friendsDao,
+            dialogDaoFacade);
     private Account account;
     private Account storedAccount;
     private Collection<Phone> phones;
@@ -42,13 +42,13 @@ public class AccountServiceTest {
     @Test
     public void testGetAccount() {
 //        when(transactionManager.getTransaction()).thenReturn(transaction);
-        when(accountFacade.select(1)).thenReturn(account);
+        when(accountDaoFacade.select(1)).thenReturn(account);
         Account actualAccount = accountService.get(1);
         assertEquals(account, actualAccount);
-        when(accountFacade.select(account)).thenReturn(account);
+        when(accountDaoFacade.select(account)).thenReturn(account);
         actualAccount = accountService.get(account);
         assertEquals(account, actualAccount);
-        when(accountFacade.select(1)).thenReturn(account);
+        when(accountDaoFacade.select(1)).thenReturn(account);
         actualAccount = accountService.get(1);
         assertEquals(account, actualAccount);
     }
@@ -56,39 +56,39 @@ public class AccountServiceTest {
     @Test
     public void testCreateAccount() {
 //        when(transactionManager.getTransaction()).thenReturn(transaction);
-        when(accountFacade.create(account)).thenReturn(true);
-        when(phoneFacade.create(phones)).thenReturn(true);
+        when(accountDaoFacade.create(account)).thenReturn(true);
+        when(phoneDaoFacade.create(phones)).thenReturn(true);
         assertTrue(accountService.createAccount(account, phones));
     }
 
     @Test(expected = IncorrectDataException.class)
     public void testCreateExistingAccount() {
 //        when(transactionManager.getTransaction()).thenReturn(transaction);
-        when(accountFacade.create(account)).thenReturn(false);
+        when(accountDaoFacade.create(account)).thenReturn(false);
         accountService.createAccount(account, phones);
     }
 
     @Test(expected = IncorrectDataException.class)
     public void testCreateExistingPhone() {
 //        when(transactionManager.getTransaction()).thenReturn(transaction);
-        when(phoneFacade.create(phones)).thenReturn(false);
+        when(phoneDaoFacade.create(phones)).thenReturn(false);
         accountService.createAccount(account, phones);
     }
 
     @Test
     public void testUpdateAccount() {
 //        when(transactionManager.getTransaction()).thenReturn(transaction);
-        when(accountFacade.update(account, storedAccount)).thenReturn(true);
+        when(accountDaoFacade.update(account, storedAccount)).thenReturn(true);
         assertTrue(accountService.updateAccount(account, storedAccount));
-        when(accountFacade.update(account, storedAccount)).thenReturn(false);
+        when(accountDaoFacade.update(account, storedAccount)).thenReturn(false);
         assertFalse(accountService.updateAccount(account, storedAccount));
     }
 
     @Test
     public void testDeleteAccount() {
-        when(accountFacade.delete(account)).thenReturn(true);
+        when(accountDaoFacade.delete(account)).thenReturn(true);
         assertTrue(accountService.deleteAccount(account));
-        when(accountFacade.delete(account)).thenReturn(false);
+        when(accountDaoFacade.delete(account)).thenReturn(false);
         assertFalse(accountService.deleteAccount(account));
     }
 
@@ -117,16 +117,16 @@ public class AccountServiceTest {
     public void testAddPhone() {
         Phone phone = new PhoneImpl();
         phone.setNumber("111-111");
-        when(phoneFacade.create(phone)).thenReturn(true);
-        assertTrue(phoneFacade.create(phone));
+        when(phoneDaoFacade.create(phone)).thenReturn(true);
+        assertTrue(phoneDaoFacade.create(phone));
     }
 
     @Test
     public void testRemovePhone() {
         Phone phone = new PhoneImpl();
         phone.setNumber("111-111");
-        when(phoneFacade.create(phone)).thenReturn(true);
-        assertTrue(phoneFacade.create(phone));
+        when(phoneDaoFacade.create(phone)).thenReturn(true);
+        assertTrue(phoneDaoFacade.create(phone));
     }
 
     @Test
@@ -136,7 +136,7 @@ public class AccountServiceTest {
         Phone secondPhone = new PhoneImpl();
         secondPhone.setNumber("33111");
         Collection<Phone> phones = asList(firstPhone, secondPhone);
-        when(phoneFacade.selectPhonesByOwner(account.getId())).thenReturn(phones);
+        when(phoneDaoFacade.selectPhonesByOwner(account.getId())).thenReturn(phones);
         Collection<Phone> actualPhones = accountService.getPhones(account.getId());
         assertEquals(phones, actualPhones);
     }

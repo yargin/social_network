@@ -11,11 +11,11 @@ import java.util.Map;
 
 
 @Component("dataSetDaoFacade")
-public class DataSetsFacadeImpl implements DataSetsFacade {
+public class DataSetsDaoFacadeImpl implements DataSetsDaoFacade {
     private final DataSelectsDao dataSelectsDao;
 
     @Autowired
-    public DataSetsFacadeImpl(DataSelectsDao dataSelectsDao) {
+    public DataSetsDaoFacadeImpl(DataSelectsDao dataSelectsDao) {
         this.dataSelectsDao = dataSelectsDao;
     }
 

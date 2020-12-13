@@ -5,7 +5,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import java.io.Serializable;
 import java.util.Collection;
 
-public interface PhoneFacade extends Serializable {
+public interface PhoneDaoFacade extends Serializable {
     Phone select(long id);
 
     Phone select(Phone phone);

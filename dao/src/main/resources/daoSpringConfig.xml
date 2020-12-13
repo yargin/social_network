@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:jee="http://www.springframework.org/schema/jee"
        xmlns="http://www.springframework.org/schema/beans"
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <jee:jndi-lookup id="idTestDataSource"
-                     jndi-name="jdbc/Local-MySql"
-                     expected-type="javax.sql.DataSource"/>
+    <!--    <jee:jndi-lookup id="dataSource"-->
+    <!--                     jndi-name="jdbc/Local-MySql"-->
+    <!--                     expected-type="javax.sql.DataSource"/>-->
 
-    <bean id = "dataSource" class = "org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name = "driverClassName" value = "com.mysql.jdbc.Driver"/>
+    <!--    <bean id="dataSource" class="org.springframework.jdbc.core.JdbcTemplate">-->
+    <!--        <constructor-arg ref="dataSource"/>-->
+    <!--    </bean>-->
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
         <property name="url"
                   value="jdbc:mysql://localhost:3306/social_network?serverTimezone=UTC&amp;useLegacyDatetimeCode=false"/>
-        <property name = "username" value = "root"/>
-        <property name = "password" value = "12131415a"/>
-<!--        <property name = "useLegacyDatetimeCode" value="false"/>-->
-<!--        <property name = "serverTimezone" value="UTC"/>-->
+        <property name="username" value="root"/>
+        <property name="password" value="12131415a"/>
+        <!--        <property name = "useLegacyDatetimeCode" value="false"/>-->
+        <!--        <property name = "serverTimezone" value="UTC"/>-->
     </bean>
 
-    <!-- bean definitions here -->
     <context:component-scan base-package="com.getjavajob.training.yarginy.socialnetwork.dao"/>
-        <bean id="groupMembershipRequestsDml"
-              class="com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.dmls.GroupsMembershipsRequestsDml"/>
 </beans>

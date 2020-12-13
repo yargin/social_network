@@ -4,73 +4,78 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.PasswordImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PasswordFacade;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PasswordDaoFacade;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.junit.Assert.*;
 
-public class PasswordFacadeTest {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:daoSpringConfig.xml")
+public class PasswordDaoFacadeTest {
     private static final Account ACCOUNT = new AccountImpl();
     private static final Password PASSWORD = new PasswordImpl();
     @Autowired
-    private static AccountFacade accountFacade;
+    private AccountDaoFacade accountDaoFacade;
     @Autowired
-    private PasswordFacade passwordFacade;
+    private PasswordDaoFacade passwordDaoFacade;
 
-    @BeforeClass
-    public static void initTestValues() {
+    @Before
+    public void initTestValues() {
         ACCOUNT.setEmail("password@test.com");
         ACCOUNT.setName("testAccount");
         ACCOUNT.setSurname("testSurname");
-        accountFacade.delete(ACCOUNT);
-        assert accountFacade.create(ACCOUNT);
+        accountDaoFacade.delete(ACCOUNT);
+        assert accountDaoFacade.create(ACCOUNT);
         PASSWORD.setAccount(ACCOUNT);
         PASSWORD.setPassword("qwe123rty");
     }
 
-    @AfterClass
-    public static void deleteTestValues() {
-        assert accountFacade.delete(ACCOUNT);
+    @After
+    public void deleteTestValues() {
+        assert accountDaoFacade.delete(ACCOUNT);
     }
 
     @Test
     public void testCreate() {
-        assertTrue(passwordFacade.create(PASSWORD));
+        assertTrue(passwordDaoFacade.create(PASSWORD));
     }
 
     @Test
     public void testCreateExisting() {
-        accountFacade.create(ACCOUNT);
-        passwordFacade.create(PASSWORD);
-        assertFalse(passwordFacade.create(PASSWORD));
+        accountDaoFacade.create(ACCOUNT);
+        passwordDaoFacade.create(PASSWORD);
+        assertFalse(passwordDaoFacade.create(PASSWORD));
     }
 
     @Test
     public void testUpdate() {
-        accountFacade.create(ACCOUNT);
-        passwordFacade.create(PASSWORD);
+        accountDaoFacade.create(ACCOUNT);
+        passwordDaoFacade.create(PASSWORD);
         PASSWORD.setPassword("updatedPassword1");
         //mistake because select by both
-        assertTrue(passwordFacade.update(PASSWORD, passwordFacade.select(PASSWORD)));
+        assertTrue(passwordDaoFacade.update(PASSWORD, passwordDaoFacade.select(PASSWORD)));
         PASSWORD.setPassword("qwe123rty");
     }
 
     @Test
     public void testUpdateNonExisting() {
         PASSWORD.setAccount(new AccountImpl("petya", "fake@email.com"));
-        assertFalse(passwordFacade.update(PASSWORD, passwordFacade.select(PASSWORD)));
+        assertFalse(passwordDaoFacade.update(PASSWORD, passwordDaoFacade.select(PASSWORD)));
         PASSWORD.setAccount(ACCOUNT);
     }
 
     @Test
     public void testSelect() {
-        accountFacade.create(ACCOUNT);
-        passwordFacade.create(PASSWORD);
-        assertEquals(PASSWORD, passwordFacade.select(PASSWORD));
+        accountDaoFacade.create(ACCOUNT);
+        passwordDaoFacade.create(PASSWORD);
+        assertEquals(PASSWORD, passwordDaoFacade.select(PASSWORD));
     }
 
     @Test
@@ -78,6 +83,6 @@ public class PasswordFacadeTest {
         Password nonExistingPassword = new PasswordImpl();
         nonExistingPassword.setAccount(new AccountImpl("Petr", "nonexisting@email.com"));
         nonExistingPassword.setPassword("nonExisting1");
-        assertEquals(passwordFacade.getNullPassword(), passwordFacade.select(nonExistingPassword));
+        assertEquals(passwordDaoFacade.getNullPassword(), passwordDaoFacade.select(nonExistingPassword));
     }
 }

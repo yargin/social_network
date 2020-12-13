@@ -4,12 +4,15 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,23 +20,21 @@ import java.util.Collection;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class BatchPhoneFacadeTest {
-    static {
-        TestDataSourceInitializer.initDataSource();
-    }
-
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:daoSpringConfig.xml")
+public class BatchPhoneDaoFacadeTest {
     @Autowired
-    private PhoneFacade phoneFacade;
+    private PhoneDaoFacade phoneDaoFacade;
     @Autowired
-    private AccountFacade accountFacade;
+    private AccountDaoFacade accountDaoFacade;
     private Collection<Phone> testPhones = new ArrayList<>();
     private Account testAccount = new AccountImpl("test", "test@test.test");
 
     @Before
     public void initAccountAndPhones() {
         testAccount.setSurname("tester");
-        accountFacade.create(testAccount);
-        testAccount = accountFacade.select(testAccount);
+        accountDaoFacade.create(testAccount);
+        testAccount = accountDaoFacade.select(testAccount);
         testPhones.add(new PhoneImpl("111-111", testAccount));
         testPhones.add(new PhoneImpl("222-222", testAccount));
         testPhones.add(new PhoneImpl("333-333", testAccount));
@@ -44,22 +45,22 @@ public class BatchPhoneFacadeTest {
 
     @After
     public void deleteAccountAndPhones() {
-        testPhones = phoneFacade.selectPhonesByOwner(testAccount.getId());
-        phoneFacade.delete(testPhones);
-        accountFacade.delete(testAccount);
+        testPhones = phoneDaoFacade.selectPhonesByOwner(testAccount.getId());
+        phoneDaoFacade.delete(testPhones);
+        accountDaoFacade.delete(testAccount);
     }
 
     @Test
     public void testDeleteManyPhonesAndOneNonExisting() {
-        phoneFacade.create(testPhones);
-        testPhones = phoneFacade.selectPhonesByOwner(testAccount.getId());
+        phoneDaoFacade.create(testPhones);
+        testPhones = phoneDaoFacade.selectPhonesByOwner(testAccount.getId());
         testPhones.add(new PhoneImpl("777-777", testAccount));
-        assertTrue(phoneFacade.delete(testPhones));
+        assertTrue(phoneDaoFacade.delete(testPhones));
     }
 
     @Test
     public void testCreateManyPhonesAndOneExisting() {
-        phoneFacade.create(testPhones.iterator().next());
-        assertFalse(phoneFacade.create(testPhones));
+        phoneDaoFacade.create(testPhones.iterator().next());
+        assertFalse(phoneDaoFacade.create(testPhones));
     }
 }

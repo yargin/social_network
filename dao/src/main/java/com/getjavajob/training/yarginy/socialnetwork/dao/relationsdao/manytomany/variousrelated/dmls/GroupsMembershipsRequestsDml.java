@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.GroupsMembershipsRequestsTable.*;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuilder.SqlQueryBuilder.buildQuery;
 
+@Component("groupMembershipRequestsDml")
 public class GroupsMembershipsRequestsDml extends ManyToManyDml<Account, Group> {
     private static final String SELECT_MEMBERS = buildQuery().selectJoin(AccountsTable.TABLE, TABLE, AccountsTable.ID,
             ACCOUNT_ID).where(GROUP_ID).build();

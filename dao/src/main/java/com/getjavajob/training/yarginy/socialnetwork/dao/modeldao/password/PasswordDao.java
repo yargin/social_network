@@ -39,7 +39,6 @@ public class PasswordDao extends DaoImpl<Password> {
             if (resultSet.next()) {
                 throw new IllegalStateException("statement returned more then one row");
             }
-            connection.commit();
             return true;
         } catch (SQLException e) {
             throw new IllegalStateException(e);

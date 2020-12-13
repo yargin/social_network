@@ -10,11 +10,11 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 
 @Component("groupsModeratorsDaoFacade")
-public class GroupsModeratorsFacadeImpl implements GroupsModeratorsFacade {
+public class GroupsModeratorsDaoFacadeImpl implements GroupsModeratorsDaoFacade {
     private final ManyToManyDao<Account, Group> groupModerators;
 
     @Autowired
-    public GroupsModeratorsFacadeImpl(@Qualifier("groupModeratorsDao") ManyToManyDao<Account, Group> groupModerators) {
+    public GroupsModeratorsDaoFacadeImpl(@Qualifier("groupModeratorsDao") ManyToManyDao<Account, Group> groupModerators) {
         this.groupModerators = groupModerators;
     }
 

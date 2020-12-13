@@ -7,11 +7,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component("passwordDaoFacade")
-public class PasswordFacadeImpl implements PasswordFacade {
+public class PasswordDaoFacadeImpl implements PasswordDaoFacade {
     private final Dao<Password> passwordDao;
 
     @Autowired
-    public PasswordFacadeImpl(@Qualifier("passwordDao") Dao<Password> passwordDao) {
+    public PasswordDaoFacadeImpl(@Qualifier("passwordDao") Dao<Password> passwordDao) {
         this.passwordDao = passwordDao;
     }
 

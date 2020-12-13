@@ -5,51 +5,52 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacade;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.junit.Assert.*;
 
-public class GroupFacadeTest {
-    static {
-        TestDataSourceInitializer.initDataSource();
-    }
-
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:daoSpringConfig.xml")
+public class GroupDaoFacadeTest {
     @Autowired
-    private GroupFacade groupFacade;
+    private GroupDaoFacade groupDaoFacade;
     @Autowired
-    private AccountFacade accountFacade;
+    private AccountDaoFacade accountDaoFacade;
     private final Group GROUP = new GroupImpl();
     private Account account = new AccountImpl("test", "test", "test@test.com");
 
     @Before
     public void testValuesInit() {
-        accountFacade.create(account);
-        account = accountFacade.select(account);
+        accountDaoFacade.create(account);
+        account = accountDaoFacade.select(account);
         GROUP.setOwner(account);
         GROUP.setName("testGroup");
     }
 
     @After
     public void testValuesDelete() {
-        accountFacade.delete(account);
-        groupFacade.delete(GROUP);
+        accountDaoFacade.delete(account);
+        groupDaoFacade.delete(GROUP);
     }
 
     @Test
     public void testCreateGroup() {
-        assertTrue(groupFacade.create(GROUP));
+        assertTrue(groupDaoFacade.create(GROUP));
     }
 
     @Test
     public void testNullFieldCreate() {
         try {
             GROUP.setName(null);
-            groupFacade.create(GROUP);
+            groupDaoFacade.create(GROUP);
         } catch (IncorrectDataException e) {
             assertFalse(false);
         }
@@ -57,43 +58,43 @@ public class GroupFacadeTest {
 
     @Test
     public void testCreateExistingGroup() {
-        groupFacade.create(GROUP);
-        assertFalse(groupFacade.create(GROUP));
+        groupDaoFacade.create(GROUP);
+        assertFalse(groupDaoFacade.create(GROUP));
     }
 
     @Test
     public void testUpdateOwner() {
-        groupFacade.create(GROUP);
-        Group storedGroup = groupFacade.select(GROUP);
+        groupDaoFacade.create(GROUP);
+        Group storedGroup = groupDaoFacade.select(GROUP);
         Account newOwner = new AccountImpl("testOwner", "newOwner", "newOwner@test.test");
-        accountFacade.create(newOwner);
+        accountDaoFacade.create(newOwner);
         GROUP.setOwner(newOwner);
-        assertTrue(groupFacade.update(GROUP, storedGroup));
+        assertTrue(groupDaoFacade.update(GROUP, storedGroup));
     }
 
     @Test
     public void testSelectGroup() {
-        groupFacade.create(GROUP);
-        Group actual = groupFacade.select(GROUP);
+        groupDaoFacade.create(GROUP);
+        Group actual = groupDaoFacade.select(GROUP);
         assertEquals(GROUP, actual);
-        actual = groupFacade.select(actual.getId());
+        actual = groupDaoFacade.select(actual.getId());
         assertEquals(GROUP, actual);
     }
 
     @Test
     public void testSelectNonExistingGroup() {
-        Group actual = groupFacade.select(GROUP);
-        assertEquals(groupFacade.getNullEntity(), actual);
+        Group actual = groupDaoFacade.select(GROUP);
+        assertEquals(groupDaoFacade.getNullEntity(), actual);
     }
 
     @Test
     public void testUpdateGroup() {
-        groupFacade.create(GROUP);
+        groupDaoFacade.create(GROUP);
         String newDescription = "new Description";
         GROUP.setDescription(newDescription);
-        Group storedGroup = groupFacade.select(GROUP);
-        assertTrue(groupFacade.update(GROUP, storedGroup));
-        storedGroup = groupFacade.select(GROUP);
+        Group storedGroup = groupDaoFacade.select(GROUP);
+        assertTrue(groupDaoFacade.update(GROUP, storedGroup));
+        storedGroup = groupDaoFacade.select(GROUP);
         assertEquals(newDescription, storedGroup.getDescription());
     }
 
@@ -101,29 +102,29 @@ public class GroupFacadeTest {
     public void testUpdateNonExistingGroup() {
         Group nonExisting = new GroupImpl();
         nonExisting.setName("non existing group");
-        assertFalse(groupFacade.update(nonExisting, nonExisting));
+        assertFalse(groupDaoFacade.update(nonExisting, nonExisting));
     }
 
     @Test
     public void testDeleteNonExisting() {
         Group nonExisting = new GroupImpl();
         nonExisting.setName("non existing group");
-        assertFalse(groupFacade.delete(nonExisting));
+        assertFalse(groupDaoFacade.delete(nonExisting));
     }
 
     @Test
     public void testDeleteGroup() {
-        groupFacade.create(GROUP);
-        assertTrue(groupFacade.delete(GROUP));
-        assertEquals(groupFacade.getNullEntity(), groupFacade.select(GROUP));
+        groupDaoFacade.create(GROUP);
+        assertTrue(groupDaoFacade.delete(GROUP));
+        assertEquals(groupDaoFacade.getNullEntity(), groupDaoFacade.select(GROUP));
     }
 
     @Test
     public void testOwner() {
-        groupFacade.create(GROUP);
-        Account actualOwner = accountFacade.select(account);
-        Group group = groupFacade.select(GROUP);
-        assertTrue(groupFacade.isOwner(actualOwner.getId(), group.getId()));
-        groupFacade.delete(GROUP);
+        groupDaoFacade.create(GROUP);
+        Account actualOwner = accountDaoFacade.select(account);
+        Group group = groupDaoFacade.select(GROUP);
+        assertTrue(groupDaoFacade.isOwner(actualOwner.getId(), group.getId()));
+        groupDaoFacade.delete(GROUP);
     }
 }

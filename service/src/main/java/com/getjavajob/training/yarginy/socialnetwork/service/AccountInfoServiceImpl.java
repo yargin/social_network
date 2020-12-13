@@ -4,8 +4,8 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,28 +14,28 @@ import java.util.Collection;
 
 @Service
 public class AccountInfoServiceImpl implements AccountInfoService {
-    private final AccountFacade accountFacade;
-    private final PhoneFacade phoneFacade;
+    private final AccountDaoFacade accountDaoFacade;
+    private final PhoneDaoFacade phoneDaoFacade;
 //    private final TransactionManager transactionManager;
 
 
     @Autowired
-    public AccountInfoServiceImpl(AccountFacade accountFacade, PhoneFacade phoneFacade) {
-        this.accountFacade = accountFacade;
-        this.phoneFacade = phoneFacade;
+    public AccountInfoServiceImpl(AccountDaoFacade accountDaoFacade, PhoneDaoFacade phoneDaoFacade) {
+        this.accountDaoFacade = accountDaoFacade;
+        this.phoneDaoFacade = phoneDaoFacade;
     }
 
     @Override
     public AccountInfoDTO select(Account account) {
-        Account storedAccount = accountFacade.select(account);
-        Collection<Phone> phones = phoneFacade.selectPhonesByOwner(storedAccount.getId());
+        Account storedAccount = accountDaoFacade.select(account);
+        Collection<Phone> phones = phoneDaoFacade.selectPhonesByOwner(storedAccount.getId());
         return new AccountInfoDTO(storedAccount, phones);
     }
 
     @Override
     public AccountInfoDTO select(long id) {
-        Account storedAccount = accountFacade.select(id);
-        Collection<Phone> phones = phoneFacade.selectPhonesByOwner(storedAccount.getId());
+        Account storedAccount = accountDaoFacade.select(id);
+        Collection<Phone> phones = phoneDaoFacade.selectPhonesByOwner(storedAccount.getId());
         return new AccountInfoDTO(storedAccount, phones);
     }
 
@@ -43,10 +43,10 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     public boolean update(AccountInfoDTO accountInfo, AccountInfoDTO storedAccountInfo) {
 //        try (Transaction transaction = transactionManager.getTransaction()) {
         Account account = accountInfo.getAccount();
-        if (!accountFacade.update(account, storedAccountInfo.getAccount())) {
+        if (!accountDaoFacade.update(account, storedAccountInfo.getAccount())) {
             throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
         }
-        if (!phoneFacade.update(storedAccountInfo.getPhones(), accountInfo.getPhones())) {
+        if (!phoneDaoFacade.update(storedAccountInfo.getPhones(), accountInfo.getPhones())) {
             throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
         }
 //            transaction.commit();

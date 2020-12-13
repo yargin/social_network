@@ -7,7 +7,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Pass
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.PasswordImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,7 +19,7 @@ import static java.util.Arrays.asList;
 
 public class AuthServiceTest {
     @Autowired
-    public static AccountFacade accountFacade;
+    public static AccountDaoFacade accountDaoFacade;
 
     @Test
     public void testRegister() {
@@ -27,7 +27,7 @@ public class AuthServiceTest {
         account.setSurname("testSurname");
         account.setBirthDate(Date.valueOf(LocalDate.of(2001, 1, 1)));
         account.setSex(Sex.MALE);
-        accountFacade.delete(account);
+        accountDaoFacade.delete(account);
         Phone firstPhone = new PhoneImpl("8921123", account);
         Phone secondPhone = new PhoneImpl("1231211", account);
         Collection<Phone> phones = asList(firstPhone, secondPhone);
@@ -38,6 +38,6 @@ public class AuthServiceTest {
 //        AuthService authService = new AuthServiceImpl();
 //        boolean registered = authService.register(account, phones, password);
 //        assertTrue(registered);
-        accountFacade.delete(account);
+        accountDaoFacade.delete(account);
     }
 }

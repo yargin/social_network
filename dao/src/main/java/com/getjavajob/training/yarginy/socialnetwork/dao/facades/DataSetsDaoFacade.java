@@ -7,7 +7,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.Se
 import java.io.Serializable;
 import java.util.Map;
 
-public interface DataSetsFacade extends Serializable {
+public interface DataSetsDaoFacade extends Serializable {
     Map<Account, Boolean> getGroupMembersAreModerators(long groupId);
 
     Map<Group, Boolean> getAllUnjoinedGroupsAreRequested(long accountId);

@@ -10,12 +10,12 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 
 @Component("dialogDaoFacade")
-public class DialogFacadeImpl implements DialogFacade {
+public class DialogDaoFacadeImpl implements DialogDaoFacade {
     private final Dao<Dialog> dialogDao;
     private final OneToManyDao<Dialog> accountDialogsDao;
 
     @Autowired
-    public DialogFacadeImpl(Dao<Dialog> dialogDao, @Qualifier("dialogsDao") OneToManyDao<Dialog> accountDialogsDao) {
+    public DialogDaoFacadeImpl(Dao<Dialog> dialogDao, @Qualifier("dialogsDao") OneToManyDao<Dialog> accountDialogsDao) {
         this.dialogDao = dialogDao;
         this.accountDialogsDao = accountDialogsDao;
     }

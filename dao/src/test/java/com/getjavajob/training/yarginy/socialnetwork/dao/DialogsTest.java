@@ -4,102 +4,103 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.DialogImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogDaoFacade;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Collection;
 
 import static org.junit.Assert.*;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:daoSpringConfig.xml")
 public class DialogsTest {
-    static {
-        TestDataSourceInitializer.initDataSource();
-    }
-
     @Autowired
-    private DialogFacade dialogFacade;
+    private DialogDaoFacade dialogDaoFacade;
     @Autowired
-    private AccountFacade accountFacade;
+    private AccountDaoFacade accountDaoFacade;
     private Account firstAccount = new AccountImpl("test1", "test1", "test1@test.test");
     private Account secondAccount = new AccountImpl("test2", "test2", "test2@test.test");
     private Dialog dialog = new DialogImpl(firstAccount, secondAccount);
 
     @Before
     public void initTestValues() {
-        accountFacade.create(firstAccount);
-        firstAccount = accountFacade.select(firstAccount);
-        accountFacade.create(secondAccount);
-        secondAccount = accountFacade.select(secondAccount);
+        accountDaoFacade.create(firstAccount);
+        firstAccount = accountDaoFacade.select(firstAccount);
+        accountDaoFacade.create(secondAccount);
+        secondAccount = accountDaoFacade.select(secondAccount);
         dialog.setFirstAccount(firstAccount);
         dialog.setSecondAccount(secondAccount);
-        dialogFacade.create(dialog);
-        dialog = dialogFacade.select(dialog);
+        dialogDaoFacade.create(dialog);
+        dialog = dialogDaoFacade.select(dialog);
     }
 
     @After
     public void destroyTestValues() {
-        dialogFacade.delete(dialog);
-        accountFacade.delete(firstAccount);
-        accountFacade.delete(secondAccount);
+        dialogDaoFacade.delete(dialog);
+        accountDaoFacade.delete(firstAccount);
+        accountDaoFacade.delete(secondAccount);
     }
 
     @Test
     public void testCreateDialog() {
-        dialogFacade.delete(dialog);
-        assertTrue(dialogFacade.create(dialog));
-        assertEquals(dialog, dialogFacade.select(dialog));
+        dialogDaoFacade.delete(dialog);
+        assertTrue(dialogDaoFacade.create(dialog));
+        assertEquals(dialog, dialogDaoFacade.select(dialog));
         Dialog testDialog = new DialogImpl(secondAccount, firstAccount);
-        assertFalse(dialogFacade.create(testDialog));
+        assertFalse(dialogDaoFacade.create(testDialog));
     }
 
     @Test
     public void testCreateExistingDialog() {
-        assertFalse(dialogFacade.create(dialog));
+        assertFalse(dialogDaoFacade.create(dialog));
     }
 
     @Test
     public void testSelectDialog() {
-        Dialog actualDialog = dialogFacade.select(dialog);
+        Dialog actualDialog = dialogDaoFacade.select(dialog);
         assertEquals(dialog, actualDialog);
     }
 
     @Test
     public void testSelectNonExistingDialog() {
-        dialogFacade.delete(dialog);
-        assertEquals(dialogFacade.getNullEntity(), dialogFacade.select(dialog));
+        dialogDaoFacade.delete(dialog);
+        assertEquals(dialogDaoFacade.getNullEntity(), dialogDaoFacade.select(dialog));
     }
 
     @Test
     public void testDeleteDialog() {
-        assertTrue(dialogFacade.delete(dialog));
-        assertEquals(dialogFacade.getNullEntity(), dialogFacade.select(dialog));
-        dialogFacade.create(dialog);
+        assertTrue(dialogDaoFacade.delete(dialog));
+        assertEquals(dialogDaoFacade.getNullEntity(), dialogDaoFacade.select(dialog));
+        dialogDaoFacade.create(dialog);
         dialog.setSecondAccount(firstAccount);
         dialog.setFirstAccount(secondAccount);
-        assertTrue(dialogFacade.delete(dialog));
-        assertEquals(dialogFacade.getNullEntity(), dialogFacade.select(dialog));
+        assertTrue(dialogDaoFacade.delete(dialog));
+        assertEquals(dialogDaoFacade.getNullEntity(), dialogDaoFacade.select(dialog));
     }
 
     @Test
     public void testDeleteNonExistingDialog() {
-        dialogFacade.delete(dialog);
-        assertFalse(dialogFacade.delete(dialog));
+        dialogDaoFacade.delete(dialog);
+        assertFalse(dialogDaoFacade.delete(dialog));
     }
 
     @Test
     public void testSelectDialogsByAccount() {
-        Collection<Dialog> firstAccountDialogs = dialogFacade.selectDialogsByAccount(firstAccount.getId());
-        Collection<Dialog> secondAccountDialogs = dialogFacade.selectDialogsByAccount(secondAccount.getId());
+        Collection<Dialog> firstAccountDialogs = dialogDaoFacade.selectDialogsByAccount(firstAccount.getId());
+        Collection<Dialog> secondAccountDialogs = dialogDaoFacade.selectDialogsByAccount(secondAccount.getId());
         assertEquals(firstAccountDialogs, secondAccountDialogs);
     }
 
     @Test
     public void testDialogExists() {
-        assertTrue(dialogFacade.isTalker(firstAccount.getId(), dialog.getId()));
-        assertTrue(dialogFacade.isTalker(secondAccount.getId(), dialog.getId()));
+        assertTrue(dialogDaoFacade.isTalker(firstAccount.getId(), dialog.getId()));
+        assertTrue(dialogDaoFacade.isTalker(secondAccount.getId(), dialog.getId()));
     }
 }

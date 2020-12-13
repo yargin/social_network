@@ -4,90 +4,91 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsMembersFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsMembersDaoFacade;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 import static org.junit.Assert.*;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:daoSpringConfig.xml")
 public class AccountsInGroupsTest {
-    static {
-        TestDataSourceInitializer.initDataSource();
-    }
-
     @Autowired
-    private GroupFacade groupFacade;
+    private GroupDaoFacade groupDaoFacade;
     @Autowired
-    private GroupsMembersFacade groupsMembersFacade;
+    private GroupsMembersDaoFacade groupsMembersDaoFacade;
     @Autowired
-    private AccountFacade accountFacade;
+    private AccountDaoFacade accountDaoFacade;
     private Account account = new AccountImpl("test", "test", "test@test.test");
     private Account owner = new AccountImpl("testOwner", "testOwner", "testOwner@test.test");
     private Group group = new GroupImpl("testGroup", owner);
 
     @Before
     public void testValuesInit() {
-        accountFacade.create(account);
-        accountFacade.create(owner);
-        account = accountFacade.select(account);
-        owner = accountFacade.select(owner);
-        groupFacade.create(group);
-        group = groupFacade.select(group);
+        accountDaoFacade.create(account);
+        accountDaoFacade.create(owner);
+        account = accountDaoFacade.select(account);
+        owner = accountDaoFacade.select(owner);
+        groupDaoFacade.create(group);
+        group = groupDaoFacade.select(group);
     }
 
     @After
     public void testValuesDelete() {
-        accountFacade.delete(account);
-        groupFacade.delete(group);
-        accountFacade.delete(owner);
+        accountDaoFacade.delete(account);
+        groupDaoFacade.delete(group);
+        accountDaoFacade.delete(owner);
     }
 
     @Test
     public void testJoinGroup() {
-        boolean actual = groupsMembersFacade.joinGroup(account.getId(), group.getId());
+        boolean actual = groupsMembersDaoFacade.joinGroup(account.getId(), group.getId());
         assertTrue(actual);
-        groupsMembersFacade.leaveGroup(account.getId(), group.getId());
+        groupsMembersDaoFacade.leaveGroup(account.getId(), group.getId());
     }
 
     @Test
     public void testJoinAlreadyJoinedGroup() {
-        groupsMembersFacade.joinGroup(account.getId(), group.getId());
-        boolean actual = groupsMembersFacade.joinGroup(account.getId(), group.getId());
+        groupsMembersDaoFacade.joinGroup(account.getId(), group.getId());
+        boolean actual = groupsMembersDaoFacade.joinGroup(account.getId(), group.getId());
         assertFalse(actual);
-        groupsMembersFacade.leaveGroup(account.getId(), group.getId());
+        groupsMembersDaoFacade.leaveGroup(account.getId(), group.getId());
     }
 
     @Test
     public void testLeaveGroup() {
-        groupsMembersFacade.joinGroup(account.getId(), group.getId());
-        boolean actual = groupsMembersFacade.leaveGroup(account.getId(), group.getId());
+        groupsMembersDaoFacade.joinGroup(account.getId(), group.getId());
+        boolean actual = groupsMembersDaoFacade.leaveGroup(account.getId(), group.getId());
         assertTrue(actual);
     }
 
     @Test
     public void selectMembers() {
-        groupsMembersFacade.joinGroup(account.getId(), group.getId());
+        groupsMembersDaoFacade.joinGroup(account.getId(), group.getId());
         Collection<Account> expected = new ArrayList<>();
-        expected.add(accountFacade.select(account));
-        Collection<Account> actual = groupsMembersFacade.selectMembers(group.getId());
+        expected.add(accountDaoFacade.select(account));
+        Collection<Account> actual = groupsMembersDaoFacade.selectMembers(group.getId());
         assertEquals(expected, actual);
-        groupsMembersFacade.leaveGroup(account.getId(), group.getId());
+        groupsMembersDaoFacade.leaveGroup(account.getId(), group.getId());
     }
 
     @Test
     public void selectGroups() {
-        groupsMembersFacade.joinGroup(account.getId(), group.getId());
+        groupsMembersDaoFacade.joinGroup(account.getId(), group.getId());
         Collection<Group> expected = new ArrayList<>();
-        expected.add(groupFacade.select(group));
-        Collection<Group> actual = groupsMembersFacade.selectAccountGroups(account.getId());
+        expected.add(groupDaoFacade.select(group));
+        Collection<Group> actual = groupsMembersDaoFacade.selectAccountGroups(account.getId());
         assertEquals(expected, actual);
-        groupsMembersFacade.leaveGroup(account.getId(), group.getId());
+        groupsMembersDaoFacade.leaveGroup(account.getId(), group.getId());
     }
 }

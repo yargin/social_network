@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 
 @Component("phoneDaoFacade")
-public class PhoneFacadeImpl implements PhoneFacade {
+public class PhoneDaoFacadeImpl implements PhoneDaoFacade {
     private final BatchDao<Phone> phoneDao;
     private final OneToManyDao<Phone> accountsPhonesDao;
 
     @Autowired
-    public PhoneFacadeImpl(BatchDao<Phone> phoneDao, OneToManyDao<Phone> accountsPhonesDao) {
+    public PhoneDaoFacadeImpl(BatchDao<Phone> phoneDao, OneToManyDao<Phone> accountsPhonesDao) {
         this.phoneDao = phoneDao;
         this.accountsPhonesDao = accountsPhonesDao;
     }

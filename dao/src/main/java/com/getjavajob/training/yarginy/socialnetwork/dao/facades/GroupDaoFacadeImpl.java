@@ -12,15 +12,15 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 
 @Component("groupDaoFacade")
-public class GroupFacadeImpl implements GroupFacade {
+public class GroupDaoFacadeImpl implements GroupDaoFacade {
     private final Dao<Group> groupDao;
     private final OneToManyDao<Group> accountsOwnedGroupsDao;
     private final ManyToManyDao<Account, Group> accountsGroupMembershipDao;
 
     @Autowired
-    public GroupFacadeImpl(Dao<Group> groupDao,
-                           @Qualifier("accountOwnerGroupsDao") OneToManyDao<Group> accountsOwnedGroupsDao,
-                           @Qualifier("groupMembershipDao") ManyToManyDao<Account, Group> accountsGroupMembershipDao) {
+    public GroupDaoFacadeImpl(Dao<Group> groupDao,
+                              @Qualifier("accountOwnerGroupsDao") OneToManyDao<Group> accountsOwnedGroupsDao,
+                              @Qualifier("groupMembershipDao") ManyToManyDao<Account, Group> accountsGroupMembershipDao) {
         this.groupDao = groupDao;
         this.accountsOwnedGroupsDao = accountsOwnedGroupsDao;
         this.accountsGroupMembershipDao = accountsGroupMembershipDao;

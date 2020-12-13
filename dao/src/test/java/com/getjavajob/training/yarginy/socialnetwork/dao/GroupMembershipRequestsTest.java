@@ -4,71 +4,72 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsMembersFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsMembersDaoFacade;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Collections;
 
 import static org.junit.Assert.*;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:daoSpringConfig.xml")
 public class GroupMembershipRequestsTest {
-    static {
-        TestDataSourceInitializer.initDataSource();
-    }
-
     @Autowired
-    private GroupFacade groupFacade;
+    private GroupDaoFacade groupDaoFacade;
     @Autowired
-    private GroupsMembersFacade groupsMembersFacade;
+    private GroupsMembersDaoFacade groupsMembersDaoFacade;
     @Autowired
-    private AccountFacade accountFacade;
+    private AccountDaoFacade accountDaoFacade;
     private Account requester = new AccountImpl("firstTest", "test", "first@test.test");
     private Account owner = new AccountImpl("secondTest", "test", "second@test.test");
     private Group group = new GroupImpl("testGroup", owner);
 
     @Before
     public void initTestValues() {
-        accountFacade.create(owner);
-        owner = accountFacade.select(owner);
-        accountFacade.create(requester);
-        requester = accountFacade.select(requester);
-        groupFacade.create(group);
-        group = groupFacade.select(group);
+        accountDaoFacade.create(owner);
+        owner = accountDaoFacade.select(owner);
+        accountDaoFacade.create(requester);
+        requester = accountDaoFacade.select(requester);
+        groupDaoFacade.create(group);
+        group = groupDaoFacade.select(group);
     }
 
     @After
     public void deleteTestValues() {
-        groupsMembersFacade.removeRequest(requester.getId(), group.getId());
-        groupFacade.delete(group);
-        accountFacade.delete(requester);
-        accountFacade.delete(owner);
+        groupsMembersDaoFacade.removeRequest(requester.getId(), group.getId());
+        groupDaoFacade.delete(group);
+        accountDaoFacade.delete(requester);
+        accountDaoFacade.delete(owner);
     }
 
     @Test
     public void testCreateGroupMembershipRequest() {
-        assertTrue(groupsMembersFacade.createRequest(requester.getId(), group.getId()));
-        assertEquals(Collections.singletonList(requester), groupsMembersFacade.selectRequests(group.getId()));
+        assertTrue(groupsMembersDaoFacade.createRequest(requester.getId(), group.getId()));
+        assertEquals(Collections.singletonList(requester), groupsMembersDaoFacade.selectRequests(group.getId()));
     }
 
     @Test
     public void testCreateExistingRequest() {
-        assertTrue(groupsMembersFacade.createRequest(requester.getId(), group.getId()));
-        assertFalse(groupsMembersFacade.createRequest(requester.getId(), group.getId()));
+        assertTrue(groupsMembersDaoFacade.createRequest(requester.getId(), group.getId()));
+        assertFalse(groupsMembersDaoFacade.createRequest(requester.getId(), group.getId()));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testCreateRequestToNonExistingAccount() {
-        assertFalse(groupsMembersFacade.createRequest(0, group.getId()));
+        assertFalse(groupsMembersDaoFacade.createRequest(0, group.getId()));
     }
 
     @Test
     public void testSelectRequests() {
-        assertTrue(groupsMembersFacade.createRequest(requester.getId(), group.getId()));
-        assertEquals(Collections.singletonList(requester), groupsMembersFacade.selectRequests(group.getId()));
+        assertTrue(groupsMembersDaoFacade.createRequest(requester.getId(), group.getId()));
+        assertEquals(Collections.singletonList(requester), groupsMembersDaoFacade.selectRequests(group.getId()));
     }
 }

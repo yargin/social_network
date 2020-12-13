@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 
 @Component("groupsMembersDaoFacade")
-public class GroupsMembersFacadeImpl implements GroupsMembersFacade {
+public class GroupsMembersFacadeImpl implements GroupsMembersDaoFacade {
     private final ManyToManyDao<Account, Group> groupMembershipDao;
     private final ManyToManyDao<Account, Group> membershipRequestsDao;
 

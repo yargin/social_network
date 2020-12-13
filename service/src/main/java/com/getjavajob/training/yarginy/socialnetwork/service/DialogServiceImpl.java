@@ -5,7 +5,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.DialogImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.TransactionManager;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.TransactionManagerImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
@@ -16,32 +16,32 @@ import org.springframework.stereotype.Service;
 @Service
 public class DialogServiceImpl implements DialogService {
     private final TransactionManager transactionManager = new TransactionManagerImpl();
-    private final DialogFacade dialogFacade;
+    private final DialogDaoFacade dialogDaoFacade;
     private final MessageService messageService;
 
     @Autowired
-    public DialogServiceImpl(DialogFacade dialogFacade, @Qualifier("dialogMessageService") MessageService messageService) {
-        this.dialogFacade = dialogFacade;
+    public DialogServiceImpl(DialogDaoFacade dialogDaoFacade, @Qualifier("dialogMessageService") MessageService messageService) {
+        this.dialogDaoFacade = dialogDaoFacade;
         this.messageService = messageService;
     }
 
     @Override
     public Dialog get(long dialogId) {
-        return dialogFacade.select(dialogId);
+        return dialogDaoFacade.select(dialogId);
     }
 
     @Override
     public Dialog get(Dialog dialog) {
-        return dialogFacade.select(dialog);
+        return dialogDaoFacade.select(dialog);
     }
 
     @Override
     public boolean create(Dialog dialog, Message message) {
 //        try (Transaction transaction = transactionManager.getTransaction()) {
-        if (!dialogFacade.create(dialog)) {
+        if (!dialogDaoFacade.create(dialog)) {
             throw new IllegalStateException();
         }
-        Dialog createdDialog = dialogFacade.select(dialog);
+        Dialog createdDialog = dialogDaoFacade.select(dialog);
         message.setReceiverId(createdDialog.getId());
         if (!messageService.addMessage(message)) {
             throw new IllegalStateException();
@@ -67,16 +67,16 @@ public class DialogServiceImpl implements DialogService {
         Account secondAccount = new AccountImpl();
         secondAccount.setId(secondAccountId);
         dialog.setSecondAccount(secondAccount);
-        return dialogFacade.select(dialog);
+        return dialogDaoFacade.select(dialog);
     }
 
     @Override
     public boolean isTalker(long accountId, long dialogId) {
-        return dialogFacade.isTalker(accountId, dialogId);
+        return dialogDaoFacade.isTalker(accountId, dialogId);
     }
 
     @Override
     public Dialog getNullDialog() {
-        return dialogFacade.getNullEntity();
+        return dialogDaoFacade.getNullEntity();
     }
 }

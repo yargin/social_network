@@ -5,10 +5,10 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,45 +20,45 @@ import java.util.Collection;
 @Service
 public class AccountServiceImpl implements AccountService {
     //    private final TransactionManager transactionManager;
-    private final AccountFacade accountFacade;
-    private final PhoneFacade phoneFacade;
-    private final FriendshipsFacade friendshipDao;
-    private final DialogFacade dialogsDao;
+    private final AccountDaoFacade accountDaoFacade;
+    private final PhoneDaoFacade phoneDaoFacade;
+    private final FriendshipsDaoFacade friendshipDao;
+    private final DialogDaoFacade dialogsDao;
 
     @Autowired
-    public AccountServiceImpl(AccountFacade accountFacade, PhoneFacade phoneFacade, FriendshipsFacade friendshipDao,
-                              DialogFacade dialogFacade) {
-        this.accountFacade = accountFacade;
-        this.phoneFacade = phoneFacade;
+    public AccountServiceImpl(AccountDaoFacade accountDaoFacade, PhoneDaoFacade phoneDaoFacade, FriendshipsDaoFacade friendshipDao,
+                              DialogDaoFacade dialogDaoFacade) {
+        this.accountDaoFacade = accountDaoFacade;
+        this.phoneDaoFacade = phoneDaoFacade;
         this.friendshipDao = friendshipDao;
-        this.dialogsDao = dialogFacade;
+        this.dialogsDao = dialogDaoFacade;
     }
 
     @Override
     public AccountInfoDTO getAccountInfo(long id) {
-        Account account = accountFacade.select(id);
-        Collection<Phone> phones = phoneFacade.selectPhonesByOwner(id);
+        Account account = accountDaoFacade.select(id);
+        Collection<Phone> phones = phoneDaoFacade.selectPhonesByOwner(id);
         return new AccountInfoDTO(account, phones);
     }
 
     @Override
     public Account get(long id) {
-        return accountFacade.select(id);
+        return accountDaoFacade.select(id);
     }
 
     @Override
     public Account get(Account account) {
-        return accountFacade.select(account);
+        return accountDaoFacade.select(account);
     }
 
     @Override
     public boolean createAccount(Account account, Collection<Phone> phones) {
 //        try (Transaction transaction = transactionManager.getTransaction()) {
         account.setRegistrationDate(Date.valueOf(LocalDate.now()));
-        if (!accountFacade.create(account)) {
+        if (!accountDaoFacade.create(account)) {
             throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
         }
-        if (!phoneFacade.create(phones)) {
+        if (!phoneDaoFacade.create(phones)) {
             throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
         }
 //            transaction.commit();
@@ -72,12 +72,12 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean updateAccount(Account account, Account storedAccount) {
-        return accountFacade.update(account, storedAccount);
+        return accountDaoFacade.update(account, storedAccount);
     }
 
     @Override
     public boolean deleteAccount(Account account) {
-        return accountFacade.delete(account);
+        return accountDaoFacade.delete(account);
     }
 
     @Override
@@ -126,7 +126,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Collection<Phone> getPhones(long accountId) {
-        return phoneFacade.selectPhonesByOwner(accountId);
+        return phoneDaoFacade.selectPhonesByOwner(accountId);
     }
 
     @Override

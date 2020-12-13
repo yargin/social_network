@@ -5,7 +5,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import java.io.Serializable;
 import java.util.Collection;
 
-public interface GroupsModeratorsFacade extends Serializable {
+public interface GroupsModeratorsDaoFacade extends Serializable {
     Collection<Account> selectModerators(long groupId);
 
     boolean addGroupModerator(long accountId, long groupId);

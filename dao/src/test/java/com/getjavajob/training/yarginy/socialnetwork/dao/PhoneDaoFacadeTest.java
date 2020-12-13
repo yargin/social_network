@@ -5,25 +5,26 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.junit.Assert.*;
 
-public class PhoneFacadeTest {
-    static {
-        TestDataSourceInitializer.initDataSource();
-    }
-
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:daoSpringConfig.xml")
+public class PhoneDaoFacadeTest {
     private static final Phone PHONE = new PhoneImpl();
     @Autowired
-    private PhoneFacade phoneFacade;
+    private PhoneDaoFacade phoneDaoFacade;
     @Autowired
-    private AccountFacade accountDao;
+    private AccountDaoFacade accountDao;
 
     @Before
     public void initTestValues() {
@@ -37,29 +38,29 @@ public class PhoneFacadeTest {
 
     @After
     public void deleteTestValues() {
-        phoneFacade.delete(PHONE);
+        phoneDaoFacade.delete(PHONE);
     }
 
     @Test
     public void testCreatePhone() {
-        phoneFacade.delete(PHONE);
-        assertTrue(phoneFacade.create(PHONE));
+        phoneDaoFacade.delete(PHONE);
+        assertTrue(phoneDaoFacade.create(PHONE));
     }
 
     @Test
     public void testCreateExisting() {
-        phoneFacade.create(PHONE);
-        assertFalse(phoneFacade.create(PHONE));
+        phoneDaoFacade.create(PHONE);
+        assertFalse(phoneDaoFacade.create(PHONE));
     }
 
     @Test
     public void testCreateWrongOwner() {
-        phoneFacade.delete(PHONE);
+        phoneDaoFacade.delete(PHONE);
         Account wrongAccount = new AccountImpl();
         wrongAccount.setId(-1);
         PHONE.setOwner(wrongAccount);
         try {
-            phoneFacade.create(PHONE);
+            phoneDaoFacade.create(PHONE);
         } catch (IllegalStateException e) {
             assertTrue(true);
         }
@@ -68,40 +69,40 @@ public class PhoneFacadeTest {
 
     @Test
     public void testSelectPhone() {
-        phoneFacade.create(PHONE);
-        Phone actual = phoneFacade.select(PHONE);
+        phoneDaoFacade.create(PHONE);
+        Phone actual = phoneDaoFacade.select(PHONE);
         assertEquals(PHONE, actual);
     }
 
     @Test
     public void testSelectNonExisting() {
-        assertEquals(phoneFacade.getNullPhone(), phoneFacade.select(99999999));
+        assertEquals(phoneDaoFacade.getNullPhone(), phoneDaoFacade.select(99999999));
     }
 
     @Test
     public void testUpdatePhone() {
-        phoneFacade.create(PHONE);
+        phoneDaoFacade.create(PHONE);
         PHONE.setType(PhoneType.PRIVATE);
-        assertTrue(phoneFacade.update(PHONE, phoneFacade.select(PHONE)));
+        assertTrue(phoneDaoFacade.update(PHONE, phoneDaoFacade.select(PHONE)));
     }
 
     @Test
     public void testUpdateNonExisting() {
         Phone nonExisting = new PhoneImpl();
         nonExisting.setNumber("000000");
-        assertFalse(phoneFacade.update(nonExisting, nonExisting));
+        assertFalse(phoneDaoFacade.update(nonExisting, nonExisting));
     }
 
     @Test
     public void testDeletePhone() {
-        phoneFacade.create(PHONE);
-        assertTrue(phoneFacade.delete(PHONE));
+        phoneDaoFacade.create(PHONE);
+        assertTrue(phoneDaoFacade.delete(PHONE));
     }
 
     @Test
     public void testDeleteNonExisting() {
         Phone nonExisting = new PhoneImpl();
         nonExisting.setNumber("000000");
-        assertFalse(phoneFacade.delete(nonExisting));
+        assertFalse(phoneDaoFacade.delete(nonExisting));
     }
 }
