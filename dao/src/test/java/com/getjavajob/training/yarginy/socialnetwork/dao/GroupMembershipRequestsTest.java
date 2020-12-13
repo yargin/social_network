@@ -20,7 +20,7 @@ import java.util.Collections;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:daoSpringConfig.xml")
+@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoOverrideSpringConfig.xml"})
 public class GroupMembershipRequestsTest {
     @Autowired
     private GroupDaoFacade groupDaoFacade;

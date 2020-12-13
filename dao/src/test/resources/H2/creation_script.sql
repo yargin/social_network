@@ -1,5 +1,19 @@
-CREATE TABLE IF NOT EXISTS
-    Accounts
+DROP TABLE IF EXISTS Friendships;
+DROP TABLE IF EXISTS Groups_memberships_requests;
+DROP TABLE IF EXISTS Friendships_requests;
+DROP TABLE IF EXISTS Groups_moderators;
+DROP TABLE IF EXISTS Groups_members;
+DROP TABLE IF EXISTS Passwords;
+DROP TABLE IF EXISTS Roles;
+DROP TABLE IF EXISTS dialogs_messages;
+DROP TABLE IF EXISTS group_wall_messages;
+DROP TABLE IF EXISTS account_wall_messages;
+DROP TABLE IF EXISTS dialogs;
+DROP TABLE IF EXISTS Phones;
+DROP TABLE IF EXISTS _Groups;
+DROP TABLE IF EXISTS Accounts;
+
+CREATE TABLE IF NOT EXISTS Accounts
 (
     id                BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name              VARCHAR(40) NOT NULL,
@@ -93,15 +107,6 @@ ALTER TABLE Passwords
 
 ALTER TABLE Passwords
     ADD CONSTRAINT C_21 FOREIGN KEY (email) REFERENCES Accounts (email) ON DELETE CASCADE ON UPDATE CASCADE;
-
-CREATE TABLE IF NOT EXISTS Account_photo
-(
-    owner_id BIGINT UNSIGNED PRIMARY KEY,
-    photo    MEDIUMBLOB
-);
-
-ALTER TABLE Account_photo
-    ADD CONSTRAINT C_22 FOREIGN KEY (owner_id) REFERENCES Accounts (id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 CREATE TABLE IF NOT EXISTS Groups_moderators
 (

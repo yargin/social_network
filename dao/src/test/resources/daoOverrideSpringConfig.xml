@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">-->
+    <!--        <property name="driverClassName" value="org.h2.Driver"/>-->
+    <!--        <property name="url" value="jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"/>-->
+    <!--        <property name="username" value="sa"/>-->
+    <!--&lt;!&ndash;        todo: runs script on each connection wrong! fix&ndash;&gt;-->
+    <!--        &lt;!&ndash;        <property name = "useLegacyDatetimeCode" value="false"/>&ndash;&gt;-->
+    <!--        &lt;!&ndash;        <property name = "serverTimezone" value="UTC"/>&ndash;&gt;-->
+    <!--    </bean>-->
+
+    <bean id="dataSource" class="com.getjavajob.training.yarginy.socialnetwork.dao.TestDataSource" init-method="init">
+        <property name="driverClassName" value="org.h2.Driver"/>
+        <property name="url" value="jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"/>
+        <property name="username" value="sa"/>
+    </bean>
+</beans>

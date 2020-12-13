@@ -21,7 +21,7 @@ import static java.util.Arrays.asList;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:daoSpringConfig.xml")
+@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoOverrideSpringConfig.xml"})
 public class BatchUpdateTest {
     @Autowired
     private PhoneDaoFacade phoneDaoFacade;
