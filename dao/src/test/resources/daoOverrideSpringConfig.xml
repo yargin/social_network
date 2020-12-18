@@ -3,10 +3,17 @@
        xmlns:context="http://www.springframework.org/schema/context" xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
 
-    <bean id="dataSource" class="com.getjavajob.training.yarginy.socialnetwork.dao.TestDataSource" init-method="init">
-        <property name="driverClassName" value="${driver}"/>
-        <property name="url" value="${url}"/>
-        <property name="username" value="{$user}"/>
+    <!--    <bean id="dataSource" class="com.getjavajob.training.yarginy.socialnetwork.dao.TestDataSource" init-method="init">-->
+    <!--        <property name="driverClassName" value="${driver}"/>-->
+    <!--        <property name="url" value="${url}"/>-->
+    <!--        <property name="username" value="{$user}"/>-->
+    <!--    </bean>-->
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/social_network?serverTimezone=UTC"/>
+        <property name="username" value="root"/>
+        <property name="password" value="12131415a"/>
     </bean>
 
     <context:property-placeholder location="H2Connection.properties"/>
