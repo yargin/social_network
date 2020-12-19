@@ -1,8 +1,8 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.newnew.queryandparamplacer.ValuePlacer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -14,16 +14,12 @@ import javax.sql.DataSource;
 import java.util.Collection;
 
 @Component("newAccountDao")
-public class AccountDao implements Dao<Account> {
-    private static final AccountFieldsHandler HANDLER = new AccountFieldsHandler();
-    private static final String SELECT_BY_ID = "SELECT * FROM Accounts WHERE id = :id";
-    private static final String SELECT_BY_ALT_KEY = "SELECT * FROM Accounts WHERE email = :email";
-    private static final String SELECT_ALL = "SELECT * FROM Accounts";
-    private static final String DELETE_ACCOUNT = "DELETE FROM Accounts WHERE email = :email";
+public class DaoImpl implements Dao<Account> {
+    private static final AccountDaoFieldsHandler HANDLER = new AccountDaoFieldsHandler();
     private final NamedParameterJdbcTemplate template;
 
     @Autowired
-    public AccountDao(DataSource dataSource) {
+    public DaoImpl(DataSource dataSource) {
         this.template = new NamedParameterJdbcTemplate(dataSource);
     }
 
@@ -32,7 +28,7 @@ public class AccountDao implements Dao<Account> {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue("id", id);
         try {
-            return template.queryForObject(SELECT_BY_ID, parameters, HANDLER::mapRow);
+            return template.queryForObject(HANDLER.getSelectByIdQuery(), parameters, HANDLER::mapRow);
         } catch (EmptyResultDataAccessException e) {
             return getNullEntity();
         }
@@ -40,10 +36,9 @@ public class AccountDao implements Dao<Account> {
 
     @Override
     public Account select(Account entityToSelect) {
-        MapSqlParameterSource parameters = new MapSqlParameterSource();
-        parameters.addValue("email", entityToSelect.getEmail());
+        MapSqlParameterSource parameters = HANDLER.getAltKeyParameter(entityToSelect);
         try {
-            return template.queryForObject(SELECT_BY_ALT_KEY, parameters, HANDLER::mapRow);
+            return template.queryForObject(HANDLER.getSelectByAltKeyQuery(), parameters, HANDLER::mapRow);
         } catch (EmptyResultDataAccessException e) {
             return getNullEntity();
         }
@@ -51,43 +46,38 @@ public class AccountDao implements Dao<Account> {
 
     @Override
     public boolean create(Account entity) {
-        AbstractQueryAndParameters<Account> queryAndParameters = HANDLER.getInsertQueryAndParameters(entity,
-                getNullEntity());
-        String query = "INSERT INTO Accounts" + queryAndParameters.getQueryParameters();
-        MapSqlParameterSource parameters = queryAndParameters.getParameters();
+        ValuePlacer queryAndParameters = HANDLER.getInsertQueryAndParameters(entity, getNullEntity());
+        String query = queryAndParameters.getQuery();
+        MapSqlParameterSource parameters = queryAndParameters.getInitedParams();
         try {
             return template.update(query, parameters) == 1;
         } catch (DataAccessException e) {
-//            e.printStackTrace();
             return false;
         }
     }
 
     @Override
     public boolean update(Account entity, Account storedEntity) {
-        AbstractQueryAndParameters<Account> queryAndParameters = HANDLER.getUpdateQueryAndParameters(entity,
-                storedEntity);
+        ValuePlacer queryAndParameters = HANDLER.getUpdateQueryAndParameters(entity, storedEntity);
         String query;
         try {
-            query = "UPDATE accounts " + queryAndParameters.getQueryParameters() + " WHERE id = :id";
+            query = queryAndParameters.getQuery();
         } catch (IllegalArgumentException e) {
             return false;
         }
-        MapSqlParameterSource parameters = queryAndParameters.getParameters();
-        parameters.addValue("id", storedEntity.getId());
+        MapSqlParameterSource parameters = queryAndParameters.getInitedParams();
         return template.update(query, parameters) > 0;
     }
 
     @Override
     public boolean delete(Account entity) {
-        MapSqlParameterSource parameters = new MapSqlParameterSource();
-        parameters.addValue("email", entity.getEmail());
-        return template.update(DELETE_ACCOUNT, parameters) > 0;
+        MapSqlParameterSource parameters = HANDLER.getAltKeyParameter(entity);
+        return template.update(HANDLER.getDeleteQuery(), parameters) > 0;
     }
 
     @Override
     public Collection<Account> selectAll() {
-        return template.query(SELECT_ALL, HANDLER::mapViewRow);
+        return template.query(HANDLER.getSelectAllQuery(), HANDLER::mapViewRow);
     }
 
     @Override
@@ -97,7 +87,7 @@ public class AccountDao implements Dao<Account> {
 
     @Override
     public Account getNullEntity() {
-        return NullEntitiesFactory.getNullAccount();
+        return HANDLER.getNullEntity();
     }
 
     @Override
