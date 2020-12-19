@@ -16,7 +16,7 @@ import java.sql.SQLException;
 
 import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.GroupsTable.*;
 
-@Repository("GroupDaoi")
+@Repository("groupDaoFieldsHandler")
 public class GroupDaoFieldsHandler implements DaoFieldsHandler<Group> {
     private static final String SELECT_BY_ID = "SELECT * FROM Groups WHERE id = :id";
     private static final String SELECT_BY_ALT_KEY = "SELECT * FROM Groups WHERE name = :name";
@@ -50,8 +50,8 @@ public class GroupDaoFieldsHandler implements DaoFieldsHandler<Group> {
     }
 
     @Override
-    public QueryAndParamPlacer getInsertQueryAndParameters(Group group, Group storedGroup) {
-        return new InsertQueryAndParamPlacer<>(TABLE, new GroupInitializer(), group, storedGroup);
+    public QueryAndParamPlacer getInsertQueryAndParameters(Group group) {
+        return new InsertQueryAndParamPlacer<>(TABLE, new GroupInitializer(), group);
     }
 
     @Override
@@ -90,7 +90,12 @@ public class GroupDaoFieldsHandler implements DaoFieldsHandler<Group> {
 
     static class GroupInitializer extends Initializer<Group> {
         @Override
-        public void initParams(Group entity, Group storedEntity) {
+        public void initUpdateParams(Group entity, Group storedEntity) {
+
+        }
+
+        @Override
+        public void initInsertParams(Group entity) {
 
         }
 

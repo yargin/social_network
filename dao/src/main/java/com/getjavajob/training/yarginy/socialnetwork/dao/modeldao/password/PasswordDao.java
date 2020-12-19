@@ -1,7 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.password;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.DaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.DaoImplOld;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dml;
 
 import javax.sql.DataSource;
@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 
-public class PasswordDao extends DaoImpl<Password> {
+public class PasswordDao extends DaoImplOld<Password> {
     public PasswordDao(DataSource dataSource, Dml<Password> passwordDml) {
         super(dataSource, passwordDml);
     }

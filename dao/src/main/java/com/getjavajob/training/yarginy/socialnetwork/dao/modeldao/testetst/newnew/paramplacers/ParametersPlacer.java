@@ -23,7 +23,7 @@ public class ParametersPlacer {
         V value = valueGetter.get();
         if (!Objects.equals(value, storedValueGetter.get())) {
             if (value == null) {
-                parameters.addValue(column, value, type);
+                parameters.addValue(column, null, type);
             } else {
                 parameters.addValue(column, objToSqlTransformer.apply(value), type);
             }
@@ -32,12 +32,17 @@ public class ParametersPlacer {
         return false;
     }
 
-    public <V> void addKey(Supplier<V> valueGetter, String key, int type) {
+    public <V> void addValue(Supplier<V> valueGetter, String key, int type) {
         parameters.addValue(key, valueGetter.get(), type);
     }
 
-    public <V, T> void addKey(Supplier<V> valueGetter, String key, int type, Function<V, T> objToSqlTransformer) {
-        parameters.addValue(key, objToSqlTransformer.apply(valueGetter.get()), type);
+    public <V, T> void addValue(Supplier<V> valueGetter, String key, int type, Function<V, T> objToSqlTransformer) {
+        V value = valueGetter.get();
+        if (value == null) {
+            parameters.addValue(key, null, type);
+        } else {
+            parameters.addValue(key, objToSqlTransformer.apply(value), type);
+        }
     }
 
     public MapSqlParameterSource getParameters() {

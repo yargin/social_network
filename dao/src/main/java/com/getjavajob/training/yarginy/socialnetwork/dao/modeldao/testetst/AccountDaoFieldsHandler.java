@@ -42,8 +42,8 @@ public class AccountDaoFieldsHandler implements DaoFieldsHandler<Account> {
         return DELETE_ACCOUNT;
     }
 
-    public QueryAndParamPlacer getInsertQueryAndParameters(Account account, Account storedAccount) {
-        return new InsertQueryAndParamPlacer<>(TABLE, new AccountInitializer(), account, storedAccount);
+    public QueryAndParamPlacer getInsertQueryAndParameters(Account account) {
+        return new InsertQueryAndParamPlacer<>(TABLE, new AccountInitializer(), account);
     }
 
     public QueryAndParamPlacer getUpdateQueryAndParameters(Account account, Account storedAccount) {
@@ -96,7 +96,25 @@ public class AccountDaoFieldsHandler implements DaoFieldsHandler<Account> {
 
     static class AccountInitializer extends Initializer<Account> {
         @Override
-        public void initParams(Account entity, Account storedAccount) {
+        public void initInsertParams(Account entity) {
+            placer.placeValue(entity::getName, NAME, Types.VARCHAR);
+            placer.placeValue(entity::getSurname, SURNAME, Types.VARCHAR);
+            placer.placeValue(entity::getPatronymic, PATRONYMIC, Types.VARCHAR);
+            placer.placeValue(entity::getSex, SEX, Types.CHAR, Sex::toString);
+            placer.placeValue(entity::getBirthDate, BIRTH_DATE, Types.DATE);
+            placer.placeValue(entity::getIcq, ICQ, Types.VARCHAR);
+            placer.placeValue(entity::getSkype, SKYPE, Types.VARCHAR);
+            placer.placeValue(entity::getEmail, EMAIL, Types.VARCHAR);
+            placer.placeValue(entity::getAdditionalEmail, ADDITIONAL_EMAIL, Types.VARCHAR);
+            placer.placeValue(entity::getCountry, COUNTRY, Types.VARCHAR);
+            placer.placeValue(entity::getCity, CITY, Types.VARCHAR);
+            placer.placeValue(entity::getRegistrationDate, REGISTRATION_DATE, Types.DATE);
+            placer.placeValue(entity::getRole, ROLE, Types.CHAR, Role::toString);
+            placer.placeValue(entity::getPhoto, PHOTO, Types.BLOB);
+        }
+
+        @Override
+        public void initUpdateParams(Account entity, Account storedAccount) {
             placer.placeValueIfDiffers(entity::getName, storedAccount::getName, NAME, Types.VARCHAR);
             placer.placeValueIfDiffers(entity::getSurname, storedAccount::getSurname, SURNAME, Types.VARCHAR);
             placer.placeValueIfDiffers(entity::getPatronymic, storedAccount::getPatronymic, PATRONYMIC, Types.VARCHAR);

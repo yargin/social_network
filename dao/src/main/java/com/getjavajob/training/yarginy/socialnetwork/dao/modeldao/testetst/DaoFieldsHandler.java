@@ -16,7 +16,7 @@ public interface DaoFieldsHandler<E extends Entity> {
 
     String getDeleteQuery();
 
-    QueryAndParamPlacer getInsertQueryAndParameters(E entity, E storedEntity);
+    QueryAndParamPlacer getInsertQueryAndParameters(E entity);
 
     QueryAndParamPlacer getUpdateQueryAndParameters(E entity, E storedEntity);
 
@@ -30,7 +30,9 @@ public interface DaoFieldsHandler<E extends Entity> {
     E getNullEntity();
 
     interface InnerInitializer<E> {
-        void initParams(E entity, E storedEntity);
+        void initUpdateParams(E entity, E storedEntity);
+
+        void initInsertParams(E entity);
 
         void setPKey(E storedEntity);
     }

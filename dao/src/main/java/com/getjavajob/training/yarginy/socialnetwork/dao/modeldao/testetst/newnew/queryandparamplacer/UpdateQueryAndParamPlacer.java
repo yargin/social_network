@@ -8,7 +8,7 @@ public class UpdateQueryAndParamPlacer<E extends Entity> extends QueryAndParamPl
     public UpdateQueryAndParamPlacer(String table, Initializer<E> initializer, E entity, E storedEntity, String[] pKey) {
         super(new UpdateQueryPlacer(table, pKey, KEY_PREFIX));
         initializer.setPlacer(this);
-        initializer.initParams(entity, storedEntity);
+        initializer.initUpdateParams(entity, storedEntity);
         initializer.setPKey(storedEntity);
     }
 }

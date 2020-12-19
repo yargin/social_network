@@ -1,7 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.DaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.DaoImplOld;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class BatchDaoImpl<E extends Entity> extends DaoImpl<E> implements BatchDao<E> {
+public class BatchDaoImpl<E extends Entity> extends DaoImplOld<E> implements BatchDao<E> {
     private final BatchDml<E> batchDml;
 
     public BatchDaoImpl(DataSource dataSource, BatchDml<E> batchDml) {

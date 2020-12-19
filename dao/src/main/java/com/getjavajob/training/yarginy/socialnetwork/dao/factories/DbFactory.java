@@ -11,14 +11,15 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.BatchDaoI
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.dmls.BatchGroupDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.batchmodeldao.dmls.BatchPhonesDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.DaoImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.AccountDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.DaoImplOld;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.DialogDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.messages.AccountWallMessageDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.messages.DialogMessageDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.messages.GroupWallMessageDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.password.PasswordDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.password.PasswordDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.AccountDaoFieldsHandler;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.DaoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.SelfManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.SelfManyToManyDaoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.dmls.FriendshipDml;
@@ -34,27 +35,25 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import javax.sql.DataSource;
 
 @Configuration
 public class DbFactory {
     private DataSource dataSource;
+    private NamedParameterJdbcTemplate template;
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
-    }
-
-    public JdbcTemplate getJdbcTemplate() {
-        return new JdbcTemplate(dataSource);
+        template = new NamedParameterJdbcTemplate(dataSource);
     }
 
     @Bean("accountDao")
     @Autowired
-    public Dao<Account> getAccountDao(AccountDml dml) {
-        return new DaoImpl<>(dataSource, dml);
+    public Dao<Account> getAccountDao(AccountDaoFieldsHandler handler) {
+        return new DaoImpl<>(template, handler);
     }
 
     @Bean("groupDao")
@@ -120,7 +119,7 @@ public class DbFactory {
     @Bean("accountWallMessageDao")
     @Autowired
     public Dao<Message> getAccountWallMessageDao(AccountWallMessageDml dml) {
-        return new DaoImpl<>(dataSource, dml);
+        return new DaoImplOld<>(dataSource, dml);
     }
 
     @Bean("accountWallMessagesDao")
@@ -130,7 +129,7 @@ public class DbFactory {
 
     @Bean("dialogMessageDao")
     public Dao<Message> getDialogMessageDao(DialogMessageDml dml) {
-        return new DaoImpl<>(dataSource, dml);
+        return new DaoImplOld<>(dataSource, dml);
     }
 
     @Bean("dialogMessagesDao")
@@ -140,7 +139,7 @@ public class DbFactory {
 
     @Bean("groupWallMessageDao")
     public Dao<Message> getGroupWallMessageDao(GroupWallMessageDml dml) {
-        return new DaoImpl<>(dataSource, dml);
+        return new DaoImplOld<>(dataSource, dml);
     }
 
     @Bean("groupWallMessagesDao")
@@ -150,7 +149,7 @@ public class DbFactory {
 
     @Bean("dialogDao")
     public Dao<Dialog> getDialogDao(DialogDml dml) {
-        return new DaoImpl<>(dataSource, dml);
+        return new DaoImplOld<>(dataSource, dml);
     }
 
     @Bean("dialogsDao")

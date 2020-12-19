@@ -15,6 +15,10 @@ public interface ValuePlacer {
     <V, T> void placeValueIfDiffers(Supplier<V> valueGetter, Supplier<V> storedValueGetter, String column, int type,
                                     Function<V, T> objToSqlTransformer);
 
+    <V> void placeValue(Supplier<V> valueGetter, String column, int type);
+
+    <V, T> void placeValue(Supplier<V> valueGetter, String column, int type, Function<V, T> objToSqlTransformer);
+
     /**
      * builds sql query for update
      *

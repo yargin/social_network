@@ -6,6 +6,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.AbstractEntit
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper;
+import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
 import java.sql.Date;
@@ -15,6 +16,7 @@ import java.util.Objects;
 import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper.*;
 import static java.util.Objects.isNull;
 
+@Component
 public class AccountImpl extends AbstractEntity implements Account {
     private static final int MAX_PHOTO_SIZE = 16000000;
     private String name;

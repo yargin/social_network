@@ -13,11 +13,11 @@ import java.util.Collection;
 
 import static java.util.Objects.isNull;
 
-public class DaoImpl<E extends Entity> implements Dao<E> {
+public class DaoImplOld<E extends Entity> implements Dao<E> {
     protected final DataSource dataSource;
     protected final Dml<E> dml;
 
-    public DaoImpl(DataSource dataSource, Dml<E> dml) {
+    public DaoImplOld(DataSource dataSource, Dml<E> dml) {
         this.dataSource = dataSource;
         this.dml = dml;
     }

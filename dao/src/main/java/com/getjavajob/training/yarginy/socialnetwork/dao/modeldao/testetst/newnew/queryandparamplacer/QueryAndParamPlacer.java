@@ -19,12 +19,12 @@ public abstract class QueryAndParamPlacer implements ValuePlacer {
 
     @Override
     public <V> void placeKey(Supplier<V> valueGetter, String column, int type) {
-        placer.addKey(valueGetter, KEY_PREFIX + column, type);
+        placer.addValue(valueGetter, KEY_PREFIX + column, type);
     }
 
     @Override
     public <V, T> void placeKey(Supplier<V> valueGetter, String column, int type, Function<V, T> objToSqlTransformer) {
-        placer.addKey(valueGetter, KEY_PREFIX + column, type, objToSqlTransformer);
+        placer.addValue(valueGetter, KEY_PREFIX + column, type, objToSqlTransformer);
     }
 
     @Override
@@ -40,6 +40,18 @@ public abstract class QueryAndParamPlacer implements ValuePlacer {
         if (placer.addFieldIfDiffers(valueGetter, storedValueGetter, column, type, objToSqlTransformer)) {
             queryPlacer.addColumn(column);
         }
+    }
+
+    @Override
+    public <V> void placeValue(Supplier<V> valueGetter, String column, int type) {
+        placer.addValue(valueGetter, column, type);
+        queryPlacer.addColumn(column);
+    }
+
+    @Override
+    public <V, T> void placeValue(Supplier<V> valueGetter, String column, int type, Function<V, T> objToSqlTransformer) {
+        placer.addValue(valueGetter, column, type, objToSqlTransformer);
+        queryPlacer.addColumn(column);
     }
 
     @Override
