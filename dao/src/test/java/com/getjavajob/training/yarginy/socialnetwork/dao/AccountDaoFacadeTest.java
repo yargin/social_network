@@ -17,63 +17,63 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoOverrideSpringConfig.xml"})
 public class AccountDaoFacadeTest {
-    private static final Account ACCOUNT = new AccountImpl();
+    private Account account = new AccountImpl();
     @Autowired
     private AccountDaoFacade accountDaoFacade;
 
     @After
     public void deleteTestValues() {
-        accountDaoFacade.delete(ACCOUNT);
+        accountDaoFacade.delete(account);
     }
 
     @Before
     public void accountInit() {
-        ACCOUNT.setEmail("test@test.test");
-        ACCOUNT.setName("test");
-        ACCOUNT.setSurname("test");
+        account.setEmail("test@test.test");
+        account.setName("test");
+        account.setSurname("test");
     }
 
     @Test
     public void testCreateAccount() {
-        accountDaoFacade.delete(ACCOUNT);
+        accountDaoFacade.delete(account);
         boolean actual;
         try {
-            ACCOUNT.setEmail(null);
-            actual = accountDaoFacade.create(ACCOUNT);
+            account.setEmail(null);
+            actual = accountDaoFacade.create(account);
         } catch (IncorrectDataException e) {
             actual = false;
         }
         assertSame(false, actual);
         try {
-            ACCOUNT.setEmail("");
-            actual = accountDaoFacade.create(ACCOUNT);
+            account.setEmail("");
+            actual = accountDaoFacade.create(account);
         } catch (IncorrectDataException e) {
             actual = false;
         }
         assertFalse(actual);
-        ACCOUNT.setEmail("test@test.test");
-        actual = accountDaoFacade.create(ACCOUNT);
+        account.setEmail("test@test.test");
+        actual = accountDaoFacade.create(account);
         assertTrue(actual);
     }
 
     @Test
     public void testCreateExistingAccount() {
-        accountDaoFacade.create(ACCOUNT);
-        assertFalse(accountDaoFacade.create(ACCOUNT));
+        accountDaoFacade.create(account);
+        assertFalse(accountDaoFacade.create(account));
     }
 
     @Test
     public void testSelectAccount() {
-        accountDaoFacade.create(ACCOUNT);
-        Account actual = accountDaoFacade.select(ACCOUNT);
-        assertEquals(ACCOUNT, actual);
+        accountDaoFacade.create(account);
+        Account actual = accountDaoFacade.select(account);
+        assertEquals(account, actual);
         actual = accountDaoFacade.select(actual);
-        assertEquals(ACCOUNT, actual);
+        assertEquals(account, actual);
     }
 
     @Test
     public void testSelectNonExistingAccount() {
-        accountDaoFacade.delete(ACCOUNT);
+        accountDaoFacade.delete(account);
         Account actual = accountDaoFacade.select(accountDaoFacade.getNullEntity());
         assertEquals(accountDaoFacade.getNullEntity(), actual);
         actual = accountDaoFacade.select(actual);
@@ -82,13 +82,13 @@ public class AccountDaoFacadeTest {
 
     @Test
     public void testUpdateAccount() {
-        accountDaoFacade.create(ACCOUNT);
+        accountDaoFacade.create(account);
         String newPatronymic = "new Patronymic";
-        ACCOUNT.setPatronymic(newPatronymic);
-        Account storedAccount = accountDaoFacade.select(ACCOUNT);
-        boolean actual = accountDaoFacade.update(ACCOUNT, storedAccount);
+        account.setPatronymic(newPatronymic);
+        Account storedAccount = accountDaoFacade.select(account);
+        boolean actual = accountDaoFacade.update(account, storedAccount);
         assertTrue(actual);
-        Account storageAccount = accountDaoFacade.select(ACCOUNT);
+        Account storageAccount = accountDaoFacade.select(account);
         assertEquals(newPatronymic, storageAccount.getPatronymic());
     }
 
@@ -108,8 +108,9 @@ public class AccountDaoFacadeTest {
 
     @Test
     public void testDeleteAccount() {
-        accountDaoFacade.create(ACCOUNT);
-        assertTrue(accountDaoFacade.delete(ACCOUNT));
-        assertEquals(accountDaoFacade.getNullEntity(), accountDaoFacade.select(ACCOUNT));
+        accountDaoFacade.create(account);
+        account = accountDaoFacade.select(account);
+        assertTrue(accountDaoFacade.delete(account));
+        assertEquals(accountDaoFacade.getNullEntity(), accountDaoFacade.select(account));
     }
 }

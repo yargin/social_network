@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst;
+package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.newnew.models.modeldaos.handlers;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
@@ -6,9 +6,10 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.newnew.Initializer;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.newnew.queryandparamplacer.InsertQueryAndParamPlacer;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.newnew.queryandparamplacer.QueryAndParamPlacer;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.newnew.queryandparamplacer.UpdateQueryAndParamPlacer;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.newnew.models.modeldaos.DaoFieldsHandler;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.valuesplacer.queryandparamplacer.InsertQueryAndParamPlacer;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.valuesplacer.queryandparamplacer.QueryAndParamPlacer;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.valuesplacer.queryandparamplacer.UpdateQueryAndParamPlacer;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Component;
 
@@ -19,12 +20,12 @@ import java.sql.Types;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable.*;
 import static java.util.Objects.isNull;
 
-@Component("accountDaoFieldsHandler")
-public class AccountDaoFieldsHandler implements DaoFieldsHandler<Account> {
+@Component("accountDaoHandler")
+public class AccountDaoHandler implements DaoFieldsHandler<Account> {
     private static final String SELECT_BY_ID = "SELECT * FROM Accounts WHERE id = :id";
     private static final String SELECT_BY_ALT_KEY = "SELECT * FROM Accounts WHERE email = :email";
     private static final String SELECT_ALL = "SELECT * FROM Accounts";
-    private static final String DELETE_ACCOUNT = "DELETE FROM Accounts WHERE email = :email";
+    private static final String DELETE_ACCOUNT = "DELETE FROM Accounts WHERE id = ?";
 
     public String getSelectByIdQuery() {
         return SELECT_BY_ID;
@@ -86,12 +87,24 @@ public class AccountDaoFieldsHandler implements DaoFieldsHandler<Account> {
 
     public MapSqlParameterSource getAltKeyParameter(Account account) {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
-        parameters.addValue("email", account.getEmail(), Types.VARCHAR);
+        parameters.addValue(EMAIL, account.getEmail(), Types.VARCHAR);
+        return parameters;
+    }
+
+    @Override
+    public MapSqlParameterSource getPKeyParameter(Account account) {
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue(ID, account.getId(), Types.BIGINT);
         return parameters;
     }
 
     public Account getNullEntity() {
         return NullEntitiesFactory.getNullAccount();
+    }
+
+    @Override
+    public String getTableName() {
+        return TABLE;
     }
 
     static class AccountInitializer extends Initializer<Account> {

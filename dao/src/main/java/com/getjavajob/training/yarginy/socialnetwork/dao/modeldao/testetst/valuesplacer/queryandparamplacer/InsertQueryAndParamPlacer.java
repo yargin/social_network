@@ -1,8 +1,8 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.newnew.queryandparamplacer;
+package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.valuesplacer.queryandparamplacer;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.newnew.Initializer;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.newnew.queryplacers.InsertQueryPlacer;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.valuesplacer.queryplacers.InsertQueryPlacer;
 
 //@Component
 //@Scope("prototype")

@@ -1,7 +1,7 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst;
+package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.newnew.models.modeldaos;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.newnew.queryandparamplacer.QueryAndParamPlacer;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.valuesplacer.queryandparamplacer.QueryAndParamPlacer;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 
 import java.sql.ResultSet;
@@ -27,7 +27,11 @@ public interface DaoFieldsHandler<E extends Entity> {
 
     MapSqlParameterSource getAltKeyParameter(E entity);
 
+    MapSqlParameterSource getPKeyParameter(E entity);
+
     E getNullEntity();
+
+    String getTableName();
 
     interface InnerInitializer<E> {
         void initUpdateParams(E entity, E storedEntity);

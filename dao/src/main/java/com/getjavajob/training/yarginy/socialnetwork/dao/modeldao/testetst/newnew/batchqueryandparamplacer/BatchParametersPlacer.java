@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.newnew.paramplacers;
+package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.newnew.batchqueryandparamplacer;
 
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 
@@ -6,10 +6,9 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class ParametersPlacer {
-    MapSqlParameterSource parameters = new MapSqlParameterSource();
-
-    public <V> boolean addFieldIfDiffers(Supplier<V> valueGetter, Supplier<V> storedValueGetter, String column, int type) {
+public class BatchParametersPlacer {
+    public <V> boolean addFieldIfDiffers(Supplier<V> valueGetter, Supplier<V> storedValueGetter, String column, int type,
+                                         MapSqlParameterSource parameters) {
         V value = valueGetter.get();
         if (!Objects.equals(value, storedValueGetter.get())) {
             parameters.addValue(column, value, type);
@@ -19,7 +18,8 @@ public class ParametersPlacer {
     }
 
     public <V, T> boolean addFieldIfDiffers(Supplier<V> valueGetter, Supplier<V> storedValueGetter, String column,
-                                            int type, Function<V, T> objToSqlTransformer) {
+                                            int type, Function<V, T> objToSqlTransformer, MapSqlParameterSource
+                                                    parameters) {
         V value = valueGetter.get();
         if (!Objects.equals(value, storedValueGetter.get())) {
             if (value == null) {
@@ -32,20 +32,17 @@ public class ParametersPlacer {
         return false;
     }
 
-    public <V> void addValue(Supplier<V> valueGetter, String key, int type) {
+    public <V> void addValue(Supplier<V> valueGetter, String key, int type, MapSqlParameterSource parameters) {
         parameters.addValue(key, valueGetter.get(), type);
     }
 
-    public <V, T> void addValue(Supplier<V> valueGetter, String key, int type, Function<V, T> objToSqlTransformer) {
+    public <V, T> void addValue(Supplier<V> valueGetter, String key, int type, Function<V, T> objToSqlTransformer,
+                                MapSqlParameterSource parameters) {
         V value = valueGetter.get();
         if (value == null) {
             parameters.addValue(key, null, type);
         } else {
             parameters.addValue(key, objToSqlTransformer.apply(value), type);
         }
-    }
-
-    public MapSqlParameterSource getParameters() {
-        return parameters;
     }
 }

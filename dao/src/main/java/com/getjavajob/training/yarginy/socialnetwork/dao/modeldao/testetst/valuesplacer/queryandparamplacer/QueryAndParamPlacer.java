@@ -1,7 +1,7 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.newnew.queryandparamplacer;
+package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.valuesplacer.queryandparamplacer;
 
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.newnew.paramplacers.ParametersPlacer;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.newnew.queryplacers.QueryPlacer;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.valuesplacer.paramplacers.ParametersPlacer;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.valuesplacer.queryplacers.QueryPlacer;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 
 import java.util.function.Function;

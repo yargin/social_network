@@ -1,22 +1,33 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst;
+package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.newnew.models.modeldaos;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.newnew.queryandparamplacer.ValuePlacer;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.valuesplacer.queryandparamplacer.ValuePlacer;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Collection;
 
 public class DaoImpl<E extends Entity> implements Dao<E> {
-    private final DaoFieldsHandler<E> handler;
-    private final NamedParameterJdbcTemplate template;
+    protected final DaoFieldsHandler<E> handler;
+    protected final JdbcTemplate template;
+    protected final NamedParameterJdbcTemplate namedTemplate;
+    protected final SimpleJdbcInsert insertTemplate;
 
-    public DaoImpl(NamedParameterJdbcTemplate template, DaoFieldsHandler<E> handler) {
+    public DaoImpl(JdbcTemplate template, DaoFieldsHandler<E> handler) {
         this.template = template;
         this.handler = handler;
+        insertTemplate = new SimpleJdbcInsert(template);
+        insertTemplate.withTableName(handler.getTableName());
+        namedTemplate = new NamedParameterJdbcTemplate(template);
     }
 
     @Override
@@ -24,7 +35,7 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue("id", id);
         try {
-            return template.queryForObject(handler.getSelectByIdQuery(), parameters, handler::mapRow);
+            return namedTemplate.queryForObject(handler.getSelectByIdQuery(), parameters, handler::mapRow);
         } catch (EmptyResultDataAccessException e) {
             return handler.getNullEntity();
         }
@@ -32,9 +43,16 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
 
     @Override
     public E select(E entityToSelect) {
+        template.query("SELECT * FROM ...", new Object[]{}, new ResultSetExtractor<E>() {
+            @Override
+            public E extractData(ResultSet resultSet) throws SQLException, DataAccessException {
+                return null;
+            }
+        });
+//        ResultSetExtractor
         MapSqlParameterSource parameters = handler.getAltKeyParameter(entityToSelect);
         try {
-            return template.queryForObject(handler.getSelectByAltKeyQuery(), parameters, handler::mapRow);
+            return namedTemplate.queryForObject(handler.getSelectByAltKeyQuery(), parameters, handler::mapRow);
         } catch (EmptyResultDataAccessException e) {
             return handler.getNullEntity();
         }
@@ -43,11 +61,9 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
     @Override
     public boolean create(E entity) {
         ValuePlacer queryAndParameters = handler.getInsertQueryAndParameters(entity);
-        String query = queryAndParameters.getQuery();
-        MapSqlParameterSource parameters = queryAndParameters.getInitedParams();
         try {
-            return template.update(query, parameters) == 1;
-        } catch (DataAccessException e) {
+            return insertTemplate.execute(queryAndParameters.getInitedParams()) == 1;
+        } catch (DuplicateKeyException e) {
             return false;
         }
     }
@@ -67,7 +83,7 @@ public class DaoImpl<E extends Entity> implements Dao<E> {
 
     @Override
     public boolean delete(E entity) {
-        MapSqlParameterSource parameters = handler.getAltKeyParameter(entity);
+        MapSqlParameterSource parameters = handler.getPKeyParameter(entity);
         return template.update(handler.getDeleteQuery(), parameters) > 0;
     }
 

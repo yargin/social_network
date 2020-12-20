@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.newnew.queryandparamplacer;
+package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.valuesplacer.queryandparamplacer;
 
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 

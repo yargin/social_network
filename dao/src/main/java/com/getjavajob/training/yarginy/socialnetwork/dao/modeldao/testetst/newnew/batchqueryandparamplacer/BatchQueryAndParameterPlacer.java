@@ -1,15 +1,22 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.newnew.batchqueryandparamplacer;
 
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.newnew.queryandparamplacer.QueryAndParamPlacer;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.newnew.queryplacers.QueryPlacer;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.valuesplacer.queryandparamplacer.QueryAndParamPlacer;
 
-public abstract class BatchQueryAndParameterPlacer extends QueryAndParamPlacer {
-    public BatchQueryAndParameterPlacer(QueryPlacer queryPlacer) {
-        super(queryPlacer);
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+public abstract class BatchQueryAndParameterPlacer {
+    private QueryAndParamPlacer firstRowPlacer;
+
+    public BatchQueryAndParameterPlacer(QueryAndParamPlacer firstRowPlacer) {
+        this.firstRowPlacer = firstRowPlacer;
     }
 
-    public MapSqlParameterSource getInitedParams() {
-        return placer.getParameters();
+    public <V> void placeValue(Supplier<V> valueGetter, String column, int type) {
+        firstRowPlacer.placeValue(valueGetter, column, type);
+    }
+
+    public <V, T> void placeValue(Supplier<V> valueGetter, String column, int type, Function<V, T> objToSqlTransformer) {
+        firstRowPlacer.placeValue(valueGetter, column, type, objToSqlTransformer);
     }
 }

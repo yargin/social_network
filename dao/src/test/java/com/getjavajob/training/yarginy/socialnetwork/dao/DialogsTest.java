@@ -31,6 +31,9 @@ public class DialogsTest {
 
     @Before
     public void initTestValues() {
+        dialogDaoFacade.delete(dialog);
+        accountDaoFacade.delete(firstAccount);
+        accountDaoFacade.delete(secondAccount);
         accountDaoFacade.create(firstAccount);
         firstAccount = accountDaoFacade.select(firstAccount);
         accountDaoFacade.create(secondAccount);
@@ -76,11 +79,6 @@ public class DialogsTest {
 
     @Test
     public void testDeleteDialog() {
-        assertTrue(dialogDaoFacade.delete(dialog));
-        assertEquals(dialogDaoFacade.getNullEntity(), dialogDaoFacade.select(dialog));
-        dialogDaoFacade.create(dialog);
-        dialog.setSecondAccount(firstAccount);
-        dialog.setFirstAccount(secondAccount);
         assertTrue(dialogDaoFacade.delete(dialog));
         assertEquals(dialogDaoFacade.getNullEntity(), dialogDaoFacade.select(dialog));
     }

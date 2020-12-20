@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.newnew.queryplacers;
+package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.valuesplacer.queryplacers;
 
 public class InsertQueryPlacer extends QueryPlacer {
     private final StringBuilder insertParameters = new StringBuilder();
