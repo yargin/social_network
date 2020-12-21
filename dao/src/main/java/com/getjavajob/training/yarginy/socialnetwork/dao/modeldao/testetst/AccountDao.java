@@ -6,11 +6,15 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.sql.Types;
@@ -19,6 +23,7 @@ import java.util.Collection;
 import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable.*;
 import static java.util.Objects.isNull;
 
+@Component
 public class AccountDao implements Dao<Account> {
     private final JdbcTemplate template;
     private final NamedParameterJdbcTemplate namedTemplate;
@@ -34,11 +39,17 @@ public class AccountDao implements Dao<Account> {
     @Override
     public Account select(long id) {
         String query = "SELECT * FROM accounts WHERE id = ?";
-        return template.query(query, getAccountExtractor(), id);
+        try {
+            return template.queryForObject(query, getAccountRowMapper(), id);
+        } catch (TransientDataAccessException e) {
+            throw new IllegalStateException(e);
+        } catch (EmptyResultDataAccessException e) {
+            return getNullEntity();
+        }
     }
 
-    public ResultSetExtractor<Account> getAccountViewExtractor() {
-        return resultSet -> {
+    public RowMapper<Account> getAccountViewRowMapper() {
+        return (resultSet, i) -> {
             Account account = new AccountImpl();
             account.setId(resultSet.getLong(ID));
             account.setName(resultSet.getString(NAME));
@@ -48,9 +59,9 @@ public class AccountDao implements Dao<Account> {
         };
     }
 
-    public ResultSetExtractor<Account> getAccountExtractor() {
-        return resultSet -> {
-            Account account = getAccountViewExtractor().extractData(resultSet);
+    public RowMapper<Account> getAccountRowMapper() {
+        return (resultSet, i) -> {
+            Account account = getAccountViewRowMapper().mapRow(resultSet, i);
             account.setPatronymic(resultSet.getString(PATRONYMIC));
             if (!isNull(resultSet.getString(SEX))) {
                 account.setSex(Sex.valueOf(resultSet.getString(SEX)));
@@ -77,13 +88,22 @@ public class AccountDao implements Dao<Account> {
     @Override
     public Account select(Account entityToSelect) {
         String query = "SELECT * FROM accounts WHERE email = ?";
-        return template.query(query, getAccountExtractor(), entityToSelect.getEmail());
-
+        try {
+            return template.queryForObject(query, getAccountRowMapper(), entityToSelect.getEmail());
+        } catch (TransientDataAccessException e) {
+            throw new IllegalArgumentException(e);
+        } catch (EmptyResultDataAccessException e) {
+            return getNullEntity();
+        }
     }
 
     @Override
     public boolean create(Account entity) {
-        return jdbcInsert.execute(createAccountFieldsMap(entity)) == 1;
+        try {
+            return jdbcInsert.execute(createAccountFieldsMap(entity)) == 1;
+        } catch (DuplicateKeyException e) {
+            return false;
+        }
     }
 
     public MapSqlParameterSource createAccountFieldsMap(Account account) {
@@ -111,7 +131,31 @@ public class AccountDao implements Dao<Account> {
 
     @Override
     public boolean update(Account entity, Account storedEntity) {
-        String query = "UPDATE accounts SET name = :surname";
+        ValuePlacer valuePlacer = new ValuePlacer(TABLE, new String[]{EMAIL});
+        valuePlacer.addFieldIfDiffers(entity::getName, storedEntity::getName, NAME, Types.VARCHAR);
+        valuePlacer.addFieldIfDiffers(entity::getSurname, storedEntity::getSurname, SURNAME, Types.VARCHAR);
+        valuePlacer.addFieldIfDiffers(entity::getPatronymic, storedEntity::getPatronymic, PATRONYMIC, Types.VARCHAR);
+        valuePlacer.addFieldIfDiffers(entity::getSex, storedEntity::getSex, SEX, Types.CHAR, Sex::toString);
+        valuePlacer.addFieldIfDiffers(entity::getBirthDate, storedEntity::getBirthDate, BIRTH_DATE, Types.DATE);
+        valuePlacer.addFieldIfDiffers(entity::getIcq, storedEntity::getIcq, ICQ, Types.VARCHAR);
+        valuePlacer.addFieldIfDiffers(entity::getSkype, storedEntity::getSkype, SKYPE, Types.VARCHAR);
+        valuePlacer.addFieldIfDiffers(entity::getEmail, storedEntity::getEmail, EMAIL, Types.VARCHAR);
+        valuePlacer.addFieldIfDiffers(entity::getAdditionalEmail, storedEntity::getAdditionalEmail, ADDITIONAL_EMAIL,
+                Types.VARCHAR);
+        valuePlacer.addFieldIfDiffers(entity::getCountry, storedEntity::getCountry, COUNTRY, Types.VARCHAR);
+        valuePlacer.addFieldIfDiffers(entity::getCity, storedEntity::getCity, CITY, Types.VARCHAR);
+        valuePlacer.addFieldIfDiffers(entity::getRegistrationDate, storedEntity::getRegistrationDate, REGISTRATION_DATE,
+                Types.DATE);
+        valuePlacer.addFieldIfDiffers(entity::getRole, storedEntity::getRole, ROLE, Types.CHAR, Role::toString);
+        valuePlacer.addFieldIfDiffers(entity::getPhoto, storedEntity::getPhoto, PHOTO, Types.BLOB);
+
+        valuePlacer.addKey(entity::getEmail, EMAIL, Types.VARCHAR);
+        try {
+            return namedTemplate.update(valuePlacer.getQuery(), valuePlacer.getParameters()) == 1;
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
@@ -123,7 +167,7 @@ public class AccountDao implements Dao<Account> {
     @Override
     public Collection<Account> selectAll() {
         String query = "SELECT * FROM accounts";
-        return template.queryForList(query, Account.class);
+        return template.query(query, getAccountViewRowMapper());
     }
 
     @Override

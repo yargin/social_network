@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Collection;
+
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -112,5 +114,13 @@ public class AccountDaoFacadeTest {
         account = accountDaoFacade.select(account);
         assertTrue(accountDaoFacade.delete(account));
         assertEquals(accountDaoFacade.getNullEntity(), accountDaoFacade.select(account));
+    }
+
+    @Test
+    public void testSelectAll() {
+        accountDaoFacade.create(account);
+        Collection<Account> accounts = accountDaoFacade.selectAll();
+        assertTrue(accounts.size() > 0);
+        assertTrue(accounts.contains(account));
     }
 }

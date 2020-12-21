@@ -17,9 +17,6 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.messages.
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.dmls.messages.GroupWallMessageDml;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.password.PasswordDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.password.PasswordDml;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.newnew.models.modeldaos.DaoImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.newnew.models.modeldaos.handlers.AccountDaoHandler;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.newnew.models.modeldaos.handlers.DialogDaoHandler;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.SelfManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.SelfManyToManyDaoImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.dmls.FriendshipDml;
@@ -50,17 +47,17 @@ public class DbFactory {
         template = new NamedParameterJdbcTemplate(dataSource);
     }
 
-    @Bean("accountDao")
-    @Autowired
-    public Dao<Account> getAccountDao(AccountDaoHandler handler) {
-        return new DaoImpl<>(dataSource, handler);
-    }
+//    @Bean("accountDao")
+//    @Autowired
+//    public Dao<Account> getAccountDao(AccountDaoHandler handler) {
+//        return new DaoImpl<>(dataSource, handler);
+//    }
 
-    @Bean("dialogDao")
-    @Autowired
-    public Dao<Dialog> getDialogDao(DialogDaoHandler handler) {
-        return new DaoImpl<>(dataSource, handler);
-    }
+//    @Bean("dialogDao")
+//    @Autowired
+//    public Dao<Dialog> getDialogDao(DialogDaoHandler handler) {
+//        return new DaoImpl<>(dataSource, handler);
+//    }
 
     @Bean("groupDao")
     @Autowired

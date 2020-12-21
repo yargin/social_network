@@ -29,5 +29,4 @@ public class UpdateQueryPlacer extends QueryPlacer {
     public void addColumn(String column) {
         updateQueryParameters.append(column).append(" = :").append(column).append(", ");
     }
-
 }
