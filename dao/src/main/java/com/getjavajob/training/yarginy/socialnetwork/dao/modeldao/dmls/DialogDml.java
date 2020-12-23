@@ -24,11 +24,11 @@ public class DialogDml extends AbstractDml<Dialog> {
     private static final String SECOND_TABLE_ALIAS = "a2";
     private static final String SELECT_ALL = buildQuery().selectAll(TABLE).build();
 
-    private static final String SELECT_BY_ID = "SELECT " + ID + ", " + AccountsTable.getViewFieldsWithAlias("a1") + ", " +
-            AccountsTable.getViewFieldsWithAlias("a2") + " FROM Dialogs JOIN Accounts a1 ON Dialogs.first_id = a1.id " +
+    private static final String SELECT_BY_ID = "SELECT " + ID + ", " + AccountsTable.getViewFieldsWithPostFix("a1") + ", " +
+            AccountsTable.getViewFieldsWithPostFix("a2") + " FROM Dialogs JOIN Accounts a1 ON Dialogs.first_id = a1.id " +
             "JOIN Accounts as a2 ON Dialogs.second_id = a2.id WHERE Dialogs.id = ? ";
-    private static final String SELECT_BY_ALT_KEY = "SELECT " + ID + ", " + AccountsTable.getViewFieldsWithAlias("a1") +
-            ", " + AccountsTable.getViewFieldsWithAlias("a2") + " FROM " + TABLE + " JOIN " + AccountsTable.TABLE +
+    private static final String SELECT_BY_ALT_KEY = "SELECT " + ID + ", " + AccountsTable.getViewFieldsWithPostFix("a1") +
+            ", " + AccountsTable.getViewFieldsWithPostFix("a2") + " FROM " + TABLE + " JOIN " + AccountsTable.TABLE +
             " a1 ON " + FIRST_ID + " = a1.id JOIN " + AccountsTable.TABLE + " a2 ON " + SECOND_ID + " = a2.id WHERE (" +
             FIRST_ID + " = ? AND " + SECOND_ID + " = ?) OR (" + SECOND_ID + "  = ? AND " + FIRST_ID + " = ?)";
 

@@ -24,7 +24,7 @@ public final class AccountsTable {
     private AccountsTable() {
     }
 
-    public static String getViewFieldsWithAlias(String alias) {
+    public static String getViewFieldsWithPostFix(String alias) {
         return alias + ".id id" + alias + ", " +
                 alias + ".name name" + alias + ", " +
                 alias + ".surname surname" + alias + ", " +

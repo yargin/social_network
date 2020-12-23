@@ -33,6 +33,7 @@ public class AccountDaoFacadeTest {
         account.setEmail("test@test.test");
         account.setName("test");
         account.setSurname("test");
+        accountDaoFacade.delete(account);
     }
 
     @Test

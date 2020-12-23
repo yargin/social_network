@@ -23,11 +23,11 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.DialogsTa
 @Component("dialogDaoHandler")
 public class DialogDaoHandler implements DaoFieldsHandler<Dialog> {
     private static final String SELECT_BY_ID = "SELECT " + TABLE + '.' + ID + ", " +
-            AccountsTable.getViewFieldsWithAlias("a1") + ", " + AccountsTable.getViewFieldsWithAlias("a2") +
+            AccountsTable.getViewFieldsWithPostFix("a1") + ", " + AccountsTable.getViewFieldsWithPostFix("a2") +
             " FROM Dialogs JOIN accounts a1 ON Dialogs.first_id = a1.id JOIN accounts as a2 ON Dialogs.second_id = " +
             "a2.id WHERE dialogs.id = :id ";
     private static final String SELECT_BY_ALT_KEY = "SELECT " + TABLE + '.' + ID + ", " +
-            AccountsTable.getViewFieldsWithAlias("a1") + ", " + AccountsTable.getViewFieldsWithAlias("a2") + " FROM " +
+            AccountsTable.getViewFieldsWithPostFix("a1") + ", " + AccountsTable.getViewFieldsWithPostFix("a2") + " FROM " +
             TABLE + " JOIN accounts a1 ON " + FIRST_ID + " = a1.id JOIN accounts a2 ON " + SECOND_ID + " = a2.id WHERE (" +
             FIRST_ID + " = :first_id AND " + SECOND_ID + " = :second_id) OR (" + SECOND_ID + "  = :first_id AND " +
             FIRST_ID + " = :second_id)";

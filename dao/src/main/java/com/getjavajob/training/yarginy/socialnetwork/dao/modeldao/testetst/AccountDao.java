@@ -5,108 +5,87 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
-import org.springframework.dao.DuplicateKeyException;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.dao.TransientDataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.sql.Types;
-import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable.*;
 import static java.util.Objects.isNull;
 
 @Component
-public class AccountDao implements Dao<Account> {
-    private final JdbcTemplate template;
-    private final NamedParameterJdbcTemplate namedTemplate;
-    private final SimpleJdbcInsert jdbcInsert;
+public class AccountDao extends AbstractDao<Account> {
+    private static final String SELECT_BY_ID = "SELECT * FROM accounts WHERE id = ?";
+    private static final String SELECT_BY_ALT_KEY = "SELECT * FROM accounts WHERE email = ?";
+    private static final String DELETE_BY_ID = "DELETE FROM accounts WHERE id = ?";
+    private static final String SELECT_ALL = "SELECT * FROM accounts";
 
     public AccountDao(DataSource dataSource) {
-        template = new JdbcTemplate(dataSource);
-        namedTemplate = new NamedParameterJdbcTemplate(dataSource);
-        jdbcInsert = new SimpleJdbcInsert(dataSource);
-        jdbcInsert.withTableName(TABLE);
+        super(dataSource, TABLE);
     }
 
     @Override
-    public Account select(long id) {
-        String query = "SELECT * FROM accounts WHERE id = ?";
-        try {
-            return template.queryForObject(query, getAccountRowMapper(), id);
-        } catch (TransientDataAccessException e) {
-            throw new IllegalStateException(e);
-        } catch (EmptyResultDataAccessException e) {
-            return getNullEntity();
-        }
+    protected String getSelectByIdQuery() {
+        return SELECT_BY_ID;
     }
 
-    public RowMapper<Account> getAccountViewRowMapper() {
-        return (resultSet, i) -> {
+    @Override
+    public ResultSetExtractor<Account> getSuffixedViewExtractor(String suffix) {
+        return resultSet -> {
             Account account = new AccountImpl();
-            account.setId(resultSet.getLong(ID));
-            account.setName(resultSet.getString(NAME));
-            account.setSurname(resultSet.getString(SURNAME));
-            account.setEmail(resultSet.getString(EMAIL));
-            return account;
-        };
-    }
-
-    public RowMapper<Account> getAccountRowMapper() {
-        return (resultSet, i) -> {
-            Account account = getAccountViewRowMapper().mapRow(resultSet, i);
-            account.setPatronymic(resultSet.getString(PATRONYMIC));
-            if (!isNull(resultSet.getString(SEX))) {
-                account.setSex(Sex.valueOf(resultSet.getString(SEX)));
-            }
-            if (!isNull(resultSet.getDate(BIRTH_DATE))) {
-                account.setBirthDate(resultSet.getDate(BIRTH_DATE));
-            }
-            if (!isNull(resultSet.getDate(REGISTRATION_DATE))) {
-                account.setRegistrationDate(resultSet.getDate(REGISTRATION_DATE));
-            }
-            account.setAdditionalEmail(resultSet.getString(ADDITIONAL_EMAIL));
-            if (!isNull(resultSet.getString(ROLE))) {
-                account.setRole(Role.valueOf(resultSet.getString(ROLE)));
-            }
-            account.setIcq(resultSet.getString(ICQ));
-            account.setSkype(resultSet.getString(SKYPE));
-            account.setCity(resultSet.getString(CITY));
-            account.setCountry(resultSet.getString(COUNTRY));
-            account.setPhoto(resultSet.getBytes(PHOTO));
+            account.setId(resultSet.getLong(ID + suffix));
+            account.setName(resultSet.getString(NAME + suffix));
+            account.setSurname(resultSet.getString(SURNAME + suffix));
+            account.setEmail(resultSet.getString(EMAIL + suffix));
             return account;
         };
     }
 
     @Override
-    public Account select(Account entityToSelect) {
-        String query = "SELECT * FROM accounts WHERE email = ?";
-        try {
-            return template.queryForObject(query, getAccountRowMapper(), entityToSelect.getEmail());
-        } catch (TransientDataAccessException e) {
-            throw new IllegalArgumentException(e);
-        } catch (EmptyResultDataAccessException e) {
-            return getNullEntity();
-        }
+    protected Object[] getAltKeys(Account account) {
+        return new Object[]{account.getEmail()};
     }
 
     @Override
-    public boolean create(Account entity) {
-        try {
-            return jdbcInsert.execute(createAccountFieldsMap(entity)) == 1;
-        } catch (DuplicateKeyException e) {
-            return false;
-        }
+    protected Object[] getPrimaryKeys(Account account) {
+        return new Object[]{account.getId()};
     }
 
-    public MapSqlParameterSource createAccountFieldsMap(Account account) {
+    @Override
+    protected String getSelectByAltKeysQuery() {
+        return SELECT_BY_ALT_KEY;
+    }
+
+    @Override
+    public ResultSetExtractor<Account> getSuffixedExtractor(String suffix) {
+        return resultSet -> {
+            Account account = getViewExtractor().extractData(resultSet);
+            account.setPatronymic(resultSet.getString(PATRONYMIC + suffix));
+            if (!isNull(resultSet.getString(SEX + suffix))) {
+                account.setSex(Sex.valueOf(resultSet.getString(SEX + suffix)));
+            }
+            if (!isNull(resultSet.getDate(BIRTH_DATE + suffix))) {
+                account.setBirthDate(resultSet.getDate(BIRTH_DATE + suffix));
+            }
+            if (!isNull(resultSet.getDate(REGISTRATION_DATE + suffix))) {
+                account.setRegistrationDate(resultSet.getDate(REGISTRATION_DATE + suffix));
+            }
+            account.setAdditionalEmail(resultSet.getString(ADDITIONAL_EMAIL + suffix));
+            if (!isNull(resultSet.getString(ROLE + suffix))) {
+                account.setRole(Role.valueOf(resultSet.getString(ROLE + suffix)));
+            }
+            account.setIcq(resultSet.getString(ICQ + suffix));
+            account.setSkype(resultSet.getString(SKYPE + suffix));
+            account.setCity(resultSet.getString(CITY + suffix));
+            account.setCountry(resultSet.getString(COUNTRY + suffix));
+            account.setPhoto(resultSet.getBytes(PHOTO + suffix));
+            return account;
+        };
+    }
+
+    protected MapSqlParameterSource createEntityFieldsMap(Account account) {
         MapSqlParameterSource map = new MapSqlParameterSource();
         map.addValue(NAME, account.getName(), Types.VARCHAR);
         map.addValue(SURNAME, account.getSurname(), Types.VARCHAR);
@@ -130,7 +109,7 @@ public class AccountDao implements Dao<Account> {
     }
 
     @Override
-    public boolean update(Account entity, Account storedEntity) {
+    public ValuePlacer getValuePlacer(Account entity, Account storedEntity) {
         ValuePlacer valuePlacer = new ValuePlacer(TABLE, new String[]{EMAIL});
         valuePlacer.addFieldIfDiffers(entity::getName, storedEntity::getName, NAME, Types.VARCHAR);
         valuePlacer.addFieldIfDiffers(entity::getSurname, storedEntity::getSurname, SURNAME, Types.VARCHAR);
@@ -150,38 +129,21 @@ public class AccountDao implements Dao<Account> {
         valuePlacer.addFieldIfDiffers(entity::getPhoto, storedEntity::getPhoto, PHOTO, Types.BLOB);
 
         valuePlacer.addKey(entity::getEmail, EMAIL, Types.VARCHAR);
-        try {
-            return namedTemplate.update(valuePlacer.getQuery(), valuePlacer.getParameters()) == 1;
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            return false;
-        }
+        return valuePlacer;
     }
 
     @Override
-    public boolean delete(Account entity) {
-        String query = "DELETE FROM accounts WHERE email = ?";
-        return template.update(query, entity.getEmail()) == 1;
+    protected String getDeleteByPrimaryKeyQuery() {
+        return DELETE_BY_ID;
     }
 
     @Override
-    public Collection<Account> selectAll() {
-        String query = "SELECT * FROM accounts";
-        return template.query(query, getAccountViewRowMapper());
-    }
-
-    @Override
-    public void checkEntity(Account entity) {
-        throw new UnsupportedOperationException();
+    protected String getSelectAllQuery() {
+        return SELECT_ALL;
     }
 
     @Override
     public Account getNullEntity() {
         return NullEntitiesFactory.getNullAccount();
-    }
-
-    @Override
-    public Account approveFromStorage(Account entity) {
-        throw new UnsupportedOperationException();
     }
 }
