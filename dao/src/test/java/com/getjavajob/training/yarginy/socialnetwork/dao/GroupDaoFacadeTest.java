@@ -21,9 +21,9 @@ import static org.junit.Assert.*;
 @ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoOverrideSpringConfig.xml"})
 public class GroupDaoFacadeTest {
     @Autowired
-    private GroupDaoFacade groupDaoFacade;
-    @Autowired
     private AccountDaoFacade accountDaoFacade;
+    @Autowired
+    private GroupDaoFacade groupDaoFacade;
     private final Group GROUP = new GroupImpl();
     private Account account = new AccountImpl("test", "test", "test@test.com");
 
@@ -38,6 +38,7 @@ public class GroupDaoFacadeTest {
     @After
     public void testValuesDelete() {
         accountDaoFacade.delete(account);
+        GROUP.setId(groupDaoFacade.select(GROUP).getId());
         groupDaoFacade.delete(GROUP);
     }
 
@@ -109,12 +110,14 @@ public class GroupDaoFacadeTest {
     public void testDeleteNonExisting() {
         Group nonExisting = new GroupImpl();
         nonExisting.setName("non existing group");
+        nonExisting.setId(66666666666L);
         assertFalse(groupDaoFacade.delete(nonExisting));
     }
 
     @Test
     public void testDeleteGroup() {
         groupDaoFacade.create(GROUP);
+        GROUP.setId(groupDaoFacade.select(GROUP).getId());
         assertTrue(groupDaoFacade.delete(GROUP));
         assertEquals(groupDaoFacade.getNullEntity(), groupDaoFacade.select(GROUP));
     }

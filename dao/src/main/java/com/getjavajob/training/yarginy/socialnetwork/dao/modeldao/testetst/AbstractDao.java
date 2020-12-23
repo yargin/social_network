@@ -29,11 +29,11 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
         jdbcInsert.withTableName(table);
     }
 
-    protected abstract String getSelectByIdQuery();
+    protected abstract String getSelectByPKeyQuery();
 
     @Override
     public E select(long id) {
-        String query = getSelectByIdQuery();
+        String query = getSelectByPKeyQuery();
         try {
             return template.queryForObject(query, getRowMapper(), id);
         } catch (TransientDataAccessException e) {
@@ -46,7 +46,8 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
     @Override
     public boolean create(E entity) {
         try {
-            return jdbcInsert.execute(createEntityFieldsMap(entity)) == 1;
+            MapSqlParameterSource parameters = createEntityFieldsMap(entity);
+            return jdbcInsert.execute(parameters) == 1;
         } catch (DuplicateKeyException e) {
             return false;
         }
@@ -76,7 +77,6 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
         try {
             return namedTemplate.update(valuePlacer.getQuery(), valuePlacer.getParameters()) == 1;
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
             return false;
         }
     }
@@ -123,9 +123,8 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
         return getViewExtractor(null);
     }
 
-    public ResultSetExtractor<E> getViewExtractor(String tableAlias) {
-        String prefix = assignPrefix(tableAlias);
-        return getSuffixedViewExtractor(prefix);
+    public ResultSetExtractor<E> getViewExtractor(String suffix) {
+        return getSuffixedViewExtractor(isNull(suffix) ? "" : suffix);
     }
 
     public abstract ResultSetExtractor<E> getSuffixedViewExtractor(String suffix);
@@ -134,17 +133,9 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
         return getExtractor(null);
     }
 
-    public ResultSetExtractor<E> getExtractor(String tableAlias) {
-        String prefix = assignPrefix(tableAlias);
-        return getSuffixedExtractor(prefix);
+    public ResultSetExtractor<E> getExtractor(String suffix) {
+        return getSuffixedExtractor(isNull(suffix) ? "" : suffix);
     }
 
     public abstract ResultSetExtractor<E> getSuffixedExtractor(String suffix);
-
-    protected String assignPrefix(String tableAlias) {
-        if (isNull(tableAlias) || tableAlias.isEmpty()) {
-            return "";
-        }
-        return tableAlias + '.';
-    }
 }

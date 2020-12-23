@@ -4,6 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesF
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.DialogImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AbstractTable;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -17,13 +18,14 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.DialogsTa
 
 @Component("dialogDao")
 public class DialogDao extends AbstractDao<Dialog> {
-    private static final String SELECT_BY_ID = "SELECT " + TABLE + '.' + ID +
-            ", " + AccountsTable.getViewFieldsWithPostFix("a1") +
-            ", " + AccountsTable.getViewFieldsWithPostFix("a2") + " FROM Dialogs JOIN accounts a1 ON Dialogs.first_id =" +
-            " a1.id JOIN accounts as a2 ON Dialogs.second_id = a2.id WHERE dialogs.id = ?";
-    private static final String SELECT_BY_ALT_KEY = "SELECT " + TABLE + '.' + ID + ", " +
-            AccountsTable.getViewFieldsWithPostFix("a1") + ", " + AccountsTable.getViewFieldsWithPostFix("a2") + " FROM " +
-            TABLE + " JOIN accounts a1 ON dialogs.first_id = a1.id JOIN accounts a2 ON dialogs.second_id = a2.id " +
+    private static final AbstractTable FIRST_ACCOUNT_TABLE = new AccountsTable("a1");
+    private static final AbstractTable SECOND_ACCOUNT_TABLE = new AccountsTable("a2");
+    private static final String SELECT_BY_ID = "SELECT d.id as idd, " + FIRST_ACCOUNT_TABLE.getViewFields() + ", " +
+            SECOND_ACCOUNT_TABLE.getViewFields() + " FROM Dialogs as d JOIN accounts as a1 ON d.first_id =" +
+            " a1.id JOIN accounts as a2 ON d.second_id = a2.id WHERE d.id = ?";
+    private static final String SELECT_BY_ALT_KEY = "SELECT d.id as idd, " + FIRST_ACCOUNT_TABLE.getViewFields() + ", " +
+            SECOND_ACCOUNT_TABLE.getViewFields() + " FROM " +
+            TABLE + " as d JOIN accounts a1 ON d.first_id = a1.id JOIN accounts a2 ON d.second_id = a2.id " +
             "WHERE (a1.id = ? AND a2.id = ?) OR (a2.id  = ? AND a1.id = ?)";
     private static final String SELECT_ALL = "SELECT * FROM " + TABLE;
     private static final String DELETE_BY_ID = "DELETE FROM " + TABLE + " WHERE id = ?";
@@ -39,7 +41,7 @@ public class DialogDao extends AbstractDao<Dialog> {
     public ResultSetExtractor<Dialog> getSuffixedViewExtractor(String suffix) {
         return resultSet -> {
             Dialog dialog = new DialogImpl();
-            dialog.setId(resultSet.getLong(suffix + ID));
+            dialog.setId(resultSet.getLong(ID + suffix));
             Account firstAccount = accountDao.getViewExtractor("a1").extractData(resultSet);
             Account secondAccount = accountDao.getViewExtractor("a2").extractData(resultSet);
             dialog.setFirstAccount(firstAccount);
@@ -54,7 +56,7 @@ public class DialogDao extends AbstractDao<Dialog> {
     }
 
     @Override
-    protected String getSelectByIdQuery() {
+    protected String getSelectByPKeyQuery() {
         return SELECT_BY_ID;
     }
 

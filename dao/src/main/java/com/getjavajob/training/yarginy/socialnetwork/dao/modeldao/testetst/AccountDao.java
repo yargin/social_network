@@ -5,11 +5,14 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
+import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AbstractTable;
+import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.sql.ResultSetMetaData;
 import java.sql.Types;
 
 import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable.*;
@@ -17,7 +20,8 @@ import static java.util.Objects.isNull;
 
 @Component
 public class AccountDao extends AbstractDao<Account> {
-    private static final String SELECT_BY_ID = "SELECT * FROM accounts WHERE id = ?";
+    private static final AbstractTable table = new AccountsTable();
+    private static final String SELECT_BY_ID = "SELECT " + table.getFields() + " FROM  WHERE id = ?";
     private static final String SELECT_BY_ALT_KEY = "SELECT * FROM accounts WHERE email = ?";
     private static final String DELETE_BY_ID = "DELETE FROM accounts WHERE id = ?";
     private static final String SELECT_ALL = "SELECT * FROM accounts";
@@ -27,7 +31,7 @@ public class AccountDao extends AbstractDao<Account> {
     }
 
     @Override
-    protected String getSelectByIdQuery() {
+    protected String getSelectByPKeyQuery() {
         return SELECT_BY_ID;
     }
 

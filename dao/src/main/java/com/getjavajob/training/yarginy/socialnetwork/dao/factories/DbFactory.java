@@ -59,11 +59,11 @@ public class DbFactory {
 //        return new DaoImpl<>(dataSource, handler);
 //    }
 
-    @Bean("groupDao")
-    @Autowired
-    public BatchDao<Group> getGroupDao(BatchGroupDml dml) {
-        return new BatchDaoImpl<>(dataSource, dml);
-    }
+//    @Bean("groupDao")
+//    @Autowired
+//    public BatchDao<Group> getGroupDao(BatchGroupDml dml) {
+//        return new BatchDaoImpl<>(dataSource, dml);
+//    }
 
     @Bean("groupMembershipDao")
     @Autowired

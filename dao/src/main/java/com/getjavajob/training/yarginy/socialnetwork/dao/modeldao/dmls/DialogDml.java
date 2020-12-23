@@ -5,6 +5,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.DialogImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AbstractDml;
+import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AbstractTable;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable;
 import org.springframework.stereotype.Component;
 
@@ -20,18 +21,19 @@ import static com.getjavajob.training.yarginy.socialnetwork.dao.utils.querybuild
 
 @Component("dialogDml")
 public class DialogDml extends AbstractDml<Dialog> {
-    private static final String FIRST_TABLE_ALIAS = "a1";
+    private static final AbstractTable FIRST_TABLE_ALIAS = new AccountsTable("a1");
     private static final String SECOND_TABLE_ALIAS = "a2";
     private static final String SELECT_ALL = buildQuery().selectAll(TABLE).build();
 
-    private static final String SELECT_BY_ID = "SELECT " + ID + ", " + AccountsTable.getViewFieldsWithPostFix("a1") + ", " +
-            AccountsTable.getViewFieldsWithPostFix("a2") + " FROM Dialogs JOIN Accounts a1 ON Dialogs.first_id = a1.id " +
-            "JOIN Accounts as a2 ON Dialogs.second_id = a2.id WHERE Dialogs.id = ? ";
-    private static final String SELECT_BY_ALT_KEY = "SELECT " + ID + ", " + AccountsTable.getViewFieldsWithPostFix("a1") +
-            ", " + AccountsTable.getViewFieldsWithPostFix("a2") + " FROM " + TABLE + " JOIN " + AccountsTable.TABLE +
-            " a1 ON " + FIRST_ID + " = a1.id JOIN " + AccountsTable.TABLE + " a2 ON " + SECOND_ID + " = a2.id WHERE (" +
-            FIRST_ID + " = ? AND " + SECOND_ID + " = ?) OR (" + SECOND_ID + "  = ? AND " + FIRST_ID + " = ?)";
-
+//    private static final String SELECT_BY_ID = "SELECT " + ID + ", " + AccountsTable.getV("a1") + ", " +
+//            AccountsTable.getViewFieldsWithPostFix("a2") + " FROM Dialogs JOIN Accounts a1 ON Dialogs.first_id = a1.id " +
+//            "JOIN Accounts as a2 ON Dialogs.second_id = a2.id WHERE Dialogs.id = ? ";
+    public static final String SELECT_BY_ID = "";
+//    private static final String SELECT_BY_ALT_KEY = "SELECT " + ID + ", " + AccountsTable.getViewFieldsWithPostFix("a1") +
+//            ", " + AccountsTable.getViewFieldsWithPostFix("a2") + " FROM " + TABLE + " JOIN " + AccountsTable.TABLE +
+//            " a1 ON " + FIRST_ID + " = a1.id JOIN " + AccountsTable.TABLE + " a2 ON " + SECOND_ID + " = a2.id WHERE (" +
+//            FIRST_ID + " = ? AND " + SECOND_ID + " = ?) OR (" + SECOND_ID + "  = ? AND " + FIRST_ID + " = ?)";
+    private static final String SELECT_BY_ALT_KEY = "";
     private static final String SELECT_UPDATE_BY_ID = buildQuery().selectAll(TABLE).where(ID).build();
     private static final String SELECT_UPDATE_BY_ALT_KEY = "SELECT * FROM " + TABLE + " WHERE (" + FIRST_ID +
             " = ? AND " + SECOND_ID + " = ?) OR (" + SECOND_ID + "  = ? AND " + FIRST_ID + " = ?)";
@@ -76,8 +78,8 @@ public class DialogDml extends AbstractDml<Dialog> {
 
     @Override
     public Dialog retrieveViewFromRow(ResultSet resultSet) throws SQLException {
-        Account firstAccount = getAccount(resultSet, FIRST_TABLE_ALIAS);
-        Account secondAccount = getAccount(resultSet, SECOND_TABLE_ALIAS);
+        Account firstAccount = getAccount(resultSet, "a1");
+        Account secondAccount = getAccount(resultSet, "a2");
 
         Dialog dialog = new DialogImpl();
         dialog.setId(resultSet.getLong(ID));

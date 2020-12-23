@@ -25,6 +25,7 @@ public class AccountDaoFacadeTest {
 
     @After
     public void deleteTestValues() {
+        account = accountDaoFacade.select(account);
         accountDaoFacade.delete(account);
     }
 
@@ -33,12 +34,12 @@ public class AccountDaoFacadeTest {
         account.setEmail("test@test.test");
         account.setName("test");
         account.setSurname("test");
+        account = accountDaoFacade.select(account);
         accountDaoFacade.delete(account);
     }
 
     @Test
     public void testCreateAccount() {
-        accountDaoFacade.delete(account);
         boolean actual;
         try {
             account.setEmail(null);
@@ -76,6 +77,7 @@ public class AccountDaoFacadeTest {
 
     @Test
     public void testSelectNonExistingAccount() {
+        account = accountDaoFacade.select(account);
         accountDaoFacade.delete(account);
         Account actual = accountDaoFacade.select(accountDaoFacade.getNullEntity());
         assertEquals(accountDaoFacade.getNullEntity(), actual);

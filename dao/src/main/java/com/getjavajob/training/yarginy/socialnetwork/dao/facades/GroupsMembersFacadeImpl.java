@@ -13,9 +13,10 @@ import java.util.Collection;
 public class GroupsMembersFacadeImpl implements GroupsMembersDaoFacade {
     private final ManyToManyDao<Account, Group> groupMembershipDao;
     private final ManyToManyDao<Account, Group> membershipRequestsDao;
+    public static final String GROUP_MEMBERSHIP_DAO = "groupMembershipDao";
 
     @Autowired
-    public GroupsMembersFacadeImpl(@Qualifier("groupMembershipDao") ManyToManyDao<Account, Group> groupMembershipDao,
+    public GroupsMembersFacadeImpl(@Qualifier(GROUP_MEMBERSHIP_DAO) ManyToManyDao<Account, Group> groupMembershipDao,
                                    @Qualifier("groupRequestsDao") ManyToManyDao<Account, Group> membershipRequestsDao) {
         this.groupMembershipDao = groupMembershipDao;
         this.membershipRequestsDao = membershipRequestsDao;
