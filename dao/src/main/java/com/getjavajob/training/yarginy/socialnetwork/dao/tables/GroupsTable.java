@@ -28,7 +28,17 @@ public final class GroupsTable extends AbstractTable {
     }
 
     @Override
-    protected String getTableName() {
+    public String getTable() {
         return TABLE;
+    }
+
+    @Override
+    public String[] getPrimaryKeys() {
+        return new String[]{ID};
+    }
+
+    @Override
+    public String[] getAltKeys() {
+        return new String[]{NAME};
     }
 }

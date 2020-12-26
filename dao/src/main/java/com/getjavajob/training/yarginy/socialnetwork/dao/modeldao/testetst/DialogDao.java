@@ -5,75 +5,92 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.DialogImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AbstractTable;
-import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable;
+import com.getjavajob.training.yarginy.socialnetwork.dao.tables.DialogsTable;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.sql.Types;
 
-import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.DialogsTable.*;
-
 @Component("dialogDao")
 public class DialogDao extends AbstractDao<Dialog> {
-    private static final AbstractTable FIRST_ACCOUNT_TABLE = new AccountsTable("a1");
-    private static final AbstractTable SECOND_ACCOUNT_TABLE = new AccountsTable("a2");
-    private static final String SELECT_BY_ID = "SELECT d.id as idd, " + FIRST_ACCOUNT_TABLE.getViewFields() + ", " +
-            SECOND_ACCOUNT_TABLE.getViewFields() + " FROM Dialogs as d JOIN accounts as a1 ON d.first_id =" +
-            " a1.id JOIN accounts as a2 ON d.second_id = a2.id WHERE d.id = ?";
-    private static final String SELECT_BY_ALT_KEY = "SELECT d.id as idd, " + FIRST_ACCOUNT_TABLE.getViewFields() + ", " +
-            SECOND_ACCOUNT_TABLE.getViewFields() + " FROM " +
-            TABLE + " as d JOIN accounts a1 ON d.first_id = a1.id JOIN accounts a2 ON d.second_id = a2.id " +
-            "WHERE (a1.id = ? AND a2.id = ?) OR (a2.id  = ? AND a1.id = ?)";
-    private static final String SELECT_ALL = "SELECT * FROM " + TABLE;
-    private static final String DELETE_BY_ID = "DELETE FROM " + TABLE + " WHERE id = ?";
+    private static final String TABLE = "dialogs";
+    private static final String ALIAS = "d";
+    private static final String FIRST_ACC_ALIAS = "a1";
+    private static final String SECOND_ACC_ALIAS = "a2";
+    private static final String ID = "id";
+    private static final String FIRST_ID = "first_id";
+    private static final String SECOND_ID = "second_id";
+    private final AbstractTable DIALOGS_TABLE = new DialogsTable("d");
+    private final String SELECT_ALL = "SELECT " + getFields() + " FROM dialogs d JOIN accounts as a1 ON " +
+            "d.first_id = a1.id JOIN accounts as a2 ON d.second_id = a2.id";
     private final AccountDao accountDao;
 
     @Autowired
     public DialogDao(DataSource dataSource, AccountDao accountDao) {
-        super(dataSource, TABLE);
+        super(dataSource, TABLE, ALIAS, true);
         this.accountDao = accountDao;
     }
 
     @Override
-    public ResultSetExtractor<Dialog> getSuffixedViewExtractor(String suffix) {
-        return resultSet -> {
+    protected String[] getFieldsList() {
+        return getViewFieldsList();
+    }
+
+    @Override
+    protected String[] getViewFieldsList() {
+        return new String[]{ID, FIRST_ID, SECOND_ID};
+    }
+
+    @Override
+    public String[] getPrimaryKeys() {
+        return new String[]{ID};
+    }
+
+    @Override
+    public String[] getAltKeys() {
+        return new String[]{FIRST_ID, SECOND_ID};
+    }
+
+    public RowMapper<Dialog> getSuffixedViewRowMapper(String dialogSuffix, String firstAccountSuffix,
+                                                      String secondAccountSuffix) {
+        return (resultSet, i) -> {
             Dialog dialog = new DialogImpl();
-            dialog.setId(resultSet.getLong(ID + suffix));
-            Account firstAccount = accountDao.getViewExtractor("a1").extractData(resultSet);
-            Account secondAccount = accountDao.getViewExtractor("a2").extractData(resultSet);
+            dialog.setId(resultSet.getLong(ID + dialogSuffix));
+            Account firstAccount = accountDao.getSuffixedViewRowMapper(firstAccountSuffix).mapRow(resultSet, i);
+            Account secondAccount = accountDao.getSuffixedViewRowMapper(secondAccountSuffix).mapRow(resultSet, i);
             dialog.setFirstAccount(firstAccount);
             dialog.setSecondAccount(secondAccount);
             return dialog;
         };
     }
 
-    @Override
-    public ResultSetExtractor<Dialog> getSuffixedExtractor(String suffix) {
-        return getViewExtractor();
+    public RowMapper<Dialog> getSuffixedRowMapper(String dialogSuffix, String firstAccountSuffix,
+                                                  String secondAccountSuffix) {
+        return getSuffixedViewRowMapper(dialogSuffix, firstAccountSuffix, secondAccountSuffix);
     }
 
     @Override
-    protected String getSelectByPKeyQuery() {
-        return SELECT_BY_ID;
+    public RowMapper<Dialog> getViewRowMapper() {
+        return getSuffixedViewRowMapper(ALIAS, FIRST_ACC_ALIAS, SECOND_ACC_ALIAS);
     }
 
     @Override
-    protected String getSelectByAltKeysQuery() {
-        return SELECT_BY_ALT_KEY;
+    public RowMapper<Dialog> getRowMapper() {
+        return getSuffixedRowMapper(ALIAS, FIRST_ACC_ALIAS, SECOND_ACC_ALIAS);
     }
 
     @Override
-    protected Object[] getAltKeys(Dialog dialog) {
+    protected Object[] getObjectsAltKeys(Dialog dialog) {
         Account firstAccount = dialog.getFirstAccount();
         Account secondAccount = dialog.getSecondAccount();
         return new Object[]{firstAccount.getId(), secondAccount.getId(), firstAccount.getId(), secondAccount.getId()};
     }
 
     @Override
-    protected Object[] getPrimaryKeys(Dialog dialog) {
+    protected Object[] getObjectPrimaryKeys(Dialog dialog) {
         return new Object[]{dialog.getId()};
     }
 
@@ -90,17 +107,12 @@ public class DialogDao extends AbstractDao<Dialog> {
 
     @Override
     protected ValuePlacer getValuePlacer(Dialog dialog, Dialog storedDialog) {
-        ValuePlacer valuePlacer = new ValuePlacer(TABLE, new String[]{FIRST_ID, SECOND_ID});
+        ValuePlacer valuePlacer = new ValuePlacer(DIALOGS_TABLE.getTable(), DIALOGS_TABLE.getAltKeys());
         valuePlacer.addFieldIfDiffers(dialog::getFirstAccount, storedDialog::getFirstAccount, FIRST_ID, Types.BIGINT,
                 Account::getId);
         valuePlacer.addFieldIfDiffers(dialog::getSecondAccount, storedDialog::getSecondAccount, FIRST_ID,
                 Types.BIGINT, Account::getId);
         return valuePlacer;
-    }
-
-    @Override
-    protected String getDeleteByPrimaryKeyQuery() {
-        return DELETE_BY_ID;
     }
 
     @Override

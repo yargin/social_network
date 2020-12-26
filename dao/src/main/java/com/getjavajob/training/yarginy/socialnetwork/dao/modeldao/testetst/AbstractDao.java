@@ -6,7 +6,6 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -14,26 +13,34 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
 import javax.sql.DataSource;
 import java.util.Collection;
-
-import static java.util.Objects.isNull;
+import java.util.function.Supplier;
 
 public abstract class AbstractDao<E extends Entity> implements Dao<E> {
     private final JdbcTemplate template;
     private final NamedParameterJdbcTemplate namedTemplate;
     private final SimpleJdbcInsert jdbcInsert;
+    private final String alias;
+    private final String where = " WHERE ";
+    private final String tableName;
+    private final boolean doubledAltKey;
 
-    public AbstractDao(DataSource dataSource, String table) {
+    public AbstractDao(DataSource dataSource, String table, String tableAlias, boolean doubledAltKey) {
         template = new JdbcTemplate(dataSource);
         namedTemplate = new NamedParameterJdbcTemplate(dataSource);
         jdbcInsert = new SimpleJdbcInsert(dataSource);
         jdbcInsert.withTableName(table);
+        this.tableName = table;
+        alias = tableAlias;
+        this.doubledAltKey = doubledAltKey;
     }
 
-    protected abstract String getSelectByPKeyQuery();
+    public AbstractDao(DataSource dataSource, String table, String tableAlias) {
+        this(dataSource, table, tableAlias, false);
+    }
 
     @Override
     public E select(long id) {
-        String query = getSelectByPKeyQuery();
+        String query = getSelectAllQuery() + where + getPKParameters();
         try {
             return template.queryForObject(query, getRowMapper(), id);
         } catch (TransientDataAccessException e) {
@@ -44,6 +51,25 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
     }
 
     @Override
+    public E select(E entity) {
+        String query;
+        if (!doubledAltKey) {
+            query = getSelectAllQuery() + where + getAltParameters();
+        } else {
+            query = getSelectAllQuery() + where + '(' + getAltParameters() + " ) OR ( " + getAltParameters() + ')';
+        }
+        try {
+            return template.queryForObject(query, getRowMapper(), getObjectsAltKeys(entity));
+        } catch (TransientDataAccessException e) {
+            throw new IllegalArgumentException(e);
+        } catch (EmptyResultDataAccessException e) {
+            return getNullEntity();
+        }
+    }
+
+    protected abstract Object[] getObjectsAltKeys(E entity);
+
+    @Override
     public boolean create(E entity) {
         try {
             MapSqlParameterSource parameters = createEntityFieldsMap(entity);
@@ -52,22 +78,6 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
             return false;
         }
     }
-
-    @Override
-    public E select(E entity) {
-        String query = getSelectByAltKeysQuery();
-        try {
-            return template.queryForObject(query, getRowMapper(), getAltKeys(entity));
-        } catch (TransientDataAccessException e) {
-            throw new IllegalArgumentException(e);
-        } catch (EmptyResultDataAccessException e) {
-            return getNullEntity();
-        }
-    }
-
-    protected abstract String getSelectByAltKeysQuery();
-
-    protected abstract Object[] getAltKeys(E entity);
 
     protected abstract MapSqlParameterSource createEntityFieldsMap(E entity);
 
@@ -85,13 +95,11 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
 
     @Override
     public boolean delete(E entity) {
-        String query = getDeleteByPrimaryKeyQuery();
-        return template.update(query, getPrimaryKeys(entity)) == 1;
+        String query = "DELETE FROM " + tableName + ' ' + where + getPKParameters();
+        return template.update(query, getObjectPrimaryKeys(entity)) == 1;
     }
 
-    protected abstract Object[] getPrimaryKeys(E entity);
-
-    protected abstract String getDeleteByPrimaryKeyQuery();
+    protected abstract Object[] getObjectPrimaryKeys(E entity);
 
     @Override
     public Collection<E> selectAll() {
@@ -111,31 +119,65 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
         throw new UnsupportedOperationException();
     }
 
-    public RowMapper<E> getViewRowMapper() {
-        return (resultSet, i) -> getViewExtractor().extractData(resultSet);
+    public abstract RowMapper<E> getViewRowMapper();
+
+    public abstract RowMapper<E> getRowMapper();
+
+
+    //test table
+
+    protected abstract String[] getFieldsList();
+
+    public String getFields() {
+        return buildString(this::getFieldsList, this::appendField);
     }
 
-    public RowMapper<E> getRowMapper() {
-        return (resultSet, i) -> getExtractor().extractData(resultSet);
+    protected abstract String[] getViewFieldsList();
+
+    public String getViewFields() {
+        return buildString(this::getViewFieldsList, this::appendField);
     }
 
-    public ResultSetExtractor<E> getViewExtractor() {
-        return getViewExtractor(null);
+    private boolean appendField(StringBuilder stringBuilder, boolean firstIteration, String field) {
+        String optionalAlias = alias.isEmpty() ? alias : alias + '.';
+        if (!firstIteration) {
+            stringBuilder.append(", ");
+        }
+        stringBuilder.append(optionalAlias).append(field).append(" as ").append(field).append(alias);
+        return false;
     }
 
-    public ResultSetExtractor<E> getViewExtractor(String suffix) {
-        return getSuffixedViewExtractor(isNull(suffix) ? "" : suffix);
+    private String buildString(Supplier<String[]> fieldsGetter, Appender appender) {
+        String[] fields = fieldsGetter.get();
+        StringBuilder stringBuilder = new StringBuilder();
+        boolean firstIteration = true;
+        for (String field : fields) {
+            firstIteration = appender.append(stringBuilder, firstIteration, field);
+        }
+        return stringBuilder.toString();
     }
 
-    public abstract ResultSetExtractor<E> getSuffixedViewExtractor(String suffix);
-
-    public ResultSetExtractor<E> getExtractor() {
-        return getExtractor(null);
+    public String getPKParameters() {
+        return buildString(this::getPrimaryKeys, this::appendKey);
     }
 
-    public ResultSetExtractor<E> getExtractor(String suffix) {
-        return getSuffixedExtractor(isNull(suffix) ? "" : suffix);
+    public abstract String[] getPrimaryKeys();
+
+    public String getAltParameters() {
+        return buildString(this::getAltKeys, this::appendKey);
     }
 
-    public abstract ResultSetExtractor<E> getSuffixedExtractor(String suffix);
+    public abstract String[] getAltKeys();
+
+    private boolean appendKey(StringBuilder stringBuilder, boolean firstIteration, String key) {
+        if (!firstIteration) {
+            stringBuilder.append(" AND ");
+        }
+        stringBuilder.append(key).append(" = ? ");
+        return false;
+    }
+
+    private interface Appender {
+        boolean append(StringBuilder builder, boolean firstIteration, String value);
+    }
 }

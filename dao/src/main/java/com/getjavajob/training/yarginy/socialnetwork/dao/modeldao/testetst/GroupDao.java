@@ -4,47 +4,54 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesF
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AbstractTable;
-import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable;
-import com.getjavajob.training.yarginy.socialnetwork.dao.tables.GroupsTable;
-import com.sun.org.apache.bcel.internal.generic.TABLESWITCH;
-import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
-
 import java.sql.Types;
-
-import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.GroupsTable.*;
 
 @Component("groupDao")
 public class GroupDao extends AbstractDao<Group> {
-    private static final AbstractTable table = new GroupsTable("gr");
-    private static final AbstractTable accountsTable = new AccountsTable("acc");
-//    private static final String SELECT_BY_ID = "SELECT "+ table.getFields() + ", " + accountsTable.getViewFields() +
-//            " FROM _groups as gr JOIN accounts as acc ON gr.owner_id = acc.id WHERE gr.id = ?;";
-    private static final String SELECT_BY_ID = "SELECT gr.id as idgr, gr.name as namegr,\n" +
-            "       gr.description as descriptiongr,\n" +
-            "       gr.owner_id as owner_idgr,\n" +
-            "       gr.creation_date as creation_dategr,\n" +
-            "       gr.photo as photogr, acc.id as idacc,\n" +
-            "       acc.name as nameacc, acc.surname as surnameacc,\n" +
-            "       acc.email as emailacc\n" +
-            "FROM _groups as gr\n" +
-            "    JOIN accounts as acc ON gr.owner_id = acc.id\n" +
-            "WHERE gr.name = 'USSR fans'";
+    private static final String TABLE = "_groups";
+    private static final String ID = "id";
+    private static final String NAME = "name";
+    private static final String DESCRIPTION = "description";
+    private static final String OWNER = "owner_id";
+    private static final String CREATION_DATE = "creation_date";
+    private static final String PHOTO = "photo";
+    private static final String[] FIELDS = {ID, NAME, DESCRIPTION, OWNER, CREATION_DATE, PHOTO};
+    private static final String GROUP_ALIAS = "gr";
+    private static final String ACCOUNT_ALIAS = "acc";
 
-    private static final String SELECT_BY_ALT_KEY = "SELECT "+ table.getFields() + ", " + accountsTable.getViewFields() +
-            " FROM _groups as gr JOIN accounts as acc ON gr.owner_id = acc.id WHERE gr.name = ?;";
-    private static final String SELECT_ALL = "SELECT "+ table.getFields() + ", " + accountsTable.getViewFields() +
-            " FROM _groups as gr JOIN accounts as acc ON gr.owner_id = acc.id;";
-    private static final String DELETE_BY_ID = "DELETE FROM _groups WHERE id = ?;";
+    private final String selectAll;
     private final AccountDao accountDao;
 
     public GroupDao(DataSource dataSource) {
-        super(dataSource, TABLE);
+        super(dataSource, TABLE, GROUP_ALIAS);
         accountDao = new AccountDao(dataSource);
+        selectAll = "SELECT " + getFields() + ", " + accountDao.getViewFields() + " FROM " + TABLE + " as " +
+                GROUP_ALIAS + " JOIN accounts as acc ON _groups.owner_id = accounts.id";
+    }
+
+    @Override
+    protected String[] getFieldsList() {
+        return FIELDS;
+    }
+
+    @Override
+    protected String[] getViewFieldsList() {
+        return new String[]{ID, NAME};
+    }
+
+    @Override
+    public String[] getPrimaryKeys() {
+        return new String[]{ID};
+    }
+
+    @Override
+    public String[] getAltKeys() {
+        return new String[]{NAME};
     }
 
     @Override
@@ -53,17 +60,7 @@ public class GroupDao extends AbstractDao<Group> {
     }
 
     @Override
-    protected String getSelectByPKeyQuery() {
-        return SELECT_BY_ID;
-    }
-
-    @Override
-    protected String getSelectByAltKeysQuery() {
-        return SELECT_BY_ALT_KEY;
-    }
-
-    @Override
-    protected Object[] getAltKeys(Group group) {
+    protected Object[] getObjectsAltKeys(Group group) {
         return new Object[]{group.getName()};
     }
 
@@ -80,7 +77,7 @@ public class GroupDao extends AbstractDao<Group> {
 
     @Override
     protected ValuePlacer getValuePlacer(Group group, Group storedGroup) {
-        ValuePlacer placer = new ValuePlacer(TABLE, new String[]{NAME});
+        ValuePlacer placer = new ValuePlacer(TABLE, getAltKeys());
         placer.addFieldIfDiffers(group::getName, storedGroup::getName, NAME, Types.VARCHAR);
         placer.addFieldIfDiffers(group::getDescription, storedGroup::getDescription, DESCRIPTION, Types.VARCHAR);
         placer.addFieldIfDiffers(group::getOwner, storedGroup::getOwner, OWNER, Types.VARCHAR, Account::getId);
@@ -92,23 +89,23 @@ public class GroupDao extends AbstractDao<Group> {
     }
 
     @Override
-    protected Object[] getPrimaryKeys(Group group) {
+    protected Object[] getObjectPrimaryKeys(Group group) {
         return new Object[]{group.getId()};
     }
 
     @Override
-    protected String getDeleteByPrimaryKeyQuery() {
-        return DELETE_BY_ID;
-    }
-
-    @Override
     protected String getSelectAllQuery() {
-        return SELECT_ALL;
+        return selectAll;
     }
 
     @Override
-    public ResultSetExtractor<Group> getSuffixedViewExtractor(String suffix) {
-        return resultSet -> {
+    public RowMapper<Group> getViewRowMapper() {
+        return getSuffixedViewRowMapper(GROUP_ALIAS);
+    }
+
+
+    public RowMapper<Group> getSuffixedViewRowMapper(String suffix) {
+        return (resultSet, i) -> {
             Group group = new GroupImpl();
             group.setId(resultSet.getLong(ID + suffix));
             group.setName(resultSet.getString(NAME + suffix));
@@ -116,16 +113,21 @@ public class GroupDao extends AbstractDao<Group> {
         };
     }
 
-    @Override
-    public ResultSetExtractor<Group> getSuffixedExtractor(String suffix) {
-        return resultSet -> {
-            Group group = getSuffixedViewExtractor(suffix).extractData(resultSet);
-            group.setDescription(resultSet.getString(DESCRIPTION + suffix));
-            group.setCreationDate(resultSet.getDate(CREATION_DATE + suffix));
-            group.setPhoto(resultSet.getBytes(PHOTO + suffix));
-            Account account = accountDao.getViewExtractor("acc").extractData(resultSet);
+    public RowMapper<Group> getSuffixedRowMapper(String groupSuffix, String accountSuffix) {
+        return (resultSet, i) -> {
+            Group group = getViewRowMapper().mapRow(resultSet, i);
+            assert group != null;
+            group.setDescription(resultSet.getString(DESCRIPTION + groupSuffix));
+            group.setCreationDate(resultSet.getDate(CREATION_DATE + groupSuffix));
+            group.setPhoto(resultSet.getBytes(PHOTO + groupSuffix));
+            Account account = accountDao.getSuffixedViewRowMapper(accountSuffix).mapRow(resultSet, i);
             group.setOwner(account);
             return group;
         };
+    }
+
+    @Override
+    public RowMapper<Group> getRowMapper() {
+        return getSuffixedRowMapper(GROUP_ALIAS, ACCOUNT_ALIAS);
     }
 }

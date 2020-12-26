@@ -5,39 +5,88 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
-import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AbstractTable;
-import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable;
-import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
-import java.sql.ResultSetMetaData;
 import java.sql.Types;
 
-import static com.getjavajob.training.yarginy.socialnetwork.dao.tables.AccountsTable.*;
 import static java.util.Objects.isNull;
 
 @Component
 public class AccountDao extends AbstractDao<Account> {
-    private static final AbstractTable table = new AccountsTable();
-    private static final String SELECT_BY_ID = "SELECT " + table.getFields() + " FROM  WHERE id = ?";
-    private static final String SELECT_BY_ALT_KEY = "SELECT * FROM accounts WHERE email = ?";
-    private static final String DELETE_BY_ID = "DELETE FROM accounts WHERE id = ?";
-    private static final String SELECT_ALL = "SELECT * FROM accounts";
+    private static final String TABLE = "accounts";
+    private static final String ALIAS = "acc";
+    private static final String ID = "id";
+    private static final String NAME = "name";
+    private static final String SURNAME = "surname";
+    private static final String PATRONYMIC = "patronymic";
+    private static final String SEX = "sex";
+    private static final String BIRTH_DATE = "birth_date";
+    private static final String ICQ = "icq";
+    private static final String SKYPE = "skype";
+    private static final String EMAIL = "email";
+    private static final String ADDITIONAL_EMAIL = "additional_email";
+    private static final String COUNTRY = "country";
+    private static final String CITY = "city";
+    private static final String REGISTRATION_DATE = "registration_date";
+    private static final String ROLE = "role";
+    private static final String PHOTO = "photo";
+    private static final String[] FIELDS = {ID, NAME, SURNAME, PATRONYMIC, SEX, BIRTH_DATE, ICQ,
+            SKYPE, EMAIL, ADDITIONAL_EMAIL, COUNTRY, CITY, REGISTRATION_DATE, ROLE, PHOTO};
+    private static final String[] VIEW_FIELDS = {ID, NAME, SURNAME, EMAIL};
+
+    private final String selectAll = "SELECT " + getFields() + " FROM accounts";
 
     public AccountDao(DataSource dataSource) {
-        super(dataSource, TABLE);
+        super(dataSource, TABLE, "");
     }
 
     @Override
-    protected String getSelectByPKeyQuery() {
-        return SELECT_BY_ID;
+    public RowMapper<Account> getViewRowMapper() {
+        return getSuffixedViewRowMapper("");
     }
 
     @Override
-    public ResultSetExtractor<Account> getSuffixedViewExtractor(String suffix) {
-        return resultSet -> {
+    protected Object[] getObjectsAltKeys(Account account) {
+        return new Object[]{account.getEmail()};
+    }
+
+    @Override
+    protected Object[] getObjectPrimaryKeys(Account account) {
+        return new Object[]{account.getId()};
+    }
+
+
+    @Override
+    protected String[] getFieldsList() {
+        return FIELDS;
+    }
+
+    @Override
+    public String[] getViewFieldsList() {
+        return VIEW_FIELDS;
+    }
+
+    @Override
+    public String[] getPrimaryKeys() {
+        return new String[]{ID};
+    }
+
+    @Override
+    public String[] getAltKeys() {
+        return new String[]{EMAIL};
+    }
+
+
+    @Override
+    public RowMapper<Account> getRowMapper() {
+        return getSuffixedRowMapper(ALIAS);
+    }
+
+    public RowMapper<Account> getSuffixedViewRowMapper(String suffix) {
+        return (resultSet, i) -> {
             Account account = new AccountImpl();
             account.setId(resultSet.getLong(ID + suffix));
             account.setName(resultSet.getString(NAME + suffix));
@@ -47,25 +96,10 @@ public class AccountDao extends AbstractDao<Account> {
         };
     }
 
-    @Override
-    protected Object[] getAltKeys(Account account) {
-        return new Object[]{account.getEmail()};
-    }
-
-    @Override
-    protected Object[] getPrimaryKeys(Account account) {
-        return new Object[]{account.getId()};
-    }
-
-    @Override
-    protected String getSelectByAltKeysQuery() {
-        return SELECT_BY_ALT_KEY;
-    }
-
-    @Override
-    public ResultSetExtractor<Account> getSuffixedExtractor(String suffix) {
-        return resultSet -> {
-            Account account = getViewExtractor().extractData(resultSet);
+    public RowMapper<Account> getSuffixedRowMapper(String suffix) {
+        return (resultSet, i) -> {
+            Account account = getSuffixedViewRowMapper(suffix).mapRow(resultSet, i);
+            assert account != null;
             account.setPatronymic(resultSet.getString(PATRONYMIC + suffix));
             if (!isNull(resultSet.getString(SEX + suffix))) {
                 account.setSex(Sex.valueOf(resultSet.getString(SEX + suffix)));
@@ -114,7 +148,7 @@ public class AccountDao extends AbstractDao<Account> {
 
     @Override
     public ValuePlacer getValuePlacer(Account entity, Account storedEntity) {
-        ValuePlacer valuePlacer = new ValuePlacer(TABLE, new String[]{EMAIL});
+        ValuePlacer valuePlacer = new ValuePlacer(TABLE, getAltKeys());
         valuePlacer.addFieldIfDiffers(entity::getName, storedEntity::getName, NAME, Types.VARCHAR);
         valuePlacer.addFieldIfDiffers(entity::getSurname, storedEntity::getSurname, SURNAME, Types.VARCHAR);
         valuePlacer.addFieldIfDiffers(entity::getPatronymic, storedEntity::getPatronymic, PATRONYMIC, Types.VARCHAR);
@@ -137,13 +171,8 @@ public class AccountDao extends AbstractDao<Account> {
     }
 
     @Override
-    protected String getDeleteByPrimaryKeyQuery() {
-        return DELETE_BY_ID;
-    }
-
-    @Override
     protected String getSelectAllQuery() {
-        return SELECT_ALL;
+        return selectAll;
     }
 
     @Override

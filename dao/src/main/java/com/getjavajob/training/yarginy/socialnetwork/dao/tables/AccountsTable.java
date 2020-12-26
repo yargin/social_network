@@ -17,7 +17,7 @@ public final class AccountsTable extends AbstractTable {
     public static final String REGISTRATION_DATE = "registration_date";
     public static final String ROLE = "role";
     public static final String PHOTO = "photo";
-    public static final String[] FIELDS = {NAME, SURNAME, PATRONYMIC, SEX, BIRTH_DATE, ICQ,
+    public static final String[] FIELDS = {ID, NAME, SURNAME, PATRONYMIC, SEX, BIRTH_DATE, ICQ,
             SKYPE, EMAIL, ADDITIONAL_EMAIL, COUNTRY, CITY, REGISTRATION_DATE, ROLE, PHOTO};
     public static final String VIEW_FIELDS = "ID, NAME, SURNAME, EMAIL";
     public static final String[] VIEW_FIELDS2 = {ID, NAME, SURNAME, EMAIL};
@@ -31,7 +31,7 @@ public final class AccountsTable extends AbstractTable {
     }
 
     @Override
-    protected String getTableName() {
+    public String getTable() {
         return TABLE;
     }
 
@@ -43,5 +43,15 @@ public final class AccountsTable extends AbstractTable {
     @Override
     public String[] getViewFieldsList() {
         return VIEW_FIELDS2;
+    }
+
+    @Override
+    public String[] getPrimaryKeys() {
+        return new String[]{ID};
+    }
+
+    @Override
+    public String[] getAltKeys() {
+        return new String[]{EMAIL};
     }
 }
