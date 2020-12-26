@@ -31,7 +31,7 @@ public class GroupDao extends AbstractDao<Group> {
         super(dataSource, TABLE, GROUP_ALIAS);
         accountDao = new AccountDao(dataSource);
         selectAll = "SELECT " + getFields() + ", " + accountDao.getViewFields() + " FROM " + TABLE + " as " +
-                GROUP_ALIAS + " JOIN accounts as acc ON _groups.owner_id = accounts.id";
+                GROUP_ALIAS + " JOIN accounts as acc ON gr.owner_id = acc.id";
     }
 
     @Override

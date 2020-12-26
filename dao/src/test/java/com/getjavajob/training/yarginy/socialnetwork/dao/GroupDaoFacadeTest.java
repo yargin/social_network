@@ -33,6 +33,7 @@ public class GroupDaoFacadeTest {
         account = accountDaoFacade.select(account);
         GROUP.setOwner(account);
         GROUP.setName("testGroup");
+        GROUP.setId(groupDaoFacade.select(GROUP).getId());
         groupDaoFacade.delete(GROUP);
     }
 
@@ -118,7 +119,7 @@ public class GroupDaoFacadeTest {
 
     @Test
     public void testDeleteGroup() {
-        assert groupDaoFacade.create(GROUP);
+        groupDaoFacade.create(GROUP);
         GROUP.setId(groupDaoFacade.select(GROUP).getId());
         assertTrue(groupDaoFacade.delete(GROUP));
         assertEquals(groupDaoFacade.getNullEntity(), groupDaoFacade.select(GROUP));

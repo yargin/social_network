@@ -95,7 +95,7 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
 
     @Override
     public boolean delete(E entity) {
-        String query = "DELETE FROM " + tableName + ' ' + where + getPKParameters();
+        String query = "DELETE FROM " + tableName + ' ' + alias + ' ' + where + getPKParameters();
         return template.update(query, getObjectPrimaryKeys(entity)) == 1;
     }
 
@@ -138,7 +138,7 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
         return buildString(this::getViewFieldsList, this::appendField);
     }
 
-    private boolean appendField(StringBuilder stringBuilder, boolean firstIteration, String field) {
+    private boolean appendField(StringBuilder stringBuilder, boolean firstIteration, String field, String alias) {
         String optionalAlias = alias.isEmpty() ? alias : alias + '.';
         if (!firstIteration) {
             stringBuilder.append(", ");
@@ -152,7 +152,7 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
         StringBuilder stringBuilder = new StringBuilder();
         boolean firstIteration = true;
         for (String field : fields) {
-            firstIteration = appender.append(stringBuilder, firstIteration, field);
+            firstIteration = appender.append(stringBuilder, firstIteration, field, alias);
         }
         return stringBuilder.toString();
     }
@@ -169,15 +169,18 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
 
     public abstract String[] getAltKeys();
 
-    private boolean appendKey(StringBuilder stringBuilder, boolean firstIteration, String key) {
+    private boolean appendKey(StringBuilder stringBuilder, boolean firstIteration, String key, String alias) {
         if (!firstIteration) {
             stringBuilder.append(" AND ");
+        }
+        if (!alias.isEmpty()) {
+            stringBuilder.append(alias).append('.');
         }
         stringBuilder.append(key).append(" = ? ");
         return false;
     }
 
     private interface Appender {
-        boolean append(StringBuilder builder, boolean firstIteration, String value);
+        boolean append(StringBuilder builder, boolean firstIteration, String value, String alias);
     }
 }
