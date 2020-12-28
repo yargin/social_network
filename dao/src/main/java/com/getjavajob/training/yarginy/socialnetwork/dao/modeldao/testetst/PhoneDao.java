@@ -28,7 +28,7 @@ public class PhoneDao extends AbstractDao<Phone> {
         super(dataSource, TABLE, ALIAS);
         accountDao = new AccountDao(dataSource);
         selectAll = "SELECT " + getFields(ALIAS) + ", " + accountDao.getViewFields(ACCOUNT_ALIAS) + " FROM " +
-                TABLE + ' ' + ALIAS +  " JOIN accounts acc ON ph.owner_id = acc.id";
+                getTable(ALIAS) + " JOIN " + accountDao.getTable(ACCOUNT_ALIAS) + " ON ph.owner_id = acc.id";
     }
 
     @Override

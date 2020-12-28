@@ -4,8 +4,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesF
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.DialogImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.tables.AbstractTable;
-import com.getjavajob.training.yarginy.socialnetwork.dao.tables.DialogsTable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -31,8 +29,9 @@ public class DialogDao extends AbstractDao<Dialog> {
         super(dataSource, TABLE, ALIAS, true);
         this.accountDao = accountDao;
         selectAll = "SELECT " + getFields(ALIAS) + ", " + accountDao.getFields(FIRST_ACC_ALIAS) + ", " +
-                accountDao.getFields(SECOND_ACC_ALIAS) + " FROM dialogs d JOIN accounts as a1 " +
-                "ON d.first_id = a1.id JOIN accounts as a2 ON d.second_id = a2.id";
+                accountDao.getFields(SECOND_ACC_ALIAS) + " FROM " + getTable(ALIAS) + " JOIN " +
+                accountDao.getTable(FIRST_ACC_ALIAS) + "ON d.first_id = a1.id JOIN " +
+                accountDao.getTable(SECOND_ACC_ALIAS) + " ON d.second_id = a2.id";
     }
 
     @Override

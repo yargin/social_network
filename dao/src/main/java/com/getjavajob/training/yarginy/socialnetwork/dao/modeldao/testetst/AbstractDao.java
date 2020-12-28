@@ -40,7 +40,7 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
 
     @Override
     public E select(long id) {
-        String query = getSelectAllQuery() + where + getPKParameters();
+        String query = getSelectAllQuery() + where + getPKParameters(alias);
         try {
             return template.queryForObject(query, getRowMapper(), id);
         } catch (TransientDataAccessException e) {
@@ -52,9 +52,9 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
 
     @Override
     public E select(E entity) {
-        String query = getSelectAllQuery() + where + '(' + getAltParameters() + ')';
+        String query = getSelectAllQuery() + where + '(' + getAltParameters(alias) + ')';
         if (doubledAltKey) {
-            query = query + " OR ( " + getAltParameters() + ')';
+            query = query + " OR ( " + getAltParameters(alias) + ')';
         }
         try {
             return template.queryForObject(query, getRowMapper(), getObjectsAltKeys(entity));
@@ -93,9 +93,9 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
 
     @Override
     public boolean delete(E entity) {
-        String query = "DELETE FROM " + tableName + ' ' + alias + ' ' + where + '(' + getAltParameters() + ')';
+        String query = "DELETE FROM " + getTable(alias) + where + '(' + getAltParameters(alias) + ')';
         if (doubledAltKey) {
-            query = query + " OR ( " + getAltParameters() + ')';
+            query = query + " OR ( " + getAltParameters(alias) + ')';
         }
         return template.update(query, getObjectsAltKeys(entity)) == 1;
     }
@@ -123,7 +123,6 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
     public abstract RowMapper<E> getViewRowMapper();
 
     public abstract RowMapper<E> getRowMapper();
-
 
     //test table
 
@@ -158,13 +157,13 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
         return stringBuilder.toString();
     }
 
-    public String getPKParameters() {
+    public String getPKParameters(String alias) {
         return buildString(this::getPrimaryKeys, this::appendKey, alias);
     }
 
     public abstract String[] getPrimaryKeys();
 
-    public String getAltParameters() {
+    public String getAltParameters(String alias) {
         return buildString(this::getAltKeys, this::appendKey, alias);
     }
 
@@ -183,5 +182,9 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
 
     private interface Appender {
         boolean append(StringBuilder builder, boolean firstIteration, String value, String alias);
+    }
+
+    public String getTable(String alias) {
+        return tableName + " as " + alias;
     }
 }
