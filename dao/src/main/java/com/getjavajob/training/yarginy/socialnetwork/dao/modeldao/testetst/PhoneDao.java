@@ -13,6 +13,7 @@ import java.sql.Types;
 public class PhoneDao extends AbstractDao<Phone> {
     private static final String TABLE = "phones";
     private static final String ALIAS = "ph";
+    private static final String ACCOUNT_ALIAS = "acc";
     private static final String ID = "id";
     private static final String NUMBER = "number";
     private static final String TYPE = "type";
@@ -24,10 +25,10 @@ public class PhoneDao extends AbstractDao<Phone> {
     private final String selectAll;
 
     public PhoneDao(DataSource dataSource) {
-        super(dataSource, TABLE, "ph");
+        super(dataSource, TABLE, ALIAS);
         accountDao = new AccountDao(dataSource);
-        selectAll = "SELECT " + getFields() + ", " + accountDao.getViewFields() + " FROM phones ph JOIN accounts acc " +
-                "ON ph.owner_id = acc.id";
+        selectAll = "SELECT " + getFields(ALIAS) + ", " + accountDao.getViewFields(ACCOUNT_ALIAS) + " FROM " +
+                TABLE + ' ' + ALIAS +  " JOIN accounts acc ON ph.owner_id = acc.id";
     }
 
     @Override

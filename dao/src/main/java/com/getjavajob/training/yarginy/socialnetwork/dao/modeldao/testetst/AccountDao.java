@@ -37,7 +37,7 @@ public class AccountDao extends AbstractDao<Account> {
             SKYPE, EMAIL, ADDITIONAL_EMAIL, COUNTRY, CITY, REGISTRATION_DATE, ROLE, PHOTO};
     private static final String[] VIEW_FIELDS = {ID, NAME, SURNAME, EMAIL};
 
-    private final String selectAll = "SELECT " + getFields() + " FROM " + TABLE + ' ' + ALIAS;
+    private final String selectAll = "SELECT " + getFields(ALIAS) + " FROM " + TABLE + ' ' + ALIAS;
 
     public AccountDao(DataSource dataSource) {
         super(dataSource, TABLE, ALIAS);

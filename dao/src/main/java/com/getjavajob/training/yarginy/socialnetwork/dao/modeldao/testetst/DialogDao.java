@@ -23,15 +23,16 @@ public class DialogDao extends AbstractDao<Dialog> {
     private static final String ID = "id";
     private static final String FIRST_ID = "first_id";
     private static final String SECOND_ID = "second_id";
-    private final AbstractTable DIALOGS_TABLE = new DialogsTable("d");
-    private final String SELECT_ALL = "SELECT " + getFields() + " FROM dialogs d JOIN accounts as a1 ON " +
-            "d.first_id = a1.id JOIN accounts as a2 ON d.second_id = a2.id";
+    private final String selectAll;
     private final AccountDao accountDao;
 
     @Autowired
     public DialogDao(DataSource dataSource, AccountDao accountDao) {
         super(dataSource, TABLE, ALIAS, true);
         this.accountDao = accountDao;
+        selectAll = "SELECT " + getFields(ALIAS) + ", " + accountDao.getFields(FIRST_ACC_ALIAS) + ", " +
+                accountDao.getFields(SECOND_ACC_ALIAS) + " FROM dialogs d JOIN accounts as a1 " +
+                "ON d.first_id = a1.id JOIN accounts as a2 ON d.second_id = a2.id";
     }
 
     @Override
@@ -107,7 +108,7 @@ public class DialogDao extends AbstractDao<Dialog> {
 
     @Override
     protected ValuePlacer getValuePlacer(Dialog dialog, Dialog storedDialog) {
-        ValuePlacer valuePlacer = new ValuePlacer(DIALOGS_TABLE.getTable(), DIALOGS_TABLE.getAltKeys());
+        ValuePlacer valuePlacer = new ValuePlacer(TABLE, getAltKeys());
         valuePlacer.addFieldIfDiffers(dialog::getFirstAccount, storedDialog::getFirstAccount, FIRST_ID, Types.BIGINT,
                 Account::getId);
         valuePlacer.addFieldIfDiffers(dialog::getSecondAccount, storedDialog::getSecondAccount, FIRST_ID,
@@ -117,7 +118,7 @@ public class DialogDao extends AbstractDao<Dialog> {
 
     @Override
     protected String getSelectAllQuery() {
-        return SELECT_ALL;
+        return selectAll;
     }
 
     @Override

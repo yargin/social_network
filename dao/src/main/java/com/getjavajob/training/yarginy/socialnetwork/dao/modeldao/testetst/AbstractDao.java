@@ -52,11 +52,9 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
 
     @Override
     public E select(E entity) {
-        String query;
-        if (!doubledAltKey) {
-            query = getSelectAllQuery() + where + getAltParameters();
-        } else {
-            query = getSelectAllQuery() + where + '(' + getAltParameters() + " ) OR ( " + getAltParameters() + ')';
+        String query = getSelectAllQuery() + where + '(' + getAltParameters() + ')';
+        if (doubledAltKey) {
+            query = query + " OR ( " + getAltParameters() + ')';
         }
         try {
             return template.queryForObject(query, getRowMapper(), getObjectsAltKeys(entity));
@@ -95,8 +93,11 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
 
     @Override
     public boolean delete(E entity) {
-        String query = "DELETE FROM " + tableName + ' ' + alias + ' ' + where + getPKParameters();
-        return template.update(query, getObjectPrimaryKeys(entity)) == 1;
+        String query = "DELETE FROM " + tableName + ' ' + alias + ' ' + where + '(' + getAltParameters() + ')';
+        if (doubledAltKey) {
+            query = query + " OR ( " + getAltParameters() + ')';
+        }
+        return template.update(query, getObjectsAltKeys(entity)) == 1;
     }
 
     protected abstract Object[] getObjectPrimaryKeys(E entity);
@@ -128,14 +129,14 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
 
     protected abstract String[] getFieldsList();
 
-    public String getFields() {
-        return buildString(this::getFieldsList, this::appendField);
+    public String getFields(String alias) {
+        return buildString(this::getFieldsList, this::appendField, alias);
     }
 
     protected abstract String[] getViewFieldsList();
 
-    public String getViewFields() {
-        return buildString(this::getViewFieldsList, this::appendField);
+    public String getViewFields(String alias) {
+        return buildString(this::getViewFieldsList, this::appendField, alias);
     }
 
     private boolean appendField(StringBuilder stringBuilder, boolean firstIteration, String field, String alias) {
@@ -147,7 +148,7 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
         return false;
     }
 
-    private String buildString(Supplier<String[]> fieldsGetter, Appender appender) {
+    private String buildString(Supplier<String[]> fieldsGetter, Appender appender, String alias) {
         String[] fields = fieldsGetter.get();
         StringBuilder stringBuilder = new StringBuilder();
         boolean firstIteration = true;
@@ -158,13 +159,13 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
     }
 
     public String getPKParameters() {
-        return buildString(this::getPrimaryKeys, this::appendKey);
+        return buildString(this::getPrimaryKeys, this::appendKey, alias);
     }
 
     public abstract String[] getPrimaryKeys();
 
     public String getAltParameters() {
-        return buildString(this::getAltKeys, this::appendKey);
+        return buildString(this::getAltKeys, this::appendKey, alias);
     }
 
     public abstract String[] getAltKeys();
