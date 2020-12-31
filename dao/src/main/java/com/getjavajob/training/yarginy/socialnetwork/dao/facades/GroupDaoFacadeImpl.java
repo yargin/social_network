@@ -4,7 +4,8 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.ManyToManyDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.testtest.AbstractOneToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.testtest.AccountGroupsDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -14,12 +15,12 @@ import java.util.Collection;
 @Component("groupDaoFacade")
 public class GroupDaoFacadeImpl implements GroupDaoFacade {
     private final Dao<Group> groupDao;
-    private final OneToManyDao<Group> accountsOwnedGroupsDao;
+    private final AbstractOneToManyDao<Group> accountsOwnedGroupsDao;
     private final ManyToManyDao<Account, Group> accountsGroupMembershipDao;
 
     @Autowired
     public GroupDaoFacadeImpl(Dao<Group> groupDao,
-                              @Qualifier("accountOwnerGroupsDao") OneToManyDao<Group> accountsOwnedGroupsDao,
+                              AccountGroupsDao accountsOwnedGroupsDao,
                               @Qualifier("groupMembershipDao") ManyToManyDao<Account, Group> accountsGroupMembershipDao) {
         this.groupDao = groupDao;
         this.accountsOwnedGroupsDao = accountsOwnedGroupsDao;

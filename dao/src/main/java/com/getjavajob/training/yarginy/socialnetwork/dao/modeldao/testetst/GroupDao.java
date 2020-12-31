@@ -4,6 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesF
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.batch.AbstractBatchDao;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Component;
@@ -12,7 +13,7 @@ import javax.sql.DataSource;
 import java.sql.Types;
 
 @Component("groupDao")
-public class GroupDao extends AbstractDao<Group> {
+public class GroupDao extends AbstractBatchDao<Group> {
     private static final String TABLE = "_groups";
     private static final String ID = "id";
     private static final String NAME = "name";
@@ -60,7 +61,7 @@ public class GroupDao extends AbstractDao<Group> {
     }
 
     @Override
-    protected Object[] getObjectsAltKeys(Group group) {
+    protected Object[] getObjectAltKeys(Group group) {
         return new Object[]{group.getName()};
     }
 
@@ -77,7 +78,7 @@ public class GroupDao extends AbstractDao<Group> {
 
     @Override
     protected ValuePlacer getValuePlacer(Group group, Group storedGroup) {
-        ValuePlacer placer = new ValuePlacer(TABLE, getAltKeys());
+        ValuePlacer placer = new ValuePlacer(TABLE);
         placer.addFieldIfDiffers(group::getName, storedGroup::getName, NAME, Types.VARCHAR);
         placer.addFieldIfDiffers(group::getDescription, storedGroup::getDescription, DESCRIPTION, Types.VARCHAR);
         placer.addFieldIfDiffers(group::getOwner, storedGroup::getOwner, OWNER, Types.VARCHAR, Account::getId);
@@ -102,7 +103,6 @@ public class GroupDao extends AbstractDao<Group> {
     public RowMapper<Group> getViewRowMapper() {
         return getSuffixedViewRowMapper(GROUP_ALIAS);
     }
-
 
     public RowMapper<Group> getSuffixedViewRowMapper(String suffix) {
         return (resultSet, i) -> {

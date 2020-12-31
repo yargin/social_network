@@ -1,4 +1,4 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages;
 
-public interface AccountWallMessageDao extends MessageDao {
+public interface GroupWallMessageDaoFacade extends MessageDao {
 }

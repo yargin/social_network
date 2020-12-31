@@ -2,25 +2,26 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.messages.AccountWallMessageDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.testtest.AbstractOneToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.testtest.AccountWallMessagesDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 
 @Repository("accountWallMessageDaoFacade")
-public class AccountWallMessageDaoImpl implements AccountWallMessageDao {
+public class AccountWallMessageDaoImpl implements AccountWallMessageDaoFacade {
     private final Dao<Message> accountWallMessageDao;
-    private OneToManyDao<Message> accountWallMessagesOneToManyDao;
+    private AbstractOneToManyDao<Message> accountWallMessagesOneToManyDao;
 
     @Autowired
-    public AccountWallMessageDaoImpl(@Qualifier("accountWallMessageDao") Dao<Message> accountWallMessageDao) {
+    public AccountWallMessageDaoImpl(AccountWallMessageDao accountWallMessageDao) {
         this.accountWallMessageDao = accountWallMessageDao;
     }
 
     @Autowired
-    public void setAccountWallMessagesOneToManyDao(@Qualifier("accountWallMessagesDao") OneToManyDao<Message> accountWallMessagesOneToManyDao) {
+    public void setAccountWallMessagesOneToManyDao(AccountWallMessagesDao accountWallMessagesOneToManyDao) {
         this.accountWallMessagesOneToManyDao = accountWallMessagesOneToManyDao;
     }
 

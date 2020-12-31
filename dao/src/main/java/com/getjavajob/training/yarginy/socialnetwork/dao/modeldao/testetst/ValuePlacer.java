@@ -2,6 +2,8 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst;
 
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -9,13 +11,11 @@ import java.util.function.Supplier;
 public class ValuePlacer {
     private static final String KEY_PREFIX = "key";
     private final String table;
-    private final String[] altKeys;
+    private final Collection<String> altKeys = new ArrayList<>();
     private final MapSqlParameterSource parameters = new MapSqlParameterSource();
     private final StringBuilder updateQueryParameters = new StringBuilder();
-    private int keyCounter = 0;
 
-    public ValuePlacer(String table, String[] altKeys) {
-        this.altKeys = altKeys;
+    public ValuePlacer(String table) {
         this.table = table;
     }
 
@@ -42,7 +42,7 @@ public class ValuePlacer {
 
     public <V> void addKey(Supplier<V> valueGetter, String column, int type) {
         parameters.addValue(KEY_PREFIX + column, valueGetter.get(), type);
-        keyCounter++;
+        altKeys.add(column);
     }
 
     public <V, T> void addKey(Supplier<V> valueGetter, String column, int type, Function<V, T> objToSqlTransformer) {
@@ -52,7 +52,7 @@ public class ValuePlacer {
         } else {
             parameters.addValue(KEY_PREFIX + column, objToSqlTransformer.apply(value), type);
         }
-        keyCounter++;
+        altKeys.add(column);
     }
 
     private void addColumn(String column) {
@@ -61,9 +61,6 @@ public class ValuePlacer {
 
 
     public MapSqlParameterSource getParameters() {
-        if (keyCounter < altKeys.length) {
-            throw new IllegalArgumentException("not all keys initialised");
-        }
         return parameters;
     }
 

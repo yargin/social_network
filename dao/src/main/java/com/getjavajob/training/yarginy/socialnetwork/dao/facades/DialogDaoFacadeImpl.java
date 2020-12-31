@@ -2,9 +2,10 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.DialogDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.testtest.AbstractOneToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.testtest.AccountDialogs;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -12,12 +13,12 @@ import java.util.Collection;
 @Component("dialogDaoFacade")
 public class DialogDaoFacadeImpl implements DialogDaoFacade {
     private final Dao<Dialog> dialogDao;
-    private final OneToManyDao<Dialog> accountDialogsDao;
+    private final AbstractOneToManyDao<Dialog> accountDialogsDao;
 
     @Autowired
-    public DialogDaoFacadeImpl(Dao<Dialog> dialogDao, @Qualifier("dialogsDao") OneToManyDao<Dialog> accountDialogsDao) {
+    public DialogDaoFacadeImpl(DialogDao dialogDao, AccountDialogs accountDialogs) {
         this.dialogDao = dialogDao;
-        this.accountDialogsDao = accountDialogsDao;
+        this.accountDialogsDao = accountDialogs;
     }
 
     @Override

@@ -33,8 +33,8 @@ public class AccountDao extends AbstractDao<Account> {
     private static final String REGISTRATION_DATE = "registration_date";
     private static final String ROLE = "role";
     private static final String PHOTO = "photo";
-    private static final String[] FIELDS = {ID, NAME, SURNAME, PATRONYMIC, SEX, BIRTH_DATE, ICQ,
-            SKYPE, EMAIL, ADDITIONAL_EMAIL, COUNTRY, CITY, REGISTRATION_DATE, ROLE, PHOTO};
+    private static final String[] FIELDS = {ID, NAME, SURNAME, PATRONYMIC, SEX, BIRTH_DATE, ICQ, SKYPE, EMAIL,
+            ADDITIONAL_EMAIL, COUNTRY, CITY, REGISTRATION_DATE, ROLE, PHOTO};
     private static final String[] VIEW_FIELDS = {ID, NAME, SURNAME, EMAIL};
 
     private final String selectAll = "SELECT " + getFields(ALIAS) + " FROM " + getTable(ALIAS);
@@ -45,11 +45,11 @@ public class AccountDao extends AbstractDao<Account> {
 
     @Override
     public RowMapper<Account> getViewRowMapper() {
-        return getSuffixedViewRowMapper("");
+        return getSuffixedViewRowMapper(ALIAS);
     }
 
     @Override
-    protected Object[] getObjectsAltKeys(Account account) {
+    protected Object[] getObjectAltKeys(Account account) {
         return new Object[]{account.getEmail()};
     }
 
@@ -148,7 +148,7 @@ public class AccountDao extends AbstractDao<Account> {
 
     @Override
     public ValuePlacer getValuePlacer(Account entity, Account storedEntity) {
-        ValuePlacer valuePlacer = new ValuePlacer(TABLE, getAltKeys());
+        ValuePlacer valuePlacer = new ValuePlacer(TABLE);
         valuePlacer.addFieldIfDiffers(entity::getName, storedEntity::getName, NAME, Types.VARCHAR);
         valuePlacer.addFieldIfDiffers(entity::getSurname, storedEntity::getSurname, SURNAME, Types.VARCHAR);
         valuePlacer.addFieldIfDiffers(entity::getPatronymic, storedEntity::getPatronymic, PATRONYMIC, Types.VARCHAR);

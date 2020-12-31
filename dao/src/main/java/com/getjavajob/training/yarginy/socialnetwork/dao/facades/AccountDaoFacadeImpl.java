@@ -6,26 +6,26 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.SelfManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.ManyToManyDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.testtest.AccountGroupsDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.testtest.AccountPhonesDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
-import java.util.Objects;
 
 @Component("accountDaoFacade")
 public class AccountDaoFacadeImpl implements AccountDaoFacade {
     private final Dao<Account> accountDao;
-    private final OneToManyDao<Group> accountGroupsDao;
+    private final AccountGroupsDao accountGroupsDao;
     private final ManyToManyDao<Account, Group> accountsInGroupsDao;
-    private final OneToManyDao<Phone> accountPhonesDao;
+    private final AccountPhonesDao accountPhonesDao;
     private final SelfManyToManyDao<Account> accountFriendsDao;
 
     @Autowired
-    public AccountDaoFacadeImpl(Dao<Account> accountDao, OneToManyDao<Group> accountGroupsDao,
+    public AccountDaoFacadeImpl(Dao<Account> accountDao, AccountGroupsDao accountGroupsDao,
                                 @Qualifier("groupMembershipDao") ManyToManyDao<Account, Group> accountsInGroupsDao,
-                                OneToManyDao<Phone> accountPhonesDao,
+                                AccountPhonesDao accountPhonesDao,
                                 SelfManyToManyDao<Account> accountFriendsDao) {
         this.accountDao = accountDao;
         this.accountGroupsDao = accountGroupsDao;

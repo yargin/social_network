@@ -16,31 +16,25 @@ import java.util.Collection;
 import java.util.function.Supplier;
 
 public abstract class AbstractDao<E extends Entity> implements Dao<E> {
-    private final JdbcTemplate template;
     private final NamedParameterJdbcTemplate namedTemplate;
-    private final SimpleJdbcInsert jdbcInsert;
+    protected final JdbcTemplate template;
+    protected final SimpleJdbcInsert jdbcInsert;
     private final String alias;
     private final String where = " WHERE ";
     private final String tableName;
-    private final boolean doubledAltKey;
 
-    public AbstractDao(DataSource dataSource, String table, String tableAlias, boolean doubledAltKey) {
+    public AbstractDao(DataSource dataSource, String table, String tableAlias) {
         template = new JdbcTemplate(dataSource);
         namedTemplate = new NamedParameterJdbcTemplate(dataSource);
         jdbcInsert = new SimpleJdbcInsert(dataSource);
         jdbcInsert.withTableName(table);
         this.tableName = table;
         alias = tableAlias;
-        this.doubledAltKey = doubledAltKey;
-    }
-
-    public AbstractDao(DataSource dataSource, String table, String tableAlias) {
-        this(dataSource, table, tableAlias, false);
     }
 
     @Override
     public E select(long id) {
-        String query = getSelectAllQuery() + where + getPKParameters(alias);
+        String query = getSelectAllQuery() + where + getStringPkAsParameters(alias);
         try {
             return template.queryForObject(query, getRowMapper(), id);
         } catch (TransientDataAccessException e) {
@@ -52,12 +46,9 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
 
     @Override
     public E select(E entity) {
-        String query = getSelectAllQuery() + where + '(' + getAltParameters(alias) + ')';
-        if (doubledAltKey) {
-            query = query + " OR ( " + getAltParameters(alias) + ')';
-        }
+        String query = getSelectAllQuery() + where + getStringAltKeysAsParameters(alias);
         try {
-            return template.queryForObject(query, getRowMapper(), getObjectsAltKeys(entity));
+            return template.queryForObject(query, getRowMapper(), getObjectAltKeys(entity));
         } catch (TransientDataAccessException e) {
             throw new IllegalArgumentException(e);
         } catch (EmptyResultDataAccessException e) {
@@ -65,7 +56,7 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
         }
     }
 
-    protected abstract Object[] getObjectsAltKeys(E entity);
+    protected abstract Object[] getObjectAltKeys(E entity);
 
     @Override
     public boolean create(E entity) {
@@ -93,11 +84,12 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
 
     @Override
     public boolean delete(E entity) {
-        String query = "DELETE FROM " + getTable(alias) + where + '(' + getAltParameters(alias) + ')';
-        if (doubledAltKey) {
-            query = query + " OR ( " + getAltParameters(alias) + ')';
-        }
-        return template.update(query, getObjectsAltKeys(entity)) == 1;
+        ;
+        return template.update(getDeleteQuery(), getObjectAltKeys(entity)) == 1;
+    }
+
+    protected String getDeleteQuery() {
+        return "DELETE FROM " + getTable(alias) + where + getStringAltKeysAsParameters(alias);
     }
 
     protected abstract Object[] getObjectPrimaryKeys(E entity);
@@ -157,13 +149,13 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
         return stringBuilder.toString();
     }
 
-    public String getPKParameters(String alias) {
+    public String getStringPkAsParameters(String alias) {
         return buildString(this::getPrimaryKeys, this::appendKey, alias);
     }
 
     public abstract String[] getPrimaryKeys();
 
-    public String getAltParameters(String alias) {
+    public String getStringAltKeysAsParameters(String alias) {
         return buildString(this::getAltKeys, this::appendKey, alias);
     }
 

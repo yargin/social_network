@@ -2,17 +2,17 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.testtest.AbstractOneToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.testtest.DialogMessagesDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
 @Component("dialogMessageDaoFacade")
-public class DialogMessageDaoImpl implements DialogMessageDao {
+public class DialogMessageDaoImpl implements DialogMessageDaoFacade {
     private Dao<Message> dialogMessageDao;
-    private OneToManyDao<Message> dialogsMessagesDao;
+    private AbstractOneToManyDao<Message> dialogsMessagesDao;
 
     @Autowired
     public void setDialogMessageDao(Dao<Message> dialogMessageDao) {
@@ -20,7 +20,7 @@ public class DialogMessageDaoImpl implements DialogMessageDao {
     }
 
     @Autowired
-    public void setDialogsMessagesDao(@Qualifier("dialogMessagesDao")OneToManyDao<Message> dialogsMessagesDao) {
+    public void setDialogsMessagesDao(DialogMessagesDao dialogsMessagesDao) {
         this.dialogsMessagesDao = dialogsMessagesDao;
     }
 

@@ -4,12 +4,15 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesF
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.PasswordImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.Types;
 
+@Repository
 public class PasswordDao extends AbstractDao<Password> {
     private static final String TABLE = "passwords";
     private static final String EMAIL = "email";
@@ -20,6 +23,7 @@ public class PasswordDao extends AbstractDao<Password> {
     private final String selectAll;
     private final AccountDao accountDao;
 
+    @Autowired
     public PasswordDao(DataSource dataSource) {
         super(dataSource, TABLE, PASSWORD_ALIAS);
         accountDao = new AccountDao(dataSource);
@@ -44,7 +48,7 @@ public class PasswordDao extends AbstractDao<Password> {
     }
 
     @Override
-    protected Object[] getObjectsAltKeys(Password password) {
+    protected Object[] getObjectAltKeys(Password password) {
         return new Object[]{password.getAccount().getEmail()};
     }
 
@@ -58,10 +62,12 @@ public class PasswordDao extends AbstractDao<Password> {
 
     @Override
     protected ValuePlacer getValuePlacer(Password password, Password storedPassword) {
-        ValuePlacer placer = new ValuePlacer(TABLE, getAltKeys());
+        ValuePlacer placer = new ValuePlacer(TABLE);
         placer.addFieldIfDiffers(password::getAccount, storedPassword::getAccount, EMAIL, Types.VARCHAR,
                 Account::getEmail);
         placer.addFieldIfDiffers(password::getPassword, storedPassword::getPassword, PASSWORD, Types.VARCHAR);
+
+        placer.addKey(password::getAccount, EMAIL, Types.VARCHAR, Account::getEmail);
         return placer;
     }
 

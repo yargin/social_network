@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
 public class NewAccountDaoTest {
     private static final Account ACCOUNT = new AccountImpl();
     @Autowired
-    @Qualifier("newAccountDao")
+    @Qualifier("accountDao")
     private Dao<Account> accountDao;
 
     @After

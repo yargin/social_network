@@ -157,12 +157,14 @@ CREATE TABLE `group_wall_messages`
     CONSTRAINT `C_36` FOREIGN KEY (`receiver_id`) REFERENCES `_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE dialogs (
-    id bigint unsigned auto_increment PRIMARY KEY,
-    first_id  bigint unsigned NOT NULL,
-    second_id bigint unsigned NOT NULL,
-    CONSTRAINT dialogs_accounts_id_fk FOREIGN KEY (first_id) REFERENCES accounts (id) ON UPDATE CASCADE ON DELETE CASCADE,
-    CONSTRAINT dialogs_accounts_id_fk_2 FOREIGN KEY (second_id) REFERENCES accounts (id) ON UPDATE CASCADE ON DELETE CASCADE
+CREATE TABLE dialogs(
+                        id        bigint unsigned auto_increment PRIMARY KEY,
+                        first_id  bigint unsigned NOT NULL,
+                        second_id bigint unsigned NOT NULL,
+                        CONSTRAINT dialogs_accounts_id_fk FOREIGN KEY (first_id) REFERENCES accounts (id) ON UPDATE CASCADE ON DELETE CASCADE,
+                        CONSTRAINT dialogs_accounts_id_fk_2 FOREIGN KEY (second_id) REFERENCES accounts (id) ON UPDATE CASCADE ON DELETE
+                            CASCADE,
+                        CONSTRAINT dialogs_accounts_id UNIQUE (first_id, second_id)
 );
 
 CREATE TABLE `dialogs_messages`

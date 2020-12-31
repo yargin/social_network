@@ -26,11 +26,11 @@ public class DialogDao extends AbstractDao<Dialog> {
 
     @Autowired
     public DialogDao(DataSource dataSource, AccountDao accountDao) {
-        super(dataSource, TABLE, ALIAS, true);
+        super(dataSource, TABLE, ALIAS);
         this.accountDao = accountDao;
         selectAll = "SELECT " + getFields(ALIAS) + ", " + accountDao.getFields(FIRST_ACC_ALIAS) + ", " +
                 accountDao.getFields(SECOND_ACC_ALIAS) + " FROM " + getTable(ALIAS) + " JOIN " +
-                accountDao.getTable(FIRST_ACC_ALIAS) + "ON d.first_id = a1.id JOIN " +
+                accountDao.getTable(FIRST_ACC_ALIAS) + " ON d.first_id = a1.id JOIN " +
                 accountDao.getTable(SECOND_ACC_ALIAS) + " ON d.second_id = a2.id";
     }
 
@@ -83,10 +83,16 @@ public class DialogDao extends AbstractDao<Dialog> {
     }
 
     @Override
-    protected Object[] getObjectsAltKeys(Dialog dialog) {
+    protected Object[] getObjectAltKeys(Dialog dialog) {
         Account firstAccount = dialog.getFirstAccount();
         Account secondAccount = dialog.getSecondAccount();
-        return new Object[]{firstAccount.getId(), secondAccount.getId(), firstAccount.getId(), secondAccount.getId()};
+        long firstId = firstAccount.getId();
+        long secondId = secondAccount.getId();
+        if (firstId < secondId) {
+            return new Object[]{firstId, secondId};
+        } else {
+            return new Object[]{secondId, firstId};
+        }
     }
 
     @Override
@@ -98,20 +104,27 @@ public class DialogDao extends AbstractDao<Dialog> {
     protected MapSqlParameterSource createEntityFieldsMap(Dialog dialog) {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue(ID, dialog.getId(), Types.BIGINT);
-        Account account = dialog.getFirstAccount();
-        parameters.addValue(FIRST_ID, account.getId(), Types.BIGINT);
-        account = dialog.getSecondAccount();
-        parameters.addValue(SECOND_ID, account.getId(), Types.BIGINT);
+        long firstId = dialog.getFirstAccount().getId();
+        long secondId = dialog.getSecondAccount().getId();
+        if (firstId < secondId) {
+            parameters.addValue(FIRST_ID, firstId, Types.BIGINT);
+            parameters.addValue(SECOND_ID, secondId, Types.BIGINT);
+        } else {
+            parameters.addValue(FIRST_ID, secondId, Types.BIGINT);
+            parameters.addValue(SECOND_ID, firstId, Types.BIGINT);
+        }
         return parameters;
     }
 
     @Override
     protected ValuePlacer getValuePlacer(Dialog dialog, Dialog storedDialog) {
-        ValuePlacer valuePlacer = new ValuePlacer(TABLE, getAltKeys());
+        ValuePlacer valuePlacer = new ValuePlacer(TABLE);
         valuePlacer.addFieldIfDiffers(dialog::getFirstAccount, storedDialog::getFirstAccount, FIRST_ID, Types.BIGINT,
                 Account::getId);
         valuePlacer.addFieldIfDiffers(dialog::getSecondAccount, storedDialog::getSecondAccount, FIRST_ID,
                 Types.BIGINT, Account::getId);
+
+        valuePlacer.addKey(storedDialog::getId, ID, Types.BIGINT);
         return valuePlacer;
     }
 

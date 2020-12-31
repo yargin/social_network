@@ -1,34 +1,33 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.testtest;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.AbstractDao;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 
 import javax.sql.DataSource;
+import java.io.Serializable;
 import java.util.Collection;
+import java.util.Objects;
 
-public abstract class AbstractOneToManyDao<O extends Entity, M extends Entity> {
-    private final JdbcTemplate template;
-    private final AbstractDao<O> oneDao;
-    private final AbstractDao<M> manyDao;
+public abstract class AbstractOneToManyDao<M extends Entity> implements Serializable {
+    protected final transient JdbcTemplate template;
 
-    public AbstractOneToManyDao(DataSource dataSource, AbstractDao<O> oneDao, AbstractDao<M> manyDao) {
+    public AbstractOneToManyDao(DataSource dataSource) {
         template = new JdbcTemplate(dataSource);
-        this.oneDao = oneDao;
-        this.manyDao = manyDao;
     }
 
-    public Collection<M> selectMany(long oneId) {
-        String query = getSelectManyQuery();
-        return template.query(query, manyDao.getRowMapper());
-    }
-
-    protected abstract String getSelectManyQuery();
+    public abstract Collection<M> selectMany(long oneId);
 
     public boolean relationExists(long oneId, long manyId) {
-        String query = getSelectOneQuery();
-        return template.query(query, oneDao.getRowMapper()).size() > 1;
+        String query = getSelectByBothQuery();
+        return Objects.equals(template.queryForObject(query, getBothParams(oneId, manyId), getExitsRowMapper()), 1);
     }
 
-    protected abstract String getSelectOneQuery();
+    protected abstract String getSelectByBothQuery();
+
+    protected abstract Object[] getBothParams(long oneId, long manyId);
+
+    private RowMapper<Integer> getExitsRowMapper() {
+        return (resultSet, i) -> resultSet.getInt(1);
+    }
 }
