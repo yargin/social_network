@@ -11,7 +11,6 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
-import javax.sql.DataSource;
 import java.util.Collection;
 import java.util.function.Supplier;
 
@@ -23,10 +22,11 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
     private final String where = " WHERE ";
     private final String tableName;
 
-    public AbstractDao(DataSource dataSource, String table, String tableAlias) {
-        template = new JdbcTemplate(dataSource);
-        namedTemplate = new NamedParameterJdbcTemplate(dataSource);
-        jdbcInsert = new SimpleJdbcInsert(dataSource);
+    public AbstractDao(JdbcTemplate template, SimpleJdbcInsert jdbcInsert, NamedParameterJdbcTemplate namedTemplate,
+                       String table, String tableAlias) {
+        this.template = template;
+        this.jdbcInsert = jdbcInsert;
+        this.namedTemplate = namedTemplate;
         jdbcInsert.withTableName(table);
         this.tableName = table;
         alias = tableAlias;

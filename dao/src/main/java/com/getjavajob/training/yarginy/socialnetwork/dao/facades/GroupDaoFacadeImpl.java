@@ -4,8 +4,8 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.ManyToManyDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.testtest.AbstractOneToManyDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.testtest.AccountGroupsDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.testtest.onetomany.AbstractOneToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.testtest.onetomany.AccountGroupsDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;

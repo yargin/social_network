@@ -6,14 +6,17 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.batch.AbstractBatchDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.stereotype.Component;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.sql.Types;
 
-@Component
+@Repository
 public class PhoneDao extends AbstractBatchDao<Phone> {
     private static final String TABLE = "phones";
     private static final String ALIAS = "ph";
@@ -27,9 +30,11 @@ public class PhoneDao extends AbstractBatchDao<Phone> {
     private final AccountDao accountDao;
     private final String selectAll;
 
-    public PhoneDao(DataSource dataSource) {
-        super(dataSource, TABLE, ALIAS);
-        accountDao = new AccountDao(dataSource);
+    @Autowired
+    public PhoneDao(JdbcTemplate template, SimpleJdbcInsert jdbcInsert, NamedParameterJdbcTemplate namedTemplate,
+                    AccountDao accountDao) {
+        super(template, jdbcInsert, namedTemplate, TABLE, ALIAS);
+        this.accountDao = accountDao;
         selectAll = "SELECT " + getFields(ALIAS) + ", " + accountDao.getViewFields(ACCOUNT_ALIAS) + " FROM " +
                 getTable(ALIAS) + " JOIN " + accountDao.getTable(ACCOUNT_ALIAS) + " ON ph.owner_id = acc.id";
     }

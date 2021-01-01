@@ -7,10 +7,12 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Messa
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.AbstractDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.AccountDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.ValuePlacer;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
-import javax.sql.DataSource;
 import java.sql.Types;
 
 public abstract class AbstractMessageDao extends AbstractDao<Message> {
@@ -25,8 +27,9 @@ public abstract class AbstractMessageDao extends AbstractDao<Message> {
     private final String table;
     private final AccountDao accountDao;
 
-    public AbstractMessageDao(DataSource dataSource, String table, AccountDao accountDao) {
-        super(dataSource, table, ALIAS);
+    public AbstractMessageDao(JdbcTemplate template, SimpleJdbcInsert jdbcInsert, NamedParameterJdbcTemplate namedTemplate,
+                              String table, AccountDao accountDao) {
+        super(template, jdbcInsert, namedTemplate, table, ALIAS);
         this.table = table;
         this.accountDao = accountDao;
     }

@@ -3,16 +3,19 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.batc
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.AbstractDao;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
-import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public abstract class AbstractBatchDao<E extends Entity> extends AbstractDao<E> {
-    public AbstractBatchDao(DataSource dataSource, String table, String tableAlias) {
-        super(dataSource, table, tableAlias);
+    public AbstractBatchDao(JdbcTemplate template, SimpleJdbcInsert jdbcInsert, NamedParameterJdbcTemplate namedTemplate,
+                            String table, String tableAlias) {
+        super(template, jdbcInsert, namedTemplate, table, tableAlias);
     }
 
     public boolean create(Collection<E> entities) {

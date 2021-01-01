@@ -3,8 +3,8 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.DialogDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.testtest.AbstractOneToManyDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.testtest.AccountDialogs;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.testtest.onetomany.AbstractOneToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.testtest.onetomany.AccountDialogs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

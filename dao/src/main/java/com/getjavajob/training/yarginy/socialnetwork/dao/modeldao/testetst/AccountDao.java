@@ -5,16 +5,19 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.stereotype.Component;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.sql.Types;
 
 import static java.util.Objects.isNull;
 
-@Component
+@Repository
 public class AccountDao extends AbstractDao<Account> {
     private static final String TABLE = "accounts";
     private static final String ALIAS = "acc";
@@ -36,11 +39,11 @@ public class AccountDao extends AbstractDao<Account> {
     private static final String[] FIELDS = {ID, NAME, SURNAME, PATRONYMIC, SEX, BIRTH_DATE, ICQ, SKYPE, EMAIL,
             ADDITIONAL_EMAIL, COUNTRY, CITY, REGISTRATION_DATE, ROLE, PHOTO};
     private static final String[] VIEW_FIELDS = {ID, NAME, SURNAME, EMAIL};
-
     private final String selectAll = "SELECT " + getFields(ALIAS) + " FROM " + getTable(ALIAS);
 
-    public AccountDao(DataSource dataSource) {
-        super(dataSource, TABLE, ALIAS);
+    @Autowired
+    public AccountDao(JdbcTemplate template, SimpleJdbcInsert jdbcInsert, NamedParameterJdbcTemplate namedTemplate) {
+        super(template, jdbcInsert, namedTemplate, TABLE, ALIAS);
     }
 
     @Override

@@ -5,14 +5,17 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.batch.AbstractBatchDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.stereotype.Component;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.sql.Types;
 
-@Component("groupDao")
+@Repository("groupDao")
 public class GroupDao extends AbstractBatchDao<Group> {
     private static final String TABLE = "_groups";
     private static final String ID = "id";
@@ -28,9 +31,11 @@ public class GroupDao extends AbstractBatchDao<Group> {
     private final String selectAll;
     private final AccountDao accountDao;
 
-    public GroupDao(DataSource dataSource) {
-        super(dataSource, TABLE, GROUP_ALIAS);
-        accountDao = new AccountDao(dataSource);
+    @Autowired
+    public GroupDao(JdbcTemplate template, SimpleJdbcInsert jdbcInsert, NamedParameterJdbcTemplate namedTemplate,
+                    AccountDao accountDao) {
+        super(template, jdbcInsert, namedTemplate, TABLE, GROUP_ALIAS);
+        this.accountDao = accountDao;
         selectAll = "SELECT " + getFields(GROUP_ALIAS) + ", " + accountDao.getViewFields(ACCOUNT_ALIAS) + " FROM " +
                 getTable(GROUP_ALIAS) + " JOIN " + accountDao.getTable(ACCOUNT_ALIAS) + " ON gr.owner_id = acc.id";
     }

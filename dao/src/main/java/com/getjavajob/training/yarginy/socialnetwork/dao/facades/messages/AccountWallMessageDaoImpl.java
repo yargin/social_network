@@ -3,8 +3,8 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.messages.AccountWallMessageDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.testtest.AbstractOneToManyDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.testtest.AccountWallMessagesDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.testtest.onetomany.AbstractOneToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.testtest.onetomany.AccountWallMessagesDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

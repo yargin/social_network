@@ -1,13 +1,14 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.testtest;
+package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.testtest.onetomany;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.AccountDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.PhoneDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.util.Collection;
+import java.util.Objects;
 
 @Repository
 public class AccountPhonesDao extends AbstractOneToManyDao<Phone> {
@@ -15,18 +16,25 @@ public class AccountPhonesDao extends AbstractOneToManyDao<Phone> {
     private static final String ACC_ALIAS = "acc";
     private final PhoneDao phoneDao;
     private final AccountDao accountDao;
+    private final JdbcTemplate template;
 
     @Autowired
-    public AccountPhonesDao(DataSource dataSource, PhoneDao phoneDao, AccountDao accountDao) {
-        super(dataSource);
+    public AccountPhonesDao(JdbcTemplate template, PhoneDao phoneDao, AccountDao accountDao) {
         this.phoneDao = phoneDao;
         this.accountDao = accountDao;
+        this.template = template;
     }
 
     private String getSelectManyQuery() {
         return "SELECT " + phoneDao.getViewFields(ALIAS) + ", " + accountDao.getViewFields(ACC_ALIAS) +
                 " FROM phones ph JOIN " + accountDao.getTable(ACC_ALIAS) + " ON acc.id = ph.owner_id " +
                 "WHERE ph.owner_id = ?";
+    }
+
+    private String getSelectByBothQuery() {
+        return "SELECT " + phoneDao.getViewFields(ALIAS) + ", " + accountDao.getViewFields(ACC_ALIAS) +
+                " FROM phones ph JOIN " + accountDao.getTable(ACC_ALIAS) + " ON acc.id = ph.owner_id " +
+                " WHERE ph.owner_id = ? AND ph.id = ?";
     }
 
     @Override
@@ -36,14 +44,9 @@ public class AccountPhonesDao extends AbstractOneToManyDao<Phone> {
     }
 
     @Override
-    protected String getSelectByBothQuery() {
-        return "SELECT " + phoneDao.getViewFields(ALIAS) + ", " + accountDao.getViewFields(ACC_ALIAS) +
-                " FROM phones ph JOIN " + accountDao.getTable(ACC_ALIAS) + " ON acc.id = ph.owner_id " +
-                " WHERE ph.owner_id = ? AND ph.id = ?";
-    }
-
-    @Override
-    protected Object[] getBothParams(long accountId, long phoneId) {
-        return new Object[]{accountId, phoneId};
+    public boolean relationExists(long accountId, long phoneId) {
+        String query = getSelectByBothQuery();
+        return Objects.equals(template.queryForObject(query, new Object[]{accountId, phoneId}, ((resultSet, i) ->
+                resultSet.getInt(1))), 1);
     }
 }

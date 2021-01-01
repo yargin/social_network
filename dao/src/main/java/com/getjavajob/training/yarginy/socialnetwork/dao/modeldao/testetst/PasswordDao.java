@@ -5,11 +5,13 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.PasswordImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.sql.Types;
 
 @Repository
@@ -24,9 +26,10 @@ public class PasswordDao extends AbstractDao<Password> {
     private final AccountDao accountDao;
 
     @Autowired
-    public PasswordDao(DataSource dataSource) {
-        super(dataSource, TABLE, PASSWORD_ALIAS);
-        accountDao = new AccountDao(dataSource);
+    public PasswordDao(JdbcTemplate template, SimpleJdbcInsert jdbcInsert, NamedParameterJdbcTemplate namedTemplate,
+                       AccountDao accountDao) {
+        super(template, jdbcInsert, namedTemplate, TABLE, PASSWORD_ALIAS);
+        this.accountDao = accountDao;
         selectAll = "SELECT " + getFields(PASSWORD_ALIAS) + ", " + accountDao.getViewFields(ACCOUNT_ALIAS) + " FROM " +
                 getTable(PASSWORD_ALIAS) + " JOIN " + accountDao.getTable(ACCOUNT_ALIAS) +
                 " ON pass.email = acc.email";
@@ -86,7 +89,7 @@ public class PasswordDao extends AbstractDao<Password> {
         return (resultSet, i) -> {
             Password password = new PasswordImpl();
             password.setAccount(accountDao.getSuffixedViewRowMapper(ACCOUNT_ALIAS).mapRow(resultSet, i));
-            password.setPassword(resultSet.getString(PASSWORD));
+            password.setPassword(resultSet.getString(PASSWORD + PASSWORD_ALIAS));
             return password;
         };
     }
