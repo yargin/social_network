@@ -10,6 +10,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsMembersDa
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsModeratorsDaoFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -18,7 +19,6 @@ import java.util.Map;
 
 @Service
 public class GroupServiceImpl implements GroupService {
-    //    private final TransactionManager transactionManager = new TransactionManagerImpl();
     private final GroupDaoFacade groupDaoFacade;
     private final GroupsMembersDaoFacade membersDao;
     private final GroupsModeratorsDaoFacade moderatorsDao;
@@ -59,18 +59,12 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    @Transactional
     public boolean acceptRequest(long accountId, long groupId) {
-//        try (Transaction transaction = transactionManager.getTransaction()) {
         if (!membersDao.joinGroup(accountId, groupId)) {
             return false;
         }
-        if (!membersDao.removeRequest(accountId, groupId)) {
-            return false;
-        }
-        return true;
-//        } catch (Exception e) {
-//            return false;
-//        }
+        return membersDao.removeRequest(accountId, groupId);
     }
 
     @Override
@@ -79,19 +73,13 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    @Transactional
     public boolean leaveGroup(long accountId, long groupId) {
         if (groupDaoFacade.isOwner(accountId, groupId)) {
             return false;
         }
-//        try (Transaction transaction = transactionManager.getTransaction()) {
         moderatorsDao.deleteGroupModerator(accountId, groupId);
-        if (!groupDaoFacade.removeMember(accountId, groupId)) {
-            return false;
-        }
-        return true;
-//        } catch (Exception e) {
-//            return false;
-//        }
+        return groupDaoFacade.removeMember(accountId, groupId);
     }
 
     @Override
@@ -125,17 +113,10 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    @Transactional
     public boolean createGroup(Group group) {
         group.setCreationDate(Date.valueOf(LocalDate.now()));
-//        try (Transaction transaction = transactionManager.getTransaction()) {
-        if (!createAndJoinOwner(group)) {
-            return false;
-        }
-//            transaction.commit();
-        return true;
-//        } catch (Exception e) {
-//            throw new IllegalStateException(e);
-//        }
+        return createAndJoinOwner(group);
     }
 
     private boolean createAndJoinOwner(Group group) {

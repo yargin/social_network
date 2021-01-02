@@ -6,16 +6,14 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.DialogImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogDaoFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.TransactionManager;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.TransactionManagerImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class DialogServiceImpl implements DialogService {
-    private final TransactionManager transactionManager = new TransactionManagerImpl();
     private final DialogDaoFacade dialogDaoFacade;
     private final MessageService messageService;
 
@@ -36,8 +34,8 @@ public class DialogServiceImpl implements DialogService {
     }
 
     @Override
+    @Transactional
     public boolean create(Dialog dialog, Message message) {
-//        try (Transaction transaction = transactionManager.getTransaction()) {
         if (!dialogDaoFacade.create(dialog)) {
             throw new IllegalStateException();
         }
@@ -46,11 +44,7 @@ public class DialogServiceImpl implements DialogService {
         if (!messageService.addMessage(message)) {
             throw new IllegalStateException();
         }
-//            transaction.commit();
         return true;
-//        } catch (Exception e) {
-//            return false;
-//        }
     }
 
     @Override

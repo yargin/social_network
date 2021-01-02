@@ -93,7 +93,6 @@ public abstract class AbstractMessageDao extends AbstractDao<Message> {
         };
     }
 
-
     public RowMapper<Message> getSuffixedRowMapper(String messageSuffix, String authorSuffix) {
         return getSuffixedViewRowMapper(messageSuffix, authorSuffix);
     }

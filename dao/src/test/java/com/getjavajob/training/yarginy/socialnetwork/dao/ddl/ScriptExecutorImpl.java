@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl;
+package com.getjavajob.training.yarginy.socialnetwork.dao.ddl;
 
 
 import javax.sql.DataSource;

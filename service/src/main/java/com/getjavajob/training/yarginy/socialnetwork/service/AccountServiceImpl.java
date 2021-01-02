@@ -12,6 +12,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -19,7 +20,6 @@ import java.util.Collection;
 
 @Service
 public class AccountServiceImpl implements AccountService {
-    //    private final TransactionManager transactionManager;
     private final AccountDaoFacade accountDaoFacade;
     private final PhoneDaoFacade phoneDaoFacade;
     private final FriendshipsDaoFacade friendshipDao;
@@ -52,8 +52,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @Transactional
     public boolean createAccount(Account account, Collection<Phone> phones) {
-//        try (Transaction transaction = transactionManager.getTransaction()) {
         account.setRegistrationDate(Date.valueOf(LocalDate.now()));
         if (!accountDaoFacade.create(account)) {
             throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
@@ -61,12 +61,6 @@ public class AccountServiceImpl implements AccountService {
         if (!phoneDaoFacade.create(phones)) {
             throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
         }
-//            transaction.commit();
-//        } catch (IncorrectDataException e) {
-//            throw e;
-//        } catch (Exception e) {
-//            throw new IllegalStateException(e);
-//        }
         return true;
     }
 
@@ -81,20 +75,15 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @Transactional
     public boolean addFriend(long firstId, long secondId) {
-//        try (Transaction transaction = transactionManager.getTransaction()) {
         if (!friendshipDao.deleteRequest(firstId, secondId)) {
             throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
         }
         if (!friendshipDao.createFriendship(firstId, secondId)) {
-//                transaction.rollback();
             throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
         }
-//            transaction.commit();
         return true;
-//        } catch (Exception e) {
-//            return false;
-//        }
     }
 
     @Override

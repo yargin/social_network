@@ -5,8 +5,10 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.*;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.Transaction;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,8 +26,6 @@ public class AccountServiceTest {
     private final FriendshipsDaoFacade friendsDao = mock(FriendshipsDaoFacade.class);
     private final PhoneDaoFacade phoneDaoFacade = mock(PhoneDaoFacade.class);
     private final DialogDaoFacade dialogDaoFacade = mock(DialogDaoFacade.class);
-    private final Transaction transaction = mock(Transaction.class);
-    private final TransactionManager transactionManager = mock(TransactionManager.class);
     private final AccountService accountService = new AccountServiceImpl(accountDaoFacade, phoneDaoFacade, friendsDao,
             dialogDaoFacade);
     private Account account;
@@ -41,7 +41,6 @@ public class AccountServiceTest {
 
     @Test
     public void testGetAccount() {
-//        when(transactionManager.getTransaction()).thenReturn(transaction);
         when(accountDaoFacade.select(1)).thenReturn(account);
         Account actualAccount = accountService.get(1);
         assertEquals(account, actualAccount);
@@ -55,7 +54,6 @@ public class AccountServiceTest {
 
     @Test
     public void testCreateAccount() {
-//        when(transactionManager.getTransaction()).thenReturn(transaction);
         when(accountDaoFacade.create(account)).thenReturn(true);
         when(phoneDaoFacade.create(phones)).thenReturn(true);
         assertTrue(accountService.createAccount(account, phones));
@@ -63,21 +61,18 @@ public class AccountServiceTest {
 
     @Test(expected = IncorrectDataException.class)
     public void testCreateExistingAccount() {
-//        when(transactionManager.getTransaction()).thenReturn(transaction);
         when(accountDaoFacade.create(account)).thenReturn(false);
         accountService.createAccount(account, phones);
     }
 
     @Test(expected = IncorrectDataException.class)
     public void testCreateExistingPhone() {
-//        when(transactionManager.getTransaction()).thenReturn(transaction);
         when(phoneDaoFacade.create(phones)).thenReturn(false);
         accountService.createAccount(account, phones);
     }
 
     @Test
     public void testUpdateAccount() {
-//        when(transactionManager.getTransaction()).thenReturn(transaction);
         when(accountDaoFacade.update(account, storedAccount)).thenReturn(true);
         assertTrue(accountService.updateAccount(account, storedAccount));
         when(accountDaoFacade.update(account, storedAccount)).thenReturn(false);

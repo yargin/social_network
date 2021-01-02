@@ -1,6 +1,5 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao;
+package com.getjavajob.training.yarginy.socialnetwork.dao.ddl;
 
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.ddl.ScriptExecutorImpl;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 //todo maybe download hikari & place here instead non-pool DriverManager?

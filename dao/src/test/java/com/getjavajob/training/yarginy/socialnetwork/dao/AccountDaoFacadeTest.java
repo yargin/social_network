@@ -101,6 +101,8 @@ public class AccountDaoFacadeTest {
     public void testUpdateNonExistingAccount() {
         Account nonExisting = new AccountImpl();
         nonExisting.setEmail("email@that.doesnt.exist");
+        Account anotherNonExisting = new AccountImpl();
+        anotherNonExisting.setEmail("anotheremail@that.doesnt.exist");
         assertFalse(accountDaoFacade.update(nonExisting, nonExisting));
     }
 

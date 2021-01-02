@@ -13,6 +13,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -23,7 +24,6 @@ import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHan
 
 @Service("authService")
 public class AuthServiceImpl implements AuthService {
-    //    private final TransactionManager transactionManager;
     private final AccountDaoFacade accountDaoFacade;
     private final PasswordDaoFacade passwordDaoFacade;
     private final PhoneDaoFacade phoneDaoFacade;
@@ -36,13 +36,14 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
     public boolean register(AccountInfoDTO accountInfoDTO, Password password) {
         return register(accountInfoDTO.getAccount(), accountInfoDTO.getPhones(), password);
     }
 
     @Override
+    @Transactional
     public boolean register(Account account, Collection<Phone> phones, Password password) {
-//        try (Transaction transaction = transactionManager.getTransaction()) {
         account.setRegistrationDate(Date.valueOf(LocalDate.now()));
         if (!accountDaoFacade.create(account)) {
             throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
@@ -53,12 +54,6 @@ public class AuthServiceImpl implements AuthService {
         if (!passwordDaoFacade.create(password)) {
             throw new IllegalStateException();
         }
-//            transaction.commit();
-//        } catch (IncorrectDataException e) {
-//            throw e;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
         return true;
     }
 

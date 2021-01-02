@@ -9,6 +9,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 
@@ -16,7 +17,6 @@ import java.util.Collection;
 public class AccountInfoServiceImpl implements AccountInfoService {
     private final AccountDaoFacade accountDaoFacade;
     private final PhoneDaoFacade phoneDaoFacade;
-//    private final TransactionManager transactionManager;
 
 
     @Autowired
@@ -40,21 +40,15 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     }
 
     @Override
+    @Transactional
     public boolean update(AccountInfoDTO accountInfo, AccountInfoDTO storedAccountInfo) {
-//        try (Transaction transaction = transactionManager.getTransaction()) {
         Account account = accountInfo.getAccount();
         if (!accountDaoFacade.update(account, storedAccountInfo.getAccount())) {
             throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
         }
-        if (!phoneDaoFacade.update(storedAccountInfo.getPhones(), accountInfo.getPhones())) {
+        if (!phoneDaoFacade.update(accountInfo.getPhones(), storedAccountInfo.getPhones())) {
             throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
         }
-//            transaction.commit();
         return true;
-//        } catch (IncorrectDataException e) {
-//            throw e;
-//        } catch (Exception e) {
-//            return false;
-//        }
     }
 }

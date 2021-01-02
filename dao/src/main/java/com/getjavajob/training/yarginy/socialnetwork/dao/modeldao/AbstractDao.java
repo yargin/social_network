@@ -78,6 +78,8 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
         try {
             return namedTemplate.update(valuePlacer.getQuery(), valuePlacer.getParameters()) == 1;
         } catch (IllegalArgumentException e) {
+            return true;
+        } catch (DataIntegrityViolationException e) {
             return false;
         }
     }

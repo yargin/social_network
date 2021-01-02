@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoOverrideSpringConfig.xml"})
 public class PhoneDaoFacadeTest {
-    private Phone phone = new PhoneImpl();
+    private final Phone phone = new PhoneImpl();
     @Autowired
     private PhoneDaoFacade phoneDaoFacade;
     @Autowired
@@ -90,6 +90,8 @@ public class PhoneDaoFacadeTest {
     public void testUpdateNonExisting() {
         Phone nonExisting = new PhoneImpl();
         nonExisting.setNumber("000000");
+        Phone anotherNonExisting = new PhoneImpl();
+        anotherNonExisting.setNumber("0000");
         assertFalse(phoneDaoFacade.update(nonExisting, nonExisting));
     }
 
