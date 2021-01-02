@@ -14,6 +14,7 @@ import java.io.IOException;
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirectToReferer;
 
 public class SearchServlet extends AbstractGetServlet {
+    private static final int LIMIT = 10;
     private DataSetsService dataSetsService;
 
     @Autowired
@@ -32,7 +33,7 @@ public class SearchServlet extends AbstractGetServlet {
             redirectToReferer(req, resp);
             return;
         }
-        SearchableDto found = dataSetsService.searchAccountsGroups(searchString, pageNumber);
+        SearchableDto found = dataSetsService.searchAccountsGroups(searchString, pageNumber, LIMIT);
         req.setAttribute("found", found.getSearchAbles());
         int allPagesNumber = found.getPages();
         int[] allPages = new int[allPagesNumber];

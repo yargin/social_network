@@ -4,10 +4,9 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.selfrelated.SelfManyToManyDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.ManyToManyDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.testtest.onetomany.AccountGroupsDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.testtest.onetomany.AccountPhonesDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.ManyToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.SelfManyToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -17,15 +16,16 @@ import java.util.Collection;
 @Component("accountDaoFacade")
 public class AccountDaoFacadeImpl implements AccountDaoFacade {
     private final Dao<Account> accountDao;
-    private final AccountGroupsDao accountGroupsDao;
+    private final OneToManyDao<Group> accountGroupsDao;
     private final ManyToManyDao<Account, Group> accountsInGroupsDao;
-    private final AccountPhonesDao accountPhonesDao;
+    private final OneToManyDao<Phone> accountPhonesDao;
     private final SelfManyToManyDao<Account> accountFriendsDao;
 
     @Autowired
-    public AccountDaoFacadeImpl(Dao<Account> accountDao, AccountGroupsDao accountGroupsDao,
+    public AccountDaoFacadeImpl(Dao<Account> accountDao,
+                                @Qualifier("groupOwnersDao") OneToManyDao<Group> accountGroupsDao,
                                 @Qualifier("groupMembershipDao") ManyToManyDao<Account, Group> accountsInGroupsDao,
-                                AccountPhonesDao accountPhonesDao,
+                                OneToManyDao<Phone> accountPhonesDao,
                                 SelfManyToManyDao<Account> accountFriendsDao) {
         this.accountDao = accountDao;
         this.accountGroupsDao = accountGroupsDao;

@@ -35,10 +35,14 @@ public class AccountsInGroupsTest {
 
     @Before
     public void testValuesInit() {
+        accountDaoFacade.delete(account);
+        groupDaoFacade.delete(group);
+        accountDaoFacade.delete(owner);
         accountDaoFacade.create(account);
         accountDaoFacade.create(owner);
         account = accountDaoFacade.select(account);
         owner = accountDaoFacade.select(owner);
+        group.setOwner(owner);
         groupDaoFacade.create(group);
         group = groupDaoFacade.select(group);
     }

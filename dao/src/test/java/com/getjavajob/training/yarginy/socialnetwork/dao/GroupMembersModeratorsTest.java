@@ -39,6 +39,7 @@ public class GroupMembersModeratorsTest {
 
     @Before
     public void testValuesInit() {
+        groupDaoFacade.delete(group);
         accountDaoFacade.create(account1);
         account1 = accountDaoFacade.select(account1);
         accountDaoFacade.create(account2);

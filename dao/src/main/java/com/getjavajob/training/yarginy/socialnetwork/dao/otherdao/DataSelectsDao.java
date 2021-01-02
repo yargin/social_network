@@ -23,9 +23,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+//todo refactor using jdbcTemplate
 @Component("dataSetsDao")
 public class DataSelectsDao implements Serializable {
-    private static final int LIMIT = 10;
     private DataSource data;
 
     @Autowired
@@ -99,12 +99,12 @@ public class DataSelectsDao implements Serializable {
         return statement;
     }
 
-    public SearchableDto searchAccountsGroups(String searchString, int pageNumber) {
+    public SearchableDto searchAccountsGroups(String searchString, int pageNumber, int limit) {
         Collection<Searchable> entities = new ArrayList<>();
         SearchableDto searchableDto = new SearchableDto(entities);
         try (Connection connection = data.getConnection();
              PreparedStatement resultStatement = prepareSearchAccountsGroups(connection, '%' + searchString + '%',
-                     pageNumber);
+                     pageNumber, limit);
              PreparedStatement rowsNumberStatement = prepareRowsCount(connection, '%' + searchString + '%');
              ResultSet resultSet = resultStatement.executeQuery();
              ResultSet resultSetRowsNumber = rowsNumberStatement.executeQuery()) {
@@ -120,14 +120,15 @@ public class DataSelectsDao implements Serializable {
                 entities.add(searchable);
             }
             resultSetRowsNumber.next();
-            searchableDto.setPages(resultSetRowsNumber.getInt("rows_number"), LIMIT);
+            searchableDto.setPages(resultSetRowsNumber.getInt("rows_number"), limit);
         } catch (SQLException e) {
             throw new IllegalStateException(e);
         }
         return searchableDto;
     }
 
-    private PreparedStatement prepareSearchAccountsGroups(Connection connection, String searchString, int pageNumber)
+    private PreparedStatement prepareSearchAccountsGroups(Connection connection, String searchString, int pageNumber,
+                                                          int limit)
             throws SQLException {
         String query = "SELECT id, type, name " +
                 " FROM " +
@@ -136,7 +137,7 @@ public class DataSelectsDao implements Serializable {
                 " UNION " +
                 " SELECT id, 'group' type, name name FROM _groups " +
                 " WHERE UPPER(name) LIKE UPPER(?) ) s " +
-                " LIMIT " + LIMIT + " OFFSET " + (pageNumber - 1) * LIMIT + ';';
+                " LIMIT " + limit + " OFFSET " + (pageNumber - 1) * limit + ';';
         PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, searchString);
         statement.setString(2, searchString);

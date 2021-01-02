@@ -2,10 +2,9 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.testetst.messages.AccountWallMessageDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.testtest.onetomany.AbstractOneToManyDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.testtest.onetomany.AccountWallMessagesDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
@@ -13,21 +12,18 @@ import java.util.Collection;
 @Repository("accountWallMessageDaoFacade")
 public class AccountWallMessageDaoImpl implements AccountWallMessageDaoFacade {
     private final Dao<Message> accountWallMessageDao;
-    private AbstractOneToManyDao<Message> accountWallMessagesOneToManyDao;
+    private final OneToManyDao<Message> accountWallMessagesDao;
 
     @Autowired
-    public AccountWallMessageDaoImpl(AccountWallMessageDao accountWallMessageDao) {
+    public AccountWallMessageDaoImpl(@Qualifier("accountWallMessageDao") Dao<Message> accountWallMessageDao,
+                                     @Qualifier("accountWallMessagesDao") OneToManyDao<Message> accountWallMessagesDao) {
         this.accountWallMessageDao = accountWallMessageDao;
-    }
-
-    @Autowired
-    public void setAccountWallMessagesOneToManyDao(AccountWallMessagesDao accountWallMessagesOneToManyDao) {
-        this.accountWallMessagesOneToManyDao = accountWallMessagesOneToManyDao;
+        this.accountWallMessagesDao = accountWallMessagesDao;
     }
 
     @Override
-    public Message select(long id) {
-        return accountWallMessageDao.select(id);
+    public Message select(long messageId) {
+        return accountWallMessageDao.select(messageId);
     }
 
     @Override
@@ -62,6 +58,6 @@ public class AccountWallMessageDaoImpl implements AccountWallMessageDaoFacade {
 
     @Override
     public Collection<Message> getMessages(long accountId) {
-        return accountWallMessagesOneToManyDao.selectMany(accountId);
+        return accountWallMessagesDao.selectMany(accountId);
     }
 }

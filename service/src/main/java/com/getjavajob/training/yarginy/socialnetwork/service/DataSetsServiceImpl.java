@@ -15,7 +15,7 @@ public class DataSetsServiceImpl implements DataSetsService {
     }
 
     @Override
-    public SearchableDto searchAccountsGroups(String searchString, int pageNumber) {
-        return dataSetsDaoFacade.searchAccountsGroups(searchString, pageNumber);
+    public SearchableDto searchAccountsGroups(String searchString, int pageNumber, int limit) {
+        return dataSetsDaoFacade.searchAccountsGroups(searchString, pageNumber, limit);
     }
 }

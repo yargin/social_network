@@ -15,7 +15,7 @@ public interface Dao<E extends Entity> extends Serializable {
      * retrieves {@link E} specified by id
      *
      * @param id {@link E}'s number
-     * @return {@link E} that was found or {@link Dml#getNullEntity()} if any wasn't found
+     * @return {@link E} that was found or getNullEntity() if any wasn't found
      */
     E select(long id);
 
@@ -60,25 +60,8 @@ public interface Dao<E extends Entity> extends Serializable {
     Collection<E> selectAll();
 
     /**
-     * checks that {@link Entity} is applicable
-     *
-     * @param entity to check
-     */
-    void checkEntity(E entity);
-
-    /**
      * @return {@link Entity} that doesn't exist
      */
     E getNullEntity();
-
-    /**
-     * checks if {@link Entity} not null, exists & was read from database<br>
-     * used for relational actions
-     *
-     * @param entity to check
-     * @return original {@link Entity} if it was read from database,<br>
-     * otherwise {@link Entity} read from database
-     * @throws IllegalArgumentException if {@param entity} is null
-     */
-    E approveFromStorage(E entity);
 }
+

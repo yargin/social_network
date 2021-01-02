@@ -12,5 +12,5 @@ public interface DataSetsDaoFacade extends Serializable {
 
     Map<Group, Boolean> getAllUnjoinedGroupsAreRequested(long accountId);
 
-    SearchableDto searchAccountsGroups(String searchString, int pageNumber);
+    SearchableDto searchAccountsGroups(String searchString, int pageNumber, int limit);
 }

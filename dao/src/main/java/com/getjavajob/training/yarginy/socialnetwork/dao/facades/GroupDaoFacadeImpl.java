@@ -3,9 +3,9 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.ManyToManyDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.testtest.onetomany.AbstractOneToManyDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.testtest.onetomany.AccountGroupsDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.ManyToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.AccountGroupsDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ import java.util.Collection;
 @Component("groupDaoFacade")
 public class GroupDaoFacadeImpl implements GroupDaoFacade {
     private final Dao<Group> groupDao;
-    private final AbstractOneToManyDao<Group> accountsOwnedGroupsDao;
+    private final OneToManyDao<Group> accountsOwnedGroupsDao;
     private final ManyToManyDao<Account, Group> accountsGroupMembershipDao;
 
     @Autowired
@@ -69,7 +69,7 @@ public class GroupDaoFacadeImpl implements GroupDaoFacade {
 
     @Override
     public boolean isOwner(long accountId, long groupId) {
-        return accountsOwnedGroupsDao.relationExists(groupId, accountId);
+        return accountsOwnedGroupsDao.relationExists(accountId, groupId);
     }
 
     @Override

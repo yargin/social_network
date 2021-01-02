@@ -19,7 +19,7 @@
         <constructor-arg ref="jdbcTemplate"/>
     </bean>
 
-    <bean id="jdbcInsert" class="org.springframework.jdbc.core.simple.SimpleJdbcInsert">
+    <bean id="jdbcInsert" class="org.springframework.jdbc.core.simple.SimpleJdbcInsert" scope="prototype">
         <constructor-arg ref="jdbcTemplate"/>
     </bean>
 

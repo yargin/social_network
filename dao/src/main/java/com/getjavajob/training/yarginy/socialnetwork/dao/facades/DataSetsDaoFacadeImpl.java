@@ -30,7 +30,7 @@ public class DataSetsDaoFacadeImpl implements DataSetsDaoFacade {
     }
 
     @Override
-    public SearchableDto searchAccountsGroups(String searchString, int pageNumber) {
-        return dataSelectsDao.searchAccountsGroups(searchString, pageNumber);
+    public SearchableDto searchAccountsGroups(String searchString, int pageNumber, int limit) {
+        return dataSelectsDao.searchAccountsGroups(searchString, pageNumber, limit);
     }
 }

@@ -2,7 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.variousrelated.ManyToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.ManyToManyDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -13,10 +13,9 @@ import java.util.Collection;
 public class GroupsMembersFacadeImpl implements GroupsMembersDaoFacade {
     private final ManyToManyDao<Account, Group> groupMembershipDao;
     private final ManyToManyDao<Account, Group> membershipRequestsDao;
-    public static final String GROUP_MEMBERSHIP_DAO = "groupMembershipDao";
 
     @Autowired
-    public GroupsMembersFacadeImpl(@Qualifier(GROUP_MEMBERSHIP_DAO) ManyToManyDao<Account, Group> groupMembershipDao,
+    public GroupsMembersFacadeImpl(@Qualifier("groupMembershipDao") ManyToManyDao<Account, Group> groupMembershipDao,
                                    @Qualifier("groupRequestsDao") ManyToManyDao<Account, Group> membershipRequestsDao) {
         this.groupMembershipDao = groupMembershipDao;
         this.membershipRequestsDao = membershipRequestsDao;

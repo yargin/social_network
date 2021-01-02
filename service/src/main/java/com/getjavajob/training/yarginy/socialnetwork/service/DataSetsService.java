@@ -5,5 +5,5 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.Se
 import java.io.Serializable;
 
 public interface DataSetsService extends Serializable {
-    SearchableDto searchAccountsGroups(String searchString, int pageNumber);
+    SearchableDto searchAccountsGroups(String searchString, int pageNumber, int limit);
 }

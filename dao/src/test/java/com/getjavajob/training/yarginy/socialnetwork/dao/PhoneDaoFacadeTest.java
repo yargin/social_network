@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoOverrideSpringConfig.xml"})
 public class PhoneDaoFacadeTest {
-    private static final Phone PHONE = new PhoneImpl();
+    private Phone phone = new PhoneImpl();
     @Autowired
     private PhoneDaoFacade phoneDaoFacade;
     @Autowired
@@ -28,50 +28,50 @@ public class PhoneDaoFacadeTest {
 
     @Before
     public void initTestValues() {
-        PHONE.setNumber("123321");
+        phone.setNumber("123321");
         Account account = new AccountImpl("test", "test", "test@test.test");
         accountDao.create(account);
         account = accountDao.select(account);
-        PHONE.setOwner(account);
-        PHONE.setType(PhoneType.PRIVATE);
+        phone.setOwner(account);
+        phone.setType(PhoneType.PRIVATE);
     }
 
     @After
     public void deleteTestValues() {
-        phoneDaoFacade.delete(PHONE);
+        phoneDaoFacade.delete(phone);
     }
 
     @Test
     public void testCreatePhone() {
-        phoneDaoFacade.delete(PHONE);
-        assertTrue(phoneDaoFacade.create(PHONE));
+        phoneDaoFacade.delete(phone);
+        assertTrue(phoneDaoFacade.create(phone));
     }
 
     @Test
     public void testCreateExisting() {
-        phoneDaoFacade.create(PHONE);
-        assertFalse(phoneDaoFacade.create(PHONE));
+        phoneDaoFacade.create(phone);
+        assertFalse(phoneDaoFacade.create(phone));
     }
 
     @Test
     public void testCreateWrongOwner() {
-        phoneDaoFacade.delete(PHONE);
+        phoneDaoFacade.delete(phone);
         Account wrongAccount = new AccountImpl();
         wrongAccount.setId(-1);
-        PHONE.setOwner(wrongAccount);
+        phone.setOwner(wrongAccount);
         try {
-            phoneDaoFacade.create(PHONE);
-        } catch (IllegalStateException e) {
+            phoneDaoFacade.create(phone);
+        } catch (IllegalArgumentException e) {
             assertTrue(true);
         }
-        PHONE.setOwner(accountDao.select(1));
+        phone.setOwner(accountDao.select(1));
     }
 
     @Test
     public void testSelectPhone() {
-        phoneDaoFacade.create(PHONE);
-        Phone actual = phoneDaoFacade.select(PHONE);
-        assertEquals(PHONE, actual);
+        phoneDaoFacade.create(phone);
+        Phone actual = phoneDaoFacade.select(phone);
+        assertEquals(phone, actual);
     }
 
     @Test
@@ -81,9 +81,9 @@ public class PhoneDaoFacadeTest {
 
     @Test
     public void testUpdatePhone() {
-        phoneDaoFacade.create(PHONE);
-        PHONE.setType(PhoneType.PRIVATE);
-        assertTrue(phoneDaoFacade.update(PHONE, phoneDaoFacade.select(PHONE)));
+        phoneDaoFacade.create(phone);
+        phone.setType(PhoneType.WORK);
+        assertTrue(phoneDaoFacade.update(phone, phoneDaoFacade.select(phone)));
     }
 
     @Test
@@ -95,8 +95,8 @@ public class PhoneDaoFacadeTest {
 
     @Test
     public void testDeletePhone() {
-        phoneDaoFacade.create(PHONE);
-        assertTrue(phoneDaoFacade.delete(PHONE));
+        phoneDaoFacade.create(phone);
+        assertTrue(phoneDaoFacade.delete(phone));
     }
 
     @Test
