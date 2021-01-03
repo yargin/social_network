@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.service.dto;
+package com.getjavajob.training.yarginy.socialnetwork.service.datakeepers;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
@@ -13,16 +13,16 @@ import java.util.stream.Collectors;
 /**
  * holds account's information such as {@link Account} & {@link Account}'s {@link Phone}s
  */
-public class AccountInfoDTO implements Serializable {
+public class AccountInfoKeeper implements Serializable {
     private final Account account;
     private final Collection<Phone> phones;
 
-    public AccountInfoDTO(Account account, Collection<Phone> phones) {
+    public AccountInfoKeeper(Account account, Collection<Phone> phones) {
         this.account = account;
         this.phones = phones;
     }
 
-    public AccountInfoDTO() {
+    public AccountInfoKeeper() {
         this(new AccountImpl(), new ArrayList<>());
     }
 

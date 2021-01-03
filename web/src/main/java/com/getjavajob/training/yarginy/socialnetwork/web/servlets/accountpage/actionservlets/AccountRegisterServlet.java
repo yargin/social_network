@@ -3,7 +3,7 @@ package com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.a
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.service.AuthService;
-import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
+import com.getjavajob.training.yarginy.socialnetwork.service.datakeepers.AccountInfoKeeper;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.UpdateAccountFieldsHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.AbstractGetPostServlet;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
@@ -33,12 +33,12 @@ public class AccountRegisterServlet extends AbstractGetPostServlet {
     protected void safeDoGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp, USER_ID, Pages.WALL);
 
-        AccountInfoDTO accountInfoDTO = updater.getOrCreateAccountInfo(AccountInfoDTO::new);
+        AccountInfoKeeper accountInfoKeeper = updater.getOrCreateAccountInfo(AccountInfoKeeper::new);
         if (isNull(req.getSession().getAttribute(ACCOUNT_INFO))) {
-            req.getSession().setAttribute(ACCOUNT_INFO, accountInfoDTO);
+            req.getSession().setAttribute(ACCOUNT_INFO, accountInfoKeeper);
         }
 
-        updater.initAccountAttributes(accountInfoDTO);
+        updater.initAccountAttributes(accountInfoKeeper);
 
         req.setAttribute(Attributes.TARGET, Pages.REGISTER);
 
@@ -49,30 +49,30 @@ public class AccountRegisterServlet extends AbstractGetPostServlet {
     protected void safeDoPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp, USER_ID, Pages.WALL);
 
-        AccountInfoDTO accountInfoDTO = (AccountInfoDTO) req.getSession().getAttribute(Attributes.ACCOUNT_INFO);
-        if (isNull(accountInfoDTO)) {
+        AccountInfoKeeper accountInfoKeeper = (AccountInfoKeeper) req.getSession().getAttribute(Attributes.ACCOUNT_INFO);
+        if (isNull(accountInfoKeeper)) {
             redirect(req, resp, Pages.LOGOUT);
             return;
         }
 
-        updater.getValuesFromParams(accountInfoDTO);
+        updater.getValuesFromParams(accountInfoKeeper);
 
-        Password password = updater.getPassword(accountInfoDTO.getAccount());
+        Password password = updater.getPassword(accountInfoKeeper.getAccount());
 
         boolean accepted = updater.isParamsAccepted();
-        req.setAttribute(ACCOUNT_INFO, accountInfoDTO);
+        req.setAttribute(ACCOUNT_INFO, accountInfoKeeper);
         if (!accepted) {
             safeDoGet(req, resp);
         } else {
-            register(updater, accountInfoDTO, password);
+            register(updater, accountInfoKeeper, password);
         }
     }
 
-    private void register(UpdateAccountFieldsHelper updater, AccountInfoDTO accountInfoDTO, Password password) throws
+    private void register(UpdateAccountFieldsHelper updater, AccountInfoKeeper accountInfoKeeper, Password password) throws
             IOException, ServletException {
         boolean registered;
         try {
-            registered = authService.register(accountInfoDTO, password);
+            registered = authService.register(accountInfoKeeper, password);
         } catch (IncorrectDataException e) {
             updater.handleInfoExceptions(e, this::safeDoGet);
             return;

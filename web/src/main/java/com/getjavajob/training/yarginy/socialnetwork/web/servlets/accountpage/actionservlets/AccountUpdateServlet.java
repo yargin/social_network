@@ -4,7 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountInfoService;
-import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
+import com.getjavajob.training.yarginy.socialnetwork.service.datakeepers.AccountInfoKeeper;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.UpdateAccountFieldsHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.AbstractGetPostServlet;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
@@ -35,13 +35,13 @@ public class AccountUpdateServlet extends AbstractGetPostServlet {
         long requestedUserId = (long) req.getAttribute(REQUESTED_ID);
 
         //select at first visit
-        AccountInfoDTO accountInfoDTO = updater.getOrCreateAccountInfo(() -> accountInfoService.select(requestedUserId));
+        AccountInfoKeeper accountInfoKeeper = updater.getOrCreateAccountInfo(() -> accountInfoService.select(requestedUserId));
         //save original to session if wasn't
         if (isNull(req.getSession().getAttribute(ACCOUNT_INFO))) {
-            req.getSession().setAttribute(ACCOUNT_INFO, accountInfoDTO);
+            req.getSession().setAttribute(ACCOUNT_INFO, accountInfoKeeper);
         }
 
-        updater.initAccountAttributes(accountInfoDTO);
+        updater.initAccountAttributes(accountInfoKeeper);
 
         req.setAttribute(TARGET, Pages.UPDATE_ACCOUNT);
 
@@ -58,15 +58,15 @@ public class AccountUpdateServlet extends AbstractGetPostServlet {
         }
 
         HttpSession session = req.getSession();
-        AccountInfoDTO accountInfoDTO = new AccountInfoDTO(new AccountImpl(), new ArrayList<>());
-        AccountInfoDTO storedAccountInfoDTO = (AccountInfoDTO) session.getAttribute(ACCOUNT_INFO);
+        AccountInfoKeeper accountInfoKeeper = new AccountInfoKeeper(new AccountImpl(), new ArrayList<>());
+        AccountInfoKeeper storedAccountInfoKeeper = (AccountInfoKeeper) session.getAttribute(ACCOUNT_INFO);
         //set non updatable values
-        Account account = accountInfoDTO.getAccount();
-        Account storedAccount = storedAccountInfoDTO.getAccount();
+        Account account = accountInfoKeeper.getAccount();
+        Account storedAccount = storedAccountInfoKeeper.getAccount();
         account.setEmail(storedAccount.getEmail());
         account.setRegistrationDate(storedAccount.getRegistrationDate());
 
-        updater.getValuesFromParams(accountInfoDTO);
+        updater.getValuesFromParams(accountInfoKeeper);
 
         if (isNull(session.getAttribute(PHOTO))) {
             session.setAttribute(PHOTO, storedAccount.getPhoto());
@@ -77,20 +77,20 @@ public class AccountUpdateServlet extends AbstractGetPostServlet {
             session.setAttribute(PHOTO, account.getPhoto());
         }
 
-        req.setAttribute(ACCOUNT_INFO, accountInfoDTO);
+        req.setAttribute(ACCOUNT_INFO, accountInfoKeeper);
         boolean accepted = updater.isParamsAccepted();
         if (!accepted) {
             safeDoGet(req, resp);
         } else {
-            update(updater, accountInfoDTO, storedAccountInfoDTO);
+            update(updater, accountInfoKeeper, storedAccountInfoKeeper);
         }
     }
 
-    private void update(UpdateAccountFieldsHelper updater, AccountInfoDTO accountInfoDTO,
-                        AccountInfoDTO storedAccountInfoDTO) throws ServletException, IOException {
+    private void update(UpdateAccountFieldsHelper updater, AccountInfoKeeper accountInfoKeeper,
+                        AccountInfoKeeper storedAccountInfoKeeper) throws ServletException, IOException {
         boolean updated;
         try {
-            updated = accountInfoService.update(accountInfoDTO, storedAccountInfoDTO);
+            updated = accountInfoService.update(accountInfoKeeper, storedAccountInfoKeeper);
         } catch (IncorrectDataException e) {
             updater.handleInfoExceptions(e, this::safeDoGet);
             return;

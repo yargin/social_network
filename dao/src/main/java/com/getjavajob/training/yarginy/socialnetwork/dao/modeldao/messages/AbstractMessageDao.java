@@ -6,7 +6,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Messa
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.MessageImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AbstractDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AccountDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.ValuePlacer;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.UpdateValuesPlacer;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -56,16 +56,16 @@ public abstract class AbstractMessageDao extends AbstractDao<Message> {
     }
 
     @Override
-    protected ValuePlacer getValuePlacer(Message message, Message storedMessage) {
-        ValuePlacer placer = new ValuePlacer(table);
-        placer.addFieldIfDiffers(message::getAuthor, storedMessage::getAuthor, AUTHOR, Types.BIGINT, Account::getId);
-        placer.addFieldIfDiffers(message::getText, storedMessage::getText, MESSAGE, Types.VARCHAR);
-        placer.addFieldIfDiffers(message::getImage, storedMessage::getImage, IMAGE, Types.BLOB);
-        placer.addFieldIfDiffers(message::getReceiverId, storedMessage::getReceiverId, RECEIVER_ID, Types.BIGINT);
-        placer.addFieldIfDiffers(message::getDate, storedMessage::getDate, POSTED, Types.TIMESTAMP);
+    protected UpdateValuesPlacer getValuePlacer(Message message, Message storedMessage) {
+        UpdateValuesPlacer valuesPlacer = new UpdateValuesPlacer(table);
+        valuesPlacer.addFieldIfDiffers(message::getAuthor, storedMessage::getAuthor, AUTHOR, Types.BIGINT, Account::getId);
+        valuesPlacer.addFieldIfDiffers(message::getText, storedMessage::getText, MESSAGE, Types.VARCHAR);
+        valuesPlacer.addFieldIfDiffers(message::getImage, storedMessage::getImage, IMAGE, Types.BLOB);
+        valuesPlacer.addFieldIfDiffers(message::getReceiverId, storedMessage::getReceiverId, RECEIVER_ID, Types.BIGINT);
+        valuesPlacer.addFieldIfDiffers(message::getDate, storedMessage::getDate, POSTED, Types.TIMESTAMP);
 
-        placer.addKey(storedMessage::getId, ID, Types.BIGINT);
-        return placer;
+        valuesPlacer.addKey(storedMessage::getId, ID, Types.BIGINT);
+        return valuesPlacer;
     }
 
     @Override

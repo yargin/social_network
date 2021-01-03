@@ -21,6 +21,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+//todo inject service
 public class AccountServiceTest {
     private final AccountDaoFacade accountDaoFacade = mock(AccountDaoFacade.class);
     private final FriendshipsDaoFacade friendsDao = mock(FriendshipsDaoFacade.class);

@@ -10,7 +10,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PasswordDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
-import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
+import com.getjavajob.training.yarginy.socialnetwork.service.datakeepers.AccountInfoKeeper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,8 +37,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public boolean register(AccountInfoDTO accountInfoDTO, Password password) {
-        return register(accountInfoDTO.getAccount(), accountInfoDTO.getPhones(), password);
+    public boolean register(AccountInfoKeeper accountInfoKeeper, Password password) {
+        return register(accountInfoKeeper.getAccount(), accountInfoKeeper.getPhones(), password);
     }
 
     @Override

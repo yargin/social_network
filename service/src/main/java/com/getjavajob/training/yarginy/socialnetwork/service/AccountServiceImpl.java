@@ -9,7 +9,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacad
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
-import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
+import com.getjavajob.training.yarginy.socialnetwork.service.datakeepers.AccountInfoKeeper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,10 +35,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountInfoDTO getAccountInfo(long id) {
+    public AccountInfoKeeper getAccountInfo(long id) {
         Account account = accountDaoFacade.select(id);
         Collection<Phone> phones = phoneDaoFacade.selectPhonesByOwner(id);
-        return new AccountInfoDTO(account, phones);
+        return new AccountInfoKeeper(account, phones);
     }
 
     @Override
@@ -78,12 +78,9 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     public boolean addFriend(long firstId, long secondId) {
         if (!friendshipDao.deleteRequest(firstId, secondId)) {
-            throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
+            return false;
         }
-        if (!friendshipDao.createFriendship(firstId, secondId)) {
-            throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
-        }
-        return true;
+        return friendshipDao.createFriendship(firstId, secondId);
     }
 
     @Override

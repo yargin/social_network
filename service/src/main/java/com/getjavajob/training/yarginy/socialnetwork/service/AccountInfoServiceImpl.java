@@ -6,7 +6,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
-import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
+import com.getjavajob.training.yarginy.socialnetwork.service.datakeepers.AccountInfoKeeper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,22 +26,22 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     }
 
     @Override
-    public AccountInfoDTO select(Account account) {
+    public AccountInfoKeeper select(Account account) {
         Account storedAccount = accountDaoFacade.select(account);
         Collection<Phone> phones = phoneDaoFacade.selectPhonesByOwner(storedAccount.getId());
-        return new AccountInfoDTO(storedAccount, phones);
+        return new AccountInfoKeeper(storedAccount, phones);
     }
 
     @Override
-    public AccountInfoDTO select(long id) {
+    public AccountInfoKeeper select(long id) {
         Account storedAccount = accountDaoFacade.select(id);
         Collection<Phone> phones = phoneDaoFacade.selectPhonesByOwner(storedAccount.getId());
-        return new AccountInfoDTO(storedAccount, phones);
+        return new AccountInfoKeeper(storedAccount, phones);
     }
 
     @Override
     @Transactional
-    public boolean update(AccountInfoDTO accountInfo, AccountInfoDTO storedAccountInfo) {
+    public boolean update(AccountInfoKeeper accountInfo, AccountInfoKeeper storedAccountInfo) {
         Account account = accountInfo.getAccount();
         if (!accountDaoFacade.update(account, storedAccountInfo.getAccount())) {
             throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);

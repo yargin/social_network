@@ -83,16 +83,16 @@ public class GroupDao extends AbstractBatchDao<Group> {
     }
 
     @Override
-    protected ValuePlacer getValuePlacer(Group group, Group storedGroup) {
-        ValuePlacer placer = new ValuePlacer(TABLE);
-        placer.addFieldIfDiffers(group::getName, storedGroup::getName, NAME, Types.VARCHAR);
-        placer.addFieldIfDiffers(group::getDescription, storedGroup::getDescription, DESCRIPTION, Types.VARCHAR);
-        placer.addFieldIfDiffers(group::getOwner, storedGroup::getOwner, OWNER, Types.VARCHAR, Account::getId);
-        placer.addFieldIfDiffers(group::getCreationDate, storedGroup::getCreationDate, CREATION_DATE, Types.DATE);
-        placer.addFieldIfDiffers(group::getPhoto, storedGroup::getPhoto, PHOTO, Types.BLOB);
+    protected UpdateValuesPlacer getValuePlacer(Group group, Group storedGroup) {
+        UpdateValuesPlacer valuesPlacer = new UpdateValuesPlacer(TABLE);
+        valuesPlacer.addFieldIfDiffers(group::getName, storedGroup::getName, NAME, Types.VARCHAR);
+        valuesPlacer.addFieldIfDiffers(group::getDescription, storedGroup::getDescription, DESCRIPTION, Types.VARCHAR);
+        valuesPlacer.addFieldIfDiffers(group::getOwner, storedGroup::getOwner, OWNER, Types.VARCHAR, Account::getId);
+        valuesPlacer.addFieldIfDiffers(group::getCreationDate, storedGroup::getCreationDate, CREATION_DATE, Types.DATE);
+        valuesPlacer.addFieldIfDiffers(group::getPhoto, storedGroup::getPhoto, PHOTO, Types.BLOB);
 
-        placer.addKey(group::getName, NAME, Types.VARCHAR);
-        return placer;
+        valuesPlacer.addKey(group::getName, NAME, Types.VARCHAR);
+        return valuesPlacer;
     }
 
     @Override

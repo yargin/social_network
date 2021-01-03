@@ -8,14 +8,14 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class ValuePlacer {
+public class UpdateValuesPlacer {
     private static final String KEY_PREFIX = "key";
     private final String table;
     private final Collection<String> altKeys = new ArrayList<>();
     private final MapSqlParameterSource parameters = new MapSqlParameterSource();
     private final StringBuilder updateQueryParameters = new StringBuilder();
 
-    public ValuePlacer(String table) {
+    public UpdateValuesPlacer(String table) {
         this.table = table;
     }
 

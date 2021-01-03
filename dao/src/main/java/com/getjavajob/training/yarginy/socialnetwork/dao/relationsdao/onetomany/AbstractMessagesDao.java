@@ -16,7 +16,7 @@ public abstract class AbstractMessagesDao implements OneToManyDao<Message> {
     private final AbstractMessageDao messageDao;
     private final AccountDao accountDao;
 
-    public AbstractMessagesDao(JdbcTemplate template, AbstractMessageDao messageDao, AccountDao accountDao) {
+    protected AbstractMessagesDao(JdbcTemplate template, AbstractMessageDao messageDao, AccountDao accountDao) {
         this.messageDao = messageDao;
         this.template = template;
         this.accountDao = accountDao;

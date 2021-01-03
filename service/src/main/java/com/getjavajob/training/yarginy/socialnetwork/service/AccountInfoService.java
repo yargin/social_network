@@ -1,14 +1,14 @@
 package com.getjavajob.training.yarginy.socialnetwork.service;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
+import com.getjavajob.training.yarginy.socialnetwork.service.datakeepers.AccountInfoKeeper;
 
 import java.io.Serializable;
 
 public interface AccountInfoService extends Serializable {
-    AccountInfoDTO select(Account account);
+    AccountInfoKeeper select(Account account);
 
-    AccountInfoDTO select(long id);
+    AccountInfoKeeper select(long id);
 
-    boolean update(AccountInfoDTO accountInfoDTO, AccountInfoDTO storedAccountInfoDTO);
+    boolean update(AccountInfoKeeper accountInfoKeeper, AccountInfoKeeper storedAccountInfoKeeper);
 }

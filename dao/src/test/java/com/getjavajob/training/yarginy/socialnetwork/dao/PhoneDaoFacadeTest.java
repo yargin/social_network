@@ -91,8 +91,8 @@ public class PhoneDaoFacadeTest {
         Phone nonExisting = new PhoneImpl();
         nonExisting.setNumber("000000");
         Phone anotherNonExisting = new PhoneImpl();
-        anotherNonExisting.setNumber("0000");
-        assertFalse(phoneDaoFacade.update(nonExisting, nonExisting));
+        anotherNonExisting.setNumber("00000");
+        assertFalse(phoneDaoFacade.update(nonExisting, anotherNonExisting));
     }
 
     @Test

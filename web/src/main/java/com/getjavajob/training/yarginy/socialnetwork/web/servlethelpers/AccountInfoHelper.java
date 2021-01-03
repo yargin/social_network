@@ -5,7 +5,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.addit
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
-import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
+import com.getjavajob.training.yarginy.socialnetwork.service.datakeepers.AccountInfoKeeper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,12 +30,12 @@ public class AccountInfoHelper {
     }
 
     public void setAccountInfo(HttpServletRequest req, long requestedUserId) {
-        AccountInfoDTO accountInfoDTO = accountService.getAccountInfo(requestedUserId);
+        AccountInfoKeeper accountInfoKeeper = accountService.getAccountInfo(requestedUserId);
 
-        Account account = accountInfoDTO.getAccount();
+        Account account = accountInfoKeeper.getAccount();
         req.setAttribute("user", account);
 
-        Collection<Phone> phones = accountInfoDTO.getPhones();
+        Collection<Phone> phones = accountInfoKeeper.getPhones();
         Collection<Phone> privatePhones = phones.stream().filter(phone -> phone.getType() == PhoneType.PRIVATE).
                 collect(Collectors.toList());
         req.setAttribute("privatePhones", privatePhones);

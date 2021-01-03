@@ -9,17 +9,19 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Collection;
 
 import static java.util.Arrays.asList;
+import static org.mockito.Mockito.mock;
 
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@ContextConfiguration(locations = {"classpath:serviceSpringConfig.xml"})
 public class AuthServiceTest {
-    @Autowired
-    public static AccountDaoFacade accountDaoFacade;
+    //    @Autowired
+    private AccountDaoFacade accountDaoFacade = mock(AccountDaoFacade.class);
 
     @Test
     public void testRegister() {

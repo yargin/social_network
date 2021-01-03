@@ -18,7 +18,8 @@ public class DialogServiceImpl implements DialogService {
     private final MessageService messageService;
 
     @Autowired
-    public DialogServiceImpl(DialogDaoFacade dialogDaoFacade, @Qualifier("dialogMessageService") MessageService messageService) {
+    public DialogServiceImpl(DialogDaoFacade dialogDaoFacade, @Qualifier("dialogMessageService") MessageService
+            messageService) {
         this.dialogDaoFacade = dialogDaoFacade;
         this.messageService = messageService;
     }

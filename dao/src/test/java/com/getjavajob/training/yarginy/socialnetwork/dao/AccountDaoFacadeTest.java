@@ -103,7 +103,7 @@ public class AccountDaoFacadeTest {
         nonExisting.setEmail("email@that.doesnt.exist");
         Account anotherNonExisting = new AccountImpl();
         anotherNonExisting.setEmail("anotheremail@that.doesnt.exist");
-        assertFalse(accountDaoFacade.update(nonExisting, nonExisting));
+        assertFalse(accountDaoFacade.update(nonExisting, anotherNonExisting));
     }
 
     @Test

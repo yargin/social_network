@@ -22,8 +22,8 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
     private final String where = " WHERE ";
     private final String tableName;
 
-    public AbstractDao(JdbcTemplate template, SimpleJdbcInsert jdbcInsert, NamedParameterJdbcTemplate namedTemplate,
-                       String table, String tableAlias) {
+    protected AbstractDao(JdbcTemplate template, SimpleJdbcInsert jdbcInsert, NamedParameterJdbcTemplate namedTemplate,
+                          String table, String tableAlias) {
         this.template = template;
         this.jdbcInsert = jdbcInsert;
         this.jdbcInsert.withTableName(table);
@@ -74,9 +74,9 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
 
     @Override
     public boolean update(E entity, E storedEntity) {
-        ValuePlacer valuePlacer = getValuePlacer(entity, storedEntity);
+        UpdateValuesPlacer valuesPlacer = getValuePlacer(entity, storedEntity);
         try {
-            return namedTemplate.update(valuePlacer.getQuery(), valuePlacer.getParameters()) == 1;
+            return namedTemplate.update(valuesPlacer.getQuery(), valuesPlacer.getParameters()) == 1;
         } catch (IllegalArgumentException e) {
             return true;
         } catch (DataIntegrityViolationException e) {
@@ -84,11 +84,10 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
         }
     }
 
-    protected abstract ValuePlacer getValuePlacer(E entity, E storedEntity);
+    protected abstract UpdateValuesPlacer getValuePlacer(E entity, E storedEntity);
 
     @Override
     public boolean delete(E entity) {
-        ;
         return template.update(getDeleteQuery(), getObjectAltKeys(entity)) == 1;
     }
 

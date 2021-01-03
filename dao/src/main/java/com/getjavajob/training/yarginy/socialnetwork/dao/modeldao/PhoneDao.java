@@ -60,14 +60,14 @@ public class PhoneDao extends AbstractBatchDao<Phone> {
     }
 
     @Override
-    protected ValuePlacer getValuePlacer(Phone phone, Phone storedPhone) {
-        ValuePlacer placer = new ValuePlacer(TABLE);
-        placer.addFieldIfDiffers(phone::getNumber, storedPhone::getNumber, NUMBER, Types.VARCHAR);
-        placer.addFieldIfDiffers(phone::getType, storedPhone::getType, TYPE, Types.CHAR, PhoneType::toString);
-        placer.addFieldIfDiffers(phone::getOwner, storedPhone::getOwner, OWNER, Types.BIGINT, Account::getId);
+    protected UpdateValuesPlacer getValuePlacer(Phone phone, Phone storedPhone) {
+        UpdateValuesPlacer valuesPlacer = new UpdateValuesPlacer(TABLE);
+        valuesPlacer.addFieldIfDiffers(phone::getNumber, storedPhone::getNumber, NUMBER, Types.VARCHAR);
+        valuesPlacer.addFieldIfDiffers(phone::getType, storedPhone::getType, TYPE, Types.CHAR, PhoneType::toString);
+        valuesPlacer.addFieldIfDiffers(phone::getOwner, storedPhone::getOwner, OWNER, Types.BIGINT, Account::getId);
 
-        placer.addKey(storedPhone::getId, ID, Types.BIGINT);
-        return placer;
+        valuesPlacer.addKey(storedPhone::getId, ID, Types.BIGINT);
+        return valuesPlacer;
     }
 
     @Override

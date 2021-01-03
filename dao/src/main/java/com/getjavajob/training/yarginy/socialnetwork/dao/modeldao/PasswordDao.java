@@ -64,14 +64,14 @@ public class PasswordDao extends AbstractDao<Password> {
     }
 
     @Override
-    protected ValuePlacer getValuePlacer(Password password, Password storedPassword) {
-        ValuePlacer placer = new ValuePlacer(TABLE);
-        placer.addFieldIfDiffers(password::getAccount, storedPassword::getAccount, EMAIL, Types.VARCHAR,
+    protected UpdateValuesPlacer getValuePlacer(Password password, Password storedPassword) {
+        UpdateValuesPlacer valuesPlacer = new UpdateValuesPlacer(TABLE);
+        valuesPlacer.addFieldIfDiffers(password::getAccount, storedPassword::getAccount, EMAIL, Types.VARCHAR,
                 Account::getEmail);
-        placer.addFieldIfDiffers(password::getPassword, storedPassword::getPassword, PASSWORD, Types.VARCHAR);
+        valuesPlacer.addFieldIfDiffers(password::getPassword, storedPassword::getPassword, PASSWORD, Types.VARCHAR);
 
-        placer.addKey(password::getAccount, EMAIL, Types.VARCHAR, Account::getEmail);
-        return placer;
+        valuesPlacer.addKey(password::getAccount, EMAIL, Types.VARCHAR, Account::getEmail);
+        return valuesPlacer;
     }
 
     @Override

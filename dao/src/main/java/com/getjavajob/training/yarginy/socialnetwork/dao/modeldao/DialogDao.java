@@ -121,21 +121,21 @@ public class DialogDao extends AbstractDao<Dialog> {
     }
 
     @Override
-    protected ValuePlacer getValuePlacer(Dialog dialog, Dialog storedDialog) {
-        ValuePlacer valuePlacer = new ValuePlacer(TABLE);
+    protected UpdateValuesPlacer getValuePlacer(Dialog dialog, Dialog storedDialog) {
+        UpdateValuesPlacer valuesPlacer = new UpdateValuesPlacer(TABLE);
         Account firstAccount = dialog.getFirstAccount();
         Account secondAccount = dialog.getSecondAccount();
         if (firstAccount.getId() > secondAccount.getId()) {
             dialog.setSecondAccount(firstAccount);
             dialog.setFirstAccount(secondAccount);
         }
-        valuePlacer.addFieldIfDiffers(dialog::getFirstAccount, storedDialog::getFirstAccount, FIRST_ID, Types.BIGINT,
+        valuesPlacer.addFieldIfDiffers(dialog::getFirstAccount, storedDialog::getFirstAccount, FIRST_ID, Types.BIGINT,
                 Account::getId);
-        valuePlacer.addFieldIfDiffers(dialog::getSecondAccount, storedDialog::getSecondAccount, FIRST_ID,
+        valuesPlacer.addFieldIfDiffers(dialog::getSecondAccount, storedDialog::getSecondAccount, FIRST_ID,
                 Types.BIGINT, Account::getId);
 
-        valuePlacer.addKey(storedDialog::getId, ID, Types.BIGINT);
-        return valuePlacer;
+        valuesPlacer.addKey(storedDialog::getId, ID, Types.BIGINT);
+        return valuesPlacer;
     }
 
     @Override

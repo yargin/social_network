@@ -9,7 +9,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Pass
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
-import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
+import com.getjavajob.training.yarginy.socialnetwork.service.datakeepers.AccountInfoKeeper;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.additionaldata.PhoneExchanger;
 
 import javax.servlet.ServletException;
@@ -36,8 +36,8 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
         super(req, resp, param, successUrl);
     }
 
-    public AccountInfoDTO getOrCreateAccountInfo(Supplier<AccountInfoDTO> accountInfoCreator) {
-        AccountInfoDTO accountInfo = (AccountInfoDTO) req.getAttribute(ACCOUNT_INFO);
+    public AccountInfoKeeper getOrCreateAccountInfo(Supplier<AccountInfoKeeper> accountInfoCreator) {
+        AccountInfoKeeper accountInfo = (AccountInfoKeeper) req.getAttribute(ACCOUNT_INFO);
         if (isNull(accountInfo)) {
             accountInfo = accountInfoCreator.get();
             req.setAttribute(ACCOUNT_INFO, accountInfoCreator.get());
@@ -45,7 +45,7 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
         return accountInfo;
     }
 
-    public void initAccountAttributes(AccountInfoDTO accountInfo) {
+    public void initAccountAttributes(AccountInfoKeeper accountInfo) {
         initSex();
 
         Account account = accountInfo.getAccount();
@@ -92,7 +92,7 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
     }
 
     private Collection<Phone> getPhonesFromParams(String attribute, PhoneType type) {
-        AccountInfoDTO accountInfo = (AccountInfoDTO) req.getSession().getAttribute(ACCOUNT_INFO);
+        AccountInfoKeeper accountInfo = (AccountInfoKeeper) req.getSession().getAttribute(ACCOUNT_INFO);
         Account account = accountInfo.getAccount();
         Collection<PhoneExchanger> phoneExchangers = (Collection<PhoneExchanger>) req.getSession().getAttribute(attribute);
         Collection<Phone> phones = new ArrayList<>();
@@ -135,8 +135,8 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
         }
     }
 
-    public void getValuesFromParams(AccountInfoDTO accountInfoDTO) throws IOException, ServletException {
-        Account account = accountInfoDTO.getAccount();
+    public void getValuesFromParams(AccountInfoKeeper accountInfoKeeper) throws IOException, ServletException {
+        Account account = accountInfoKeeper.getAccount();
         setStringFromParam(account::setName, "name");
         setStringFromParam(account::setSurname, "surname");
         setStringFromParam(account::setPatronymic, "patronymic");
@@ -153,7 +153,7 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
         Collection<Phone> privatePhones = getPhonesFromParams(PRIVATE_PHONES, PhoneType.PRIVATE);
         Collection<Phone> workPhones = getPhonesFromParams(WORK_PHONES, PhoneType.WORK);
 
-        Collection<Phone> phones = accountInfoDTO.getPhones();
+        Collection<Phone> phones = accountInfoKeeper.getPhones();
         phones.clear();
         phones.addAll(privatePhones);
         phones.addAll(workPhones);
