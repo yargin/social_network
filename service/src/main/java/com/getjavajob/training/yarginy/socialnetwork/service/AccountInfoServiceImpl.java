@@ -41,6 +41,7 @@ public class AccountInfoServiceImpl implements AccountInfoService {
 
     @Override
     @Transactional
+    //todo implement by xml
     public boolean update(AccountInfoKeeper accountInfo, AccountInfoKeeper storedAccountInfo) {
         Account account = accountInfo.getAccount();
         if (!accountDaoFacade.update(account, storedAccountInfo.getAccount())) {

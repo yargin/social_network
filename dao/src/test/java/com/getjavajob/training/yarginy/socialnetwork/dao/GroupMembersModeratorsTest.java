@@ -48,6 +48,7 @@ public class GroupMembersModeratorsTest {
         account3 = accountDaoFacade.select(account3);
         accountDaoFacade.create(account4);
         account4 = accountDaoFacade.select(account4);
+        group.setOwner(account1);
         groupDaoFacade.create(group);
         group = groupDaoFacade.select(group);
         groupDaoFacade.addMember(account1.getId(), group.getId());

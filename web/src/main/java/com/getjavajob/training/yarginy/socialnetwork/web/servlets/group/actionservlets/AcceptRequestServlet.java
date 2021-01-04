@@ -12,6 +12,7 @@ import java.io.IOException;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
 
+
 public class AcceptRequestServlet extends AbstractPostServlet {
     private GroupService groupService;
 

@@ -6,11 +6,14 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,17 +21,18 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-//todo inject service
+@RunWith(MockitoJUnitRunner.class)
 public class AccountServiceTest {
-    private final AccountDaoFacade accountDaoFacade = mock(AccountDaoFacade.class);
-    private final FriendshipsDaoFacade friendsDao = mock(FriendshipsDaoFacade.class);
-    private final PhoneDaoFacade phoneDaoFacade = mock(PhoneDaoFacade.class);
-    private final DialogDaoFacade dialogDaoFacade = mock(DialogDaoFacade.class);
-    private final AccountService accountService = new AccountServiceImpl(accountDaoFacade, phoneDaoFacade, friendsDao,
-            dialogDaoFacade);
+    @Mock
+    private AccountDaoFacade accountDaoFacade;
+    @Mock
+    private FriendshipsDaoFacade friendsDao;
+    @Mock
+    private PhoneDaoFacade phoneDaoFacade;
+    @InjectMocks
+    private AccountServiceImpl accountService;
     private Account account;
     private Account storedAccount;
     private Collection<Phone> phones;

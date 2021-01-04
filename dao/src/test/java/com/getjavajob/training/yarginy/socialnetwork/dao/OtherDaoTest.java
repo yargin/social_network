@@ -34,11 +34,11 @@ public class OtherDaoTest {
     private AccountDaoFacade accountDaoFacade;
     private Account account = new AccountImpl("test", "test", "test@test.test");
     private Account owner = new AccountImpl("testOwner", "testOwner", "testOwner@test.test");
-    private Group group1 = new GroupImpl("testGroup1", owner);
-    private Group group2 = new GroupImpl("testGroup2", owner);
-    private Group group3 = new GroupImpl("testGroup3", owner);
-    private Group group4 = new GroupImpl("testGroup4", owner);
-    private Group group5 = new GroupImpl("testGroup5", owner);
+    private Group group1;
+    private Group group2;
+    private Group group3;
+    private Group group4;
+    private Group group5;
 
     @Before
     public void initTestValues() {
@@ -46,6 +46,11 @@ public class OtherDaoTest {
         account = accountDaoFacade.select(account);
         accountDaoFacade.create(owner);
         owner = accountDaoFacade.select(owner);
+        group1 = new GroupImpl("testGroup1", owner);
+        group2 = new GroupImpl("testGroup2", owner);
+        group3 = new GroupImpl("testGroup3", owner);
+        group4 = new GroupImpl("testGroup4", owner);
+        group5 = new GroupImpl("testGroup5", owner);
 
         groupDaoFacade.create(group1);
         group1 = groupDaoFacade.select(group1);

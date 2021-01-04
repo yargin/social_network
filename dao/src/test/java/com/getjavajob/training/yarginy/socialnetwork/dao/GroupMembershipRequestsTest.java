@@ -38,6 +38,7 @@ public class GroupMembershipRequestsTest {
         owner = accountDaoFacade.select(owner);
         accountDaoFacade.create(requester);
         requester = accountDaoFacade.select(requester);
+        group.setOwner(owner);
         groupDaoFacade.create(group);
         group = groupDaoFacade.select(group);
     }

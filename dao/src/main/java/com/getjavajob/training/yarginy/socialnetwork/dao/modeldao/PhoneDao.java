@@ -17,6 +17,8 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Types;
 
+import static java.util.Objects.isNull;
+
 @Repository
 public class PhoneDao extends AbstractBatchDao<Phone> {
     private static final String TABLE = "phones";
@@ -54,7 +56,9 @@ public class PhoneDao extends AbstractBatchDao<Phone> {
     protected MapSqlParameterSource createEntityFieldsMap(Phone phone) {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue(NUMBER, phone.getNumber(), Types.VARCHAR);
-        parameters.addValue(TYPE, phone.getType(), Types.CHAR);
+        if (!isNull(phone.getType())) {
+            parameters.addValue(TYPE, phone.getType().toString(), Types.CHAR);
+        }
         parameters.addValue(OWNER, phone.getOwner().getId(), Types.BIGINT);
         return parameters;
     }

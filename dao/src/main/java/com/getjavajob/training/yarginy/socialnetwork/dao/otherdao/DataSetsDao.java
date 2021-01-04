@@ -25,7 +25,7 @@ import java.util.Map;
 
 //todo refactor using jdbcTemplate
 @Component("dataSetsDao")
-public class DataSelectsDao implements Serializable {
+public class DataSetsDao implements Serializable {
     private DataSource data;
 
     @Autowired

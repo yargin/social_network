@@ -8,20 +8,32 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Pass
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PasswordDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Collection;
 
 import static java.util.Arrays.asList;
-import static org.mockito.Mockito.mock;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@ContextConfiguration(locations = {"classpath:serviceSpringConfig.xml"})
+@RunWith(MockitoJUnitRunner.class)
 public class AuthServiceTest {
-    //    @Autowired
-    private AccountDaoFacade accountDaoFacade = mock(AccountDaoFacade.class);
+    @Mock
+    private AccountDaoFacade accountDaoFacade;
+    @Mock
+    private PasswordDaoFacade passwordDaoFacade;
+    @Mock
+    private PhoneDaoFacade phoneDaoFacade;
+    @InjectMocks
+    private AuthServiceImpl authService;
 
     @Test
     public void testRegister() {
@@ -29,17 +41,16 @@ public class AuthServiceTest {
         account.setSurname("testSurname");
         account.setBirthDate(Date.valueOf(LocalDate.of(2001, 1, 1)));
         account.setSex(Sex.MALE);
-        accountDaoFacade.delete(account);
         Phone firstPhone = new PhoneImpl("8921123", account);
         Phone secondPhone = new PhoneImpl("1231211", account);
         Collection<Phone> phones = asList(firstPhone, secondPhone);
         Password password = new PasswordImpl();
         password.setPassword("123qwe123");
         password.setAccount(account);
-        //todo
-//        AuthService authService = new AuthServiceImpl();
-//        boolean registered = authService.register(account, phones, password);
-//        assertTrue(registered);
-        accountDaoFacade.delete(account);
+        when(accountDaoFacade.create(account)).thenReturn(true);
+        when(phoneDaoFacade.create(phones)).thenReturn(true);
+        when(passwordDaoFacade.create(password)).thenReturn(true);
+        boolean registered = authService.register(account, phones, password);
+        assertTrue(registered);
     }
 }

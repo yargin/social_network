@@ -41,6 +41,7 @@ public class GroupModeratorsTest {
         owner = accountDaoFacade.select(owner);
         accountDaoFacade.create(moderator);
         moderator = accountDaoFacade.select(moderator);
+        group.setOwner(owner);
         groupDaoFacade.create(group);
         group = groupDaoFacade.select(group);
     }
