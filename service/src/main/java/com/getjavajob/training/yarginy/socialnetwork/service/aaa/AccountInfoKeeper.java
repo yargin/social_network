@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.service.datakeepers;
+package com.getjavajob.training.yarginy.socialnetwork.service.aaa;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 /**
  * holds account's information such as {@link Account} & {@link Account}'s {@link Phone}s
  */
+//@Component
 public class AccountInfoKeeper implements Serializable {
     private final Account account;
     private final Collection<Phone> phones;

@@ -10,7 +10,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PasswordDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
-import com.getjavajob.training.yarginy.socialnetwork.service.datakeepers.AccountInfoKeeper;
+import com.getjavajob.training.yarginy.socialnetwork.service.aaa.AccountInfoKeeper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,17 +36,19 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    @Transactional
     public boolean register(AccountInfoKeeper accountInfoKeeper, Password password) {
         return register(accountInfoKeeper.getAccount(), accountInfoKeeper.getPhones(), password);
     }
 
     @Override
-    @Transactional
     public boolean register(Account account, Collection<Phone> phones, Password password) {
         account.setRegistrationDate(Date.valueOf(LocalDate.now()));
         if (!accountDaoFacade.create(account)) {
             throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
+        }
+        Account savedAccount = accountDaoFacade.select(account);
+        for (Phone phone : phones) {
+            phone.setOwner(savedAccount);
         }
         if (!phoneDaoFacade.create(phones)) {
             throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
@@ -58,6 +60,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional()
     public Account login(String email, String password) {
         Password passwordObject = new PasswordImpl();
         Account account = new AccountImpl();

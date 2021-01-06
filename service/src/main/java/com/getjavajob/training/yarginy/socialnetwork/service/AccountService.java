@@ -4,7 +4,7 @@ package com.getjavajob.training.yarginy.socialnetwork.service;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.service.datakeepers.AccountInfoKeeper;
+import com.getjavajob.training.yarginy.socialnetwork.service.aaa.AccountInfoKeeper;
 
 import java.io.Serializable;
 import java.util.Collection;

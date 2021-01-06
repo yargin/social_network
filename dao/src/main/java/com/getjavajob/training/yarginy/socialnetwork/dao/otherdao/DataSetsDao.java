@@ -36,12 +36,11 @@ public class DataSetsDao implements Serializable {
     public Map<Account, Boolean> getGroupMembersModerators(long groupId) {
         Map<Account, Boolean> membersModerators = new HashMap<>();
         template.query(getGroupMembersAdModeratorsQUery(), (resultSet, i) -> {
-                    Account account = accountDao.getSuffixedViewRowMapper("a").mapRow(resultSet, i);
-                    long isModerator = resultSet.getLong("moderator");
-                    membersModerators.put(account, isModerator != 0);
-                    return account;
-                }
-                , groupId);
+            Account account = accountDao.getSuffixedViewRowMapper("a").mapRow(resultSet, i);
+            long isModerator = resultSet.getLong("moderator");
+            membersModerators.put(account, isModerator != 0);
+            return account;
+        }, groupId);
         return membersModerators;
     }
 

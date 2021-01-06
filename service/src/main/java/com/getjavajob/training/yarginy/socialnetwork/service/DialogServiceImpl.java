@@ -10,7 +10,6 @@ import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageSer
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class DialogServiceImpl implements DialogService {
@@ -35,7 +34,6 @@ public class DialogServiceImpl implements DialogService {
     }
 
     @Override
-    @Transactional
     public boolean create(Dialog dialog, Message message) {
         if (!dialogDaoFacade.create(dialog)) {
             throw new IllegalStateException();
@@ -50,7 +48,7 @@ public class DialogServiceImpl implements DialogService {
 
     @Override
     public boolean delete(Dialog dialog) {
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override

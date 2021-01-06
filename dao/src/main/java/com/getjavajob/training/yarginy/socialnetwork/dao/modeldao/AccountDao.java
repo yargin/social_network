@@ -146,9 +146,7 @@ public class AccountDao extends AbstractDao<Account> {
         map.addValue(CITY, account.getCity(), Types.VARCHAR);
         map.addValue(REGISTRATION_DATE, account.getRegistrationDate(), Types.DATE);
         map.addValue(PHOTO, account.getPhoto(), Types.BLOB);
-        if (!isNull(account.getRole())) {
-            map.addValue(ROLE, account.getRole(), Types.CHAR);
-        }
+        map.addValue(ROLE, isNull(account.getRole()) ? Role.USER.toString() : account.getRole().toString(), Types.CHAR);
         return map;
     }
 

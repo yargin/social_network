@@ -5,7 +5,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.addit
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
-import com.getjavajob.training.yarginy.socialnetwork.service.datakeepers.AccountInfoKeeper;
+import com.getjavajob.training.yarginy.socialnetwork.service.aaa.AccountInfoKeeper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

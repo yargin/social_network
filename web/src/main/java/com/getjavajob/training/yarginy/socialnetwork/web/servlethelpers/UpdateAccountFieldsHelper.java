@@ -9,7 +9,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Pass
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
-import com.getjavajob.training.yarginy.socialnetwork.service.datakeepers.AccountInfoKeeper;
+import com.getjavajob.training.yarginy.socialnetwork.service.aaa.AccountInfoKeeper;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.additionaldata.PhoneExchanger;
 
 import javax.servlet.ServletException;
@@ -31,6 +31,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.R
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 import static java.util.Objects.isNull;
 
+//todo make bean
 public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
     public UpdateAccountFieldsHelper(HttpServletRequest req, HttpServletResponse resp, String param, String successUrl) {
         super(req, resp, param, successUrl);

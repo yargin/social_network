@@ -1,5 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.service;
 
+import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.DataFlowViolationException;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
@@ -9,10 +10,9 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacad
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
-import com.getjavajob.training.yarginy.socialnetwork.service.datakeepers.AccountInfoKeeper;
+import com.getjavajob.training.yarginy.socialnetwork.service.aaa.AccountInfoKeeper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -52,7 +52,6 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    @Transactional
     public boolean createAccount(Account account, Collection<Phone> phones) {
         account.setRegistrationDate(Date.valueOf(LocalDate.now()));
         if (!accountDaoFacade.create(account)) {
@@ -75,12 +74,22 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    @Transactional
     public boolean addFriend(long firstId, long secondId) {
-        if (!friendshipDao.deleteRequest(firstId, secondId)) {
+        try {
+            addFriendTransactional(firstId, secondId);
+        } catch (DataFlowViolationException e) {
             return false;
         }
-        return friendshipDao.createFriendship(firstId, secondId);
+        return true;
+    }
+
+    public void addFriendTransactional(long firstId, long secondId) {
+        if (!friendshipDao.deleteRequest(firstId, secondId)) {
+            throw new DataFlowViolationException();
+        }
+        if (!friendshipDao.createFriendship(firstId, secondId)) {
+            throw new DataFlowViolationException();
+        }
     }
 
     @Override
