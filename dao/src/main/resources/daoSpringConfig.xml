@@ -13,6 +13,8 @@
        http://www.springframework.org/schema/jee
        http://www.springframework.org/schema/jee/spring-jee.xsd">
 
+    <import resource="classpath:commonSpringConfig.xml"/>
+
     <jee:jndi-lookup id="dataSource"
                      jndi-name="jdbc/Local-MySql"
                      expected-type="javax.sql.DataSource"/>
@@ -30,5 +32,4 @@
     </bean>
 
     <context:component-scan base-package="com.getjavajob.training.yarginy.socialnetwork.dao"/>
-    <!--    <tx:annotation-driven/>-->
 </beans>

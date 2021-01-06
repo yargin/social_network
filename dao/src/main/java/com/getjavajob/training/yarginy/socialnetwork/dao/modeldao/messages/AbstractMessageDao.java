@@ -27,8 +27,8 @@ public abstract class AbstractMessageDao extends AbstractDao<Message> {
     private final String table;
     private final AccountDao accountDao;
 
-    public AbstractMessageDao(JdbcTemplate template, SimpleJdbcInsert jdbcInsert, NamedParameterJdbcTemplate namedTemplate,
-                              String table, AccountDao accountDao) {
+    protected AbstractMessageDao(JdbcTemplate template, SimpleJdbcInsert jdbcInsert, NamedParameterJdbcTemplate namedTemplate,
+                                 String table, AccountDao accountDao) {
         super(template, jdbcInsert, namedTemplate, table, ALIAS);
         this.table = table;
         this.accountDao = accountDao;

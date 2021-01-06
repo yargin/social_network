@@ -4,7 +4,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
 
-import java.io.InputStream;
 import java.sql.Date;
 
 /**
@@ -65,9 +64,5 @@ public interface Account extends Entity {
 
     byte[] getPhoto();
 
-    void setPhoto(InputStream photo);
-
     void setPhoto(byte[] photo);
-
-    String getHtmlPhoto();
 }

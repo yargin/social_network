@@ -8,6 +8,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelpe
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Base64;
 
 import static java.util.Objects.isNull;
@@ -75,7 +76,7 @@ public class MessageImpl implements Message {
     }
 
     public void setImage(byte[] image) {
-        this.image = image;
+        this.image = Arrays.copyOf(image, image.length);
     }
 
     public Timestamp getDate() {

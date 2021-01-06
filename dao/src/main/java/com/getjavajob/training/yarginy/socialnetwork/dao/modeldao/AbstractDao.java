@@ -15,11 +15,11 @@ import java.util.Collection;
 import java.util.function.Supplier;
 
 public abstract class AbstractDao<E extends Entity> implements Dao<E> {
+    private static final String WHERE = " WHERE ";
     private final NamedParameterJdbcTemplate namedTemplate;
     protected final JdbcTemplate template;
     protected final SimpleJdbcInsert jdbcInsert;
     private final String alias;
-    private final String where = " WHERE ";
     private final String tableName;
 
     protected AbstractDao(JdbcTemplate template, SimpleJdbcInsert jdbcInsert, NamedParameterJdbcTemplate namedTemplate,
@@ -34,7 +34,7 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
 
     @Override
     public E select(long id) {
-        String query = getSelectAllQuery() + where + getStringPkAsParameters(alias);
+        String query = getSelectAllQuery() + WHERE + getStringPkAsParameters(alias);
         try {
             return template.queryForObject(query, getRowMapper(), id);
         } catch (TransientDataAccessException e) {
@@ -46,7 +46,7 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
 
     @Override
     public E select(E entity) {
-        String query = getSelectAllQuery() + where + getStringAltKeysAsParameters(alias);
+        String query = getSelectAllQuery() + WHERE + getStringAltKeysAsParameters(alias);
         try {
             return template.queryForObject(query, getRowMapper(), getObjectAltKeys(entity));
         } catch (TransientDataAccessException e) {
@@ -92,7 +92,7 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
     }
 
     protected String getDeleteQuery() {
-        return "DELETE FROM " + getTable(alias) + where + getStringAltKeysAsParameters(alias);
+        return "DELETE FROM " + getTable(alias) + WHERE + getStringAltKeysAsParameters(alias);
     }
 
     protected abstract Object[] getObjectPrimaryKeys(E entity);
@@ -165,11 +165,11 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
         return false;
     }
 
-    private interface Appender {
-        boolean append(StringBuilder builder, boolean firstIteration, String value, String alias);
-    }
-
     public String getTable(String alias) {
         return tableName + " as " + alias;
+    }
+
+    private interface Appender {
+        boolean append(StringBuilder builder, boolean firstIteration, String value, String alias);
     }
 }

@@ -7,20 +7,20 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.PasswordImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PasswordDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.service.aaa.AccountInfoKeeper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory.getNullPassword;
-import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper.encrypt;
+import static com.getjavajob.training.yarginy.socialnetwork.common.utils.CommonApplicationContextProvider.getContext;
 
 @Service("authService")
 public class AuthServiceImpl implements AuthService {
@@ -60,7 +60,6 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    @Transactional()
     public Account login(String email, String password) {
         Password passwordObject = new PasswordImpl();
         Account account = new AccountImpl();
@@ -71,9 +70,10 @@ public class AuthServiceImpl implements AuthService {
         if (passwordObject.equals(getNullPassword())) {
             throw new IncorrectDataException(IncorrectData.WRONG_EMAIL);
         }
-        if (!passwordObject.getPassword().equals(encrypt(password))) {
+        DataHandleHelper dataHandleHelper = getContext().getBean(DataHandleHelper.class);
+        if (!passwordObject.getPassword().equals(dataHandleHelper.encrypt(password))) {
             throw new IncorrectDataException(IncorrectData.WRONG_PASSWORD);
         }
-        return passwordObject.getAccount();
+        return accountDaoFacade.select(account);
     }
 }

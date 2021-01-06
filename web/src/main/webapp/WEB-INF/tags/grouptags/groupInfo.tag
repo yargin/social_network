@@ -15,8 +15,8 @@
 
 <div class="info">
     <c:choose>
-        <c:when test="${not empty group.getHtmlPhoto()}">
-            <img src="data:image/jpeg;base64, ${group.getHtmlPhoto()}">
+        <c:when test="${not empty photo}">
+            <img src="data:image/jpeg;base64, ${photo}">
         </c:when>
         <c:otherwise>
             <img src="${context}/img/emptyAvatar.jpg">

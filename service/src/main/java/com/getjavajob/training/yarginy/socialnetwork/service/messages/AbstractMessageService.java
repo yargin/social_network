@@ -2,7 +2,6 @@ package com.getjavajob.training.yarginy.socialnetwork.service.messages;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages.MessageDao;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;

@@ -9,6 +9,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Pass
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper;
 import com.getjavajob.training.yarginy.socialnetwork.service.aaa.AccountInfoKeeper;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.additionaldata.PhoneExchanger;
 
@@ -27,11 +28,11 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory.getNullPassword;
+import static com.getjavajob.training.yarginy.socialnetwork.common.utils.CommonApplicationContextProvider.getContext;
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 import static java.util.Objects.isNull;
 
-//todo make bean
 public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
     public UpdateAccountFieldsHelper(HttpServletRequest req, HttpServletResponse resp, String param, String successUrl) {
         super(req, resp, param, successUrl);
@@ -61,7 +62,8 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
         setAttribute("skype", account::getSkype);
         setAttribute("country", account::getCountry);
         setAttribute("city", account::getCity);
-        setAttribute("photo", account::getHtmlPhoto);
+        DataHandleHelper dataHandleHelper = getContext().getBean(DataHandleHelper.class);
+        setAttribute("photo", () -> dataHandleHelper.getHtmlPhoto(account.getPhoto()));
 
         Collection<Phone> phones = accountInfo.getPhones();
         HttpSession session = req.getSession();
@@ -149,7 +151,8 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
         setStringFromParam(account::setSkype, "skype");
         setStringFromParam(account::setCountry, "country");
         setStringFromParam(account::setCity, "city");
-        setPhotoFromParam(account::setPhoto, "photo");
+        DataHandleHelper dataHandleHelper = getContext().getBean(DataHandleHelper.class);
+        setPhotoFromParam(account::setPhoto, dataHandleHelper, "photo");
 
         Collection<Phone> privatePhones = getPhonesFromParams(PRIVATE_PHONES, PhoneType.PRIVATE);
         Collection<Phone> workPhones = getPhonesFromParams(WORK_PHONES, PhoneType.WORK);

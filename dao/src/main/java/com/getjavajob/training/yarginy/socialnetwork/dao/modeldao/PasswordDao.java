@@ -89,7 +89,7 @@ public class PasswordDao extends AbstractDao<Password> {
         return (resultSet, i) -> {
             Password password = new PasswordImpl();
             password.setAccount(accountDao.getSuffixedViewRowMapper(ACCOUNT_ALIAS).mapRow(resultSet, i));
-            password.setEncryptedPassword(resultSet.getString(PASSWORD + PASSWORD_ALIAS));
+            password.setPassword(resultSet.getString(PASSWORD + PASSWORD_ALIAS));
             return password;
         };
     }

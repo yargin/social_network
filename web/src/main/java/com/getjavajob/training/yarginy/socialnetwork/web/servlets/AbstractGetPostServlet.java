@@ -14,7 +14,6 @@ public abstract class AbstractGetPostServlet extends AbstractServlet {
             safeDoGet(req, resp);
         } catch (ServletException | IOException e) {
             e.printStackTrace();
-            //todo what about error-page??
             req.getRequestDispatcher(Jsps.ERROR).forward(req, resp);
         }
     }

@@ -56,7 +56,7 @@ public class FriendshipsRequestsDaoTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testCreateRequestToNonExistingAccount() {
-        assertFalse(friendshipsDaoFacade.createRequest(firstAccount.getId(), 0));
+        friendshipsDaoFacade.createRequest(firstAccount.getId(), 0);
     }
 
     @Test

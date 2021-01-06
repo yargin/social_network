@@ -22,6 +22,7 @@ import static java.util.Objects.isNull;
 
 @Component("dataSetsDao")
 public class DataSetsDao implements Serializable {
+    private static final int ACCOUNTS_GROUPS_PARAMETERS_NUMBER = 3;
     private final JdbcTemplate template;
     private final AccountDao accountDao;
     private final GroupDao groupDao;
@@ -77,7 +78,7 @@ public class DataSetsDao implements Serializable {
 
     public SearchableDto searchAccountsGroups(String searchString, int pageNumber, int limit) {
         String query = searchAccountsAndGroupsQuery(pageNumber, limit);
-        String[] searchParameters = new String[3];
+        String[] searchParameters = new String[ACCOUNTS_GROUPS_PARAMETERS_NUMBER];
         Arrays.fill(searchParameters, '%' + searchString + '%');
         Collection<Searchable> entities = template.query(query, (resultSet, i) -> {
             Searchable searchable = new SearchableImpl();

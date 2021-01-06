@@ -13,8 +13,8 @@ import java.util.Collection;
 import java.util.List;
 
 public abstract class AbstractBatchDao<E extends Entity> extends AbstractDao<E> implements BatchDao<E> {
-    public AbstractBatchDao(JdbcTemplate template, SimpleJdbcInsert jdbcInsert, NamedParameterJdbcTemplate namedTemplate,
-                            String table, String tableAlias) {
+    protected AbstractBatchDao(JdbcTemplate template, SimpleJdbcInsert jdbcInsert, NamedParameterJdbcTemplate namedTemplate,
+                               String table, String tableAlias) {
         super(template, jdbcInsert, namedTemplate, table, tableAlias);
     }
 

@@ -20,12 +20,8 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 import static java.util.Objects.isNull;
 
 public class GroupCreationServlet extends AbstractGetPostServlet {
-    private GroupService groupService;
-
     @Autowired
-    public void setGroupService(GroupService groupService) {
-        this.groupService = groupService;
-    }
+    private GroupService groupService;
 
     @Override
     protected void safeDoGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

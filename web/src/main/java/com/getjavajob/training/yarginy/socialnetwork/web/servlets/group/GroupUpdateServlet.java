@@ -19,12 +19,8 @@ import java.io.IOException;
 import static java.util.Objects.isNull;
 
 public class GroupUpdateServlet extends AbstractGetPostServlet {
-    private GroupService groupService;
-
     @Autowired
-    public void setGroupService(GroupService groupService) {
-        this.groupService = groupService;
-    }
+    private GroupService groupService;
 
     @Override
     protected void safeDoGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -38,6 +34,7 @@ public class GroupUpdateServlet extends AbstractGetPostServlet {
         if (isNull(req.getSession().getAttribute(Attributes.GROUP))) {
             req.getSession().setAttribute(Attributes.GROUP, group);
         }
+        updater.initGroupAttributes(group);
 
         req.getRequestDispatcher(Jsps.GROUP_UPDATE).forward(req, resp);
     }

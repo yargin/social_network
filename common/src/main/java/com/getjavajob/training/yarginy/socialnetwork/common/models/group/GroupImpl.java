@@ -2,18 +2,15 @@ package com.getjavajob.training.yarginy.socialnetwork.common.models.group;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.AbstractEntity;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper;
 
-import java.io.InputStream;
 import java.sql.Date;
-import java.util.Base64;
+import java.util.Arrays;
 import java.util.Objects;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper.*;
 import static java.util.Objects.isNull;
 
 public class GroupImpl extends AbstractEntity implements Group {
-    private static final int MAX_PHOTO_SIZE = 16000000;
     private String name;
     private String description;
     private Account owner;
@@ -75,20 +72,7 @@ public class GroupImpl extends AbstractEntity implements Group {
 
     @Override
     public void setPhoto(byte[] photo) {
-        this.photo = photo;
-    }
-
-    @Override
-    public void setPhoto(InputStream photo) {
-        this.photo = DataHandleHelper.readFile(photo, MAX_PHOTO_SIZE);
-    }
-
-    @Override
-    public String getHtmlPhoto() {
-        if (!isNull(photo)) {
-            return Base64.getEncoder().encodeToString(photo);
-        }
-        return "";
+        this.photo = Arrays.copyOf(photo, photo.length);
     }
 
     @Override

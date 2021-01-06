@@ -2,6 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 
 import javax.servlet.ServletException;
@@ -51,11 +52,11 @@ public class UpdateFieldsHelper {
         }
     }
 
-    protected void setPhotoFromParam(Consumer<InputStream> setter, String param) throws IOException, ServletException {
+    protected void setPhotoFromParam(Consumer<byte[]> setter, DataHandleHelper dataHandleHelper, String param) throws IOException, ServletException {
         Part imagePart = req.getPart(param);
         try (InputStream inputStream = imagePart.getInputStream()) {
             if (inputStream.available() > 0) {
-                setter.accept(inputStream);
+                setter.accept(dataHandleHelper.readAvatarPhoto(inputStream));
             }
         } catch (IOException e) {
             throw new IncorrectDataException(IncorrectData.UPLOADING_ERROR);

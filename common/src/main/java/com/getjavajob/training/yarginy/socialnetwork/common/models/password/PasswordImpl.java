@@ -4,9 +4,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 
 import java.util.Objects;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper.passwordMandatory;
-import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper.encrypt;
-
 public class PasswordImpl implements Password {
     private Account account;
     private String password;
@@ -28,11 +25,6 @@ public class PasswordImpl implements Password {
 
     @Override
     public void setPassword(String password) {
-        this.password = encrypt(passwordMandatory(password));
-    }
-
-    @Override
-    public void setEncryptedPassword(String password) {
         this.password = password;
     }
 

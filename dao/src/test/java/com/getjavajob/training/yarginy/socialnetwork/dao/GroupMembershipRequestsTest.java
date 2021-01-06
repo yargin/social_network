@@ -65,7 +65,7 @@ public class GroupMembershipRequestsTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testCreateRequestToNonExistingAccount() {
-        assertFalse(groupsMembersDaoFacade.createRequest(0, group.getId()));
+        groupsMembersDaoFacade.createRequest(0, group.getId());
     }
 
     @Test

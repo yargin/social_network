@@ -28,8 +28,8 @@
 
 <div class="info">
     <c:choose>
-        <c:when test="${not empty user.getHtmlPhoto()}">
-            <img src="data:image/jpeg;base64, ${user.getHtmlPhoto()}">
+        <c:when test="${not empty photo}">
+            <img src="data:image/jpeg;base64, ${photo}">
         </c:when>
         <c:otherwise>
             <img src="${context}/img/emptyAvatar.jpg">

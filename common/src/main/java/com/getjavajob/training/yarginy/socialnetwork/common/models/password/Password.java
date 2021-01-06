@@ -20,11 +20,4 @@ public interface Password extends Entity {
      * @param password to check, encrypt & assign
      */
     void setPassword(String password);
-
-    /**
-     * sets password that was already checked & hashed
-     *
-     * @param password to set
-     */
-    void setEncryptedPassword(String password);
 }
