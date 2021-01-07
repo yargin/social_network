@@ -13,7 +13,7 @@ import java.util.Base64;
 
 import static java.util.Objects.isNull;
 
-@Component
+@Component("dataHandler")
 public final class DataHandleHelper {
     private static final int MAX_PHOTO_SIZE = 16000000;
 
@@ -34,6 +34,10 @@ public final class DataHandleHelper {
     }
 
     public byte[] readAvatarPhoto(InputStream inputStream) {
+        return readFile(inputStream, MAX_PHOTO_SIZE);
+    }
+
+    public byte[] readMessageImage(InputStream inputStream) {
         return readFile(inputStream, MAX_PHOTO_SIZE);
     }
 

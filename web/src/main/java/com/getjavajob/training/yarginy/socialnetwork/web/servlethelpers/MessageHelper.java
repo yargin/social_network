@@ -4,6 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.MessageImpl;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,6 +16,7 @@ import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static com.getjavajob.training.yarginy.socialnetwork.common.utils.CommonApplicationContextProvider.getContext;
 import static java.util.Objects.isNull;
 
 @Component
@@ -60,7 +62,8 @@ public final class MessageHelper {
         Part part = req.getPart("image");
         if (part.getSize() > 1) {
             try (InputStream inputStream = part.getInputStream()) {
-                message.setImage(inputStream);
+                DataHandleHelper dataHandleHelper = getContext().getBean(DataHandleHelper.class);
+                message.setImage(dataHandleHelper.readMessageImage(inputStream));
             }
         }
         long senderId = (long) req.getAttribute(Attributes.REQUESTER_ID);

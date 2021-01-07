@@ -16,6 +16,8 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Types;
 
+import static java.util.Objects.isNull;
+
 @Repository("groupDao")
 public class GroupDao extends AbstractBatchDao<Group> {
     private static final String TABLE = "_groups";
@@ -131,7 +133,10 @@ public class GroupDao extends AbstractBatchDao<Group> {
             }
             group.setDescription(resultSet.getString(DESCRIPTION + groupSuffix));
             group.setCreationDate(resultSet.getDate(CREATION_DATE + groupSuffix));
-            group.setPhoto(resultSet.getBytes(PHOTO + groupSuffix));
+            byte[] photo = resultSet.getBytes(PHOTO + groupSuffix);
+            if (!isNull(photo)) {
+                group.setPhoto(photo);
+            }
             Account account = accountDao.getSuffixedViewRowMapper(accountSuffix).mapRow(resultSet, i);
             group.setOwner(account);
             return group;

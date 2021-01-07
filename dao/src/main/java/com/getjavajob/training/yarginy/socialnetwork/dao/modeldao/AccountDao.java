@@ -124,7 +124,10 @@ public class AccountDao extends AbstractDao<Account> {
             account.setSkype(resultSet.getString(SKYPE + suffix));
             account.setCity(resultSet.getString(CITY + suffix));
             account.setCountry(resultSet.getString(COUNTRY + suffix));
-            account.setPhoto(resultSet.getBytes(PHOTO + suffix));
+            byte[] photo = resultSet.getBytes(PHOTO + suffix);
+            if (!isNull(photo)) {
+                account.setPhoto(photo);
+            }
             return account;
         };
     }

@@ -7,6 +7,7 @@
 
 <c:forEach var="message" items="${messages}">
     <c:set var="author" value="${message.author}"/>
+    <jsp:useBean id="dataHandler" class="com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper"/>
     <div class="wallMessage"
             <c:choose>
                 <c:when test="${author.id == sessionScope.userId}">
@@ -35,7 +36,7 @@
         </div>
         <div>
             <p>${message.text}</p>
-            <c:set var="image" value="${message.getHtmlImage()}"/>
+            <c:set var="image" value="${dataHandler.getHtmlPhoto(message.getImage())}"/>
             <c:if test="${not empty image}">
                 <img src="data:image/jpeg;base64, ${image}">
             </c:if>

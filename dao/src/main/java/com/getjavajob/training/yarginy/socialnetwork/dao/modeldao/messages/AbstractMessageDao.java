@@ -15,6 +15,8 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
 import java.sql.Types;
 
+import static java.util.Objects.isNull;
+
 public abstract class AbstractMessageDao extends AbstractDao<Message> {
     private static final String ALIAS = "mes";
     private static final String AUTHOR_ALIAS = "acc";
@@ -88,7 +90,10 @@ public abstract class AbstractMessageDao extends AbstractDao<Message> {
             message.setText(resultSet.getString(MESSAGE + messageSuffix));
             message.setDate(resultSet.getTimestamp(POSTED + messageSuffix));
             message.setReceiverId(resultSet.getLong(RECEIVER_ID + messageSuffix));
-            message.setImage(resultSet.getBytes(IMAGE + messageSuffix));
+            byte[] image = resultSet.getBytes(IMAGE + messageSuffix);
+            if (!isNull(image)) {
+                message.setImage(image);
+            }
             return message;
         };
     }
@@ -125,5 +130,15 @@ public abstract class AbstractMessageDao extends AbstractDao<Message> {
     @Override
     public String[] getAltKeys() {
         return new String[]{AUTHOR, RECEIVER_ID, POSTED};
+    }
+
+    @Override
+    public boolean delete(Message message) {
+        return template.update(getDeleteQuery(), getObjectPrimaryKeys(message)) == 1;
+    }
+
+    @Override
+    protected String getDeleteQuery() {
+        return "DELETE FROM " + table + " as " + ALIAS + " where " + getStringPkAsParameters(ALIAS);
     }
 }

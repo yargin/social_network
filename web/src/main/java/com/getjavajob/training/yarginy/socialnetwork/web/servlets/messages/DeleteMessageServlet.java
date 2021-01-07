@@ -3,7 +3,6 @@ package com.getjavajob.training.yarginy.socialnetwork.web.servlets.messages;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.MessageHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.AbstractPostServlet;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,7 +14,6 @@ public class DeleteMessageServlet extends AbstractPostServlet {
     private MessageHelper messageHelper;
 
     @Autowired
-    @Qualifier("accountWallMessageService")
     public void setMessageHelper(MessageHelper messageHelper) {
         this.messageHelper = messageHelper;
     }
