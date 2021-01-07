@@ -1,9 +1,9 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.filters.messageaccess;
 
 import com.getjavajob.training.yarginy.socialnetwork.service.DialogService;
-import com.getjavajob.training.yarginy.socialnetwork.service.DialogServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
-import com.getjavajob.training.yarginy.socialnetwork.service.GroupServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -17,8 +17,23 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.R
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 
 public class MessageAccessFilter extends HttpFilter {
-    private final GroupService groupService = new GroupServiceImpl();
-    private final DialogService dialogService = new DialogServiceImpl();
+    private GroupService groupService;
+    private DialogService dialogService;
+
+    @Autowired
+    public void setGroupService(GroupService groupService) {
+        this.groupService = groupService;
+    }
+
+    @Autowired
+    public void setDialogService(DialogService dialogService) {
+        this.dialogService = dialogService;
+    }
+
+    @Override
+    public void init() {
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, getServletContext());
+    }
 
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException,

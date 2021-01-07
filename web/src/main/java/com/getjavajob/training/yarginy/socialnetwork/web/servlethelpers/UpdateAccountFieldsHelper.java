@@ -9,7 +9,8 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Pass
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
-import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper;
+import com.getjavajob.training.yarginy.socialnetwork.service.aaa.AccountInfoKeeper;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.additionaldata.PhoneExchanger;
 
 import javax.servlet.ServletException;
@@ -27,6 +28,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory.getNullPassword;
+import static com.getjavajob.training.yarginy.socialnetwork.common.utils.CommonApplicationContextProvider.getContext;
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 import static java.util.Objects.isNull;
@@ -36,8 +38,8 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
         super(req, resp, param, successUrl);
     }
 
-    public AccountInfoDTO getOrCreateAccountInfo(Supplier<AccountInfoDTO> accountInfoCreator) {
-        AccountInfoDTO accountInfo = (AccountInfoDTO) req.getAttribute(ACCOUNT_INFO);
+    public AccountInfoKeeper getOrCreateAccountInfo(Supplier<AccountInfoKeeper> accountInfoCreator) {
+        AccountInfoKeeper accountInfo = (AccountInfoKeeper) req.getAttribute(ACCOUNT_INFO);
         if (isNull(accountInfo)) {
             accountInfo = accountInfoCreator.get();
             req.setAttribute(ACCOUNT_INFO, accountInfoCreator.get());
@@ -45,7 +47,7 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
         return accountInfo;
     }
 
-    public void initAccountAttributes(AccountInfoDTO accountInfo) {
+    public void initAccountAttributes(AccountInfoKeeper accountInfo) {
         initSex();
 
         Account account = accountInfo.getAccount();
@@ -60,7 +62,8 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
         setAttribute("skype", account::getSkype);
         setAttribute("country", account::getCountry);
         setAttribute("city", account::getCity);
-        setAttribute("photo", account::getHtmlPhoto);
+        DataHandleHelper dataHandleHelper = getContext().getBean(DataHandleHelper.class);
+        setAttribute("photo", () -> dataHandleHelper.getHtmlPhoto(account.getPhoto()));
 
         Collection<Phone> phones = accountInfo.getPhones();
         HttpSession session = req.getSession();
@@ -92,7 +95,7 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
     }
 
     private Collection<Phone> getPhonesFromParams(String attribute, PhoneType type) {
-        AccountInfoDTO accountInfo = (AccountInfoDTO) req.getSession().getAttribute(ACCOUNT_INFO);
+        AccountInfoKeeper accountInfo = (AccountInfoKeeper) req.getSession().getAttribute(ACCOUNT_INFO);
         Account account = accountInfo.getAccount();
         Collection<PhoneExchanger> phoneExchangers = (Collection<PhoneExchanger>) req.getSession().getAttribute(attribute);
         Collection<Phone> phones = new ArrayList<>();
@@ -135,8 +138,8 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
         }
     }
 
-    public void getValuesFromParams(AccountInfoDTO accountInfoDTO) throws IOException, ServletException {
-        Account account = accountInfoDTO.getAccount();
+    public void getValuesFromParams(AccountInfoKeeper accountInfoKeeper) throws IOException, ServletException {
+        Account account = accountInfoKeeper.getAccount();
         setStringFromParam(account::setName, "name");
         setStringFromParam(account::setSurname, "surname");
         setStringFromParam(account::setPatronymic, "patronymic");
@@ -148,12 +151,13 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
         setStringFromParam(account::setSkype, "skype");
         setStringFromParam(account::setCountry, "country");
         setStringFromParam(account::setCity, "city");
-        setPhotoFromParam(account::setPhoto, "photo");
+        DataHandleHelper dataHandleHelper = getContext().getBean(DataHandleHelper.class);
+        setPhotoFromParam(account::setPhoto, dataHandleHelper, "photo");
 
         Collection<Phone> privatePhones = getPhonesFromParams(PRIVATE_PHONES, PhoneType.PRIVATE);
         Collection<Phone> workPhones = getPhonesFromParams(WORK_PHONES, PhoneType.WORK);
 
-        Collection<Phone> phones = accountInfoDTO.getPhones();
+        Collection<Phone> phones = accountInfoKeeper.getPhones();
         phones.clear();
         phones.addAll(privatePhones);
         phones.addAll(workPhones);

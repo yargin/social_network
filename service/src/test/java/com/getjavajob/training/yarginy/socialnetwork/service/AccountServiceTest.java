@@ -5,10 +5,15 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.*;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.Transaction;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,18 +21,18 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class AccountServiceTest {
-    private final AccountDao accountDao = mock(AccountDao.class);
-    private final FriendshipsDao friendsDao = mock(FriendshipsDao.class);
-    private final PhoneDao phoneDao = mock(PhoneDao.class);
-    private final DialogDao dialogDao = mock(DialogDao.class);
-    private final Transaction transaction = mock(Transaction.class);
-    private final TransactionManager transactionManager = mock(TransactionManager.class);
-    private final AccountService accountService = new AccountServiceImpl(accountDao, phoneDao, friendsDao, dialogDao,
-            transactionManager);
+    @Mock
+    private AccountDaoFacade accountDaoFacade;
+    @Mock
+    private FriendshipsDaoFacade friendsDao;
+    @Mock
+    private PhoneDaoFacade phoneDaoFacade;
+    @InjectMocks
+    private AccountServiceImpl accountService;
     private Account account;
     private Account storedAccount;
     private Collection<Phone> phones;
@@ -41,54 +46,49 @@ public class AccountServiceTest {
 
     @Test
     public void testGetAccount() {
-        when(transactionManager.getTransaction()).thenReturn(transaction);
-        when(accountDao.select(1)).thenReturn(account);
+        when(accountDaoFacade.select(1)).thenReturn(account);
         Account actualAccount = accountService.get(1);
         assertEquals(account, actualAccount);
-        when(accountDao.select(account)).thenReturn(account);
+        when(accountDaoFacade.select(account)).thenReturn(account);
         actualAccount = accountService.get(account);
         assertEquals(account, actualAccount);
-        when(accountDao.select(1)).thenReturn(account);
+        when(accountDaoFacade.select(1)).thenReturn(account);
         actualAccount = accountService.get(1);
         assertEquals(account, actualAccount);
     }
 
     @Test
     public void testCreateAccount() {
-        when(transactionManager.getTransaction()).thenReturn(transaction);
-        when(accountDao.create(account)).thenReturn(true);
-        when(phoneDao.create(phones)).thenReturn(true);
+        when(accountDaoFacade.create(account)).thenReturn(true);
+        when(phoneDaoFacade.create(phones)).thenReturn(true);
         assertTrue(accountService.createAccount(account, phones));
     }
 
     @Test(expected = IncorrectDataException.class)
     public void testCreateExistingAccount() {
-        when(transactionManager.getTransaction()).thenReturn(transaction);
-        when(accountDao.create(account)).thenReturn(false);
+        when(accountDaoFacade.create(account)).thenReturn(false);
         accountService.createAccount(account, phones);
     }
 
     @Test(expected = IncorrectDataException.class)
     public void testCreateExistingPhone() {
-        when(transactionManager.getTransaction()).thenReturn(transaction);
-        when(phoneDao.create(phones)).thenReturn(false);
+        when(phoneDaoFacade.create(phones)).thenReturn(false);
         accountService.createAccount(account, phones);
     }
 
     @Test
     public void testUpdateAccount() {
-        when(transactionManager.getTransaction()).thenReturn(transaction);
-        when(accountDao.update(account, storedAccount)).thenReturn(true);
+        when(accountDaoFacade.update(account, storedAccount)).thenReturn(true);
         assertTrue(accountService.updateAccount(account, storedAccount));
-        when(accountDao.update(account, storedAccount)).thenReturn(false);
+        when(accountDaoFacade.update(account, storedAccount)).thenReturn(false);
         assertFalse(accountService.updateAccount(account, storedAccount));
     }
 
     @Test
     public void testDeleteAccount() {
-        when(accountDao.delete(account)).thenReturn(true);
+        when(accountDaoFacade.delete(account)).thenReturn(true);
         assertTrue(accountService.deleteAccount(account));
-        when(accountDao.delete(account)).thenReturn(false);
+        when(accountDaoFacade.delete(account)).thenReturn(false);
         assertFalse(accountService.deleteAccount(account));
     }
 
@@ -117,16 +117,16 @@ public class AccountServiceTest {
     public void testAddPhone() {
         Phone phone = new PhoneImpl();
         phone.setNumber("111-111");
-        when(phoneDao.create(phone)).thenReturn(true);
-        assertTrue(phoneDao.create(phone));
+        when(phoneDaoFacade.create(phone)).thenReturn(true);
+        assertTrue(phoneDaoFacade.create(phone));
     }
 
     @Test
     public void testRemovePhone() {
         Phone phone = new PhoneImpl();
         phone.setNumber("111-111");
-        when(phoneDao.create(phone)).thenReturn(true);
-        assertTrue(phoneDao.create(phone));
+        when(phoneDaoFacade.create(phone)).thenReturn(true);
+        assertTrue(phoneDaoFacade.create(phone));
     }
 
     @Test
@@ -136,7 +136,7 @@ public class AccountServiceTest {
         Phone secondPhone = new PhoneImpl();
         secondPhone.setNumber("33111");
         Collection<Phone> phones = asList(firstPhone, secondPhone);
-        when(phoneDao.selectPhonesByOwner(account.getId())).thenReturn(phones);
+        when(phoneDaoFacade.selectPhonesByOwner(account.getId())).thenReturn(phones);
         Collection<Phone> actualPhones = accountService.getPhones(account.getId());
         assertEquals(phones, actualPhones);
     }

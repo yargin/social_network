@@ -4,14 +4,14 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountInfoService;
-import com.getjavajob.training.yarginy.socialnetwork.service.AccountInfoServiceImpl;
-import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
+import com.getjavajob.training.yarginy.socialnetwork.service.aaa.AccountInfoKeeper;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.UpdateAccountFieldsHelper;
+import com.getjavajob.training.yarginy.socialnetwork.web.servlets.AbstractGetPostServlet;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -21,22 +21,27 @@ import java.util.ArrayList;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 import static java.util.Objects.isNull;
 
-public class AccountUpdateServlet extends HttpServlet {
-    private final AccountInfoService accountInfoService = new AccountInfoServiceImpl();
+public class AccountUpdateServlet extends AbstractGetPostServlet {
+    private AccountInfoService accountInfoService;
+
+    @Autowired
+    public void setAccountInfoService(AccountInfoService accountInfoService) {
+        this.accountInfoService = accountInfoService;
+    }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void safeDoGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp, USER_ID, Pages.WALL);
         long requestedUserId = (long) req.getAttribute(REQUESTED_ID);
 
         //select at first visit
-        AccountInfoDTO accountInfoDTO = updater.getOrCreateAccountInfo(() -> accountInfoService.select(requestedUserId));
+        AccountInfoKeeper accountInfoKeeper = updater.getOrCreateAccountInfo(() -> accountInfoService.select(requestedUserId));
         //save original to session if wasn't
         if (isNull(req.getSession().getAttribute(ACCOUNT_INFO))) {
-            req.getSession().setAttribute(ACCOUNT_INFO, accountInfoDTO);
+            req.getSession().setAttribute(ACCOUNT_INFO, accountInfoKeeper);
         }
 
-        updater.initAccountAttributes(accountInfoDTO);
+        updater.initAccountAttributes(accountInfoKeeper);
 
         req.setAttribute(TARGET, Pages.UPDATE_ACCOUNT);
 
@@ -44,7 +49,7 @@ public class AccountUpdateServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void safeDoPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp, REQUESTED_ID, Pages.WALL);
 
         if ("cancel".equals(req.getParameter("save"))) {
@@ -53,15 +58,15 @@ public class AccountUpdateServlet extends HttpServlet {
         }
 
         HttpSession session = req.getSession();
-        AccountInfoDTO accountInfoDTO = new AccountInfoDTO(new AccountImpl(), new ArrayList<>());
-        AccountInfoDTO storedAccountInfoDTO = (AccountInfoDTO) session.getAttribute(ACCOUNT_INFO);
+        AccountInfoKeeper accountInfoKeeper = new AccountInfoKeeper(new AccountImpl(), new ArrayList<>());
+        AccountInfoKeeper storedAccountInfoKeeper = (AccountInfoKeeper) session.getAttribute(ACCOUNT_INFO);
         //set non updatable values
-        Account account = accountInfoDTO.getAccount();
-        Account storedAccount = storedAccountInfoDTO.getAccount();
+        Account account = accountInfoKeeper.getAccount();
+        Account storedAccount = storedAccountInfoKeeper.getAccount();
         account.setEmail(storedAccount.getEmail());
         account.setRegistrationDate(storedAccount.getRegistrationDate());
 
-        updater.getValuesFromParams(accountInfoDTO);
+        updater.getValuesFromParams(accountInfoKeeper);
 
         if (isNull(session.getAttribute(PHOTO))) {
             session.setAttribute(PHOTO, storedAccount.getPhoto());
@@ -72,24 +77,24 @@ public class AccountUpdateServlet extends HttpServlet {
             session.setAttribute(PHOTO, account.getPhoto());
         }
 
-        req.setAttribute(ACCOUNT_INFO, accountInfoDTO);
+        req.setAttribute(ACCOUNT_INFO, accountInfoKeeper);
         boolean accepted = updater.isParamsAccepted();
         if (!accepted) {
-            doGet(req, resp);
+            safeDoGet(req, resp);
         } else {
-            update(updater, accountInfoDTO, storedAccountInfoDTO);
+            update(updater, accountInfoKeeper, storedAccountInfoKeeper);
         }
     }
 
-    private void update(UpdateAccountFieldsHelper updater, AccountInfoDTO accountInfoDTO,
-                        AccountInfoDTO storedAccountInfoDTO) throws ServletException, IOException {
+    private void update(UpdateAccountFieldsHelper updater, AccountInfoKeeper accountInfoKeeper,
+                        AccountInfoKeeper storedAccountInfoKeeper) throws ServletException, IOException {
         boolean updated;
         try {
-            updated = accountInfoService.update(accountInfoDTO, storedAccountInfoDTO);
+            updated = accountInfoService.update(accountInfoKeeper, storedAccountInfoKeeper);
         } catch (IncorrectDataException e) {
-            updater.handleInfoExceptions(e, this::doGet);
+            updater.handleInfoExceptions(e, this::safeDoGet);
             return;
         }
-        updater.acceptActionOrRetry(updated, this::doGet);
+        updater.acceptActionOrRetry(updated, this::safeDoGet);
     }
 }

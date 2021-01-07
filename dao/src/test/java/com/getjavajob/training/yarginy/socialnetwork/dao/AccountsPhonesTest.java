@@ -4,13 +4,15 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,34 +20,34 @@ import java.util.Collection;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoOverrideSpringConfig.xml"})
 public class AccountsPhonesTest {
-    static {
-        TestDataSourceInitializer.initDataSource();
-    }
-
-    private static final AccountDao ACCOUNT_DAO = new AccountDaoImpl();
-    private static final PhoneDao PHONE_DAO = new PhoneDaoImpl();
+    @Autowired
+    private AccountDaoFacade accountDaoFacade;
+    @Autowired
+    private PhoneDaoFacade phoneDaoFacade;
     private final Collection<Phone> phones = new ArrayList<>();
     private Account account = new AccountImpl("test", "testtest", "test@test.test");
 
     @Before
     public void initTestValues() {
-        ACCOUNT_DAO.create(account);
-        account = ACCOUNT_DAO.select(account);
+        accountDaoFacade.create(account);
+        account = accountDaoFacade.select(account);
         phones.add(new PhoneImpl("11111111111111111111111", account));
         phones.add(new PhoneImpl("22222222222222222222222", account));
     }
 
     @After
     public void deleteTestValues() {
-        ACCOUNT_DAO.delete(account);
-        PHONE_DAO.delete(phones);
+        accountDaoFacade.delete(account);
+        phoneDaoFacade.delete(phones);
     }
 
     @Test
     public void testSelectPhones() {
-        assertTrue(PHONE_DAO.create(phones));
-        Collection<Phone> actualPhones = PHONE_DAO.selectPhonesByOwner(account.getId());
+        assertTrue(phoneDaoFacade.create(phones));
+        Collection<Phone> actualPhones = phoneDaoFacade.selectPhonesByOwner(account.getId());
         assertEquals(phones, actualPhones);
     }
 }

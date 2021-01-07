@@ -1,99 +1,94 @@
 package com.getjavajob.training.yarginy.socialnetwork.service;
 
+import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.DataFlowViolationException;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.*;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.Transaction;
-import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.service.aaa.AccountInfoKeeper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Collection;
 
+@Service
 public class AccountServiceImpl implements AccountService {
-    private final TransactionManager transactionManager;
-    private final AccountDao accountDao;
-    private final PhoneDao phoneDao;
-    private final FriendshipsDao friendshipDao;
-    private final DialogDao dialogsDao;
+    private final AccountDaoFacade accountDaoFacade;
+    private final PhoneDaoFacade phoneDaoFacade;
+    private final FriendshipsDaoFacade friendshipDao;
+    private final DialogDaoFacade dialogsDao;
 
-    public AccountServiceImpl() {
-        this(new AccountDaoImpl(), new PhoneDaoImpl(), new FriendshipsDaoImpl(), new DialogDaoImpl(),
-                new TransactionManagerImpl());
-    }
-
-    public AccountServiceImpl(AccountDao accountDao, PhoneDao phoneDao, FriendshipsDao friendshipDao, DialogDao
-            dialogDao, TransactionManager transactionManager) {
-        this.accountDao = accountDao;
-        this.phoneDao = phoneDao;
+    @Autowired
+    public AccountServiceImpl(AccountDaoFacade accountDaoFacade, PhoneDaoFacade phoneDaoFacade, FriendshipsDaoFacade friendshipDao,
+                              DialogDaoFacade dialogDaoFacade) {
+        this.accountDaoFacade = accountDaoFacade;
+        this.phoneDaoFacade = phoneDaoFacade;
         this.friendshipDao = friendshipDao;
-        this.dialogsDao = dialogDao;
-        this.transactionManager = transactionManager;
+        this.dialogsDao = dialogDaoFacade;
     }
 
     @Override
-    public AccountInfoDTO getAccountInfo(long id) {
-        Account account = accountDao.select(id);
-        Collection<Phone> phones = phoneDao.selectPhonesByOwner(id);
-        return new AccountInfoDTO(account, phones);
+    public AccountInfoKeeper getAccountInfo(long id) {
+        Account account = accountDaoFacade.select(id);
+        Collection<Phone> phones = phoneDaoFacade.selectPhonesByOwner(id);
+        return new AccountInfoKeeper(account, phones);
     }
 
     @Override
     public Account get(long id) {
-        return accountDao.select(id);
+        return accountDaoFacade.select(id);
     }
 
     @Override
     public Account get(Account account) {
-        return accountDao.select(account);
+        return accountDaoFacade.select(account);
     }
 
     @Override
     public boolean createAccount(Account account, Collection<Phone> phones) {
-        try (Transaction transaction = transactionManager.getTransaction()) {
-            account.setRegistrationDate(Date.valueOf(LocalDate.now()));
-            if (!accountDao.create(account)) {
-                throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
-            }
-            if (!phoneDao.create(phones)) {
-                throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
-            }
-            transaction.commit();
-        } catch (IncorrectDataException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
+        account.setRegistrationDate(Date.valueOf(LocalDate.now()));
+        if (!accountDaoFacade.create(account)) {
+            throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
+        }
+        if (!phoneDaoFacade.create(phones)) {
+            throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
         }
         return true;
     }
 
     @Override
     public boolean updateAccount(Account account, Account storedAccount) {
-        return accountDao.update(account, storedAccount);
+        return accountDaoFacade.update(account, storedAccount);
     }
 
     @Override
     public boolean deleteAccount(Account account) {
-        return accountDao.delete(account);
+        return accountDaoFacade.delete(account);
     }
 
     @Override
     public boolean addFriend(long firstId, long secondId) {
-        try (Transaction transaction = transactionManager.getTransaction()) {
-            if (!friendshipDao.deleteRequest(firstId, secondId)) {
-                throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
-            }
-            if (!friendshipDao.createFriendship(firstId, secondId)) {
-                transaction.rollback();
-                throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
-            }
-            transaction.commit();
-            return true;
-        } catch (Exception e) {
+        try {
+            addFriendTransactional(firstId, secondId);
+        } catch (DataFlowViolationException e) {
             return false;
+        }
+        return true;
+    }
+
+    public void addFriendTransactional(long firstId, long secondId) {
+        if (!friendshipDao.deleteRequest(firstId, secondId)) {
+            throw new DataFlowViolationException();
+        }
+        if (!friendshipDao.createFriendship(firstId, secondId)) {
+            throw new DataFlowViolationException();
         }
     }
 
@@ -126,7 +121,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Collection<Phone> getPhones(long accountId) {
-        return phoneDao.selectPhonesByOwner(accountId);
+        return phoneDaoFacade.selectPhonesByOwner(accountId);
     }
 
     @Override

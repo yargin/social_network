@@ -2,13 +2,13 @@ package com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.v
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
-import com.getjavajob.training.yarginy.socialnetwork.service.AccountServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.AccountInfoHelper;
+import com.getjavajob.training.yarginy.socialnetwork.web.servlets.AbstractGetServlet;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -17,12 +17,22 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.R
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.TAB;
 import static java.util.Objects.isNull;
 
-public class FriendshipRequestCreationServlet extends HttpServlet {
-    private final AccountService accountService = new AccountServiceImpl();
-    private final AccountInfoHelper infoHelper = new AccountInfoHelper();
+public class FriendshipRequestCreationServlet extends AbstractGetServlet {
+    private AccountService accountService;
+    private AccountInfoHelper infoHelper;
+
+    @Autowired
+    public void setAccountService(AccountService accountService) {
+        this.accountService = accountService;
+    }
+
+    @Autowired
+    public void setInfoHelper(AccountInfoHelper infoHelper) {
+        this.infoHelper = infoHelper;
+    }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void safeDoGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (!isNull(req.getAttribute("requester")) || !isNull(req.getAttribute("friend"))) {
             redirectToReferer(req, resp);
             return;

@@ -3,18 +3,27 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
-import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
+@Component("groupWallMessageDaoFacade")
+public class GroupWallMessageDaoImpl implements GroupWallMessageDaoFacade {
+    private Dao<Message> groupWallMessageDao;
+    private OneToManyDao<Message> groupWallMessagesDao;
 
-public class GroupWallMessageDaoImpl implements GroupWallMessageDao {
-    private final Dao<Message> groupWallMessageDao = getDbFactory().getGroupWallMessageDao();
-    private final OneToManyDao<Message> groupWallMessagesOneToManyDao = getDbFactory().getGroupWallMessagesDao();
+    @Autowired
+    public void setGroupWallMessageDao(@Qualifier("groupWallMessageDao") Dao<Message> groupWallMessageDao,
+                                       @Qualifier("groupWallMessagesDao") OneToManyDao<Message> groupWallMessagesDao) {
+        this.groupWallMessageDao = groupWallMessageDao;
+        this.groupWallMessagesDao = groupWallMessagesDao;
+    }
 
     @Override
-    public Message select(long id) {
-        return groupWallMessageDao.select(id);
+    public Message select(long messageId) {
+        return groupWallMessageDao.select(messageId);
     }
 
     @Override
@@ -49,6 +58,6 @@ public class GroupWallMessageDaoImpl implements GroupWallMessageDao {
 
     @Override
     public Collection<Message> getMessages(long groupId) {
-        return groupWallMessagesOneToManyDao.selectMany(groupId);
+        return groupWallMessagesDao.selectMany(groupId);
     }
 }

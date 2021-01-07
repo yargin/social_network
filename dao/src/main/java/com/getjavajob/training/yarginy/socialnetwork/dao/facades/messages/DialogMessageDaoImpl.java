@@ -3,18 +3,27 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
-import static com.getjavajob.training.yarginy.socialnetwork.dao.factories.AbstractDbFactory.getDbFactory;
+@Component("dialogMessageDaoFacade")
+public class DialogMessageDaoImpl implements DialogMessageDaoFacade {
+    private Dao<Message> dialogMessageDao;
+    private OneToManyDao<Message> dialogsMessagesDao;
 
-public class DialogMessageDaoImpl implements DialogMessageDao {
-    private final Dao<Message> dialogMessageDao = getDbFactory().getDialogMessageDao();
-    private final OneToManyDao<Message> dialogsMessagesDao = getDbFactory().getDialogsMessagesDao();
+    @Autowired
+    public void setDialogMessageDao(@Qualifier("dialogMessageDao") Dao<Message> dialogMessageDao,
+                                    @Qualifier("dialogMessagesDao") OneToManyDao<Message> dialogsMessagesDao) {
+        this.dialogMessageDao = dialogMessageDao;
+        this.dialogsMessagesDao = dialogsMessagesDao;
+    }
 
     @Override
-    public Message select(long id) {
-        return dialogMessageDao.select(id);
+    public Message select(long messageId) {
+        return dialogMessageDao.select(messageId);
     }
 
     @Override

@@ -4,24 +4,33 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.*;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DataSetsDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsModeratorsDaoFacade;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Map;
 
 import static org.junit.Assert.*;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoOverrideSpringConfig.xml"})
 public class GroupMembersModeratorsTest {
-    static {
-        TestDataSourceInitializer.initDataSource();
-    }
-
-    private final DataSetsDao dataSetsDao = new DataSetsDaoImpl();
-    private final AccountDao accountDao = new AccountDaoImpl();
-    private final GroupDao groupDao = new GroupDaoImpl();
-    private final GroupsModeratorsDao moderatorsDao = new GroupsModeratorsDaoImpl();
+    @Autowired
+    private DataSetsDaoFacade dataSetsDaoFacade;
+    @Autowired
+    private GroupDaoFacade groupDaoFacade;
+    @Autowired
+    private GroupsModeratorsDaoFacade moderatorsDao;
+    @Autowired
+    private AccountDaoFacade accountDaoFacade;
     private Account account1 = new AccountImpl("test1", "test1", "test1@test.test");
     private Account account2 = new AccountImpl("test2", "test2", "test2@test.test");
     private Account account3 = new AccountImpl("test3", "test3", "test3@test.test");
@@ -30,36 +39,38 @@ public class GroupMembersModeratorsTest {
 
     @Before
     public void testValuesInit() {
-        accountDao.create(account1);
-        account1 = accountDao.select(account1);
-        accountDao.create(account2);
-        account2 = accountDao.select(account2);
-        accountDao.create(account3);
-        account3 = accountDao.select(account3);
-        accountDao.create(account4);
-        account4 = accountDao.select(account4);
-        groupDao.create(group);
-        group = groupDao.select(group);
-        groupDao.addMember(account1.getId(), group.getId());
-        groupDao.addMember(account2.getId(), group.getId());
-        groupDao.addMember(account3.getId(), group.getId());
-        groupDao.addMember(account4.getId(), group.getId());
+        groupDaoFacade.delete(group);
+        accountDaoFacade.create(account1);
+        account1 = accountDaoFacade.select(account1);
+        accountDaoFacade.create(account2);
+        account2 = accountDaoFacade.select(account2);
+        accountDaoFacade.create(account3);
+        account3 = accountDaoFacade.select(account3);
+        accountDaoFacade.create(account4);
+        account4 = accountDaoFacade.select(account4);
+        group.setOwner(account1);
+        groupDaoFacade.create(group);
+        group = groupDaoFacade.select(group);
+        groupDaoFacade.addMember(account1.getId(), group.getId());
+        groupDaoFacade.addMember(account2.getId(), group.getId());
+        groupDaoFacade.addMember(account3.getId(), group.getId());
+        groupDaoFacade.addMember(account4.getId(), group.getId());
         moderatorsDao.addGroupModerator(account1.getId(), group.getId());
         moderatorsDao.addGroupModerator(account2.getId(), group.getId());
     }
 
     @After
     public void deleteTestValues() {
-        accountDao.delete(account1);
-        accountDao.delete(account2);
-        accountDao.delete(account3);
-        accountDao.delete(account4);
-        groupDao.delete(group);
+        accountDaoFacade.delete(account1);
+        accountDaoFacade.delete(account2);
+        accountDaoFacade.delete(account3);
+        accountDaoFacade.delete(account4);
+        groupDaoFacade.delete(group);
     }
 
     @Test
     public void testGetMembersModerators() {
-        Map<Account, Boolean> membersModerators = dataSetsDao.getGroupMembersAreModerators(group.getId());
+        Map<Account, Boolean> membersModerators = dataSetsDaoFacade.getGroupMembersAreModerators(group.getId());
         assertTrue(membersModerators.get(account1));
         assertTrue(membersModerators.get(account2));
         assertFalse(membersModerators.get(account3));

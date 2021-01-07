@@ -7,61 +7,54 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.PasswordImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.*;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.Transaction;
-import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoDTO;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PasswordDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.service.aaa.AccountInfoKeeper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory.getNullPassword;
-import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper.encrypt;
+import static com.getjavajob.training.yarginy.socialnetwork.common.utils.CommonApplicationContextProvider.getContext;
 
+@Service("authService")
 public class AuthServiceImpl implements AuthService {
-    private final TransactionManager transactionManager;
-    private final AccountDao accountDao;
-    private final PasswordDao passwordDao;
-    private final PhoneDao phoneDao;
+    private final AccountDaoFacade accountDaoFacade;
+    private final PasswordDaoFacade passwordDaoFacade;
+    private final PhoneDaoFacade phoneDaoFacade;
 
-    public AuthServiceImpl() {
-        this(new TransactionManagerImpl(), new AccountDaoImpl(), new PasswordDaoImpl(), new PhoneDaoImpl());
-    }
-
-    public AuthServiceImpl(TransactionManager transactionManager, AccountDao accountDao, PasswordDao passwordDao,
-                           PhoneDao phoneDao) {
-        this.transactionManager = transactionManager;
-        this.accountDao = accountDao;
-        this.passwordDao = passwordDao;
-        this.phoneDao = phoneDao;
+    @Autowired
+    public AuthServiceImpl(AccountDaoFacade accountDaoFacade, PasswordDaoFacade passwordDaoFacade, PhoneDaoFacade phoneDaoFacade) {
+        this.accountDaoFacade = accountDaoFacade;
+        this.passwordDaoFacade = passwordDaoFacade;
+        this.phoneDaoFacade = phoneDaoFacade;
     }
 
     @Override
-    public boolean register(AccountInfoDTO accountInfoDTO, Password password) {
-        return register(accountInfoDTO.getAccount(), accountInfoDTO.getPhones(), password);
+    public boolean register(AccountInfoKeeper accountInfoKeeper, Password password) {
+        return register(accountInfoKeeper.getAccount(), accountInfoKeeper.getPhones(), password);
     }
 
     @Override
     public boolean register(Account account, Collection<Phone> phones, Password password) {
-        try (Transaction transaction = transactionManager.getTransaction()) {
-            account.setRegistrationDate(Date.valueOf(LocalDate.now()));
-            if (!accountDao.create(account)) {
-                transaction.rollback();
-                throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
-            }
-            if (!phoneDao.create(phones)) {
-                transaction.rollback();
-                throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
-            }
-            if (!passwordDao.create(password)) {
-                transaction.rollback();
-                throw new IllegalStateException();
-            }
-            transaction.commit();
-        } catch (IncorrectDataException e) {
-            throw e;
-        } catch (Exception e) {
-            e.printStackTrace();
+        account.setRegistrationDate(Date.valueOf(LocalDate.now()));
+        if (!accountDaoFacade.create(account)) {
+            throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
+        }
+        Account savedAccount = accountDaoFacade.select(account);
+        for (Phone phone : phones) {
+            phone.setOwner(savedAccount);
+        }
+        if (!phoneDaoFacade.create(phones)) {
+            throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
+        }
+        if (!passwordDaoFacade.create(password)) {
+            throw new IllegalStateException();
         }
         return true;
     }
@@ -73,13 +66,14 @@ public class AuthServiceImpl implements AuthService {
         account.setEmail(email);
         passwordObject.setAccount(account);
         passwordObject.setPassword(password);
-        passwordObject = passwordDao.select(passwordObject);
+        passwordObject = passwordDaoFacade.select(passwordObject);
         if (passwordObject.equals(getNullPassword())) {
             throw new IncorrectDataException(IncorrectData.WRONG_EMAIL);
         }
-        if (!passwordObject.getPassword().equals(encrypt(password))) {
+        DataHandleHelper dataHandleHelper = getContext().getBean(DataHandleHelper.class);
+        if (!passwordObject.getPassword().equals(dataHandleHelper.encrypt(password))) {
             throw new IncorrectDataException(IncorrectData.WRONG_PASSWORD);
         }
-        return passwordObject.getAccount();
+        return accountDaoFacade.select(account);
     }
 }

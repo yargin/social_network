@@ -19,16 +19,13 @@
             <label><fmt:message key="form.description" bundle="${label}"/> : </label>
             <textarea name="description">${group.getDescription()}</textarea>
             <br>
-            <c:if test="${not empty group.getHtmlPhoto()}">
-                <img src="data:image/jpeg;base64, ${group.getHtmlPhoto()}">
+            <c:if test="${not empty photo}">
+                <img src="data:image/jpeg;base64, ${photo}">
                 <br>
                 <fmt:message key="form.chooseAnother" bundle="${label}"/>
                 <br>
             </c:if>
             <input type="file" name="photo" accept="image/*"
-                <%--            <c:if test="${not empty group.getHtmlPhoto()}">--%>
-                <%--                   value="${group.getHtmlPhoto()}"--%>
-                <%--            </c:if>--%>
                    title="<fmt:message key="form.uploadImage" bundle="${label}"/>">
             <br>
             <button type="submit" name="save" value="save"><fmt:message key="button.save" bundle="${label}"/></button>

@@ -6,13 +6,13 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.DialogImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.service.DialogService;
-import com.getjavajob.training.yarginy.socialnetwork.service.DialogServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.MessageHelper;
+import com.getjavajob.training.yarginy.socialnetwork.web.servlets.AbstractPostServlet;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -23,11 +23,22 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTER_ID;
 import static java.util.Objects.isNull;
 
-public class CreateDialogServlet extends HttpServlet {
-    private final DialogService dialogService = new DialogServiceImpl();
+public class CreateDialogServlet extends AbstractPostServlet {
+    private DialogService dialogService;
+    private MessageHelper messageHelper;
+
+    @Autowired
+    public void setDialogService(DialogService dialogService) {
+        this.dialogService = dialogService;
+    }
+
+    @Autowired
+    public void setMessageHelper(MessageHelper messageHelper) {
+        this.messageHelper = messageHelper;
+    }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void safeDoPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         long authorId = (long) req.getAttribute(REQUESTER_ID);
         long receiverId = (long) req.getAttribute(Attributes.RECEIVER_ID);
         Dialog dialog = new DialogImpl();
@@ -37,7 +48,7 @@ public class CreateDialogServlet extends HttpServlet {
         receiver.setId(receiverId);
         dialog.setFirstAccount(author);
         dialog.setSecondAccount(receiver);
-        Message message = MessageHelper.getMessageFromRequest(req);
+        Message message = messageHelper.getMessageFromRequest(req);
         String text = message.getText();
         if ((isNull(text) || text.trim().isEmpty()) && isNull(message.getImage())) {
             redirectToReferer(req, resp);

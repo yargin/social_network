@@ -1,5 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany;
 
+
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
 
 import java.io.Serializable;

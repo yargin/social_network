@@ -3,7 +3,6 @@ package com.getjavajob.training.yarginy.socialnetwork.common.models.message;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 
-import java.io.InputStream;
 import java.sql.Timestamp;
 
 public interface Message extends Entity {
@@ -18,10 +17,6 @@ public interface Message extends Entity {
     byte[] getImage();
 
     void setImage(byte[] image);
-
-    void setImage(InputStream photo);
-
-    String getHtmlImage();
 
     Timestamp getDate();
 

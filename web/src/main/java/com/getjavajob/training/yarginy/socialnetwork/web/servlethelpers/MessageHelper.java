@@ -4,11 +4,11 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.MessageImpl;
-import com.getjavajob.training.yarginy.socialnetwork.service.messages.AccountWallMessageServiceImpl;
-import com.getjavajob.training.yarginy.socialnetwork.service.messages.DialogMessageServiceImpl;
-import com.getjavajob.training.yarginy.socialnetwork.service.messages.GroupWallMessageServiceImpl;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -16,17 +16,24 @@ import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static com.getjavajob.training.yarginy.socialnetwork.common.utils.CommonApplicationContextProvider.getContext;
 import static java.util.Objects.isNull;
 
+@Component
 public final class MessageHelper {
-    private static final MessageService ACCOUNT_WALL_MESSAGE_SERVICE = new AccountWallMessageServiceImpl();
-    private static final MessageService GROUP_WALL_MESSAGE_SERVICE = new GroupWallMessageServiceImpl();
-    private static final MessageService ACCOUNT_PRIVATE_MESSAGE_SERVICE = new DialogMessageServiceImpl();
+    private final MessageService accountWallMessageService;
+    private final MessageService groupWallMessageService;
+    private final MessageService accountPrivateMessageService;
 
-    private MessageHelper() {
+    public MessageHelper(@Qualifier("accountWallMessageService") MessageService accountWallMessageService,
+                         @Qualifier("groupWallMessageService") MessageService groupWallMessageService,
+                         @Qualifier("dialogMessageService") MessageService accountPrivateMessageService) {
+        this.accountWallMessageService = accountWallMessageService;
+        this.groupWallMessageService = groupWallMessageService;
+        this.accountPrivateMessageService = accountPrivateMessageService;
     }
 
-    public static boolean addMessage(HttpServletRequest req) throws IOException, ServletException {
+    public boolean addMessage(HttpServletRequest req) throws IOException, ServletException {
         Message message = getMessageFromRequest(req);
 
         String text = message.getText();
@@ -39,23 +46,24 @@ public final class MessageHelper {
 
         String type = req.getParameter("type");
         if ("accountWall".equals(type)) {
-            return ACCOUNT_WALL_MESSAGE_SERVICE.addMessage(message);
+            return accountWallMessageService.addMessage(message);
         } else if ("accountPrivate".equals(type)) {
-            return ACCOUNT_PRIVATE_MESSAGE_SERVICE.addMessage(message);
+            return accountPrivateMessageService.addMessage(message);
         } else if ("groupWall".equals(type)) {
-            return GROUP_WALL_MESSAGE_SERVICE.addMessage(message);
+            return groupWallMessageService.addMessage(message);
         }
         throw new IllegalArgumentException("message type not specified");
     }
 
-    public static Message getMessageFromRequest(HttpServletRequest req) throws IOException, ServletException {
+    public Message getMessageFromRequest(HttpServletRequest req) throws IOException, ServletException {
         Message message = new MessageImpl();
         String text = req.getParameter("text");
         message.setText(text);
         Part part = req.getPart("image");
         if (part.getSize() > 1) {
             try (InputStream inputStream = part.getInputStream()) {
-                message.setImage(inputStream);
+                DataHandleHelper dataHandleHelper = getContext().getBean(DataHandleHelper.class);
+                message.setImage(dataHandleHelper.readMessageImage(inputStream));
             }
         }
         long senderId = (long) req.getAttribute(Attributes.REQUESTER_ID);
@@ -65,17 +73,17 @@ public final class MessageHelper {
         return message;
     }
 
-    public static void deleteMessage(HttpServletRequest req) {
+    public void deleteMessage(HttpServletRequest req) {
         Message message = new MessageImpl();
         long messageId = (long) req.getAttribute(Attributes.REQUESTED_ID);
         message.setId(messageId);
         String type = req.getParameter("type");
         if ("accountWall".equals(type)) {
-            ACCOUNT_WALL_MESSAGE_SERVICE.deleteMessage(message);
+            accountWallMessageService.deleteMessage(message);
         } else if ("accountPrivate".equals(type)) {
-            ACCOUNT_PRIVATE_MESSAGE_SERVICE.deleteMessage(message);
+            accountPrivateMessageService.deleteMessage(message);
         } else if ("groupWall".equals(type)) {
-            GROUP_WALL_MESSAGE_SERVICE.deleteMessage(message);
+            groupWallMessageService.deleteMessage(message);
         }
     }
 }

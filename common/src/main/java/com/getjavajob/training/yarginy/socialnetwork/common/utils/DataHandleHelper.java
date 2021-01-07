@@ -2,18 +2,22 @@ package com.getjavajob.training.yarginy.socialnetwork.common.utils;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
+import static java.util.Objects.isNull;
+
+@Component("dataHandler")
 public final class DataHandleHelper {
-    private DataHandleHelper() {
-    }
+    private static final int MAX_PHOTO_SIZE = 16000000;
 
-    public static String encrypt(String stringToEncrypt) {
+    public String encrypt(String stringToEncrypt) {
         MessageDigest md = null;
         try {
             md = MessageDigest.getInstance("SHA-256");
@@ -29,7 +33,15 @@ public final class DataHandleHelper {
         return stringBuilder.toString();
     }
 
-    public static byte[] readFile(InputStream inputStream, int maxSize) {
+    public byte[] readAvatarPhoto(InputStream inputStream) {
+        return readFile(inputStream, MAX_PHOTO_SIZE);
+    }
+
+    public byte[] readMessageImage(InputStream inputStream) {
+        return readFile(inputStream, MAX_PHOTO_SIZE);
+    }
+
+    public byte[] readFile(InputStream inputStream, int maxSize) {
         try {
             int size = inputStream.available();
             if (size > maxSize) {
@@ -41,5 +53,12 @@ public final class DataHandleHelper {
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
+    }
+
+    public String getHtmlPhoto(byte[] bytes) {
+        if (!isNull(bytes)) {
+            return Base64.getEncoder().encodeToString(bytes);
+        }
+        return "";
     }
 }

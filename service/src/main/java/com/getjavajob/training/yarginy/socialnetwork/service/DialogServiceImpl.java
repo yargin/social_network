@@ -5,52 +5,50 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.DialogImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogDaoImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.TransactionManager;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.TransactionManagerImpl;
-import com.getjavajob.training.yarginy.socialnetwork.dao.factories.connectionpool.Transaction;
-import com.getjavajob.training.yarginy.socialnetwork.service.messages.DialogMessageServiceImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
+@Service
 public class DialogServiceImpl implements DialogService {
-    private final TransactionManager transactionManager = new TransactionManagerImpl();
-    private final DialogDao dialogDao = new DialogDaoImpl();
-    private final MessageService messageService = new DialogMessageServiceImpl();
+    private final DialogDaoFacade dialogDaoFacade;
+    private final MessageService messageService;
+
+    @Autowired
+    public DialogServiceImpl(DialogDaoFacade dialogDaoFacade, @Qualifier("dialogMessageService") MessageService
+            messageService) {
+        this.dialogDaoFacade = dialogDaoFacade;
+        this.messageService = messageService;
+    }
 
     @Override
     public Dialog get(long dialogId) {
-        return dialogDao.select(dialogId);
+        return dialogDaoFacade.select(dialogId);
     }
 
     @Override
     public Dialog get(Dialog dialog) {
-        return dialogDao.select(dialog);
+        return dialogDaoFacade.select(dialog);
     }
 
     @Override
     public boolean create(Dialog dialog, Message message) {
-        try (Transaction transaction = transactionManager.getTransaction()) {
-            if (!dialogDao.create(dialog)) {
-                transaction.rollback();
-                throw new IllegalStateException();
-            }
-            Dialog createdDialog = dialogDao.select(dialog);
-            message.setReceiverId(createdDialog.getId());
-            if (!messageService.addMessage(message)) {
-                transaction.rollback();
-                throw new IllegalStateException();
-            }
-            transaction.commit();
-            return true;
-        } catch (Exception e) {
-            return false;
+        if (!dialogDaoFacade.create(dialog)) {
+            throw new IllegalStateException();
         }
+        Dialog createdDialog = dialogDaoFacade.select(dialog);
+        message.setReceiverId(createdDialog.getId());
+        if (!messageService.addMessage(message)) {
+            throw new IllegalStateException();
+        }
+        return true;
     }
 
     @Override
     public boolean delete(Dialog dialog) {
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -62,16 +60,16 @@ public class DialogServiceImpl implements DialogService {
         Account secondAccount = new AccountImpl();
         secondAccount.setId(secondAccountId);
         dialog.setSecondAccount(secondAccount);
-        return dialogDao.select(dialog);
+        return dialogDaoFacade.select(dialog);
     }
 
     @Override
     public boolean isTalker(long accountId, long dialogId) {
-        return dialogDao.isTalker(accountId, dialogId);
+        return dialogDaoFacade.isTalker(accountId, dialogId);
     }
 
     @Override
     public Dialog getNullDialog() {
-        return dialogDao.getNullEntity();
+        return dialogDaoFacade.getNullEntity();
     }
 }
