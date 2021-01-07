@@ -5,9 +5,13 @@
 <fmt:setBundle basename="label" var="label"/>
 <fmt:setBundle basename="error" var="error"/>
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
+<script src="${context}/js/confirmation.js"></script>
 
 <div class="info">
-    <form action="${context}${target}?id=${id}" method="post" enctype="multipart/form-data">
+    <fmt:message key="label.saveUpdates" var="confirmText" bundle="${label}"/>
+
+    <form action="${context}${target}?id=${id}" method="post" enctype="multipart/form-data" id="accountUpdate"
+          onsubmit='return confirmation("${confirmText}")'>
 
         <label><fmt:message key="form.name" bundle="${label}"/></label>
         <input type="text" name="name"
@@ -93,7 +97,8 @@
         <c:if test="${not empty errphoto}"><fmt:message key="${errphoto}" bundle="${error}"/><br></c:if>
 
         <button type="submit" name="save" value="save"><fmt:message key="button.save" bundle="${label}"/></button>
-        <button type="submit" name="save" value="cancel"><fmt:message key="button.cancel" bundle="${label}"/></button>
-
+        <button type="button" onclick="window.location.href='${context}/wall?id=${id}'">
+            <fmt:message key="button.cancel" bundle="${label}"/>
+        </button>
     </form>
 </div>
