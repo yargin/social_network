@@ -6,12 +6,12 @@ import java.io.Serializable;
  * used for exchanging phones between servlets & jsps
  * contains param-name, phone & error
  */
-public class PhoneExchanger implements Serializable {
+public class PhoneView implements Serializable {
     private String paramName;
     private String value;
     private String error;
 
-    public PhoneExchanger(String paramName, String value, String error) {
+    public PhoneView(String paramName, String value, String error) {
         this.paramName = paramName;
         this.value = value;
         this.error = error;
@@ -43,7 +43,7 @@ public class PhoneExchanger implements Serializable {
 
     @Override
     public String toString() {
-        return "PhoneExchanger{" +
+        return "PhoneView{" +
                 "name='" + paramName + '\'' +
                 ", value='" + value + '\'' +
                 ", error='" + error + '\'' +

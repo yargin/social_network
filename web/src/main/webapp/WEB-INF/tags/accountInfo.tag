@@ -2,14 +2,16 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <fmt:setBundle basename="label"/>
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
+<script src="${context}/js/updateFunctions.js"></script>
+<fmt:message key="label.areYouSure" var="confirmText"/>
 
 <div class="info">
     <fmt:message key="form.name"/> : ${user.getName()}<br>
     <fmt:message key="form.surname"/> : ${user.getSurname()}<br>
     <fmt:message key="form.patronymic"/> : ${user.getPatronymic()}<br>
     <fmt:message key="form.sex"/> : <c:if test="${not empty user.getSex()}">
-    ${user.getSex().toString().toLowerCase()}
-</c:if><br>
+    ${user.getSex().toString().toLowerCase()}</c:if>
+    <br>
     <fmt:message key="form.email"/> : ${user.getEmail()}<br>
     <fmt:message key="form.registrationDate"/> : ${user.getRegistrationDate()}<br>
     <fmt:message key="form.birthdate"/> : ${user.getBirthDate()}<br>
@@ -40,6 +42,7 @@
 <c:if test="${not empty owner or not empty admin}">
     <div>
         <a href="${context}/updateinfo?id=${id}"><fmt:message key="label.updateInfo"/></a><br>
-        <a href="${context}/deleteAccount?id=${id}"><fmt:message key="label.deleteAccount"/></a>
+        <a href="${context}/deleteAccount?id=${id}" onclick='return confirmation("${confirmText}")'><fmt:message
+                key="label.deleteAccount"/></a>
     </div>
 </c:if>

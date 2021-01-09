@@ -5,7 +5,7 @@
 <fmt:setBundle basename="label" var="label"/>
 <fmt:setBundle basename="error" var="error"/>
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
-<script src="${context}/js/confirmation.js"></script>
+<script src="${context}/js/updateFunctions.js"></script>
 
 <div class="info">
     <fmt:message key="label.saveUpdates" var="confirmText" bundle="${label}"/>

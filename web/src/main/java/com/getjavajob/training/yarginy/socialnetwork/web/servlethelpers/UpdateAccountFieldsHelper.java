@@ -11,7 +11,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneIm
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper;
 import com.getjavajob.training.yarginy.socialnetwork.service.aaa.AccountInfoKeeper;
-import com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.additionaldata.PhoneExchanger;
+import com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.additionaldata.PhoneView;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -68,25 +68,21 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
         Collection<Phone> phones = accountInfo.getPhones();
         HttpSession session = req.getSession();
         if (isNull(session.getAttribute(PRIVATE_PHONES))) {
-            Collection<PhoneExchanger> privatePhones = createPhoneExchangers(phones, "privatePhone", PhoneType.PRIVATE);
+            Collection<PhoneView> privatePhones = createPhoneExchangers(phones, "privatePhone", PhoneType.PRIVATE);
             session.setAttribute(PRIVATE_PHONES, privatePhones);
         }
         if (isNull(session.getAttribute(WORK_PHONES))) {
-            Collection<PhoneExchanger> workPhones = createPhoneExchangers(phones, "workPhone", PhoneType.WORK);
+            Collection<PhoneView> workPhones = createPhoneExchangers(phones, "workPhone", PhoneType.WORK);
             session.setAttribute(WORK_PHONES, workPhones);
         }
     }
 
-    private Collection<PhoneExchanger> createPhoneExchangers(Collection<Phone> phones, String param,
-                                                             PhoneType type) {
+    private Collection<PhoneView> createPhoneExchangers(Collection<Phone> phones, String param, PhoneType type) {
         AtomicInteger i = new AtomicInteger(0);
-        Collection<PhoneExchanger> phoneExchangers = phones.stream().filter(phone -> type.equals(phone.getType())).
-                map(phone -> {
-                    i.getAndIncrement();
-                    return new PhoneExchanger(param + i, phone.getNumber(), "");
-                }).collect(Collectors.toList());
-        phoneExchangers.add(new PhoneExchanger(param + i.incrementAndGet(), "", ""));
-        return phoneExchangers;
+        return phones.stream().filter(phone -> type.equals(phone.getType())).map(phone -> {
+            i.getAndIncrement();
+            return new PhoneView(param + i, phone.getNumber(), "");
+        }).collect(Collectors.toList());
     }
 
     public void initSex() {
@@ -97,24 +93,24 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
     private Collection<Phone> getPhonesFromParams(String attribute, PhoneType type) {
         AccountInfoKeeper accountInfo = (AccountInfoKeeper) req.getSession().getAttribute(ACCOUNT_INFO);
         Account account = accountInfo.getAccount();
-        Collection<PhoneExchanger> phoneExchangers = (Collection<PhoneExchanger>) req.getSession().getAttribute(attribute);
+        Collection<PhoneView> phoneViews = (Collection<PhoneView>) req.getSession().getAttribute(attribute);
         Collection<Phone> phones = new ArrayList<>();
-        Iterator<PhoneExchanger> iterator = phoneExchangers.iterator();
+        Iterator<PhoneView> iterator = phoneViews.iterator();
         while (iterator.hasNext()) {
-            PhoneExchanger phoneExchanger = iterator.next();
-            String phoneValue = req.getParameter(phoneExchanger.getParamName());
+            PhoneView phoneView = iterator.next();
+            String phoneValue = req.getParameter(phoneView.getParamName());
             if (isNull(phoneValue) || phoneValue.isEmpty()) {
                 if (iterator.hasNext()) {
                     iterator.remove();
                 }
             } else {
-                phoneExchanger.setValue(phoneValue);
+                phoneView.setValue(phoneValue);
                 try {
                     Phone phone = new PhoneImpl(phoneValue, account);
                     phone.setType(type);
                     phones.add(phone);
                 } catch (IncorrectDataException e) {
-                    phoneExchanger.setError(e.getType().getPropertyKey());
+                    phoneView.setError(e.getType().getPropertyKey());
                     paramsAccepted = false;
                 }
             }

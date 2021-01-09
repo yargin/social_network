@@ -33,7 +33,7 @@ public abstract class AbstractBatchDao<E extends Entity> extends AbstractDao<E> 
     }
 
     public boolean delete(Collection<E> entities) {
-        String query = getDeleteQuery();
+        String query = getDeleteByAltKeysQuery();
         List<Object[]> keys = new ArrayList<>();
         for (E entity : entities) {
             keys.add(getObjectAltKeys(entity));
