@@ -16,12 +16,13 @@ const ERROR = 'Error';
 const DELETE = 'Delete';
 const BR = 'br';
 
-function addNewPrivatePhone() {
+function addNewPrivatePhone(type) {
+    var newPhoneId = type === 'private' ? 'newPrivatePhone' : 'newWorkPhone';
     //todo inline doesn't work WHY??
-    var checked = checkPhone('newPrivatePhone');
+    var checked = checkPhone(newPhoneId);
     if (checked) {
-        addPrivatePhone(document.getElementById('newPrivatePhone').value, "");
-        document.getElementById('newPrivatePhone').value = "";
+        addPrivatePhone(document.getElementById(newPhoneId).value, "");
+        document.getElementById(newPhoneId).value = "";
     }
 }
 
@@ -67,7 +68,6 @@ function changePhone(elementId) {
     }
 
     //before change actual need to change another field that was duplicated if exists
-    //todo but there's old id!!!
     var duplicate = document.getElementById(value);
     if (duplicate !== null) {
         var duplicateValue = duplicate.value;
@@ -105,8 +105,17 @@ function changePhone(elementId) {
 }
 
 //add phone to array & to page
-function addPrivatePhone(value, error) {
-    privatePhones.push(value);
+function addPrivatePhone(value, error, type) {
+    var listId = '';
+    var divId = '';
+    if (type !== 'work') {
+        privatePhones.push(value);
+        listId = 'privatePhonesList';
+        divId = 'newPrivatePhoneDiv';
+    } else {
+        listId = 'workPhonesList';
+        divId = 'newWorkPhoneDiv';
+    }
     currentValues.push(value);
 
     //add to list new phone
@@ -117,22 +126,22 @@ function addPrivatePhone(value, error) {
     inputtedPhone.addEventListener('blur', function () {
         changePhone(inputtedPhone.getAttribute('id'));
     });
-    var phonesList = document.getElementById('privatePhonesList');
-    var newPrivatePhoneDiv = document.getElementById('newPrivatePhoneDiv');
-    phonesList.insertBefore(inputtedPhone, newPrivatePhoneDiv);
+    var phonesList = document.getElementById(listId);
+    var newPhoneDiv = document.getElementById(divId);
+    phonesList.insertBefore(inputtedPhone, newPhoneDiv);
 
     var deletePhoneButton = document.createElement('button');
     var deleteText = document.createTextNode(document.deleteText);
     deletePhoneButton.setAttribute('id', value + DELETE);
     deletePhoneButton.setAttribute('type', 'button');
     deletePhoneButton.addEventListener('click', function () {
-        deletePrivatePhone(value);
+        deletePrivatePhone(value, type);
     });
     deletePhoneButton.appendChild(deleteText);
-    phonesList.insertBefore(deletePhoneButton, newPrivatePhoneDiv);
+    phonesList.insertBefore(deletePhoneButton, newPhoneDiv);
     var br = document.createElement(BR);
     br.setAttribute('id', value + BR);
-    phonesList.insertBefore(br, newPrivatePhoneDiv);
+    phonesList.insertBefore(br, newPhoneDiv);
 
     //create error
     if (typeof error === 'undefined') {
@@ -142,13 +151,17 @@ function addPrivatePhone(value, error) {
     var errorDiv = document.createElement('div');
     errorDiv.appendChild(errorText);
     errorDiv.setAttribute('id', value + ERROR);
-    phonesList.insertBefore(errorDiv, newPrivatePhoneDiv);
+    phonesList.insertBefore(errorDiv, newPhoneDiv);
 }
 
-function deletePrivatePhone(valueToDelete) {
-    privatePhones = privatePhones.filter(function (value, index, arr) {
-        return value !== valueToDelete;
-    });
+function deletePrivatePhone(valueToDelete, type) {
+    if (type === 'private') {
+        privatePhones = privatePhones.filter(function (value, index, arr) {
+            return value !== valueToDelete;
+        });
+    } else {
+        //todo
+    }
     currentValues = currentValues.filter(function (value, index, arr) {
         return value !== valueToDelete;
     });
@@ -167,6 +180,7 @@ function submit() {
         }
         document.getElementById(privatePhones[i]).setAttribute('name', 'privatePhone' + i);
     }
+    //todo
     alert('success');
     return false;
 }

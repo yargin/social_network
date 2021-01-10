@@ -17,11 +17,11 @@
                 <fmt:message key="${privatePhone.error}" bundle="${error}"/>
             </c:set>
         </c:if>
-        <script> addPrivatePhone("${privatePhone.value}", "${privatePhoneError}"); </script>
+        <script> addPrivatePhone("${privatePhone.value}", "${privatePhoneError}", "private"); </script>
     </c:forEach>
     <div id="newPrivatePhoneDiv">
         <input type="text" id="newPrivatePhone" onblur="checkPhone('newPrivatePhone');">
-        <button onclick="addNewPrivatePhone()" type="button">add</button>
+        <button onclick="addNewPrivatePhone('private')" type="button">add</button>
         <div id="newPrivatePhoneError"></div>
     </div>
     <c:if test="${not empty phoneDuplicate}"><fmt:message key="${phoneDuplicate}" bundle="${error}"/><br></c:if>
