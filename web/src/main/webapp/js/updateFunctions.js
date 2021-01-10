@@ -1,5 +1,8 @@
 function confirmation(confirmMessage) {
-    return confirm(confirmMessage);
+    if (submit()) {
+        return confirm(confirmMessage);
+    }
+    return false;
 }
 
 function init(deleteText) {
@@ -8,11 +11,15 @@ function init(deleteText) {
 
 //array
 var privatePhones;
+var currentValues;
 const ERROR = 'Error';
 const DELETE = 'Delete';
 const BR = 'br';
 
 function addNewPrivatePhone() {
+    if (typeof privatePhones === 'undefined') {
+        privatePhones = [];
+    }
     //todo inline doesn't work WHY??
     var checked = checkPhone('newPrivatePhone');
     if (checked) {
@@ -28,6 +35,7 @@ function checkPhone(elementId) {
     while (errorDiv.firstChild) {
         errorDiv.removeChild(errorDiv.firstChild);
     }
+
     if (value.length < 3) {
         errorDiv.appendChild(document.createTextNode('too short'));
         return false;
@@ -36,19 +44,52 @@ function checkPhone(elementId) {
         errorDiv.appendChild(document.createTextNode('too long'));
         return false;
     }
-    if (privatePhones.includes(value)) {
+    if (typeof currentValues === 'undefined') {
+        currentValues = [];
+    }
+    if (currentValues.includes(value)) {
         errorDiv.appendChild(document.createTextNode('already exists in list'));
         return false;
     }
     return true;
 }
 
-function validatePhone(elementId) {
+function changePhone(elementId) {
+    var newPrivatePhone = document.getElementById(elementId);
+    var value = newPrivatePhone.value;
+
+    if (elementId === value) {
+        return;
+    }
+    for (var i = 0; i < currentValues.length; i++) {
+        if (currentValues[i] === elementId) {
+            currentValues.splice(i, 1);
+            break;
+        }
+    }
+
     if (!checkPhone(elementId)) {
         return;
     }
-    var newPrivatePhone = document.getElementById(elementId);
-    var value = newPrivatePhone.value;
+
+    //before change actual need to change another field that was duplicated if exists
+    //todo but there's old id!!!
+    var duplicate = document.getElementById(value);
+    if (duplicate !== null) {
+        var duplicateValue = duplicate.value;
+        document.getElementById(value).setAttribute('id', duplicateValue);
+        var duplicateError = document.getElementById(value + ERROR);
+        while (duplicateError.firstChild) {
+            duplicateError.removeChild(duplicateError.firstChild);
+        }
+        duplicateError.setAttribute('id', duplicateValue + ERROR);
+        document.getElementById(value + DELETE).setAttribute('id', duplicateValue + DELETE);
+        document.getElementById(value + BR).setAttribute('id', duplicateValue + BR);
+        duplicate.setAttribute('value', duplicateValue);
+        alert('duplicate value: ' + duplicateValue + ', value: ' + value);
+    }
+
+    //change current field
     var errorDiv = document.getElementById(elementId + ERROR);
     errorDiv.setAttribute('id', value + ERROR);
 
@@ -57,23 +98,26 @@ function validatePhone(elementId) {
     deleteButton.addEventListener('click', function () {
         deletePrivatePhone(value);
     });
-    document.getElementById(elementId).setAttribute('id', value + BR);
+    document.getElementById(elementId + BR).setAttribute('id', value + BR);
 
 
     privatePhones = privatePhones.filter(function (oldValue, index, arr) {
         return oldValue !== elementId;
-    })
+    });
     newPrivatePhone.setAttribute('id', value);
     newPrivatePhone.setAttribute('value', value);
     privatePhones.push(value);
+    currentValues.push(value);
 }
 
 //add phone to array & to page
 function addPrivatePhone(value, error) {
     if (typeof privatePhones === 'undefined') {
         privatePhones = [value];
+        currentValues = [value];
     } else {
         privatePhones.push(value);
+        currentValues.push(value);
     }
 
     //add to list new phone
@@ -82,10 +126,8 @@ function addPrivatePhone(value, error) {
     inputtedPhone.setAttribute('value', value);
     inputtedPhone.setAttribute('type', 'text');
     inputtedPhone.addEventListener('blur', function () {
-        validatePhone(inputtedPhone.getAttribute('id'));
+        changePhone(inputtedPhone.getAttribute('id'));
     });
-
-
     var phonesList = document.getElementById('privatePhonesList');
     var newPrivatePhoneDiv = document.getElementById('newPrivatePhoneDiv');
     phonesList.insertBefore(inputtedPhone, newPrivatePhoneDiv);
@@ -117,9 +159,25 @@ function addPrivatePhone(value, error) {
 function deletePrivatePhone(valueToDelete) {
     privatePhones = privatePhones.filter(function (value, index, arr) {
         return value !== valueToDelete;
-    })
+    });
+    privatePhones = privatePhones.filter(function (value, index, arr) {
+        return value !== valueToDelete;
+    });
     document.getElementById(valueToDelete).remove();
     document.getElementById(valueToDelete + DELETE).remove();
     document.getElementById(valueToDelete + ERROR).remove();
     document.getElementById(valueToDelete + BR).remove();
+}
+
+function submit() {
+    for (var i = 0; i < privatePhones.length; i++) {
+        var errorDiv = document.getElementById(privatePhones[i] + ERROR);
+        alert(privatePhones[i] + errorDiv.firstChild.textContent);
+        if (errorDiv.firstChild.textContent !== '') {
+            return false;
+        }
+        document.getElementById(privatePhones[i]).setAttribute('name', 'privatePhone' + i);
+    }
+    alert('success');
+    return false;
 }
