@@ -10,16 +10,13 @@ function init(deleteText) {
 }
 
 //array
-var privatePhones;
-var currentValues;
+var privatePhones = [];
+var currentValues = [];
 const ERROR = 'Error';
 const DELETE = 'Delete';
 const BR = 'br';
 
 function addNewPrivatePhone() {
-    if (typeof privatePhones === 'undefined') {
-        privatePhones = [];
-    }
     //todo inline doesn't work WHY??
     var checked = checkPhone('newPrivatePhone');
     if (checked) {
@@ -43,9 +40,6 @@ function checkPhone(elementId) {
     if (value.length > 13) {
         errorDiv.appendChild(document.createTextNode('too long'));
         return false;
-    }
-    if (typeof currentValues === 'undefined') {
-        currentValues = [];
     }
     if (currentValues.includes(value)) {
         errorDiv.appendChild(document.createTextNode('already exists in list'));
@@ -112,13 +106,8 @@ function changePhone(elementId) {
 
 //add phone to array & to page
 function addPrivatePhone(value, error) {
-    if (typeof privatePhones === 'undefined') {
-        privatePhones = [value];
-        currentValues = [value];
-    } else {
-        privatePhones.push(value);
-        currentValues.push(value);
-    }
+    privatePhones.push(value);
+    currentValues.push(value);
 
     //add to list new phone
     var inputtedPhone = document.createElement('input');
@@ -160,7 +149,7 @@ function deletePrivatePhone(valueToDelete) {
     privatePhones = privatePhones.filter(function (value, index, arr) {
         return value !== valueToDelete;
     });
-    privatePhones = privatePhones.filter(function (value, index, arr) {
+    currentValues = currentValues.filter(function (value, index, arr) {
         return value !== valueToDelete;
     });
     document.getElementById(valueToDelete).remove();
