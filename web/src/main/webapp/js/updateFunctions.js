@@ -1,3 +1,14 @@
+var tooShortError;
+var tooLongError;
+var notPhoneError;
+var duplicateError;
+
+var privatePhones = [];
+var workPhones = [];
+const ERROR = 'Error';
+const DELETE = 'Delete';
+const BR = 'br';
+
 function confirmation(confirmMessage) {
     if (submit()) {
         return confirm(confirmMessage);
@@ -5,23 +16,19 @@ function confirmation(confirmMessage) {
     return false;
 }
 
-function init(deleteText) {
+function init(deleteText, tooShortErr, tooLongErr, notPhoneErr, duplicateErr) {
     document.deleteText = deleteText;
+    document.tooShortError = tooShortErr;
+    document.tooLongError = tooLongErr;
+    document.notPhoneError = notPhoneErr;
+    document.duplicateError = duplicateErr;
 }
 
-//array
-var privatePhones = [];
-var currentValues = [];
-const ERROR = 'Error';
-const DELETE = 'Delete';
-const BR = 'br';
-
-function addNewPrivatePhone(type) {
+function addNewPhone(type) {
     var newPhoneId = type === 'private' ? 'newPrivatePhone' : 'newWorkPhone';
-    //todo inline doesn't work WHY??
     var checked = checkPhone(newPhoneId);
     if (checked) {
-        addPrivatePhone(document.getElementById(newPhoneId).value, "");
+        addPhone(document.getElementById(newPhoneId).value, "", type);
         document.getElementById(newPhoneId).value = "";
     }
 }
@@ -35,52 +42,31 @@ function checkPhone(elementId) {
     }
 
     if (value.length < 3) {
-        errorDiv.appendChild(document.createTextNode('too short'));
+        errorDiv.appendChild(document.createTextNode(tooShortError));
         return false;
     }
     if (value.length > 13) {
-        errorDiv.appendChild(document.createTextNode('too long'));
+        errorDiv.appendChild(document.createTextNode(tooLongError));
         return false;
     }
-    if (currentValues.includes(value)) {
-        errorDiv.appendChild(document.createTextNode('already exists in list'));
+    if (privatePhones.includes(value) || workPhones.includes(value)) {
+        errorDiv.appendChild(document.createTextNode(duplicateError));
         return false;
     }
     return true;
 }
 
-function changePhone(elementId) {
-    var newPrivatePhone = document.getElementById(elementId);
-    var value = newPrivatePhone.value;
+function changePhone(elementId, type) {
+    var newPhone = document.getElementById(elementId);
+    var value = newPhone.value;
 
     if (elementId === value) {
         return;
     }
-    for (var i = 0; i < currentValues.length; i++) {
-        if (currentValues[i] === elementId) {
-            currentValues.splice(i, 1);
-            break;
-        }
-    }
 
     if (!checkPhone(elementId)) {
+        newPhone.focus();
         return;
-    }
-
-    //before change actual need to change another field that was duplicated if exists
-    var duplicate = document.getElementById(value);
-    if (duplicate !== null) {
-        var duplicateValue = duplicate.value;
-        document.getElementById(value).setAttribute('id', duplicateValue);
-        var duplicateError = document.getElementById(value + ERROR);
-        while (duplicateError.firstChild) {
-            duplicateError.removeChild(duplicateError.firstChild);
-        }
-        duplicateError.setAttribute('id', duplicateValue + ERROR);
-        document.getElementById(value + DELETE).setAttribute('id', duplicateValue + DELETE);
-        document.getElementById(value + BR).setAttribute('id', duplicateValue + BR);
-        duplicate.setAttribute('value', duplicateValue);
-        alert('duplicate value: ' + duplicateValue + ', value: ' + value);
     }
 
     //change current field
@@ -90,22 +76,28 @@ function changePhone(elementId) {
     var deleteButton = document.getElementById(elementId + DELETE);
     deleteButton.setAttribute('id', value + DELETE);
     deleteButton.addEventListener('click', function () {
-        deletePrivatePhone(value);
+        deletePhone(value);
     });
     document.getElementById(elementId + BR).setAttribute('id', value + BR);
 
+    newPhone.setAttribute('id', value);
+    newPhone.setAttribute('value', value);
 
-    privatePhones = privatePhones.filter(function (oldValue, index, arr) {
-        return oldValue !== elementId;
-    });
-    newPrivatePhone.setAttribute('id', value);
-    newPrivatePhone.setAttribute('value', value);
-    privatePhones.push(value);
-    currentValues.push(value);
+    if (type === 'private') {
+        privatePhones = privatePhones.filter(function (oldValue, index, arr) {
+            return oldValue !== elementId;
+        });
+        privatePhones.push(value);
+    } else {
+        workPhones = workPhones.filter(function (oldValue, index, arr) {
+            return oldValue !== elementId;
+        });
+        workPhones.push(value);
+    }
 }
 
 //add phone to array & to page
-function addPrivatePhone(value, error, type) {
+function addPhone(value, error, type) {
     var listId = '';
     var divId = '';
     if (type !== 'work') {
@@ -113,10 +105,10 @@ function addPrivatePhone(value, error, type) {
         listId = 'privatePhonesList';
         divId = 'newPrivatePhoneDiv';
     } else {
+        workPhones.push(value);
         listId = 'workPhonesList';
         divId = 'newWorkPhoneDiv';
     }
-    currentValues.push(value);
 
     //add to list new phone
     var inputtedPhone = document.createElement('input');
@@ -124,7 +116,7 @@ function addPrivatePhone(value, error, type) {
     inputtedPhone.setAttribute('value', value);
     inputtedPhone.setAttribute('type', 'text');
     inputtedPhone.addEventListener('blur', function () {
-        changePhone(inputtedPhone.getAttribute('id'));
+        changePhone(inputtedPhone.getAttribute('id'), type);
     });
     var phonesList = document.getElementById(listId);
     var newPhoneDiv = document.getElementById(divId);
@@ -135,7 +127,7 @@ function addPrivatePhone(value, error, type) {
     deletePhoneButton.setAttribute('id', value + DELETE);
     deletePhoneButton.setAttribute('type', 'button');
     deletePhoneButton.addEventListener('click', function () {
-        deletePrivatePhone(value, type);
+        deletePhone(value, type);
     });
     deletePhoneButton.appendChild(deleteText);
     phonesList.insertBefore(deletePhoneButton, newPhoneDiv);
@@ -154,17 +146,16 @@ function addPrivatePhone(value, error, type) {
     phonesList.insertBefore(errorDiv, newPhoneDiv);
 }
 
-function deletePrivatePhone(valueToDelete, type) {
+function deletePhone(valueToDelete, type) {
     if (type === 'private') {
         privatePhones = privatePhones.filter(function (value, index, arr) {
             return value !== valueToDelete;
         });
     } else {
-        //todo
+        workPhones = workPhones.filter(function (value, index, arr) {
+            return value !== valueToDelete;
+        });
     }
-    currentValues = currentValues.filter(function (value, index, arr) {
-        return value !== valueToDelete;
-    });
     document.getElementById(valueToDelete).remove();
     document.getElementById(valueToDelete + DELETE).remove();
     document.getElementById(valueToDelete + ERROR).remove();
@@ -172,15 +163,21 @@ function deletePrivatePhone(valueToDelete, type) {
 }
 
 function submit() {
-    for (var i = 0; i < privatePhones.length; i++) {
-        var errorDiv = document.getElementById(privatePhones[i] + ERROR);
-        alert(privatePhones[i] + errorDiv.firstChild.textContent);
-        if (errorDiv.firstChild.textContent !== '') {
+    // alert('work phones: ' + workPhones + ', private phones: ' + privatePhones);
+    let i;
+    checkForErrorAddName(privatePhones, 'privatePhone');
+    checkForErrorAddName(workPhones, 'workPhone');
+    // alert('success');
+    return false;
+}
+
+function checkForErrorAddName(phones, type) {
+    for (i = 0; i < phones.length; i++) {
+        var errorDiv = document.getElementById(phones[i] + ERROR);
+        if (errorDiv.firstChild != null && errorDiv.firstChild.textContent !== '') {
+            document.getElementById(phones[i]).focus();
             return false;
         }
-        document.getElementById(privatePhones[i]).setAttribute('name', 'privatePhone' + i);
+        document.getElementById(phones[i]).setAttribute('name', type + i);
     }
-    //todo
-    alert('success');
-    return false;
 }
