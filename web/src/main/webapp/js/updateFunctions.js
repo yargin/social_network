@@ -2,12 +2,12 @@ var tooShortError;
 var tooLongError;
 var notPhoneError;
 var duplicateError;
+var deleteText;
 
 var privatePhones = [];
 var workPhones = [];
 const ERROR = 'Error';
 const DELETE = 'Delete';
-const BR = 'br';
 
 function confirmation(confirmMessage) {
     if (submit()) {
@@ -16,12 +16,12 @@ function confirmation(confirmMessage) {
     return false;
 }
 
-function init(deleteText, tooShortErr, tooLongErr, notPhoneErr, duplicateErr) {
-    document.deleteText = deleteText;
-    document.tooShortError = tooShortErr;
-    document.tooLongError = tooLongErr;
-    document.notPhoneError = notPhoneErr;
-    document.duplicateError = duplicateErr;
+function init(deleteButtonTex, tooShortErr, tooLongErr, notPhoneErr, duplicateErr) {
+    deleteText = deleteButtonTex;
+    tooShortError = tooShortErr;
+    tooLongError = tooLongErr;
+    notPhoneError = notPhoneErr;
+    duplicateError = duplicateErr;
 }
 
 function addNewPhone(type) {
@@ -78,7 +78,6 @@ function changePhone(elementId, type) {
     deleteButton.addEventListener('click', function () {
         deletePhone(value);
     });
-    document.getElementById(elementId + BR).setAttribute('id', value + BR);
 
     newPhone.setAttribute('id', value);
     newPhone.setAttribute('value', value);
@@ -123,17 +122,14 @@ function addPhone(value, error, type) {
     phonesList.insertBefore(inputtedPhone, newPhoneDiv);
 
     var deletePhoneButton = document.createElement('button');
-    var deleteText = document.createTextNode(document.deleteText);
+    var deleteButtonText = document.createTextNode(deleteText);
     deletePhoneButton.setAttribute('id', value + DELETE);
     deletePhoneButton.setAttribute('type', 'button');
     deletePhoneButton.addEventListener('click', function () {
         deletePhone(value, type);
     });
-    deletePhoneButton.appendChild(deleteText);
+    deletePhoneButton.appendChild(deleteButtonText);
     phonesList.insertBefore(deletePhoneButton, newPhoneDiv);
-    var br = document.createElement(BR);
-    br.setAttribute('id', value + BR);
-    phonesList.insertBefore(br, newPhoneDiv);
 
     //create error
     if (typeof error === 'undefined') {
@@ -163,12 +159,12 @@ function deletePhone(valueToDelete, type) {
 }
 
 function submit() {
-    // alert('work phones: ' + workPhones + ', private phones: ' + privatePhones);
-    let i;
-    checkForErrorAddName(privatePhones, 'privatePhone');
-    checkForErrorAddName(workPhones, 'workPhone');
-    // alert('success');
-    return false;
+    var checked = checkForErrorAddName(privatePhones, 'privatePhone');
+    if (!checked) {
+        return false;
+    }
+    checked = checkForErrorAddName(workPhones, 'workPhone');
+    return checked;
 }
 
 function checkForErrorAddName(phones, type) {
@@ -180,4 +176,5 @@ function checkForErrorAddName(phones, type) {
         }
         document.getElementById(phones[i]).setAttribute('name', type + i);
     }
+    return true;
 }
