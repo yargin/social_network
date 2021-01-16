@@ -23,7 +23,7 @@
         </c:if>
         <script> addPhone("${privatePhone.value}", "${privatePhoneError}", "private"); </script>
     </c:forEach>
-    <div id="newPrivatePhoneDiv">
+    <div id="newPrivatePhoneDiv" class="newPhoneDiv">
         <input type="text" id="newPrivatePhone" onblur="checkPhone('newPrivatePhone');">
         <button onclick="addNewPhone('private')" type="button"><fmt:message key="button.add"
                                                                             bundle="${label}"/></button>
@@ -43,7 +43,7 @@
         </c:if>
         <script> addPhone("${workPhone.value}", "${workPhoneError}", "work"); </script>
     </c:forEach>
-    <div id="newWorkPhoneDiv">
+    <div id="newWorkPhoneDiv" class="newPhoneDiv">
         <input type="text" id="newWorkPhone" onblur="checkPhone('newWorkPhone');">
         <button onclick="addNewPhone('work')" type="button"><fmt:message key="button.add" bundle="${label}"/></button>
         <div id="newWorkPhoneError"></div>

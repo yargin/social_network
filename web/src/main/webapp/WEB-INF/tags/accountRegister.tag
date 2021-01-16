@@ -5,6 +5,7 @@
 <fmt:setBundle basename="label" var="label"/>
 <fmt:setBundle basename="error" var="error"/>
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
+<script src="${context}/js/updateFunctions.js"></script>
 
 <div class="post">
     <form action="${context}${target}" method="post" enctype="multipart/form-data">
@@ -95,7 +96,7 @@
         <br>
         <c:if test="${not empty errcity}"><fmt:message key="${errcity}" bundle="${error}"/><br></c:if>
 
-        <common:phonesRegister/>
+        <common:phonesUpdate/>
 
         <c:if test="${not empty photo}">
             <img src="data:image/jpeg;base64, ${photo}">

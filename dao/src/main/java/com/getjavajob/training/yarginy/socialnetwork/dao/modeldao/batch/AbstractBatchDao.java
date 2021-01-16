@@ -20,6 +20,9 @@ public abstract class AbstractBatchDao<E extends Entity> extends AbstractDao<E> 
 
     public boolean create(Collection<E> entities) {
         int size = entities.size();
+        if (size == 0) {
+            return true;
+        }
         SqlParameterSource[] parametersList = new SqlParameterSource[size];
         int i = 0;
         for (E entity : entities) {
@@ -47,7 +50,6 @@ public abstract class AbstractBatchDao<E extends Entity> extends AbstractDao<E> 
         delete(entitiesToDelete);
         Collection<E> entitiesToCreate = new ArrayList<>(entities);
         entitiesToCreate.removeAll(storedEntities);
-        create(entitiesToCreate);
-        return true;
+        return create(entitiesToCreate);
     }
 }

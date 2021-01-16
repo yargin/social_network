@@ -6,6 +6,7 @@ var deleteText;
 
 var privatePhones = [];
 var workPhones = [];
+var deleteListeners = new Map();
 const ERROR = 'Error';
 const DELETE = 'Delete';
 
@@ -53,6 +54,7 @@ function checkPhone(elementId) {
         errorDiv.appendChild(document.createTextNode(duplicateError));
         return false;
     }
+    //todo add regular expression
     return true;
 }
 
@@ -75,9 +77,11 @@ function changePhone(elementId, type) {
 
     var deleteButton = document.getElementById(elementId + DELETE);
     deleteButton.setAttribute('id', value + DELETE);
-    deleteButton.addEventListener('click', function () {
-        deletePhone(value);
-    });
+
+    deleteButton.removeEventListener('click', deleteListeners.get(elementId));
+    deleteListeners.delete(elementId);
+    addDeleteListener(deleteButton, value);
+
 
     newPhone.setAttribute('id', value);
     newPhone.setAttribute('value', value);
@@ -93,6 +97,14 @@ function changePhone(elementId, type) {
         });
         workPhones.push(value);
     }
+}
+
+function addDeleteListener(button, value) {
+    var listener = function () {
+        deletePhone(value);
+    };
+    deleteListeners.set(value, listener);
+    button.addEventListener('click', listener);
 }
 
 //add phone to array & to page
@@ -114,21 +126,15 @@ function addPhone(value, error, type) {
     inputtedPhone.setAttribute('id', value);
     inputtedPhone.setAttribute('value', value);
     inputtedPhone.setAttribute('type', 'text');
+
     inputtedPhone.addEventListener('blur', function () {
-        changePhone(inputtedPhone.getAttribute('id'), type);
+        changePhone(value, type);
     });
     var phonesList = document.getElementById(listId);
     var newPhoneDiv = document.getElementById(divId);
     phonesList.insertBefore(inputtedPhone, newPhoneDiv);
 
-    var deletePhoneButton = document.createElement('button');
-    var deleteButtonText = document.createTextNode(deleteText);
-    deletePhoneButton.setAttribute('id', value + DELETE);
-    deletePhoneButton.setAttribute('type', 'button');
-    deletePhoneButton.addEventListener('click', function () {
-        deletePhone(value, type);
-    });
-    deletePhoneButton.appendChild(deleteButtonText);
+    var deletePhoneButton = createDeleteButton(value);
     phonesList.insertBefore(deletePhoneButton, newPhoneDiv);
 
     //create error
@@ -142,20 +148,30 @@ function addPhone(value, error, type) {
     phonesList.insertBefore(errorDiv, newPhoneDiv);
 }
 
-function deletePhone(valueToDelete, type) {
-    if (type === 'private') {
-        privatePhones = privatePhones.filter(function (value, index, arr) {
-            return value !== valueToDelete;
-        });
-    } else {
-        workPhones = workPhones.filter(function (value, index, arr) {
-            return value !== valueToDelete;
-        });
-    }
+function createDeleteButton(value) {
+    var deletePhoneButton = document.createElement('button');
+    deletePhoneButton.setAttribute('id', value + DELETE);
+    deletePhoneButton.setAttribute('type', 'button');
+
+    addDeleteListener(deletePhoneButton, value);
+
+    deletePhoneButton.textContent = deleteText;
+    return deletePhoneButton;
+}
+
+function deletePhone(valueToDelete) {
+    privatePhones = privatePhones.filter(function (value, index, arr) {
+        return value !== valueToDelete;
+    });
+    workPhones = workPhones.filter(function (value, index, arr) {
+        return value !== valueToDelete;
+    });
+    //todo remove
+    alert(privatePhones);
+    alert(workPhones);
     document.getElementById(valueToDelete).remove();
     document.getElementById(valueToDelete + DELETE).remove();
     document.getElementById(valueToDelete + ERROR).remove();
-    document.getElementById(valueToDelete + BR).remove();
 }
 
 function submit() {
@@ -168,7 +184,7 @@ function submit() {
 }
 
 function checkForErrorAddName(phones, type) {
-    for (i = 0; i < phones.length; i++) {
+    for (var i = 0; i < phones.length; i++) {
         var errorDiv = document.getElementById(phones[i] + ERROR);
         if (errorDiv.firstChild != null && errorDiv.firstChild.textContent !== '') {
             document.getElementById(phones[i]).focus();
