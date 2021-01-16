@@ -1,15 +1,20 @@
 var tooShortError;
 var tooLongError;
 var notPhoneError;
-var duplicateError;
+var duplicateErrorMessage;
 var deleteText;
 
 var privatePhones = [];
 var workPhones = [];
 var deleteListeners = new Map();
 var blurListeners = new Map();
+var duplicateNumber;
+var anotherDuplicate;
 const ERROR = 'Error';
 const DELETE = 'Delete';
+const SPACE = /\s?/;
+const PHONE_REGEX = /^[+]?\s?\d{1,4}([\s-]?\d+)+$/;
+const PHONE_REGEX_WITH_BRACES = /^[+]?\s?[(]\s?\d{1,4}\s?[)]\s?([\s-]?\d+)+$/;
 
 function confirmation(confirmMessage) {
     if (submit()) {
@@ -23,7 +28,7 @@ function init(deleteButtonTex, tooShortErr, tooLongErr, notPhoneErr, duplicateEr
     tooShortError = tooShortErr;
     tooLongError = tooLongErr;
     notPhoneError = notPhoneErr;
-    duplicateError = duplicateErr;
+    duplicateErrorMessage = duplicateErr;
 }
 
 function addNewPhone(type) {
@@ -51,24 +56,53 @@ function checkPhone(elementId) {
         errorDiv.appendChild(document.createTextNode(tooLongError));
         return false;
     }
-    if (privatePhones.includes(value) || workPhones.includes(value)) {
-        errorDiv.appendChild(document.createTextNode(duplicateError));
+    if (!PHONE_REGEX.test(value) && !PHONE_REGEX_WITH_BRACES.test(value)) {
+        errorDiv.appendChild(document.createTextNode(notPhoneError));
         return false;
     }
-    //todo add regular expression
+
+    if (elementId !== value && (privatePhones.includes(value) || workPhones.includes(value))) {
+        errorDiv.appendChild(document.createTextNode(duplicateErrorMessage));
+
+        errorDiv = document.getElementById(value + ERROR);
+        while (errorDiv.firstChild) {
+            errorDiv.removeChild(errorDiv.firstChild);
+        }
+        errorDiv.appendChild(document.createTextNode(duplicateErrorMessage));
+
+        anotherDuplicate = elementId;
+        duplicateNumber = value;
+        return false;
+    } else {
+        deleteDuplicate();
+    }
     return true;
+}
+
+function deleteDuplicate() {
+    deleteDuplicateMessage(duplicateNumber);
+    deleteDuplicateMessage(anotherDuplicate);
+    duplicateNumber = null;
+    anotherDuplicate = null;
+}
+
+function deleteDuplicateMessage(valueToDelete) {
+    var duplicateError = document.getElementById(valueToDelete + ERROR);
+    if (duplicateError != null && duplicateError.firstChild != null) {
+        duplicateError.removeChild(duplicateError.firstChild);
+    }
 }
 
 function changePhone(elementId) {
     var newPhone = document.getElementById(elementId);
     var value = newPhone.value;
 
-    if (elementId === value) {
+    if (!checkPhone(elementId)) {
+        newPhone.focus();
         return;
     }
 
-    if (!checkPhone(elementId)) {
-        newPhone.focus();
+    if (elementId === value) {
         return;
     }
 
@@ -180,9 +214,13 @@ function deletePhone(valueToDelete) {
     workPhones = workPhones.filter(function (value, index, arr) {
         return value !== valueToDelete;
     });
+    var toDelete = document.getElementById(valueToDelete).value;
     document.getElementById(valueToDelete).remove();
     document.getElementById(valueToDelete + DELETE).remove();
     document.getElementById(valueToDelete + ERROR).remove();
+    if (duplicateNumber === toDelete) {
+        deleteDuplicate();
+    }
 }
 
 function submit() {
