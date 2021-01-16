@@ -7,6 +7,7 @@ var deleteText;
 var privatePhones = [];
 var workPhones = [];
 var deleteListeners = new Map();
+var blurListeners = new Map();
 const ERROR = 'Error';
 const DELETE = 'Delete';
 
@@ -58,7 +59,7 @@ function checkPhone(elementId) {
     return true;
 }
 
-function changePhone(elementId, type) {
+function changePhone(elementId) {
     var newPhone = document.getElementById(elementId);
     var value = newPhone.value;
 
@@ -82,21 +83,27 @@ function changePhone(elementId, type) {
     deleteListeners.delete(elementId);
     addDeleteListener(deleteButton, value);
 
-
     newPhone.setAttribute('id', value);
     newPhone.setAttribute('value', value);
+    newPhone.removeEventListener('blur', blurListeners.get(elementId));
+    blurListeners.delete(elementId);
+    addBlurListener(newPhone, value);
 
-    if (type === 'private') {
-        privatePhones = privatePhones.filter(function (oldValue, index, arr) {
-            return oldValue !== elementId;
-        });
-        privatePhones.push(value);
-    } else {
-        workPhones = workPhones.filter(function (oldValue, index, arr) {
-            return oldValue !== elementId;
-        });
-        workPhones.push(value);
+    var replaced = replaceValue(elementId, value, privatePhones);
+    if (!replaced) {
+        replaceValue(elementId, value, workPhones);
     }
+}
+
+function replaceValue(oldValue, newValue, array) {
+    var size = array.length;
+    for (var i = 0; i < size; i++) {
+        if (array[i] === oldValue) {
+            array[i] = newValue;
+            return true;
+        }
+    }
+    return false;
 }
 
 function addDeleteListener(button, value) {
@@ -105,6 +112,14 @@ function addDeleteListener(button, value) {
     };
     deleteListeners.set(value, listener);
     button.addEventListener('click', listener);
+}
+
+function addBlurListener(input, value) {
+    var listener = function () {
+        changePhone(value);
+    };
+    blurListeners.set(value, listener);
+    input.addEventListener('blur', listener);
 }
 
 //add phone to array & to page
@@ -127,9 +142,8 @@ function addPhone(value, error, type) {
     inputtedPhone.setAttribute('value', value);
     inputtedPhone.setAttribute('type', 'text');
 
-    inputtedPhone.addEventListener('blur', function () {
-        changePhone(value, type);
-    });
+    addBlurListener(inputtedPhone, value);
+
     var phonesList = document.getElementById(listId);
     var newPhoneDiv = document.getElementById(divId);
     phonesList.insertBefore(inputtedPhone, newPhoneDiv);
@@ -166,9 +180,6 @@ function deletePhone(valueToDelete) {
     workPhones = workPhones.filter(function (value, index, arr) {
         return value !== valueToDelete;
     });
-    //todo remove
-    alert(privatePhones);
-    alert(workPhones);
     document.getElementById(valueToDelete).remove();
     document.getElementById(valueToDelete + DELETE).remove();
     document.getElementById(valueToDelete + ERROR).remove();
