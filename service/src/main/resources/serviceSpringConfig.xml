@@ -6,16 +6,16 @@
        xmlns:aop="http://www.springframework.org/schema/aop"
 
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-           http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/beans/spring-beans.xsd
 
-           http://www.springframework.org/schema/context
-           https://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/context
+       https://www.springframework.org/schema/context/spring-context.xsd
 
        http://www.springframework.org/schema/tx
        http://www.springframework.org/schema/tx/spring-tx.xsd
 
-        http://www.springframework.org/schema/aop
-        http://www.springframework.org/schema/aop/spring-aop.xsd">
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <import resource="classpath:daoSpringConfig.xml"/>
 
@@ -45,12 +45,11 @@
     </aop:config>
 
     <!--    byte-code proxied methods-->
-    <!--    todo where is class-extend-proxy? not byte code?-->
     <aop:config proxy-target-class="true">
         <aop:pointcut id="addFriend"
                       expression="execution(* com.getjavajob.training.yarginy.socialnetwork.service.AccountServiceImpl.addFriendTransactional(..))"/>
         <aop:pointcut id="groupCreate"
-                      expression="execution(* com.getjavajob.training.yarginy.socialnetwork.service.GroupServiceImpl.createAndJoinOwner(..))"/>
+                      expression="execution(* com.getjavajob.training.yarginy.socialnetwork.service.GroupServiceImpl.createGroupAndInviteOwner(..))"/>
         <aop:advisor advice-ref="plainTx" pointcut-ref="groupCreate"/>
     </aop:config>
 
@@ -64,7 +63,6 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
-    <!--    todo how add another annotation-driven with proxy-target-class=true-->
     <!--    <tx:annotation-driven proxy-target-class="true" transaction-manager="transactionManager"/>-->
 
     <!--    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" >-->

@@ -46,6 +46,9 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    //todo add pagination to all lists selections
+    //todo add page entity in service layer
+    //todo look at spring data
     public Collection<Group> getAccountGroups(long accountId) {
         return membersDao.selectAccountGroups(accountId);
     }
@@ -115,14 +118,14 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public boolean createGroup(Group group) {
         try {
-            createAndJoinOwner(group);
+            createGroupAndInviteOwner(group);
             return true;
         } catch (IllegalArgumentException e) {
             return false;
         }
     }
 
-    public void createAndJoinOwner(Group group) {
+    public void createGroupAndInviteOwner(Group group) {
         Account owner = group.getOwner();
         if (isNull(owner)) {
             throw new DataFlowViolationException("owner can't be null");

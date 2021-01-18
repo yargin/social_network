@@ -4,6 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -13,14 +14,20 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.function.Supplier;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.utils.CommonApplicationContextProvider.getContext;
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 import static java.util.Objects.isNull;
 
 public class UpdateGroupFieldsHelper extends UpdateFieldsHelper {
+    private DataHandleHelper dataHandleHelper;
+
     public UpdateGroupFieldsHelper(HttpServletRequest req, HttpServletResponse resp, String idParam, String successUrl) {
         super(req, resp, idParam, successUrl);
+    }
+
+    @Autowired
+    public void setDataHandleHelper(DataHandleHelper dataHandleHelper) {
+        this.dataHandleHelper = dataHandleHelper;
     }
 
     public Group getOrCreateGroup(Supplier<Group> groupCreator) {
@@ -36,7 +43,6 @@ public class UpdateGroupFieldsHelper extends UpdateFieldsHelper {
     public void getValuesFromParams(Group group) throws IOException, ServletException {
         setStringFromParam(group::setName, "name");
         setStringFromParam(group::setDescription, "description");
-        DataHandleHelper dataHandleHelper = getContext().getBean(DataHandleHelper.class);
         setPhotoFromParam(group::setPhoto, dataHandleHelper, PHOTO);
     }
 

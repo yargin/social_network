@@ -20,16 +20,18 @@ import java.time.LocalDate;
 import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory.getNullPassword;
-import static com.getjavajob.training.yarginy.socialnetwork.common.utils.CommonApplicationContextProvider.getContext;
 
 @Service("authService")
 public class AuthServiceImpl implements AuthService {
     private final AccountDaoFacade accountDaoFacade;
     private final PasswordDaoFacade passwordDaoFacade;
     private final PhoneDaoFacade phoneDaoFacade;
+    private final DataHandleHelper dataHandleHelper;
 
     @Autowired
-    public AuthServiceImpl(AccountDaoFacade accountDaoFacade, PasswordDaoFacade passwordDaoFacade, PhoneDaoFacade phoneDaoFacade) {
+    public AuthServiceImpl(DataHandleHelper dataHandleHelper, AccountDaoFacade accountDaoFacade,
+                           PasswordDaoFacade passwordDaoFacade, PhoneDaoFacade phoneDaoFacade) {
+        this.dataHandleHelper = dataHandleHelper;
         this.accountDaoFacade = accountDaoFacade;
         this.passwordDaoFacade = passwordDaoFacade;
         this.phoneDaoFacade = phoneDaoFacade;
@@ -53,6 +55,7 @@ public class AuthServiceImpl implements AuthService {
         if (!phoneDaoFacade.create(phones)) {
             throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
         }
+        password.setPassword(dataHandleHelper.encrypt(password.getPassword()));
         if (!passwordDaoFacade.create(password)) {
             throw new IllegalStateException();
         }
@@ -70,7 +73,6 @@ public class AuthServiceImpl implements AuthService {
         if (passwordObject.equals(getNullPassword())) {
             throw new IncorrectDataException(IncorrectData.WRONG_EMAIL);
         }
-        DataHandleHelper dataHandleHelper = getContext().getBean(DataHandleHelper.class);
         if (!passwordObject.getPassword().equals(dataHandleHelper.encrypt(password))) {
             throw new IncorrectDataException(IncorrectData.WRONG_PASSWORD);
         }

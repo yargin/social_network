@@ -34,6 +34,7 @@ public class GroupWallServlet extends AbstractGetServlet {
         Collection<Message> messages = groupWallMessageService.selectMessages(requestedId);
         req.setAttribute("messages", messages);
         req.setAttribute("group", group);
+        //todo autowire
         req.setAttribute("photo", context.getBean(DataHandleHelper.class).getHtmlPhoto(group.getPhoto()));
         req.setAttribute("type", "groupWall");
         req.setAttribute("id", requestedId);

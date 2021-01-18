@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -14,7 +15,7 @@ import java.util.Base64;
 import static java.util.Objects.isNull;
 
 @Component("dataHandler")
-public final class DataHandleHelper {
+public class DataHandleHelper implements Serializable {
     private static final int MAX_PHOTO_SIZE = 16000000;
 
     public String encrypt(String stringToEncrypt) {

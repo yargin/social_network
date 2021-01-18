@@ -83,6 +83,7 @@ public class AccountServiceImpl implements AccountService {
         return true;
     }
 
+    //todo dup
     public void addFriendTransactional(long firstId, long secondId) {
         if (!friendshipDao.deleteRequest(firstId, secondId)) {
             throw new DataFlowViolationException();

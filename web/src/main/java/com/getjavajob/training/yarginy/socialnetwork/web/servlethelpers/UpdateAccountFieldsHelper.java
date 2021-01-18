@@ -61,8 +61,7 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
         setAttribute("skype", account::getSkype);
         setAttribute("country", account::getCountry);
         setAttribute("city", account::getCity);
-        DataHandleHelper dataHandleHelper = getContext().getBean(DataHandleHelper.class);
-        setAttribute("photo", () -> dataHandleHelper.getHtmlPhoto(account.getPhoto()));
+        setAttribute("photo", () -> getContext().getBean(DataHandleHelper.class).getHtmlPhoto(account.getPhoto()));
 
         Collection<Phone> phones = accountInfo.getPhones();
         HttpSession session = req.getSession();

@@ -16,7 +16,6 @@ import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.utils.CommonApplicationContextProvider.getContext;
 import static java.util.Objects.isNull;
 
 @Component
@@ -24,13 +23,16 @@ public final class MessageHelper {
     private final MessageService accountWallMessageService;
     private final MessageService groupWallMessageService;
     private final MessageService accountPrivateMessageService;
+    private final DataHandleHelper dataHandleHelper;
 
     public MessageHelper(@Qualifier("accountWallMessageService") MessageService accountWallMessageService,
                          @Qualifier("groupWallMessageService") MessageService groupWallMessageService,
-                         @Qualifier("dialogMessageService") MessageService accountPrivateMessageService) {
+                         @Qualifier("dialogMessageService") MessageService accountPrivateMessageService,
+                         DataHandleHelper dataHandleHelper) {
         this.accountWallMessageService = accountWallMessageService;
         this.groupWallMessageService = groupWallMessageService;
         this.accountPrivateMessageService = accountPrivateMessageService;
+        this.dataHandleHelper = dataHandleHelper;
     }
 
     public boolean addMessage(HttpServletRequest req) throws IOException, ServletException {
@@ -62,7 +64,6 @@ public final class MessageHelper {
         Part part = req.getPart("image");
         if (part.getSize() > 1) {
             try (InputStream inputStream = part.getInputStream()) {
-                DataHandleHelper dataHandleHelper = getContext().getBean(DataHandleHelper.class);
                 message.setImage(dataHandleHelper.readMessageImage(inputStream));
             }
         }
