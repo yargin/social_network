@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <fmt:setBundle basename="label" var="label"/>
 <fmt:setBundle basename="error" var="error"/>
+<fmt:setBundle basename="form" var="form"/>
 
 <fmt:message key="button.delete" bundle="${label}" var="deleteText"/>
 <fmt:message key="error.notPhone" bundle="${error}" var="notPhone"/>
@@ -13,7 +14,7 @@
     init("${deleteText}", "${tooShort}", "${tooLong}", "${notPhone}", "${duplicate}");
 </script>
 
-<br><label><fmt:message key="form.privatePhones" bundle="${label}"/></label><br>
+<br><label><fmt:message key="form.privatePhones" bundle="${form}"/></label><br>
 <div id="privatePhonesList">
     <c:forEach var="privatePhone" items="${sessionScope.privatePhones}">
         <c:if test="${not empty privatePhone.error}">
@@ -33,7 +34,7 @@
 </div>
 
 
-<br><label><fmt:message key="form.workPhones" bundle="${label}"/></label><br>
+<br><label><fmt:message key="form.workPhones" bundle="${form}"/></label><br>
 <div id="workPhonesList">
     <c:forEach var="workPhone" items="${sessionScope.workPhones}">
         <c:if test="${not empty workPhone.error}">

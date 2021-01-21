@@ -8,7 +8,6 @@ import com.getjavajob.training.yarginy.socialnetwork.web.servlets.AbstractGetSer
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -19,8 +18,6 @@ import java.util.Collection;
 public class GroupModeratorsListServlet extends AbstractGetServlet {
     @Autowired
     private GroupService groupService;
-    @Autowired
-    private ApplicationContext context;
 
     @Override
     protected void safeDoGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -29,7 +26,7 @@ public class GroupModeratorsListServlet extends AbstractGetServlet {
         req.setAttribute("moderators", moderators);
         Group group = groupService.get(requestedId);
         req.setAttribute("group", group);
-        req.setAttribute("photo", context.getBean(DataHandleHelper.class).getHtmlPhoto(group.getPhoto()));
+        req.setAttribute("photo", new DataHandleHelper().getHtmlPhoto(group.getPhoto()));
         req.setAttribute("tab", "moderators");
         req.getRequestDispatcher(Jsps.GROUP_JSP).forward(req, resp);
     }

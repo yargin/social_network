@@ -10,7 +10,6 @@ import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ApplicationContext;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -24,8 +23,6 @@ public class GroupWallServlet extends AbstractGetServlet {
     @Autowired
     @Qualifier("groupWallMessageService")
     private MessageService groupWallMessageService;
-    @Autowired
-    private ApplicationContext context;
 
     @Override
     protected void safeDoGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -34,8 +31,7 @@ public class GroupWallServlet extends AbstractGetServlet {
         Collection<Message> messages = groupWallMessageService.selectMessages(requestedId);
         req.setAttribute("messages", messages);
         req.setAttribute("group", group);
-        //todo autowire
-        req.setAttribute("photo", context.getBean(DataHandleHelper.class).getHtmlPhoto(group.getPhoto()));
+        req.setAttribute("photo", new DataHandleHelper().getHtmlPhoto(group.getPhoto()));
         req.setAttribute("type", "groupWall");
         req.setAttribute("id", requestedId);
         req.setAttribute("tab", "wall");

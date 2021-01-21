@@ -10,7 +10,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper;
-import com.getjavajob.training.yarginy.socialnetwork.service.aaa.AccountInfoKeeper;
+import com.getjavajob.training.yarginy.socialnetwork.service.infokeepers.AccountInfoKeeper;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.additionaldata.PhoneView;
 
 import javax.servlet.ServletException;
@@ -27,7 +27,6 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory.getNullPassword;
-import static com.getjavajob.training.yarginy.socialnetwork.common.utils.CommonApplicationContextProvider.getContext;
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 import static java.util.Objects.isNull;
@@ -61,7 +60,7 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
         setAttribute("skype", account::getSkype);
         setAttribute("country", account::getCountry);
         setAttribute("city", account::getCity);
-        setAttribute("photo", () -> getContext().getBean(DataHandleHelper.class).getHtmlPhoto(account.getPhoto()));
+        setAttribute("photo", () -> new DataHandleHelper().getHtmlPhoto(account.getPhoto()));
 
         Collection<Phone> phones = accountInfo.getPhones();
         HttpSession session = req.getSession();
@@ -143,8 +142,7 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
         setStringFromParam(account::setSkype, "skype");
         setStringFromParam(account::setCountry, "country");
         setStringFromParam(account::setCity, "city");
-        DataHandleHelper dataHandleHelper = getContext().getBean(DataHandleHelper.class);
-        setPhotoFromParam(account::setPhoto, dataHandleHelper, "photo");
+        setPhotoFromParam(account::setPhoto, new DataHandleHelper(), "photo");
 
         Collection<Phone> privatePhones = getPhonesFromParams(PRIVATE_PHONES, PhoneType.PRIVATE);
         Collection<Phone> workPhones = getPhonesFromParams(WORK_PHONES, PhoneType.WORK);

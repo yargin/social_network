@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.service.aaa;
+package com.getjavajob.training.yarginy.socialnetwork.service.infokeepers;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;

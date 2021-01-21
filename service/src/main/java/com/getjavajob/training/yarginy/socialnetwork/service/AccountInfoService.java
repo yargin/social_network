@@ -1,7 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.service;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.service.aaa.AccountInfoKeeper;
+import com.getjavajob.training.yarginy.socialnetwork.service.infokeepers.AccountInfoKeeper;
 
 import java.io.Serializable;
 

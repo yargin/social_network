@@ -12,12 +12,11 @@ var duplicateNumber;
 var anotherDuplicate;
 const ERROR = 'Error';
 const DELETE = 'Delete';
-const SPACE = /\s?/;
 const PHONE_REGEX = /^[+]?\s?\d{1,4}([\s-]?\d+)+$/;
 const PHONE_REGEX_WITH_BRACES = /^[+]?\s?[(]\s?\d{1,4}\s?[)]\s?([\s-]?\d+)+$/;
 
 function confirmation(confirmMessage) {
-    if (submit()) {
+    if (acceptPhones()) {
         return confirm(confirmMessage);
     }
     return false;
@@ -223,7 +222,7 @@ function deletePhone(valueToDelete) {
     }
 }
 
-function submit() {
+function acceptPhones() {
     var checked = checkForErrorAddName(privatePhones, 'privatePhone');
     if (!checked) {
         return false;
@@ -240,6 +239,7 @@ function checkForErrorAddName(phones, type) {
             return false;
         }
         document.getElementById(phones[i]).setAttribute('name', type + i);
+        alert(document.getElementById(phones[i]).getAttribute('name'));
     }
     return true;
 }
