@@ -34,7 +34,7 @@
         <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.common.AuthFilter</filter-class>
         <init-param>
             <param-name>pathToIgnore</param-name>
-            <param-value>registration:login:css:img</param-value>
+            <param-value>registration:login:css:img:js</param-value>
         </init-param>
     </filter>
     <filter-mapping>

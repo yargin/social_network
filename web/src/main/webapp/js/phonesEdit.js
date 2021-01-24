@@ -1,3 +1,8 @@
+const ERROR_POSTFIX = 'Error';
+const DELETE_POSTFIX = 'Delete';
+const PHONE_REGEX = /^[+]?\s?\d{1,4}([\s-]?\d+)+$/;
+const PHONE_REGEX_WITH_BRACES = /^[+]?\s?[(]\s?\d{1,4}\s?[)]\s?([\s-]?\d+)+$/;
+
 var tooShortError;
 var tooLongError;
 var notPhoneError;
@@ -10,17 +15,6 @@ var deleteListeners = new Map();
 var blurListeners = new Map();
 var duplicateNumber;
 var anotherDuplicate;
-const ERROR = 'Error';
-const DELETE = 'Delete';
-const PHONE_REGEX = /^[+]?\s?\d{1,4}([\s-]?\d+)+$/;
-const PHONE_REGEX_WITH_BRACES = /^[+]?\s?[(]\s?\d{1,4}\s?[)]\s?([\s-]?\d+)+$/;
-
-function confirmation(confirmMessage) {
-    if (acceptPhones()) {
-        return confirm(confirmMessage);
-    }
-    return false;
-}
 
 function init(deleteButtonTex, tooShortErr, tooLongErr, notPhoneErr, duplicateErr) {
     deleteText = deleteButtonTex;
@@ -42,7 +36,7 @@ function addNewPhone(type) {
 function checkPhone(elementId) {
     var newPrivatePhone = document.getElementById(elementId);
     var value = newPrivatePhone.value;
-    var errorDiv = document.getElementById(elementId + ERROR);
+    var errorDiv = document.getElementById(elementId + ERROR_POSTFIX);
     while (errorDiv.firstChild) {
         errorDiv.removeChild(errorDiv.firstChild);
     }
@@ -63,7 +57,7 @@ function checkPhone(elementId) {
     if (elementId !== value && (privatePhones.includes(value) || workPhones.includes(value))) {
         errorDiv.appendChild(document.createTextNode(duplicateErrorMessage));
 
-        errorDiv = document.getElementById(value + ERROR);
+        errorDiv = document.getElementById(value + ERROR_POSTFIX);
         while (errorDiv.firstChild) {
             errorDiv.removeChild(errorDiv.firstChild);
         }
@@ -86,7 +80,7 @@ function deleteDuplicate() {
 }
 
 function deleteDuplicateMessage(valueToDelete) {
-    var duplicateError = document.getElementById(valueToDelete + ERROR);
+    var duplicateError = document.getElementById(valueToDelete + ERROR_POSTFIX);
     if (duplicateError != null && duplicateError.firstChild != null) {
         duplicateError.removeChild(duplicateError.firstChild);
     }
@@ -106,11 +100,11 @@ function changePhone(elementId) {
     }
 
     //change current field
-    var errorDiv = document.getElementById(elementId + ERROR);
-    errorDiv.setAttribute('id', value + ERROR);
+    var errorDiv = document.getElementById(elementId + ERROR_POSTFIX);
+    errorDiv.setAttribute('id', value + ERROR_POSTFIX);
 
-    var deleteButton = document.getElementById(elementId + DELETE);
-    deleteButton.setAttribute('id', value + DELETE);
+    var deleteButton = document.getElementById(elementId + DELETE_POSTFIX);
+    deleteButton.setAttribute('id', value + DELETE_POSTFIX);
 
     deleteButton.removeEventListener('click', deleteListeners.get(elementId));
     deleteListeners.delete(elementId);
@@ -142,7 +136,7 @@ function replaceValue(oldValue, newValue, array) {
 function addDeleteListener(button, value) {
     var listener = function () {
         deletePhone(value);
-    };
+    }
     deleteListeners.set(value, listener);
     button.addEventListener('click', listener);
 }
@@ -150,7 +144,7 @@ function addDeleteListener(button, value) {
 function addBlurListener(input, value) {
     var listener = function () {
         changePhone(value);
-    };
+    }
     blurListeners.set(value, listener);
     input.addEventListener('blur', listener);
 }
@@ -191,13 +185,13 @@ function addPhone(value, error, type) {
     var errorText = document.createTextNode(error);
     var errorDiv = document.createElement('div');
     errorDiv.appendChild(errorText);
-    errorDiv.setAttribute('id', value + ERROR);
+    errorDiv.setAttribute('id', value + ERROR_POSTFIX);
     phonesList.insertBefore(errorDiv, newPhoneDiv);
 }
 
 function createDeleteButton(value) {
     var deletePhoneButton = document.createElement('button');
-    deletePhoneButton.setAttribute('id', value + DELETE);
+    deletePhoneButton.setAttribute('id', value + DELETE_POSTFIX);
     deletePhoneButton.setAttribute('type', 'button');
 
     addDeleteListener(deletePhoneButton, value);
@@ -215,14 +209,16 @@ function deletePhone(valueToDelete) {
     });
     var toDelete = document.getElementById(valueToDelete).value;
     document.getElementById(valueToDelete).remove();
-    document.getElementById(valueToDelete + DELETE).remove();
-    document.getElementById(valueToDelete + ERROR).remove();
+    document.getElementById(valueToDelete + DELETE_POSTFIX).remove();
+    document.getElementById(valueToDelete + ERROR_POSTFIX).remove();
     if (duplicateNumber === toDelete) {
         deleteDuplicate();
     }
 }
 
 function acceptPhones() {
+    // alert('accept private phones ' + privatePhones);
+    // alert('accept work phones ' + workPhones);
     var checked = checkForErrorAddName(privatePhones, 'privatePhone');
     if (!checked) {
         return false;
@@ -233,13 +229,13 @@ function acceptPhones() {
 
 function checkForErrorAddName(phones, type) {
     for (var i = 0; i < phones.length; i++) {
-        var errorDiv = document.getElementById(phones[i] + ERROR);
+        var errorDiv = document.getElementById(phones[i] + ERROR_POSTFIX);
         if (errorDiv.firstChild != null && errorDiv.firstChild.textContent !== '') {
             document.getElementById(phones[i]).focus();
             return false;
         }
         document.getElementById(phones[i]).setAttribute('name', type + i);
-        alert(document.getElementById(phones[i]).getAttribute('name'));
+        // alert('in one phone check ' + document.getElementById(phones[i]).getAttribute('name'));
     }
     return true;
 }

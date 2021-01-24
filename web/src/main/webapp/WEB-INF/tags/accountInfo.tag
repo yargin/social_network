@@ -3,7 +3,7 @@
 <fmt:setBundle basename="form" var="form"/>
 <fmt:setBundle basename="label" var="label"/>
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
-<script src="${context}/js/updateFunctions.js"></script>
+<script src="${context}/js/phonesEdit.js" defer></script>
 <fmt:message key="label.areYouSure" var="confirmText" bundle="${label}"/>
 
 <div class="info">

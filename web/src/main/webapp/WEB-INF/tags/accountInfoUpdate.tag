@@ -5,14 +5,16 @@
 <fmt:setBundle basename="label" var="label"/>
 <fmt:setBundle basename="error" var="error"/>
 <fmt:setBundle basename="form" var="form"/>
+
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
-<script src="${context}/js/updateFunctions.js"></script>
+<script type="text/javascript" src="${context}/js/phonesEdit.js"></script>
+<script type="text/javascript" src="${context}/js/confirmationDialog.js"></script>
 
 <div class="info">
     <fmt:message key="label.saveUpdates" var="confirmText" bundle="${label}"/>
 
     <form action="${context}${target}?id=${id}" method="post" enctype="multipart/form-data" id="accountUpdate"
-          onsubmit='return confirmation("${confirmText}")'>
+          onsubmit='return confirmation("${confirmText}", acceptPhones())'>
 
         <label><fmt:message key="form.name" bundle="${form}"/></label>
         <input type="text" name="name"

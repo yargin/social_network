@@ -4,6 +4,18 @@
 <fmt:setBundle basename="error" var="error"/>
 <fmt:setBundle basename="form" var="form"/>
 
+<fmt:message key="button.delete" bundle="${label}" var="deleteText"/>
+<fmt:message key="error.notPhone" bundle="${error}" var="notPhone"/>
+<fmt:message key="error.tooLong" bundle="${error}" var="tooLong"/>
+<fmt:message key="error.tooShort" bundle="${error}" var="tooShort"/>
+<fmt:message key="error.duplicate" bundle="${error}" var="duplicate"/>
+
+<%--todo delete this--%>
+<script>
+    init("${deleteText}", "${tooShort}", "${tooLong}", "${notPhone}", "${duplicate}");
+</script>
+
+
 <c:forEach var="privatePhone" items="${sessionScope.privatePhones}">
     <input type="text"
            name="${privatePhone.paramName}" value="${privatePhone.value}"
