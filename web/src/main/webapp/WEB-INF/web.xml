@@ -4,6 +4,7 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
 
+<!--    todo split two-word urls-->
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>classpath:webSpringConfig.xml</param-value>
@@ -33,7 +34,7 @@
         <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.common.AuthFilter</filter-class>
         <init-param>
             <param-name>pathToIgnore</param-name>
-            <param-value>registration:login:css:img</param-value>
+            <param-value>registration:login:css:img:js</param-value>
         </init-param>
     </filter>
     <filter-mapping>
@@ -172,17 +173,6 @@
         <url-pattern>/removefriendship</url-pattern>
         <url-pattern>/dialogs</url-pattern>
     </filter-mapping>
-
-    <!--    <filter>-->
-    <!--        <filter-name>FriendChecker</filter-name>-->
-    <!--        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.accountinfoaccess.FriendCheckerFilter-->
-    <!--        </filter-class>-->
-    <!--    </filter>-->
-    <!--    <filter-mapping>-->
-    <!--        <filter-name>FriendChecker</filter-name>-->
-    <!--        <url-pattern>/privatemessage</url-pattern>-->
-    <!--        <url-pattern>/createdialog</url-pattern>-->
-    <!--    </filter-mapping>-->
 
     <filter>
         <filter-name>OwnerFriendChecker</filter-name>

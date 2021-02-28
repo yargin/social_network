@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 import static java.util.Objects.isNull;
 
 public class LogoutServlet extends AbstractGetServlet {
@@ -19,6 +20,10 @@ public class LogoutServlet extends AbstractGetServlet {
     @Override
     protected void safeDoGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession();
+        session.removeAttribute(ACCOUNT_INFO);
+        session.removeAttribute(PRIVATE_PHONES);
+        session.removeAttribute(WORK_PHONES);
+        session.removeAttribute(PHOTO);
         session.invalidate();
 
         Cookie[] cookies = req.getCookies();

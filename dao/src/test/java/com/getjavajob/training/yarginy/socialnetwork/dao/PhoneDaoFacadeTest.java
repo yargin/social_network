@@ -38,12 +38,12 @@ public class PhoneDaoFacadeTest {
 
     @After
     public void deleteTestValues() {
-        phoneDaoFacade.delete(phone);
+        phoneDaoFacade.delete(phoneDaoFacade.select(phone));
     }
 
     @Test
     public void testCreatePhone() {
-        phoneDaoFacade.delete(phone);
+        phoneDaoFacade.delete(phoneDaoFacade.select(phone));
         assertTrue(phoneDaoFacade.create(phone));
     }
 
@@ -55,7 +55,7 @@ public class PhoneDaoFacadeTest {
 
     @Test
     public void testCreateWrongOwner() {
-        phoneDaoFacade.delete(phone);
+        phoneDaoFacade.delete(phoneDaoFacade.select(phone));
         Account wrongAccount = new AccountImpl();
         wrongAccount.setId(-1);
         phone.setOwner(wrongAccount);
@@ -98,7 +98,7 @@ public class PhoneDaoFacadeTest {
     @Test
     public void testDeletePhone() {
         phoneDaoFacade.create(phone);
-        assertTrue(phoneDaoFacade.delete(phone));
+        assertTrue(phoneDaoFacade.delete(phoneDaoFacade.select(phone)));
     }
 
     @Test

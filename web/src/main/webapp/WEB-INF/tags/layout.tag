@@ -15,6 +15,7 @@
     <title><fmt:message key="title"/></title>
 </head>
 <body>
+
 <div class="wrapper">
     <div class="header">
         <img src="${context}/img/java.png" id="logo">

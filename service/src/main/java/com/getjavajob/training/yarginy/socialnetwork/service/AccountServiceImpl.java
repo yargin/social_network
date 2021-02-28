@@ -10,7 +10,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacad
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
-import com.getjavajob.training.yarginy.socialnetwork.service.aaa.AccountInfoKeeper;
+import com.getjavajob.training.yarginy.socialnetwork.service.infokeepers.AccountInfoKeeper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -84,10 +84,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     public void addFriendTransactional(long firstId, long secondId) {
-        if (!friendshipDao.deleteRequest(firstId, secondId)) {
-            throw new DataFlowViolationException();
-        }
-        if (!friendshipDao.createFriendship(firstId, secondId)) {
+        if (!friendshipDao.deleteRequest(firstId, secondId) || !friendshipDao.createFriendship(firstId, secondId)) {
             throw new DataFlowViolationException();
         }
     }

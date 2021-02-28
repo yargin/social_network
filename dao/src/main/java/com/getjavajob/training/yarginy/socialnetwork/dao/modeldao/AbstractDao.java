@@ -88,10 +88,14 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
 
     @Override
     public boolean delete(E entity) {
-        return template.update(getDeleteQuery(), getObjectAltKeys(entity)) == 1;
+        return template.update(getDeleteByIdQuery(), getObjectPrimaryKeys(entity)) == 1;
     }
 
-    protected String getDeleteQuery() {
+    protected String getDeleteByIdQuery() {
+        return "DELETE FROM " + getTable(alias) + WHERE + getStringPkAsParameters(alias);
+    }
+
+    protected String getDeleteByAltKeysQuery() {
         return "DELETE FROM " + getTable(alias) + WHERE + getStringAltKeysAsParameters(alias);
     }
 

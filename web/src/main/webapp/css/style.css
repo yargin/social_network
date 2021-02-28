@@ -142,7 +142,9 @@ html, body, ul, li {
 }
 
 .post input, select {
-    margin-top: 10px;
+    margin-top: 1%;
+    margin-bottom: 3%;
+    margin-right: 3%;
     display: inline-block;
     alignment: center;
 }
@@ -225,4 +227,8 @@ button:hover {
     max-width: 90px;
     float: right;
     margin: 5px 10px;
+}
+
+.newPhoneDiv {
+    border-top: 1px solid #94d2d4;
 }

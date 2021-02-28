@@ -7,6 +7,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Pass
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.PasswordImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PasswordDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
@@ -32,6 +33,8 @@ public class AuthServiceTest {
     private PasswordDaoFacade passwordDaoFacade;
     @Mock
     private PhoneDaoFacade phoneDaoFacade;
+    @Mock
+    private DataHandleHelper dataHandleHelper;
     @InjectMocks
     private AuthServiceImpl authService;
 
@@ -48,6 +51,7 @@ public class AuthServiceTest {
         password.setPassword("123qwe123");
         password.setAccount(account);
         when(accountDaoFacade.create(account)).thenReturn(true);
+        when(accountDaoFacade.select(account)).thenReturn(account);
         when(phoneDaoFacade.create(phones)).thenReturn(true);
         when(passwordDaoFacade.create(password)).thenReturn(true);
         boolean registered = authService.register(account, phones, password);

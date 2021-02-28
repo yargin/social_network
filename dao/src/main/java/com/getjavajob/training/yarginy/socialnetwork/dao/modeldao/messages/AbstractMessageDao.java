@@ -134,11 +134,11 @@ public abstract class AbstractMessageDao extends AbstractDao<Message> {
 
     @Override
     public boolean delete(Message message) {
-        return template.update(getDeleteQuery(), getObjectPrimaryKeys(message)) == 1;
+        return template.update(getDeleteByIdQuery(), getObjectPrimaryKeys(message)) == 1;
     }
 
     @Override
-    protected String getDeleteQuery() {
+    protected String getDeleteByIdQuery() {
         return "DELETE FROM " + table + " as " + ALIAS + " where " + getStringPkAsParameters(ALIAS);
     }
 }

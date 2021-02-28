@@ -31,7 +31,7 @@ public class PasswordDaoFacadeTest {
         ACCOUNT.setEmail("password@test.com");
         ACCOUNT.setName("testAccount");
         ACCOUNT.setSurname("testSurname");
-        accountDaoFacade.delete(ACCOUNT);
+        accountDaoFacade.delete(accountDaoFacade.select(ACCOUNT));
         assert accountDaoFacade.create(ACCOUNT);
         PASSWORD.setAccount(ACCOUNT);
         PASSWORD.setPassword("qwe123rty");
@@ -39,7 +39,7 @@ public class PasswordDaoFacadeTest {
 
     @After
     public void deleteTestValues() {
-        assert accountDaoFacade.delete(ACCOUNT);
+        assert accountDaoFacade.delete(accountDaoFacade.select(ACCOUNT));
     }
 
     @Test
