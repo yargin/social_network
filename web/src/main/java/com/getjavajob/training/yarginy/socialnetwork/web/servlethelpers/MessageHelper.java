@@ -1,8 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.message.MessageImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -62,7 +61,7 @@ public final class MessageHelper {
     }
 
     public Message getMessageFromRequest(HttpServletRequest req) throws IOException, ServletException {
-        Message message = new MessageImpl();
+        Message message = new Message();
         String text = req.getParameter("text");
         message.setText(text);
         Part part = req.getPart("image");
@@ -72,14 +71,14 @@ public final class MessageHelper {
             }
         }
         long senderId = (long) req.getAttribute(REQUESTER_ID);
-        AccountImpl author = new AccountImpl();
+        Account author = new Account();
         author.setId(senderId);
         message.setAuthor(author);
         return message;
     }
 
     public void deleteMessage(HttpServletRequest req) {
-        Message message = new MessageImpl();
+        Message message = new Message();
         long messageId = (long) req.getAttribute(REQUESTED_ID);
         message.setId(messageId);
         String type = req.getParameter("type");

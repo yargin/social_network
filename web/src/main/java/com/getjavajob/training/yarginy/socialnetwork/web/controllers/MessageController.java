@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.controllers;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.message.MessageImpl;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -33,13 +33,8 @@ public class MessageController {
     }
 
     @PostMapping("/add")
-    public String addMessage(@RequestParam("type") String type, @ModelAttribute MessageImpl message,
-                             @RequestParam("imageUpload") MultipartFile image, HttpServletRequest req,
-                             @RequestParam("author.id") long requesterId) {
-        //todo - use nested model or remove all models interfaces
-//        AccountImpl author = new AccountImpl();
-//        author.setId(requesterId);
-//        message.setAuthor(author);
+    public String addMessage(@RequestParam("type") String type, @ModelAttribute Message message,
+                             @RequestParam("imageUpload") MultipartFile image, HttpServletRequest req) {
         if (!image.isEmpty()) {
             try {
                 message.setImage(image.getBytes());
@@ -58,7 +53,7 @@ public class MessageController {
     }
 
     @PostMapping("/delete")
-    public String deleteMessage(@RequestParam("type") String type, @ModelAttribute MessageImpl message,
+    public String deleteMessage(@RequestParam("type") String type, @ModelAttribute Message message,
                                 HttpServletRequest req) {
         if ("accountWall".equals(type)) {
             accountWallMessageService.deleteMessage(message);

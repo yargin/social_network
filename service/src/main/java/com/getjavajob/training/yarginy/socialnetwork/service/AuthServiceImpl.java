@@ -3,9 +3,7 @@ package com.getjavajob.training.yarginy.socialnetwork.service;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.password.PasswordImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
@@ -64,8 +62,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public Account login(String email, String password) {
-        Password passwordObject = new PasswordImpl();
-        Account account = new AccountImpl();
+        Password passwordObject = new Password();
+        Account account = new Account();
         account.setEmail(email);
         passwordObject.setAccount(account);
         passwordObject.setPassword(password);

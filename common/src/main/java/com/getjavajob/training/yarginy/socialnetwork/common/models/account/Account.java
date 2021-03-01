@@ -1,68 +1,200 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.models.account;
 
+import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
+import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.AbstractEntity;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.sql.Date;
+import java.util.Arrays;
+import java.util.Objects;
 
-/**
- * provides object model of relational entity Account
- */
-public interface Account extends Entity {
-    String getName();
+import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper.*;
+import static java.util.Objects.isNull;
 
-    String getSurname();
+@Component("account")
+@Scope("prototype")
+public class Account extends AbstractEntity implements Entity {
+    private String name;
+    private String surname;
+    private String patronymic;
+    private Sex sex;
+    private Date birthDate;
+    private Date registrationDate;
+    private String email;
+    private String additionalEmail;
+    private Role role;
+    private String icq;
+    private String skype;
+    private String city;
+    private String country;
+    private byte[] photo;
 
-    String getPatronymic();
+    public Account() {
+    }
 
-    Sex getSex();
+    public Account(String name, String email) {
+        this.name = stringMandatory(name);
+        this.email = emailMandatory(email);
+    }
 
-    Date getBirthDate();
+    public Account(String name, String surname, String email) {
+        this(name, email);
+        this.surname = stringMandatory(surname);
+    }
 
-    Date getRegistrationDate();
+    @Override
+    public long getId() {
+        return getIdNumber();
+    }
 
-    String getEmail();
+    @Override
+    public void setId(long id) {
+        setIdNumber(id);
+    }
 
-    String getAdditionalEmail();
+    public String getName() {
+        return name;
+    }
 
-    Role getRole();
+    public void setName(String name) {
+        this.name = stringMandatory(name);
+    }
 
-    String getIcq();
+    public String getSurname() {
+        return surname;
+    }
 
-    String getSkype();
+    public void setSurname(String surname) {
+        this.surname = stringMandatory(surname);
+    }
 
-    String getCity();
+    public String getPatronymic() {
+        return patronymic;
+    }
 
-    String getCountry();
+    public void setPatronymic(String patronymic) {
+        this.patronymic = stringOptional(patronymic);
+    }
 
-    void setSex(Sex sex);
+    public Sex getSex() {
+        return sex;
+    }
 
-    void setName(String name);
+    public void setSex(Sex sex) {
+        this.sex = sex;
+    }
 
-    void setSurname(String surname);
+    public Date getBirthDate() {
+        return birthDate;
+    }
 
-    void setPatronymic(String patronymic);
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = eligibleAge(birthDate);
+    }
 
-    void setBirthDate(Date birthDate);
+    public Date getRegistrationDate() {
+        return registrationDate;
+    }
 
-    void setRegistrationDate(Date registrationDate);
+    public void setRegistrationDate(Date registrationDate) {
+        this.registrationDate = registrationDate;
+    }
 
-    void setEmail(String email);
+    public String getEmail() {
+        return email;
+    }
 
-    void setAdditionalEmail(String additionalEmail);
+    public void setEmail(String email) {
+        this.email = emailMandatory(email);
+    }
 
-    void setRole(Role role);
+    public String getAdditionalEmail() {
+        return additionalEmail;
+    }
 
-    void setIcq(String icq);
+    public void setAdditionalEmail(String additionalEmail) {
+        if (Objects.equals(additionalEmail, email)) {
+            throw new IncorrectDataException(IncorrectData.SAME_ADDITIONAL_EMAIL);
+        }
+        this.additionalEmail = emailOptional(additionalEmail);
+    }
 
-    void setSkype(String skype);
+    public Role getRole() {
+        return role;
+    }
 
-    void setCity(String city);
+    public void setRole(Role role) {
+        this.role = role;
+    }
 
-    void setCountry(String country);
+    public String getIcq() {
+        return icq;
+    }
 
-    byte[] getPhoto();
+    public void setIcq(String icq) {
+        this.icq = stringOptional(icq);
+    }
 
-    void setPhoto(byte[] photo);
+    public String getSkype() {
+        return skype;
+    }
+
+    public void setSkype(String skype) {
+        this.skype = stringOptional(skype);
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = stringOptional(city);
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = stringOptional(country);
+    }
+
+    public byte[] getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(byte[] photo) {
+        this.photo = Arrays.copyOf(photo, photo.length);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (isNull(o)) {
+            return false;
+        }
+        if (this == o) {
+            return true;
+        }
+        if (o instanceof Account) {
+            Account account = (Account) o;
+            return Objects.equals(stringOptional(email), stringOptional(account.getEmail()));
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email);
+    }
+
+    @Override
+    public String toString() {
+        return "Account{name=" + name + ", surname='" + surname + ", patronymic=" + patronymic + ", birthDate=" +
+                birthDate + ", city=" + city + ", country=" + country + '}';
+    }
 }

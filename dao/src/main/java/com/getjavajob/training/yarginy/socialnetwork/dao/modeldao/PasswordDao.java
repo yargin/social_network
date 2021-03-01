@@ -3,7 +3,6 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.password.PasswordImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -87,7 +86,7 @@ public class PasswordDao extends AbstractDao<Password> {
     @Override
     public RowMapper<Password> getViewRowMapper() {
         return (resultSet, i) -> {
-            Password password = new PasswordImpl();
+            Password password = new Password();
             password.setAccount(accountDao.getSuffixedViewRowMapper(ACCOUNT_ALIAS).mapRow(resultSet, i));
             password.setPassword(resultSet.getString(PASSWORD + PASSWORD_ALIAS));
             return password;

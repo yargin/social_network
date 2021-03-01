@@ -4,7 +4,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.Searchable;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchableDto;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchableImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchableType;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AccountDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.GroupDao;
@@ -81,7 +80,7 @@ public class DataSetsDao implements Serializable {
         String[] searchParameters = new String[ACCOUNTS_GROUPS_PARAMETERS_NUMBER];
         Arrays.fill(searchParameters, '%' + searchString + '%');
         Collection<Searchable> entities = template.query(query, (resultSet, i) -> {
-            Searchable searchable = new SearchableImpl();
+            Searchable searchable = new Searchable();
             searchable.setId(resultSet.getLong("id"));
             searchable.setName(resultSet.getString("name"));
             if ("user".equals(resultSet.getString("type"))) {

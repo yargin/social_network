@@ -1,15 +1,36 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.models.searchable;
 
-public interface Searchable {
-    long getId();
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
-    void setId(long id);
+@Component
+@Scope("prototype")
+public class Searchable {
+    private long id;
+    private String name;
+    private SearchableType type;
 
-    String getName();
+    public long getId() {
+        return id;
+    }
 
-    void setName(String name);
+    public void setId(long id) {
+        this.id = id;
+    }
 
-    SearchableType getType();
+    public String getName() {
+        return name;
+    }
 
-    void setType(SearchableType type);
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public SearchableType getType() {
+        return type;
+    }
+
+    public void setType(SearchableType type) {
+        this.type = type;
+    }
 }

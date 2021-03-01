@@ -1,7 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.service.infokeepers;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
 
@@ -24,7 +23,7 @@ public class AccountInfoKeeper implements Serializable {
     }
 
     public AccountInfoKeeper() {
-        this(new AccountImpl(), new ArrayList<>());
+        this(new Account(), new ArrayList<>());
     }
 
     public Account getAccount() {

@@ -4,7 +4,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.DataFlowV
 import com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.batch.AbstractBatchDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -114,7 +113,7 @@ public class GroupDao extends AbstractBatchDao<Group> {
 
     public RowMapper<Group> getSuffixedViewRowMapper(String suffix) {
         return (resultSet, i) -> {
-            Group group = new GroupImpl();
+            Group group = new Group();
             try {
                 group.setId(resultSet.getLong(ID + suffix));
             } catch (DataFlowViolationException e) {

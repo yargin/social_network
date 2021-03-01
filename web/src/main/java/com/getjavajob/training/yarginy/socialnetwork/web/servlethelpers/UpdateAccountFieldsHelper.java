@@ -5,9 +5,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.password.PasswordImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper;
 import com.getjavajob.training.yarginy.socialnetwork.service.infokeepers.AccountInfoKeeper;
@@ -100,7 +98,7 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
             PhoneView phoneView = new PhoneView(prefix + i, number, "");
             phoneViews.add(phoneView);
             try {
-                Phone phone = new PhoneImpl(number, account);
+                Phone phone = new Phone(number, account);
                 phone.setType(type);
                 phones.add(phone);
             } catch (IncorrectDataException e) {
@@ -114,10 +112,10 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
     }
 
     public Password getPassword(Account account) {
-        Password password = new PasswordImpl();
+        Password password = new Password();
         password.setAccount(account);
         setStringFromParam(password::setPassword, "password");
-        Password confirmPassword = new PasswordImpl();
+        Password confirmPassword = new Password();
         confirmPassword.setAccount(account);
         setStringFromParam(confirmPassword::setPassword, "confirmPassword");
         if (!Objects.equals(password, confirmPassword)) {

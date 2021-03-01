@@ -1,7 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.servlets.group;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.AbstractGetServlet;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
@@ -27,7 +26,7 @@ public class GroupDeleteServlet extends AbstractGetServlet {
     @Override
     protected void safeDoGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         long requestedId = (long) req.getAttribute(Attributes.REQUESTED_ID);
-        Group group = new GroupImpl();
+        Group group = new Group();
         group.setId(requestedId);
         if (groupService.removeGroup(group)) {
             redirect(req, resp, Pages.GROUPS);

@@ -2,9 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.service;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
@@ -39,9 +37,9 @@ public class AccountServiceTest {
 
     @Before
     public void init() {
-        account = new AccountImpl("Petr", "email@gjj.ru");
+        account = new Account("Petr", "email@gjj.ru");
         account.setId(555);
-        phones = asList(new PhoneImpl("123321", account), new PhoneImpl("123123", account));
+        phones = asList(new Phone("123321", account), new Phone("123123", account));
     }
 
     @Test
@@ -115,7 +113,7 @@ public class AccountServiceTest {
 
     @Test
     public void testAddPhone() {
-        Phone phone = new PhoneImpl();
+        Phone phone = new Phone();
         phone.setNumber("111-111");
         when(phoneDaoFacade.create(phone)).thenReturn(true);
         assertTrue(phoneDaoFacade.create(phone));
@@ -123,7 +121,7 @@ public class AccountServiceTest {
 
     @Test
     public void testRemovePhone() {
-        Phone phone = new PhoneImpl();
+        Phone phone = new Phone();
         phone.setNumber("111-111");
         when(phoneDaoFacade.create(phone)).thenReturn(true);
         assertTrue(phoneDaoFacade.create(phone));
@@ -131,9 +129,9 @@ public class AccountServiceTest {
 
     @Test
     public void testGetPhones() {
-        Phone firstPhone = new PhoneImpl();
+        Phone firstPhone = new Phone();
         firstPhone.setNumber("11333");
-        Phone secondPhone = new PhoneImpl();
+        Phone secondPhone = new Phone();
         secondPhone.setNumber("33111");
         Collection<Phone> phones = asList(firstPhone, secondPhone);
         when(phoneDaoFacade.selectPhonesByOwner(account.getId())).thenReturn(phones);

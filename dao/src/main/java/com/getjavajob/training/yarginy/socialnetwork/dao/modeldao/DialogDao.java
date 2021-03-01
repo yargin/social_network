@@ -4,7 +4,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.DataFlowV
 import com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.DialogImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -61,7 +60,7 @@ public class DialogDao extends AbstractDao<Dialog> {
     public RowMapper<Dialog> getSuffixedViewRowMapper(String dialogSuffix, String firstAccountSuffix,
                                                       String secondAccountSuffix) {
         return (resultSet, i) -> {
-            Dialog dialog = new DialogImpl();
+            Dialog dialog = new Dialog();
             try {
                 dialog.setId(resultSet.getLong(ID + dialogSuffix));
             } catch (DataFlowViolationException e) {

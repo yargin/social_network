@@ -1,7 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.actionservlets;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.AbstractGetServlet;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
@@ -28,7 +27,7 @@ public class AccountDeleteServlet extends AbstractGetServlet {
     protected void safeDoGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         long requestedUserId = (long) req.getAttribute(REQUESTED_ID);
 
-        Account accountToDelete = new AccountImpl();
+        Account accountToDelete = new Account();
         accountToDelete.setId(requestedUserId);
         boolean deleted = accountService.deleteAccount(accountToDelete);
         if (deleted) {

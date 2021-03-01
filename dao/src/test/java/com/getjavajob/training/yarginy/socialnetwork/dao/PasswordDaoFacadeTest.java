@@ -1,9 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.password.PasswordImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PasswordDaoFacade;
 import org.junit.After;
@@ -19,8 +17,8 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoOverrideSpringConfig.xml"})
 public class PasswordDaoFacadeTest {
-    private static final Account ACCOUNT = new AccountImpl();
-    private static final Password PASSWORD = new PasswordImpl();
+    private static final Account ACCOUNT = new Account();
+    private static final Password PASSWORD = new Password();
     @Autowired
     private AccountDaoFacade accountDaoFacade;
     @Autowired
@@ -66,7 +64,7 @@ public class PasswordDaoFacadeTest {
 
     @Test
     public void testUpdateNonExisting() {
-        PASSWORD.setAccount(new AccountImpl("petya", "fake@email.com"));
+        PASSWORD.setAccount(new Account("petya", "fake@email.com"));
         assertFalse(passwordDaoFacade.update(PASSWORD, passwordDaoFacade.select(PASSWORD)));
         PASSWORD.setAccount(ACCOUNT);
     }
@@ -80,8 +78,8 @@ public class PasswordDaoFacadeTest {
 
     @Test
     public void testSelectNonExisting() {
-        Password nonExistingPassword = new PasswordImpl();
-        nonExistingPassword.setAccount(new AccountImpl("Petr", "nonexisting@email.com"));
+        Password nonExistingPassword = new Password();
+        nonExistingPassword.setAccount(new Account("Petr", "nonexisting@email.com"));
         nonExistingPassword.setPassword("nonExisting1");
         assertEquals(passwordDaoFacade.getNullPassword(), passwordDaoFacade.select(nonExistingPassword));
     }

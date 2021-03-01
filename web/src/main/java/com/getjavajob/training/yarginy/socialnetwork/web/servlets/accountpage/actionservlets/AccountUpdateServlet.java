@@ -2,7 +2,6 @@ package com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.a
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountInfoService;
 import com.getjavajob.training.yarginy.socialnetwork.service.infokeepers.AccountInfoKeeper;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.UpdateAccountFieldsHelper;
@@ -58,7 +57,7 @@ public class AccountUpdateServlet extends AbstractGetPostServlet {
         }
 
         HttpSession session = req.getSession();
-        AccountInfoKeeper accountInfoKeeper = new AccountInfoKeeper(new AccountImpl(), new ArrayList<>());
+        AccountInfoKeeper accountInfoKeeper = new AccountInfoKeeper(new Account(), new ArrayList<>());
         AccountInfoKeeper storedAccountInfoKeeper = (AccountInfoKeeper) session.getAttribute(ACCOUNT_INFO);
         //set non updatable values
         Account account = accountInfoKeeper.getAccount();

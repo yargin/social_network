@@ -2,7 +2,6 @@ package com.getjavajob.training.yarginy.socialnetwork.web.servlets.group;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.UpdateGroupFieldsHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.AbstractGetPostServlet;
@@ -48,7 +47,7 @@ public class GroupUpdateServlet extends AbstractGetPostServlet {
         }
         long requestedId = (long) req.getAttribute(Attributes.REQUESTED_ID);
         Group storedGroup = (Group) req.getSession().getAttribute(Attributes.GROUP);
-        Group group = new GroupImpl();
+        Group group = new Group();
 
         //for further views
         group.setPhoto(storedGroup.getPhoto());

@@ -1,9 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsMembersDaoFacade;
@@ -29,9 +27,9 @@ public class AccountsInGroupsTest {
     private GroupsMembersDaoFacade groupsMembersDaoFacade;
     @Autowired
     private AccountDaoFacade accountDaoFacade;
-    private Account account = new AccountImpl("test", "test", "test@test.test");
-    private Account owner = new AccountImpl("testOwner", "testOwner", "testOwner@test.test");
-    private Group group = new GroupImpl("testGroup", owner);
+    private Account account = new Account("test", "test", "test@test.test");
+    private Account owner = new Account("testOwner", "testOwner", "testOwner@test.test");
+    private Group group = new Group("testGroup", owner);
 
     @Before
     public void testValuesInit() {

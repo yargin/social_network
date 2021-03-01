@@ -3,7 +3,6 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.DataFlowViolationException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,7 +88,7 @@ public class AccountDao extends AbstractDao<Account> {
 
     public RowMapper<Account> getSuffixedViewRowMapper(String suffix) {
         return (resultSet, i) -> {
-            Account account = new AccountImpl();
+            Account account = new Account();
             try {
                 account.setId(resultSet.getLong(ID + suffix));
             } catch (DataFlowViolationException e) {

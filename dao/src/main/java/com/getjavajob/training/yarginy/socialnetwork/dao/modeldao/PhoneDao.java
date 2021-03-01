@@ -4,7 +4,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.DataFlowV
 import com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.batch.AbstractBatchDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,7 +97,7 @@ public class PhoneDao extends AbstractBatchDao<Phone> {
 
     public RowMapper<Phone> getSuffixedViewRowMapper(String phoneSuffix) {
         return (resultSet, i) -> {
-            Phone phone = new PhoneImpl();
+            Phone phone = new Phone();
             try {
                 phone.setId(resultSet.getLong(ID + phoneSuffix));
             } catch (DataFlowViolationException e) {

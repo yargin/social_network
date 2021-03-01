@@ -1,9 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.actionservlets;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.DialogImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.service.DialogService;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.MessageHelper;
@@ -41,10 +39,10 @@ public class CreateDialogServlet extends AbstractPostServlet {
     protected void safeDoPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         long authorId = (long) req.getAttribute(REQUESTER_ID);
         long receiverId = (long) req.getAttribute(Attributes.RECEIVER_ID);
-        Dialog dialog = new DialogImpl();
-        Account author = new AccountImpl();
+        Dialog dialog = new Dialog();
+        Account author = new Account();
         author.setId(authorId);
-        Account receiver = new AccountImpl();
+        Account receiver = new Account();
         receiver.setId(receiverId);
         dialog.setFirstAccount(author);
         dialog.setSecondAccount(receiver);

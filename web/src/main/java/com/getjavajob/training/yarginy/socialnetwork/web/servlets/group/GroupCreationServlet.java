@@ -3,7 +3,6 @@ package com.getjavajob.training.yarginy.socialnetwork.web.servlets.group;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.UpdateGroupFieldsHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.AbstractGetPostServlet;
@@ -26,7 +25,7 @@ public class GroupCreationServlet extends AbstractGetPostServlet {
     @Override
     protected void safeDoGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UpdateGroupFieldsHelper updater = new UpdateGroupFieldsHelper(req, resp, GROUP_ID, Pages.GROUP);
-        Group group = updater.getOrCreateGroup(GroupImpl::new);
+        Group group = updater.getOrCreateGroup(Group::new);
         updater.initGroupAttributes(group);
         req.getRequestDispatcher(Jsps.GROUP_CREATION).forward(req, resp);
     }
@@ -34,7 +33,7 @@ public class GroupCreationServlet extends AbstractGetPostServlet {
     @Override
     protected void safeDoPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UpdateGroupFieldsHelper updater = new UpdateGroupFieldsHelper(req, resp, GROUP_ID, Pages.GROUP);
-        Group group = new GroupImpl();
+        Group group = new Group();
         updater.getValuesFromParams(group);
         if (!isNull(group.getPhoto())) {
             req.getSession().setAttribute(PHOTO, group.getPhoto());
