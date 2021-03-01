@@ -7,7 +7,7 @@
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 
 <div class="wallMessage" style="margin-right: 40%">
-    <form action="${context}/addmessage" method="post" enctype="multipart/form-data"
+    <form action="${context}/message/add" method="post" enctype="multipart/form-data"
           style="">
         <input type="hidden" value="${sessionScope.userId}" name="requesterId">
         <input type="hidden" value="${id}" name="receiverId">

@@ -1,11 +1,15 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.models.dialog;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
 import static java.util.Objects.isNull;
 
+@Component
+@Scope("prototype")
 public class DialogImpl implements Dialog {
     private long id;
     private Account firstAccount;

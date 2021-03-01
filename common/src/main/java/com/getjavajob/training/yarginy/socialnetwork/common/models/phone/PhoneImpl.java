@@ -3,12 +3,16 @@ package com.getjavajob.training.yarginy.socialnetwork.common.models.phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.AbstractEntity;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper.*;
 import static java.util.Objects.isNull;
 
+@Component
+@Scope("prototype")
 public class PhoneImpl extends AbstractEntity implements Phone {
     private String number;
     private PhoneType type;

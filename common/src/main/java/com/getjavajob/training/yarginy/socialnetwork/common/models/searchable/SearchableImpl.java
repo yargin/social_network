@@ -1,5 +1,10 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.models.searchable;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+@Component
+@Scope("prototype")
 public class SearchableImpl implements Searchable {
     private long id;
     private String name;

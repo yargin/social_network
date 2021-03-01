@@ -4,7 +4,6 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
 
-<!--    todo split two-word urls-->
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>classpath:webSpringConfig.xml</param-value>
@@ -14,6 +13,29 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
+    <servlet>
+        <servlet-name>dispatcher</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dispatcher</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.css</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.js</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.jpg</url-pattern>
+    </servlet-mapping>
+
     <welcome-file-list>
         <welcome-file>/WEB-INF/jsps/index.jsp</welcome-file>
     </welcome-file-list>
@@ -21,13 +43,6 @@
     <session-config>
         <session-timeout>30</session-timeout>
     </session-config>
-
-    <jsp-config>
-        <jsp-property-group>
-            <url-pattern>*.jsp</url-pattern>
-            <default-content-type>"text/html; charset=UTF-8"</default-content-type>
-        </jsp-property-group>
-    </jsp-config>
 
     <filter>
         <filter-name>AuthFilter</filter-name>
@@ -104,8 +119,6 @@
         <url-pattern>/leavegroup</url-pattern>
         <url-pattern>/addmoderator</url-pattern>
         <url-pattern>/removemoderator</url-pattern>
-        <url-pattern>/addmessage</url-pattern>
-        <url-pattern>/deletemessage</url-pattern>
         <url-pattern>/createdialog</url-pattern>
         <url-pattern>/privatemessage</url-pattern>
     </filter-mapping>
@@ -123,17 +136,18 @@
     </filter-mapping>
 
     <!-- permission for message -->
-    <filter>
-        <filter-name>MessagePermissionChecker</filter-name>
-        <filter-class>
-            com.getjavajob.training.yarginy.socialnetwork.web.filters.messageaccess.MessageAccessFilter
-        </filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>MessagePermissionChecker</filter-name>
-        <url-pattern>/deletemessage</url-pattern>
-        <url-pattern>/addmessage</url-pattern>
-    </filter-mapping>
+    <!--    todo-->
+    <!--    <filter>-->
+    <!--        <filter-name>MessagePermissionChecker</filter-name>-->
+    <!--        <filter-class>-->
+    <!--            com.getjavajob.training.yarginy.socialnetwork.web.filters.messageaccess.MessageAccessFilter-->
+    <!--        </filter-class>-->
+    <!--    </filter>-->
+    <!--    <filter-mapping>-->
+    <!--        <filter-name>MessagePermissionChecker</filter-name>-->
+    <!--        <url-pattern>/message/delete</url-pattern>-->
+    <!--        <url-pattern>/message/add</url-pattern>-->
+    <!--    </filter-mapping>-->
 
     <!-- permissions for account info -->
     <filter>
@@ -520,30 +534,6 @@
     <servlet-mapping>
         <servlet-name>searchServlet</servlet-name>
         <url-pattern>/search</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>addMessage</servlet-name>
-        <servlet-class>
-            com.getjavajob.training.yarginy.socialnetwork.web.servlets.messages.AddMessageServlet
-        </servlet-class>
-        <multipart-config>
-        </multipart-config>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>addMessage</servlet-name>
-        <url-pattern>/addmessage</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>deleteMessage</servlet-name>
-        <servlet-class>
-            com.getjavajob.training.yarginy.socialnetwork.web.servlets.messages.DeleteMessageServlet
-        </servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>deleteMessage</servlet-name>
-        <url-pattern>/deletemessage</url-pattern>
     </servlet-mapping>
 
     <servlet>

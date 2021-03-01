@@ -1,9 +1,13 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.models.password;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
+@Component
+@Scope("prototype")
 public class PasswordImpl implements Password {
     private Account account;
     private String password;

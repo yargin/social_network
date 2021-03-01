@@ -1,6 +1,5 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.models;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.DialogImpl;
@@ -17,8 +16,8 @@ public abstract class NullEntitiesFactory {
     private NullEntitiesFactory() {
     }
 
-    public static Account getNullAccount() {
-        Account nullAccount = new AccountImpl();
+    public static AccountImpl getNullAccount() {
+        AccountImpl nullAccount = new AccountImpl();
         nullAccount.setId(-1);
         nullAccount.setName("doesn't exist");
         nullAccount.setSurname("doesn't exist");

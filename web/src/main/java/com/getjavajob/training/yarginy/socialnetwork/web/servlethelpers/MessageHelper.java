@@ -1,12 +1,10 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.MessageImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
-import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +14,7 @@ import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 import static java.util.Objects.isNull;
 
 @Component
@@ -35,15 +34,20 @@ public final class MessageHelper {
         this.dataHandleHelper = dataHandleHelper;
     }
 
-    public boolean addMessage(HttpServletRequest req) throws IOException, ServletException {
-        Message message = getMessageFromRequest(req);
+    public boolean addMessage(HttpServletRequest req) {
+        Message message;
+        try {
+            message = getMessageFromRequest(req);
+        } catch (IOException | ServletException e) {
+            throw new IllegalStateException(e);
+        }
 
         String text = message.getText();
         if ((isNull(text) || text.trim().isEmpty()) && isNull(message.getImage())) {
             return false;
         }
 
-        long receiverId = (long) req.getAttribute(Attributes.RECEIVER_ID);
+        long receiverId = (long) req.getAttribute(RECEIVER_ID);
         message.setReceiverId(receiverId);
 
         String type = req.getParameter("type");
@@ -67,8 +71,8 @@ public final class MessageHelper {
                 message.setImage(dataHandleHelper.readMessageImage(inputStream));
             }
         }
-        long senderId = (long) req.getAttribute(Attributes.REQUESTER_ID);
-        Account author = new AccountImpl();
+        long senderId = (long) req.getAttribute(REQUESTER_ID);
+        AccountImpl author = new AccountImpl();
         author.setId(senderId);
         message.setAuthor(author);
         return message;
@@ -76,7 +80,7 @@ public final class MessageHelper {
 
     public void deleteMessage(HttpServletRequest req) {
         Message message = new MessageImpl();
-        long messageId = (long) req.getAttribute(Attributes.REQUESTED_ID);
+        long messageId = (long) req.getAttribute(REQUESTED_ID);
         message.setId(messageId);
         String type = req.getParameter("type");
         if ("accountWall".equals(type)) {

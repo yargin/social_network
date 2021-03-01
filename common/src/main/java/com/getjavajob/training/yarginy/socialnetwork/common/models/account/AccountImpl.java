@@ -5,6 +5,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.models.AbstractEntity;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.sql.Date;
@@ -14,7 +15,8 @@ import java.util.Objects;
 import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper.*;
 import static java.util.Objects.isNull;
 
-@Component
+@Component("account")
+@Scope("prototype")
 public class AccountImpl extends AbstractEntity implements Account {
     private String name;
     private String surname;

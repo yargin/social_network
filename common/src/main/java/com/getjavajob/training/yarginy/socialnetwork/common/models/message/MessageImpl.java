@@ -1,18 +1,25 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.models.message;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 import java.util.Arrays;
 
+@Component
+@Scope("prototype")
 public class MessageImpl implements Message {
     private long id;
-    private Account author;
+    private AccountImpl author;
     private String text;
     private byte[] image;
     private Timestamp date;
     private long receiverId;
+
+    public MessageImpl() {
+    }
 
     public long getId() {
         return id;
@@ -22,11 +29,11 @@ public class MessageImpl implements Message {
         this.id = id;
     }
 
-    public Account getAuthor() {
+    public AccountImpl getAuthor() {
         return author;
     }
 
-    public void setAuthor(Account author) {
+    public void setAuthor(AccountImpl author) {
         this.author = DataCheckHelper.objectMandatory(author);
     }
 

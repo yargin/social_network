@@ -2,6 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.messages;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.MessageImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AbstractDao;
@@ -83,7 +84,7 @@ public abstract class AbstractMessageDao extends AbstractDao<Message> {
 
     public RowMapper<Message> getSuffixedViewRowMapper(String messageSuffix, String authorSuffix) {
         return (resultSet, i) -> {
-            Account author = accountDao.getSuffixedViewRowMapper(authorSuffix).mapRow(resultSet, i);
+            AccountImpl author = (AccountImpl) accountDao.getSuffixedViewRowMapper(authorSuffix).mapRow(resultSet, i);
             Message message = new MessageImpl();
             message.setAuthor(author);
             message.setId(resultSet.getLong(ID + messageSuffix));

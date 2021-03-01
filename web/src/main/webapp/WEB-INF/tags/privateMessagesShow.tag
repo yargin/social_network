@@ -24,7 +24,7 @@
             </p>
             <div style="min-width: 50px; border-bottom: none;">
                 <c:if test="${not empty admin or author.id == sessionScope.userId}">
-                    <form action="${context}/deletemessage" method="post" style="margin-bottom: 5px;">
+                    <form action="${context}/message/delete" method="post" style="margin-bottom: 5px;">
                         <input type="hidden" value="${id}" name="receiverId">
                         <input type="hidden" value="${author.id}" name="requesterId">
                         <input type="hidden" value="${message.id}" name="id">

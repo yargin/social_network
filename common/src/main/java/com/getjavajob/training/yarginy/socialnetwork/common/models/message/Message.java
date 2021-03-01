@@ -1,14 +1,14 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.models.message;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 
 import java.sql.Timestamp;
 
 public interface Message extends Entity {
-    Account getAuthor();
+    AccountImpl getAuthor();
 
-    void setAuthor(Account author);
+    void setAuthor(AccountImpl author);
 
     String getText();
 

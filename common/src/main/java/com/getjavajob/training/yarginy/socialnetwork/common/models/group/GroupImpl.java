@@ -2,6 +2,8 @@ package com.getjavajob.training.yarginy.socialnetwork.common.models.group;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.AbstractEntity;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.sql.Date;
 import java.util.Arrays;
@@ -10,6 +12,8 @@ import java.util.Objects;
 import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper.*;
 import static java.util.Objects.isNull;
 
+@Component
+@Scope("prototype")
 public class GroupImpl extends AbstractEntity implements Group {
     private String name;
     private String description;
