@@ -23,4 +23,15 @@
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="maxUploadSize" value="16000000"/>
     </bean>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/message/*"/>
+            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.TwoIdsInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/message/*"/>
+            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.MessageInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
 </beans>

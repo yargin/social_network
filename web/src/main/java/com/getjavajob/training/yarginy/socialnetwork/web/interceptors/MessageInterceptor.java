@@ -1,56 +1,39 @@
-package com.getjavajob.training.yarginy.socialnetwork.web.filters.messageaccess;
+package com.getjavajob.training.yarginy.socialnetwork.web.interceptors;
 
 import com.getjavajob.training.yarginy.socialnetwork.service.DialogService;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.AccountInfoHelper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirectToReferer;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 
-public class MessageAccessFilter extends HttpFilter {
-    private GroupService groupService;
-    private DialogService dialogService;
-    private AccountInfoHelper infoHelper;
+@Component
+public class MessageInterceptor extends HandlerInterceptorAdapter {
+    private final GroupService groupService;
+    private final DialogService dialogService;
+    private final AccountInfoHelper infoHelper;
 
     @Autowired
-    public void setGroupService(GroupService groupService) {
+    public MessageInterceptor(GroupService groupService, DialogService dialogService, AccountInfoHelper infoHelper) {
         this.groupService = groupService;
-    }
-
-    @Autowired
-    public void setDialogService(DialogService dialogService) {
         this.dialogService = dialogService;
-    }
-
-    @Autowired
-    public void setInfoHelper(AccountInfoHelper infoHelper) {
         this.infoHelper = infoHelper;
     }
 
     @Override
-    public void init() {
-        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, getServletContext());
-    }
-
-    @Override
-    protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException,
-            ServletException {
+    public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) throws Exception {
         long authorId = (long) req.getAttribute(REQUESTER_ID);
         long receiverId = (long) req.getAttribute(RECEIVER_ID);
         long currentUserId = (long) req.getSession().getAttribute(USER_ID);
 
         if (infoHelper.isAdmin(req)) {
-            chain.doFilter(req, res);
-            return;
+            return true;
         }
 
         boolean isAuthor = authorId == currentUserId;
@@ -66,10 +49,10 @@ public class MessageAccessFilter extends HttpFilter {
             hasAccess = isAuthor || groupService.isModerator(currentUserId, receiverId) || groupService.
                     isOwner(currentUserId, receiverId);
         }
-        if (hasAccess) {
-            chain.doFilter(req, res);
-        } else {
-            redirectToReferer(req, res);
+        if (!hasAccess) {
+            redirectToReferer(req, resp);
+            return false;
         }
+        return true;
     }
 }

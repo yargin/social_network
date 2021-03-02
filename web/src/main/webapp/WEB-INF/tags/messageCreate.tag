@@ -9,6 +9,7 @@
 <div class="wallMessage" style="margin-left: 10%; margin-right: 10%">
     <form action="${context}/message/add" method="post" enctype="multipart/form-data" style="">
         <input type="hidden" value="${sessionScope.userId}" name="author.id">
+        <input type="hidden" value="${sessionScope.userId}" name="requesterId">
         <input type="hidden" value="${id}" name="receiverId">
         <input type="hidden" value="${type}" name="type">
         <div style=" border-bottom: none;">

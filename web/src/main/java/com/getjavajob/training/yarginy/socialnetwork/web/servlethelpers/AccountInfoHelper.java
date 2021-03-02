@@ -10,11 +10,7 @@ import com.getjavajob.training.yarginy.socialnetwork.service.infokeepers.Account
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -46,12 +42,10 @@ public class AccountInfoHelper {
         req.setAttribute("workPhones", workPhones);
     }
 
-    public static boolean isAdmin(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException,
-            ServletException {
+    public boolean isAdmin(HttpServletRequest req) {
         Account account = (Account) req.getSession().getAttribute(USER);
         if ((!isNull(account.getRole()) && (Role.ADMIN.equals(account.getRole())))) {
             req.setAttribute("admin", true);
-            chain.doFilter(req, res);
             return true;
         }
         return false;
