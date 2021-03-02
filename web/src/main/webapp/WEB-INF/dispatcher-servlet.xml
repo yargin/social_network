@@ -24,10 +24,30 @@
         <property name="maxUploadSize" value="16000000"/>
     </bean>
 
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsps/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
     <mvc:interceptors>
         <mvc:interceptor>
+            <mvc:mapping path="/dialog/show*"/>
+            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.OneIdInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
             <mvc:mapping path="/message/*"/>
+            <mvc:mapping path="/dialog/create*"/>
+            <mvc:mapping path="/dialog/new*"/>
             <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.TwoIdsInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/dialog/create*"/>
+            <mvc:mapping path="/dialog/new*"/>
+            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.AccountAccessInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/dialog/show*"/>
+            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.DialogAccessInterceptor"/>
         </mvc:interceptor>
         <mvc:interceptor>
             <mvc:mapping path="/message/*"/>

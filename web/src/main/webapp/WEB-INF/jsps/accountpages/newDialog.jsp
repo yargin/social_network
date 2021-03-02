@@ -8,15 +8,17 @@
 <common:layout>
 
     <div class="wallMessage" style="margin-right: 40%">
-        <form action="${context}/createdialog" method="post" enctype="multipart/form-data">
+        <form action="${context}/dialog/create" method="post" enctype="multipart/form-data">
             <input type="hidden" value="${sessionScope.userId}" name="requesterId">
+            <input type="hidden" value="${sessionScope.userId}" name="author.id">
             <input type="hidden" value="${id}" name="receiverId">
+            <input type="hidden" value="${id}" name="receiver.id">
             <input type="hidden" value="${type}" name="type">
             <div style=" border-bottom: none;">
                 <textarea name="text" placeholder="asd"></textarea>
             </div>
             <br>
-            <input type="file" name="image" accept="image/*"
+            <input type="file" name="imageUpload" accept="image/*"
                    title="<fmt:message key="form.uploadImage"/>">
             <br>
             <button type="submit"><fmt:message key="button.send"/></button>

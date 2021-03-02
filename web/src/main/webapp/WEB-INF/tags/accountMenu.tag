@@ -67,7 +67,7 @@
     </c:if>
 
     <c:if test="${not empty friend or not empty admin and empty owner}">
-        <form action="${context}/privatemessage" method="post" style="display: inline">
+        <form action="${context}/dialog/new" method="post" style="display: inline">
             <input type="hidden" name="requesterId" value="${sessionScope.userId}">
             <input type="hidden" name="receiverId" value="${id}">
             <input type="hidden" name="type" value="accountPrivate">

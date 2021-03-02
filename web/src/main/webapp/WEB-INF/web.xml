@@ -101,7 +101,7 @@
         <url-pattern>/grouprequests</url-pattern>
         <url-pattern>/moderators</url-pattern>
         <url-pattern>/deletemessage</url-pattern>
-        <url-pattern>/dialog</url-pattern>
+<!--        <url-pattern>/dialog</url-pattern>-->
     </filter-mapping>
 
     <filter>
@@ -119,34 +119,20 @@
         <url-pattern>/leavegroup</url-pattern>
         <url-pattern>/addmoderator</url-pattern>
         <url-pattern>/removemoderator</url-pattern>
-        <url-pattern>/createdialog</url-pattern>
-        <url-pattern>/privatemessage</url-pattern>
+        <!--        <url-pattern>/createdialog</url-pattern>-->
+        <!--        <url-pattern>/privatemessage</url-pattern>-->
     </filter-mapping>
 
-<!--    permission for dialog-->
-    <filter>
-        <filter-name>DialogAccessFilter</filter-name>
-        <filter-class>
-            com.getjavajob.training.yarginy.socialnetwork.web.filters.dialogaccess.DialogAccessFilter
-        </filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>DialogAccessFilter</filter-name>
-        <url-pattern>/dialog</url-pattern>
-    </filter-mapping>
-
-    <!-- permission for message -->
-    <!--    todo-->
+    <!--    permission for dialog-->
     <!--    <filter>-->
-    <!--        <filter-name>MessagePermissionChecker</filter-name>-->
+    <!--        <filter-name>DialogAccessFilter</filter-name>-->
     <!--        <filter-class>-->
-    <!--            com.getjavajob.training.yarginy.socialnetwork.web.filters.messageaccess.MessageAccessFilter-->
+    <!--            com.getjavajob.training.yarginy.socialnetwork.web.filters.dialogaccess.DialogAccessFilter-->
     <!--        </filter-class>-->
     <!--    </filter>-->
     <!--    <filter-mapping>-->
-    <!--        <filter-name>MessagePermissionChecker</filter-name>-->
-    <!--        <url-pattern>/message/delete</url-pattern>-->
-    <!--        <url-pattern>/message/add</url-pattern>-->
+    <!--        <filter-name>DialogAccessFilter</filter-name>-->
+    <!--        <url-pattern>/dialog</url-pattern>-->
     <!--    </filter-mapping>-->
 
     <!-- permissions for account info -->
@@ -168,9 +154,9 @@
         <url-pattern>/dialogs</url-pattern>
         <url-pattern>/removefriendship</url-pattern>
         <url-pattern>/groups</url-pattern>
-        <url-pattern>/privatemessage</url-pattern>
+        <!--        <url-pattern>/privatemessage</url-pattern>-->
         <url-pattern>/dialogs</url-pattern>
-        <url-pattern>/createdialog</url-pattern>
+        <!--        <url-pattern>/createdialog</url-pattern>-->
     </filter-mapping>
 
     <filter>
@@ -536,18 +522,18 @@
         <url-pattern>/search</url-pattern>
     </servlet-mapping>
 
-    <servlet>
-        <servlet-name>createDialog</servlet-name>
-        <servlet-class>
-            com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.actionservlets.CreateDialogServlet
-        </servlet-class>
-        <multipart-config>
-        </multipart-config>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>createDialog</servlet-name>
-        <url-pattern>/createdialog</url-pattern>
-    </servlet-mapping>
+    <!--    <servlet>-->
+    <!--        <servlet-name>createDialog</servlet-name>-->
+    <!--        <servlet-class>-->
+    <!--            com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.actionservlets.CreateDialogServlet-->
+    <!--        </servlet-class>-->
+    <!--        <multipart-config>-->
+    <!--        </multipart-config>-->
+    <!--    </servlet>-->
+    <!--    <servlet-mapping>-->
+    <!--        <servlet-name>createDialog</servlet-name>-->
+    <!--        <url-pattern>/createdialog</url-pattern>-->
+    <!--    </servlet-mapping>-->
 
     <servlet>
         <servlet-name>dialogs</servlet-name>
@@ -560,27 +546,27 @@
         <url-pattern>/dialogs</url-pattern>
     </servlet-mapping>
 
-    <servlet>
-        <servlet-name>dialog</servlet-name>
-        <servlet-class>
-            com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.viewservlets.DialogMessagesServlet
-        </servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>dialog</servlet-name>
-        <url-pattern>/dialog</url-pattern>
-    </servlet-mapping>
+    <!--    <servlet>-->
+    <!--        <servlet-name>dialog</servlet-name>-->
+    <!--        <servlet-class>-->
+    <!--            com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.viewservlets.DialogMessagesServlet-->
+    <!--        </servlet-class>-->
+    <!--    </servlet>-->
+    <!--    <servlet-mapping>-->
+    <!--        <servlet-name>dialog</servlet-name>-->
+    <!--        <url-pattern>/dialog</url-pattern>-->
+    <!--    </servlet-mapping>-->
 
-    <servlet>
-        <servlet-name>privateMessage</servlet-name>
-        <servlet-class>
-            com.getjavajob.training.yarginy.socialnetwork.web.servlets.messages.PrivateMessageServlet
-        </servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>privateMessage</servlet-name>
-        <url-pattern>/privatemessage</url-pattern>
-    </servlet-mapping>
+    <!--    <servlet>-->
+    <!--        <servlet-name>privateMessage</servlet-name>-->
+    <!--        <servlet-class>-->
+    <!--            com.getjavajob.training.yarginy.socialnetwork.web.servlets.messages.PrivateMessageServlet-->
+    <!--        </servlet-class>-->
+    <!--    </servlet>-->
+    <!--    <servlet-mapping>-->
+    <!--        <servlet-name>privateMessage</servlet-name>-->
+    <!--        <url-pattern>/privatemessage</url-pattern>-->
+    <!--    </servlet-mapping>-->
 
     <resource-ref>
         <res-ref-name>jdbc/Local-MySql</res-ref-name>

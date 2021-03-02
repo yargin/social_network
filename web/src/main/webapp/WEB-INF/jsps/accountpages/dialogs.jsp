@@ -21,7 +21,7 @@
             </c:otherwise>
         </c:choose>
 
-        <a href="${context}/dialog?id=${dialog.id}">
+        <a href="${context}/dialog/show?id=${dialog.id}">
                 ${talker.getName()} ${talker.getSurname()}
         </a>
         <br><br>
