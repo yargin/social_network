@@ -7,7 +7,7 @@
 <c:forEach var="memberItem" items="${members}">
     <c:set var="memberVar" value="${memberItem.getKey()}"/>
     <c:set var="isModerator" value="${memberItem.getValue()}"/>
-    <a href="${context}/wall?id=${memberVar.getId()}">
+    <a href="${context}/account/wall?id=${memberVar.getId()}">
             ${memberVar.getName()} ${memberVar.getSurname()}
     </a>
     <form action="${context}/leavegroup" method="post">

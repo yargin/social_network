@@ -15,7 +15,7 @@
             <c:forEach var="foundItem" items="${found}">
                 <c:choose>
                     <c:when test="${foundItem.type.getTypeName() eq 'account'}">
-                        <a href="${context}/wall?id=${foundItem.id}">
+                        <a href="${context}/account/wall?id=${foundItem.id}">
                             <fmt:message key="label.user"/>: ${foundItem.name}</a>
                     </c:when>
                     <c:otherwise>

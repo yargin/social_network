@@ -13,7 +13,7 @@
     <div class="post">
         <c:forEach items="${requesters}" var="requester">
             <form action="${context}/acceptfriendship" method="post">
-                <a href="${context}/wall?id=${requester.getId()}">
+                <a href="${context}/account/wall?id=${requester.getId()}">
                         ${requester.getName()} ${requester.getSurname()}
                 </a>
                 <input type="hidden" value="${requester.getId()}" name="requesterId">

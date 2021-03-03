@@ -11,7 +11,7 @@
     <fmt:message key="form.description" bundle="${form}"/> : ${group.getDescription()}<br>
     <fmt:message key="label.groupCreationDate" bundle="${label}"/> : ${group.getCreationDate()}<br>
     <fmt:message key="label.creator" bundle="${label}"/> :
-    <a href="${context}/wall?id=${ownerObject.getId()}">${ownerObject.getName()} ${ownerObject.getSurname()}</a>
+    <a href="${context}/account/wall?id=${ownerObject.getId()}">${ownerObject.getName()} ${ownerObject.getSurname()}</a>
 </div>
 
 <div class="info">

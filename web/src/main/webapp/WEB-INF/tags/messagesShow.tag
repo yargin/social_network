@@ -12,7 +12,7 @@
         <div>
             <p><fmt:message key="label.date"/>: <fmt:formatDate value="${message.date}" type="both"/></p>
             <p><fmt:message key="label.author"/>:
-                <a href="${context}/wall?id=${author.id}">${author.name} ${author.surname}</a>
+                <a href="${context}/account/wall?id=${author.id}">${author.name} ${author.surname}</a>
             </p>
             <div style="min-width: 50px; border-bottom: none;">
                 <c:if test="${not empty admin or not empty owner or author.id == sessionScope.userId}">

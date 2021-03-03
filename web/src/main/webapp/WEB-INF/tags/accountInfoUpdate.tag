@@ -100,7 +100,7 @@
         <c:if test="${not empty errphoto}"><fmt:message key="${errphoto}" bundle="${error}"/><br></c:if>
 
         <button type="submit" name="save" value="save"><fmt:message key="button.save" bundle="${label}"/></button>
-        <button type="button" onclick="window.location.href='${context}/wall?id=${id}'">
+        <button type="button" onclick="window.location.href='${context}/account/wall?id=${id}'">
             <fmt:message key="button.cancel" bundle="${label}"/>
         </button>
     </form>

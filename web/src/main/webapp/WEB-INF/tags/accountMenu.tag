@@ -14,7 +14,7 @@
                 </strong>
             </c:when>
             <c:otherwise>
-                <a href="${context}/wall?id=${id}">
+                <a href="${context}/account/wall?id=${id}">
                     <button type="button" name="wall"><fmt:message key="button.wall"/></button>
                 </a>
             </c:otherwise>
@@ -44,7 +44,7 @@
                 </strong>
             </c:when>
             <c:otherwise>
-                <a href="${context}/friendsrequests?id=${id}">
+                <a href="${context}//account/requests?id=${id}">
                     <button type="submit" name="requests"><fmt:message key="button.friendshipRequests"/></button>
                 </a>
             </c:otherwise>
@@ -59,7 +59,7 @@
                 </strong>
             </c:when>
             <c:otherwise>
-                <a href="${context}/friends?id=${id}">
+                <a href="${context}/account/friends?id=${id}">
                     <button type="submit" name="friends"><fmt:message key="button.friends"/></button>
                 </a>
             </c:otherwise>
@@ -83,7 +83,7 @@
                 </strong>
             </c:when>
             <c:otherwise>
-                <a href="${context}/dialogs?id=${id}">
+                <a href="${context}/account/dialogs?id=${id}">
                     <button type="submit" name="dialogs"><fmt:message key="button.dialogs"/></button>
                 </a>
             </c:otherwise>
@@ -98,7 +98,7 @@
                 </strong>
             </c:when>
             <c:otherwise>
-                <a href="${context}/groups?id=${id}">
+                <a href="${context}/account/groups?id=${id}">
                     <button type="submit" name="dialogs"><fmt:message key="menu.groups"/></button>
                 </a>
             </c:otherwise>

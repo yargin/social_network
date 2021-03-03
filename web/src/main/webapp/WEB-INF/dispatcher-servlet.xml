@@ -53,5 +53,19 @@
             <mvc:mapping path="/message/*"/>
             <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.MessageInterceptor"/>
         </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/account/*"/>
+            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.AccountInfoInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/account/friends"/>
+            <mvc:mapping path="/account/groups"/>
+            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.OwnerFriendInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/account/requests"/>
+            <mvc:mapping path="/account/dialogs"/>
+            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.OwnerInterceptor"/>
+        </mvc:interceptor>
     </mvc:interceptors>
 </beans>

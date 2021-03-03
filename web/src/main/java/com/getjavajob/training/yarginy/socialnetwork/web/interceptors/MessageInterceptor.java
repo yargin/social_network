@@ -2,7 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.web.interceptors;
 
 import com.getjavajob.training.yarginy.socialnetwork.service.DialogService;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
-import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.AccountInfoHelper;
+import com.getjavajob.training.yarginy.socialnetwork.web.controllerhelpers.AccountInfoHelper2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -17,10 +17,10 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 public class MessageInterceptor extends HandlerInterceptorAdapter {
     private final GroupService groupService;
     private final DialogService dialogService;
-    private final AccountInfoHelper infoHelper;
+    private final AccountInfoHelper2 infoHelper;
 
     @Autowired
-    public MessageInterceptor(GroupService groupService, DialogService dialogService, AccountInfoHelper infoHelper) {
+    public MessageInterceptor(GroupService groupService, DialogService dialogService, AccountInfoHelper2 infoHelper) {
         this.groupService = groupService;
         this.dialogService = dialogService;
         this.infoHelper = infoHelper;

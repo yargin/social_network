@@ -18,11 +18,11 @@
             <c:choose>
                 <c:when test="${empty allgroups}">
                     <strong><fmt:message key="label.joinedGroups"/></strong>
-                    <a href="${context}/groups?id=${id}&allgroups=true"><fmt:message key="label.allGroups"/></a>
+                    <a href="${context}/account/groups?id=${id}&allgroups=true"><fmt:message key="label.allGroups"/></a>
                     <br>
                 </c:when>
                 <c:otherwise>
-                    <a href="${context}/groups?id=${id}"><fmt:message key="label.joinedGroups"/></a>
+                    <a href="${context}/account/groups?id=${id}"><fmt:message key="label.joinedGroups"/></a>
                     <strong><fmt:message key="label.allGroups"/></strong>
                     <br>
                 </c:otherwise>

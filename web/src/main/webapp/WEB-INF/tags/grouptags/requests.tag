@@ -5,7 +5,7 @@
 <c:set var="id" value="${group.getId()}"/>
 
 <c:forEach var="requesterVar" items="${requesters}">
-    <a href="${context}/wall?id=${requesterVar.getId()}">
+    <a href="${context}/account/wall?id=${requesterVar.getId()}">
             ${requesterVar.getName()} ${requesterVar.getSurname()}
     </a>
     <form action="${context}/acceptingroup" method="post">
