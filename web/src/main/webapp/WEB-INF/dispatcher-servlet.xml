@@ -34,12 +34,10 @@
     <!--    <mvc:resources mapping="/img/*" location="img"/>-->
     <!--    <mvc:resources mapping="/font/*" location="font"/>-->
 
-    <!--todo-->
     <mvc:interceptors>
         <mvc:interceptor>
-            <!--            <mvc:mapping path="/**"/>-->
             <mvc:mapping path="/**"/>
-            <!--            <mvc:mapping path="*"/>-->
+            <mvc:mapping path="/*"/>
             <mvc:exclude-mapping path="/registration"/>
             <mvc:exclude-mapping path="/login"/>
             <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.AuthInterceptor"/>

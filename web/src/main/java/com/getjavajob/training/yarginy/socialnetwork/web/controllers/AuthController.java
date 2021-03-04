@@ -5,10 +5,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
@@ -35,6 +32,11 @@ public class AuthController {
         this.authService = authService;
     }
 
+    @RequestMapping("/")
+    public String welcomeRedirect() {
+        return "redirect:/account/wall";
+    }
+
     @GetMapping("/login")
     public String showLogin(HttpServletRequest req, @CookieValue(required = false) String email,
                             @CookieValue(required = false) String password) {
@@ -53,8 +55,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ModelAndView login(@RequestParam String email, @RequestParam String password, @RequestParam String rememberMe,
-                              HttpServletRequest req, HttpServletResponse resp) {
+    public ModelAndView login(@RequestParam String email, @RequestParam String password, HttpServletRequest req,
+                              @RequestParam(required = false) String rememberMe, HttpServletResponse resp) {
         Account account;
         ModelAndView modelAndView = new ModelAndView(LOGIN);
         try {
