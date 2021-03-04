@@ -52,7 +52,7 @@ public class FriendshipRequestCreationServlet extends AbstractGetServlet {
             req.setAttribute(Attributes.ERROR, e.getType().getPropertyKey());
         }
 
-        infoHelper.setAccountInfo(req, receiverId);
+//        infoHelper.setAccountInfo(req, receiverId);
         req.setAttribute(TAB, "addFriend");
         req.setAttribute(Attributes.REQUESTED_ID, receiverId);
         req.getRequestDispatcher(Jsps.FRIENDSHIP_REQUEST).forward(req, resp);

@@ -52,6 +52,7 @@
             <mvc:mapping path="/message/*"/>
             <mvc:mapping path="/dialog/create*"/>
             <mvc:mapping path="/dialog/new*"/>
+            <mvc:mapping path="/friendship/*"/>
             <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.TwoIdsInterceptor"/>
         </mvc:interceptor>
         <mvc:interceptor>
@@ -69,6 +70,8 @@
         </mvc:interceptor>
         <mvc:interceptor>
             <mvc:mapping path="/account/*"/>
+            <mvc:mapping path="/friendship/accept*"/>
+            <mvc:mapping path="/friendship/remove*"/>
             <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.AccountInfoInterceptor"/>
         </mvc:interceptor>
         <mvc:interceptor>
@@ -79,6 +82,8 @@
         <mvc:interceptor>
             <mvc:mapping path="/account/requests"/>
             <mvc:mapping path="/account/dialogs"/>
+            <mvc:mapping path="/friendship/accept*"/>
+            <mvc:mapping path="/friendship/remove*"/>
             <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.OwnerInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>

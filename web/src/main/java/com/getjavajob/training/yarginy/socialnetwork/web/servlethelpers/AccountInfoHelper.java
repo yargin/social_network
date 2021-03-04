@@ -9,6 +9,7 @@ import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
 import com.getjavajob.training.yarginy.socialnetwork.service.infokeepers.AccountInfoKeeper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
@@ -26,20 +27,20 @@ public class AccountInfoHelper {
         this.accountService = accountService;
     }
 
-    public void setAccountInfo(HttpServletRequest req, long requestedUserId) {
+    public void setAccountInfo(ModelAndView modelAndView, long requestedUserId) {
         AccountInfoKeeper accountInfoKeeper = accountService.getAccountInfo(requestedUserId);
 
         Account account = accountInfoKeeper.getAccount();
-        req.setAttribute("user", account);
-        req.setAttribute("photo", new DataHandleHelper().getHtmlPhoto(account.getPhoto()));
+        modelAndView.addObject("user", account);
+        modelAndView.addObject("photo", new DataHandleHelper().getHtmlPhoto(account.getPhoto()));
 
         Collection<Phone> phones = accountInfoKeeper.getPhones();
         Collection<Phone> privatePhones = phones.stream().filter(phone -> phone.getType() == PhoneType.PRIVATE).
                 collect(Collectors.toList());
-        req.setAttribute("privatePhones", privatePhones);
+        modelAndView.addObject("privatePhones", privatePhones);
         Collection<Phone> workPhones = phones.stream().filter(phone -> phone.getType() == PhoneType.WORK).
                 collect(Collectors.toList());
-        req.setAttribute("workPhones", workPhones);
+        modelAndView.addObject("workPhones", workPhones);
     }
 
     public boolean isAdmin(HttpServletRequest req) {

@@ -45,7 +45,7 @@ public class GroupsListServlet extends AbstractGetServlet {
             req.removeAttribute(ALL_GROUPS_LIST);
         }
 
-        infoHelper.setAccountInfo(req, accountId);
+//        infoHelper.setAccountInfo(req, accountId);
         req.setAttribute(TAB, "groups");
         req.getRequestDispatcher(Jsps.GROUPS_LIST).forward(req, resp);
     }

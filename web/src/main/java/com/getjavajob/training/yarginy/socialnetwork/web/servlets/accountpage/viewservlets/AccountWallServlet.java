@@ -36,7 +36,7 @@ public class AccountWallServlet extends AbstractGetServlet {
     protected void safeDoGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         long requestedUserId = (long) req.getAttribute(REQUESTED_ID);
 
-        infoHelper.setAccountInfo(req, requestedUserId);
+//        infoHelper.setAccountInfo(req, requestedUserId);
 
         Collection<Message> messages = accountMessageService.selectMessages(requestedUserId);
         req.setAttribute("messages", messages);

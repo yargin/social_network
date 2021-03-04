@@ -20,6 +20,7 @@ import java.util.Objects;
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirectBackView;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTED_ID;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.TAB;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.DIALOG;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.DIALOG_VIEW;
 
 @Controller
@@ -73,7 +74,7 @@ public class DialogController {
     public ModelAndView newDialog(@RequestAttribute long receiverId, @RequestAttribute long requesterId) {
         Dialog dialog = dialogService.getByTalkers(receiverId, requesterId);
         if (!Objects.equals(dialog, dialogService.getNullDialog())) {
-            return new ModelAndView("redirect:" + "/dialog/show?" + REQUESTED_ID + '=' + dialog.getId());
+            return new ModelAndView("redirect:" + DIALOG + "?id=" + dialog.getId());
         } else {
             ModelAndView modelAndView = new ModelAndView("accountpages/newDialog");
             modelAndView.addObject(REQUESTED_ID, receiverId);

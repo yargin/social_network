@@ -36,7 +36,7 @@ public class FriendshipRequestsListServlet extends AbstractGetServlet {
         Collection<Account> requesters = accountService.getFriendshipRequests(requestedId);
         req.setAttribute("requesters", requesters);
 
-        infoHelper.setAccountInfo(req, requestedId);
+//        infoHelper.setAccountInfo(req, requestedId);
 
         req.setAttribute(TAB, "friendshipRequestsList");
         req.getRequestDispatcher(Jsps.FRIENDSHIP_REQUESTS_LIST).forward(req, resp);

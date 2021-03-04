@@ -36,7 +36,7 @@ public class DialogsServlet extends AbstractGetServlet {
 
         Collection<Dialog> dialogs = accountService.getDialogs(requestedId);
         req.setAttribute(Attributes.DIALOGS, dialogs);
-        infoHelper.setAccountInfo(req, requestedId);
+//        infoHelper.setAccountInfo(req, requestedId);
         req.setAttribute(TAB, "dialogs");
         req.getRequestDispatcher(Jsps.DIALOGS).forward(req, resp);
     }

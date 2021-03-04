@@ -85,7 +85,6 @@
         <url-pattern>/groupmembers</url-pattern>
         <url-pattern>/grouprequests</url-pattern>
         <url-pattern>/moderators</url-pattern>
-        <url-pattern>/deletemessage</url-pattern>
     </filter-mapping>
 
     <filter>
@@ -95,9 +94,6 @@
     </filter>
     <filter-mapping>
         <filter-name>TwoRequestedIdFilter</filter-name>
-        <url-pattern>/addfriend</url-pattern>
-        <url-pattern>/acceptfriendship</url-pattern>
-        <url-pattern>/removefriendship</url-pattern>
         <url-pattern>/acceptingroup</url-pattern>
         <url-pattern>/joingroup</url-pattern>
         <url-pattern>/leavegroup</url-pattern>
@@ -116,10 +112,6 @@
 
         <url-pattern>/updateinfo</url-pattern>
         <url-pattern>/deleteAccount</url-pattern>
-
-        <url-pattern>/addfriend</url-pattern>
-        <url-pattern>/acceptfriendship</url-pattern>
-        <url-pattern>/removefriendship</url-pattern>
     </filter-mapping>
 
     <filter>
@@ -131,8 +123,6 @@
         <filter-name>OwnerChecker</filter-name>
         <url-pattern>/updateinfo</url-pattern>
         <url-pattern>/deleteAccount</url-pattern>
-        <url-pattern>/acceptfriendship</url-pattern>
-        <url-pattern>/removefriendship</url-pattern>
     </filter-mapping>
 
     <!-- permissions for group-->
@@ -336,39 +326,6 @@
     <servlet-mapping>
         <servlet-name>groupModerators</servlet-name>
         <url-pattern>/moderators</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>createFriendshipRequest</servlet-name>
-        <servlet-class>
-            com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.viewservlets.FriendshipRequestCreationServlet
-        </servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>createFriendshipRequest</servlet-name>
-        <url-pattern>/addfriend</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>acceptFriendshipRequest</servlet-name>
-        <servlet-class>
-            com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.actionservlets.FriendshipRequestAcceptServlet
-        </servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>acceptFriendshipRequest</servlet-name>
-        <url-pattern>/acceptfriendship</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>removeFriendship</servlet-name>
-        <servlet-class>
-            com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.actionservlets.FriendshipDeletionServlet
-        </servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>removeFriendship</servlet-name>
-        <url-pattern>/removefriendship</url-pattern>
     </servlet-mapping>
 
     <servlet>

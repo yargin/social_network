@@ -29,7 +29,7 @@
                 </strong>
             </c:when>
             <c:otherwise>
-                <a href="${context}/addfriend?requesterId=${sessionScope.userId}&receiverId=${id}">
+                <a href="${context}/friendship/add?requesterId=${sessionScope.userId}&receiverId=${id}">
                     <button type="submit" name="addFriend"><fmt:message key="button.addToFriends"/></button>
                 </a>
             </c:otherwise>
@@ -44,7 +44,7 @@
                 </strong>
             </c:when>
             <c:otherwise>
-                <a href="${context}//account/requests?id=${id}">
+                <a href="${context}/account/requests?id=${id}">
                     <button type="submit" name="requests"><fmt:message key="button.friendshipRequests"/></button>
                 </a>
             </c:otherwise>
