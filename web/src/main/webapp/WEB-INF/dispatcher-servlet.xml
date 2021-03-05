@@ -29,10 +29,10 @@
         <property name="suffix" value=".jsp"/>
     </bean>
 
-    <!--    <mvc:resources mapping="/css/*" location="css"/>-->
-    <!--    <mvc:resources mapping="/js/*" location="js"/>-->
-    <!--    <mvc:resources mapping="/img/*" location="img"/>-->
-    <!--    <mvc:resources mapping="/font/*" location="font"/>-->
+    <mvc:resources mapping="/css/*" location="css"/>
+    <mvc:resources mapping="/js/*" location="js"/>
+    <mvc:resources mapping="/img/*" location="img"/>
+    <mvc:resources mapping="/font/*" location="font"/>
 
     <mvc:interceptors>
         <mvc:interceptor>
@@ -45,7 +45,10 @@
 
         <mvc:interceptor>
             <mvc:mapping path="/dialog/show*"/>
-            <mvc:mapping path="/group/moderators/show*"/>
+            <mvc:mapping path="/group/wall*"/>
+            <mvc:mapping path="/group/moderators*"/>
+            <mvc:mapping path="/group/requests*"/>
+            <mvc:mapping path="/group/members*"/>
             <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.common.OneIdInterceptor"/>
         </mvc:interceptor>
 
@@ -56,6 +59,9 @@
             <mvc:mapping path="/friendship/*"/>
             <mvc:mapping path="/group/moderators/add*"/>
             <mvc:mapping path="/group/moderators/remove*"/>
+            <mvc:mapping path="/group/join*"/>
+            <mvc:mapping path="/group/leave*"/>
+            <mvc:mapping path="/group/accept*"/>
             <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.common.TwoIdsInterceptor"/>
         </mvc:interceptor>
 
@@ -70,7 +76,12 @@
 
         <mvc:interceptor>
             <!--            <mvc:mapping path="/group/**"/>-->
-            <mvc:mapping path="/group/moderators/*"/>
+            <mvc:mapping path="/group/moderators**"/>
+            <mvc:mapping path="/group/wall*"/>
+            <mvc:mapping path="/group/requests*"/>
+            <mvc:mapping path="/group/members*"/>
+            <mvc:mapping path="/group/leave*"/>
+            <mvc:mapping path="/group/accept*"/>
             <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.group.GroupAccessSetter"/>
         </mvc:interceptor>
 
@@ -100,7 +111,19 @@
 
         <mvc:interceptor>
             <mvc:mapping path="/group/moderators/*"/>
+            <mvc:mapping path="/group/requests*"/>
+            <mvc:mapping path="/group/accept*"/>
             <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.group.GroupModerOwnerChecker"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/group/members*"/>
+            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.group.GroupMemberModerOwnerChecker"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/group/leave*"/>
+            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.group.GroupMemberModerOwnerChecker"/>
         </mvc:interceptor>
     </mvc:interceptors>
 </beans>

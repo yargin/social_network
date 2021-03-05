@@ -32,7 +32,7 @@
     <a href="${context}/deletegroup?id=${id}"><fmt:message key="label.deleteGroup" bundle="${label}"/></a><br>
 </c:if>
 <c:if test="${not empty member and empty owner}">
-    <form action="${context}/leavegroup" method="post">
+    <form action="${context}/group/leave" method="post">
         <input type="hidden" value="${sessionScope.userId}" name="requesterId">
         <input type="hidden" value="${id}" name="receiverId">
         <button type="submit"><fmt:message key="button.leaveGroup" bundle="${label}"/></button>

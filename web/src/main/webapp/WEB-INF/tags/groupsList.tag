@@ -5,10 +5,10 @@
 
 <c:forEach items="${groups}" var="group">
     <c:if test="${empty allgroups}">
-<%--        collection--%>
-        <a href="${context}/group?id=${group.id}">${group.name}</a>
+        <%--        collection--%>
+        <a href="${context}/group/wall?id=${group.id}">${group.name}</a>
         <c:if test="${not empty owner or not empty admin}">
-            <form action="${context}/leavegroup" method="post">
+            <form action="${context}/group/leave" method="post">
                 <input type="hidden" name="requesterId" value="${id}">
                 <input type="hidden" name="receiverId" value="${group.id}">
                 <button type="submit"><fmt:message key="button.leaveGroup"/></button>
@@ -19,7 +19,7 @@
     <c:if test="${not empty allgroups}">
         <%--        hashmap--%>
         <c:set var="groupVar" value="${group.getKey()}"/>
-        <a href="${context}/group?id=${groupVar.id}">${groupVar.name}</a>
+        <a href="${context}/group/wall?id=${groupVar.id}">${groupVar.name}</a>
         <c:choose>
             <c:when test="${group.getValue()}">
                 <br>
@@ -27,7 +27,7 @@
             </c:when>
             <c:otherwise>
                 <c:if test="${not empty owner or not empty admin}">
-                    <form action="${context}/joingroup" method="post">
+                    <form action="${context}/group/join?" method="post">
                         <input type="hidden" name="requesterId" value="${id}">
                         <input type="hidden" name="receiverId" value="${groupVar.id}">
                         <button type="submit"><fmt:message key="button.joinGroup"/></button>

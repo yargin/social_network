@@ -8,7 +8,7 @@
     <a href="${context}/account/wall?id=${requesterVar.getId()}">
             ${requesterVar.getName()} ${requesterVar.getSurname()}
     </a>
-    <form action="${context}/acceptingroup" method="post">
+    <form action="${context}/group/accept" method="post">
         <input type="hidden" value="${requesterVar.getId()}" name="requesterId">
         <input type="hidden" value="${id}" name="receiverId">
         <button type="submit" name="accept" value="true"><fmt:message key="button.accept"/></button>

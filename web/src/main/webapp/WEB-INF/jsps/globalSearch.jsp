@@ -19,7 +19,7 @@
                             <fmt:message key="label.user"/>: ${foundItem.name}</a>
                     </c:when>
                     <c:otherwise>
-                        <a href="${context}/group?id=${foundItem.id}">
+                        <a href="${context}/group/wall?id=${foundItem.id}">
                             <fmt:message key="label.group"/>: ${foundItem.name}</a>
                     </c:otherwise>
                 </c:choose>
