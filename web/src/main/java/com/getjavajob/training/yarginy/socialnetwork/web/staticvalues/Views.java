@@ -5,4 +5,5 @@ public final class Views {
     public static final String ACCOUNT_WALL_VIEW = "accountpages/accountWall";
     public static final String FRIENDSHIP_REQUEST_VIEW = "accountpages/friendshipRequest";
     public static final String GROUP_VIEW = "grouppages/group";
+    public static final String SEARCH_VIEW = "globalSearch";
 }

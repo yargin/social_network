@@ -170,18 +170,6 @@
         <url-pattern>/deletegroup</url-pattern>
     </servlet-mapping>
 
-
-    <servlet>
-        <servlet-name>searchServlet</servlet-name>
-        <servlet-class>
-            com.getjavajob.training.yarginy.socialnetwork.web.servlets.other.SearchServlet
-        </servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>searchServlet</servlet-name>
-        <url-pattern>/search</url-pattern>
-    </servlet-mapping>
-
     <resource-ref>
         <res-ref-name>jdbc/Local-MySql</res-ref-name>
         <res-type>javax.sql.DataSource</res-type>
