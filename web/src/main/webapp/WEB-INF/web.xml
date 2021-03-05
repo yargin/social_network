@@ -71,7 +71,6 @@
         <url-pattern>/deletegroup</url-pattern>
         <url-pattern>/groupmembers</url-pattern>
         <url-pattern>/grouprequests</url-pattern>
-        <url-pattern>/moderators</url-pattern>
     </filter-mapping>
 
     <filter>
@@ -84,8 +83,6 @@
         <url-pattern>/acceptingroup</url-pattern>
         <url-pattern>/joingroup</url-pattern>
         <url-pattern>/leavegroup</url-pattern>
-        <url-pattern>/addmoderator</url-pattern>
-        <url-pattern>/removemoderator</url-pattern>
     </filter-mapping>
 
     <filter>
@@ -124,13 +121,10 @@
         <url-pattern>/group</url-pattern>
         <url-pattern>/groupmembers</url-pattern>
         <url-pattern>/grouprequests</url-pattern>
-        <url-pattern>/moderators</url-pattern>
         <url-pattern>/acceptingroup</url-pattern>
         <url-pattern>/leavegroup</url-pattern>
         <url-pattern>/updategroup</url-pattern>
         <url-pattern>/deletegroup</url-pattern>
-        <url-pattern>/addmoderator</url-pattern>
-        <url-pattern>/removemoderator</url-pattern>
     </filter-mapping>
 
     <filter>
@@ -164,12 +158,9 @@
     <filter-mapping>
         <filter-name>ModerOwnerChecker</filter-name>
         <url-pattern>/grouprequests</url-pattern>
-        <url-pattern>/moderators</url-pattern>
         <url-pattern>/acceptingroup</url-pattern>
         <url-pattern>/updategroup</url-pattern>
         <url-pattern>/deletegroup</url-pattern>
-        <url-pattern>/addmoderator</url-pattern>
-        <url-pattern>/removemoderator</url-pattern>
     </filter-mapping>
 
 
@@ -287,17 +278,6 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>groupModerators</servlet-name>
-        <servlet-class>
-            com.getjavajob.training.yarginy.socialnetwork.web.servlets.group.viewservlets.GroupModeratorsListServlet
-        </servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>groupModerators</servlet-name>
-        <url-pattern>/moderators</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
         <servlet-name>joinGroup</servlet-name>
         <servlet-class>
             com.getjavajob.training.yarginy.socialnetwork.web.servlets.group.actionservlets.JoinGroupServlet
@@ -328,28 +308,6 @@
     <servlet-mapping>
         <servlet-name>acceptGroupRequest</servlet-name>
         <url-pattern>/acceptingroup</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>addModerator</servlet-name>
-        <servlet-class>
-            com.getjavajob.training.yarginy.socialnetwork.web.servlets.group.actionservlets.AddModeratorServlet
-        </servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>addModerator</servlet-name>
-        <url-pattern>/addmoderator</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>removeModerator</servlet-name>
-        <servlet-class>
-            com.getjavajob.training.yarginy.socialnetwork.web.servlets.group.actionservlets.RemoveModeratorServlet
-        </servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>removeModerator</servlet-name>
-        <url-pattern>/removemoderator</url-pattern>
     </servlet-mapping>
 
     <servlet>

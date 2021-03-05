@@ -58,7 +58,7 @@
             </strong>
         </c:when>
         <c:otherwise>
-            <a href="${context}/moderators?id=${id}">
+            <a href="${context}/group/moderators/show?id=${id}">
                 <button type="button"><fmt:message key="label.moderators"/></button>
             </a>
         </c:otherwise>

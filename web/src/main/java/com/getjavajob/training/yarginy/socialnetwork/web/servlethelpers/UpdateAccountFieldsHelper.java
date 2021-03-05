@@ -30,6 +30,8 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 import static java.util.Objects.isNull;
 
 public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
+    private final DataHandleHelper dataHandleHelper = new DataHandleHelper();
+
     public UpdateAccountFieldsHelper(HttpServletRequest req, HttpServletResponse resp, String param, String successUrl) {
         super(req, resp, param, successUrl);
     }
@@ -58,7 +60,7 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
         setAttribute("skype", account::getSkype);
         setAttribute("country", account::getCountry);
         setAttribute("city", account::getCity);
-        setAttribute("photo", () -> new DataHandleHelper().getHtmlPhoto(account.getPhoto()));
+        setAttribute("photo", () -> dataHandleHelper.getHtmlPhoto(account.getPhoto()));
 
         Collection<Phone> phones = accountInfo.getPhones();
         HttpSession session = req.getSession();
@@ -140,7 +142,7 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
         setStringFromParam(account::setSkype, "skype");
         setStringFromParam(account::setCountry, "country");
         setStringFromParam(account::setCity, "city");
-        setPhotoFromParam(account::setPhoto, new DataHandleHelper(), "photo");
+        setPhotoFromParam(account::setPhoto, dataHandleHelper, "photo");
 
         Collection<Phone> privatePhones = getPhonesFromParams(PRIVATE_PHONES, PhoneType.PRIVATE);
         Collection<Phone> workPhones = getPhonesFromParams(WORK_PHONES, PhoneType.WORK);

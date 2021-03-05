@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.web.interceptors;
+package com.getjavajob.training.yarginy.socialnetwork.web.interceptors.message;
 
 import com.getjavajob.training.yarginy.socialnetwork.service.DialogService;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
@@ -14,13 +14,13 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.R
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 
 @Component
-public class MessageInterceptor extends HandlerInterceptorAdapter {
+public class MessageAccessChecker extends HandlerInterceptorAdapter {
     private final GroupService groupService;
     private final DialogService dialogService;
     private final AccountInfoHelper2 infoHelper;
 
     @Autowired
-    public MessageInterceptor(GroupService groupService, DialogService dialogService, AccountInfoHelper2 infoHelper) {
+    public MessageAccessChecker(GroupService groupService, DialogService dialogService, AccountInfoHelper2 infoHelper) {
         this.groupService = groupService;
         this.dialogService = dialogService;
         this.infoHelper = infoHelper;
@@ -51,8 +51,7 @@ public class MessageInterceptor extends HandlerInterceptorAdapter {
         }
         if (!hasAccess) {
             redirectToReferer(req, resp);
-            return false;
         }
-        return true;
+        return hasAccess;
     }
 }

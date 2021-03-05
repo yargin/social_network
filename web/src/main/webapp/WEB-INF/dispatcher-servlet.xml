@@ -40,49 +40,67 @@
             <mvc:mapping path="/*"/>
             <mvc:exclude-mapping path="/registration"/>
             <mvc:exclude-mapping path="/login"/>
-            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.AuthInterceptor"/>
+            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.common.AuthChecker"/>
         </mvc:interceptor>
+
         <mvc:interceptor>
             <mvc:mapping path="/dialog/show*"/>
-            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.OneIdInterceptor"/>
+            <mvc:mapping path="/group/moderators/show*"/>
+            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.common.OneIdInterceptor"/>
         </mvc:interceptor>
+
         <mvc:interceptor>
             <mvc:mapping path="/message/*"/>
             <mvc:mapping path="/dialog/create*"/>
             <mvc:mapping path="/dialog/new*"/>
             <mvc:mapping path="/friendship/*"/>
-            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.TwoIdsInterceptor"/>
+            <mvc:mapping path="/group/moderators/add*"/>
+            <mvc:mapping path="/group/moderators/remove*"/>
+            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.common.TwoIdsInterceptor"/>
         </mvc:interceptor>
+
         <mvc:interceptor>
             <mvc:mapping path="/dialog/create*"/>
             <mvc:mapping path="/dialog/new*"/>
-            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.AccountAccessInterceptor"/>
-        </mvc:interceptor>
-        <mvc:interceptor>
-            <mvc:mapping path="/dialog/show*"/>
-            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.DialogAccessInterceptor"/>
-        </mvc:interceptor>
-        <mvc:interceptor>
-            <mvc:mapping path="/message/*"/>
-            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.MessageInterceptor"/>
-        </mvc:interceptor>
-        <mvc:interceptor>
             <mvc:mapping path="/account/*"/>
             <mvc:mapping path="/friendship/accept*"/>
             <mvc:mapping path="/friendship/remove*"/>
-            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.AccountInfoInterceptor"/>
+            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.account.AccountAccessSetter"/>
         </mvc:interceptor>
+
+        <mvc:interceptor>
+            <!--            <mvc:mapping path="/group/**"/>-->
+            <mvc:mapping path="/group/moderators/*"/>
+            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.group.GroupAccessSetter"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/dialog/show*"/>
+            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.dialog.DialogAccessChecker"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/message/*"/>
+            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.message.MessageAccessChecker"/>
+        </mvc:interceptor>
+
         <mvc:interceptor>
             <mvc:mapping path="/account/friends"/>
             <mvc:mapping path="/account/groups"/>
-            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.OwnerFriendInterceptor"/>
+            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.account.AccountOwnerFriendChecker"/>
         </mvc:interceptor>
+
         <mvc:interceptor>
             <mvc:mapping path="/account/requests"/>
             <mvc:mapping path="/account/dialogs"/>
             <mvc:mapping path="/friendship/accept*"/>
             <mvc:mapping path="/friendship/remove*"/>
-            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.OwnerInterceptor"/>
+            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.account.AccountOwnerChecker"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/group/moderators/*"/>
+            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.group.GroupModerOwnerChecker"/>
         </mvc:interceptor>
     </mvc:interceptors>
 </beans>

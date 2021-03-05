@@ -52,17 +52,21 @@ public class UpdateFieldsHelper {
         }
     }
 
-    protected void setPhotoFromParam(Consumer<byte[]> setter, DataHandleHelper dataHandleHelper, String param) throws IOException, ServletException {
+    protected void setPhotoFromParam(Consumer<byte[]> setter, DataHandleHelper dataHandleHelper, String param)
+            throws IOException, ServletException {
         Part imagePart = req.getPart(param);
-        try (InputStream inputStream = imagePart.getInputStream()) {
-            if (inputStream.available() > 0) {
-                setter.accept(dataHandleHelper.readAvatarPhoto(inputStream));
+        System.out.println("HERE");
+        if (!isNull(imagePart)) {
+            try (InputStream inputStream = imagePart.getInputStream()) {
+                if (inputStream.available() > 0) {
+                    setter.accept(dataHandleHelper.readAvatarPhoto(inputStream));
+                }
+            } catch (IOException e) {
+                throw new IncorrectDataException(IncorrectData.UPLOADING_ERROR);
+            } catch (IncorrectDataException e) {
+                paramsAccepted = false;
+                req.setAttribute(ERR + param, e.getType().getPropertyKey());
             }
-        } catch (IOException e) {
-            throw new IncorrectDataException(IncorrectData.UPLOADING_ERROR);
-        } catch (IncorrectDataException e) {
-            paramsAccepted = false;
-            req.setAttribute(ERR + param, e.getType().getPropertyKey());
         }
     }
 

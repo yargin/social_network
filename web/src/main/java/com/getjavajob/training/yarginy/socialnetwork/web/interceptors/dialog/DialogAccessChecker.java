@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.web.interceptors;
+package com.getjavajob.training.yarginy.socialnetwork.web.interceptors.dialog;
 
 import com.getjavajob.training.yarginy.socialnetwork.service.DialogService;
 import com.getjavajob.training.yarginy.socialnetwork.web.controllerhelpers.AccountInfoHelper2;
@@ -14,12 +14,12 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER_ID;
 
 @Component
-public class DialogAccessInterceptor extends HandlerInterceptorAdapter {
+public class DialogAccessChecker extends HandlerInterceptorAdapter {
     private final DialogService dialogService;
     private final AccountInfoHelper2 infoHelper;
 
     @Autowired
-    public DialogAccessInterceptor(DialogService dialogService, AccountInfoHelper2 infoHelper) {
+    public DialogAccessChecker(DialogService dialogService, AccountInfoHelper2 infoHelper) {
         this.dialogService = dialogService;
         this.infoHelper = infoHelper;
     }

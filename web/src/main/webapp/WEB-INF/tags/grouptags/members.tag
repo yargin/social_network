@@ -17,7 +17,7 @@
     </form>
     <c:if test="${not isModerator}">
         <c:if test="${not empty admin or not empty owner or not empty moderator}">
-            <form action="${context}/addmoderator" method="post">
+            <form action="${context}/group/moderators/add" method="post">
                 <input type="hidden" value="${memberVar.getId()}" name="requesterId">
                 <input type="hidden" value="${id}" name="receiverId">
                 <button type="submit"><fmt:message key="button.makeModerator"/></button>

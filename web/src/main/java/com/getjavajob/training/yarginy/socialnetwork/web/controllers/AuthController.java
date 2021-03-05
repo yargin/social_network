@@ -115,6 +115,6 @@ public class AuthController {
                 }
             }
         }
-        return LOGIN;
+        return "redirect:/login";
     }
 }

@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.web.interceptors;
+package com.getjavajob.training.yarginy.socialnetwork.web.interceptors.account;
 
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import static java.util.Objects.isNull;
 
-public class OwnerFriendInterceptor extends HandlerInterceptorAdapter {
+public class AccountOwnerChecker extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) throws Exception {
         if (!isNull(req.getAttribute("admin")) || !isNull(req.getAttribute("owner")) ||

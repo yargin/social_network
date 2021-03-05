@@ -99,7 +99,7 @@ public class AccountInfoController {
 
     @GetMapping("/groups")
     public ModelAndView getGroups(@RequestParam(value = "id", required = false) Long requestedId,
-                                  @RequestParam("allgroups") String listAll,
+                                  @RequestParam(value = "allgroups", required = false) String listAll,
                                   @SessionAttribute("userId") long sessionId) {
         long id = requestedId == null ? sessionId : requestedId;
         ModelAndView modelAndView = new ModelAndView("accountpages/accountGroups");

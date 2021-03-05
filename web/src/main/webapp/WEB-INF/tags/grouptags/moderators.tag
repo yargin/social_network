@@ -8,7 +8,7 @@
     <a href="${context}/account/wall?id=${moderatorVar.getId()}">
             ${moderatorVar.getName()} ${moderatorVar.getSurname()}
     </a>
-    <form action="${context}/removemoderator" method="post">
+    <form action="${context}/group/moderators/remove" method="post">
         <input type="hidden" value="${moderatorVar.getId()}" name="requesterId">
         <input type="hidden" value="${id}" name="receiverId">
         <button type="submit"><fmt:message key="button.delete"/></button>

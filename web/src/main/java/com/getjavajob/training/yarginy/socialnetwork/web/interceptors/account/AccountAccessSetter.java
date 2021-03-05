@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.web.interceptors;
+package com.getjavajob.training.yarginy.socialnetwork.web.interceptors.account;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
@@ -14,11 +14,11 @@ import javax.servlet.http.HttpSession;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 
 @Component
-public class AccountInfoInterceptor extends HandlerInterceptorAdapter {
+public class AccountAccessSetter extends HandlerInterceptorAdapter {
     private final AccountService accountService;
 
     @Autowired
-    public AccountInfoInterceptor(AccountService accountService) {
+    public AccountAccessSetter(AccountService accountService) {
         this.accountService = accountService;
     }
 

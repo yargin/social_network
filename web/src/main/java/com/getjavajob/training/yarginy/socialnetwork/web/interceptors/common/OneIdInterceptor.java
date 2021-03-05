@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.web.interceptors;
+package com.getjavajob.training.yarginy.socialnetwork.web.interceptors.common;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;

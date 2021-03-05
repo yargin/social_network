@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.web.interceptors;
+package com.getjavajob.training.yarginy.socialnetwork.web.interceptors.common;
 
 import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 import static java.util.Objects.isNull;
 
 @Component
-public class AuthInterceptor extends HandlerInterceptorAdapter {
+public class AuthChecker extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession(true);

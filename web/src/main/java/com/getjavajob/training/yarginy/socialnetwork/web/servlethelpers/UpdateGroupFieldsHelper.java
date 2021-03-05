@@ -4,7 +4,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -19,15 +18,11 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 import static java.util.Objects.isNull;
 
 public class UpdateGroupFieldsHelper extends UpdateFieldsHelper {
-    private DataHandleHelper dataHandleHelper;
+    //todo
+    private final DataHandleHelper dataHandleHelper = new DataHandleHelper();
 
     public UpdateGroupFieldsHelper(HttpServletRequest req, HttpServletResponse resp, String idParam, String successUrl) {
         super(req, resp, idParam, successUrl);
-    }
-
-    @Autowired
-    public void setDataHandleHelper(DataHandleHelper dataHandleHelper) {
-        this.dataHandleHelper = dataHandleHelper;
     }
 
     public Group getOrCreateGroup(Supplier<Group> groupCreator) {
