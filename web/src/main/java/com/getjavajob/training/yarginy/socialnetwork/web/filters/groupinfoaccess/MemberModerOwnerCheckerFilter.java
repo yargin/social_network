@@ -18,7 +18,7 @@ public class MemberModerOwnerCheckerFilter extends HttpFilter {
                 !isNull(req.getAttribute("moderator"))) {
             chain.doFilter(req, res);
         } else {
-            res.sendRedirect(req.getContextPath() + Pages.WALL);
+            res.sendRedirect(req.getContextPath() + Pages.ACCOUNT_WALL);
         }
     }
 }

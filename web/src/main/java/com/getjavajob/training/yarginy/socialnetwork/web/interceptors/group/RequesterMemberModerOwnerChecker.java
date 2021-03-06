@@ -18,7 +18,7 @@ public class RequesterMemberModerOwnerChecker extends HandlerInterceptorAdapter 
                 (!isNull(req.getAttribute("member")) && !isNull(req.getAttribute("requestOwner")))) {
             return true;
         }
-        res.sendRedirect(req.getContextPath() + Pages.WALL);
+        res.sendRedirect(req.getContextPath() + Pages.ACCOUNT_WALL);
         return false;
     }
 }

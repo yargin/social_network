@@ -25,6 +25,6 @@ public class JoinGroupServlet extends AbstractPostServlet {
         long accountId = (long) req.getAttribute(Attributes.REQUESTER_ID);
         long groupId = (long) req.getAttribute(Attributes.RECEIVER_ID);
         groupService.sendGroupRequest(accountId, groupId);
-        redirect(req, resp, Pages.GROUP, Attributes.REQUESTED_ID, "" + groupId);
+        redirect(req, resp, Pages.GROUP_WALL, Attributes.REQUESTED_ID, "" + groupId);
     }
 }

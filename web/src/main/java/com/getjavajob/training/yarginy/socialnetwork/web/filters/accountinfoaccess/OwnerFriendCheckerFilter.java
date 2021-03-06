@@ -19,7 +19,7 @@ public class OwnerFriendCheckerFilter extends HttpFilter {
                 !isNull(req.getAttribute("friend"))) {
             chain.doFilter(req, res);
         } else {
-            res.sendRedirect(req.getContextPath() + Pages.WALL);
+            res.sendRedirect(req.getContextPath() + Pages.ACCOUNT_WALL);
         }
     }
 }

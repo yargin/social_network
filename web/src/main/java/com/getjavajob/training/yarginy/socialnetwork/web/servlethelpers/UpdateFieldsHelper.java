@@ -34,7 +34,7 @@ public class UpdateFieldsHelper {
         } else {
             updateSuccessUrl = successUrl;
         }
-        updateFailUrl = Pages.WALL;
+        updateFailUrl = Pages.ACCOUNT_WALL;
     }
 
     public void setSuccessUrl(String successUrl, String param, String value) {
@@ -55,7 +55,6 @@ public class UpdateFieldsHelper {
     protected void setPhotoFromParam(Consumer<byte[]> setter, DataHandleHelper dataHandleHelper, String param)
             throws IOException, ServletException {
         Part imagePart = req.getPart(param);
-        System.out.println("HERE");
         if (!isNull(imagePart)) {
             try (InputStream inputStream = imagePart.getInputStream()) {
                 if (inputStream.available() > 0) {
@@ -81,8 +80,8 @@ public class UpdateFieldsHelper {
         try {
             setter.accept(value);
         } catch (IncorrectDataException e) {
-            req.setAttribute(ERR + param, e.getType().getPropertyKey());
             paramsAccepted = false;
+            req.setAttribute(ERR + param, e.getType().getPropertyKey());
             req.setAttribute(param, value);
         }
     }

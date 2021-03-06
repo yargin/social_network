@@ -30,7 +30,7 @@ public class AccountUpdateServlet extends AbstractGetPostServlet {
 
     @Override
     protected void safeDoGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp, USER_ID, Pages.WALL);
+        UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp);
         long requestedUserId = (long) req.getAttribute(REQUESTED_ID);
 
         //select at first visit
@@ -49,7 +49,7 @@ public class AccountUpdateServlet extends AbstractGetPostServlet {
 
     @Override
     protected void safeDoPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp, REQUESTED_ID, Pages.WALL);
+        UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp);
 
         if ("cancel".equals(req.getParameter("save"))) {
             updater.acceptActionOrRetry(true, null);

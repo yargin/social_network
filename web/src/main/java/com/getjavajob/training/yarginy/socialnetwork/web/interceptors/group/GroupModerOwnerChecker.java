@@ -17,7 +17,7 @@ public class GroupModerOwnerChecker extends HandlerInterceptorAdapter {
                 getAttribute("moderator"))) {
             return true;
         }
-        resp.sendRedirect(req.getContextPath() + Pages.WALL);
+        resp.sendRedirect(req.getContextPath() + Pages.ACCOUNT_WALL);
         return false;
     }
 }

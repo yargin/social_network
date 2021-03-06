@@ -19,7 +19,6 @@ import java.io.IOException;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.ACCOUNT_INFO;
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER_ID;
 import static java.util.Objects.isNull;
 
 @Component
@@ -33,7 +32,7 @@ public class AccountRegisterServlet extends AbstractGetPostServlet {
 
     @Override
     protected void safeDoGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp, USER_ID, Pages.WALL);
+        UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp);
 
         AccountInfoKeeper accountInfoKeeper = updater.getOrCreateAccountInfo(AccountInfoKeeper::new);
         if (isNull(req.getSession().getAttribute(ACCOUNT_INFO))) {
@@ -49,7 +48,7 @@ public class AccountRegisterServlet extends AbstractGetPostServlet {
 
     @Override
     protected void safeDoPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp, USER_ID, Pages.WALL);
+        UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp);
 
         AccountInfoKeeper accountInfoKeeper = (AccountInfoKeeper) req.getSession().getAttribute(Attributes.ACCOUNT_INFO);
         if (isNull(accountInfoKeeper)) {

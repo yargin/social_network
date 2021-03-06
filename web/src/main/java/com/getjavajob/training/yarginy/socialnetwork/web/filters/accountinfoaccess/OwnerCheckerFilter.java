@@ -18,7 +18,7 @@ public class OwnerCheckerFilter extends HttpFilter {
         if (!isNull(req.getAttribute("admin")) || !isNull(req.getAttribute("owner"))) {
             chain.doFilter(req, res);
         } else {
-            res.sendRedirect(req.getContextPath() + Pages.WALL);
+            res.sendRedirect(req.getContextPath() + Pages.ACCOUNT_WALL);
         }
     }
 }

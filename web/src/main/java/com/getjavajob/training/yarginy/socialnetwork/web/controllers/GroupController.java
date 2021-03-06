@@ -53,7 +53,7 @@ public class GroupController {
         Collection<Account> requesters = groupService.getGroupRequests(id);
         modelAndView.addObject("requesters", requesters);
         addInfoAndPhoto(modelAndView, id);
-        modelAndView.addObject("tab", "requests");
+        modelAndView.addObject(TAB, "requests");
         return modelAndView;
     }
 
@@ -63,7 +63,7 @@ public class GroupController {
         Map<Account, Boolean> members = groupService.getGroupMembersModerators(id);
         modelAndView.addObject("members", members);
         addInfoAndPhoto(modelAndView, id);
-        modelAndView.addObject("tab", "members");
+        modelAndView.addObject(TAB, "members");
         return modelAndView;
     }
 
@@ -71,14 +71,14 @@ public class GroupController {
     public String joinGroup(@RequestAttribute("requesterId") long accountId,
                             @RequestAttribute("receiverId") long groupId) {
         groupService.sendGroupRequest(accountId, groupId);
-        return REDIRECT + GROUP;
+        return REDIRECT + GROUP_WALL;
     }
 
     @PostMapping("/leave")
     public String leaveGroup(@RequestAttribute("requesterId") long accountId,
                              @RequestAttribute("receiverId") long groupId) {
         groupService.leaveGroup(accountId, groupId);
-        return REDIRECT + GROUP;
+        return REDIRECT + GROUP_WALL;
     }
 
     @PostMapping("/accept")
@@ -113,7 +113,7 @@ public class GroupController {
         Collection<Account> moderators = groupService.getModerators(id);
         modelAndView.addObject("moderators", moderators);
         addInfoAndPhoto(modelAndView, id);
-        modelAndView.addObject("tab", "moderators");
+        modelAndView.addObject(TAB, "moderators");
         return modelAndView;
     }
 

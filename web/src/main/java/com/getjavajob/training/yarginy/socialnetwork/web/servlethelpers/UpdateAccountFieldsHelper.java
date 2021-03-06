@@ -27,13 +27,14 @@ import java.util.stream.Collectors;
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory.getNullPassword;
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.ACCOUNT_WALL;
 import static java.util.Objects.isNull;
 
 public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
     private final DataHandleHelper dataHandleHelper = new DataHandleHelper();
 
-    public UpdateAccountFieldsHelper(HttpServletRequest req, HttpServletResponse resp, String param, String successUrl) {
-        super(req, resp, param, successUrl);
+    public UpdateAccountFieldsHelper(HttpServletRequest req, HttpServletResponse resp) {
+        super(req, resp, USER_ID, ACCOUNT_WALL);
     }
 
     public AccountInfoKeeper getOrCreateAccountInfo(Supplier<AccountInfoKeeper> accountInfoCreator) {

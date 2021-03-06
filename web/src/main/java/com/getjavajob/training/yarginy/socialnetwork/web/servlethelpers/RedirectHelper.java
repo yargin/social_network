@@ -4,8 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.ACCOUNT_WALL;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.LOGIN;
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.WALL;
 import static java.util.Objects.isNull;
 
 public final class RedirectHelper {
@@ -29,7 +29,7 @@ public final class RedirectHelper {
     public static void redirectToReferer(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String referer = req.getHeader(REFERER);
         if (isNull(referer) || referer.contains(LOGIN)) {
-            resp.sendRedirect(req.getContextPath() + WALL);
+            resp.sendRedirect(req.getContextPath() + ACCOUNT_WALL);
             return;
         }
         String url = req.getRequestURL().toString();
@@ -42,7 +42,7 @@ public final class RedirectHelper {
     public static String redirectBackView(HttpServletRequest req) {
         String referer = req.getHeader(REFERER);
         if (isNull(referer) || referer.contains(LOGIN)) {
-            return REDIRECT + WALL;
+            return REDIRECT + ACCOUNT_WALL;
         }
         String url = req.getRequestURL().toString();
         if (referer.equals(url)) {

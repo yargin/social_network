@@ -10,19 +10,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Base64;
 import java.util.function.Supplier;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.GROUP_WALL;
 import static java.util.Objects.isNull;
 
 public class UpdateGroupFieldsHelper extends UpdateFieldsHelper {
-    //todo
     private final DataHandleHelper dataHandleHelper = new DataHandleHelper();
 
-    public UpdateGroupFieldsHelper(HttpServletRequest req, HttpServletResponse resp, String idParam, String successUrl) {
-        super(req, resp, idParam, successUrl);
+    public UpdateGroupFieldsHelper(HttpServletRequest req, HttpServletResponse resp) {
+        super(req, resp, GROUP_ID, GROUP_WALL);
     }
 
     public Group getOrCreateGroup(Supplier<Group> groupCreator) {
@@ -47,7 +46,7 @@ public class UpdateGroupFieldsHelper extends UpdateFieldsHelper {
 
         byte[] photoBytes = group.getPhoto();
         if (!isNull(photoBytes)) {
-            String photo = Base64.getEncoder().encodeToString(photoBytes);
+            String photo = dataHandleHelper.getHtmlPhoto(photoBytes);
             req.setAttribute(PHOTO, photo);
         }
     }
@@ -62,6 +61,18 @@ public class UpdateGroupFieldsHelper extends UpdateFieldsHelper {
             doGet.accept(req, resp);
         }
     }
+
+//    todo delete
+//    public String NEWacceptActionOrRetry(boolean updated, DoGetWrapper doGet) {
+//        if (updated) {
+//            HttpSession session = req.getSession();
+//            session.removeAttribute(GROUP);
+//            session.removeAttribute(PHOTO);
+//            return updateSuccessUrl;
+//        } else {
+//            return redirectBackView(req);
+//        }
+//    }
 
     public void handleInfoExceptions(IncorrectDataException e, DoGetWrapper doGet) throws ServletException, IOException {
         if (e.getType() == IncorrectData.GROUP_DUPLICATE) {

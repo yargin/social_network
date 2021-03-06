@@ -21,7 +21,7 @@ public class SessionIdSetterFilter extends HttpFilter {
         String uri = req.getRequestURI();
         String page = "";
         if (uri.contains("wall")) {
-            page = Pages.WALL;
+            page = Pages.ACCOUNT_WALL;
         } else if (uri.contains("friends")) {
             page = Pages.FRIENDS;
         } else if (uri.contains("dialogs")) {

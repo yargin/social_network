@@ -24,7 +24,7 @@ public class GroupCreationServlet extends AbstractGetPostServlet {
 
     @Override
     protected void safeDoGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        UpdateGroupFieldsHelper updater = new UpdateGroupFieldsHelper(req, resp, GROUP_ID, Pages.GROUP);
+        UpdateGroupFieldsHelper updater = new UpdateGroupFieldsHelper(req, resp);
         Group group = updater.getOrCreateGroup(Group::new);
         updater.initGroupAttributes(group);
         req.getRequestDispatcher(Jsps.GROUP_CREATION).forward(req, resp);
@@ -32,7 +32,7 @@ public class GroupCreationServlet extends AbstractGetPostServlet {
 
     @Override
     protected void safeDoPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        UpdateGroupFieldsHelper updater = new UpdateGroupFieldsHelper(req, resp, GROUP_ID, Pages.GROUP);
+        UpdateGroupFieldsHelper updater = new UpdateGroupFieldsHelper(req, resp);
         Group group = new Group();
         updater.getValuesFromParams(group);
         if (!isNull(group.getPhoto())) {
@@ -61,7 +61,7 @@ public class GroupCreationServlet extends AbstractGetPostServlet {
             return;
         }
         Group createdGroup = groupService.get(group);
-        updater.setSuccessUrl(Pages.GROUP, GROUP_ID, "" + createdGroup.getId());
+        updater.setSuccessUrl(Pages.GROUP_WALL, GROUP_ID, "" + createdGroup.getId());
         updater.acceptActionOrRetry(created, this::safeDoGet);
     }
 }

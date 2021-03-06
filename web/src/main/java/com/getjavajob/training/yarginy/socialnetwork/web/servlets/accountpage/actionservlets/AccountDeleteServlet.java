@@ -31,7 +31,7 @@ public class AccountDeleteServlet extends AbstractGetServlet {
         accountToDelete.setId(requestedUserId);
         boolean deleted = accountService.deleteAccount(accountToDelete);
         if (deleted) {
-            redirect(req, resp, Pages.WALL);
+            redirect(req, resp, Pages.ACCOUNT_WALL);
         } else {
             req.getRequestDispatcher(Jsps.ERROR).forward(req, resp);
         }

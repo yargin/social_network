@@ -15,7 +15,7 @@ public class AccountOwnerFriendChecker extends HandlerInterceptorAdapter {
                 !isNull(req.getAttribute("friend"))) {
             return true;
         } else {
-            res.sendRedirect(req.getContextPath() + Pages.WALL);
+            res.sendRedirect(req.getContextPath() + Pages.ACCOUNT_WALL);
         }
         return false;
     }
