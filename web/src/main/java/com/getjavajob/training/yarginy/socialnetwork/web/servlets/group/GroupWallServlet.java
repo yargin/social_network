@@ -2,7 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.web.servlets.group;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
-import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.AbstractGetServlet;
@@ -31,7 +31,7 @@ public class GroupWallServlet extends AbstractGetServlet {
         Collection<Message> messages = groupWallMessageService.selectMessages(requestedId);
         req.setAttribute("messages", messages);
         req.setAttribute("group", group);
-        req.setAttribute("photo", new DataHandleHelper().getHtmlPhoto(group.getPhoto()));
+        req.setAttribute("photo", new DataHandler().getHtmlPhoto(group.getPhoto()));
         req.setAttribute("type", "groupWall");
         req.setAttribute("id", requestedId);
         req.setAttribute("tab", "wall");

@@ -4,7 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountInfoService;
 import com.getjavajob.training.yarginy.socialnetwork.service.infokeepers.AccountInfoKeeper;
-import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.UpdateAccountFieldsHelper;
+import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.AccountFieldsUpdater;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.AbstractGetPostServlet;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
@@ -30,7 +30,7 @@ public class AccountUpdateServlet extends AbstractGetPostServlet {
 
     @Override
     protected void safeDoGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp);
+        AccountFieldsUpdater updater = new AccountFieldsUpdater(req, resp);
         long requestedUserId = (long) req.getAttribute(REQUESTED_ID);
 
         //select at first visit
@@ -49,7 +49,7 @@ public class AccountUpdateServlet extends AbstractGetPostServlet {
 
     @Override
     protected void safeDoPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp);
+        AccountFieldsUpdater updater = new AccountFieldsUpdater(req, resp);
 
         if ("cancel".equals(req.getParameter("save"))) {
             updater.acceptActionOrRetry(true, null);
@@ -85,7 +85,7 @@ public class AccountUpdateServlet extends AbstractGetPostServlet {
         }
     }
 
-    private void update(UpdateAccountFieldsHelper updater, AccountInfoKeeper accountInfoKeeper,
+    private void update(AccountFieldsUpdater updater, AccountInfoKeeper accountInfoKeeper,
                         AccountInfoKeeper storedAccountInfoKeeper) throws ServletException, IOException {
         boolean updated;
         try {

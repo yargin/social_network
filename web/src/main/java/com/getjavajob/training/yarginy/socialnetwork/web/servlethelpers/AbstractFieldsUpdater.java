@@ -2,12 +2,11 @@ package com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
-import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper;
-import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,25 +15,24 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.ERR;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.ACCOUNT_WALL;
 import static java.util.Objects.isNull;
 
-public class UpdateFieldsHelper {
+public abstract class AbstractFieldsUpdater {
     protected final HttpServletRequest req;
-    protected final HttpServletResponse resp;
     protected final String updateFailUrl;
     protected String updateSuccessUrl;
     protected boolean paramsAccepted = true;
 
-    public UpdateFieldsHelper(HttpServletRequest req, HttpServletResponse resp, String param, String successUrl) {
+    public AbstractFieldsUpdater(HttpServletRequest req, String param, String successUrl) {
         this.req = req;
-        this.resp = resp;
         String stringRequestedId = req.getParameter(param);
         if (!isNull(stringRequestedId)) {
             setSuccessUrl(successUrl, param, stringRequestedId);
         } else {
             updateSuccessUrl = successUrl;
         }
-        updateFailUrl = Pages.ACCOUNT_WALL;
+        updateFailUrl = ACCOUNT_WALL;
     }
 
     public void setSuccessUrl(String successUrl, String param, String value) {
@@ -52,19 +50,36 @@ public class UpdateFieldsHelper {
         }
     }
 
-    protected void setPhotoFromParam(Consumer<byte[]> setter, DataHandleHelper dataHandleHelper, String param)
-            throws IOException, ServletException {
-        Part imagePart = req.getPart(param);
+    protected void setPhotoFromParam(Consumer<byte[]> setter, DataHandler dataHandler, String param) {
+        Part imagePart;
+        try {
+            imagePart = req.getPart(param);
+        } catch (IOException | ServletException e) {
+            throw new IncorrectDataException(IncorrectData.UPLOADING_ERROR);
+        }
         if (!isNull(imagePart)) {
             try (InputStream inputStream = imagePart.getInputStream()) {
                 if (inputStream.available() > 0) {
-                    setter.accept(dataHandleHelper.readAvatarPhoto(inputStream));
+                    setter.accept(dataHandler.readAvatarPhoto(inputStream));
                 }
             } catch (IOException e) {
                 throw new IncorrectDataException(IncorrectData.UPLOADING_ERROR);
             } catch (IncorrectDataException e) {
                 paramsAccepted = false;
                 req.setAttribute(ERR + param, e.getType().getPropertyKey());
+            }
+        }
+    }
+
+    protected void setPhotoFromParam(Consumer<byte[]> setter, MultipartFile photo) {
+        if (!photo.isEmpty()) {
+            try {
+                setter.accept(photo.getBytes());
+            } catch (IOException e) {
+                throw new IncorrectDataException(IncorrectData.UPLOADING_ERROR);
+            } catch (IncorrectDataException e) {
+                paramsAccepted = false;
+                req.setAttribute(ERR + "photo", e.getType().getPropertyKey());
             }
         }
     }

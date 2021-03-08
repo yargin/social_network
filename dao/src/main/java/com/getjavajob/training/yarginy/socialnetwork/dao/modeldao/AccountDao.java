@@ -162,17 +162,14 @@ public class AccountDao extends AbstractDao<Account> {
         valuesPlacer.addFieldIfDiffers(entity::getBirthDate, storedEntity::getBirthDate, BIRTH_DATE, Types.DATE);
         valuesPlacer.addFieldIfDiffers(entity::getIcq, storedEntity::getIcq, ICQ, Types.VARCHAR);
         valuesPlacer.addFieldIfDiffers(entity::getSkype, storedEntity::getSkype, SKYPE, Types.VARCHAR);
-        valuesPlacer.addFieldIfDiffers(entity::getEmail, storedEntity::getEmail, EMAIL, Types.VARCHAR);
         valuesPlacer.addFieldIfDiffers(entity::getAdditionalEmail, storedEntity::getAdditionalEmail, ADDITIONAL_EMAIL,
                 Types.VARCHAR);
         valuesPlacer.addFieldIfDiffers(entity::getCountry, storedEntity::getCountry, COUNTRY, Types.VARCHAR);
         valuesPlacer.addFieldIfDiffers(entity::getCity, storedEntity::getCity, CITY, Types.VARCHAR);
-        valuesPlacer.addFieldIfDiffers(entity::getRegistrationDate, storedEntity::getRegistrationDate, REGISTRATION_DATE,
-                Types.DATE);
         valuesPlacer.addFieldIfDiffers(entity::getRole, storedEntity::getRole, ROLE, Types.CHAR, Role::toString);
         valuesPlacer.addFieldIfDiffers(entity::getPhoto, storedEntity::getPhoto, PHOTO, Types.BLOB);
 
-        valuesPlacer.addKey(entity::getEmail, EMAIL, Types.VARCHAR);
+        valuesPlacer.addKey(storedEntity::getEmail, EMAIL, Types.VARCHAR);
         return valuesPlacer;
     }
 

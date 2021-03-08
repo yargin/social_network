@@ -7,4 +7,5 @@ public final class Views {
     public static final String GROUP_VIEW = "grouppages/group";
     public static final String SEARCH_VIEW = "globalSearch";
     public static final String GROUP_UPDATE_VIEW = "grouppages/groupUpdate";
+    public static final String GROUP_CREATE_VIEW = "grouppages/groupCreate";
 }

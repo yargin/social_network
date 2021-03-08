@@ -2,7 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.web.servlets.group.viewser
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
-import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.AbstractGetServlet;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
@@ -25,7 +25,7 @@ public class GroupMemberRequestsServlet extends AbstractGetServlet {
         Collection<Account> requesters = groupService.getGroupRequests(requestedId);
         req.setAttribute("requesters", requesters);
         Group group = groupService.get(requestedId);
-        req.setAttribute("photo", new DataHandleHelper().getHtmlPhoto(group.getPhoto()));
+        req.setAttribute("photo", new DataHandler().getHtmlPhoto(group.getPhoto()));
         req.setAttribute("group", group);
         req.setAttribute("tab", "requests");
         req.getRequestDispatcher(Jsps.GROUP_JSP).forward(req, resp);

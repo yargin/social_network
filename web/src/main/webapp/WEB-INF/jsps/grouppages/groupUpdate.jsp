@@ -9,7 +9,7 @@
 
 <common:layout>
     <div class="info">
-        <form action="${context}/updategroup?id=${group.getId()}" method="post" enctype="multipart/form-data">
+        <form action="${context}/group/update?id=${group.getId()}" method="post" enctype="multipart/form-data">
             <label><fmt:message key="form.groupName" bundle="${form}"/> : </label>
             <input type="text" name="name" value="${group.getName()}">
             <br>

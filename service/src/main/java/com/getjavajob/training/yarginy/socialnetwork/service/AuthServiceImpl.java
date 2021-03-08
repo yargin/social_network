@@ -5,7 +5,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PasswordDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
@@ -24,12 +24,12 @@ public class AuthServiceImpl implements AuthService {
     private final AccountDaoFacade accountDaoFacade;
     private final PasswordDaoFacade passwordDaoFacade;
     private final PhoneDaoFacade phoneDaoFacade;
-    private final DataHandleHelper dataHandleHelper;
+    private final DataHandler dataHandler;
 
     @Autowired
-    public AuthServiceImpl(DataHandleHelper dataHandleHelper, AccountDaoFacade accountDaoFacade,
+    public AuthServiceImpl(DataHandler dataHandler, AccountDaoFacade accountDaoFacade,
                            PasswordDaoFacade passwordDaoFacade, PhoneDaoFacade phoneDaoFacade) {
-        this.dataHandleHelper = dataHandleHelper;
+        this.dataHandler = dataHandler;
         this.accountDaoFacade = accountDaoFacade;
         this.passwordDaoFacade = passwordDaoFacade;
         this.phoneDaoFacade = phoneDaoFacade;
@@ -53,7 +53,7 @@ public class AuthServiceImpl implements AuthService {
         if (!phoneDaoFacade.create(phones)) {
             throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
         }
-        password.setPassword(dataHandleHelper.encrypt(password.getPassword()));
+        password.setPassword(dataHandler.encrypt(password.getPassword()));
         if (!passwordDaoFacade.create(password)) {
             throw new IllegalStateException();
         }
@@ -71,7 +71,7 @@ public class AuthServiceImpl implements AuthService {
         if (passwordObject.equals(getNullPassword())) {
             throw new IncorrectDataException(IncorrectData.WRONG_EMAIL);
         }
-        if (!passwordObject.getPassword().equals(dataHandleHelper.encrypt(password))) {
+        if (!passwordObject.getPassword().equals(dataHandler.encrypt(password))) {
             throw new IncorrectDataException(IncorrectData.WRONG_PASSWORD);
         }
         return accountDaoFacade.select(account);

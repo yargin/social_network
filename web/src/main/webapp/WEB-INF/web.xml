@@ -4,6 +4,8 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
 
+    <absolute-ordering/>
+
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>/WEB-INF/dispatcher-servlet.xml</param-value>
@@ -21,6 +23,23 @@
     <servlet-mapping>
         <servlet-name>dispatcher</servlet-name>
         <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/css/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/js/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/img/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/font/*</url-pattern>
     </servlet-mapping>
 
     <session-config>
@@ -45,8 +64,6 @@
         <filter-name>RequestedIdFilter</filter-name>
         <url-pattern>/updateinfo</url-pattern>
         <url-pattern>/deleteAccount</url-pattern>
-        <url-pattern>/updategroup</url-pattern>
-        <url-pattern>/deletegroup</url-pattern>
     </filter-mapping>
 
     <filter>
@@ -72,32 +89,6 @@
         <url-pattern>/updateinfo</url-pattern>
         <url-pattern>/deleteAccount</url-pattern>
     </filter-mapping>
-
-    <!-- permissions for group-->
-    <filter>
-        <filter-name>GroupPermissionsSetter</filter-name>
-        <filter-class>
-            com.getjavajob.training.yarginy.socialnetwork.web.filters.groupinfoaccess.GroupInfoAccessSetterFilter
-        </filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>GroupPermissionsSetter</filter-name>
-        <url-pattern>/updategroup</url-pattern>
-        <url-pattern>/deletegroup</url-pattern>
-    </filter-mapping>
-
-    <filter>
-        <filter-name>ModerOwnerChecker</filter-name>
-        <filter-class>
-            com.getjavajob.training.yarginy.socialnetwork.web.filters.groupinfoaccess.ModerOwnerCheckerFilter
-        </filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>ModerOwnerChecker</filter-name>
-        <url-pattern>/updategroup</url-pattern>
-        <url-pattern>/deletegroup</url-pattern>
-    </filter-mapping>
-
 
     <servlet>
         <servlet-name>register</servlet-name>
@@ -134,40 +125,6 @@
     <servlet-mapping>
         <servlet-name>updateAccount</servlet-name>
         <url-pattern>/updateinfo</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>createGroup</servlet-name>
-        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.group.GroupCreationServlet
-        </servlet-class>
-        <multipart-config>
-        </multipart-config>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>createGroup</servlet-name>
-        <url-pattern>/creategroup</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>updateGroup</servlet-name>
-        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.group.GroupUpdateServlet
-        </servlet-class>
-        <multipart-config>
-        </multipart-config>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>updateGroup</servlet-name>
-        <url-pattern>/updategroup</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>deleteGroup</servlet-name>
-        <servlet-class>com.getjavajob.training.yarginy.socialnetwork.web.servlets.group.GroupDeleteServlet
-        </servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>deleteGroup</servlet-name>
-        <url-pattern>/deletegroup</url-pattern>
     </servlet-mapping>
 
     <resource-ref>

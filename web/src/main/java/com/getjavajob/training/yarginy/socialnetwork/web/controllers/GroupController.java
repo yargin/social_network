@@ -3,7 +3,7 @@ package com.getjavajob.training.yarginy.socialnetwork.web.controllers;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
-import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +24,14 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Vie
 public class GroupController {
     private static final String REDIRECT = "redirect:";
     private final GroupService groupService;
-    private final DataHandleHelper dataHandleHelper;
+    private final DataHandler dataHandler;
     private final MessageService messageService;
 
     @Autowired
-    public GroupController(GroupService groupService, DataHandleHelper dataHandleHelper,
+    public GroupController(GroupService groupService, DataHandler dataHandler,
                            @Qualifier("groupWallMessageService") MessageService messageService) {
         this.groupService = groupService;
-        this.dataHandleHelper = dataHandleHelper;
+        this.dataHandler = dataHandler;
         this.messageService = messageService;
     }
 
@@ -119,7 +119,7 @@ public class GroupController {
 
     private void addInfoAndPhoto(ModelAndView modelAndView, long id) {
         Group group = groupService.get(id);
-        modelAndView.addObject("photo", dataHandleHelper.getHtmlPhoto(group.getPhoto()));
+        modelAndView.addObject("photo", dataHandler.getHtmlPhoto(group.getPhoto()));
         modelAndView.addObject("group", group);
     }
 }

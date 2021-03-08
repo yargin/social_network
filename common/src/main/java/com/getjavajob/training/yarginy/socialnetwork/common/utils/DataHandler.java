@@ -15,7 +15,7 @@ import java.util.Base64;
 import static java.util.Objects.isNull;
 
 @Component("dataHandler")
-public class DataHandleHelper implements Serializable {
+public class DataHandler implements Serializable {
     private static final int MAX_PHOTO_SIZE = 16000000;
 
     public String encrypt(String stringToEncrypt) {

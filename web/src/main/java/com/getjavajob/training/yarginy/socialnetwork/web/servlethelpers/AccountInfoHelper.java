@@ -4,7 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
-import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
 import com.getjavajob.training.yarginy.socialnetwork.service.infokeepers.AccountInfoKeeper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class AccountInfoHelper {
 
         Account account = accountInfoKeeper.getAccount();
         modelAndView.addObject("user", account);
-        modelAndView.addObject("photo", new DataHandleHelper().getHtmlPhoto(account.getPhoto()));
+        modelAndView.addObject("photo", new DataHandler().getHtmlPhoto(account.getPhoto()));
 
         Collection<Phone> phones = accountInfoKeeper.getPhones();
         Collection<Phone> privatePhones = phones.stream().filter(phone -> phone.getType() == PhoneType.PRIVATE).

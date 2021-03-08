@@ -26,10 +26,10 @@
 </div>
 <br>
 <c:if test="${not empty moderator or not empty admin or not empty owner}">
-    <a href="${context}/updategroup?id=${id}"><fmt:message key="label.updateInfo" bundle="${label}"/></a><br>
+    <a href="${context}/group/update?id=${id}"><fmt:message key="label.updateInfo" bundle="${label}"/></a><br>
 </c:if>
 <c:if test="${not empty admin or not empty owner}">
-    <a href="${context}/deletegroup?id=${id}"><fmt:message key="label.deleteGroup" bundle="${label}"/></a><br>
+    <a href="${context}/group/delete?id=${id}"><fmt:message key="label.deleteGroup" bundle="${label}"/></a><br>
 </c:if>
 <c:if test="${not empty member and empty owner}">
     <form action="${context}/group/leave" method="post">

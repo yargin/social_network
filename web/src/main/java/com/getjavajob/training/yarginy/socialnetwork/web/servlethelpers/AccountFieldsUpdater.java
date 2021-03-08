@@ -7,34 +7,130 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.addit
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
-import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
 import com.getjavajob.training.yarginy.socialnetwork.service.infokeepers.AccountInfoKeeper;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.additionaldata.PhoneView;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionContext;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory.getNullPassword;
+import static com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex.FEMALE;
+import static com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex.MALE;
+import static com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType.PRIVATE;
+import static com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType.WORK;
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.ACCOUNT_WALL;
 import static java.util.Objects.isNull;
 
-public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
-    private final DataHandleHelper dataHandleHelper = new DataHandleHelper();
+public final class AccountFieldsUpdater extends AbstractFieldsUpdater {
+    private final DataHandler dataHandler = new DataHandler();
+    //todo to delete
+    HttpServletResponse resp;
+    HttpSession session = new HttpSession() {
+        @Override
+        public long getCreationTime() {
+            return 0;
+        }
 
-    public UpdateAccountFieldsHelper(HttpServletRequest req, HttpServletResponse resp) {
-        super(req, resp, USER_ID, ACCOUNT_WALL);
+        @Override
+        public String getId() {
+            return null;
+        }
+
+        @Override
+        public long getLastAccessedTime() {
+            return 0;
+        }
+
+        @Override
+        public ServletContext getServletContext() {
+            return null;
+        }
+
+        @Override
+        public int getMaxInactiveInterval() {
+            return 0;
+        }
+
+        @Override
+        public void setMaxInactiveInterval(int interval) {
+
+        }
+
+        @Override
+        public HttpSessionContext getSessionContext() {
+            return null;
+        }
+
+        @Override
+        public Object getAttribute(String name) {
+            return null;
+        }
+
+        @Override
+        public Object getValue(String name) {
+            return null;
+        }
+
+        @Override
+        public Enumeration<String> getAttributeNames() {
+            return null;
+        }
+
+        @Override
+        public String[] getValueNames() {
+            return new String[0];
+        }
+
+        @Override
+        public void setAttribute(String name, Object value) {
+
+        }
+
+        @Override
+        public void putValue(String name, Object value) {
+
+        }
+
+        @Override
+        public void removeAttribute(String name) {
+
+        }
+
+        @Override
+        public void removeValue(String name) {
+
+        }
+
+        @Override
+        public void invalidate() {
+
+        }
+
+        @Override
+        public boolean isNew() {
+            return false;
+        }
+    };
+
+    public AccountFieldsUpdater(HttpServletRequest req, HttpServletResponse resp) {
+        super(req, USER_ID, ACCOUNT_WALL);
+        this.resp = resp;
     }
 
     public AccountInfoKeeper getOrCreateAccountInfo(Supplier<AccountInfoKeeper> accountInfoCreator) {
@@ -61,16 +157,16 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
         setAttribute("skype", account::getSkype);
         setAttribute("country", account::getCountry);
         setAttribute("city", account::getCity);
-        setAttribute("photo", () -> dataHandleHelper.getHtmlPhoto(account.getPhoto()));
+        setAttribute("photo", () -> dataHandler.getHtmlPhoto(account.getPhoto()));
 
         Collection<Phone> phones = accountInfo.getPhones();
-        HttpSession session = req.getSession();
+//        HttpSession session = req.getSession();
         if (isNull(session.getAttribute(PRIVATE_PHONES))) {
-            Collection<PhoneView> privatePhones = createPhoneViews(phones, "privatePhone", PhoneType.PRIVATE);
+            Collection<PhoneView> privatePhones = createPhoneViews(phones, "privatePhone", PRIVATE);
             session.setAttribute(PRIVATE_PHONES, privatePhones);
         }
         if (isNull(session.getAttribute(WORK_PHONES))) {
-            Collection<PhoneView> workPhones = createPhoneViews(phones, "workPhone", PhoneType.WORK);
+            Collection<PhoneView> workPhones = createPhoneViews(phones, "workPhone", WORK);
             session.setAttribute(WORK_PHONES, workPhones);
         }
     }
@@ -84,17 +180,17 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
     }
 
     public void initSex() {
-        req.setAttribute("male", Sex.MALE.toString());
-        req.setAttribute("female", Sex.FEMALE.toString());
+        req.setAttribute("male", MALE.toString());
+        req.setAttribute("female", FEMALE.toString());
     }
 
     private Collection<Phone> getPhonesFromParams(String attribute, PhoneType type) {
-        Collection<PhoneView> phoneViews = (Collection<PhoneView>) req.getSession().getAttribute(attribute);
+        Collection<PhoneView> phoneViews = (Collection<PhoneView>) session.getAttribute(attribute);
         phoneViews.clear();
         Collection<Phone> phones = new ArrayList<>();
-        AccountInfoKeeper accountInfo = (AccountInfoKeeper) req.getSession().getAttribute(ACCOUNT_INFO);
+        AccountInfoKeeper accountInfo = (AccountInfoKeeper) session.getAttribute(ACCOUNT_INFO);
         Account account = accountInfo.getAccount();
-        String prefix = type.equals(PhoneType.PRIVATE) ? "privatePhone" : "workPhone";
+        String prefix = type.equals(PRIVATE) ? "privatePhone" : "workPhone";
         int i = 0;
         String number = req.getParameter(prefix + i);
         while (!isNull(number)) {
@@ -143,10 +239,10 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
         setStringFromParam(account::setSkype, "skype");
         setStringFromParam(account::setCountry, "country");
         setStringFromParam(account::setCity, "city");
-        setPhotoFromParam(account::setPhoto, dataHandleHelper, "photo");
+        setPhotoFromParam(account::setPhoto, dataHandler, "photo");
 
-        Collection<Phone> privatePhones = getPhonesFromParams(PRIVATE_PHONES, PhoneType.PRIVATE);
-        Collection<Phone> workPhones = getPhonesFromParams(WORK_PHONES, PhoneType.WORK);
+        Collection<Phone> privatePhones = getPhonesFromParams(PRIVATE_PHONES, PRIVATE);
+        Collection<Phone> workPhones = getPhonesFromParams(WORK_PHONES, WORK);
 
         Collection<Phone> phones = accountInfoKeeper.getPhones();
         phones.clear();
@@ -156,14 +252,13 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
 
     public void acceptActionOrRetry(boolean updated, DoGetWrapper doGet) throws IOException, ServletException {
         if (updated) {
-            HttpSession session = req.getSession();
             session.removeAttribute(ACCOUNT_INFO);
             session.removeAttribute(PRIVATE_PHONES);
             session.removeAttribute(WORK_PHONES);
             session.removeAttribute(PHOTO);
-            redirect(req, resp, updateSuccessUrl);
+            redirect((HttpServletRequest) req, resp, updateSuccessUrl);
         } else {
-            doGet.accept(req, resp);
+            doGet.accept((HttpServletRequest) req, resp);
         }
     }
 
@@ -177,6 +272,6 @@ public final class UpdateAccountFieldsHelper extends UpdateFieldsHelper {
         if (e.getType() == IncorrectData.UPLOADING_ERROR) {
             req.setAttribute(UPLOAD_ERROR, e.getType().getPropertyKey());
         }
-        doGet.accept(req, resp);
+        doGet.accept((HttpServletRequest) req, resp);
     }
 }

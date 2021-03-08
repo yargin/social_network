@@ -11,7 +11,7 @@
     <common:accountMenu/>
 
     <c:if test="${not empty friend or not empty owner or not empty admin}">
-        <a href="${context}/creategroup">
+        <a href="${context}/group/create">
             <button><fmt:message key="label.createGroup"/></button>
         </a><br>
         <div class="post">

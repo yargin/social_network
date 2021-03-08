@@ -2,7 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
-import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -21,16 +21,16 @@ public final class MessageHelper {
     private final MessageService accountWallMessageService;
     private final MessageService groupWallMessageService;
     private final MessageService accountPrivateMessageService;
-    private final DataHandleHelper dataHandleHelper;
+    private final DataHandler dataHandler;
 
     public MessageHelper(@Qualifier("accountWallMessageService") MessageService accountWallMessageService,
                          @Qualifier("groupWallMessageService") MessageService groupWallMessageService,
                          @Qualifier("dialogMessageService") MessageService accountPrivateMessageService,
-                         DataHandleHelper dataHandleHelper) {
+                         DataHandler dataHandler) {
         this.accountWallMessageService = accountWallMessageService;
         this.groupWallMessageService = groupWallMessageService;
         this.accountPrivateMessageService = accountPrivateMessageService;
-        this.dataHandleHelper = dataHandleHelper;
+        this.dataHandler = dataHandler;
     }
 
     public boolean addMessage(HttpServletRequest req) {
@@ -67,7 +67,7 @@ public final class MessageHelper {
         Part part = req.getPart("image");
         if (part.getSize() > 1) {
             try (InputStream inputStream = part.getInputStream()) {
-                message.setImage(dataHandleHelper.readMessageImage(inputStream));
+                message.setImage(dataHandler.readMessageImage(inputStream));
             }
         }
         long senderId = (long) req.getAttribute(REQUESTER_ID);

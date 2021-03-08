@@ -14,7 +14,7 @@ public final class Jsps {
     public static final String FRIENDS_LIST = "/WEB-INF/jsps/accountpages/friendsList.jsp";
 
     public static final String GROUP_JSP = "/WEB-INF/jsps/grouppages/group.jsp";
-    public static final String GROUP_CREATION = "/WEB-INF/jsps/grouppages/groupCreation.jsp";
+    public static final String GROUP_CREATION = "/WEB-INF/jsps/grouppages/groupCreate.jsp";
     public static final String GROUP_UPDATE = "/WEB-INF/jsps/grouppages/groupUpdate.jsp";
 
     public static final String DIALOGS = "/WEB-INF/jsps/accountpages/dialogs.jsp";

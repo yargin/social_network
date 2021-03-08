@@ -6,13 +6,10 @@
 <fmt:setBundle basename="form" var="form"/>
 <fmt:setBundle basename="error" var="error"/>
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
-<input type="hidden" value="${group}" name="group"/>
 
-<% request.setAttribute("savedPhoto", request.getAttribute("savedPhoto")); %>
 <common:layout>
     <div class="post">
-        <form action="${context}/creategroup" method="post" enctype="multipart/form-data">
-
+        <form action="${context}/group/create" method="post" enctype="multipart/form-data">
             <input type="text" name="name"
                    <c:if test="${not empty group.name}">value="${name}"</c:if>
                    placeholder="<fmt:message key="form.groupName" bundle="${form}"/>" required>
@@ -36,8 +33,9 @@
             </c:if>
                    title="<fmt:message key="form.uploadImage" bundle="${form}"/>">
             <br>
-            <button><fmt:message key="button.create" bundle="${label}"/></button>
+            <button type="submit" name="save" value="save"><fmt:message key="button.save" bundle="${label}"/></button>
+            <button type="submit" name="save" value="cancel"><fmt:message key="button.cancel"
+                                                                          bundle="${label}"/></button>
         </form>
-
     </div>
 </common:layout>

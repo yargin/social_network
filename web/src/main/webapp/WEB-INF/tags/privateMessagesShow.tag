@@ -7,7 +7,7 @@
 
 <c:forEach var="message" items="${messages}">
     <c:set var="author" value="${message.author}"/>
-    <jsp:useBean id="dataHandler" class="com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper"/>
+    <jsp:useBean id="dataHandler" class="com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler"/>
     <div class="wallMessage"
             <c:choose>
                 <c:when test="${author.id == sessionScope.userId}">

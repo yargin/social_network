@@ -4,7 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.service.AuthService;
 import com.getjavajob.training.yarginy.socialnetwork.service.infokeepers.AccountInfoKeeper;
-import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.UpdateAccountFieldsHelper;
+import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.AccountFieldsUpdater;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.AbstractGetPostServlet;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Jsps;
@@ -32,7 +32,7 @@ public class AccountRegisterServlet extends AbstractGetPostServlet {
 
     @Override
     protected void safeDoGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp);
+        AccountFieldsUpdater updater = new AccountFieldsUpdater(req, resp);
 
         AccountInfoKeeper accountInfoKeeper = updater.getOrCreateAccountInfo(AccountInfoKeeper::new);
         if (isNull(req.getSession().getAttribute(ACCOUNT_INFO))) {
@@ -48,7 +48,7 @@ public class AccountRegisterServlet extends AbstractGetPostServlet {
 
     @Override
     protected void safeDoPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        UpdateAccountFieldsHelper updater = new UpdateAccountFieldsHelper(req, resp);
+        AccountFieldsUpdater updater = new AccountFieldsUpdater(req, resp);
 
         AccountInfoKeeper accountInfoKeeper = (AccountInfoKeeper) req.getSession().getAttribute(Attributes.ACCOUNT_INFO);
         if (isNull(accountInfoKeeper)) {
@@ -69,7 +69,7 @@ public class AccountRegisterServlet extends AbstractGetPostServlet {
         }
     }
 
-    private void register(UpdateAccountFieldsHelper updater, AccountInfoKeeper accountInfoKeeper, Password password) throws
+    private void register(AccountFieldsUpdater updater, AccountInfoKeeper accountInfoKeeper, Password password) throws
             IOException, ServletException {
         boolean registered;
         try {
