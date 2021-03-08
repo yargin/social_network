@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  */
 //@Component
 public class AccountInfoKeeper implements Serializable {
-    private final Account account;
+    private Account account;
     private final Collection<Phone> phones;
 
     public AccountInfoKeeper(Account account, Collection<Phone> phones) {
@@ -28,6 +28,10 @@ public class AccountInfoKeeper implements Serializable {
 
     public Account getAccount() {
         return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     public Collection<Phone> getPhones() {

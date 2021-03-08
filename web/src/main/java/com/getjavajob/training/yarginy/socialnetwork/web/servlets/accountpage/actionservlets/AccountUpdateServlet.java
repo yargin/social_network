@@ -1,6 +1,5 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.actionservlets;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountInfoService;
 import com.getjavajob.training.yarginy.socialnetwork.service.infokeepers.AccountInfoKeeper;
@@ -30,7 +29,7 @@ public class AccountUpdateServlet extends AbstractGetPostServlet {
 
     @Override
     protected void safeDoGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        AccountFieldsUpdater updater = new AccountFieldsUpdater(req, resp);
+        AccountFieldsUpdater updater = new AccountFieldsUpdater(req, req.getSession());
         long requestedUserId = (long) req.getAttribute(REQUESTED_ID);
 
         //select at first visit
@@ -49,7 +48,7 @@ public class AccountUpdateServlet extends AbstractGetPostServlet {
 
     @Override
     protected void safeDoPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        AccountFieldsUpdater updater = new AccountFieldsUpdater(req, resp);
+        AccountFieldsUpdater updater = new AccountFieldsUpdater(req, req.getSession());
 
         if ("cancel".equals(req.getParameter("save"))) {
             updater.acceptActionOrRetry(true, null);
@@ -65,7 +64,7 @@ public class AccountUpdateServlet extends AbstractGetPostServlet {
         account.setEmail(storedAccount.getEmail());
         account.setRegistrationDate(storedAccount.getRegistrationDate());
 
-        updater.getValuesFromParams(accountInfoKeeper);
+//        updater.getValuesFromParams(accountInfoKeeper);
 
         if (isNull(session.getAttribute(PHOTO))) {
             session.setAttribute(PHOTO, storedAccount.getPhoto());
@@ -88,12 +87,12 @@ public class AccountUpdateServlet extends AbstractGetPostServlet {
     private void update(AccountFieldsUpdater updater, AccountInfoKeeper accountInfoKeeper,
                         AccountInfoKeeper storedAccountInfoKeeper) throws ServletException, IOException {
         boolean updated;
-        try {
-            updated = accountInfoService.update(accountInfoKeeper, storedAccountInfoKeeper);
-        } catch (IncorrectDataException e) {
-            updater.handleInfoExceptions(e, this::safeDoGet);
-            return;
-        }
-        updater.acceptActionOrRetry(updated, this::safeDoGet);
+//        try {
+//            updated = accountInfoService.update(accountInfoKeeper, storedAccountInfoKeeper);
+//        } catch (IncorrectDataException e) {
+//            updater.handleInfoExceptions(e, this::safeDoGet);
+//            return;
+//        }
+//        updater.acceptActionOrRetry(updated, this::safeDoGet);
     }
 }

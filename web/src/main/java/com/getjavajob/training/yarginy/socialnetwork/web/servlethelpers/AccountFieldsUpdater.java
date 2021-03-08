@@ -3,7 +3,6 @@ package com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
@@ -11,17 +10,10 @@ import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
 import com.getjavajob.training.yarginy.socialnetwork.service.infokeepers.AccountInfoKeeper;
 import com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.additionaldata.PhoneView;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionContext;
-import java.io.IOException;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
@@ -32,105 +24,17 @@ import static com.getjavajob.training.yarginy.socialnetwork.common.models.accoun
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex.MALE;
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType.PRIVATE;
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType.WORK;
-import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirect;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.ACCOUNT_WALL;
 import static java.util.Objects.isNull;
 
 public final class AccountFieldsUpdater extends AbstractFieldsUpdater {
     private final DataHandler dataHandler = new DataHandler();
-    //todo to delete
-    HttpServletResponse resp;
-    HttpSession session = new HttpSession() {
-        @Override
-        public long getCreationTime() {
-            return 0;
-        }
+    private final HttpSession session;
 
-        @Override
-        public String getId() {
-            return null;
-        }
-
-        @Override
-        public long getLastAccessedTime() {
-            return 0;
-        }
-
-        @Override
-        public ServletContext getServletContext() {
-            return null;
-        }
-
-        @Override
-        public int getMaxInactiveInterval() {
-            return 0;
-        }
-
-        @Override
-        public void setMaxInactiveInterval(int interval) {
-
-        }
-
-        @Override
-        public HttpSessionContext getSessionContext() {
-            return null;
-        }
-
-        @Override
-        public Object getAttribute(String name) {
-            return null;
-        }
-
-        @Override
-        public Object getValue(String name) {
-            return null;
-        }
-
-        @Override
-        public Enumeration<String> getAttributeNames() {
-            return null;
-        }
-
-        @Override
-        public String[] getValueNames() {
-            return new String[0];
-        }
-
-        @Override
-        public void setAttribute(String name, Object value) {
-
-        }
-
-        @Override
-        public void putValue(String name, Object value) {
-
-        }
-
-        @Override
-        public void removeAttribute(String name) {
-
-        }
-
-        @Override
-        public void removeValue(String name) {
-
-        }
-
-        @Override
-        public void invalidate() {
-
-        }
-
-        @Override
-        public boolean isNew() {
-            return false;
-        }
-    };
-
-    public AccountFieldsUpdater(HttpServletRequest req, HttpServletResponse resp) {
+    public AccountFieldsUpdater(HttpServletRequest req, HttpSession session) {
         super(req, USER_ID, ACCOUNT_WALL);
-        this.resp = resp;
+        this.session = session;
     }
 
     public AccountInfoKeeper getOrCreateAccountInfo(Supplier<AccountInfoKeeper> accountInfoCreator) {
@@ -160,7 +64,6 @@ public final class AccountFieldsUpdater extends AbstractFieldsUpdater {
         setAttribute("photo", () -> dataHandler.getHtmlPhoto(account.getPhoto()));
 
         Collection<Phone> phones = accountInfo.getPhones();
-//        HttpSession session = req.getSession();
         if (isNull(session.getAttribute(PRIVATE_PHONES))) {
             Collection<PhoneView> privatePhones = createPhoneViews(phones, "privatePhone", PRIVATE);
             session.setAttribute(PRIVATE_PHONES, privatePhones);
@@ -184,15 +87,14 @@ public final class AccountFieldsUpdater extends AbstractFieldsUpdater {
         req.setAttribute("female", FEMALE.toString());
     }
 
-    private Collection<Phone> getPhonesFromParams(String attribute, PhoneType type) {
+    private Collection<Phone> getPhonesFromParams(String attribute, PhoneType type, AccountInfoKeeper accountInfo) {
         Collection<PhoneView> phoneViews = (Collection<PhoneView>) session.getAttribute(attribute);
         phoneViews.clear();
         Collection<Phone> phones = new ArrayList<>();
-        AccountInfoKeeper accountInfo = (AccountInfoKeeper) session.getAttribute(ACCOUNT_INFO);
-        Account account = accountInfo.getAccount();
         String prefix = type.equals(PRIVATE) ? "privatePhone" : "workPhone";
         int i = 0;
         String number = req.getParameter(prefix + i);
+        Account account = accountInfo.getAccount();
         while (!isNull(number)) {
             PhoneView phoneView = new PhoneView(prefix + i, number, "");
             phoneViews.add(phoneView);
@@ -226,23 +128,23 @@ public final class AccountFieldsUpdater extends AbstractFieldsUpdater {
         }
     }
 
-    public void getValuesFromParams(AccountInfoKeeper accountInfoKeeper) throws IOException, ServletException {
-        Account account = accountInfoKeeper.getAccount();
-        setStringFromParam(account::setName, "name");
-        setStringFromParam(account::setSurname, "surname");
-        setStringFromParam(account::setPatronymic, "patronymic");
-        setObjectFromParam(account::setSex, "sex", Sex::valueOf);
-        setStringFromParam(account::setEmail, "email");
-        setStringFromParam(account::setAdditionalEmail, "additionalEmail");
-        setObjectFromParam(account::setBirthDate, "birthDate", Date::valueOf);
-        setStringFromParam(account::setIcq, "icq");
-        setStringFromParam(account::setSkype, "skype");
-        setStringFromParam(account::setCountry, "country");
-        setStringFromParam(account::setCity, "city");
-        setPhotoFromParam(account::setPhoto, dataHandler, "photo");
+    public Password getPassword(Account account, String password, String confirmPassword) {
+        Password enteredPassword;
+        if (Objects.equals(password, confirmPassword) && !password.isEmpty()) {
+            enteredPassword = new Password();
+            enteredPassword.setPassword(password);
+            enteredPassword.setAccount(account);
+        } else {
+            req.setAttribute("passNotMatch", "error.passwordNotMatch");
+            paramsAccepted = false;
+            enteredPassword = getNullPassword();
+        }
+        return enteredPassword;
+    }
 
-        Collection<Phone> privatePhones = getPhonesFromParams(PRIVATE_PHONES, PRIVATE);
-        Collection<Phone> workPhones = getPhonesFromParams(WORK_PHONES, WORK);
+    public void getValuesFromParams(AccountInfoKeeper accountInfoKeeper) {
+        Collection<Phone> privatePhones = getPhonesFromParams(PRIVATE_PHONES, PRIVATE, accountInfoKeeper);
+        Collection<Phone> workPhones = getPhonesFromParams(WORK_PHONES, WORK, accountInfoKeeper);
 
         Collection<Phone> phones = accountInfoKeeper.getPhones();
         phones.clear();
@@ -250,19 +152,19 @@ public final class AccountFieldsUpdater extends AbstractFieldsUpdater {
         phones.addAll(workPhones);
     }
 
-    public void acceptActionOrRetry(boolean updated, DoGetWrapper doGet) throws IOException, ServletException {
+    public String acceptActionOrRetry(boolean updated, GetMethodWrapper doGet) {
         if (updated) {
             session.removeAttribute(ACCOUNT_INFO);
             session.removeAttribute(PRIVATE_PHONES);
             session.removeAttribute(WORK_PHONES);
             session.removeAttribute(PHOTO);
-            redirect((HttpServletRequest) req, resp, updateSuccessUrl);
+            return "redirect:" + updateSuccessUrl;
         } else {
-            doGet.accept((HttpServletRequest) req, resp);
+            return doGet.performGet(req, session);
         }
     }
 
-    public void handleInfoExceptions(IncorrectDataException e, DoGetWrapper doGet) throws ServletException, IOException {
+    public String handleInfoExceptions(IncorrectDataException e, GetMethodWrapper doGet) {
         if (e.getType() == IncorrectData.EMAIL_DUPLICATE) {
             req.setAttribute(EMAIL_DUPLICATE, e.getType().getPropertyKey());
         }
@@ -272,6 +174,6 @@ public final class AccountFieldsUpdater extends AbstractFieldsUpdater {
         if (e.getType() == IncorrectData.UPLOADING_ERROR) {
             req.setAttribute(UPLOAD_ERROR, e.getType().getPropertyKey());
         }
-        doGet.accept((HttpServletRequest) req, resp);
+        return doGet.performGet(req, session);
     }
 }

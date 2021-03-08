@@ -4,7 +4,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -31,13 +30,6 @@ public class GroupFieldsUpdater extends AbstractFieldsUpdater {
             req.setAttribute(GROUP, group);
         }
         return group;
-    }
-
-    public void getValuesFromParams(Group group, MultipartFile photo) {
-        setStringFromParam(group::setName, "name");
-        setStringFromParam(group::setDescription, "description");
-
-        setPhotoFromParam(group::setPhoto, photo);
     }
 
     public void initAttributes(Group group) {

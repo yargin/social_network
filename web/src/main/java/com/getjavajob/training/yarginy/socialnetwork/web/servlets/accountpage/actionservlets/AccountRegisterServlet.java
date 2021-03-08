@@ -1,6 +1,5 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.actionservlets;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.service.AuthService;
 import com.getjavajob.training.yarginy.socialnetwork.service.infokeepers.AccountInfoKeeper;
@@ -32,7 +31,7 @@ public class AccountRegisterServlet extends AbstractGetPostServlet {
 
     @Override
     protected void safeDoGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        AccountFieldsUpdater updater = new AccountFieldsUpdater(req, resp);
+        AccountFieldsUpdater updater = new AccountFieldsUpdater(req, req.getSession());
 
         AccountInfoKeeper accountInfoKeeper = updater.getOrCreateAccountInfo(AccountInfoKeeper::new);
         if (isNull(req.getSession().getAttribute(ACCOUNT_INFO))) {
@@ -48,7 +47,7 @@ public class AccountRegisterServlet extends AbstractGetPostServlet {
 
     @Override
     protected void safeDoPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        AccountFieldsUpdater updater = new AccountFieldsUpdater(req, resp);
+        AccountFieldsUpdater updater = new AccountFieldsUpdater(req, req.getSession());
 
         AccountInfoKeeper accountInfoKeeper = (AccountInfoKeeper) req.getSession().getAttribute(Attributes.ACCOUNT_INFO);
         if (isNull(accountInfoKeeper)) {
@@ -56,7 +55,7 @@ public class AccountRegisterServlet extends AbstractGetPostServlet {
             return;
         }
 
-        updater.getValuesFromParams(accountInfoKeeper);
+//        updater.getValuesFromParams(accountInfoKeeper);
 
         Password password = updater.getPassword(accountInfoKeeper.getAccount());
 
@@ -71,13 +70,13 @@ public class AccountRegisterServlet extends AbstractGetPostServlet {
 
     private void register(AccountFieldsUpdater updater, AccountInfoKeeper accountInfoKeeper, Password password) throws
             IOException, ServletException {
-        boolean registered;
-        try {
-            registered = authService.register(accountInfoKeeper, password);
-        } catch (IncorrectDataException e) {
-            updater.handleInfoExceptions(e, this::safeDoGet);
-            return;
-        }
-        updater.acceptActionOrRetry(registered, this::safeDoGet);
+//        boolean registered;
+//        try {
+//            registered = authService.register(accountInfoKeeper, password);
+//        } catch (IncorrectDataException e) {
+//            updater.handleInfoExceptions(e, this::safeDoGet);
+//            return;
+//        }
+//        updater.acceptActionOrRetry(registered, this::safeDoGet);
     }
 }

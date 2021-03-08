@@ -91,19 +91,6 @@
     </filter-mapping>
 
     <servlet>
-        <servlet-name>register</servlet-name>
-        <servlet-class>
-            com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.actionservlets.AccountRegisterServlet
-        </servlet-class>
-        <multipart-config>
-        </multipart-config>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>register</servlet-name>
-        <url-pattern>/registration</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
         <servlet-name>deleteAccount</servlet-name>
         <servlet-class>
             com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.actionservlets.AccountDeleteServlet
