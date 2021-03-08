@@ -71,7 +71,7 @@ public abstract class AbstractFieldsUpdater {
         }
     }
 
-    protected void setPhotoFromParam(Consumer<byte[]> setter, MultipartFile photo) {
+    public void setPhotoFromParam(Consumer<byte[]> setter, MultipartFile photo) {
         if (!photo.isEmpty()) {
             try {
                 setter.accept(photo.getBytes());

@@ -16,7 +16,7 @@
             <textarea name="text" placeholder="<fmt:message key="form.inputText" bundle="${form}"/>"></textarea>
         </div>
         <br>
-        <input type="file" name="imageUpload" accept="image/*"
+        <input type="file" name="image" accept="image/*"
                title="<fmt:message key="form.uploadImage" bundle="${form}"/>">
         <br>
         <button type="submit"><fmt:message key="button.send" bundle="${label}"/></button>

@@ -5,14 +5,11 @@ import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageSer
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirectBackView;
 
@@ -34,14 +31,7 @@ public class MessageController {
 
     @PostMapping("/add")
     public String addMessage(@RequestParam("type") String type, @ModelAttribute Message message,
-                             @RequestParam("imageUpload") MultipartFile image, HttpServletRequest req) {
-        if (!image.isEmpty()) {
-            try {
-                message.setImage(image.getBytes());
-            } catch (IOException e) {
-                throw new IllegalStateException(e);
-            }
-        }
+                             HttpServletRequest req) {
         if ("accountWall".equals(type)) {
             accountWallMessageService.addMessage(message);
         } else if ("accountPrivate".equals(type)) {
@@ -63,5 +53,10 @@ public class MessageController {
             groupWallMessageService.deleteMessage(message);
         }
         return redirectBackView(req);
+    }
+
+    @InitBinder("message")
+    public void registerCustomEditors(WebDataBinder binder) {
+        binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
     }
 }

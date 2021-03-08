@@ -9,16 +9,16 @@
 
 <common:layout>
     <div class="info">
-        <form action="${context}/group/update?id=${group.getId()}" method="post" enctype="multipart/form-data">
+        <form action="${context}/group/update?id=${group.id}" method="post" enctype="multipart/form-data">
             <label><fmt:message key="form.groupName" bundle="${form}"/> : </label>
-            <input type="text" name="name" value="${group.getName()}">
+            <input type="text" name="name" value="${group.name}">
             <br>
             <c:if test="${not empty errname}"><fmt:message key="${errname}" bundle="${error}"/><br></c:if>
             <c:if test="${not empty nameDuplicate}"><fmt:message key="${nameDuplicate}" bundle="${error}"/><br></c:if>
             <br>
 
             <label><fmt:message key="form.description" bundle="${form}"/> : </label>
-            <textarea name="description">${group.getDescription()}</textarea>
+            <textarea name="description">${group.description}</textarea>
             <br>
             <c:if test="${not empty photo}">
                 <img src="data:image/jpeg;base64, ${photo}">

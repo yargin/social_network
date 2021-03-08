@@ -8,8 +8,9 @@ import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.GroupFie
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -30,49 +31,6 @@ public class GroupCrudController {
         this.groupService = groupService;
     }
 
-    @GetMapping("/update")
-    public String showUpdate(HttpServletRequest req, HttpSession session) {
-        long requestedId = (long) req.getAttribute(REQUESTED_ID);
-
-        GroupFieldsUpdater updater = new GroupFieldsUpdater(req, session);
-        //select at first visit
-        Group group = updater.getOrCreate(() -> groupService.get(requestedId));
-
-        //save to session if wasn't
-        if (isNull(session.getAttribute(GROUP))) {
-            session.setAttribute(GROUP, group);
-        }
-        updater.initAttributes(group);
-
-        return GROUP_UPDATE_VIEW;
-    }
-
-    @PostMapping("/update")
-    public String performUpdate(HttpServletRequest req, HttpSession session,
-                                @RequestParam("photo") MultipartFile image) {
-        GroupFieldsUpdater updater = new GroupFieldsUpdater(req, session);
-        if ("cancel".equals(req.getParameter("save"))) {
-            return updater.acceptActionOrRetry(true, null);
-        }
-        long requestedId = (long) req.getAttribute(REQUESTED_ID);
-        Group storedGroup = (Group) session.getAttribute(GROUP);
-        Group group = new Group();
-
-        //for further views
-        group.setPhoto(storedGroup.getPhoto());
-        group.setId(requestedId);
-
-        updater.getValuesFromParams(group, image);
-        boolean accepted = updater.isParamsAccepted();
-        //for next view
-        req.setAttribute(GROUP, group);
-        if (!accepted) {
-            return showUpdate(req, session);
-        } else {
-            return updateGroup(updater, group, storedGroup);
-        }
-    }
-
     @GetMapping("/create")
     public String showCreate(HttpServletRequest req, HttpSession session) {
         GroupFieldsUpdater updater = new GroupFieldsUpdater(req, session);
@@ -82,18 +40,15 @@ public class GroupCrudController {
     }
 
     @PostMapping("/create")
-    public String performCreation(HttpServletRequest req, HttpSession session,
-                                  @RequestParam(value = "photo", required = false) MultipartFile image) {
+    public String performCreation(HttpServletRequest req, HttpSession session, @ModelAttribute Group group) {
         GroupFieldsUpdater updater = new GroupFieldsUpdater(req, session);
         if ("cancel".equals(req.getParameter("save"))) {
             return updater.acceptActionOrRetry(true, null);
         }
-        Group group = new Group();
-        updater.getValuesFromParams(group, image);
-        //todo why there's session and in update not
-        if (!isNull(group.getPhoto())) {
+
+        if (group.getPhoto().length != 0) {
             session.setAttribute(PHOTO, group.getPhoto());
-        } else if (!isNull(session.getAttribute(PHOTO))) {
+        } else {
             group.setPhoto((byte[]) session.getAttribute(PHOTO));
         }
 
@@ -120,6 +75,50 @@ public class GroupCrudController {
         return updater.acceptActionOrRetry(created, this::showCreate);
     }
 
+    @GetMapping("/update")
+    public String showUpdate(HttpServletRequest req, HttpSession session) {
+        long requestedId = (long) req.getAttribute(REQUESTED_ID);
+
+        GroupFieldsUpdater updater = new GroupFieldsUpdater(req, session);
+        //select at first visit
+        Group group = updater.getOrCreate(() -> groupService.get(requestedId));
+
+        //save to session if wasn't
+        if (isNull(session.getAttribute(GROUP))) {
+            session.setAttribute(GROUP, group);
+        }
+        updater.initAttributes(group);
+
+        return GROUP_UPDATE_VIEW;
+    }
+
+    @PostMapping("/update")
+    public String performUpdate(HttpServletRequest req, HttpSession session, @ModelAttribute Group group) {
+        GroupFieldsUpdater updater = new GroupFieldsUpdater(req, session);
+        if ("cancel".equals(req.getParameter("save"))) {
+            return updater.acceptActionOrRetry(true, null);
+        }
+        long requestedId = (long) req.getAttribute(REQUESTED_ID);
+        Group storedGroup = (Group) session.getAttribute(GROUP);
+
+        //for further views
+        group.setId(requestedId);
+        if (group.getPhoto().length < 1) {
+            group.setPhoto(storedGroup.getPhoto());
+        } else {
+            storedGroup.setPhoto(group.getPhoto());
+        }
+
+        boolean accepted = updater.isParamsAccepted();
+        //for next view
+        req.setAttribute(GROUP, group);
+        if (!accepted) {
+            return showUpdate(req, session);
+        } else {
+            return updateGroup(updater, group, storedGroup);
+        }
+    }
+
     private String updateGroup(GroupFieldsUpdater updater, Group group, Group storedGroup) {
         boolean updated;
         try {
@@ -139,5 +138,10 @@ public class GroupCrudController {
             return "redirect:" + Pages.GROUPS;
         }
         return "error";
+    }
+
+    @InitBinder("group")
+    public void registerCustomEditors(WebDataBinder binder) {
+        binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
     }
 }

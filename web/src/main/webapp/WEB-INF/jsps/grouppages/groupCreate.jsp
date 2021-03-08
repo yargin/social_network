@@ -6,7 +6,7 @@
 <fmt:setBundle basename="form" var="form"/>
 <fmt:setBundle basename="error" var="error"/>
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
-
+-
 <common:layout>
     <div class="post">
         <form action="${context}/group/create" method="post" enctype="multipart/form-data">
