@@ -2,7 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.web.interceptors.message;
 
 import com.getjavajob.training.yarginy.socialnetwork.service.DialogService;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
-import com.getjavajob.training.yarginy.socialnetwork.web.controllerhelpers.AccountInfoHelper2;
+import com.getjavajob.training.yarginy.socialnetwork.web.helpers.AccountInfoHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -10,17 +10,17 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirectToReferer;
+import static com.getjavajob.training.yarginy.socialnetwork.web.helpers.RedirectHelper.redirectToReferer;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 
 @Component
 public class MessageAccessChecker extends HandlerInterceptorAdapter {
     private final GroupService groupService;
     private final DialogService dialogService;
-    private final AccountInfoHelper2 infoHelper;
+    private final AccountInfoHelper infoHelper;
 
     @Autowired
-    public MessageAccessChecker(GroupService groupService, DialogService dialogService, AccountInfoHelper2 infoHelper) {
+    public MessageAccessChecker(GroupService groupService, DialogService dialogService, AccountInfoHelper infoHelper) {
         this.groupService = groupService;
         this.dialogService = dialogService;
         this.infoHelper = infoHelper;

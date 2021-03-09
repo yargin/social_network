@@ -1,12 +1,6 @@
-package com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.additionaldata;
+package com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers;
 
-import java.io.Serializable;
-
-/**
- * used for exchanging phones between servlets & jsps
- * contains param-name, phone & error
- */
-public class PhoneView implements Serializable {
+public class PhoneView {
     private String value;
     private String error;
 

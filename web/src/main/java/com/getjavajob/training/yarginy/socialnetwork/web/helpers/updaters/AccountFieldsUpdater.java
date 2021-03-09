@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers;
+package com.getjavajob.training.yarginy.socialnetwork.web.helpers.updaters;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
@@ -8,7 +8,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
 import com.getjavajob.training.yarginy.socialnetwork.service.infokeepers.AccountInfoKeeper;
-import com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.additionaldata.PhoneView;
+import com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers.PhoneView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;

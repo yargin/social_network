@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers;
+package com.getjavajob.training.yarginy.socialnetwork.web.helpers;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,12 +17,6 @@ public final class RedirectHelper {
 
     public static void redirect(HttpServletRequest req, HttpServletResponse resp, String page) throws IOException {
         String location = req.getContextPath() + page;
-        resp.sendRedirect(location);
-    }
-
-    public static void redirect(HttpServletRequest req, HttpServletResponse resp, String page, String param, String value)
-            throws IOException {
-        String location = req.getContextPath() + page + '?' + param + '=' + value;
         resp.sendRedirect(location);
     }
 

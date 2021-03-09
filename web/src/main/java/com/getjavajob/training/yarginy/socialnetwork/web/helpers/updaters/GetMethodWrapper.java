@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers;
+package com.getjavajob.training.yarginy.socialnetwork.web.helpers.updaters;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;

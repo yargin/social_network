@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Objects;
 
-import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirectBackView;
+import static com.getjavajob.training.yarginy.socialnetwork.web.helpers.RedirectHelper.redirectBackView;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTED_ID;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.TAB;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.DIALOG;

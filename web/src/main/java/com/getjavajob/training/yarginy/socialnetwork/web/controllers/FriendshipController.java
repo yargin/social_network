@@ -2,7 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.web.controllers;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
-import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.AccountInfoHelper;
+import com.getjavajob.training.yarginy.socialnetwork.web.helpers.AccountInfoHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,7 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 
-import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirectBackView;
+import static com.getjavajob.training.yarginy.socialnetwork.web.helpers.RedirectHelper.redirectBackView;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTED_ID;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.TAB;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.FRIENDS;

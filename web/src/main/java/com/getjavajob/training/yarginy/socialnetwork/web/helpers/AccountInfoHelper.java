@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.web.controllerhelpers;
+package com.getjavajob.training.yarginy.socialnetwork.web.helpers;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
@@ -19,7 +19,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 import static java.util.Objects.isNull;
 
 @Component
-public class AccountInfoHelper2 {
+public class AccountInfoHelper {
     private AccountService accountService;
 
     @Autowired

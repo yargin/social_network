@@ -7,7 +7,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Messa
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
-import com.getjavajob.training.yarginy.socialnetwork.web.controllerhelpers.AccountInfoHelper2;
+import com.getjavajob.training.yarginy.socialnetwork.web.helpers.AccountInfoHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,21 +21,19 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.Collection;
 import java.util.Map;
 
-import static com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.viewservlets.GroupsListServlet.ALL_GROUPS_LIST;
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.GROUPS;
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.TAB;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.ACCOUNT_WALL_VIEW;
 
 @Controller
 @RequestMapping("/account")
 public class AccountInfoController {
-    private final AccountInfoHelper2 infoHelper;
+    private final AccountInfoHelper infoHelper;
     private final AccountService accountService;
     private final GroupService groupService;
     private final MessageService messageService;
 
     @Autowired
-    public AccountInfoController(AccountInfoHelper2 infoHelper, AccountService accountService, GroupService groupService,
+    public AccountInfoController(AccountInfoHelper infoHelper, AccountService accountService, GroupService groupService,
                                  @Qualifier("accountWallMessageService") MessageService messageService) {
         this.infoHelper = infoHelper;
         this.accountService = accountService;
@@ -110,7 +108,6 @@ public class AccountInfoController {
         } else {
             Collection<Group> joinedGroups = groupService.getAccountGroups(id);
             modelAndView.addObject(GROUPS, joinedGroups);
-            modelAndView.addObject(ALL_GROUPS_LIST);
         }
         infoHelper.setAccountInfo(modelAndView, id);
         modelAndView.addObject(TAB, "groups");

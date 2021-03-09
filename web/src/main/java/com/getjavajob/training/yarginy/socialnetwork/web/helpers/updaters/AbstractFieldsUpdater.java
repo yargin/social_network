@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers;
+package com.getjavajob.training.yarginy.socialnetwork.web.helpers.updaters;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 

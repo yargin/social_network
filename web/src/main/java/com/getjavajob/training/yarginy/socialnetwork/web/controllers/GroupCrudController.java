@@ -4,7 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
-import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.GroupFieldsUpdater;
+import com.getjavajob.training.yarginy.socialnetwork.web.helpers.updaters.GroupFieldsUpdater;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -58,7 +58,6 @@ public class GroupCrudController {
             group.setOwner((Account) session.getAttribute(USER));
             return createGroup(updater, group);
         } else {
-            req.setAttribute(GROUP, group);
             return showCreate(req, session);
         }
     }

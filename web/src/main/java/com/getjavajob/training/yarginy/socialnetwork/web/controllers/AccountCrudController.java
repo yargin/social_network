@@ -11,7 +11,7 @@ import com.getjavajob.training.yarginy.socialnetwork.service.AuthService;
 import com.getjavajob.training.yarginy.socialnetwork.service.infokeepers.AccountInfoKeeper;
 import com.getjavajob.training.yarginy.socialnetwork.web.controllers.editors.RoleEditor;
 import com.getjavajob.training.yarginy.socialnetwork.web.controllers.editors.SexEditor;
-import com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.AccountFieldsUpdater;
+import com.getjavajob.training.yarginy.socialnetwork.web.helpers.updaters.AccountFieldsUpdater;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 import org.springframework.beans.factory.annotation.Autowired;

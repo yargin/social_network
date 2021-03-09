@@ -11,7 +11,7 @@ import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static com.getjavajob.training.yarginy.socialnetwork.web.servlethelpers.RedirectHelper.redirectBackView;
+import static com.getjavajob.training.yarginy.socialnetwork.web.helpers.RedirectHelper.redirectBackView;
 
 @Controller
 @RequestMapping("/message")

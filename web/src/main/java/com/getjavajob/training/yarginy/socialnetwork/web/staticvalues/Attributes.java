@@ -30,6 +30,7 @@ public final class Attributes {
     public static final String TAB = "tab";
     public static final String REDACTOR = "redactor";
     public static final String DIALOGS = "dialogs";
+    public static final String ALL_GROUPS_LIST = "allgroups";
 
     private Attributes() {
     }
