@@ -9,14 +9,13 @@
 <fmt:message key="error.tooLong" bundle="${error}" var="tooLong"/>
 <fmt:message key="error.tooShort" bundle="${error}" var="tooShort"/>
 <fmt:message key="error.duplicate" bundle="${error}" var="duplicate"/>
-
 <script>
     init("${deleteText}", "${tooShort}", "${tooLong}", "${notPhone}", "${duplicate}");
 </script>
 
 <br><label><fmt:message key="form.privatePhones" bundle="${form}"/></label><br>
 <div id="privatePhonesList">
-    <c:forEach var="privatePhone" items="${sessionScope.privatePhones}">
+    <c:forEach var="privatePhone" items="${privatePhones}">
         <c:if test="${not empty privatePhone.error}">
             <c:set var="privatePhoneError">
                 <fmt:message key="${privatePhone.error}" bundle="${error}"/>
@@ -36,7 +35,7 @@
 
 <br><label><fmt:message key="form.workPhones" bundle="${form}"/></label><br>
 <div id="workPhonesList">
-    <c:forEach var="workPhone" items="${sessionScope.workPhones}">
+    <c:forEach var="workPhone" items="${workPhones}">
         <c:if test="${not empty workPhone.error}">
             <c:set var="workPhoneError">
                 <fmt:message key="${workPhone.error}" bundle="${error}"/>

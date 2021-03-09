@@ -169,7 +169,9 @@ public class Account extends AbstractEntity implements Entity {
     }
 
     public void setPhoto(byte[] photo) {
-        this.photo = Arrays.copyOf(photo, photo.length);
+        if (!isNull(photo)) {
+            this.photo = Arrays.copyOf(photo, photo.length);
+        }
     }
 
     @Override

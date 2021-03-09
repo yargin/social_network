@@ -7,22 +7,12 @@ import java.io.Serializable;
  * contains param-name, phone & error
  */
 public class PhoneView implements Serializable {
-    private String paramName;
     private String value;
     private String error;
 
-    public PhoneView(String paramName, String value, String error) {
-        this.paramName = paramName;
+    public PhoneView(String value, String error) {
         this.value = value;
         this.error = error;
-    }
-
-    public String getParamName() {
-        return paramName;
-    }
-
-    public void setParamName(String name) {
-        this.paramName = name;
     }
 
     public String getValue() {
@@ -44,7 +34,6 @@ public class PhoneView implements Serializable {
     @Override
     public String toString() {
         return "PhoneView{" +
-                "name='" + paramName + '\'' +
                 ", value='" + value + '\'' +
                 ", error='" + error + '\'' +
                 '}';

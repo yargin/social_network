@@ -15,7 +15,6 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -29,6 +28,8 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pag
 import static java.util.Objects.isNull;
 
 public final class AccountFieldsUpdater extends AbstractFieldsUpdater {
+    private static final String PRIVATE_PHONES_ATTR = "privatePhones";
+    private static final String WORK_PHONES_ATTR = "workPhones";
     private final DataHandler dataHandler = new DataHandler();
     private final HttpSession session;
 
@@ -64,22 +65,21 @@ public final class AccountFieldsUpdater extends AbstractFieldsUpdater {
         setAttribute("photo", () -> dataHandler.getHtmlPhoto(account.getPhoto()));
 
         Collection<Phone> phones = accountInfo.getPhones();
-        if (isNull(session.getAttribute(PRIVATE_PHONES))) {
-            Collection<PhoneView> privatePhones = createPhoneViews(phones, "privatePhone", PRIVATE);
-            session.setAttribute(PRIVATE_PHONES, privatePhones);
+
+        if (isNull(session.getAttribute(PRIVATE_PHONES_ATTR))) {
+            Collection<PhoneView> privatePhones = createPhoneViews(phones, PRIVATE);
+            session.setAttribute(PRIVATE_PHONES_ATTR, privatePhones);
         }
-        if (isNull(session.getAttribute(WORK_PHONES))) {
-            Collection<PhoneView> workPhones = createPhoneViews(phones, "workPhone", WORK);
-            session.setAttribute(WORK_PHONES, workPhones);
+
+        if (isNull(session.getAttribute(WORK_PHONES_ATTR))) {
+            Collection<PhoneView> workPhones = createPhoneViews(phones, WORK);
+            session.setAttribute(WORK_PHONES_ATTR, workPhones);
         }
     }
 
-    private Collection<PhoneView> createPhoneViews(Collection<Phone> phones, String param, PhoneType type) {
-        AtomicInteger i = new AtomicInteger(0);
-        return phones.stream().filter(phone -> type.equals(phone.getType())).map(phone -> {
-            i.getAndIncrement();
-            return new PhoneView(param + i, phone.getNumber(), "");
-        }).collect(Collectors.toList());
+    private Collection<PhoneView> createPhoneViews(Collection<Phone> phones, PhoneType type) {
+        return phones.stream().filter(phone -> type.equals(phone.getType())).
+                map(phone -> new PhoneView(phone.getNumber(), "")).collect(Collectors.toList());
     }
 
     public void initSex() {
@@ -87,27 +87,26 @@ public final class AccountFieldsUpdater extends AbstractFieldsUpdater {
         req.setAttribute("female", FEMALE.toString());
     }
 
-    private Collection<Phone> getPhonesFromParams(String attribute, PhoneType type, AccountInfoKeeper accountInfo) {
+    private Collection<Phone> getPhonesFromParams(Collection<String> enteredPhones, String attribute,
+                                                  PhoneType type, AccountInfoKeeper accountInfo) {
         Collection<PhoneView> phoneViews = (Collection<PhoneView>) session.getAttribute(attribute);
         phoneViews.clear();
         Collection<Phone> phones = new ArrayList<>();
-        String prefix = type.equals(PRIVATE) ? "privatePhone" : "workPhone";
-        int i = 0;
-        String number = req.getParameter(prefix + i);
         Account account = accountInfo.getAccount();
-        while (!isNull(number)) {
-            PhoneView phoneView = new PhoneView(prefix + i, number, "");
-            phoneViews.add(phoneView);
-            try {
-                Phone phone = new Phone(number, account);
-                phone.setType(type);
-                phones.add(phone);
-            } catch (IncorrectDataException e) {
-                phoneView.setError(e.getType().getPropertyKey());
-                paramsAccepted = false;
+
+        if (!isNull(enteredPhones)) {
+            for (String enteredPhone : enteredPhones) {
+                PhoneView phoneView = new PhoneView(enteredPhone, "");
+                phoneViews.add(phoneView);
+                try {
+                    Phone phone = new Phone(enteredPhone, account);
+                    phone.setType(type);
+                    phones.add(phone);
+                } catch (IncorrectDataException e) {
+                    phoneView.setError(e.getType().getPropertyKey());
+                    paramsAccepted = false;
+                }
             }
-            i++;
-            number = req.getParameter(prefix + i);
         }
         return phones;
     }
@@ -123,9 +122,8 @@ public final class AccountFieldsUpdater extends AbstractFieldsUpdater {
             req.setAttribute("passNotMatch", "error.passwordNotMatch");
             paramsAccepted = false;
             return getNullPassword();
-        } else {
-            return password;
         }
+        return password;
     }
 
     public Password getPassword(Account account, String password, String confirmPassword) {
@@ -142,9 +140,11 @@ public final class AccountFieldsUpdater extends AbstractFieldsUpdater {
         return enteredPassword;
     }
 
-    public void getValuesFromParams(AccountInfoKeeper accountInfoKeeper) {
-        Collection<Phone> privatePhones = getPhonesFromParams(PRIVATE_PHONES, PRIVATE, accountInfoKeeper);
-        Collection<Phone> workPhones = getPhonesFromParams(WORK_PHONES, WORK, accountInfoKeeper);
+    public void getValuesFromParams(AccountInfoKeeper accountInfoKeeper, Collection<String> enteredPrivatePhones,
+                                    Collection<String> enteredWorkPhones) {
+        Collection<Phone> privatePhones = getPhonesFromParams(enteredPrivatePhones, PRIVATE_PHONES_ATTR, PRIVATE,
+                accountInfoKeeper);
+        Collection<Phone> workPhones = getPhonesFromParams(enteredWorkPhones, WORK_PHONES_ATTR, WORK, accountInfoKeeper);
 
         Collection<Phone> phones = accountInfoKeeper.getPhones();
         phones.clear();
@@ -155,13 +155,12 @@ public final class AccountFieldsUpdater extends AbstractFieldsUpdater {
     public String acceptActionOrRetry(boolean updated, GetMethodWrapper doGet) {
         if (updated) {
             session.removeAttribute(ACCOUNT_INFO);
-            session.removeAttribute(PRIVATE_PHONES);
-            session.removeAttribute(WORK_PHONES);
+            session.removeAttribute(PRIVATE_PHONES_ATTR);
+            session.removeAttribute(WORK_PHONES_ATTR);
             session.removeAttribute(PHOTO);
             return "redirect:" + updateSuccessUrl;
-        } else {
-            return doGet.performGet(req, session);
         }
+        return doGet.performGet(req, session);
     }
 
     public String handleInfoExceptions(IncorrectDataException e, GetMethodWrapper doGet) {

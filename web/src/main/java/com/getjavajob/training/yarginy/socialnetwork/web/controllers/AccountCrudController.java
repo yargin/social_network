@@ -20,6 +20,7 @@ import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.ACCOUNT_INFO;
 import static java.util.Objects.isNull;
@@ -51,7 +52,9 @@ public class AccountCrudController {
 
     @PostMapping("/registration")
     public String register(HttpServletRequest req, HttpSession session, @ModelAttribute Account account,
-                           @RequestParam String password, @RequestParam String confirmPassword) {
+                           @RequestParam String password, @RequestParam String confirmPassword,
+                           @RequestParam(required = false) Collection<String> privatePhones,
+                           @RequestParam(required = false) Collection<String> workPhones) {
         AccountFieldsUpdater updater = new AccountFieldsUpdater(req, session);
 
         AccountInfoKeeper accountInfoKeeper = (AccountInfoKeeper) session.getAttribute(Attributes.ACCOUNT_INFO);
@@ -62,7 +65,7 @@ public class AccountCrudController {
         }
         accountInfoKeeper.setAccount(account);
 
-        updater.getValuesFromParams(accountInfoKeeper);
+        updater.getValuesFromParams(accountInfoKeeper, privatePhones, workPhones);
 
         Password enteredPassword = updater.getPassword(account, password, confirmPassword);
 

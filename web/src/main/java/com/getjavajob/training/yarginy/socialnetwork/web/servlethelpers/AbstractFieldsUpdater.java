@@ -31,21 +31,6 @@ public abstract class AbstractFieldsUpdater {
         updateSuccessUrl = successUrl + '?' + param + '=' + value;
     }
 
-//    public void setPhotoFromParam(Consumer<byte[]> setter, MultipartFile photo) {
-//        if (!photo.isEmpty()) {
-//            try {
-//                setter.accept(photo.getBytes());
-//            } catch (IOException e) {
-//                throw new IncorrectDataException(IncorrectData.UPLOADING_ERROR);
-//            } catch (MaxUploadSizeExceededException e) {
-//                throw new IncorrectDataException(IncorrectData.FILE_TOO_LARGE);
-//            } catch (IncorrectDataException e) {
-//                paramsAccepted = false;
-//                req.setAttribute(ERR + "photo", e.getType().getPropertyKey());
-//            }
-//        }
-//    }
-
     protected void setStringFromParam(Consumer<String> setter, String param) {
         String enteredValue = req.getParameter(param);
         if (!isNull(enteredValue)) {
