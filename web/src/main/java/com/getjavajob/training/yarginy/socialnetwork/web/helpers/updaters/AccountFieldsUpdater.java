@@ -111,21 +111,6 @@ public final class AccountFieldsUpdater extends AbstractFieldsUpdater {
         return phones;
     }
 
-    public Password getPassword(Account account) {
-        Password password = new Password();
-        password.setAccount(account);
-        setStringFromParam(password::setPassword, "password");
-        Password confirmPassword = new Password();
-        confirmPassword.setAccount(account);
-        setStringFromParam(confirmPassword::setPassword, "confirmPassword");
-        if (!Objects.equals(password, confirmPassword)) {
-            req.setAttribute("passNotMatch", "error.passwordNotMatch");
-            paramsAccepted = false;
-            return getNullPassword();
-        }
-        return password;
-    }
-
     public Password getPassword(Account account, String password, String confirmPassword) {
         Password enteredPassword;
         if (Objects.equals(password, confirmPassword) && !password.isEmpty()) {

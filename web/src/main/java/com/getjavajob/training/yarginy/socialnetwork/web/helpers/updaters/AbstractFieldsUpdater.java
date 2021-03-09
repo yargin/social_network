@@ -1,12 +1,8 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.helpers.updaters;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
-
 import javax.servlet.http.HttpServletRequest;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.ERR;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.ACCOUNT_WALL;
 import static java.util.Objects.isNull;
 
@@ -29,23 +25,6 @@ public abstract class AbstractFieldsUpdater {
 
     public void setSuccessUrl(String successUrl, String param, String value) {
         updateSuccessUrl = successUrl + '?' + param + '=' + value;
-    }
-
-    protected void setStringFromParam(Consumer<String> setter, String param) {
-        String enteredValue = req.getParameter(param);
-        if (!isNull(enteredValue)) {
-            setFromParam(setter, param, enteredValue);
-        }
-    }
-
-    protected <E> void setFromParam(Consumer<E> setter, String param, E value) {
-        try {
-            setter.accept(value);
-        } catch (IncorrectDataException e) {
-            paramsAccepted = false;
-            req.setAttribute(ERR + param, e.getType().getPropertyKey());
-            req.setAttribute(param, value);
-        }
     }
 
     protected <E> void setAttribute(String param, Supplier<E> getter) {

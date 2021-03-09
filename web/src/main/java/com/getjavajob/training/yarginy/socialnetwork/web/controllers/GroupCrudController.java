@@ -39,6 +39,13 @@ public class GroupCrudController {
         return GROUP_CREATE_VIEW;
     }
 
+//    public String showCreate(ModelAndView modelAndView, GroupFieldsUpdater updater) {
+//        Group group = updater.getOrCreate(Group::new);
+//        updater.initAttributes(group);
+//        modelAndView.setViewName(GROUP_CREATE_VIEW);
+//        return modelAndView;
+//    }
+
     @PostMapping("/create")
     public String performCreation(HttpServletRequest req, HttpSession session, @ModelAttribute Group group) {
         GroupFieldsUpdater updater = new GroupFieldsUpdater(req, session);
