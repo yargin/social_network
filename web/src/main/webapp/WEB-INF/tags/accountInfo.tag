@@ -42,8 +42,8 @@
 <br>
 <c:if test="${not empty owner or not empty admin}">
     <div>
-        <a href="${context}/updateinfo?id=${id}"><fmt:message key="label.updateInfo" bundle="${label}"/></a><br>
-        <a href="${context}/deleteAccount?id=${id}" onclick='return confirmation("${confirmText}")'><fmt:message
+        <a href="${context}/account/update?id=${id}"><fmt:message key="label.updateInfo" bundle="${label}"/></a><br>
+        <a href="${context}/account/delete?id=${id}" onclick='return confirmation("${confirmText}")'><fmt:message
                 key="label.deleteAccount" bundle="${label}"/></a>
     </div>
 </c:if>

@@ -43,76 +43,8 @@
     </servlet-mapping>
 
     <session-config>
-        <session-timeout>30</session-timeout>
+        <session-timeout>1</session-timeout>
     </session-config>
-
-    <filter>
-        <filter-name>CharacterSetFilter</filter-name>
-        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.common.CharacterSetFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>CharacterSetFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
-    <filter>
-        <filter-name>RequestedIdFilter</filter-name>
-        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.idvalidation.IdValidationFilter
-        </filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>RequestedIdFilter</filter-name>
-        <url-pattern>/updateinfo</url-pattern>
-        <url-pattern>/deleteAccount</url-pattern>
-    </filter-mapping>
-
-    <filter>
-        <filter-name>AccountPermissionsSetter</filter-name>
-        <filter-class>
-            com.getjavajob.training.yarginy.socialnetwork.web.filters.accountinfoaccess.AccountInfoAccessSetterFilter
-        </filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>AccountPermissionsSetter</filter-name>
-
-        <url-pattern>/updateinfo</url-pattern>
-        <url-pattern>/deleteAccount</url-pattern>
-    </filter-mapping>
-
-    <filter>
-        <filter-name>OwnerChecker</filter-name>
-        <filter-class>com.getjavajob.training.yarginy.socialnetwork.web.filters.accountinfoaccess.OwnerCheckerFilter
-        </filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>OwnerChecker</filter-name>
-        <url-pattern>/updateinfo</url-pattern>
-        <url-pattern>/deleteAccount</url-pattern>
-    </filter-mapping>
-
-    <servlet>
-        <servlet-name>deleteAccount</servlet-name>
-        <servlet-class>
-            com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.actionservlets.AccountDeleteServlet
-        </servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>deleteAccount</servlet-name>
-        <url-pattern>/deleteAccount</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>updateAccount</servlet-name>
-        <servlet-class>
-            com.getjavajob.training.yarginy.socialnetwork.web.servlets.accountpage.actionservlets.AccountUpdateServlet
-        </servlet-class>
-        <multipart-config>
-        </multipart-config>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>updateAccount</servlet-name>
-        <url-pattern>/updateinfo</url-pattern>
-    </servlet-mapping>
 
     <resource-ref>
         <res-ref-name>jdbc/Local-MySql</res-ref-name>

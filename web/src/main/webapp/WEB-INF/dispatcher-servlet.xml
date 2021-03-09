@@ -50,6 +50,8 @@
             <mvc:mapping path="/group/members*"/>
             <mvc:mapping path="/group/delete*"/>
             <mvc:mapping path="/group/update*"/>
+            <mvc:mapping path="/account/delete*"/>
+            <mvc:mapping path="/account/update*"/>
             <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.common.OneIdInterceptor"/>
         </mvc:interceptor>
 
@@ -72,6 +74,8 @@
             <mvc:mapping path="/account/*"/>
             <mvc:mapping path="/friendship/accept*"/>
             <mvc:mapping path="/friendship/remove*"/>
+            <mvc:mapping path="/account/delete*"/>
+            <mvc:mapping path="/account/update*"/>
             <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.account.AccountAccessSetter"/>
         </mvc:interceptor>
 
@@ -99,16 +103,18 @@
         </mvc:interceptor>
 
         <mvc:interceptor>
-            <mvc:mapping path="/account/friends"/>
-            <mvc:mapping path="/account/groups"/>
+            <mvc:mapping path="/account/friends*"/>
+            <mvc:mapping path="/account/groups*"/>
             <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.account.AccountOwnerFriendChecker"/>
         </mvc:interceptor>
 
         <mvc:interceptor>
-            <mvc:mapping path="/account/requests"/>
-            <mvc:mapping path="/account/dialogs"/>
+            <mvc:mapping path="/account/requests*"/>
+            <mvc:mapping path="/account/dialogs*"/>
             <mvc:mapping path="/friendship/accept*"/>
             <mvc:mapping path="/friendship/remove*"/>
+            <mvc:mapping path="/account/delete*"/>
+            <mvc:mapping path="/account/update*"/>
             <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.account.AccountOwnerChecker"/>
         </mvc:interceptor>
 

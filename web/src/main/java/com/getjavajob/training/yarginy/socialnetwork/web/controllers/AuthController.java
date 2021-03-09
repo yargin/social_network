@@ -96,12 +96,7 @@ public class AuthController {
     }
 
     @GetMapping("/logout")
-    public String logout(HttpServletRequest req, HttpServletResponse resp) {
-        HttpSession session = req.getSession();
-        session.removeAttribute(ACCOUNT_INFO);
-        session.removeAttribute(PRIVATE_PHONES);
-        session.removeAttribute(WORK_PHONES);
-        session.removeAttribute(PHOTO);
+    public String logout(HttpServletRequest req, HttpServletResponse resp, HttpSession session) {
         session.invalidate();
 
         Cookie[] cookies = req.getCookies();
