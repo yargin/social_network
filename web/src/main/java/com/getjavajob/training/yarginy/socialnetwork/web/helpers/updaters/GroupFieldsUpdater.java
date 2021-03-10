@@ -16,13 +16,14 @@ public class GroupFieldsUpdater {
     private final DataHandler dataHandler = new DataHandler();
     private final HttpSession session;
     private final HttpServletRequest req;
+    private final String updateFailView;
     private String updateSuccessUrl;
-    private String updateFailView;
 
     public GroupFieldsUpdater(HttpServletRequest req, HttpSession session, String updateFailView) {
         this.session = session;
         this.req = req;
         this.updateFailView = updateFailView;
+        //if empty - create, if not update
         Object requestedId = req.getAttribute(REQUESTED_ID);
         if (!isNull(requestedId)) {
             setSuccessUrl(GROUP_WALL, REQUESTED_ID, (long) requestedId);

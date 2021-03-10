@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.ACCOUNT_UPDATE_VIEW;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.REGISTRATION_VIEW;
 import static java.util.Objects.isNull;
 
 @Controller
@@ -44,18 +46,14 @@ public class AccountCrudController {
 
     @GetMapping("/registration")
     public String showRegister(HttpServletRequest req, HttpSession session) {
-        AccountFieldsUpdater updater = new AccountFieldsUpdater(req, session);
+        AccountFieldsUpdater updater = new AccountFieldsUpdater(req, session, REGISTRATION_VIEW);
 
-        AccountInfoKeeper accountInfoKeeper = updater.getOrCreateAccountInfo(AccountInfoKeeper::new);
+        AccountInfoKeeper accountInfoKeeper = new AccountInfoKeeper();
         if (isNull(session.getAttribute(ACCOUNT_INFO))) {
             session.setAttribute(ACCOUNT_INFO, accountInfoKeeper);
         }
 
-        updater.initAccountAttributes(accountInfoKeeper);
-
-        req.setAttribute(Attributes.TARGET, Pages.REGISTER);
-
-        return "registration";
+        return updater.getView(accountInfoKeeper, REGISTRATION_VIEW);
     }
 
     @PostMapping("/registration")
@@ -63,7 +61,7 @@ public class AccountCrudController {
                            @RequestParam String password, @RequestParam String confirmPassword,
                            @RequestParam(required = false) Collection<String> privatePhones,
                            @RequestParam(required = false) Collection<String> workPhones) {
-        AccountFieldsUpdater updater = new AccountFieldsUpdater(req, session);
+        AccountFieldsUpdater updater = new AccountFieldsUpdater(req, session, REGISTRATION_VIEW);
 
         AccountInfoKeeper accountInfoKeeper = (AccountInfoKeeper) session.getAttribute(Attributes.ACCOUNT_INFO);
 
@@ -80,7 +78,7 @@ public class AccountCrudController {
         boolean accepted = updater.isParamsAccepted();
         req.setAttribute(ACCOUNT_INFO, accountInfoKeeper);
         if (!accepted) {
-            return showRegister(req, session);
+            return updater.getView(accountInfoKeeper, REGISTRATION_VIEW);
         } else {
             return register(updater, accountInfoKeeper, enteredPassword);
         }
@@ -91,36 +89,31 @@ public class AccountCrudController {
         try {
             registered = authService.register(accountInfoKeeper, password);
         } catch (IncorrectDataException e) {
-            return updater.handleInfoExceptions(e, this::showRegister);
+            return updater.handleInfoExceptions(e, accountInfoKeeper);
         }
-        return updater.acceptActionOrRetry(registered, this::showRegister);
+        return updater.acceptActionOrRetry(registered, accountInfoKeeper);
     }
 
     @GetMapping("/account/update")
     public String showUpdate(HttpServletRequest req, HttpSession session) {
-        AccountFieldsUpdater updater = new AccountFieldsUpdater(req, session);
+        AccountFieldsUpdater updater = new AccountFieldsUpdater(req, session, ACCOUNT_UPDATE_VIEW);
 
         //select at first visit
         long requestedUserId = (long) req.getAttribute(REQUESTED_ID);
-        AccountInfoKeeper accountInfoKeeper = updater.getOrCreateAccountInfo(
-                () -> accountInfoService.select(requestedUserId));
+        AccountInfoKeeper accountInfoKeeper = accountInfoService.select(requestedUserId);
         //save original to session if wasn't
         if (isNull(req.getSession().getAttribute(ACCOUNT_INFO))) {
             session.setAttribute(ACCOUNT_INFO, accountInfoKeeper);
         }
 
-        updater.initAccountAttributes(accountInfoKeeper);
-
-        req.setAttribute(TARGET, Pages.UPDATE_ACCOUNT);
-
-        return "accountUpdate";
+        return updater.getView(accountInfoKeeper, ACCOUNT_UPDATE_VIEW);
     }
 
     @PostMapping("/account/update")
     public String performUpdate(HttpServletRequest req, HttpSession session, @ModelAttribute Account account,
                                 @RequestParam(required = false) Collection<String> privatePhones,
                                 @RequestParam(required = false) Collection<String> workPhones) {
-        AccountFieldsUpdater updater = new AccountFieldsUpdater(req, req.getSession());
+        AccountFieldsUpdater updater = new AccountFieldsUpdater(req, req.getSession(), ACCOUNT_UPDATE_VIEW);
 
         if ("cancel".equals(req.getParameter("save"))) {
             return updater.acceptActionOrRetry(true, null);
@@ -149,7 +142,7 @@ public class AccountCrudController {
         req.setAttribute(ACCOUNT_INFO, accountInfoKeeper);
         boolean accepted = updater.isParamsAccepted();
         if (!accepted) {
-            return showUpdate(req, session);
+            return updater.getView(accountInfoKeeper, ACCOUNT_UPDATE_VIEW);
         } else {
             return update(updater, accountInfoKeeper, storedAccountInfoKeeper);
         }
@@ -161,9 +154,9 @@ public class AccountCrudController {
         try {
             updated = accountInfoService.update(accountInfoKeeper, storedAccountInfoKeeper);
         } catch (IncorrectDataException e) {
-            return updater.handleInfoExceptions(e, this::showUpdate);
+            return updater.handleInfoExceptions(e, accountInfoKeeper);
         }
-        return updater.acceptActionOrRetry(updated, this::showUpdate);
+        return updater.acceptActionOrRetry(updated, accountInfoKeeper);
     }
 
     @GetMapping("/account/delete")

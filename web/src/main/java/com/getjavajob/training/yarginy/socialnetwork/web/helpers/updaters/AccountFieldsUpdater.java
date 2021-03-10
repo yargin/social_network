@@ -27,17 +27,26 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.ACCOUNT_WALL;
 import static java.util.Objects.isNull;
 
-public final class AccountFieldsUpdater extends AbstractFieldsUpdater {
+public final class AccountFieldsUpdater {
     private static final String PRIVATE_PHONES_ATTR = "privatePhones";
     private static final String WORK_PHONES_ATTR = "workPhones";
     private final DataHandler dataHandler = new DataHandler();
     private final HttpSession session;
-    protected final HttpServletRequest req;
+    private final HttpServletRequest req;
+    private final String updateFailView;
+    private boolean paramsAccepted = true;
+    private String updateSuccessUrl;
 
-    public AccountFieldsUpdater(HttpServletRequest req, HttpSession session) {
-        super(req, USER_ID, ACCOUNT_WALL);
+    public AccountFieldsUpdater(HttpServletRequest req, HttpSession session, String updateFailView) {
         this.session = session;
         this.req = req;
+        this.updateFailView = updateFailView;
+        Object requestedId = req.getAttribute(REQUESTED_ID);
+        if (!isNull(requestedId)) {
+            setSuccessUrl(ACCOUNT_WALL, REQUESTED_ID, (long) requestedId);
+        } else {
+            updateSuccessUrl = ACCOUNT_WALL;
+        }
     }
 
     public AccountInfoKeeper getOrCreateAccountInfo(Supplier<AccountInfoKeeper> accountInfoCreator) {
@@ -49,7 +58,7 @@ public final class AccountFieldsUpdater extends AbstractFieldsUpdater {
         return accountInfo;
     }
 
-    public void initAccountAttributes(AccountInfoKeeper accountInfo) {
+    public String getView(AccountInfoKeeper accountInfo, String view) {
         initSex();
 
         Account account = accountInfo.getAccount();
@@ -71,6 +80,7 @@ public final class AccountFieldsUpdater extends AbstractFieldsUpdater {
             Collection<PhoneView> workPhones = createPhoneViews(phones, WORK);
             session.setAttribute(WORK_PHONES_ATTR, workPhones);
         }
+        return view;
     }
 
     private Collection<PhoneView> createPhoneViews(Collection<Phone> phones, PhoneType type) {
@@ -133,7 +143,7 @@ public final class AccountFieldsUpdater extends AbstractFieldsUpdater {
         phones.addAll(workPhones);
     }
 
-    public String acceptActionOrRetry(boolean updated, GetMethodWrapper doGet) {
+    public String acceptActionOrRetry(boolean updated, AccountInfoKeeper accountInfoKeeper) {
         if (updated) {
             session.removeAttribute(ACCOUNT_INFO);
             session.removeAttribute(PRIVATE_PHONES_ATTR);
@@ -141,10 +151,10 @@ public final class AccountFieldsUpdater extends AbstractFieldsUpdater {
             session.removeAttribute(PHOTO);
             return "redirect:" + updateSuccessUrl;
         }
-        return doGet.performGet(req, session);
+        return getView(accountInfoKeeper, updateFailView);
     }
 
-    public String handleInfoExceptions(IncorrectDataException e, GetMethodWrapper doGet) {
+    public String handleInfoExceptions(IncorrectDataException e, AccountInfoKeeper accountInfoKeeper) {
         if (e.getType() == IncorrectData.EMAIL_DUPLICATE) {
             req.setAttribute(EMAIL_DUPLICATE, e.getType().getPropertyKey());
         }
@@ -154,11 +164,11 @@ public final class AccountFieldsUpdater extends AbstractFieldsUpdater {
         if (e.getType() == IncorrectData.UPLOADING_ERROR) {
             req.setAttribute(UPLOAD_ERROR, e.getType().getPropertyKey());
         }
-        return doGet.performGet(req, session);
+        return getView(accountInfoKeeper, updateFailView);
     }
 
 
-    public void setSuccessUrl(String successUrl, String param, String value) {
+    public void setSuccessUrl(String successUrl, String param, long value) {
         updateSuccessUrl = successUrl + '?' + param + '=' + value;
     }
 

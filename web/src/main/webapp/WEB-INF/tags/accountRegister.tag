@@ -12,7 +12,7 @@
 
 <fmt:message key="label.saveUpdates" var="confirmText" bundle="${label}"/>
 <div class="post">
-    <form action="${context}${target}" method="post" enctype="multipart/form-data"
+    <form action="${context}/registration" method="post" enctype="multipart/form-data"
           onsubmit="return acceptPhones()">
 
         <input type="text" name="name" value="${account.name}"
@@ -86,9 +86,6 @@
             <br>
         </c:if>
         <input type="file" placeholder="asd" name="photo" accept="image/*"
-        <c:if test="${not empty photo}">
-               value="${photo}"
-        </c:if>
                title="<fmt:message key="form.uploadImage" bundle="${form}"/>">
         <br>
 

@@ -28,9 +28,6 @@
                 <br>
             </c:if>
             <input type="file" name="photo" accept="image/*"
-            <c:if test="${not empty photo}">
-                   value="${photo}"
-            </c:if>
                    title="<fmt:message key="form.uploadImage" bundle="${form}"/>">
             <br>
             <button type="submit" name="save" value="save"><fmt:message key="button.save" bundle="${label}"/></button>
