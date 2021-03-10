@@ -11,14 +11,14 @@
     <div class="post">
         <form action="${context}/group/create" method="post" enctype="multipart/form-data">
             <input type="text" name="name"
-                   <c:if test="${not empty group.name}">value="${name}"</c:if>
+                   <c:if test="${not empty group.name}">value="${group.name}"</c:if>
                    placeholder="<fmt:message key="form.groupName" bundle="${form}"/>" required>
             <br>
-            <c:if test="${not empty errname}"><fmt:message key="${errname}" bundle="${error}"/><br></c:if>
             <c:if test="${not empty nameDuplicate}"><fmt:message key="${nameDuplicate}" bundle="${error}"/><br></c:if>
             <textarea name="description"
-                      placeholder="<fmt:message key="form.description" bundle="${form}"/>"
-            ><c:if test="${not empty description}">${description}</c:if></textarea>
+                      placeholder="<fmt:message key="form.description" bundle="${form}"/>">
+                    ${group.description}
+            </textarea>
             <br>
 
             <c:if test="${not empty photo}">

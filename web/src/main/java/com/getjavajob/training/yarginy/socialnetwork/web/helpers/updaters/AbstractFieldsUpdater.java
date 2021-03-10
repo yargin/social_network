@@ -1,7 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.helpers.updaters;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.function.Supplier;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.ACCOUNT_WALL;
 import static java.util.Objects.isNull;
@@ -25,12 +24,6 @@ public abstract class AbstractFieldsUpdater {
 
     public void setSuccessUrl(String successUrl, String param, String value) {
         updateSuccessUrl = successUrl + '?' + param + '=' + value;
-    }
-
-    protected <E> void setAttribute(String param, Supplier<E> getter) {
-        if (isNull(req.getAttribute(param)) && !isNull(getter.get())) {
-            req.setAttribute(param, getter.get());
-        }
     }
 
     public boolean isParamsAccepted() {

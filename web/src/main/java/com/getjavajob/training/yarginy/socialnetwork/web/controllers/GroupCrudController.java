@@ -33,22 +33,15 @@ public class GroupCrudController {
 
     @GetMapping("/create")
     public String showCreate(HttpServletRequest req, HttpSession session) {
-        GroupFieldsUpdater updater = new GroupFieldsUpdater(req, session);
-        Group group = updater.getOrCreate(Group::new);
-        updater.initAttributes(group);
-        return GROUP_CREATE_VIEW;
+        GroupFieldsUpdater updater = new GroupFieldsUpdater(req, session, GROUP_CREATE_VIEW);
+        Group group = new Group();
+        return updater.getView(group, GROUP_CREATE_VIEW);
     }
 
-//    public String showCreate(ModelAndView modelAndView, GroupFieldsUpdater updater) {
-//        Group group = updater.getOrCreate(Group::new);
-//        updater.initAttributes(group);
-//        modelAndView.setViewName(GROUP_CREATE_VIEW);
-//        return modelAndView;
-//    }
-
     @PostMapping("/create")
-    public String performCreation(HttpServletRequest req, HttpSession session, @ModelAttribute Group group) {
-        GroupFieldsUpdater updater = new GroupFieldsUpdater(req, session);
+    public String performCreation(HttpServletRequest req, HttpSession session, @ModelAttribute Group group,
+                                  @SessionAttribute("user") Account owner) {
+        GroupFieldsUpdater updater = new GroupFieldsUpdater(req, session, GROUP_CREATE_VIEW);
         if ("cancel".equals(req.getParameter("save"))) {
             return updater.acceptActionOrRetry(true, null);
         }
@@ -59,14 +52,10 @@ public class GroupCrudController {
             group.setPhoto((byte[]) session.getAttribute(PHOTO));
         }
 
-        boolean accepted = updater.isParamsAccepted();
         req.setAttribute(GROUP, group);
-        if (accepted) {
-            group.setOwner((Account) session.getAttribute(USER));
-            return createGroup(updater, group);
-        } else {
-            return showCreate(req, session);
-        }
+
+        group.setOwner(owner);
+        return createGroup(updater, group);
     }
 
     private String createGroup(GroupFieldsUpdater updater, Group group) {
@@ -74,33 +63,31 @@ public class GroupCrudController {
         try {
             created = groupService.createGroup(group);
         } catch (IncorrectDataException e) {
-            return updater.handleInfoExceptions(e, this::showCreate);
+            return updater.handleInfoExceptions(e, group);
         }
         Group createdGroup = groupService.get(group);
-        updater.setSuccessUrl(GROUP_WALL, GROUP_ID, "" + createdGroup.getId());
-        return updater.acceptActionOrRetry(created, this::showCreate);
+        updater.setSuccessUrl(GROUP_WALL, GROUP_ID, createdGroup.getId());
+        return updater.acceptActionOrRetry(created, group);
     }
 
     @GetMapping("/update")
     public String showUpdate(HttpServletRequest req, HttpSession session) {
         long requestedId = (long) req.getAttribute(REQUESTED_ID);
 
-        GroupFieldsUpdater updater = new GroupFieldsUpdater(req, session);
+        GroupFieldsUpdater updater = new GroupFieldsUpdater(req, session, GROUP_UPDATE_VIEW);
         //select at first visit
-        Group group = updater.getOrCreate(() -> groupService.get(requestedId));
+        Group group = groupService.get(requestedId);
 
         //save to session if wasn't
         if (isNull(session.getAttribute(GROUP))) {
             session.setAttribute(GROUP, group);
         }
-        updater.initAttributes(group);
-
-        return GROUP_UPDATE_VIEW;
+        return updater.getView(group, GROUP_UPDATE_VIEW);
     }
 
     @PostMapping("/update")
     public String performUpdate(HttpServletRequest req, HttpSession session, @ModelAttribute Group group) {
-        GroupFieldsUpdater updater = new GroupFieldsUpdater(req, session);
+        GroupFieldsUpdater updater = new GroupFieldsUpdater(req, session, GROUP_UPDATE_VIEW);
         if ("cancel".equals(req.getParameter("save"))) {
             return updater.acceptActionOrRetry(true, null);
         }
@@ -115,14 +102,8 @@ public class GroupCrudController {
             storedGroup.setPhoto(group.getPhoto());
         }
 
-        boolean accepted = updater.isParamsAccepted();
         //for next view
-        req.setAttribute(GROUP, group);
-        if (!accepted) {
-            return showUpdate(req, session);
-        } else {
-            return updateGroup(updater, group, storedGroup);
-        }
+        return updateGroup(updater, group, storedGroup);
     }
 
     private String updateGroup(GroupFieldsUpdater updater, Group group, Group storedGroup) {
@@ -130,10 +111,10 @@ public class GroupCrudController {
         try {
             updated = groupService.updateGroup(group, storedGroup);
         } catch (IncorrectDataException e) {
-            return updater.handleInfoExceptions(e, this::showUpdate);
+            return updater.handleInfoExceptions(e, group);
         }
-        updater.setSuccessUrl(GROUP_WALL, GROUP_ID, "" + group.getId());
-        return updater.acceptActionOrRetry(updated, this::showUpdate);
+        updater.setSuccessUrl(GROUP_WALL, GROUP_ID, group.getId());
+        return updater.acceptActionOrRetry(updated, group);
     }
 
     @GetMapping("/delete")

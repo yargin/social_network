@@ -13,7 +13,6 @@
             <label><fmt:message key="form.groupName" bundle="${form}"/> : </label>
             <input type="text" name="name" value="${group.name}">
             <br>
-            <c:if test="${not empty errname}"><fmt:message key="${errname}" bundle="${error}"/><br></c:if>
             <c:if test="${not empty nameDuplicate}"><fmt:message key="${nameDuplicate}" bundle="${error}"/><br></c:if>
             <br>
 

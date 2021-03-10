@@ -7,55 +7,58 @@ import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.function.Supplier;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.GROUP_WALL;
 import static java.util.Objects.isNull;
 
-public class GroupFieldsUpdater extends AbstractFieldsUpdater {
+public class GroupFieldsUpdater {
     private final DataHandler dataHandler = new DataHandler();
     private final HttpSession session;
+    private final HttpServletRequest req;
+    private String updateSuccessUrl;
+    private String updateFailView;
 
-    public GroupFieldsUpdater(HttpServletRequest req, HttpSession session) {
-        super(req, GROUP_ID, GROUP_WALL);
+    public GroupFieldsUpdater(HttpServletRequest req, HttpSession session, String updateFailView) {
         this.session = session;
-    }
-
-    public Group getOrCreate(Supplier<Group> groupCreator) {
-        Group group = (Group) req.getAttribute(GROUP);
-        if (isNull(group)) {
-            group = groupCreator.get();
-            //set group for view if it wasn't in post
-            req.setAttribute(GROUP, group);
+        this.req = req;
+        this.updateFailView = updateFailView;
+        Object requestedId = req.getAttribute(REQUESTED_ID);
+        if (!isNull(requestedId)) {
+            setSuccessUrl(GROUP_WALL, REQUESTED_ID, (long) requestedId);
+        } else {
+            updateSuccessUrl = GROUP_WALL;
         }
-        return group;
     }
 
-    public void initAttributes(Group group) {
-        setAttribute("name", group::getName);
-        setAttribute("description", group::getDescription);
+    public void setSuccessUrl(String successUrl, String param, long value) {
+        updateSuccessUrl = successUrl + '?' + param + '=' + value;
+    }
+
+    public String getView(Group group, String view) {
+        req.setAttribute("group", group);
 
         byte[] photoBytes = group.getPhoto();
         if (!isNull(photoBytes)) {
             String photo = dataHandler.getHtmlPhoto(photoBytes);
             req.setAttribute(PHOTO, photo);
         }
+        return view;
     }
 
-    public String acceptActionOrRetry(boolean updated, GetMethodWrapper doGet) {
+    public String acceptActionOrRetry(boolean updated, Group group) {
         if (updated) {
             session.removeAttribute(GROUP);
             session.removeAttribute(PHOTO);
             return "redirect:" + updateSuccessUrl;
         }
-        return doGet.performGet(req, session);
+        return getView(group, updateFailView);
     }
 
-    public String handleInfoExceptions(IncorrectDataException e, GetMethodWrapper doGet) {
+    public String handleInfoExceptions(IncorrectDataException e, Group group) {
         if (e.getType() == IncorrectData.GROUP_DUPLICATE) {
             req.setAttribute(NAME_DUPLICATE, e.getType().getPropertyKey());
         }
-        return doGet.performGet(req, session);
+        return getView(group, updateFailView);
     }
 }

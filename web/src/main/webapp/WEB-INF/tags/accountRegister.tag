@@ -15,91 +15,67 @@
     <form action="${context}${target}" method="post" enctype="multipart/form-data"
           onsubmit="return acceptPhones()">
 
-        <input type="text" name="name"
-               <c:if test="${not empty name}">value="${name}"</c:if>
+        <input type="text" name="name" value="${account.name}"
                placeholder='<fmt:message key="form.name" bundle="${form}"/>' required>
         <br>
-        <c:if test="${not empty errname}"><fmt:message key="${errname}" bundle="${error}"/><br></c:if>
 
-        <input type="text" name="surname"
-               <c:if test="${not empty surname}">value="${surname}"</c:if>
+        <input type="text" name="surname" value="${account.surname}"
                placeholder='<fmt:message key="form.surname" bundle="${form}"/>' required>
         <br>
-        <c:if test="${not empty errsurname}"><fmt:message key="${errsurname}" bundle="${error}"/><br></c:if>
 
-        <input type="text" name="patronymic"
-               <c:if test="${not empty patronymic}">value="${patronymic}"</c:if>
+        <input type="text" name="patronymic" value="${account.patronymic}"
                placeholder='<fmt:message key="form.patronymic" bundle="${form}"/>'>
         <br>
-        <c:if test="${not empty errpatronymic}"><fmt:message key="${errpatronymic}" bundle="${error}"/><br></c:if>
 
         <label>
             <fmt:message key="form.sex" bundle="${form}"/>
         </label>
         <select name="sex" required>
-            <option value="${male}" <c:if test="${Sex.MALE eq sex}">selected</c:if>>
+            <option value="${male}" <c:if test="${Sex.MALE eq account.sex}">selected</c:if>>
                 <fmt:message key="form.male" bundle="${form}"/></option>
-            <option value="${female}" <c:if test="${Sex.FEMALE eq sex}">selected</c:if>>
+            <option value="${female}" <c:if test="${Sex.FEMALE eq account.sex}">selected</c:if>>
                 <fmt:message key="form.female" bundle="${form}"/></option>
         </select>
         <br>
 
-        <input type="email" name="email"
-               <c:if test="${not empty email}">value="${email}"</c:if>
+        <input type="email" name="email" value="${account.email}"
                placeholder='<fmt:message key="form.email" bundle="${form}"/>' required>
         <br>
-        <c:if test="${not empty erremail}"><fmt:message key="${erremail}" bundle="${error}"/><br></c:if>
 
-        <input type="email" name="additionalEmail"
-               <c:if test="${not empty additionalEmail}">value="${additionalEmail}"</c:if>
+        <input type="email" name="additionalEmail" value="${account.additionalEmail}"
                placeholder='<fmt:message key="form.additionalEmail" bundle="${form}"/>' required>
         <br>
-        <c:if test="${not empty erradditionalEmail}"><fmt:message key="${erradditionalEmail}"
-                                                                  bundle="${error}"/><br></c:if>
         <c:if test="${not empty emailDuplicate}"><fmt:message key="${emailDuplicate}" bundle="${error}"/><br></c:if>
 
         <input type="password" name="password" placeholder="<fmt:message key="form.password" bundle="${form}"/>"
                required>
         <br>
-        <c:if test="${not empty errpassword}"><fmt:message key="${errpassword}" bundle="${error}"/><br></c:if>
 
         <input type="password" name="confirmPassword"
                placeholder='<fmt:message key="form.confirmPassword" bundle="${form}"/>' required>
         <br>
-        <c:if test="${not empty errconfirmPassword}"><fmt:message key="${errconfirmPassword}"
-                                                                  bundle="${error}"/><br></c:if>
         <c:if test="${not empty passNotMatch}"><fmt:message key="${passNotMatch}" bundle="${error}"/><br></c:if>
 
 
         <label><fmt:message key="form.birthdate" bundle="${form}"/></label>
-        <input type="date" name="birthDate"
-               <c:if test="${not empty birthDate}">value="${birthDate}"</c:if>>
+        <input type="date" name="birthDate" value="${account.birthDate}">
         <br>
-        <c:if test="${not empty errbirthDate}"><fmt:message key="${errbirthDate}" bundle="${error}"/><br></c:if>
 
-        <input type="text" name="icq"
-               <c:if test="${not empty icq}">value="${icq}"</c:if>
+        <input type="text" name="icq" value="${account.icq}"
                placeholder='<fmt:message key="form.icq" bundle="${form}"/>'>
         <br>
-        <c:if test="${not empty erricq}"><fmt:message key="${erricq}" bundle="${error}"/><br></c:if>
 
-        <input type="text" name="skype"
-               <c:if test="${not empty skype}">value="${skype}"</c:if>
+        <input type="text" name="skype" value="${account.skype}"
                placeholder='<fmt:message key="form.skype" bundle="${form}"/>'>
         <br>
-        <c:if test="${not empty errskype}"><fmt:message key="${errskype}" bundle="${error}"/><br></c:if>
 
-        <input type="text" name="country"
-               <c:if test="${not empty country}">value="${country}"</c:if>
+        <input type="text" name="country" value="${account.country}"
                placeholder='<fmt:message key="form.country" bundle="${form}"/>' required>
         <br>
-        <c:if test="${not empty errcountry}"><fmt:message key="${errcountry}" bundle="${error}"/><br></c:if>
 
-        <input type="text" name="city"
-               <c:if test="${not empty city}">value="${city}"</c:if>
+        <input type="text" name="city" value="${account.city}"
                placeholder='<fmt:message key="form.city" bundle="${form}"/>' required>
         <br>
-        <c:if test="${not empty errcity}"><fmt:message key="${errcity}" bundle="${error}"/><br></c:if>
 
         <common:phonesUpdate/>
 
@@ -115,7 +91,6 @@
         </c:if>
                title="<fmt:message key="form.uploadImage" bundle="${form}"/>">
         <br>
-        <c:if test="${not empty errphoto}"><fmt:message key="${errphoto}" bundle="${error}"/><br></c:if>
 
         <button><fmt:message key="button.register" bundle="${label}"/></button>
     </form>

@@ -32,10 +32,12 @@ public final class AccountFieldsUpdater extends AbstractFieldsUpdater {
     private static final String WORK_PHONES_ATTR = "workPhones";
     private final DataHandler dataHandler = new DataHandler();
     private final HttpSession session;
+    protected final HttpServletRequest req;
 
     public AccountFieldsUpdater(HttpServletRequest req, HttpSession session) {
         super(req, USER_ID, ACCOUNT_WALL);
         this.session = session;
+        this.req = req;
     }
 
     public AccountInfoKeeper getOrCreateAccountInfo(Supplier<AccountInfoKeeper> accountInfoCreator) {
@@ -51,18 +53,12 @@ public final class AccountFieldsUpdater extends AbstractFieldsUpdater {
         initSex();
 
         Account account = accountInfo.getAccount();
-        setAttribute("name", account::getName);
-        setAttribute("surname", account::getSurname);
-        setAttribute("patronymic", account::getPatronymic);
-        setAttribute("sex", account::getSex);
-        setAttribute("email", account::getEmail);
-        setAttribute("additionalEmail", account::getAdditionalEmail);
-        setAttribute("birthDate", account::getBirthDate);
-        setAttribute("icq", account::getIcq);
-        setAttribute("skype", account::getSkype);
-        setAttribute("country", account::getCountry);
-        setAttribute("city", account::getCity);
-        setAttribute("photo", () -> dataHandler.getHtmlPhoto(account.getPhoto()));
+        byte[] photoBytes = account.getPhoto();
+        if (!isNull(photoBytes)) {
+            String photo = dataHandler.getHtmlPhoto(photoBytes);
+            req.setAttribute(PHOTO, photo);
+        }
+        req.setAttribute("account", account);
 
         Collection<Phone> phones = accountInfo.getPhones();
 
@@ -159,5 +155,14 @@ public final class AccountFieldsUpdater extends AbstractFieldsUpdater {
             req.setAttribute(UPLOAD_ERROR, e.getType().getPropertyKey());
         }
         return doGet.performGet(req, session);
+    }
+
+
+    public void setSuccessUrl(String successUrl, String param, String value) {
+        updateSuccessUrl = successUrl + '?' + param + '=' + value;
+    }
+
+    public boolean isParamsAccepted() {
+        return paramsAccepted;
     }
 }
