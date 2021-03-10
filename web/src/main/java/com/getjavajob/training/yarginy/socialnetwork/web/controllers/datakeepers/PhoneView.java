@@ -1,6 +1,8 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers;
 
-public class PhoneView {
+import java.io.Serializable;
+
+public class PhoneView implements Serializable {
     private String value;
     private String error;
 

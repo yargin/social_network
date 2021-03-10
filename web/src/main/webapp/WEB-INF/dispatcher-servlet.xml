@@ -35,11 +35,6 @@
 
     <mvc:interceptors>
         <mvc:interceptor>
-            <mvc:mapping path="/"/>
-            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.common.CharacterSetSetter"/>
-        </mvc:interceptor>
-
-        <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <mvc:mapping path="/*"/>
             <mvc:exclude-mapping path="/registration"/>

@@ -9,13 +9,12 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additio
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
 import com.getjavajob.training.yarginy.socialnetwork.service.infokeepers.AccountInfoKeeper;
 import com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers.PhoneView;
+import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory.getNullPassword;
@@ -32,42 +31,27 @@ public final class AccountFieldsUpdater {
     private static final String WORK_PHONES_ATTR = "workPhones";
     private final DataHandler dataHandler = new DataHandler();
     private final HttpSession session;
-    private final HttpServletRequest req;
     private final String updateFailView;
+    private final ModelAndView modelAndView;
     private boolean paramsAccepted = true;
-    private String updateSuccessUrl;
 
-    public AccountFieldsUpdater(HttpServletRequest req, HttpSession session, String updateFailView) {
+    public AccountFieldsUpdater(HttpSession session, String updateFailView) {
         this.session = session;
-        this.req = req;
         this.updateFailView = updateFailView;
-        Object requestedId = req.getAttribute(REQUESTED_ID);
-        if (!isNull(requestedId)) {
-            setSuccessUrl(ACCOUNT_WALL, REQUESTED_ID, (long) requestedId);
-        } else {
-            updateSuccessUrl = ACCOUNT_WALL;
-        }
+        modelAndView = new ModelAndView();
     }
 
-    public AccountInfoKeeper getOrCreateAccountInfo(Supplier<AccountInfoKeeper> accountInfoCreator) {
-        AccountInfoKeeper accountInfo = (AccountInfoKeeper) req.getAttribute(ACCOUNT_INFO);
-        if (isNull(accountInfo)) {
-            accountInfo = accountInfoCreator.get();
-            req.setAttribute(ACCOUNT_INFO, accountInfoCreator.get());
-        }
-        return accountInfo;
-    }
-
-    public String getView(AccountInfoKeeper accountInfo, String view) {
-        initSex();
+    public ModelAndView getModelAndView(AccountInfoKeeper accountInfo, String view) {
+        modelAndView.addObject("male", MALE.toString());
+        modelAndView.addObject("female", FEMALE.toString());
 
         Account account = accountInfo.getAccount();
         byte[] photoBytes = account.getPhoto();
         if (!isNull(photoBytes)) {
             String photo = dataHandler.getHtmlPhoto(photoBytes);
-            req.setAttribute(PHOTO, photo);
+            modelAndView.addObject(PHOTO, photo);
         }
-        req.setAttribute("account", account);
+        modelAndView.addObject("account", account);
 
         Collection<Phone> phones = accountInfo.getPhones();
 
@@ -80,17 +64,13 @@ public final class AccountFieldsUpdater {
             Collection<PhoneView> workPhones = createPhoneViews(phones, WORK);
             session.setAttribute(WORK_PHONES_ATTR, workPhones);
         }
-        return view;
+        modelAndView.setViewName(view);
+        return modelAndView;
     }
 
-    private Collection<PhoneView> createPhoneViews(Collection<Phone> phones, PhoneType type) {
+    private ArrayList<PhoneView> createPhoneViews(Collection<Phone> phones, PhoneType type) {
         return phones.stream().filter(phone -> type.equals(phone.getType())).
-                map(phone -> new PhoneView(phone.getNumber(), "")).collect(Collectors.toList());
-    }
-
-    public void initSex() {
-        req.setAttribute("male", MALE.toString());
-        req.setAttribute("female", FEMALE.toString());
+                map(phone -> new PhoneView(phone.getNumber(), "")).collect(Collectors.toCollection(ArrayList::new));
     }
 
     private Collection<Phone> getPhonesFromParams(Collection<String> enteredPhones, String attribute,
@@ -124,7 +104,7 @@ public final class AccountFieldsUpdater {
             enteredPassword.setPassword(password);
             enteredPassword.setAccount(account);
         } else {
-            req.setAttribute("passNotMatch", "error.passwordNotMatch");
+            modelAndView.addObject("passNotMatch", "error.passwordNotMatch");
             paramsAccepted = false;
             enteredPassword = getNullPassword();
         }
@@ -143,36 +123,36 @@ public final class AccountFieldsUpdater {
         phones.addAll(workPhones);
     }
 
-    public String acceptActionOrRetry(boolean updated, AccountInfoKeeper accountInfoKeeper) {
-        if (updated) {
+    public ModelAndView acceptActionOrRetry(boolean updated, AccountInfoKeeper accountInfoKeeper) {
+        if (updated && !isNull(accountInfoKeeper.getAccount())) {
             session.removeAttribute(ACCOUNT_INFO);
             session.removeAttribute(PRIVATE_PHONES_ATTR);
             session.removeAttribute(WORK_PHONES_ATTR);
             session.removeAttribute(PHOTO);
-            return "redirect:" + updateSuccessUrl;
+            long id = accountInfoKeeper.getAccount().getId();
+            return new ModelAndView("redirect:" + ACCOUNT_WALL + '?' + REQUESTED_ID + '=' + id);
         }
-        return getView(accountInfoKeeper, updateFailView);
+        return getModelAndView(accountInfoKeeper, updateFailView);
     }
 
-    public String handleInfoExceptions(IncorrectDataException e, AccountInfoKeeper accountInfoKeeper) {
+    public ModelAndView handleInfoExceptions(IncorrectDataException e, AccountInfoKeeper accountInfoKeeper) {
         if (e.getType() == IncorrectData.EMAIL_DUPLICATE) {
-            req.setAttribute(EMAIL_DUPLICATE, e.getType().getPropertyKey());
+            modelAndView.addObject(EMAIL_DUPLICATE, e.getType().getPropertyKey());
         }
         if (e.getType() == IncorrectData.PHONE_DUPLICATE) {
-            req.setAttribute(PHONE_DUPLICATE, e.getType().getPropertyKey());
+            modelAndView.addObject(PHONE_DUPLICATE, e.getType().getPropertyKey());
         }
         if (e.getType() == IncorrectData.UPLOADING_ERROR) {
-            req.setAttribute(UPLOAD_ERROR, e.getType().getPropertyKey());
+            modelAndView.addObject(UPLOAD_ERROR, e.getType().getPropertyKey());
         }
-        return getView(accountInfoKeeper, updateFailView);
-    }
-
-
-    public void setSuccessUrl(String successUrl, String param, long value) {
-        updateSuccessUrl = successUrl + '?' + param + '=' + value;
+        return getModelAndView(accountInfoKeeper, updateFailView);
     }
 
     public boolean isParamsAccepted() {
         return paramsAccepted;
+    }
+
+    public void addAttribute(String name, Object value) {
+        modelAndView.addObject(name, value);
     }
 }

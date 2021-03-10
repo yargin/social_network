@@ -4,8 +4,9 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
@@ -13,53 +14,50 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pag
 import static java.util.Objects.isNull;
 
 public class GroupFieldsUpdater {
-    private final DataHandler dataHandler = new DataHandler();
     private final HttpSession session;
-    private final HttpServletRequest req;
+    private final ModelAndView modelAndView;
     private final String updateFailView;
-    private String updateSuccessUrl;
+    private DataHandler dataHandler = new DataHandler();
 
-    public GroupFieldsUpdater(HttpServletRequest req, HttpSession session, String updateFailView) {
+    public GroupFieldsUpdater(HttpSession session, String updateFailView) {
+        modelAndView = new ModelAndView();
         this.session = session;
-        this.req = req;
         this.updateFailView = updateFailView;
-        //if empty - create, if not update
-        Object requestedId = req.getAttribute(REQUESTED_ID);
-        if (!isNull(requestedId)) {
-            setSuccessUrl(GROUP_WALL, REQUESTED_ID, (long) requestedId);
-        } else {
-            updateSuccessUrl = GROUP_WALL;
-        }
     }
 
-    public void setSuccessUrl(String successUrl, String param, long value) {
-        updateSuccessUrl = successUrl + '?' + param + '=' + value;
+    @Autowired
+    public void setDataHandler(DataHandler dataHandler) {
+        this.dataHandler = dataHandler;
     }
 
-    public String getView(Group group, String view) {
-        req.setAttribute("group", group);
-
+    public ModelAndView getModelAndView(Group group, String successView) {
+        modelAndView.setViewName(successView);
+        modelAndView.addObject("group", group);
         byte[] photoBytes = group.getPhoto();
         if (!isNull(photoBytes)) {
             String photo = dataHandler.getHtmlPhoto(photoBytes);
-            req.setAttribute(PHOTO, photo);
+            modelAndView.addObject(PHOTO, photo);
         }
-        return view;
+        return modelAndView;
     }
 
-    public String acceptActionOrRetry(boolean updated, Group group) {
+    public ModelAndView acceptActionOrRetry(boolean updated, Group group) {
         if (updated) {
             session.removeAttribute(GROUP);
             session.removeAttribute(PHOTO);
-            return "redirect:" + updateSuccessUrl;
+            return new ModelAndView("redirect:" + GROUP_WALL + '?' + REQUESTED_ID + '=' + group.getId());
         }
-        return getView(group, updateFailView);
+        return getModelAndView(group, updateFailView);
     }
 
-    public String handleInfoExceptions(IncorrectDataException e, Group group) {
+    public ModelAndView handleInfoExceptions(IncorrectDataException e, Group group) {
         if (e.getType() == IncorrectData.GROUP_DUPLICATE) {
-            req.setAttribute(NAME_DUPLICATE, e.getType().getPropertyKey());
+            modelAndView.addObject(NAME_DUPLICATE, e.getType().getPropertyKey());
         }
-        return getView(group, updateFailView);
+        return getModelAndView(group, updateFailView);
+    }
+
+    public void addAttribute(String name, Object value) {
+        modelAndView.addObject(name, value);
     }
 }

@@ -11,12 +11,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.GROUP_WALL;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.GROUP;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.PHOTO;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.GROUP_CREATE_VIEW;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.GROUP_UPDATE_VIEW;
 import static java.util.Objects.isNull;
@@ -32,16 +33,15 @@ public class GroupCrudController {
     }
 
     @GetMapping("/create")
-    public String showCreate(HttpServletRequest req, HttpSession session) {
-        GroupFieldsUpdater updater = new GroupFieldsUpdater(req, session, GROUP_CREATE_VIEW);
-        Group group = new Group();
-        return updater.getView(group, GROUP_CREATE_VIEW);
+    public ModelAndView showCreate(HttpSession session) {
+        GroupFieldsUpdater updater = new GroupFieldsUpdater(session, GROUP_CREATE_VIEW);
+        return updater.getModelAndView(new Group(), GROUP_CREATE_VIEW);
     }
 
     @PostMapping("/create")
-    public String performCreation(HttpServletRequest req, HttpSession session, @ModelAttribute Group group,
-                                  @SessionAttribute("user") Account owner) {
-        GroupFieldsUpdater updater = new GroupFieldsUpdater(req, session, GROUP_CREATE_VIEW);
+    public ModelAndView performCreation(HttpServletRequest req, HttpSession session, @ModelAttribute Group group,
+                                        @SessionAttribute("user") Account owner) {
+        GroupFieldsUpdater updater = new GroupFieldsUpdater(session, GROUP_CREATE_VIEW);
         if ("cancel".equals(req.getParameter("save"))) {
             return updater.acceptActionOrRetry(true, null);
         }
@@ -52,29 +52,25 @@ public class GroupCrudController {
             group.setPhoto((byte[]) session.getAttribute(PHOTO));
         }
 
-        req.setAttribute(GROUP, group);
+        updater.addAttribute(GROUP, group);
 
         group.setOwner(owner);
         return createGroup(updater, group);
     }
 
-    private String createGroup(GroupFieldsUpdater updater, Group group) {
+    private ModelAndView createGroup(GroupFieldsUpdater updater, Group group) {
         boolean created;
         try {
             created = groupService.createGroup(group);
         } catch (IncorrectDataException e) {
             return updater.handleInfoExceptions(e, group);
         }
-        Group createdGroup = groupService.get(group);
-        updater.setSuccessUrl(GROUP_WALL, GROUP_ID, createdGroup.getId());
-        return updater.acceptActionOrRetry(created, group);
+        return updater.acceptActionOrRetry(created, groupService.get(group));
     }
 
     @GetMapping("/update")
-    public String showUpdate(HttpServletRequest req, HttpSession session) {
-        long requestedId = (long) req.getAttribute(REQUESTED_ID);
-
-        GroupFieldsUpdater updater = new GroupFieldsUpdater(req, session, GROUP_UPDATE_VIEW);
+    public ModelAndView showUpdate(@RequestAttribute("id") long requestedId, HttpSession session) {
+        GroupFieldsUpdater updater = new GroupFieldsUpdater(session, GROUP_UPDATE_VIEW);
         //select at first visit
         Group group = groupService.get(requestedId);
 
@@ -82,16 +78,17 @@ public class GroupCrudController {
         if (isNull(session.getAttribute(GROUP))) {
             session.setAttribute(GROUP, group);
         }
-        return updater.getView(group, GROUP_UPDATE_VIEW);
+        return updater.getModelAndView(group, GROUP_UPDATE_VIEW);
     }
 
     @PostMapping("/update")
-    public String performUpdate(HttpServletRequest req, HttpSession session, @ModelAttribute Group group) {
-        GroupFieldsUpdater updater = new GroupFieldsUpdater(req, session, GROUP_UPDATE_VIEW);
-        if ("cancel".equals(req.getParameter("save"))) {
+    public ModelAndView performUpdate(HttpSession session, @ModelAttribute Group group,
+                                      @RequestParam(value = "save", required = false) String save,
+                                      @RequestAttribute("id") long requestedId) {
+        GroupFieldsUpdater updater = new GroupFieldsUpdater(session, GROUP_UPDATE_VIEW);
+        if ("cancel".equals(save)) {
             return updater.acceptActionOrRetry(true, null);
         }
-        long requestedId = (long) req.getAttribute(REQUESTED_ID);
         Group storedGroup = (Group) session.getAttribute(GROUP);
 
         //for further views
@@ -106,14 +103,13 @@ public class GroupCrudController {
         return updateGroup(updater, group, storedGroup);
     }
 
-    private String updateGroup(GroupFieldsUpdater updater, Group group, Group storedGroup) {
+    private ModelAndView updateGroup(GroupFieldsUpdater updater, Group group, Group storedGroup) {
         boolean updated;
         try {
             updated = groupService.updateGroup(group, storedGroup);
         } catch (IncorrectDataException e) {
             return updater.handleInfoExceptions(e, group);
         }
-        updater.setSuccessUrl(GROUP_WALL, GROUP_ID, group.getId());
         return updater.acceptActionOrRetry(updated, group);
     }
 
