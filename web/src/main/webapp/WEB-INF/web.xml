@@ -54,7 +54,6 @@
             <param-value>true</param-value>
         </init-param>
     </filter>
-
     <filter-mapping>
         <filter-name>encodingFilter</filter-name>
         <url-pattern>/*</url-pattern>
@@ -65,7 +64,7 @@
     </session-config>
 
     <resource-ref>
-        <res-ref-name>jdbc/Local-MySql</res-ref-name>
+        <res-ref-name>jdbc/local</res-ref-name>
         <res-type>javax.sql.DataSource</res-type>
         <res-auth>Container</res-auth>
     </resource-ref>

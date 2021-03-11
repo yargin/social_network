@@ -4,7 +4,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
@@ -17,17 +16,12 @@ public class GroupFieldsUpdater {
     private final HttpSession session;
     private final ModelAndView modelAndView;
     private final String updateFailView;
-    private DataHandler dataHandler = new DataHandler();
+    private final DataHandler dataHandler = new DataHandler();
 
     public GroupFieldsUpdater(HttpSession session, String updateFailView) {
         modelAndView = new ModelAndView();
         this.session = session;
         this.updateFailView = updateFailView;
-    }
-
-    @Autowired
-    public void setDataHandler(DataHandler dataHandler) {
-        this.dataHandler = dataHandler;
     }
 
     public ModelAndView getModelAndView(Group group, String successView) {

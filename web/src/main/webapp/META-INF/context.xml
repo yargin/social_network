@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <Context>
-    <Resource name="jdbc/Local-MySql" auth="Container" type="javax.sql.DataSource"
+    <Resource name="jdbc/local" auth="Container" type="javax.sql.DataSource"
               factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
               maxTotal="10" minIdle="2" maxWaitMillis="10000"
               username="root" password="12131415a" driverClassName="com.mysql.cj.jdbc.Driver"

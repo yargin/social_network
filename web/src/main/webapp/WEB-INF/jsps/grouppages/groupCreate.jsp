@@ -15,10 +15,7 @@
                    placeholder="<fmt:message key="form.groupName" bundle="${form}"/>" required>
             <br>
             <c:if test="${not empty nameDuplicate}"><fmt:message key="${nameDuplicate}" bundle="${error}"/><br></c:if>
-            <textarea name="description"
-                      placeholder="<fmt:message key="form.description" bundle="${form}"/>">
-                    ${group.description}
-            </textarea>
+            <textarea name="description">${group.description}</textarea>
             <br>
 
             <c:if test="${not empty photo}">

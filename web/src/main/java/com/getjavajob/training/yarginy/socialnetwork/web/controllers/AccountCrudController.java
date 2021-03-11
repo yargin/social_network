@@ -13,7 +13,6 @@ import com.getjavajob.training.yarginy.socialnetwork.web.controllers.editors.Rol
 import com.getjavajob.training.yarginy.socialnetwork.web.controllers.editors.SexEditor;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.updaters.AccountFieldsUpdater;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
-import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -27,6 +26,7 @@ import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.ACCOUNT_INFO;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.PHOTO;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.LOGOUT;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.ACCOUNT_UPDATE_VIEW;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.REGISTRATION_VIEW;
 import static java.util.Objects.isNull;
@@ -72,7 +72,7 @@ public class AccountCrudController {
         }
         accountInfoKeeper.setAccount(account);
 
-        updater.getValuesFromParams(accountInfoKeeper, privatePhones, workPhones);
+        updater.getPhonesFromParams(accountInfoKeeper, privatePhones, workPhones);
 
         Password enteredPassword = updater.getPassword(account, password, confirmPassword);
 
@@ -127,7 +127,7 @@ public class AccountCrudController {
         account.setEmail(storedAccount.getEmail());
         account.setRegistrationDate(storedAccount.getRegistrationDate());
 
-        updater.getValuesFromParams(accountInfoKeeper, privatePhones, workPhones);
+        updater.getPhonesFromParams(accountInfoKeeper, privatePhones, workPhones);
 
         if (account.getPhoto().length == 0) {
             if (isNull(session.getAttribute(PHOTO))) {
@@ -163,13 +163,13 @@ public class AccountCrudController {
     @GetMapping("/account/delete")
     public String delete(@ModelAttribute Account accountToDelete) {
         if (accountService.deleteAccount(accountToDelete)) {
-            return "redirect:" + Pages.LOGOUT;
+            return "redirect:" + LOGOUT;
         }
         return "error";
     }
 
     @InitBinder("account")
-    public void registerPhotoBinder(WebDataBinder binder) {
+    public void registerPhotoEditor(WebDataBinder binder) {
         binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
     }
 

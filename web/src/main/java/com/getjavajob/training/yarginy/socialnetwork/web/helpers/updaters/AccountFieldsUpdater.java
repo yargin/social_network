@@ -111,7 +111,7 @@ public final class AccountFieldsUpdater {
         return enteredPassword;
     }
 
-    public void getValuesFromParams(AccountInfoKeeper accountInfoKeeper, Collection<String> enteredPrivatePhones,
+    public void getPhonesFromParams(AccountInfoKeeper accountInfoKeeper, Collection<String> enteredPrivatePhones,
                                     Collection<String> enteredWorkPhones) {
         Collection<Phone> privatePhones = getPhonesFromParams(enteredPrivatePhones, PRIVATE_PHONES_ATTR, PRIVATE,
                 accountInfoKeeper);

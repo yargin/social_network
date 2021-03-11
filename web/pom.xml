@@ -14,7 +14,7 @@
     <!--    todo don't forget to change packaging type-->
     <packaging>war</packaging>
     <properties>
-        <tomcat.version>10.0.2</tomcat.version>
+        <tomcat.version>9.0.41</tomcat.version>
     </properties>
 
 
@@ -31,23 +31,6 @@
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>4.0.1</version>
-        </dependency>
-
-        <!--        todo for embedded tomcat-->
-        <!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.apache.tomcat/servlet-api &ndash;&gt;-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.apache.tomcat</groupId>-->
-        <!--            <artifactId>servlet-api</artifactId>-->
-        <!--            <version>6.0.53</version>-->
-        <!--            <scope>provided</scope>-->
-        <!--        </dependency>-->
-
-
-        <!-- https://mvnrepository.com/artifact/javax.servlet/jsp-api -->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>jsp-api</artifactId>
-            <version>2.0</version>
         </dependency>
 
         <dependency>
@@ -90,121 +73,103 @@
         </dependency>
 
         <!--        todo embedded tomcat dependencies-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.apache.tomcat.embed</groupId>-->
-        <!--            <artifactId>tomcat-embed-core</artifactId>-->
-        <!--            <version>${tomcat.version}</version>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.apache.tomcat.embed</groupId>-->
-        <!--            <artifactId>tomcat-embed-jasper</artifactId>-->
-        <!--            <version>${tomcat.version}</version>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.apache.tomcat</groupId>-->
-        <!--            <artifactId>tomcat-jasper</artifactId>-->
-        <!--            <version>${tomcat.version}</version>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.apache.tomcat</groupId>-->
-        <!--            <artifactId>tomcat-jasper-el</artifactId>-->
-        <!--            <version>${tomcat.version}</version>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.apache.tomcat</groupId>-->
-        <!--            <artifactId>tomcat-jsp-api</artifactId>-->
-        <!--            <version>${tomcat.version}</version>-->
-        <!--        </dependency>-->
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jasper</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jasper-el</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jsp-api</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <artifactId>maven-clean-plugin</artifactId>
-                    <version>3.1.0</version>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.22.1</version>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-install-plugin</artifactId>
-                    <version>2.5.2</version>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-deploy-plugin</artifactId>
-                    <version>2.8.2</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
+        <finalName>embeddedTomcatSample</finalName>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.1.2</version>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>appassembler-maven-plugin</artifactId>
+                <version>2.0.0</version>
+                <configuration>
+                    <assembleDirectory>target</assembleDirectory>
+                    <programs>
+                        <program>
+                            <mainClass>launch.Main</mainClass>
+                            <name>webapp</name>
+                        </program>
+                    </programs>
+                </configuration>
                 <executions>
                     <execution>
                         <phase>package</phase>
                         <goals>
-                            <goal>copy</goal>
+                            <goal>assemble</goal>
                         </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>com.github.jsimone</groupId>
-                                    <artifactId>webapp-runner-main</artifactId>
-                                    <version>9.0.27.1</version>
-                                    <destFileName>webapp-runner.jar</destFileName>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.apache.tomcat</groupId>
-                                    <artifactId>tomcat-dbcp</artifactId>
-                                    <version>9.0.29</version>
-                                </artifactItem>
-                            </artifactItems>
-                            <stripVersion>true</stripVersion>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>com.heroku.sdk</groupId>
-                <artifactId>heroku-maven-plugin</artifactId>
-                <version>2.0.13</version>
-                <configuration>
-                    <appName>yarginy-socnet</appName>
-                    <processTypes>
-                        <web>
-                            <!--                            @formatter:off-->
-                            java $JAVA_OPTS -cp target/dependency/webapp-runner.jar:target/dependency/tomcat-dbcp.jar webapp.runner.launch.Main --enable-naming --context-xml target/web-1.0.0-SNAPSHOT/META-INF/context.xml $WEBAPP_RUNNER_OPTS --port $PORT target/web-1.0.0-SNAPSHOT.war</web>
-<!--                        @formatter:on-->
-                    </processTypes>
-                </configuration>
-            </plugin>
-            <!--            todo embedded tomcat plugin-->
-            <!--            <plugin>-->
-            <!--                <groupId>org.codehaus.mojo</groupId>-->
-            <!--                <artifactId>appassembler-maven-plugin</artifactId>-->
-            <!--                <version>2.0.0</version>-->
-            <!--                <configuration>-->
-            <!--                    <assembleDirectory>target</assembleDirectory>-->
-            <!--                    <programs>-->
-            <!--                        <program>-->
-            <!--                            <mainClass>launch.Main</mainClass>-->
-            <!--                            <name>webapp</name>-->
-            <!--                        </program>-->
-            <!--                    </programs>-->
-            <!--                </configuration>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <phase>package</phase>-->
-            <!--                        <goals>-->
-            <!--                            <goal>assemble</goal>-->
-            <!--                        </goals>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--            </plugin>-->
         </plugins>
+        <!--        <plugins>-->
+        <!--            <plugin>-->
+        <!--                <groupId>org.apache.maven.plugins</groupId>-->
+        <!--                <artifactId>maven-dependency-plugin</artifactId>-->
+        <!--                <version>3.1.2</version>-->
+        <!--                <executions>-->
+        <!--                    <execution>-->
+        <!--                        <phase>package</phase>-->
+        <!--                        <goals>-->
+        <!--                            <goal>copy</goal>-->
+        <!--                        </goals>-->
+        <!--                        <configuration>-->
+        <!--                            <artifactItems>-->
+        <!--                                <artifactItem>-->
+        <!--                                    <groupId>com.github.jsimone</groupId>-->
+        <!--                                    <artifactId>webapp-runner-main</artifactId>-->
+        <!--                                    <version>9.0.27.1</version>-->
+        <!--                                    <destFileName>webapp-runner.jar</destFileName>-->
+        <!--                                </artifactItem>-->
+        <!--                                <artifactItem>-->
+        <!--                                    <groupId>org.apache.tomcat</groupId>-->
+        <!--                                    <artifactId>tomcat-dbcp</artifactId>-->
+        <!--                                    <version>${tomcat.version}</version>-->
+        <!--                                </artifactItem>-->
+        <!--                            </artifactItems>-->
+        <!--                            <stripVersion>true</stripVersion>-->
+        <!--                        </configuration>-->
+        <!--                    </execution>-->
+        <!--                </executions>-->
+        <!--            </plugin>-->
+        <!--            <plugin>-->
+        <!--                <groupId>com.heroku.sdk</groupId>-->
+        <!--                <artifactId>heroku-maven-plugin</artifactId>-->
+        <!--                <version>2.0.13</version>-->
+        <!--                <configuration>-->
+        <!--                    <appName>yarginy-socnet</appName>-->
+        <!--                    <processTypes>-->
+        <!--                        <web>-->
+        <!--                            &lt;!&ndash;                            @formatter:off&ndash;&gt;-->
+<!--                            java $JAVA_OPTS -cp target/dependency/webapp-runner.jar:target/dependency/tomcat-dbcp.jar webapp.runner.launch.Main &#45;&#45;enable-naming &#45;&#45;context-xml target/web-1.0.0-SNAPSHOT/META-INF/context.xml $WEBAPP_RUNNER_OPTS &#45;&#45;port $PORT target/web-1.0.0-SNAPSHOT.war</web>-->
+<!--&lt;!&ndash;                        @formatter:on&ndash;&gt;-->
+        <!--                    </processTypes>-->
+        <!--                </configuration>-->
+        <!--            </plugin>-->
+        <!--        </plugins>-->
     </build>
 </project>

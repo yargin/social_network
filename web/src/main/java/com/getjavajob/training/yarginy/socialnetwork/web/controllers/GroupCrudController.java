@@ -70,6 +70,7 @@ public class GroupCrudController {
 
     @GetMapping("/update")
     public ModelAndView showUpdate(@RequestAttribute("id") long requestedId, HttpSession session) {
+
         GroupFieldsUpdater updater = new GroupFieldsUpdater(session, GROUP_UPDATE_VIEW);
         //select at first visit
         Group group = groupService.get(requestedId);

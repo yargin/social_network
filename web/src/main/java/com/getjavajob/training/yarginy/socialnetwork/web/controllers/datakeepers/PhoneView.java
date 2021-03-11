@@ -26,12 +26,4 @@ public class PhoneView implements Serializable {
     public void setError(String error) {
         this.error = error;
     }
-
-    @Override
-    public String toString() {
-        return "PhoneView{" +
-                ", value='" + value + '\'' +
-                ", error='" + error + '\'' +
-                '}';
-    }
 }
