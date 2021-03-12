@@ -19,6 +19,16 @@
 
     <mvc:annotation-driven/>
 
+    <bean class="org.springframework.context.support.ResourceBundleMessageSource" id="messageSource">
+        <property name="basenames">
+            <list>
+                <value>form</value>
+                <value>error</value>
+                <value>label</value>
+            </list>
+        </property>
+    </bean>
+
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="maxUploadSize" value="16000000"/>
     </bean>

@@ -1,9 +1,8 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.helpers.updaters;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
-import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
+import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
@@ -24,8 +23,8 @@ public class GroupFieldsUpdater {
         this.updateFailView = updateFailView;
     }
 
-    public ModelAndView getModelAndView(Group group, String successView) {
-        modelAndView.setViewName(successView);
+    public ModelAndView getModelAndView(Group group) {
+        modelAndView.setViewName(updateFailView);
         modelAndView.addObject("group", group);
         byte[] photoBytes = group.getPhoto();
         if (!isNull(photoBytes)) {
@@ -39,19 +38,12 @@ public class GroupFieldsUpdater {
         if (updated) {
             session.removeAttribute(GROUP);
             session.removeAttribute(PHOTO);
-            return new ModelAndView("redirect:" + GROUP_WALL + '?' + REQUESTED_ID + '=' + group.getId());
+            if (!isNull(group) && group.getId() > 0) {
+                return new ModelAndView("redirect:" + GROUP_WALL + '?' + REQUESTED_ID + '=' + group.getId());
+            } else {
+                return new ModelAndView("redirect:" + Pages.GROUPS);
+            }
         }
-        return getModelAndView(group, updateFailView);
-    }
-
-    public ModelAndView handleInfoExceptions(IncorrectDataException e, Group group) {
-        if (e.getType() == IncorrectData.GROUP_DUPLICATE) {
-            modelAndView.addObject(NAME_DUPLICATE, e.getType().getPropertyKey());
-        }
-        return getModelAndView(group, updateFailView);
-    }
-
-    public void addAttribute(String name, Object value) {
-        modelAndView.addObject(name, value);
+        return getModelAndView(group);
     }
 }

@@ -1,6 +1,5 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
@@ -52,7 +51,7 @@ public class GroupDaoFacadeTest {
         try {
             GROUP.setName(null);
             groupDaoFacade.create(GROUP);
-        } catch (IncorrectDataException e) {
+        } catch (IllegalArgumentException e) {
             assertFalse(false);
         }
     }

@@ -1,6 +1,5 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import org.junit.After;
@@ -43,14 +42,7 @@ public class AccountDaoFacadeTest {
         try {
             account.setEmail(null);
             actual = accountDaoFacade.create(account);
-        } catch (IncorrectDataException e) {
-            actual = false;
-        }
-        assertSame(false, actual);
-        try {
-            account.setEmail("");
-            actual = accountDaoFacade.create(account);
-        } catch (IncorrectDataException e) {
+        } catch (IllegalArgumentException e) {
             actual = false;
         }
         assertFalse(actual);

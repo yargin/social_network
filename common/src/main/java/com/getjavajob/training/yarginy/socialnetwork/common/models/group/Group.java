@@ -10,7 +10,7 @@ import java.sql.Date;
 import java.util.Arrays;
 import java.util.Objects;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper.*;
+import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper.stringOptional;
 import static java.util.Objects.isNull;
 
 @Component
@@ -45,7 +45,7 @@ public class Group extends AbstractEntity implements Entity {
     }
 
     public void setName(String name) {
-        this.name = stringMandatory(name);
+        this.name = name;
     }
 
     public Account getOwner() {
@@ -53,7 +53,7 @@ public class Group extends AbstractEntity implements Entity {
     }
 
     public void setOwner(Account owner) {
-        this.owner = objectMandatory(owner);
+        this.owner = owner;
     }
 
     public String getDescription() {
@@ -61,7 +61,7 @@ public class Group extends AbstractEntity implements Entity {
     }
 
     public void setDescription(String description) {
-        this.description = stringOptional(description);
+        this.description = description;
     }
 
     public byte[] getPhoto() {

@@ -172,6 +172,19 @@ html, body, ul, li {
     font-weight: bolder;
 }
 
+#cancel {
+    padding: 6px 10px 6px 10px;
+    margin-top: 10px;
+    background-color: #94d2d4;
+    border: none;
+    border-radius: 1px;
+    cursor: pointer;
+}
+
+#cancel:hover {
+    background-color: #b75208;
+}
+
 button {
     padding: 6px 10px 6px 10px;
     margin-top: 10px;

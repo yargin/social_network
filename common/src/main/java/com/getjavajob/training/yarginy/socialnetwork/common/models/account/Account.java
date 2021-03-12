@@ -1,7 +1,5 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.models.account;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
-import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.AbstractEntity;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
@@ -9,28 +7,38 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.addit
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Past;
 import java.sql.Date;
 import java.util.Arrays;
 import java.util.Objects;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper.*;
+import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper.stringOptional;
 import static java.util.Objects.isNull;
 
 @Component("account")
 @Scope("prototype")
 public class Account extends AbstractEntity implements Entity {
+    @NotBlank
     private String name;
+    @NotBlank
     private String surname;
     private String patronymic;
     private Sex sex;
+    @Past
     private Date birthDate;
     private Date registrationDate;
+    @Email
     private String email;
+    @Email
     private String additionalEmail;
     private Role role;
     private String icq;
     private String skype;
+    @NotBlank
     private String city;
+    @NotBlank
     private String country;
     private byte[] photo;
 
@@ -38,13 +46,13 @@ public class Account extends AbstractEntity implements Entity {
     }
 
     public Account(String name, String email) {
-        this.name = stringMandatory(name);
-        this.email = emailMandatory(email);
+        this.name = name;
+        this.email = email;
     }
 
     public Account(String name, String surname, String email) {
         this(name, email);
-        this.surname = stringMandatory(surname);
+        this.surname = surname;
     }
 
     @Override
@@ -62,7 +70,7 @@ public class Account extends AbstractEntity implements Entity {
     }
 
     public void setName(String name) {
-        this.name = stringMandatory(name);
+        this.name = name;
     }
 
     public String getSurname() {
@@ -70,7 +78,7 @@ public class Account extends AbstractEntity implements Entity {
     }
 
     public void setSurname(String surname) {
-        this.surname = stringMandatory(surname);
+        this.surname = surname;
     }
 
     public String getPatronymic() {
@@ -78,7 +86,7 @@ public class Account extends AbstractEntity implements Entity {
     }
 
     public void setPatronymic(String patronymic) {
-        this.patronymic = stringOptional(patronymic);
+        this.patronymic = patronymic;
     }
 
     public Sex getSex() {
@@ -94,7 +102,7 @@ public class Account extends AbstractEntity implements Entity {
     }
 
     public void setBirthDate(Date birthDate) {
-        this.birthDate = eligibleAge(birthDate);
+        this.birthDate = birthDate;
     }
 
     public Date getRegistrationDate() {
@@ -110,7 +118,7 @@ public class Account extends AbstractEntity implements Entity {
     }
 
     public void setEmail(String email) {
-        this.email = emailMandatory(email);
+        this.email = email;
     }
 
     public String getAdditionalEmail() {
@@ -118,10 +126,7 @@ public class Account extends AbstractEntity implements Entity {
     }
 
     public void setAdditionalEmail(String additionalEmail) {
-        if (Objects.equals(additionalEmail, email)) {
-            throw new IncorrectDataException(IncorrectData.SAME_ADDITIONAL_EMAIL);
-        }
-        this.additionalEmail = emailOptional(additionalEmail);
+        this.additionalEmail = additionalEmail;
     }
 
     public Role getRole() {
@@ -137,7 +142,7 @@ public class Account extends AbstractEntity implements Entity {
     }
 
     public void setIcq(String icq) {
-        this.icq = stringOptional(icq);
+        this.icq = icq;
     }
 
     public String getSkype() {
@@ -145,7 +150,7 @@ public class Account extends AbstractEntity implements Entity {
     }
 
     public void setSkype(String skype) {
-        this.skype = stringOptional(skype);
+        this.skype = skype;
     }
 
     public String getCity() {
@@ -153,7 +158,7 @@ public class Account extends AbstractEntity implements Entity {
     }
 
     public void setCity(String city) {
-        this.city = stringOptional(city);
+        this.city = city;
     }
 
     public String getCountry() {
@@ -161,7 +166,7 @@ public class Account extends AbstractEntity implements Entity {
     }
 
     public void setCountry(String country) {
-        this.country = stringOptional(country);
+        this.country = country;
     }
 
     public byte[] getPhoto() {
