@@ -13,7 +13,6 @@
     <fmt:message key="label.creator" bundle="${label}"/> :
     <a href="${context}/account/wall?id=${ownerObject.getId()}">${ownerObject.getName()} ${ownerObject.getSurname()}</a>
 </div>
-
 <div class="info">
     <c:choose>
         <c:when test="${not empty photo}">

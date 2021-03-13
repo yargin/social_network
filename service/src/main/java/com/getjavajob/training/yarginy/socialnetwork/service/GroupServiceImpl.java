@@ -60,7 +60,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public boolean isOwner(long accountId, long groupId) {
-        return groupDaoFacade.isOwner(groupId, accountId);
+        return groupDaoFacade.isOwner(accountId, groupId);
     }
 
     @Override

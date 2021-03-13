@@ -12,8 +12,8 @@
     <spring:message code="label.saveUpdates" var="confirmText"/>
     <%--@elvariable id="account" type="com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account"--%>
     <form:form action="${context}/account/update?id=${id}" method="post" enctype="multipart/form-data"
-               id="accountUpdate" onsubmit='return confirmation("${confirmText}", acceptPhones())'
-               modelAttribute="account">
+               onsubmit='return confirmation("${confirmText}", acceptPhones())'
+               id="accountUpdate" modelAttribute="account">
 
         <label><spring:message code="form.name"/></label>
         <form:input type="text" path="name" value="${account.name}" required="required"/> <br>
@@ -26,8 +26,8 @@
         <label><spring:message code="form.patronymic"/></label>
         <form:input type="text" path="patronymic" value="${account.patronymic}"/> <br>
 
-        <label><spring:message code="form.sex"/></label>
-        <select name="sex" required>
+        <label for="sex"><spring:message code="form.sex"/></label>
+        <select name="sex" id="sex" required>
             <option value="${male}" <c:if test="${Sex.MALE eq account.sex}">selected</c:if>>
                 <spring:message code="form.male"/></option>
             <option value="${female}" <c:if test="${Sex.FEMALE eq account.sex}">selected</c:if>>
@@ -72,12 +72,7 @@
         <form:input type="file" path="photo" accept="image/*" title="${uploadImage}"/> <br>
 
         <button type="submit" name="save" value="save"><spring:message code="button.save"/></button>
-        <%--        todo--%>
-        <button type="button" onclick="window.location.href='${context}/account/wall?id=${id}'">
-            <spring:message code="button.cancel"/>
-        </button>
-        <%--        <button type="submit" name="save" value="cancel" formnovalidate><spring:message--%>
-        <%--                code="button.cancel"/></button>--%>
-
+        <button type="submit" name="save" value="cancel" onclick="skipConfirmation()" formnovalidate>
+            <spring:message code="button.cancel"/></button>
     </form:form>
 </div>

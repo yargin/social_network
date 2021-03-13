@@ -48,6 +48,7 @@ public class GroupAccessSetter extends HandlerInterceptorAdapter {
 
         if (groupService.isOwner(requesterId, requestedGroupId)) {
             req.setAttribute("owner", true);
+            System.out.println("OWNER");
         }
         if (groupService.isMembershipRequester(requesterId, requestedGroupId)) {
             req.setAttribute("requester", true);
