@@ -41,7 +41,7 @@ public final class AccountFieldsUpdater {
         modelAndView = new ModelAndView();
     }
 
-    public ModelAndView getModelAndView(AccountInfoKeeper accountInfo, String view) {
+    public ModelAndView getModelAndView(AccountInfoKeeper accountInfo) {
         modelAndView.addObject("male", MALE.toString());
         modelAndView.addObject("female", FEMALE.toString());
 
@@ -64,7 +64,7 @@ public final class AccountFieldsUpdater {
             Collection<PhoneView> workPhones = createPhoneViews(phones, WORK);
             session.setAttribute(WORK_PHONES_ATTR, workPhones);
         }
-        modelAndView.setViewName(view);
+        modelAndView.setViewName(updateFailView);
         return modelAndView;
     }
 
@@ -132,7 +132,7 @@ public final class AccountFieldsUpdater {
             long id = accountInfoKeeper.getAccount().getId();
             return new ModelAndView("redirect:" + ACCOUNT_WALL + '?' + REQUESTED_ID + '=' + id);
         }
-        return getModelAndView(accountInfoKeeper, updateFailView);
+        return getModelAndView(accountInfoKeeper);
     }
 
     public ModelAndView handleInfoExceptions(IncorrectDataException e, AccountInfoKeeper accountInfoKeeper) {
@@ -145,7 +145,7 @@ public final class AccountFieldsUpdater {
         if (e.getType() == IncorrectData.UPLOADING_ERROR) {
             modelAndView.addObject(UPLOAD_ERROR, e.getType().getPropertyKey());
         }
-        return getModelAndView(accountInfoKeeper, updateFailView);
+        return getModelAndView(accountInfoKeeper);
     }
 
     public boolean isParamsAccepted() {

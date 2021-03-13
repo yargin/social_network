@@ -141,5 +141,6 @@ public class GroupCrudController {
     @InitBinder("group")
     public void registerCustomEditors(WebDataBinder binder) {
         binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
+//        binder.setConversionService();
     }
 }

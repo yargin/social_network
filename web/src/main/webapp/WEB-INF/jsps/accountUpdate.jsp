@@ -3,7 +3,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <common:layout>
-    HERE
     <div class="post">
         <common:accountInfoUpdate/>
     </div>

@@ -13,8 +13,10 @@ import com.getjavajob.training.yarginy.socialnetwork.web.controllers.editors.Rol
 import com.getjavajob.training.yarginy.socialnetwork.web.controllers.editors.SexEditor;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.updaters.AccountFieldsUpdater;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
+import com.getjavajob.training.yarginy.socialnetwork.web.validators.AccountValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
@@ -36,13 +38,15 @@ public class AccountCrudController {
     private final AuthService authService;
     private final AccountInfoService accountInfoService;
     private final AccountService accountService;
+    private final AccountValidator accountValidator;
 
     @Autowired
     public AccountCrudController(AuthService authService, AccountInfoService accountInfoService,
-                                 AccountService accountService) {
+                                 AccountService accountService, AccountValidator accountValidator) {
         this.authService = authService;
         this.accountInfoService = accountInfoService;
         this.accountService = accountService;
+        this.accountValidator = accountValidator;
     }
 
     @GetMapping("/registration")
@@ -54,11 +58,11 @@ public class AccountCrudController {
             session.setAttribute(ACCOUNT_INFO, accountInfoKeeper);
         }
 
-        return updater.getModelAndView(accountInfoKeeper, REGISTRATION_VIEW);
+        return updater.getModelAndView(accountInfoKeeper);
     }
 
     @PostMapping("/registration")
-    public ModelAndView register(HttpSession session, @ModelAttribute Account account,
+    public ModelAndView register(HttpSession session, @ModelAttribute Account account, BindingResult result,
                                  @RequestParam String password, @RequestParam String confirmPassword,
                                  @RequestParam(required = false) Collection<String> privatePhones,
                                  @RequestParam(required = false) Collection<String> workPhones) {
@@ -79,8 +83,12 @@ public class AccountCrudController {
         boolean accepted = updater.isParamsAccepted();
         updater.addAttribute(ACCOUNT_INFO, accountInfoKeeper);
         if (!accepted) {
-            return updater.getModelAndView(accountInfoKeeper, REGISTRATION_VIEW);
+            return updater.getModelAndView(accountInfoKeeper);
         } else {
+            accountValidator.validate(account, result);
+            if (result.hasErrors()) {
+                return updater.getModelAndView(accountInfoKeeper);
+            }
             return register(updater, accountInfoKeeper, enteredPassword);
         }
     }
@@ -106,11 +114,11 @@ public class AccountCrudController {
             session.setAttribute(ACCOUNT_INFO, accountInfoKeeper);
         }
 
-        return updater.getModelAndView(accountInfoKeeper, ACCOUNT_UPDATE_VIEW);
+        return updater.getModelAndView(accountInfoKeeper);
     }
 
     @PostMapping("/account/update")
-    public ModelAndView performUpdate(HttpSession session, @ModelAttribute Account account,
+    public ModelAndView performUpdate(HttpSession session, @ModelAttribute Account account, BindingResult result,
                                       @RequestParam(required = false) Collection<String> privatePhones,
                                       @RequestParam(required = false) Collection<String> workPhones,
                                       @RequestParam(required = false) String save) {
@@ -142,8 +150,9 @@ public class AccountCrudController {
 
         updater.addAttribute(ACCOUNT_INFO, accountInfoKeeper);
         boolean accepted = updater.isParamsAccepted();
-        if (!accepted) {
-            return updater.getModelAndView(accountInfoKeeper, ACCOUNT_UPDATE_VIEW);
+        accountValidator.validate(account, result);
+        if (!accepted || result.hasErrors()) {
+            return updater.getModelAndView(accountInfoKeeper);
         } else {
             return update(updater, accountInfoKeeper, storedAccountInfoKeeper);
         }

@@ -1,94 +1,91 @@
 <%@ tag import="com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="common" tagdir="/WEB-INF/tags" %>
-<fmt:setBundle basename="label" var="label"/>
-<fmt:setBundle basename="error" var="error"/>
-<fmt:setBundle basename="form" var="form"/>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 <script type="text/javascript" src="${context}/js/phonesEdit.js"></script>
 
-<fmt:message key="label.saveUpdates" var="confirmText" bundle="${label}"/>
+<spring:message code="label.saveUpdates" var="confirmText"/>
 <div class="post">
-    <form action="${context}/registration" method="post" enctype="multipart/form-data"
-          onsubmit="return acceptPhones()">
+    <%--@elvariable id="account" type="com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account"--%>
+    <form:form action="${context}/registration" method="post" enctype="multipart/form-data"
+               onsubmit="return acceptPhones()" modelAttribute="account">
 
-        <input type="text" name="name" value="${account.name}"
-               placeholder='<fmt:message key="form.name" bundle="${form}"/>' required>
-        <br>
+        <spring:message code="form.name" var="formName"/>
+        <form:input type="text" path="name" value="${account.name}" placeholder="${formName}" required="required"/> <br>
+        <form:errors path="name" element="div"/>
 
-        <input type="text" name="surname" value="${account.surname}"
-               placeholder='<fmt:message key="form.surname" bundle="${form}"/>' required>
-        <br>
+        <spring:message code="form.surname" var="formSurname"/>
+        <form:input type="text" path="surname" value="${account.surname}" placeholder="${formSurname}"
+                    required="required"/> <br>
+        <form:errors path="surname" element="div"/>
 
-        <input type="text" name="patronymic" value="${account.patronymic}"
-               placeholder='<fmt:message key="form.patronymic" bundle="${form}"/>'>
-        <br>
+        <spring:message code="form.patronymic" var="formPatronymic"/>
+        <form:input type="text" path="patronymic" value="${account.patronymic}" placeholder="${formPatronymic}"/> <br>
 
-        <label>
-            <fmt:message key="form.sex" bundle="${form}"/>
-        </label>
+        <label><spring:message code="form.sex"/></label>
         <select name="sex" required>
             <option value="${male}" <c:if test="${Sex.MALE eq account.sex}">selected</c:if>>
-                <fmt:message key="form.male" bundle="${form}"/></option>
+                <spring:message code="form.male"/></option>
             <option value="${female}" <c:if test="${Sex.FEMALE eq account.sex}">selected</c:if>>
-                <fmt:message key="form.female" bundle="${form}"/></option>
+                <spring:message code="form.female"/></option>
         </select>
         <br>
 
-        <input type="email" name="email" value="${account.email}"
-               placeholder='<fmt:message key="form.email" bundle="${form}"/>' required>
-        <br>
+        <spring:message code="form.email" var="formEmail"/>
+        <form:input type="email" path="email" value="${account.email}"
+                    placeholder="${formEmail}" required="required"/> <br>
+        <form:errors path="email" element="div"/>
 
-        <input type="email" name="additionalEmail" value="${account.additionalEmail}"
-               placeholder='<fmt:message key="form.additionalEmail" bundle="${form}"/>' required>
-        <br>
-        <c:if test="${not empty emailDuplicate}"><fmt:message key="${emailDuplicate}" bundle="${error}"/><br></c:if>
+        <spring:message code="form.additionalEmail" var="formAdditionalEmail"/>
+        <form:input type="email" path="additionalEmail" value="${account.additionalEmail}"
+                    placeholder="${formAdditionalEmail}" required="required"/> <br>
+        <form:errors path="additionalEmail" element="div"/>
+        <c:if test="${not empty emailDuplicate}"><spring:message code="${emailDuplicate}"/><br></c:if>
 
-        <input type="password" name="password" placeholder="<fmt:message key="form.password" bundle="${form}"/>"
-               required>
-        <br>
+        <input type="password" name="password" placeholder='<spring:message code="form.password"/>'
+               required> <br>
 
         <input type="password" name="confirmPassword"
-               placeholder='<fmt:message key="form.confirmPassword" bundle="${form}"/>' required>
-        <br>
-        <c:if test="${not empty passNotMatch}"><fmt:message key="${passNotMatch}" bundle="${error}"/><br></c:if>
+               placeholder='<spring:message code="form.confirmPassword"/>' required> <br>
+        <c:if test="${not empty passNotMatch}"><spring:message code="${passNotMatch}"/><br></c:if>
 
 
-        <label><fmt:message key="form.birthdate" bundle="${form}"/></label>
-        <input type="date" name="birthDate" value="${account.birthDate}">
-        <br>
+        <label><spring:message code="form.birthdate"/></label>
+        <form:input type="date" path="birthDate" value="${account.birthDate}"/> <br>
+        <form:errors path="birthDate" element="div"/>
 
-        <input type="text" name="icq" value="${account.icq}"
-               placeholder='<fmt:message key="form.icq" bundle="${form}"/>'>
-        <br>
+        <spring:message code="form.icq" var="formIcq"/>
+        <form:input type="text" path="icq" value="${account.icq}" placeholder="${formIcq}"/> <br>
 
-        <input type="text" name="skype" value="${account.skype}"
-               placeholder='<fmt:message key="form.skype" bundle="${form}"/>'>
-        <br>
+        <spring:message code="form.skype" var="formSkype"/>
+        <form:input type="text" path="skype" value="${account.skype}" placeholder="${formSkype}"/> <br>
 
-        <input type="text" name="country" value="${account.country}"
-               placeholder='<fmt:message key="form.country" bundle="${form}"/>' required>
-        <br>
 
-        <input type="text" name="city" value="${account.city}"
-               placeholder='<fmt:message key="form.city" bundle="${form}"/>' required>
-        <br>
+        <spring:message code="form.country" var="formCountry"/>
+        <form:input type="text" path="country" value="${account.country}"
+                    placeholder="${formCountry}" required="required"/> <br>
+        <form:errors path="country" element="div"/>
+
+        <spring:message code="form.city" var="formCity"/>
+        <form:input type="text" path="city" value="${account.city}" placeholder="${formCity}" required="required"/> <br>
+        <form:errors path="city" element="div"/>
 
         <common:phonesUpdate/>
 
         <c:if test="${not empty photo}">
             <img src="data:image/jpeg;base64, ${photo}">
             <br>
-            <fmt:message key="form.chooseAnother" bundle="${form}"/>
+            <spring:message code="form.chooseAnother"/>
             <br>
         </c:if>
         <input type="file" placeholder="asd" name="photo" accept="image/*"
-               title="<fmt:message key="form.uploadImage" bundle="${form}"/>">
+               title="<spring:message code="form.uploadImage"/>">
         <br>
 
-        <button><fmt:message key="button.register" bundle="${label}"/></button>
-    </form>
+        <button><spring:message code="button.save"/></button>
+    </form:form>
 </div>

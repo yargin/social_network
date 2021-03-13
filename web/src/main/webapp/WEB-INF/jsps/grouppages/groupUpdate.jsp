@@ -7,17 +7,15 @@
 
 <common:layout>
     <div class="info">
+        <%--@elvariable id="group" type="com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group"--%>
         <form:form action="${context}/group/update?id=${group.id}" method="post" enctype="multipart/form-data"
                    modelAttribute="group">
-            <form:label path="form.groupName"/>
-            <form:input path="name" value="${group.name}" required="required"/>
-            <br>
-            <form:errors path="name" element="div"/>
-            <br>
+            <label><spring:message code="form.groupName"/></label>
+            <form:input path="name" value="${group.name}" required="required"/> <br>
+            <form:errors path="name" element="div"/> <br>
 
-            <form:label path="form.descriptione"/>
-            <form:textarea path="description"/>
-            <br>
+            <label><spring:message code="form.description"/></label>
+            <form:textarea path="description"/> <br>
             <c:if test="${not empty photo}">
                 <img src="data:image/jpeg;base64, ${photo}">
                 <br>
@@ -25,10 +23,9 @@
                 <br>
             </c:if>
             <spring:message code="form.uploadImage" var="uploadImage"/>
-            <form:input type="file" path="photo" accept="image/*" title="${uploadImage}"/>
-            <br>
-            <button type="submit" name="save" value="save"><<spring:message code="button.save"/></button>
-            <button type="submit" name="save" value="cancel" formnovalidate><<spring:message
+            <form:input type="file" path="photo" accept="image/*" title="${uploadImage}"/> <br>
+            <button type="submit" name="save" value="save"><spring:message code="button.save"/></button>
+            <button type="submit" name="save" value="cancel" formnovalidate><spring:message
                     code="button.cancel"/></button>
         </form:form>
     </div>

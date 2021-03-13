@@ -7,9 +7,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.addit
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Past;
 import java.sql.Date;
 import java.util.Arrays;
 import java.util.Objects;
@@ -20,25 +17,18 @@ import static java.util.Objects.isNull;
 @Component("account")
 @Scope("prototype")
 public class Account extends AbstractEntity implements Entity {
-    @NotBlank
     private String name;
-    @NotBlank
     private String surname;
     private String patronymic;
     private Sex sex;
-    @Past
     private Date birthDate;
     private Date registrationDate;
-    @Email
     private String email;
-    @Email
     private String additionalEmail;
     private Role role;
     private String icq;
     private String skype;
-    @NotBlank
     private String city;
-    @NotBlank
     private String country;
     private byte[] photo;
 

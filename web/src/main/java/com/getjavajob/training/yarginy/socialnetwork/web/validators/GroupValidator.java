@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import static java.util.Objects.isNull;
+
 @Component
 public class GroupValidator implements Validator {
     @Override
@@ -16,11 +18,11 @@ public class GroupValidator implements Validator {
     public void validate(Object target, Errors errors) {
         Group group = (Group) target;
 
-        String name = group.getName().trim();
-        if (name.isEmpty()) {
+        String name = group.getName();
+        if (isNull(name) || name.trim().isEmpty()) {
             errors.rejectValue("name", "error.wrongString", "NOT APPLICABLE");
         } else {
-            group.setName(name);
+            group.setName(name.trim());
         }
     }
 }

@@ -15,7 +15,7 @@
 
 <br><label><fmt:message key="form.privatePhones" bundle="${form}"/></label><br>
 <div id="privatePhonesList">
-    <c:forEach var="privatePhone" items="${privatePhones}">
+    <c:forEach var="privatePhone" items="${sessionScope.privatePhones}">
         <c:if test="${not empty privatePhone.error}">
             <c:set var="privatePhoneError">
                 <fmt:message key="${privatePhone.error}" bundle="${error}"/>
@@ -35,7 +35,7 @@
 
 <br><label><fmt:message key="form.workPhones" bundle="${form}"/></label><br>
 <div id="workPhonesList">
-    <c:forEach var="workPhone" items="${workPhones}">
+    <c:forEach var="workPhone" items="${sessionScope.workPhones}">
         <c:if test="${not empty workPhone.error}">
             <c:set var="workPhoneError">
                 <fmt:message key="${workPhone.error}" bundle="${error}"/>
