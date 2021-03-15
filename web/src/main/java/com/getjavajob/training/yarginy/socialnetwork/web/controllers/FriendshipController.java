@@ -3,7 +3,7 @@ package com.getjavajob.training.yarginy.socialnetwork.web.controllers;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.AccountInfoHelper;
-import com.getjavajob.training.yarginy.socialnetwork.web.helpers.RedirectHelper;
+import com.getjavajob.training.yarginy.socialnetwork.web.helpers.Redirector;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,14 +24,14 @@ import static java.util.Objects.isNull;
 public class FriendshipController {
     private final AccountService accountService;
     private final AccountInfoHelper infoHelper;
-    private final RedirectHelper redirectHelper;
+    private final Redirector redirector;
 
     @Autowired
     public FriendshipController(AccountService accountService, AccountInfoHelper infoHelper,
-                                RedirectHelper redirectHelper) {
+                                Redirector redirector) {
         this.accountService = accountService;
         this.infoHelper = infoHelper;
-        this.redirectHelper = redirectHelper;
+        this.redirector = redirector;
     }
 
     @PostMapping("/accept")
@@ -52,7 +52,7 @@ public class FriendshipController {
         ModelAndView modelAndView = new ModelAndView(FRIENDSHIP_REQUEST_VIEW);
 
         if (isNull(requesterId) || !isNull(friend) || !Objects.equals(userId, requesterId)) {
-            return new ModelAndView(redirectHelper.redirectBackView(req));
+            return new ModelAndView(redirector.redirectBackView(req));
         }
 
         try {

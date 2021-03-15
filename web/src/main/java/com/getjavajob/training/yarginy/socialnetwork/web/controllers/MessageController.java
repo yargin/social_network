@@ -2,7 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.web.controllers;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
-import com.getjavajob.training.yarginy.socialnetwork.web.helpers.RedirectHelper;
+import com.getjavajob.training.yarginy.socialnetwork.web.helpers.Redirector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -18,17 +18,17 @@ public class MessageController {
     private final MessageService accountWallMessageService;
     private final MessageService groupWallMessageService;
     private final MessageService accountPrivateMessageService;
-    private final RedirectHelper redirectHelper;
+    private final Redirector redirector;
 
     @Autowired
     public MessageController(@Qualifier("accountWallMessageService") MessageService accountWallMessageService,
                              @Qualifier("groupWallMessageService") MessageService groupWallMessageService,
                              @Qualifier("dialogMessageService") MessageService accountPrivateMessageService,
-                             RedirectHelper redirectHelper) {
+                             Redirector redirector) {
         this.accountWallMessageService = accountWallMessageService;
         this.groupWallMessageService = groupWallMessageService;
         this.accountPrivateMessageService = accountPrivateMessageService;
-        this.redirectHelper = redirectHelper;
+        this.redirector = redirector;
     }
 
     @PostMapping("/add")
@@ -41,7 +41,7 @@ public class MessageController {
         } else if ("groupWall".equals(type)) {
             groupWallMessageService.addMessage(message);
         }
-        return redirectHelper.redirectBackView(req);
+        return redirector.redirectBackView(req);
     }
 
     @PostMapping("/delete")
@@ -54,7 +54,7 @@ public class MessageController {
         } else if ("groupWall".equals(type)) {
             groupWallMessageService.deleteMessage(message);
         }
-        return redirectHelper.redirectBackView(req);
+        return redirector.redirectBackView(req);
     }
 
     @InitBinder("message")

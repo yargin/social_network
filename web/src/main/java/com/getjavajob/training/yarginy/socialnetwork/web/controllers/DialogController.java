@@ -5,7 +5,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.service.DialogService;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
-import com.getjavajob.training.yarginy.socialnetwork.web.helpers.RedirectHelper;
+import com.getjavajob.training.yarginy.socialnetwork.web.helpers.Redirector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -29,13 +29,13 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Vie
 public class DialogController {
     private final DialogService dialogService;
     private final MessageService messageService;
-    private final RedirectHelper redirectHelper;
+    private final Redirector redirector;
 
     @Autowired
-    public DialogController(DialogService dialogService, RedirectHelper redirectHelper,
+    public DialogController(DialogService dialogService, Redirector redirector,
                             @Qualifier("dialogMessageService") MessageService messageService) {
         this.dialogService = dialogService;
-        this.redirectHelper = redirectHelper;
+        this.redirector = redirector;
         this.messageService = messageService;
     }
 
@@ -63,7 +63,7 @@ public class DialogController {
     public ModelAndView showDialog(HttpServletRequest req, @RequestParam long id) {
         Dialog dialog = dialogService.get(id);
         if (Objects.equals(dialog, dialogService.getNullDialog())) {
-            return new ModelAndView(redirectHelper.redirectBackView(req));
+            return new ModelAndView(redirector.redirectBackView(req));
         }
         ModelAndView modelAndView = new ModelAndView(DIALOG_VIEW);
         modelAndView.addObject(dialog);

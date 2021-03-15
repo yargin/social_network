@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.interceptors.common;
 
-import com.getjavajob.training.yarginy.socialnetwork.web.helpers.RedirectHelper;
+import com.getjavajob.training.yarginy.socialnetwork.web.helpers.Redirector;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 import org.springframework.stereotype.Component;
@@ -14,10 +14,10 @@ import static java.util.Objects.isNull;
 
 @Component
 public class AuthChecker extends HandlerInterceptorAdapter {
-    private final RedirectHelper redirectHelper;
+    private final Redirector redirector;
 
-    public AuthChecker(RedirectHelper redirectHelper) {
-        this.redirectHelper = redirectHelper;
+    public AuthChecker(Redirector redirector) {
+        this.redirector = redirector;
     }
 
     @Override
@@ -25,13 +25,13 @@ public class AuthChecker extends HandlerInterceptorAdapter {
         HttpSession session = request.getSession(true);
         Object userIdObject = session.getAttribute(Attributes.USER_ID);
         if (isNull(userIdObject)) {
-            redirectHelper.redirect(request, response, Pages.LOGIN);
+            redirector.redirect(request, response, Pages.LOGIN);
             return false;
         }
         long userId = (long) userIdObject;
 
         if (userId < 1) {
-            redirectHelper.redirect(request, response, Pages.LOGIN);
+            redirector.redirect(request, response, Pages.LOGIN);
             return false;
         }
         return true;

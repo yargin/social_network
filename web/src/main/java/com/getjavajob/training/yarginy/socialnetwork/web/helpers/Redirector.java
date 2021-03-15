@@ -10,7 +10,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pag
 import static java.util.Objects.isNull;
 
 @Component
-public class RedirectHelper {
+public class Redirector {
     private static final String REFERER = "Referer";
 
     public void redirect(HttpServletRequest req, HttpServletResponse resp, String page) throws IOException {

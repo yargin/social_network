@@ -3,7 +3,7 @@ package com.getjavajob.training.yarginy.socialnetwork.web.controllers;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.service.AuthService;
-import com.getjavajob.training.yarginy.socialnetwork.web.helpers.RedirectHelper;
+import com.getjavajob.training.yarginy.socialnetwork.web.helpers.Redirector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -27,12 +27,12 @@ public class AuthController {
     private static final String EMAIL = "email";
     private static final String PASSWORD = "password";
     private final AuthService authService;
-    private final RedirectHelper redirectHelper;
+    private final Redirector redirector;
 
     @Autowired
-    public AuthController(AuthService authService, RedirectHelper redirectHelper) {
+    public AuthController(AuthService authService, Redirector redirector) {
         this.authService = authService;
-        this.redirectHelper = redirectHelper;
+        this.redirector = redirector;
     }
 
     @RequestMapping("/")
@@ -46,7 +46,7 @@ public class AuthController {
         try {
             Account account = authService.login(email, password);
             assignSessionParameters(req, account);
-            return redirectHelper.redirectBackView(req);
+            return redirector.redirectBackView(req);
         } catch (Exception e) {
             return LOGIN_VIEW;
         }
@@ -95,7 +95,7 @@ public class AuthController {
         }
 
         assignSessionParameters(req, account);
-        return new ModelAndView(redirectHelper.redirectBackView(req));
+        return new ModelAndView(redirector.redirectBackView(req));
     }
 
     @GetMapping("/logout")

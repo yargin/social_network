@@ -3,7 +3,7 @@ package com.getjavajob.training.yarginy.socialnetwork.web.interceptors.message;
 import com.getjavajob.training.yarginy.socialnetwork.service.DialogService;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.AccountInfoHelper;
-import com.getjavajob.training.yarginy.socialnetwork.web.helpers.RedirectHelper;
+import com.getjavajob.training.yarginy.socialnetwork.web.helpers.Redirector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -18,15 +18,15 @@ public class MessageAccessChecker extends HandlerInterceptorAdapter {
     private final GroupService groupService;
     private final DialogService dialogService;
     private final AccountInfoHelper infoHelper;
-    private final RedirectHelper redirectHelper;
+    private final Redirector redirector;
 
     @Autowired
     public MessageAccessChecker(GroupService groupService, DialogService dialogService, AccountInfoHelper infoHelper,
-                                RedirectHelper redirectHelper) {
+                                Redirector redirector) {
         this.groupService = groupService;
         this.dialogService = dialogService;
         this.infoHelper = infoHelper;
-        this.redirectHelper = redirectHelper;
+        this.redirector = redirector;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class MessageAccessChecker extends HandlerInterceptorAdapter {
                     isOwner(currentUserId, receiverId);
         }
         if (!hasAccess) {
-            redirectHelper.redirectToReferer(req, resp);
+            redirector.redirectToReferer(req, resp);
         }
         return hasAccess;
     }

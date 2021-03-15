@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.interceptors.common;
 
-import com.getjavajob.training.yarginy.socialnetwork.web.helpers.RedirectHelper;
+import com.getjavajob.training.yarginy.socialnetwork.web.helpers.Redirector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -12,11 +12,11 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 
 @Component
 public class OneIdInterceptor extends HandlerInterceptorAdapter {
-    private final RedirectHelper redirectHelper;
+    private final Redirector redirector;
 
     @Autowired
-    public OneIdInterceptor(RedirectHelper redirectHelper) {
-        this.redirectHelper = redirectHelper;
+    public OneIdInterceptor(Redirector redirector) {
+        this.redirector = redirector;
     }
 
     @Override
@@ -26,11 +26,11 @@ public class OneIdInterceptor extends HandlerInterceptorAdapter {
         try {
             requestedId = Long.parseLong(stringRequestedId);
         } catch (NumberFormatException e) {
-            redirectHelper.redirectToReferer(req, resp);
+            redirector.redirectToReferer(req, resp);
             return false;
         }
         if (requestedId < 1) {
-            redirectHelper.redirectToReferer(req, resp);
+            redirector.redirectToReferer(req, resp);
             return false;
         }
         req.setAttribute(REQUESTED_ID, requestedId);
