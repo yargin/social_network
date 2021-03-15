@@ -23,8 +23,8 @@ public class GroupMembersDao implements ManyToManyDao<Account, Group> {
     private static final String TABLE = "groups_members";
     private static final String ACCOUNT_ID = "account_id";
     private static final String GROUP_ID = "group_id";
-    private final JdbcTemplate template;
-    private final SimpleJdbcInsert insertTemplate;
+    private final transient JdbcTemplate template;
+    private final transient SimpleJdbcInsert insertTemplate;
     private final GroupDao groupDao;
     private final AccountDao accountDao;
 

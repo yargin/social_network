@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
+import static com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType.PRIVATE;
 import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper.*;
 import static java.util.Objects.isNull;
 
@@ -20,13 +21,13 @@ public class Phone extends AbstractEntity implements Entity {
     private Account owner;
 
     public Phone() {
-        setType(PhoneType.PRIVATE);
+        type = PRIVATE;
     }
 
     public Phone(String number, Account owner) {
         this.number = phoneMandatory(number);
         this.owner = objectMandatory(owner);
-        setType(PhoneType.PRIVATE);
+        setType(PRIVATE);
     }
 
     public String getNumber() {

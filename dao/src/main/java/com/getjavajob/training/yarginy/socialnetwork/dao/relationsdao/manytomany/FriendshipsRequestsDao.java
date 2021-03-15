@@ -20,8 +20,8 @@ public class FriendshipsRequestsDao implements ManyToManyDao<Account, Account> {
     private static final String TABLE = "friendships_requests";
     private static final String REQUESTER_ID = "requester";
     private static final String RECEIVER_ID = "receiver";
-    private final JdbcTemplate template;
-    private final SimpleJdbcInsert insertTemplate;
+    private final transient JdbcTemplate template;
+    private final transient SimpleJdbcInsert insertTemplate;
     private final AccountDao accountDao;
 
     @Autowired

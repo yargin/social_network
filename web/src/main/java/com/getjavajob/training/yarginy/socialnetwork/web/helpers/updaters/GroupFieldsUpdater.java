@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.GROUP_WALL;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.REDIRECT;
 import static java.util.Objects.isNull;
 
 public class GroupFieldsUpdater {
@@ -39,9 +40,9 @@ public class GroupFieldsUpdater {
             session.removeAttribute(GROUP);
             session.removeAttribute(PHOTO);
             if (!isNull(group) && group.getId() > 0) {
-                return new ModelAndView("redirect:" + GROUP_WALL + '?' + REQUESTED_ID + '=' + group.getId());
+                return new ModelAndView(REDIRECT + GROUP_WALL + '?' + REQUESTED_ID + '=' + group.getId());
             } else {
-                return new ModelAndView("redirect:" + Pages.GROUPS);
+                return new ModelAndView(REDIRECT + Pages.GROUPS);
             }
         }
         return getModelAndView(group);

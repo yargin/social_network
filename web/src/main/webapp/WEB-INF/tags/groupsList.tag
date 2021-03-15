@@ -11,7 +11,6 @@
             <form action="${context}/group/leave" method="post">
                 <input type="hidden" name="requesterId" value="${id}">
                 <input type="hidden" name="receiverId" value="${group.id}">
-<%--                <button type="submit"><fmt:message key="button.leaveGroup"/></button>--%>
             </form>
         </c:if>
         <br>

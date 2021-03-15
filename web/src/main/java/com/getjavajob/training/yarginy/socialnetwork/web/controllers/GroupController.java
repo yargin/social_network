@@ -15,14 +15,13 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.Collection;
 import java.util.Map;
 
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.TAB;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.*;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.GROUP_VIEW;
 
 @Controller
 @RequestMapping("/group")
 public class GroupController {
-    private static final String REDIRECT = "redirect:";
     private final GroupService groupService;
     private final DataHandler dataHandler;
     private final MessageService messageService;
@@ -68,22 +67,22 @@ public class GroupController {
     }
 
     @PostMapping("/join")
-    public String joinGroup(@RequestAttribute("requesterId") long accountId,
-                            @RequestAttribute("receiverId") long groupId) {
+    public String joinGroup(@RequestAttribute(REQUESTER_ID) long accountId,
+                            @RequestAttribute(RECEIVER_ID) long groupId) {
         groupService.sendGroupRequest(accountId, groupId);
         return REDIRECT + GROUP_WALL;
     }
 
     @PostMapping("/leave")
-    public String leaveGroup(@RequestAttribute("requesterId") long accountId,
-                             @RequestAttribute("receiverId") long groupId) {
+    public String leaveGroup(@RequestAttribute(REQUESTER_ID) long accountId,
+                             @RequestAttribute(RECEIVER_ID) long groupId) {
         groupService.leaveGroup(accountId, groupId);
         return REDIRECT + GROUP_WALL;
     }
 
     @PostMapping("/accept")
-    public String acceptInGroup(@RequestAttribute("requesterId") long accountId,
-                                @RequestAttribute("receiverId") long groupId,
+    public String acceptInGroup(@RequestAttribute(REQUESTER_ID) long accountId,
+                                @RequestAttribute(RECEIVER_ID) long groupId,
                                 @RequestParam(required = false) String accept) {
         if ("true".equals(accept)) {
             groupService.acceptRequest(accountId, groupId);
@@ -94,15 +93,15 @@ public class GroupController {
     }
 
     @PostMapping("/moderators/add")
-    public String addModerator(@RequestAttribute("requesterId") long accountId,
-                               @RequestAttribute("receiverId") long groupId) {
+    public String addModerator(@RequestAttribute(REQUESTER_ID) long accountId,
+                               @RequestAttribute(RECEIVER_ID) long groupId) {
         groupService.addModerator(accountId, groupId);
         return REDIRECT + GROUP_MEMBERS;
     }
 
     @PostMapping("/moderators/remove")
-    public String removeModerator(@RequestAttribute("requesterId") long accountId,
-                                  @RequestAttribute("receiverId") long groupId) {
+    public String removeModerator(@RequestAttribute(REQUESTER_ID) long accountId,
+                                  @RequestAttribute(RECEIVER_ID) long groupId) {
         groupService.removeModerator(accountId, groupId);
         return REDIRECT + GROUP_MODERATORS;
     }
@@ -119,7 +118,7 @@ public class GroupController {
 
     private void addInfoAndPhoto(ModelAndView modelAndView, long id) {
         Group group = groupService.get(id);
-        modelAndView.addObject("photo", dataHandler.getHtmlPhoto(group.getPhoto()));
+        modelAndView.addObject(PHOTO, dataHandler.getHtmlPhoto(group.getPhoto()));
         modelAndView.addObject("group", group);
     }
 }

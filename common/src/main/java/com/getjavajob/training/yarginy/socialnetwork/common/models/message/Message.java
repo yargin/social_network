@@ -19,9 +19,6 @@ public class Message implements Entity {
     private Timestamp date;
     private long receiverId;
 
-    public Message() {
-    }
-
     @Override
     public long getId() {
         return id;

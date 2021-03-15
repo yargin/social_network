@@ -16,7 +16,7 @@ public class AccountPhonesDao implements OneToManyDao<Phone> {
     private static final String ACC_ALIAS = "acc";
     private final PhoneDao phoneDao;
     private final AccountDao accountDao;
-    private final JdbcTemplate template;
+    private final transient JdbcTemplate template;
 
     @Autowired
     public AccountPhonesDao(JdbcTemplate template, PhoneDao phoneDao, AccountDao accountDao) {

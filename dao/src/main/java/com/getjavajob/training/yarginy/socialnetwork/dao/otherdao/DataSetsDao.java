@@ -22,7 +22,7 @@ import static java.util.Objects.isNull;
 @Component("dataSetsDao")
 public class DataSetsDao implements Serializable {
     private static final int ACCOUNTS_GROUPS_PARAMETERS_NUMBER = 3;
-    private final JdbcTemplate template;
+    private final transient JdbcTemplate template;
     private final AccountDao accountDao;
     private final GroupDao groupDao;
 

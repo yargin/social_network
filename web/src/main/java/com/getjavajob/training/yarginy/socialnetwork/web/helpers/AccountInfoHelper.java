@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.PHOTO;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER;
 import static java.util.Objects.isNull;
 
@@ -32,7 +33,7 @@ public class AccountInfoHelper {
 
         Account account = accountInfoKeeper.getAccount();
         modelAndView.addObject("user", account);
-        modelAndView.addObject("photo", new DataHandler().getHtmlPhoto(account.getPhoto()));
+        modelAndView.addObject(PHOTO, new DataHandler().getHtmlPhoto(account.getPhoto()));
 
         Collection<Phone> phones = accountInfoKeeper.getPhones();
         Collection<Phone> privatePhones = phones.stream().filter(phone -> phone.getType() == PhoneType.PRIVATE).

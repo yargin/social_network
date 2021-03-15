@@ -18,7 +18,7 @@ public class AccountDialogs implements OneToManyDao<Dialog> {
     private static final String DIALOG_ALIAS = "d";
     private final AccountDao accountDao;
     private final DialogDao dialogDao;
-    private final JdbcTemplate template;
+    private final transient JdbcTemplate template;
 
     @Autowired
     public AccountDialogs(JdbcTemplate template, AccountDao accountDao, DialogDao dialogDao) {

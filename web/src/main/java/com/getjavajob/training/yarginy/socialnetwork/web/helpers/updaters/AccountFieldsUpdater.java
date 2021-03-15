@@ -68,7 +68,7 @@ public final class AccountFieldsUpdater {
         return modelAndView;
     }
 
-    private ArrayList<PhoneView> createPhoneViews(Collection<Phone> phones, PhoneType type) {
+    private Collection<PhoneView> createPhoneViews(Collection<Phone> phones, PhoneType type) {
         return phones.stream().filter(phone -> type.equals(phone.getType())).
                 map(phone -> new PhoneView(phone.getNumber(), "")).collect(Collectors.toCollection(ArrayList::new));
     }
@@ -101,7 +101,7 @@ public final class AccountFieldsUpdater {
         Password enteredPassword;
         if (Objects.equals(password, confirmPassword) && !password.isEmpty()) {
             enteredPassword = new Password();
-            enteredPassword.setPassword(password);
+            enteredPassword.setStringPassword(password);
             enteredPassword.setAccount(account);
         } else {
             modelAndView.addObject("passNotMatch", "error.passwordNotMatch");
@@ -130,7 +130,7 @@ public final class AccountFieldsUpdater {
             session.removeAttribute(WORK_PHONES_ATTR);
             session.removeAttribute(PHOTO);
             long id = accountInfoKeeper.getAccount().getId();
-            return new ModelAndView("redirect:" + ACCOUNT_WALL + '?' + REQUESTED_ID + '=' + id);
+            return new ModelAndView(REDIRECT + ACCOUNT_WALL + '?' + REQUESTED_ID + '=' + id);
         }
         return getModelAndView(accountInfoKeeper);
     }

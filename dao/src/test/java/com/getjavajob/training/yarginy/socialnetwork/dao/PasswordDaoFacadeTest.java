@@ -32,7 +32,7 @@ public class PasswordDaoFacadeTest {
         accountDaoFacade.delete(accountDaoFacade.select(ACCOUNT));
         assert accountDaoFacade.create(ACCOUNT);
         PASSWORD.setAccount(ACCOUNT);
-        PASSWORD.setPassword("qwe123rty");
+        PASSWORD.setStringPassword("qwe123rty");
     }
 
     @After
@@ -56,10 +56,10 @@ public class PasswordDaoFacadeTest {
     public void testUpdate() {
         accountDaoFacade.create(ACCOUNT);
         passwordDaoFacade.create(PASSWORD);
-        PASSWORD.setPassword("updatedPassword1");
+        PASSWORD.setStringPassword("updatedPassword1");
         //mistake because select by both
         assertTrue(passwordDaoFacade.update(PASSWORD, passwordDaoFacade.select(PASSWORD)));
-        PASSWORD.setPassword("qwe123rty");
+        PASSWORD.setStringPassword("qwe123rty");
     }
 
     @Test
@@ -80,7 +80,7 @@ public class PasswordDaoFacadeTest {
     public void testSelectNonExisting() {
         Password nonExistingPassword = new Password();
         nonExistingPassword.setAccount(new Account("Petr", "nonexisting@email.com"));
-        nonExistingPassword.setPassword("nonExisting1");
+        nonExistingPassword.setStringPassword("nonExisting1");
         assertEquals(passwordDaoFacade.getNullPassword(), passwordDaoFacade.select(nonExistingPassword));
     }
 }

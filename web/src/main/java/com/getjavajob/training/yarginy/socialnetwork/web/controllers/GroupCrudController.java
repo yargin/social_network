@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.GROUP;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.PHOTO;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.REDIRECT;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.GROUP_CREATE_VIEW;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.GROUP_UPDATE_VIEW;
 import static java.util.Objects.isNull;
@@ -26,7 +27,6 @@ import static java.util.Objects.isNull;
 @Controller
 @RequestMapping("/group")
 public class GroupCrudController {
-    private static final String REDIRECT = "redirect:";
     private final GroupService groupService;
     private final GroupValidator groupValidator;
 
@@ -141,6 +141,5 @@ public class GroupCrudController {
     @InitBinder("group")
     public void registerCustomEditors(WebDataBinder binder) {
         binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
-//        binder.setConversionService();
     }
 }

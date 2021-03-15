@@ -46,9 +46,6 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    //todo add pagination to all lists selections
-    //todo add page entity in service layer
-    //todo look at spring data
     public Collection<Group> getAccountGroups(long accountId) {
         return membersDao.selectAccountGroups(accountId);
     }

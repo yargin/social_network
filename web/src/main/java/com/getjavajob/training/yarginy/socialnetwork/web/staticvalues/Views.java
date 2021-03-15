@@ -10,4 +10,8 @@ public final class Views {
     public static final String GROUP_CREATE_VIEW = "grouppages/groupCreate";
     public static final String REGISTRATION_VIEW = "registration";
     public static final String ACCOUNT_UPDATE_VIEW = "accountUpdate";
+    public static final String LOGIN_VIEW = "login";
+
+    private Views() {
+    }
 }

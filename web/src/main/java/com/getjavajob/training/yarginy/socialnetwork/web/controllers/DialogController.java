@@ -5,6 +5,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.service.DialogService;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
+import com.getjavajob.training.yarginy.socialnetwork.web.helpers.RedirectHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -17,10 +18,10 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Objects;
 
-import static com.getjavajob.training.yarginy.socialnetwork.web.helpers.RedirectHelper.redirectBackView;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTED_ID;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.TAB;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.DIALOG;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.REDIRECT;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.DIALOG_VIEW;
 
 @Controller
@@ -28,10 +29,13 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Vie
 public class DialogController {
     private final DialogService dialogService;
     private final MessageService messageService;
+    private final RedirectHelper redirectHelper;
 
     @Autowired
-    public DialogController(DialogService dialogService, @Qualifier("dialogMessageService") MessageService messageService) {
+    public DialogController(DialogService dialogService, RedirectHelper redirectHelper,
+                            @Qualifier("dialogMessageService") MessageService messageService) {
         this.dialogService = dialogService;
+        this.redirectHelper = redirectHelper;
         this.messageService = messageService;
     }
 
@@ -51,15 +55,15 @@ public class DialogController {
             }
         }
         dialogService.create(dialog, message);
-        dialog = dialogService.getByTalkers(author.getId(), receiver.getId());
-        return "redirect:" + "/dialog/show?" + REQUESTED_ID + '=' + dialog.getId();
+        long createdId = dialogService.getByTalkers(author.getId(), receiver.getId()).getId();
+        return REDIRECT + "/dialog/show?" + REQUESTED_ID + '=' + createdId;
     }
 
     @GetMapping("/show")
     public ModelAndView showDialog(HttpServletRequest req, @RequestParam long id) {
         Dialog dialog = dialogService.get(id);
         if (Objects.equals(dialog, dialogService.getNullDialog())) {
-            return new ModelAndView(redirectBackView(req));
+            return new ModelAndView(redirectHelper.redirectBackView(req));
         }
         ModelAndView modelAndView = new ModelAndView(DIALOG_VIEW);
         modelAndView.addObject(dialog);
@@ -74,7 +78,7 @@ public class DialogController {
     public ModelAndView newDialog(@RequestAttribute long receiverId, @RequestAttribute long requesterId) {
         Dialog dialog = dialogService.getByTalkers(receiverId, requesterId);
         if (!Objects.equals(dialog, dialogService.getNullDialog())) {
-            return new ModelAndView("redirect:" + DIALOG + "?id=" + dialog.getId());
+            return new ModelAndView(REDIRECT + DIALOG + "?id=" + dialog.getId());
         } else {
             ModelAndView modelAndView = new ModelAndView("accountpages/newDialog");
             modelAndView.addObject(REQUESTED_ID, receiverId);

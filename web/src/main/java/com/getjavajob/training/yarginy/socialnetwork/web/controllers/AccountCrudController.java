@@ -29,6 +29,7 @@ import java.util.Collection;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.ACCOUNT_INFO;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.PHOTO;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.LOGOUT;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.REDIRECT;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.ACCOUNT_UPDATE_VIEW;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.REGISTRATION_VIEW;
 import static java.util.Objects.isNull;
@@ -172,7 +173,7 @@ public class AccountCrudController {
     @GetMapping("/account/delete")
     public String delete(@ModelAttribute Account accountToDelete) {
         if (accountService.deleteAccount(accountToDelete)) {
-            return "redirect:" + LOGOUT;
+            return REDIRECT + LOGOUT;
         }
         return "error";
     }

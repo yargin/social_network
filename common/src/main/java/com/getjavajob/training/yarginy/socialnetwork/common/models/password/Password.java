@@ -11,7 +11,7 @@ import java.util.Objects;
 @Scope("prototype")
 public class Password implements Entity {
     private Account account;
-    private String password;
+    private String stringPassword;
 
     public Account getAccount() {
         return account;
@@ -21,12 +21,12 @@ public class Password implements Entity {
         this.account = account;
     }
 
-    public String getPassword() {
-        return password;
+    public String getStringPassword() {
+        return stringPassword;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setStringPassword(String stringPassword) {
+        this.stringPassword = stringPassword;
     }
 
     @Override
@@ -48,11 +48,11 @@ public class Password implements Entity {
             return false;
         }
         Password password1 = (Password) o;
-        return Objects.equals(account, password1.account) && Objects.equals(password, password1.password);
+        return Objects.equals(account, password1.account) && Objects.equals(stringPassword, password1.stringPassword);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(account, password);
+        return Objects.hash(account, stringPassword);
     }
 }

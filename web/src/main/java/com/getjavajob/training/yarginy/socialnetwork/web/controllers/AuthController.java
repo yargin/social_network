@@ -3,6 +3,7 @@ package com.getjavajob.training.yarginy.socialnetwork.web.controllers;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.service.AuthService;
+import com.getjavajob.training.yarginy.socialnetwork.web.helpers.RedirectHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +16,9 @@ import javax.servlet.http.HttpSession;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData.WRONG_EMAIL;
 import static com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData.WRONG_PASSWORD;
-import static com.getjavajob.training.yarginy.socialnetwork.web.helpers.RedirectHelper.redirectBackView;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.*;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.LOGIN_VIEW;
 import static java.util.Objects.isNull;
 
 @Controller
@@ -24,28 +26,29 @@ public class AuthController {
     private static final String ERROR = "logerror";
     private static final String EMAIL = "email";
     private static final String PASSWORD = "password";
-    private static final String LOGIN = "login";
     private final AuthService authService;
+    private final RedirectHelper redirectHelper;
 
     @Autowired
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, RedirectHelper redirectHelper) {
         this.authService = authService;
+        this.redirectHelper = redirectHelper;
     }
 
     @RequestMapping("/")
     public String welcomeRedirect() {
-        return "redirect:/account/wall";
+        return REDIRECT + ACCOUNT_WALL;
     }
 
-    @GetMapping("/login")
+    @GetMapping(LOGIN)
     public String showLogin(HttpServletRequest req, @CookieValue(required = false) String email,
                             @CookieValue(required = false) String password) {
         try {
             Account account = authService.login(email, password);
             assignSessionParameters(req, account);
-            return redirectBackView(req);
+            return redirectHelper.redirectBackView(req);
         } catch (Exception e) {
-            return LOGIN;
+            return LOGIN_VIEW;
         }
     }
 
@@ -54,11 +57,11 @@ public class AuthController {
         req.getSession().setAttribute(USER_ID, account.getId());
     }
 
-    @PostMapping("/login")
+    @PostMapping(LOGIN)
     public ModelAndView login(@RequestParam String email, @RequestParam String password, HttpServletRequest req,
                               @RequestParam(required = false) String rememberMe, HttpServletResponse resp) {
         Account account;
-        ModelAndView modelAndView = new ModelAndView(LOGIN);
+        ModelAndView modelAndView = new ModelAndView(LOGIN_VIEW);
         try {
             account = authService.login(email, password);
         } catch (IncorrectDataException e) {
@@ -92,7 +95,7 @@ public class AuthController {
         }
 
         assignSessionParameters(req, account);
-        return new ModelAndView(redirectBackView(req));
+        return new ModelAndView(redirectHelper.redirectBackView(req));
     }
 
     @GetMapping("/logout")
@@ -110,6 +113,6 @@ public class AuthController {
                 }
             }
         }
-        return "redirect:/login";
+        return REDIRECT + LOGIN;
     }
 }

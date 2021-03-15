@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.SEARCH_VIEW;
 
 @Controller
@@ -23,8 +21,7 @@ public class SearchController {
     }
 
     @GetMapping("/search")
-    public ModelAndView getSearchResults(@RequestParam(required = false) String searchString, HttpServletRequest req,
-                                         @RequestParam int page) {
+    public ModelAndView getSearchResults(@RequestParam(required = false) String searchString, @RequestParam int page) {
         ModelAndView modelAndView = new ModelAndView(SEARCH_VIEW);
         SearchableDto found = dataSetsService.searchAccountsGroups(searchString, page, LIMIT);
         modelAndView.addObject("found", found.getSearchAbles());

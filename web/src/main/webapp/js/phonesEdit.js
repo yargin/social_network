@@ -151,8 +151,8 @@ function addBlurListener(input, value) {
 
 //add phone to array & to page
 function addPhone(value, error, type) {
-    var listId = '';
-    var divId = '';
+    var listId;
+    var divId;
     if (type !== 'work') {
         privatePhones.push(value);
         listId = 'privatePhonesList';

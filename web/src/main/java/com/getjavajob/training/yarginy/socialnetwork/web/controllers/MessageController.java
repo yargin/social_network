@@ -2,6 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.web.controllers;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
+import com.getjavajob.training.yarginy.socialnetwork.web.helpers.RedirectHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -11,22 +12,23 @@ import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static com.getjavajob.training.yarginy.socialnetwork.web.helpers.RedirectHelper.redirectBackView;
-
 @Controller
 @RequestMapping("/message")
 public class MessageController {
     private final MessageService accountWallMessageService;
     private final MessageService groupWallMessageService;
     private final MessageService accountPrivateMessageService;
+    private final RedirectHelper redirectHelper;
 
     @Autowired
     public MessageController(@Qualifier("accountWallMessageService") MessageService accountWallMessageService,
                              @Qualifier("groupWallMessageService") MessageService groupWallMessageService,
-                             @Qualifier("dialogMessageService") MessageService accountPrivateMessageService) {
+                             @Qualifier("dialogMessageService") MessageService accountPrivateMessageService,
+                             RedirectHelper redirectHelper) {
         this.accountWallMessageService = accountWallMessageService;
         this.groupWallMessageService = groupWallMessageService;
         this.accountPrivateMessageService = accountPrivateMessageService;
+        this.redirectHelper = redirectHelper;
     }
 
     @PostMapping("/add")
@@ -39,7 +41,7 @@ public class MessageController {
         } else if ("groupWall".equals(type)) {
             groupWallMessageService.addMessage(message);
         }
-        return redirectBackView(req);
+        return redirectHelper.redirectBackView(req);
     }
 
     @PostMapping("/delete")
@@ -52,7 +54,7 @@ public class MessageController {
         } else if ("groupWall".equals(type)) {
             groupWallMessageService.deleteMessage(message);
         }
-        return redirectBackView(req);
+        return redirectHelper.redirectBackView(req);
     }
 
     @InitBinder("message")

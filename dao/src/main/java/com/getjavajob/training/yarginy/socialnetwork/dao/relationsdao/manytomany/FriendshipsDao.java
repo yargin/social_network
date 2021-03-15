@@ -23,8 +23,8 @@ public class FriendshipsDao implements SelfManyToManyDao<Account> {
     private static final String TABLE = "friendships";
     private static final String FIRST_ACC_ID = "first_account";
     private static final String SECOND_ACC_ID = "second_account";
-    private final JdbcTemplate template;
-    private final SimpleJdbcInsert insertTemplate;
+    private final transient JdbcTemplate template;
+    private final transient SimpleJdbcInsert insertTemplate;
     private final AccountDao accountDao;
 
     @Autowired

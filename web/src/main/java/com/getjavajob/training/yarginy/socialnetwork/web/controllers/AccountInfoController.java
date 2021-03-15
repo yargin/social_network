@@ -42,8 +42,8 @@ public class AccountInfoController {
     }
 
     @GetMapping("/wall")
-    public ModelAndView showWall(@RequestParam(value = "id", required = false) Long requestedId,
-                                 @SessionAttribute("userId") long sessionId) {
+    public ModelAndView showWall(@RequestParam(value = REQUESTED_ID, required = false) Long requestedId,
+                                 @SessionAttribute(USER_ID) long sessionId) {
         long id = requestedId == null ? sessionId : requestedId;
         ModelAndView modelAndView = new ModelAndView(ACCOUNT_WALL_VIEW);
         infoHelper.setAccountInfo(modelAndView, id);
@@ -56,8 +56,8 @@ public class AccountInfoController {
     }
 
     @GetMapping("/requests")
-    public ModelAndView getFriendshipRequests(@RequestParam(value = "id", required = false) Long requestedId,
-                                              @SessionAttribute("userId") long sessionId) {
+    public ModelAndView getFriendshipRequests(@RequestParam(value = REQUESTED_ID, required = false) Long requestedId,
+                                              @SessionAttribute(USER_ID) long sessionId) {
         long id = requestedId == null ? sessionId : requestedId;
         ModelAndView modelAndView = new ModelAndView("accountpages/friendshipRequestsList");
 
@@ -71,8 +71,8 @@ public class AccountInfoController {
     }
 
     @GetMapping("/friends")
-    public ModelAndView getFriends(@RequestParam(value = "id", required = false) Long requestedId,
-                                   @SessionAttribute("userId") long sessionId) {
+    public ModelAndView getFriends(@RequestParam(value = REQUESTED_ID, required = false) Long requestedId,
+                                   @SessionAttribute(USER_ID) long sessionId) {
         long id = requestedId == null ? sessionId : requestedId;
         ModelAndView modelAndView = new ModelAndView("accountpages/friendsList");
 
@@ -84,8 +84,8 @@ public class AccountInfoController {
     }
 
     @GetMapping("/dialogs")
-    public ModelAndView getDialogs(@RequestParam(value = "id", required = false) Long requestedId,
-                                   @SessionAttribute("userId") long sessionId) {
+    public ModelAndView getDialogs(@RequestParam(value = REQUESTED_ID, required = false) Long requestedId,
+                                   @SessionAttribute(USER_ID) long sessionId) {
         long id = requestedId == null ? sessionId : requestedId;
         ModelAndView modelAndView = new ModelAndView("accountpages/dialogs");
         Collection<Dialog> dialogs = accountService.getDialogs(id);
@@ -96,9 +96,9 @@ public class AccountInfoController {
     }
 
     @GetMapping("/groups")
-    public ModelAndView getGroups(@RequestParam(value = "id", required = false) Long requestedId,
+    public ModelAndView getGroups(@RequestParam(value = REQUESTED_ID, required = false) Long requestedId,
                                   @RequestParam(value = "allgroups", required = false) String listAll,
-                                  @SessionAttribute("userId") long sessionId) {
+                                  @SessionAttribute(USER_ID) long sessionId) {
         long id = requestedId == null ? sessionId : requestedId;
         ModelAndView modelAndView = new ModelAndView("accountpages/accountGroups");
         if ("true".equals(listAll)) {

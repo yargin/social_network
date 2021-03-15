@@ -18,6 +18,7 @@ public final class Pages extends HttpServlet {
     public static final String GROUP_MODERATORS = "/group/moderators";
     public static final String DIALOGS = "/account/dialogs";
     public static final String DIALOG = "/dialog/show";
+    public static final String REDIRECT = "redirect:";
 
     private Pages() {
     }

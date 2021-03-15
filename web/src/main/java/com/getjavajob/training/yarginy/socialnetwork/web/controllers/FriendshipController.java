@@ -3,6 +3,7 @@ package com.getjavajob.training.yarginy.socialnetwork.web.controllers;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.AccountInfoHelper;
+import com.getjavajob.training.yarginy.socialnetwork.web.helpers.RedirectHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,11 +13,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 
-import static com.getjavajob.training.yarginy.socialnetwork.web.helpers.RedirectHelper.redirectBackView;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTED_ID;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.TAB;
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.FRIENDS;
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.FRIENDSHIP_REQUESTS;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.*;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.FRIENDSHIP_REQUEST_VIEW;
 import static java.util.Objects.isNull;
 
@@ -25,11 +24,14 @@ import static java.util.Objects.isNull;
 public class FriendshipController {
     private final AccountService accountService;
     private final AccountInfoHelper infoHelper;
+    private final RedirectHelper redirectHelper;
 
     @Autowired
-    public FriendshipController(AccountService accountService, AccountInfoHelper infoHelper) {
+    public FriendshipController(AccountService accountService, AccountInfoHelper infoHelper,
+                                RedirectHelper redirectHelper) {
         this.accountService = accountService;
         this.infoHelper = infoHelper;
+        this.redirectHelper = redirectHelper;
     }
 
     @PostMapping("/accept")
@@ -40,7 +42,7 @@ public class FriendshipController {
         } else {
             accountService.deleteFriendshipRequest(requesterId, receiverId);
         }
-        return "redirect:" + FRIENDSHIP_REQUESTS + "?id=" + receiverId;
+        return REDIRECT + FRIENDSHIP_REQUESTS + "?id=" + receiverId;
     }
 
     @GetMapping("/add")
@@ -50,7 +52,7 @@ public class FriendshipController {
         ModelAndView modelAndView = new ModelAndView(FRIENDSHIP_REQUEST_VIEW);
 
         if (isNull(requesterId) || !isNull(friend) || !Objects.equals(userId, requesterId)) {
-            return new ModelAndView(redirectBackView(req));
+            return new ModelAndView(redirectHelper.redirectBackView(req));
         }
 
         try {
@@ -68,6 +70,6 @@ public class FriendshipController {
     @PostMapping("/remove")
     public String removeFromFriends(@RequestAttribute Long requesterId, @RequestAttribute Long receiverId) {
         accountService.removeFriend(requesterId, receiverId);
-        return "redirect:" + FRIENDS + "?id=" + receiverId;
+        return REDIRECT + FRIENDS + "?id=" + receiverId;
     }
 }

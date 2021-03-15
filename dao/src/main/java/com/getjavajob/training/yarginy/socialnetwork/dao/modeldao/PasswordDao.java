@@ -58,7 +58,7 @@ public class PasswordDao extends AbstractDao<Password> {
     protected MapSqlParameterSource createEntityFieldsMap(Password password) {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue(EMAIL, password.getAccount().getEmail(), Types.VARCHAR);
-        parameters.addValue(PASSWORD, password.getPassword(), Types.VARCHAR);
+        parameters.addValue(PASSWORD, password.getStringPassword(), Types.VARCHAR);
         return parameters;
     }
 
@@ -67,7 +67,7 @@ public class PasswordDao extends AbstractDao<Password> {
         UpdateValuesPlacer valuesPlacer = new UpdateValuesPlacer(TABLE);
         valuesPlacer.addFieldIfDiffers(password::getAccount, storedPassword::getAccount, EMAIL, Types.VARCHAR,
                 Account::getEmail);
-        valuesPlacer.addFieldIfDiffers(password::getPassword, storedPassword::getPassword, PASSWORD, Types.VARCHAR);
+        valuesPlacer.addFieldIfDiffers(password::getStringPassword, storedPassword::getStringPassword, PASSWORD, Types.VARCHAR);
 
         valuesPlacer.addKey(password::getAccount, EMAIL, Types.VARCHAR, Account::getEmail);
         return valuesPlacer;
@@ -88,7 +88,7 @@ public class PasswordDao extends AbstractDao<Password> {
         return (resultSet, i) -> {
             Password password = new Password();
             password.setAccount(accountDao.getSuffixedViewRowMapper(ACCOUNT_ALIAS).mapRow(resultSet, i));
-            password.setPassword(resultSet.getString(PASSWORD + PASSWORD_ALIAS));
+            password.setStringPassword(resultSet.getString(PASSWORD + PASSWORD_ALIAS));
             return password;
         };
     }

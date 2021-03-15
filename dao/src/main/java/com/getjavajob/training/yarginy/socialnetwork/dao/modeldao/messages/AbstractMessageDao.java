@@ -82,7 +82,7 @@ public abstract class AbstractMessageDao extends AbstractDao<Message> {
 
     public RowMapper<Message> getSuffixedViewRowMapper(String messageSuffix, String authorSuffix) {
         return (resultSet, i) -> {
-            Account author = (Account) accountDao.getSuffixedViewRowMapper(authorSuffix).mapRow(resultSet, i);
+            Account author = accountDao.getSuffixedViewRowMapper(authorSuffix).mapRow(resultSet, i);
             Message message = new Message();
             message.setAuthor(author);
             message.setId(resultSet.getLong(ID + messageSuffix));

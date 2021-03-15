@@ -13,7 +13,7 @@ import java.util.Collection;
 public class AccountGroupsDao implements OneToManyDao<Group> {
     private static final String GROUP_ALIAS = "g";
     private final GroupDao groupDao;
-    private final JdbcTemplate template;
+    private final transient JdbcTemplate template;
 
     @Autowired
     public AccountGroupsDao(JdbcTemplate template, GroupDao groupDao) {

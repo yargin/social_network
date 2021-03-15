@@ -45,7 +45,7 @@ public class AuthServiceTest {
         Phone secondPhone = new Phone("1231211", account);
         Collection<Phone> phones = asList(firstPhone, secondPhone);
         Password password = new Password();
-        password.setPassword("123qwe123");
+        password.setStringPassword("123qwe123");
         password.setAccount(account);
         when(accountDaoFacade.create(account)).thenReturn(true);
         when(accountDaoFacade.select(account)).thenReturn(account);

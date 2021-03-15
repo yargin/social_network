@@ -37,7 +37,7 @@ public abstract class NullEntitiesFactory {
 
     public static Password getNullPassword() {
         Password nullPassword = new Password();
-        nullPassword.setPassword("nullPassword0");
+        nullPassword.setStringPassword("nullPassword0");
         nullPassword.setAccount(getNullAccount());
         return nullPassword;
     }

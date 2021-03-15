@@ -2,9 +2,10 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 
+import java.io.Serializable;
 import java.util.Collection;
 
-public interface MessageDao {
+public interface MessageDao extends Serializable {
     Message select(long id);
 
     Message select(Message message);

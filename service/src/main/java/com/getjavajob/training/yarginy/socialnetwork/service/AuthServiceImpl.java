@@ -53,7 +53,7 @@ public class AuthServiceImpl implements AuthService {
         if (!phoneDaoFacade.create(phones)) {
             throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
         }
-        password.setPassword(dataHandler.encrypt(password.getPassword()));
+        password.setStringPassword(dataHandler.encrypt(password.getStringPassword()));
         if (!passwordDaoFacade.create(password)) {
             throw new IllegalStateException();
         }
@@ -66,12 +66,12 @@ public class AuthServiceImpl implements AuthService {
         Account account = new Account();
         account.setEmail(email);
         passwordObject.setAccount(account);
-        passwordObject.setPassword(password);
+        passwordObject.setStringPassword(password);
         passwordObject = passwordDaoFacade.select(passwordObject);
         if (passwordObject.equals(getNullPassword())) {
             throw new IncorrectDataException(IncorrectData.WRONG_EMAIL);
         }
-        if (!passwordObject.getPassword().equals(dataHandler.encrypt(password))) {
+        if (!passwordObject.getStringPassword().equals(dataHandler.encrypt(password))) {
             throw new IncorrectDataException(IncorrectData.WRONG_PASSWORD);
         }
         return accountDaoFacade.select(account);
