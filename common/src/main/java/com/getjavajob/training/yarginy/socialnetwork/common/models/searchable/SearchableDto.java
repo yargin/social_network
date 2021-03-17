@@ -4,16 +4,20 @@ import java.util.Collection;
 
 public class SearchableDto {
     private final Collection<Searchable> searchAbles;
-    private int pages;
+    private int[] pages;
 
     public SearchableDto(Collection<Searchable> searchAbles) {
         this.searchAbles = searchAbles;
     }
 
     public void setPages(int rows, int limit) {
-        pages = rows / limit;
+        int allPagesNumber = rows / limit;
         if (rows % limit != 0) {
-            pages++;
+            allPagesNumber++;
+        }
+        pages = new int[allPagesNumber];
+        for (int i = 0; i < allPagesNumber; i++) {
+            pages[i] = i + 1;
         }
     }
 
@@ -21,7 +25,7 @@ public class SearchableDto {
         return searchAbles;
     }
 
-    public int getPages() {
+    public int[] getPages() {
         return pages;
     }
 }

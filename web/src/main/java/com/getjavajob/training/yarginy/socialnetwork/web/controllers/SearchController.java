@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.SEARCH_VIEW;
@@ -21,18 +22,22 @@ public class SearchController {
     }
 
     @GetMapping("/search")
-    public ModelAndView getSearchResults(@RequestParam(required = false) String searchString, @RequestParam int page) {
+    public ModelAndView getSearchResults(@RequestParam(required = false) String searchString) {
         ModelAndView modelAndView = new ModelAndView(SEARCH_VIEW);
-        SearchableDto found = dataSetsService.searchAccountsGroups(searchString, page, LIMIT);
-        modelAndView.addObject("found", found.getSearchAbles());
-        int allPagesNumber = found.getPages();
-        int[] allPages = new int[allPagesNumber];
-        for (int i = 0; i < allPagesNumber; i++) {
-            allPages[i] = i + 1;
-        }
-        modelAndView.addObject("allPages", allPages);
-        modelAndView.addObject("page", page);
-        modelAndView.addObject("searchString", searchString);
+        modelAndView.addObject("searchString", searchString == null ? "" : searchString);
+//        SearchableDto found = dataSetsService.searchAccountsGroups(searchString, page, LIMIT);
+//        modelAndView.addObject("found", found.getSearchAbles());
+//        modelAndView.addObject("allPages", found.getPages());
+//
+//        modelAndView.addObject("page", page);
+//        modelAndView.addObject("searchString", searchString);
+//        return modelAndView;
         return modelAndView;
+    }
+
+    @GetMapping("/find")
+    @ResponseBody
+    public SearchableDto getResult(@RequestParam(required = false) String string, @RequestParam int page) {
+        return dataSetsService.searchAccountsGroups(string, page, LIMIT);
     }
 }

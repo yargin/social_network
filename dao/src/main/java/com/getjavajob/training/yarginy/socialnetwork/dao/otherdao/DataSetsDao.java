@@ -12,12 +12,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.util.Objects.isNull;
+import static java.util.Arrays.fill;
 
 @Component("dataSetsDao")
 public class DataSetsDao implements Serializable {
@@ -78,7 +77,7 @@ public class DataSetsDao implements Serializable {
     public SearchableDto searchAccountsGroups(String searchString, int pageNumber, int limit) {
         String query = searchAccountsAndGroupsQuery(pageNumber, limit);
         String[] searchParameters = new String[ACCOUNTS_GROUPS_PARAMETERS_NUMBER];
-        Arrays.fill(searchParameters, '%' + searchString + '%');
+        fill(searchParameters, '%' + searchString + '%');
         Collection<Searchable> entities = template.query(query, (resultSet, i) -> {
             Searchable searchable = new Searchable();
             searchable.setId(resultSet.getLong("id"));
@@ -93,8 +92,7 @@ public class DataSetsDao implements Serializable {
         SearchableDto searchableDto = new SearchableDto(entities);
         Integer rowsNumber = template.queryForObject(accountsAndGroupsRowCountQuery(), (resultSet, i) ->
                 resultSet.getInt("rows_number"), (Object[]) searchParameters);
-        assert !isNull(rowsNumber);
-        searchableDto.setPages(rowsNumber, limit);
+        searchableDto.setPages(rowsNumber == null ? 0 : rowsNumber, limit);
         return searchableDto;
     }
 

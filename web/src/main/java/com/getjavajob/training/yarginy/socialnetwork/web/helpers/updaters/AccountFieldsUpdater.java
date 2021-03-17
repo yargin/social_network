@@ -24,6 +24,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.common.models.phone.
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType.WORK;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.ACCOUNT_WALL;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.REDIRECT;
 import static java.util.Objects.isNull;
 
 public final class AccountFieldsUpdater {
