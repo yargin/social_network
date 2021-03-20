@@ -27,23 +27,29 @@ public class AccountValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         Account account = (Account) target;
-        checkNullOrEmptyString(account::getName, account::setName, errors, "name");
-        checkNullOrEmptyString(account::getSurname, account::setSurname, errors, "surname");
-        checkNullOrEmptyString(account::getEmail, account::setEmail, errors, "email");
-        checkNullOrEmptyString(account::getAdditionalEmail, account::setAdditionalEmail, errors, "additionalEmail");
-        checkNullOrEmptyString(account::getCountry, account::setCountry, errors, "country");
-        checkNullOrEmptyString(account::getCity, account::setCity, errors, "city");
-        checkEmail(account.getEmail(), "email", errors);
-        checkEmail(account.getAdditionalEmail(), "additionalEmail", errors);
+        checkNullString(account::getName, account::setName, errors, "account.name");
+        checkNullString(account::getSurname, account::setSurname, errors, "account.surname");
+        checkNullString(account::getEmail, account::setEmail, errors, "account.email");
+        String additionalEmailPath = "account.additionalEmail";
+        checkNullString(account::getAdditionalEmail, account::setAdditionalEmail, errors, additionalEmailPath);
+        checkNullString(account::getCountry, account::setCountry, errors, "account.country");
+        checkNullString(account::getCity, account::setCity, errors, "account.city");
+        String email = account.getEmail();
+        checkEmail(email, "account.email", errors);
+        String additionalEmail = account.getAdditionalEmail();
+        checkEmail(additionalEmail, additionalEmailPath, errors);
+        if (!isNull(email) && email.equals(additionalEmail)) {
+            errors.rejectValue(additionalEmailPath, "error.sameAdditionalEmail");
+        }
         checkBirthDate(account.getBirthDate(), errors);
     }
 
-    private void checkNullOrEmptyString(Supplier<String> getter, Consumer<String> setter, Errors errors, String field) {
+    private void checkNullString(Supplier<String> getter, Consumer<String> setter, Errors errors, String field) {
         String value = getter.get();
-        if (isNull(value) || value.trim().isEmpty()) {
+        if (isNull(value)) {
             errors.rejectValue(field, "error.wrongString");
         } else {
-            setter.accept(value.trim());
+            setter.accept(value);
         }
     }
 
@@ -62,9 +68,9 @@ public class AccountValidator implements Validator {
             LocalDate minDate = now().minusYears(MIN_AGE);
             LocalDate maxDate = now().minusYears(MAX_AGE);
             if (localDate.isAfter(minDate)) {
-                errors.rejectValue("birthDate", "error.tooYoung");
+                errors.rejectValue("account.birthDate", "error.tooYoung");
             } else if (localDate.isBefore(maxDate)) {
-                errors.rejectValue("birthDate", "error.tooOld");
+                errors.rejectValue("account.birthDate", "error.tooOld");
             }
         }
     }

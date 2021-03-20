@@ -10,55 +10,55 @@
 
 <div class="info">
     <spring:message code="label.saveUpdates" var="confirmText"/>
-    <%--@elvariable id="account" type="com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account"--%>
+    <%--@elvariable id="registrationMvcModel" type="com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers.AccountInfoMvcModel"--%>
     <form:form action="${context}/account/update?id=${id}" method="post" enctype="multipart/form-data"
                onsubmit='return confirmation("${confirmText}", acceptPhones())'
-               id="accountUpdate" modelAttribute="account">
+               id="accountUpdate" modelAttribute="registrationMvcModel">
 
+        <%--@elvariable id="account" type="com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account"--%>
         <label><spring:message code="form.name"/></label>
-        <form:input type="text" path="name" value="${account.name}" required="required"/> <br>
-        <form:errors path="name" element="div"/>
+        <form:input type="text" path="account.name" value="${account.name}" required="required"/> <br>
+        <form:errors path="account.name" element="div"/>
 
         <label><spring:message code="form.surname"/></label>
-        <form:input type="text" path="surname" value="${account.surname}" required="required"/> <br>
-        <form:errors path="surname" element="div"/>
+        <form:input type="text" path="account.surname" value="${account.surname}" required="required"/> <br>
+        <form:errors path="account.surname" element="div"/>
 
         <label><spring:message code="form.patronymic"/></label>
-        <form:input type="text" path="patronymic" value="${account.patronymic}"/> <br>
+        <form:input type="text" path="account.patronymic" value="${account.patronymic}"/> <br>
 
-        <label for="sex"><spring:message code="form.sex"/></label>
-        <select name="sex" id="sex" required>
-            <option value="${male}" <c:if test="${Sex.MALE eq account.sex}">selected</c:if>>
-                <spring:message code="form.male"/></option>
-            <option value="${female}" <c:if test="${Sex.FEMALE eq account.sex}">selected</c:if>>
-                <spring:message code="form.female"/></option>
-        </select>
-        <br>
+        <label><spring:message code="form.sex"/></label>
+        <form:select path="account.sex">
+            <spring:message code="form.male" var="male"/>
+            <form:option value="${Sex.MALE}" label="${male}"/>
+            <spring:message code="form.female" var="female"/>
+            <form:option value="${Sex.FEMALE}" label="${female}"/>
+        </form:select><br>
 
         <label><spring:message code="form.additionalEmail"/></label>
-        <form:input type="email" path="additionalEmail" value="${account.additionalEmail}"/> <br>
-        <form:errors path="additionalEmail" element="div"/>
+        <form:input type="email" path="account.additionalEmail" value="${account.additionalEmail}"/> <br>
+        <form:errors path="account.additionalEmail" element="div"/>
         <c:if test="${not empty emailDuplicate}"><spring:message code="${emailDuplicate}"/><br></c:if>
 
         <label><spring:message code="form.birthdate"/></label>
-        <form:input type="date" path="birthDate" value="${account.birthDate}"/> <br>
-        <form:errors path="birthDate" element="div"/>
+        <form:input type="date" path="account.birthDate" value="${account.birthDate}"/> <br>
+        <form:errors path="account.birthDate" element="div"/>
 
         <label><spring:message code="form.icq"/></label>
-        <form:input type="text" path="icq" value="${account.icq}"/> <br>
-        <form:errors path="icq" element="div"/>
+        <form:input type="text" path="account.icq" value="${account.icq}"/> <br>
+        <form:errors path="account.icq" element="div"/>
 
         <label><spring:message code="form.skype"/></label>
-        <form:input type="text" path="skype" value="${account.skype}"/> <br>
-        <form:errors path="skype" element="div"/>
+        <form:input type="text" path="account.skype" value="${account.skype}"/> <br>
+        <form:errors path="account.skype" element="div"/>
 
         <label><spring:message code="form.country"/></label>
-        <form:input type="text" path="country" value="${account.country}" required="required"/> <br>
-        <form:errors path="country" element="div"/>
+        <form:input type="text" path="account.country" value="${account.country}" required="required"/> <br>
+        <form:errors path="account.country" element="div"/>
 
         <label><spring:message code="form.city"/></label>
-        <form:input type="text" path="city" value="${account.city}" required="required"/> <br>
-        <form:errors path="city" element="div"/>
+        <form:input type="text" path="account.city" value="${account.city}" required="required"/> <br>
+        <form:errors path="account.city" element="div"/>
 
         <common:phonesUpdate/>
 
@@ -69,7 +69,7 @@
             <br>
         </c:if>
         <spring:message code="form.uploadImage" var="uploadImage"/>
-        <form:input type="file" path="photo" accept="image/*" title="${uploadImage}"/> <br>
+        <form:input type="file" path="account.photo" accept="image/*" title="${uploadImage}"/> <br>
 
         <button type="submit" name="save" value="save"><spring:message code="button.save"/></button>
         <button type="submit" name="save" value="cancel" onclick="skipConfirmation()" formnovalidate>

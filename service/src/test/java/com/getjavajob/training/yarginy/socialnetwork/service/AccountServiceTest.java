@@ -34,6 +34,7 @@ public class AccountServiceTest {
     private Account account;
     private Account storedAccount;
     private Collection<Phone> phones;
+    private Collection<Phone> storedPhones;
 
     @Before
     public void init() {
@@ -77,9 +78,15 @@ public class AccountServiceTest {
     @Test
     public void testUpdateAccount() {
         when(accountDaoFacade.update(account, storedAccount)).thenReturn(true);
-        assertTrue(accountService.updateAccount(account, storedAccount));
+        when(phoneDaoFacade.update(phones, storedPhones)).thenReturn(true);
+        assertTrue(accountService.updateAccount(account, storedAccount, phones, storedPhones));
+    }
+
+    @Test(expected = IncorrectDataException.class)
+    public void testUpdateAccountFail() {
         when(accountDaoFacade.update(account, storedAccount)).thenReturn(false);
-        assertFalse(accountService.updateAccount(account, storedAccount));
+        when(phoneDaoFacade.update(phones, storedPhones)).thenReturn(true);
+        accountService.updateAccount(account, storedAccount, phones, storedPhones);
     }
 
     @Test

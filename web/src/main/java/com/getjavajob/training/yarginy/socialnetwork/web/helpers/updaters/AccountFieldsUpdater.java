@@ -3,23 +3,19 @@ package com.getjavajob.training.yarginy.socialnetwork.web.helpers.updaters;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
-import com.getjavajob.training.yarginy.socialnetwork.service.infokeepers.AccountInfoKeeper;
+import com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers.AccountInfoMvcModel;
 import com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers.PhoneView;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory.getNullPassword;
-import static com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex.FEMALE;
-import static com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex.MALE;
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType.PRIVATE;
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType.WORK;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
@@ -28,13 +24,10 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pag
 import static java.util.Objects.isNull;
 
 public final class AccountFieldsUpdater {
-    private static final String PRIVATE_PHONES_ATTR = "privatePhones";
-    private static final String WORK_PHONES_ATTR = "workPhones";
     private final DataHandler dataHandler = new DataHandler();
     private final HttpSession session;
     private final String updateFailView;
     private final ModelAndView modelAndView;
-    private boolean paramsAccepted = true;
 
     public AccountFieldsUpdater(HttpSession session, String updateFailView) {
         this.session = session;
@@ -42,118 +35,67 @@ public final class AccountFieldsUpdater {
         modelAndView = new ModelAndView();
     }
 
-    public ModelAndView getModelAndView(AccountInfoKeeper accountInfo) {
-        modelAndView.addObject("male", MALE.toString());
-        modelAndView.addObject("female", FEMALE.toString());
-
-        Account account = accountInfo.getAccount();
-        byte[] photoBytes = account.getPhoto();
-        if (!isNull(photoBytes)) {
-            String photo = dataHandler.getHtmlPhoto(photoBytes);
-            modelAndView.addObject(PHOTO, photo);
+    public ModelAndView getModelAndView(AccountInfoMvcModel accountInfoMvcModel) {
+        Account account = accountInfoMvcModel.getAccount();
+        if (!isNull(account)) {
+            byte[] photoBytes = account.getPhoto();
+            if (!isNull(photoBytes)) {
+                String photo = dataHandler.getHtmlPhoto(photoBytes);
+                modelAndView.addObject(PHOTO, photo);
+            }
         }
-        modelAndView.addObject("account", account);
+        modelAndView.addObject("registrationMvcModel", accountInfoMvcModel);
+        modelAndView.addObject("privatePhones", accountInfoMvcModel.getPrivatePhones());
+        modelAndView.addObject("workPhones", accountInfoMvcModel.getWorkPhones());
 
-        Collection<Phone> phones = accountInfo.getPhones();
-
-        if (isNull(session.getAttribute(PRIVATE_PHONES_ATTR))) {
-            Collection<PhoneView> privatePhones = createPhoneViews(phones, PRIVATE);
-            session.setAttribute(PRIVATE_PHONES_ATTR, privatePhones);
-        }
-
-        if (isNull(session.getAttribute(WORK_PHONES_ATTR))) {
-            Collection<PhoneView> workPhones = createPhoneViews(phones, WORK);
-            session.setAttribute(WORK_PHONES_ATTR, workPhones);
-        }
         modelAndView.setViewName(updateFailView);
         return modelAndView;
     }
 
-    private Collection<PhoneView> createPhoneViews(Collection<Phone> phones, PhoneType type) {
-        return phones.stream().filter(phone -> type.equals(phone.getType())).
-                map(phone -> new PhoneView(phone.getNumber(), "")).collect(Collectors.toCollection(ArrayList::new));
+    public ModelAndView acceptActionOrRetry(boolean updated, AccountInfoMvcModel accountInfoMvcModel) {
+        if (updated && !isNull(accountInfoMvcModel.getAccount())) {
+            session.removeAttribute(PHOTO);
+            session.removeAttribute(ACCOUNT_INFO);
+            long id = accountInfoMvcModel.getAccount().getId();
+            return new ModelAndView(REDIRECT + ACCOUNT_WALL + '?' + REQUESTED_ID + '=' + id);
+        }
+        accountInfoMvcModel.setPassword(null);
+        accountInfoMvcModel.setConfirmPassword(null);
+        return getModelAndView(accountInfoMvcModel);
     }
 
-    private Collection<Phone> getPhonesFromParams(Collection<String> enteredPhones, String attribute,
-                                                  PhoneType type, AccountInfoKeeper accountInfo) {
-        Collection<PhoneView> phoneViews = (Collection<PhoneView>) session.getAttribute(attribute);
-        phoneViews.clear();
-        Collection<Phone> phones = new ArrayList<>();
-        Account account = accountInfo.getAccount();
-
-        if (!isNull(enteredPhones)) {
-            for (String enteredPhone : enteredPhones) {
-                PhoneView phoneView = new PhoneView(enteredPhone, "");
-                phoneViews.add(phoneView);
-                try {
-                    Phone phone = new Phone(enteredPhone, account);
-                    phone.setType(type);
-                    phones.add(phone);
-                } catch (IncorrectDataException e) {
-                    phoneView.setError(e.getType().getPropertyKey());
-                    paramsAccepted = false;
-                }
-            }
+    public ModelAndView handleInfoExceptions(IncorrectDataException e, AccountInfoMvcModel accountInfoMvcModel,
+                                             BindingResult result) {
+        if (e.getType() == IncorrectData.EMAIL_DUPLICATE) {
+            result.rejectValue("account.email", "error.accountDuplicate");
         }
+        if (e.getType() == IncorrectData.PHONE_DUPLICATE) {
+            result.rejectValue("privatePhones", "error.phoneDuplicate");
+            result.rejectValue("workPhones", "error.phoneDuplicate");
+        }
+        if (e.getType() == IncorrectData.UPLOADING_ERROR) {
+            result.rejectValue("account.photo", "error.failedToUpload");
+        }
+        return getModelAndView(accountInfoMvcModel);
+    }
+
+    public Collection<Phone> getPhonesFromModel(AccountInfoMvcModel accountInfoMvcModel) {
+        Account account = accountInfoMvcModel.getAccount();
+        Collection<Phone> phones = getPhonesFromModel(accountInfoMvcModel.getPrivatePhones(), PRIVATE, account);
+        phones.addAll(getPhonesFromModel(accountInfoMvcModel.getWorkPhones(), WORK, account));
         return phones;
     }
 
-    public Password getPassword(Account account, String password, String confirmPassword) {
-        Password enteredPassword;
-        if (Objects.equals(password, confirmPassword) && !password.isEmpty()) {
-            enteredPassword = new Password();
-            enteredPassword.setStringPassword(password);
-            enteredPassword.setAccount(account);
-        } else {
-            modelAndView.addObject("passNotMatch", "error.passwordNotMatch");
-            paramsAccepted = false;
-            enteredPassword = getNullPassword();
+    private Collection<Phone> getPhonesFromModel(Collection<PhoneView> phoneViews, PhoneType type, Account account) {
+        Collection<Phone> phones = new ArrayList<>();
+        if (!isNull(phoneViews)) {
+            phones.addAll(phoneViews.stream().
+                    map(e -> {
+                        Phone phone = new Phone(e.getNumber(), account);
+                        phone.setType(type);
+                        return phone;
+                    }).collect(Collectors.toList()));
         }
-        return enteredPassword;
-    }
-
-    public void getPhonesFromParams(AccountInfoKeeper accountInfoKeeper, Collection<String> enteredPrivatePhones,
-                                    Collection<String> enteredWorkPhones) {
-        Collection<Phone> privatePhones = getPhonesFromParams(enteredPrivatePhones, PRIVATE_PHONES_ATTR, PRIVATE,
-                accountInfoKeeper);
-        Collection<Phone> workPhones = getPhonesFromParams(enteredWorkPhones, WORK_PHONES_ATTR, WORK, accountInfoKeeper);
-
-        Collection<Phone> phones = accountInfoKeeper.getPhones();
-        phones.clear();
-        phones.addAll(privatePhones);
-        phones.addAll(workPhones);
-    }
-
-    public ModelAndView acceptActionOrRetry(boolean updated, AccountInfoKeeper accountInfoKeeper) {
-        if (updated && !isNull(accountInfoKeeper.getAccount())) {
-            session.removeAttribute(ACCOUNT_INFO);
-            session.removeAttribute(PRIVATE_PHONES_ATTR);
-            session.removeAttribute(WORK_PHONES_ATTR);
-            session.removeAttribute(PHOTO);
-            long id = accountInfoKeeper.getAccount().getId();
-            return new ModelAndView(REDIRECT + ACCOUNT_WALL + '?' + REQUESTED_ID + '=' + id);
-        }
-        return getModelAndView(accountInfoKeeper);
-    }
-
-    public ModelAndView handleInfoExceptions(IncorrectDataException e, AccountInfoKeeper accountInfoKeeper) {
-        if (e.getType() == IncorrectData.EMAIL_DUPLICATE) {
-            modelAndView.addObject(EMAIL_DUPLICATE, e.getType().getPropertyKey());
-        }
-        if (e.getType() == IncorrectData.PHONE_DUPLICATE) {
-            modelAndView.addObject(PHONE_DUPLICATE, e.getType().getPropertyKey());
-        }
-        if (e.getType() == IncorrectData.UPLOADING_ERROR) {
-            modelAndView.addObject(UPLOAD_ERROR, e.getType().getPropertyKey());
-        }
-        return getModelAndView(accountInfoKeeper);
-    }
-
-    public boolean isParamsAccepted() {
-        return paramsAccepted;
-    }
-
-    public void addAttribute(String name, Object value) {
-        modelAndView.addObject(name, value);
+        return phones;
     }
 }

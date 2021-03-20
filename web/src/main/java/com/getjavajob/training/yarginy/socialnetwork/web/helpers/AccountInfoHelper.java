@@ -3,10 +3,8 @@ package com.getjavajob.training.yarginy.socialnetwork.web.helpers;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
-import com.getjavajob.training.yarginy.socialnetwork.service.infokeepers.AccountInfoKeeper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
@@ -15,31 +13,33 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import static com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType.PRIVATE;
+import static com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType.WORK;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.PHOTO;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER;
 import static java.util.Objects.isNull;
 
 @Component
 public class AccountInfoHelper {
-    private AccountService accountService;
+    private final AccountService accountService;
+    private final DataHandler dataHandler;
 
     @Autowired
-    public void setAccountService(AccountService accountService) {
+    public AccountInfoHelper(AccountService accountService, DataHandler dataHandler) {
         this.accountService = accountService;
+        this.dataHandler = dataHandler;
     }
 
     public void setAccountInfo(ModelAndView modelAndView, long id) {
-        AccountInfoKeeper accountInfoKeeper = accountService.getAccountInfo(id);
-
-        Account account = accountInfoKeeper.getAccount();
+        Account account = accountService.get(id);
         modelAndView.addObject("user", account);
-        modelAndView.addObject(PHOTO, new DataHandler().getHtmlPhoto(account.getPhoto()));
+        modelAndView.addObject(PHOTO, dataHandler.getHtmlPhoto(account.getPhoto()));
 
-        Collection<Phone> phones = accountInfoKeeper.getPhones();
-        Collection<Phone> privatePhones = phones.stream().filter(phone -> phone.getType() == PhoneType.PRIVATE).
+        Collection<Phone> phones = accountService.getPhones(id);
+        Collection<Phone> privatePhones = phones.stream().filter(phone -> PRIVATE.equals(phone.getType())).
                 collect(Collectors.toList());
         modelAndView.addObject("privatePhones", privatePhones);
-        Collection<Phone> workPhones = phones.stream().filter(phone -> phone.getType() == PhoneType.WORK).
+        Collection<Phone> workPhones = phones.stream().filter(phone -> WORK.equals(phone.getType())).
                 collect(Collectors.toList());
         modelAndView.addObject("workPhones", workPhones);
     }

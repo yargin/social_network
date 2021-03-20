@@ -217,8 +217,6 @@ function deletePhone(valueToDelete) {
 }
 
 function acceptPhones() {
-    // alert('accept private phones ' + privatePhones);
-    // alert('accept work phones ' + workPhones);
     var checked = checkForErrorAddName(privatePhones, 'privatePhones');
     if (!checked) {
         return false;
@@ -234,8 +232,7 @@ function checkForErrorAddName(phones, type) {
             document.getElementById(phones[i]).focus();
             return false;
         }
-        document.getElementById(phones[i]).setAttribute('name', type);
-        // alert('in one phone check ' + document.getElementById(phones[i]).getAttribute('name'));
+        document.getElementById(phones[i]).setAttribute('name', type + '[' + i + '].number');
     }
     return true;
 }

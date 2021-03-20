@@ -10,7 +10,6 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacad
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
-import com.getjavajob.training.yarginy.socialnetwork.service.infokeepers.AccountInfoKeeper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,13 +31,6 @@ public class AccountServiceImpl implements AccountService {
         this.phoneDaoFacade = phoneDaoFacade;
         this.friendshipDao = friendshipDao;
         this.dialogsDao = dialogDaoFacade;
-    }
-
-    @Override
-    public AccountInfoKeeper getAccountInfo(long id) {
-        Account account = accountDaoFacade.select(id);
-        Collection<Phone> phones = phoneDaoFacade.selectPhonesByOwner(id);
-        return new AccountInfoKeeper(account, phones);
     }
 
     @Override
@@ -64,8 +56,15 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean updateAccount(Account account, Account storedAccount) {
-        return accountDaoFacade.update(account, storedAccount);
+    public boolean updateAccount(Account account, Account storedAccount, Collection<Phone> phones,
+                                 Collection<Phone> storedPhones) {
+        if (!accountDaoFacade.update(account, storedAccount)) {
+            throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
+        }
+        if (!phoneDaoFacade.update(phones, storedPhones)) {
+            throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
+        }
+        return true;
     }
 
     @Override
