@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <Context>
-    <Resource name="jdbc/local" auth="Container" type="javax.sql.DataSource"
-              factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
-              maxTotal="10" minIdle="2" maxWaitMillis="10000"
-              username="root" password="12131415a" driverClassName="com.mysql.cj.jdbc.Driver"
-              url="jdbc:mysql://localhost:3306/social_network?serverTimezone=UTC"/>
+    <!--    <Resource name="jdbc/local" auth="Container" type="javax.sql.DataSource"-->
+    <!--              factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"-->
+    <!--              maxTotal="10" minIdle="2" maxWaitMillis="10000"-->
+    <!--              username="root" password="12131415a" driverClassName="com.mysql.cj.jdbc.Driver"-->
+    <!--              url="jdbc:mysql://localhost:3306/social_network?serverTimezone=UTC"/>-->
 
-    <Resource name="jdbc/Heroku-Jaws" auth="Container" type="javax.sql.DataSource"
+    <Resource name="jdbc/Heroku-Jaws"
+              auth="Container"
+              type="javax.sql.DataSource"
               factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
-              maxTotal="6" minIdle="2" maxWaitMillis="10000"
-              username="ob3tdoreg91spqkc" password="tpkl0gslmimomhgg" driverClassName="com.mysql.cj.jdbc.Driver"
+              maxTotal="6"
+              minIdle="2"
+              maxWaitMillis="10000"
+              username="ob3tdoreg91spqkc" password="tpkl0gslmimomhgg"
+              driverClassName="com.mysql.cj.jdbc.Driver"
               url="jdbc:mysql://q2gen47hi68k1yrb.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/crmpcpc571dqa7ra"/>
 </Context>

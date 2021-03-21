@@ -25,13 +25,6 @@ public class SearchController {
     public ModelAndView getSearchResults(@RequestParam(required = false) String searchString) {
         ModelAndView modelAndView = new ModelAndView(SEARCH_VIEW);
         modelAndView.addObject("searchString", searchString == null ? "" : searchString);
-//        SearchableDto found = dataSetsService.searchAccountsGroups(searchString, page, LIMIT);
-//        modelAndView.addObject("found", found.getSearchAbles());
-//        modelAndView.addObject("allPages", found.getPages());
-//
-//        modelAndView.addObject("page", page);
-//        modelAndView.addObject("searchString", searchString);
-//        return modelAndView;
         return modelAndView;
     }
 

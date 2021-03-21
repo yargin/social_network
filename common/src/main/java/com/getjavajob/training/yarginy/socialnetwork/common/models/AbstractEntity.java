@@ -1,7 +1,5 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.models;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper.checkId;
-
 /**
  * defines {@link Entity} that can be saved in some storage, identified by unique(among it's type {@link Entity}) number
  * identifier
@@ -28,6 +26,6 @@ public class AbstractEntity {
      * <br>-1 - special value for null-{@link Entity}
      */
     public void setIdNumber(long id) {
-        this.id = checkId(id);
+        this.id = id;
     }
 }

@@ -11,7 +11,6 @@ import java.sql.Date;
 import java.util.Arrays;
 import java.util.Objects;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper.stringOptional;
 import static java.util.Objects.isNull;
 
 @Component("account")
@@ -179,7 +178,7 @@ public class Account extends AbstractEntity implements Entity {
         }
         if (o instanceof Account) {
             Account account = (Account) o;
-            return Objects.equals(stringOptional(email), stringOptional(account.getEmail()));
+            return Objects.equals(email, account.getEmail());
         }
         return false;
     }

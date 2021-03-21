@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <fmt:setBundle basename="label"/>
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
-<c:set var="id" value="${group.getId()}"/>
+<c:set var="id" value="${group.id}"/>
 
 
 <%--if not a member don't show buttons--%>

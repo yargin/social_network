@@ -3,15 +3,15 @@
 <fmt:setBundle basename="label" var="label"/>
 <fmt:setBundle basename="form" var="form"/>
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
-<c:set var="id" value="${group.getId()}"/>
-<c:set var="ownerObject" value="${group.getOwner()}"/>
+<c:set var="id" value="${group.id}"/>
+<c:set var="ownerObject" value="${group.owner}"/>
 
 <div class="info">
-    <fmt:message key="form.groupName" bundle="${form}"/> : ${group.getName()}<br>
-    <fmt:message key="form.description" bundle="${form}"/> : ${group.getDescription()}<br>
-    <fmt:message key="label.groupCreationDate" bundle="${label}"/> : ${group.getCreationDate()}<br>
+    <fmt:message key="form.groupName" bundle="${form}"/> : ${group.name}<br>
+    <fmt:message key="form.description" bundle="${form}"/> : ${group.description}<br>
+    <fmt:message key="label.groupCreationDate" bundle="${label}"/> : ${group.creationDate}<br>
     <fmt:message key="label.creator" bundle="${label}"/> :
-    <a href="${context}/account/wall?id=${ownerObject.getId()}">${ownerObject.getName()} ${ownerObject.getSurname()}</a>
+    <a href="${context}/account/wall?id=${ownerObject.id}">${ownerObject.name} ${ownerObject.surname}</a>
 </div>
 <div class="info">
     <c:choose>

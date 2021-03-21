@@ -8,7 +8,6 @@ import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.AccountInfoHelper;
-import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -33,6 +32,7 @@ public class AccountInfoController {
     private final MessageService messageService;
 
     @Autowired
+//    todo look if there this annotation need to be here
     public AccountInfoController(AccountInfoHelper infoHelper, AccountService accountService, GroupService groupService,
                                  @Qualifier("accountWallMessageService") MessageService messageService) {
         this.infoHelper = infoHelper;
@@ -89,7 +89,7 @@ public class AccountInfoController {
         long id = requestedId == null ? sessionId : requestedId;
         ModelAndView modelAndView = new ModelAndView("accountpages/dialogs");
         Collection<Dialog> dialogs = accountService.getDialogs(id);
-        modelAndView.addObject(Attributes.DIALOGS, dialogs);
+        modelAndView.addObject(DIALOGS, dialogs);
         infoHelper.setAccountInfo(modelAndView, id);
         modelAndView.addObject(TAB, "dialogs");
         return modelAndView;

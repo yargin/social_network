@@ -13,9 +13,9 @@ import static java.util.Objects.isNull;
 public class RequesterMemberModerOwnerChecker extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) throws Exception {
+        boolean isMemberRequester = !isNull(req.getAttribute("member")) && !isNull(req.getAttribute("requestOwner"));
         if (!isNull(req.getAttribute("admin")) || !isNull(req.getAttribute("moderator")) ||
-                !isNull(req.getAttribute("owner")) ||
-                (!isNull(req.getAttribute("member")) && !isNull(req.getAttribute("requestOwner")))) {
+                !isNull(req.getAttribute("owner")) || isMemberRequester) {
             return true;
         }
         res.sendRedirect(req.getContextPath() + Pages.ACCOUNT_WALL);

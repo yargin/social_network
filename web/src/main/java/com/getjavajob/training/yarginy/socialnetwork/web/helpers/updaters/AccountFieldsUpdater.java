@@ -44,7 +44,8 @@ public final class AccountFieldsUpdater {
                 modelAndView.addObject(PHOTO, photo);
             }
         }
-        modelAndView.addObject("registrationMvcModel", accountInfoMvcModel);
+
+        modelAndView.addObject("accountInfoMvcModel", accountInfoMvcModel);
         modelAndView.addObject("privatePhones", accountInfoMvcModel.getPrivatePhones());
         modelAndView.addObject("workPhones", accountInfoMvcModel.getWorkPhones());
 

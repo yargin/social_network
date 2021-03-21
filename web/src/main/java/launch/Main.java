@@ -25,7 +25,6 @@ public class Main {
 
         StandardContext ctx = (StandardContext) tomcat.addWebapp("/", new File(webappDirLocation).getAbsolutePath());
         System.out.println("configuring app with basedir: " + new File("./" + webappDirLocation).getAbsolutePath());
-
         //todo added
         tomcat.enableNaming();
         //todo trying

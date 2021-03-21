@@ -2,7 +2,6 @@ package com.getjavajob.training.yarginy.socialnetwork.web.controllers;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
@@ -10,10 +9,9 @@ import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
 import com.getjavajob.training.yarginy.socialnetwork.service.AuthService;
 import com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers.AccountInfoMvcModel;
 import com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers.PhoneView;
-import com.getjavajob.training.yarginy.socialnetwork.web.controllers.editors.RoleEditor;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.updaters.AccountFieldsUpdater;
-import com.getjavajob.training.yarginy.socialnetwork.web.validators.AccountInfoValidator;
-import com.getjavajob.training.yarginy.socialnetwork.web.validators.RegistrationValidator;
+import com.getjavajob.training.yarginy.socialnetwork.web.validators.composite.AccountInfoValidator;
+import com.getjavajob.training.yarginy.socialnetwork.web.validators.composite.RegistrationValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
@@ -144,8 +142,8 @@ public class AccountCrudController {
         return update(updater, model, storedModel, result);
     }
 
-    private ModelAndView update(AccountFieldsUpdater updater, AccountInfoMvcModel model,
-                                AccountInfoMvcModel storedModel, BindingResult result) {
+    private ModelAndView update(AccountFieldsUpdater updater, AccountInfoMvcModel model, AccountInfoMvcModel storedModel,
+                                BindingResult result) {
         boolean updated;
         try {
             Collection<Phone> phones = updater.getPhonesFromModel(model);
@@ -165,10 +163,10 @@ public class AccountCrudController {
         return "error";
     }
 
+    //    todo bean form
     @InitBinder
     public void registerPhotoEditor(WebDataBinder binder) {
         binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
-        binder.registerCustomEditor(Role.class, new RoleEditor());
         binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
     }
 }

@@ -2,12 +2,12 @@ package com.getjavajob.training.yarginy.socialnetwork.common.models.message;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
-import java.util.Arrays;
+
+import static java.util.Arrays.copyOf;
 
 @Component
 @Scope("prototype")
@@ -34,7 +34,7 @@ public class Message implements Entity {
     }
 
     public void setAuthor(Account author) {
-        this.author = DataCheckHelper.objectMandatory(author);
+        this.author = author;
     }
 
     public String getText() {
@@ -50,7 +50,7 @@ public class Message implements Entity {
     }
 
     public void setImage(byte[] image) {
-        this.image = Arrays.copyOf(image, image.length);
+        this.image = copyOf(image, image.length);
     }
 
     public Timestamp getDate() {

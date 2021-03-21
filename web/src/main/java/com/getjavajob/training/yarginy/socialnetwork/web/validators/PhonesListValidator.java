@@ -22,9 +22,9 @@ public class PhonesListValidator {
     private void checkPhone(PhoneView phoneView, Errors errors) {
         String phone = phoneView.getNumber();
         String space = "[\\s]?";
-        String regex = "[+]?" + space + "\\d{1,4}" + "([\\s-]?\\d+)+";
+        String regex = "[+]?" + space + "\\d{1,4}" + "([\\s-]?\\d+){0,6}";
         String regexWithBraces = "[+]?" + space + "\\d{1,4}" + space + "[(]" + space + "\\d+" + space + "[)]" + space +
-                "([\\s-]?\\d+)+";
+                "([\\s-]?\\d+){0,6}";
         Pattern pattern = Pattern.compile(regex);
         Pattern patternWithBraces = Pattern.compile(regexWithBraces);
         if (!pattern.matcher(phone).matches() && !patternWithBraces.matcher(phone).matches()) {

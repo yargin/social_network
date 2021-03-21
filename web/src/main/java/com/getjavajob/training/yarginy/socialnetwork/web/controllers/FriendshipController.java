@@ -4,7 +4,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.AccountInfoHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.Redirector;
-import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTED_ID;
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.TAB;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.*;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.FRIENDSHIP_REQUEST_VIEW;
 import static java.util.Objects.isNull;
@@ -27,8 +25,7 @@ public class FriendshipController {
     private final Redirector redirector;
 
     @Autowired
-    public FriendshipController(AccountService accountService, AccountInfoHelper infoHelper,
-                                Redirector redirector) {
+    public FriendshipController(AccountService accountService, AccountInfoHelper infoHelper, Redirector redirector) {
         this.accountService = accountService;
         this.infoHelper = infoHelper;
         this.redirector = redirector;
@@ -58,7 +55,7 @@ public class FriendshipController {
         try {
             modelAndView.addObject("created", accountService.createFriendshipRequest(requesterId, receiverId));
         } catch (IncorrectDataException e) {
-            modelAndView.addObject(Attributes.ERROR, e.getType().getPropertyKey());
+            modelAndView.addObject(ERROR, "error.wrongRequest");
         }
 
         infoHelper.setAccountInfo(modelAndView, receiverId);

@@ -10,7 +10,6 @@ import java.sql.Date;
 import java.util.Arrays;
 import java.util.Objects;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.utils.DataCheckHelper.stringOptional;
 import static java.util.Objects.isNull;
 
 @Component
@@ -92,7 +91,7 @@ public class Group extends AbstractEntity implements Entity {
         }
         if (o instanceof Group) {
             Group group = (Group) o;
-            return Objects.equals(stringOptional(name), stringOptional(group.getName()));
+            return Objects.equals(name, group.getName());
         }
         return false;
     }

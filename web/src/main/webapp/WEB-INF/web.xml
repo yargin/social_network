@@ -3,17 +3,16 @@
          xmlns="http://xmlns.jcp.org/xml/ns/javaee"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
-
     <absolute-ordering/>
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>/WEB-INF/dispatcher-servlet.xml</param-value>
+        <param-value>classpath:webSpringConfig.xml</param-value>
     </context-param>
 
-    <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
+    <session-config>
+        <session-timeout>10</session-timeout>
+    </session-config>
 
     <servlet>
         <servlet-name>dispatcher</servlet-name>
@@ -28,17 +27,8 @@
     <servlet-mapping>
         <servlet-name>default</servlet-name>
         <url-pattern>/css/*</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>default</servlet-name>
         <url-pattern>/js/*</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>default</servlet-name>
         <url-pattern>/img/*</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>default</servlet-name>
         <url-pattern>/font/*</url-pattern>
     </servlet-mapping>
 
@@ -58,10 +48,6 @@
         <filter-name>encodingFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-
-    <session-config>
-        <session-timeout>1</session-timeout>
-    </session-config>
 
     <resource-ref>
         <res-ref-name>jdbc/local</res-ref-name>

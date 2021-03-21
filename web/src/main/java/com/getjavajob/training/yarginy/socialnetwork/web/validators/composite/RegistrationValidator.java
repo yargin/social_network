@@ -1,6 +1,7 @@
-package com.getjavajob.training.yarginy.socialnetwork.web.validators;
+package com.getjavajob.training.yarginy.socialnetwork.web.validators.composite;
 
 import com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers.AccountInfoMvcModel;
+import com.getjavajob.training.yarginy.socialnetwork.web.validators.PasswordValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

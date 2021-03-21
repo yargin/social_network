@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns="http://www.springframework.org/schema/beans"
 
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
 
-       http://www.springframework.org/schema/context
-       http://www.springframework.org/schema/context/spring-context.xsd
+
+
 
        http://www.springframework.org/schema/mvc
        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
-
-    <import resource="classpath:serviceSpringConfig.xml"/>
-    <import resource="classpath:commonSpringConfig.xml"/>
-    <context:component-scan base-package="com.getjavajob.training.yarginy.socialnetwork.web"/>
 
     <mvc:annotation-driven/>
 
@@ -90,15 +85,9 @@
         </mvc:interceptor>
 
         <mvc:interceptor>
-            <!--            <mvc:mapping path="/group/**"/>-->
-            <mvc:mapping path="/group/moderators**"/>
-            <mvc:mapping path="/group/wall*"/>
-            <mvc:mapping path="/group/requests*"/>
-            <mvc:mapping path="/group/members*"/>
-            <mvc:mapping path="/group/leave*"/>
-            <mvc:mapping path="/group/accept*"/>
-            <mvc:mapping path="/group/delete*"/>
-            <mvc:mapping path="/group/update*"/>
+            <mvc:mapping path="/group/**"/>
+            <mvc:exclude-mapping path="/group/join*"/>
+            <mvc:exclude-mapping path="/group/create*"/>
             <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.group.GroupAccessSetter"/>
         </mvc:interceptor>
 

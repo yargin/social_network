@@ -10,9 +10,9 @@
 
 <spring:message code="label.saveUpdates" var="confirmText"/>
 <div class="post">
-    <%--@elvariable id="registrationMvcModel" type="com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers.AccountInfoMvcModel"--%>
+    <%--@elvariable id="accountInfoMvcModel" type="com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers.AccountInfoMvcModel"--%>
     <form:form action="${context}/registration" method="post" enctype="multipart/form-data"
-               onsubmit="return acceptPhones()" modelAttribute="registrationMvcModel">
+               onsubmit="return acceptPhones()" modelAttribute="accountInfoMvcModel">
         <%--@elvariable id="account" type="com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account"--%>
         <spring:message code="form.name" var="formName"/>
         <form:input type="text" path="account.name" value="${account.name}" placeholder="${formName}"
@@ -66,8 +66,8 @@
 
 
         <spring:message code="form.country" var="formCountry"/>
-        <form:input type="text" path="account.country" value="${account.country}"
-                    placeholder="${formCountry}" required="required"/> <br>
+        <form:input type="text" path="account.country" value="${account.country}" placeholder="${formCountry}"
+                    required="required"/> <br>
         <form:errors path="account.country" element="div"/>
 
         <spring:message code="form.city" var="formCity"/>

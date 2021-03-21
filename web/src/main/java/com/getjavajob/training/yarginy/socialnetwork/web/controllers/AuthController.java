@@ -14,8 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData.WRONG_EMAIL;
-import static com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData.WRONG_PASSWORD;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.*;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.LOGIN_VIEW;
@@ -68,13 +66,13 @@ public class AuthController {
             switch (e.getType()) {
                 case NOT_AN_EMAIL:
                 case WRONG_EMAIL:
-                    modelAndView.addObject(ERROR, WRONG_EMAIL.getPropertyKey());
+                    modelAndView.addObject(ERROR, "error.wrongEmail");
                     break;
                 case NOT_A_PASSWORD:
                 case WRONG_PASSWORD:
                 case PASSWORD_TOO_LONG:
                 case PASSWORD_TOO_SHORT:
-                    modelAndView.addObject(ERROR, WRONG_PASSWORD.getPropertyKey());
+                    modelAndView.addObject(ERROR, "error.wrongPassword");
                     if (!isNull(email)) {
                         modelAndView.addObject(EMAIL, email);
                     }

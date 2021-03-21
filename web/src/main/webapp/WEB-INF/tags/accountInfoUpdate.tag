@@ -10,10 +10,10 @@
 
 <div class="info">
     <spring:message code="label.saveUpdates" var="confirmText"/>
-    <%--@elvariable id="registrationMvcModel" type="com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers.AccountInfoMvcModel"--%>
+    <%--@elvariable id="accountInfoMvcModel" type="com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers.AccountInfoMvcModel"--%>
     <form:form action="${context}/account/update?id=${id}" method="post" enctype="multipart/form-data"
                onsubmit='return confirmation("${confirmText}", acceptPhones())'
-               id="accountUpdate" modelAttribute="registrationMvcModel">
+               id="accountUpdate" modelAttribute="accountInfoMvcModel">
 
         <%--@elvariable id="account" type="com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account"--%>
         <label><spring:message code="form.name"/></label>
@@ -38,7 +38,6 @@
         <label><spring:message code="form.additionalEmail"/></label>
         <form:input type="email" path="account.additionalEmail" value="${account.additionalEmail}"/> <br>
         <form:errors path="account.additionalEmail" element="div"/>
-        <c:if test="${not empty emailDuplicate}"><spring:message code="${emailDuplicate}"/><br></c:if>
 
         <label><spring:message code="form.birthdate"/></label>
         <form:input type="date" path="account.birthDate" value="${account.birthDate}"/> <br>
