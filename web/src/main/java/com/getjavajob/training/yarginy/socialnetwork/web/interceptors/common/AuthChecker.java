@@ -2,7 +2,6 @@ package com.getjavajob.training.yarginy.socialnetwork.web.interceptors.common;
 
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.Redirector;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -17,7 +16,6 @@ import static java.util.Objects.isNull;
 public class AuthChecker extends HandlerInterceptorAdapter {
     private final Redirector redirector;
 
-    @Autowired
     public AuthChecker(Redirector redirector) {
         this.redirector = redirector;
     }

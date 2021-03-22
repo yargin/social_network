@@ -3,7 +3,6 @@ package com.getjavajob.training.yarginy.socialnetwork.web.controllers;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.Redirector;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -20,7 +19,6 @@ public class MessageController {
     private final MessageService accountPrivateMessageService;
     private final Redirector redirector;
 
-    @Autowired
     public MessageController(@Qualifier("accountWallMessageService") MessageService accountWallMessageService,
                              @Qualifier("groupWallMessageService") MessageService groupWallMessageService,
                              @Qualifier("dialogMessageService") MessageService accountPrivateMessageService,

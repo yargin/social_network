@@ -4,7 +4,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.service.AuthService;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.Redirector;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -27,7 +26,6 @@ public class AuthController {
     private final AuthService authService;
     private final Redirector redirector;
 
-    @Autowired
     public AuthController(AuthService authService, Redirector redirector) {
         this.authService = authService;
         this.redirector = redirector;

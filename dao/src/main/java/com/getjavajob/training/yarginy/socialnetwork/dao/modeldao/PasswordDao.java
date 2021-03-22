@@ -3,7 +3,6 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -24,7 +23,6 @@ public class PasswordDao extends AbstractDao<Password> {
     private final String selectAll;
     private final AccountDao accountDao;
 
-    @Autowired
     public PasswordDao(JdbcTemplate template, SimpleJdbcInsert jdbcInsert, NamedParameterJdbcTemplate namedTemplate,
                        AccountDao accountDao) {
         super(template, jdbcInsert, namedTemplate, TABLE, PASSWORD_ALIAS);

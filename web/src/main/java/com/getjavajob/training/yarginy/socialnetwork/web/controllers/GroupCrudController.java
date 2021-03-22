@@ -7,7 +7,6 @@ import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.updaters.GroupFieldsUpdater;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 import com.getjavajob.training.yarginy.socialnetwork.web.validators.GroupValidator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -30,7 +29,6 @@ public class GroupCrudController {
     private final GroupService groupService;
     private final GroupValidator groupValidator;
 
-    @Autowired
     public GroupCrudController(GroupService groupService, GroupValidator groupValidator) {
         this.groupService = groupService;
         this.groupValidator = groupValidator;

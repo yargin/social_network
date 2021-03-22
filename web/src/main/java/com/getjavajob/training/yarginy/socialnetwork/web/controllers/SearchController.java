@@ -2,7 +2,6 @@ package com.getjavajob.training.yarginy.socialnetwork.web.controllers;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchableDto;
 import com.getjavajob.training.yarginy.socialnetwork.service.DataSetsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,7 +15,6 @@ public class SearchController {
     private static final int LIMIT = 10;
     private final DataSetsService dataSetsService;
 
-    @Autowired
     public SearchController(DataSetsService dataSetsService) {
         this.dataSetsService = dataSetsService;
     }

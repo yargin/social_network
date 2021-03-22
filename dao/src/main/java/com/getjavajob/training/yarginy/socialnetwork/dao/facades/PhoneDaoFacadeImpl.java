@@ -3,7 +3,6 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.batch.BatchDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -13,7 +12,6 @@ public class PhoneDaoFacadeImpl implements PhoneDaoFacade {
     private final BatchDao<Phone> phoneDao;
     private final OneToManyDao<Phone> accountsPhonesDao;
 
-    @Autowired
     public PhoneDaoFacadeImpl(BatchDao<Phone> phoneDao, OneToManyDao<Phone> accountsPhonesDao) {
         this.phoneDao = phoneDao;
         this.accountsPhonesDao = accountsPhonesDao;

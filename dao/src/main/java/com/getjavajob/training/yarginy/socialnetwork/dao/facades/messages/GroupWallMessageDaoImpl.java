@@ -3,7 +3,6 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +13,6 @@ public class GroupWallMessageDaoImpl implements GroupWallMessageDaoFacade {
     private Dao<Message> groupWallMessageDao;
     private OneToManyDao<Message> groupWallMessagesDao;
 
-    @Autowired
     public void setGroupWallMessageDao(@Qualifier("groupWallMessageDao") Dao<Message> groupWallMessageDao,
                                        @Qualifier("groupWallMessagesDao") OneToManyDao<Message> groupWallMessagesDao) {
         this.groupWallMessageDao = groupWallMessageDao;

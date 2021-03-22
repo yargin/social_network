@@ -6,7 +6,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Messa
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +25,6 @@ public class GroupController {
     private final DataHandler dataHandler;
     private final MessageService messageService;
 
-    @Autowired
     public GroupController(GroupService groupService, DataHandler dataHandler,
                            @Qualifier("groupWallMessageService") MessageService messageService) {
         this.groupService = groupService;

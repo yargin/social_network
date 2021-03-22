@@ -5,7 +5,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.addit
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -24,7 +23,6 @@ public class AccountInfoHelper {
     private final AccountService accountService;
     private final DataHandler dataHandler;
 
-    @Autowired
     public AccountInfoHelper(AccountService accountService, DataHandler dataHandler) {
         this.accountService = accountService;
         this.dataHandler = dataHandler;

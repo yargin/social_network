@@ -1,7 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.interceptors.common;
 
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.Redirector;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -14,7 +13,6 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 public class OneIdInterceptor extends HandlerInterceptorAdapter {
     private final Redirector redirector;
 
-    @Autowired
     public OneIdInterceptor(Redirector redirector) {
         this.redirector = redirector;
     }

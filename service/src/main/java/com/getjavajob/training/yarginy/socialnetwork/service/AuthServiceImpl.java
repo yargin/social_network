@@ -9,7 +9,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PasswordDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -25,7 +24,6 @@ public class AuthServiceImpl implements AuthService {
     private final PhoneDaoFacade phoneDaoFacade;
     private final DataHandler dataHandler;
 
-    @Autowired
     public AuthServiceImpl(DataHandler dataHandler, AccountDaoFacade accountDaoFacade,
                            PasswordDaoFacade passwordDaoFacade, PhoneDaoFacade phoneDaoFacade) {
         this.dataHandler = dataHandler;

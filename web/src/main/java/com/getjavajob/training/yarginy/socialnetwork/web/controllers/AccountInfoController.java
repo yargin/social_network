@@ -8,7 +8,6 @@ import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.AccountInfoHelper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,8 +30,6 @@ public class AccountInfoController {
     private final GroupService groupService;
     private final MessageService messageService;
 
-    @Autowired
-//    todo look if there this annotation need to be here
     public AccountInfoController(AccountInfoHelper infoHelper, AccountService accountService, GroupService groupService,
                                  @Qualifier("accountWallMessageService") MessageService messageService) {
         this.infoHelper = infoHelper;

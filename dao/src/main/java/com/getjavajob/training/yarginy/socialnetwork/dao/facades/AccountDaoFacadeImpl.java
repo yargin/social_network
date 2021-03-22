@@ -7,7 +7,6 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.ManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.SelfManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +20,6 @@ public class AccountDaoFacadeImpl implements AccountDaoFacade {
     private final OneToManyDao<Phone> accountPhonesDao;
     private final SelfManyToManyDao<Account> accountFriendsDao;
 
-    @Autowired
     public AccountDaoFacadeImpl(Dao<Account> accountDao,
                                 @Qualifier("groupOwnersDao") OneToManyDao<Group> accountGroupsDao,
                                 @Qualifier("groupMembershipDao") ManyToManyDao<Account, Group> accountsInGroupsDao,

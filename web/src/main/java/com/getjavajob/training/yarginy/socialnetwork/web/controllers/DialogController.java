@@ -6,7 +6,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Messa
 import com.getjavajob.training.yarginy.socialnetwork.service.DialogService;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.Redirector;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +30,6 @@ public class DialogController {
     private final MessageService messageService;
     private final Redirector redirector;
 
-    @Autowired
     public DialogController(DialogService dialogService, Redirector redirector,
                             @Qualifier("dialogMessageService") MessageService messageService) {
         this.dialogService = dialogService;

@@ -9,7 +9,6 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DataSetsDaoFaca
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsMembersDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsModeratorsDaoFacade;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -26,7 +25,6 @@ public class GroupServiceImpl implements GroupService {
     private final GroupsModeratorsDaoFacade moderatorsDao;
     private final DataSetsDaoFacade dataSetsDaoFacade;
 
-    @Autowired
     public GroupServiceImpl(GroupDaoFacade groupDaoFacade, GroupsMembersDaoFacade membersDao,
                             GroupsModeratorsDaoFacade moderatorsDao, DataSetsDaoFacade dataSetsDaoFacade) {
         this.groupDaoFacade = groupDaoFacade;

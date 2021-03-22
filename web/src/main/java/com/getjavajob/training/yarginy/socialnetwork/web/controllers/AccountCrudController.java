@@ -12,7 +12,6 @@ import com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.updaters.AccountFieldsUpdater;
 import com.getjavajob.training.yarginy.socialnetwork.web.validators.composite.AccountInfoValidator;
 import com.getjavajob.training.yarginy.socialnetwork.web.validators.composite.RegistrationValidator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -43,7 +42,6 @@ public class AccountCrudController {
     private final RegistrationValidator registrationValidator;
     private final AccountInfoValidator accountInfoValidator;
 
-    @Autowired
     public AccountCrudController(AuthService authService, AccountInfoValidator accountInfoValidator,
                                  AccountService accountService, RegistrationValidator registrationValidator) {
         this.authService = authService;

@@ -5,7 +5,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesF
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -41,7 +40,6 @@ public class AccountDao extends AbstractDao<Account> {
     private static final String[] VIEW_FIELDS = {ID, NAME, SURNAME, EMAIL};
     private final String selectAll = "SELECT " + getFields(ALIAS) + " FROM " + getTable(ALIAS);
 
-    @Autowired
     public AccountDao(JdbcTemplate template, SimpleJdbcInsert jdbcInsert, NamedParameterJdbcTemplate namedTemplate) {
         super(template, jdbcInsert, namedTemplate, TABLE, ALIAS);
     }

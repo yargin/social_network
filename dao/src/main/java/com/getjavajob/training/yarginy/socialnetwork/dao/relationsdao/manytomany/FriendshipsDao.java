@@ -2,7 +2,6 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytoman
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AccountDao;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -27,7 +26,6 @@ public class FriendshipsDao implements SelfManyToManyDao<Account> {
     private final transient SimpleJdbcInsert insertTemplate;
     private final AccountDao accountDao;
 
-    @Autowired
     public FriendshipsDao(JdbcTemplate template, SimpleJdbcInsert insertTemplate, AccountDao accountDao) {
         this.template = template;
         this.insertTemplate = insertTemplate;

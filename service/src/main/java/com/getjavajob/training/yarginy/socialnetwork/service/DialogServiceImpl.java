@@ -5,7 +5,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +13,6 @@ public class DialogServiceImpl implements DialogService {
     private final DialogDaoFacade dialogDaoFacade;
     private final MessageService messageService;
 
-    @Autowired
     public DialogServiceImpl(DialogDaoFacade dialogDaoFacade, @Qualifier("dialogMessageService") MessageService
             messageService) {
         this.dialogDaoFacade = dialogDaoFacade;

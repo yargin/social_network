@@ -3,7 +3,6 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +13,6 @@ public class AccountWallMessageDaoImpl implements AccountWallMessageDaoFacade {
     private final Dao<Message> accountWallMessageDao;
     private final OneToManyDao<Message> accountWallMessagesDao;
 
-    @Autowired
     public AccountWallMessageDaoImpl(@Qualifier("accountWallMessageDao") Dao<Message> accountWallMessageDao,
                                      @Qualifier("accountWallMessagesDao") OneToManyDao<Message> accountWallMessagesDao) {
         this.accountWallMessageDao = accountWallMessageDao;

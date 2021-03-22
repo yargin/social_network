@@ -4,7 +4,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AccountDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.GroupDao;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -28,7 +27,6 @@ public class GroupMembersDao implements ManyToManyDao<Account, Group> {
     private final GroupDao groupDao;
     private final AccountDao accountDao;
 
-    @Autowired
     public GroupMembersDao(JdbcTemplate template, SimpleJdbcInsert insertTemplate, GroupDao groupDao, AccountDao accountDao) {
         this.template = template;
         this.insertTemplate = insertTemplate;

@@ -10,7 +10,6 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacad
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -24,7 +23,6 @@ public class AccountServiceImpl implements AccountService {
     private final FriendshipsDaoFacade friendshipDao;
     private final DialogDaoFacade dialogsDao;
 
-    @Autowired
     public AccountServiceImpl(AccountDaoFacade accountDaoFacade, PhoneDaoFacade phoneDaoFacade, FriendshipsDaoFacade friendshipDao,
                               DialogDaoFacade dialogDaoFacade) {
         this.accountDaoFacade = accountDaoFacade;

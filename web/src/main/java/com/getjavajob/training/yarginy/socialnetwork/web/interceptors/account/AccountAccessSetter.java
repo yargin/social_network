@@ -3,7 +3,6 @@ package com.getjavajob.training.yarginy.socialnetwork.web.interceptors.account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -17,7 +16,6 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 public class AccountAccessSetter extends HandlerInterceptorAdapter {
     private final AccountService accountService;
 
-    @Autowired
     public AccountAccessSetter(AccountService accountService) {
         this.accountService = accountService;
     }

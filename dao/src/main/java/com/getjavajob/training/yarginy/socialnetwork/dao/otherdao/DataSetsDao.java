@@ -7,7 +7,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.Se
 import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchableType;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AccountDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.GroupDao;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +24,6 @@ public class DataSetsDao implements Serializable {
     private final AccountDao accountDao;
     private final GroupDao groupDao;
 
-    @Autowired
     public DataSetsDao(JdbcTemplate template, AccountDao accountDao, GroupDao groupDao) {
         this.template = template;
         this.accountDao = accountDao;

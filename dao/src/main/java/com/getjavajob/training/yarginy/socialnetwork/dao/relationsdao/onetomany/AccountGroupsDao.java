@@ -2,7 +2,6 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.GroupDao;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -15,7 +14,6 @@ public class AccountGroupsDao implements OneToManyDao<Group> {
     private final GroupDao groupDao;
     private final transient JdbcTemplate template;
 
-    @Autowired
     public AccountGroupsDao(JdbcTemplate template, GroupDao groupDao) {
         this.groupDao = groupDao;
         this.template = template;

@@ -17,10 +17,11 @@
 
     <jee:jndi-lookup id="dataSource"
                      jndi-name="jdbc/Heroku-Jaws"
-                     expected-type="javax.sql.DataSource"/>
+                     expected-type="javax.sql.DataSource"
+                     resource-ref="true"/>
 
     <!--    <jee:jndi-lookup id="dataSource"-->
-    <!--                     jndi-name="jdbc/local"-->
+    <!--                     jndi-name="jdbc/Local-MySql"-->
     <!--                     expected-type="javax.sql.DataSource"/>-->
 
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate" scope="prototype">

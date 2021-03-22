@@ -4,7 +4,6 @@ import com.getjavajob.training.yarginy.socialnetwork.service.DialogService;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.AccountInfoHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.Redirector;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -20,7 +19,6 @@ public class MessageAccessChecker extends HandlerInterceptorAdapter {
     private final AccountInfoHelper infoHelper;
     private final Redirector redirector;
 
-    @Autowired
     public MessageAccessChecker(GroupService groupService, DialogService dialogService, AccountInfoHelper infoHelper,
                                 Redirector redirector) {
         this.groupService = groupService;

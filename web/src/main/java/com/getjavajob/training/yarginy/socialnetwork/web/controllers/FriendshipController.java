@@ -4,7 +4,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.AccountInfoHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.Redirector;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,7 +23,6 @@ public class FriendshipController {
     private final AccountInfoHelper infoHelper;
     private final Redirector redirector;
 
-    @Autowired
     public FriendshipController(AccountService accountService, AccountInfoHelper infoHelper, Redirector redirector) {
         this.accountService = accountService;
         this.infoHelper = infoHelper;
