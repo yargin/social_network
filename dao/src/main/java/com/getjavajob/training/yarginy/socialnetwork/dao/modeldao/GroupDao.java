@@ -18,7 +18,7 @@ import static java.util.Objects.isNull;
 
 @Repository("groupDao")
 public class GroupDao extends AbstractBatchDao<Group> {
-    private static final String TABLE = "`groups`";
+    private static final String TABLE = "`GROUPS`";
     private static final String ID = "id";
     private static final String NAME = "name";
     private static final String DESCRIPTION = "description";
@@ -28,7 +28,6 @@ public class GroupDao extends AbstractBatchDao<Group> {
     private static final String[] FIELDS = {ID, NAME, DESCRIPTION, OWNER, CREATION_DATE, PHOTO};
     private static final String GROUP_ALIAS = "gr";
     private static final String ACCOUNT_ALIAS = "acc";
-
     private final String selectAll;
     private final AccountDao accountDao;
 

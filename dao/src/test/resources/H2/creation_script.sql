@@ -10,7 +10,7 @@ DROP TABLE IF EXISTS group_wall_messages;
 DROP TABLE IF EXISTS account_wall_messages;
 DROP TABLE IF EXISTS dialogs;
 DROP TABLE IF EXISTS Phones;
-DROP TABLE IF EXISTS 'Groups';
+DROP TABLE IF EXISTS `Groups`;
 DROP TABLE IF EXISTS Accounts;
 
 CREATE TABLE IF NOT EXISTS Accounts
@@ -56,7 +56,7 @@ ALTER TABLE Accounts
 ALTER TABLE Accounts
     ADD CHECK (role IN ('ADMIN', 'USER'));
 
-CREATE TABLE IF NOT EXISTS 'Groups'
+CREATE TABLE IF NOT EXISTS `Groups`
 (
     id
     BIGINT

@@ -26,7 +26,11 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
                           String table, String tableAlias) {
         this.template = template;
         this.jdbcInsert = jdbcInsert;
-        this.jdbcInsert.withTableName(table);
+        if (table.contains("`")) {
+            this.jdbcInsert.withTableName(table.substring(1, table.length() - 1));
+        } else {
+            this.jdbcInsert.withTableName(table);
+        }
         this.namedTemplate = namedTemplate;
         this.tableName = table;
         alias = tableAlias;

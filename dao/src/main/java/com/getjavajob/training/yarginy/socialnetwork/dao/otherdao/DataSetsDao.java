@@ -63,7 +63,7 @@ public class DataSetsDao implements Serializable {
 
     private String getAllUnjoinedGroupsQuery() {
         return "SELECT " + groupDao.getViewFields("g") + ", gmr.group_id requested" +
-                " FROM `groups` g LEFT JOIN " +
+                " FROM `Groups` g LEFT JOIN " +
                 " (SELECT group_id FROM groups_memberships_requests" +
                 " WHERE account_id = ?) gmr " +
                 " ON gmr.group_id = g.id " +
@@ -100,7 +100,7 @@ public class DataSetsDao implements Serializable {
                 " (SELECT id, 'user' type, CONCAT(name, ' ', surname) name FROM accounts " +
                 " WHERE UPPER(name) LIKE UPPER(?) or UPPER(surname) LIKE UPPER(?)" +
                 " UNION " +
-                " SELECT id, 'group' type, name name FROM `groups` " +
+                " SELECT id, 'group' type, name name FROM `Groups` " +
                 " WHERE UPPER(name) LIKE UPPER(?) ) s " +
                 " LIMIT " + limit + " OFFSET " + (pageNumber - 1) * limit + ';';
     }
@@ -110,7 +110,7 @@ public class DataSetsDao implements Serializable {
                 " (SELECT id, 'user' type, CONCAT(name, ' ', surname) name FROM accounts " +
                 " WHERE UPPER(name) LIKE UPPER(?) or UPPER(surname) LIKE UPPER(?)" +
                 " UNION " +
-                " SELECT id, 'group' type, name name FROM `groups` " +
+                " SELECT id, 'group' type, name name FROM `Groups` " +
                 " WHERE UPPER(name) LIKE UPPER(?) ) s ;";
     }
 }
