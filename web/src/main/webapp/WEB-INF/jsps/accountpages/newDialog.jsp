@@ -6,7 +6,6 @@
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 
 <common:layout>
-
     <div class="wallMessage" style="margin-right: 40%">
         <form action="${context}/dialog/create" method="post" enctype="multipart/form-data">
             <input type="hidden" value="${sessionScope.userId}" name="requesterId">
@@ -27,5 +26,4 @@
         <div>
         </div>
     </div>
-
 </common:layout>

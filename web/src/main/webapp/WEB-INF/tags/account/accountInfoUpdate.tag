@@ -1,6 +1,7 @@
 <%@ tag import="com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="common" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="account" tagdir="/WEB-INF/tags/account" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
@@ -59,7 +60,7 @@
         <form:input type="text" path="account.city" value="${account.city}" required="required"/> <br>
         <form:errors path="account.city" element="div"/>
 
-        <common:phonesUpdate/>
+        <account:phonesUpdate/>
 
         <c:if test="${not empty photo}">
             <img src="data:image/jpeg;base64, ${photo}">

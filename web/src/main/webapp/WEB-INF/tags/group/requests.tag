@@ -6,7 +6,7 @@
 
 <c:forEach var="requesterVar" items="${requesters}">
     <a href="${context}/account/wall?id=${requesterVar.id}">
-            ${requesterVar.getName()} ${requesterVar.getSurname()}
+            ${requesterVar.name} ${requesterVar.surname}
     </a>
     <form action="${context}/group/accept" method="post">
         <input type="hidden" value="${requesterVar.id}" name="requesterId">

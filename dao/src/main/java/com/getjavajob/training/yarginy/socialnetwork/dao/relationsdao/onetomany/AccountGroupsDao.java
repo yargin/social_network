@@ -21,13 +21,13 @@ public class AccountGroupsDao implements OneToManyDao<Group> {
 
     @Override
     public Collection<Group> selectMany(long accountId) {
-        String query = "SELECT " + groupDao.getViewFields(GROUP_ALIAS) + " FROM _groups g WHERE g.owner_id = ?";
+        String query = "SELECT " + groupDao.getViewFields(GROUP_ALIAS) + " FROM `groups` g WHERE g.owner_id = ?";
         return template.query(query, groupDao.getSuffixedViewRowMapper(GROUP_ALIAS), accountId);
     }
 
     @Override
     public boolean relationExists(long accountId, long groupId) {
-        String query = "SELECT 1 FROM _groups g WHERE g.owner_id = ? AND g.id = ?";
+        String query = "SELECT 1 FROM `groups` g WHERE g.owner_id = ? AND g.id = ?";
         try {
             template.queryForObject(query, new Object[]{accountId, groupId}, ((resultSet, i) -> resultSet.getInt(1)));
             return true;

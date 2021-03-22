@@ -11,6 +11,8 @@ import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static java.util.Objects.isNull;
+
 @Controller
 @RequestMapping("/message")
 public class MessageController {
@@ -32,12 +34,14 @@ public class MessageController {
     @PostMapping("/add")
     public String addMessage(@RequestParam("type") String type, @ModelAttribute Message message,
                              HttpServletRequest req) {
-        if ("accountWall".equals(type)) {
-            accountWallMessageService.addMessage(message);
-        } else if ("accountPrivate".equals(type)) {
-            accountPrivateMessageService.addMessage(message);
-        } else if ("groupWall".equals(type)) {
-            groupWallMessageService.addMessage(message);
+        if (!message.getText().isEmpty() || !isNull(message.getImage()) && message.getImage().length != 0) {
+            if ("accountWall".equals(type)) {
+                accountWallMessageService.addMessage(message);
+            } else if ("accountPrivate".equals(type)) {
+                accountPrivateMessageService.addMessage(message);
+            } else if ("groupWall".equals(type)) {
+                groupWallMessageService.addMessage(message);
+            }
         }
         return redirector.redirectBackView(req);
     }

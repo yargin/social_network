@@ -10,11 +10,11 @@ import java.util.Collection;
 
 @Component("dialogMessageDaoFacade")
 public class DialogMessageDaoImpl implements DialogMessageDaoFacade {
-    private Dao<Message> dialogMessageDao;
-    private OneToManyDao<Message> dialogsMessagesDao;
+    private final Dao<Message> dialogMessageDao;
+    private final OneToManyDao<Message> dialogsMessagesDao;
 
-    public void setDialogMessageDao(@Qualifier("dialogMessageDao") Dao<Message> dialogMessageDao,
-                                    @Qualifier("dialogMessagesDao") OneToManyDao<Message> dialogsMessagesDao) {
+    public DialogMessageDaoImpl(@Qualifier("dialogMessageDao") Dao<Message> dialogMessageDao,
+                                @Qualifier("dialogMessagesDao") OneToManyDao<Message> dialogsMessagesDao) {
         this.dialogMessageDao = dialogMessageDao;
         this.dialogsMessagesDao = dialogsMessagesDao;
     }

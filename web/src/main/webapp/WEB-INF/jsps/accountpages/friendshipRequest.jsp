@@ -2,12 +2,13 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="common" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="account" tagdir="/WEB-INF/tags/account" %>
 <fmt:setBundle basename="label" var="label"/>
 <fmt:setBundle basename="error" var="errorBundle"/>
 
 <common:layout>
-    <common:accountInfo/>
-    <common:accountMenu/>
+    <account:accountInfo/>
+    <account:accountMenu/>
 
     <br><br>
     <c:if test="${not empty error}"><fmt:message key="${error}" bundle="${errorBundle}"/></c:if>
@@ -20,5 +21,4 @@
         </c:otherwise>
     </c:choose>
     <br><br>
-
 </common:layout>

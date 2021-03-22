@@ -1,6 +1,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="common" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="message" tagdir="/WEB-INF/tags/message" %>
 <fmt:setBundle basename="label"/>
 
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
@@ -18,6 +19,6 @@
         <label><fmt:message key="label.requestSent"/></label><br><br>
     </c:if>
 <c:if test="${not empty owner or not empty admin or not empty member or not empty moderator}">
-    <common:messageCreate/>
-    <common:messagesShow/>
+    <message:messageCreate/>
+    <message:messagesShow/>
 </c:if>

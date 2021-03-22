@@ -2,12 +2,13 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="common" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="account" tagdir="/WEB-INF/tags/account" %>
 <fmt:setBundle basename="label"/>
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 
 <common:layout>
-    <common:accountInfo/>
-    <common:accountMenu/>
+    <account:accountInfo/>
+    <account:accountMenu/>
 
     <br><br>
     <div class="post">
@@ -24,5 +25,4 @@
             <br>
         </c:forEach>
     </div>
-
 </common:layout>

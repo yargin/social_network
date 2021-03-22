@@ -108,9 +108,9 @@ public class AccountCrudController {
         Collection<Phone> allPhones = accountService.getPhones(id);
         model.setPrivatePhones(getPhoneViews(allPhones, PRIVATE));
         model.setWorkPhones(getPhoneViews(allPhones, WORK));
-        //save original to session
-        session.setAttribute(PHOTO, account.getPhoto());
+        //save original info to session
         session.setAttribute(ACCOUNT_INFO, model);
+        session.setAttribute(PHOTO, account.getPhoto());
         return updater.getModelAndView(model);
     }
 
@@ -125,7 +125,7 @@ public class AccountCrudController {
         AccountInfoMvcModel storedModel = (AccountInfoMvcModel) session.getAttribute(ACCOUNT_INFO);
         Account storedAccount = storedModel.getAccount();
         Account account = model.getAccount();
-//        //set non updatable values
+        //set non updatable values
         account.setId(storedAccount.getId());
         account.setEmail(storedAccount.getEmail());
         account.setRegistrationDate(storedAccount.getRegistrationDate());
@@ -161,7 +161,6 @@ public class AccountCrudController {
         return "error";
     }
 
-    //    todo bean form
     @InitBinder
     public void registerPhotoEditor(WebDataBinder binder) {
         binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());

@@ -5,10 +5,10 @@
 <c:set var="id" value="${group.id}"/>
 
 <c:forEach var="memberItem" items="${members}">
-    <c:set var="memberVar" value="${memberItem.getKey()}"/>
-    <c:set var="isModerator" value="${memberItem.getValue()}"/>
+    <c:set var="memberVar" value="${memberItem.key}"/>
+    <c:set var="isModerator" value="${memberItem.value}"/>
     <a href="${context}/account/wall?id=${memberVar.id}">
-            ${memberVar.getName()} ${memberVar.getSurname()}
+            ${memberVar.name} ${memberVar.surname}
     </a>
     <form action="${context}/group/leave" method="post">
         <input type="hidden" value="${memberVar.id}" name="requesterId">

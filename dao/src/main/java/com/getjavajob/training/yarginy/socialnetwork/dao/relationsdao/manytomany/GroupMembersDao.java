@@ -37,7 +37,7 @@ public class GroupMembersDao implements ManyToManyDao<Account, Group> {
 
     @Override
     public Collection<Group> selectByFirst(long accountId) {
-        String query = "SELECT " + groupDao.getViewFields(GROUP_ALIAS) + " FROM _groups gr JOIN groups_members " +
+        String query = "SELECT " + groupDao.getViewFields(GROUP_ALIAS) + " FROM `groups` gr JOIN groups_members " +
                 "gr_m ON gr.id = gr_m.group_id WHERE gr_m.account_id = ?";
         return template.query(query, new Object[]{accountId}, groupDao.getSuffixedViewRowMapper(GROUP_ALIAS));
     }

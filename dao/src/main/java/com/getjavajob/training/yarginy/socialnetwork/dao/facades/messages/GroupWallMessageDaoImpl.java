@@ -10,11 +10,11 @@ import java.util.Collection;
 
 @Component("groupWallMessageDaoFacade")
 public class GroupWallMessageDaoImpl implements GroupWallMessageDaoFacade {
-    private Dao<Message> groupWallMessageDao;
-    private OneToManyDao<Message> groupWallMessagesDao;
+    private final Dao<Message> groupWallMessageDao;
+    private final OneToManyDao<Message> groupWallMessagesDao;
 
-    public void setGroupWallMessageDao(@Qualifier("groupWallMessageDao") Dao<Message> groupWallMessageDao,
-                                       @Qualifier("groupWallMessagesDao") OneToManyDao<Message> groupWallMessagesDao) {
+    public GroupWallMessageDaoImpl(@Qualifier("groupWallMessageDao") Dao<Message> groupWallMessageDao,
+                                   @Qualifier("groupWallMessagesDao") OneToManyDao<Message> groupWallMessagesDao) {
         this.groupWallMessageDao = groupWallMessageDao;
         this.groupWallMessagesDao = groupWallMessagesDao;
     }

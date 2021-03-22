@@ -2,13 +2,14 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="common" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="account" tagdir="/WEB-INF/tags/account" %>
 <fmt:setBundle basename="label"/>
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 
 
 <common:layout>
-    <common:accountInfo/>
-    <common:accountMenu/>
+    <account:accountInfo/>
+    <account:accountMenu/>
 
     <c:if test="${not empty friend or not empty owner or not empty admin}">
         <a href="${context}/group/create">
@@ -28,7 +29,7 @@
                 </c:otherwise>
             </c:choose>
         </div>
-        <common:groupsList/>
+        <account:groupsList/>
     </c:if>
 
 </common:layout>

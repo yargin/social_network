@@ -2,19 +2,20 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="common" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="account" tagdir="/WEB-INF/tags/account" %>
 <fmt:setBundle basename="label" var="label"/>
 <fmt:setBundle basename="error" var="error"/>
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 
 <common:layout>
-    <common:accountInfo/>
-    <common:accountMenu/>
+    <account:accountInfo/>
+    <account:accountMenu/>
 
     <br>
     <c:forEach var="dialog" items="${dialogs}">
         <c:choose>
             <c:when test="${dialog.firstAccount eq user}">
-                <c:set value="${dialog.getSecondAccount}" var="talker"/>
+                <c:set value="${dialog.secondAccount}" var="talker"/>
             </c:when>
             <c:otherwise>
                 <c:set value="${dialog.firstAccount}" var="talker"/>
@@ -26,5 +27,4 @@
         </a>
         <br><br>
     </c:forEach>
-
 </common:layout>

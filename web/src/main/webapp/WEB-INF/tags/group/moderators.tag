@@ -6,7 +6,7 @@
 
 <c:forEach var="moderatorVar" items="${moderators}">
     <a href="${context}/account/wall?id=${moderatorVar.id}">
-            ${moderatorVar.getName()} ${moderatorVar.getSurname()}
+            ${moderatorVar.name} ${moderatorVar.surname}
     </a>
     <form action="${context}/group/moderators/remove" method="post">
         <input type="hidden" value="${moderatorVar.id}" name="requesterId">
