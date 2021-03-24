@@ -71,6 +71,12 @@
             <version>4.13</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jdbc</artifactId>
+            <version>9.0.27</version>
+        </dependency>
     </dependencies>
 
     <build>
