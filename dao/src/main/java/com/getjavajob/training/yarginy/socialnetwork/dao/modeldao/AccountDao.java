@@ -3,10 +3,8 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.DataFlowViolationException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -42,7 +40,6 @@ public class AccountDao extends AbstractDao<Account> {
     private static final String[] VIEW_FIELDS = {ID, NAME, SURNAME, EMAIL};
     private final String selectAll = "SELECT " + getFields(ALIAS) + " FROM " + getTable(ALIAS);
 
-    @Autowired
     public AccountDao(JdbcTemplate template, SimpleJdbcInsert jdbcInsert, NamedParameterJdbcTemplate namedTemplate) {
         super(template, jdbcInsert, namedTemplate, TABLE, ALIAS);
     }
@@ -89,7 +86,7 @@ public class AccountDao extends AbstractDao<Account> {
 
     public RowMapper<Account> getSuffixedViewRowMapper(String suffix) {
         return (resultSet, i) -> {
-            Account account = new AccountImpl();
+            Account account = new Account();
             try {
                 account.setId(resultSet.getLong(ID + suffix));
             } catch (DataFlowViolationException e) {
@@ -154,26 +151,24 @@ public class AccountDao extends AbstractDao<Account> {
     }
 
     @Override
-    public UpdateValuesPlacer getValuePlacer(Account entity, Account storedEntity) {
+    public UpdateValuesPlacer getValuePlacer(Account account, Account storedAccount) {
         UpdateValuesPlacer valuesPlacer = new UpdateValuesPlacer(TABLE);
-        valuesPlacer.addFieldIfDiffers(entity::getName, storedEntity::getName, NAME, Types.VARCHAR);
-        valuesPlacer.addFieldIfDiffers(entity::getSurname, storedEntity::getSurname, SURNAME, Types.VARCHAR);
-        valuesPlacer.addFieldIfDiffers(entity::getPatronymic, storedEntity::getPatronymic, PATRONYMIC, Types.VARCHAR);
-        valuesPlacer.addFieldIfDiffers(entity::getSex, storedEntity::getSex, SEX, Types.CHAR, Sex::toString);
-        valuesPlacer.addFieldIfDiffers(entity::getBirthDate, storedEntity::getBirthDate, BIRTH_DATE, Types.DATE);
-        valuesPlacer.addFieldIfDiffers(entity::getIcq, storedEntity::getIcq, ICQ, Types.VARCHAR);
-        valuesPlacer.addFieldIfDiffers(entity::getSkype, storedEntity::getSkype, SKYPE, Types.VARCHAR);
-        valuesPlacer.addFieldIfDiffers(entity::getEmail, storedEntity::getEmail, EMAIL, Types.VARCHAR);
-        valuesPlacer.addFieldIfDiffers(entity::getAdditionalEmail, storedEntity::getAdditionalEmail, ADDITIONAL_EMAIL,
+        valuesPlacer.addFieldIfDiffers(account::getName, storedAccount::getName, NAME, Types.VARCHAR);
+        valuesPlacer.addFieldIfDiffers(account::getSurname, storedAccount::getSurname, SURNAME, Types.VARCHAR);
+        valuesPlacer.addFieldIfDiffers(account::getPatronymic, storedAccount::getPatronymic, PATRONYMIC, Types.VARCHAR);
+        valuesPlacer.addFieldIfDiffers(account::getSex, storedAccount::getSex, SEX, Types.CHAR, Sex::toString);
+        valuesPlacer.addFieldIfDiffers(account::getBirthDate, storedAccount::getBirthDate, BIRTH_DATE, Types.DATE);
+        valuesPlacer.addFieldIfDiffers(account::getIcq, storedAccount::getIcq, ICQ, Types.VARCHAR);
+        valuesPlacer.addFieldIfDiffers(account::getSkype, storedAccount::getSkype, SKYPE, Types.VARCHAR);
+        valuesPlacer.addFieldIfDiffers(account::getEmail, storedAccount::getEmail, EMAIL, Types.VARCHAR);
+        valuesPlacer.addFieldIfDiffers(account::getAdditionalEmail, storedAccount::getAdditionalEmail, ADDITIONAL_EMAIL,
                 Types.VARCHAR);
-        valuesPlacer.addFieldIfDiffers(entity::getCountry, storedEntity::getCountry, COUNTRY, Types.VARCHAR);
-        valuesPlacer.addFieldIfDiffers(entity::getCity, storedEntity::getCity, CITY, Types.VARCHAR);
-        valuesPlacer.addFieldIfDiffers(entity::getRegistrationDate, storedEntity::getRegistrationDate, REGISTRATION_DATE,
-                Types.DATE);
-        valuesPlacer.addFieldIfDiffers(entity::getRole, storedEntity::getRole, ROLE, Types.CHAR, Role::toString);
-        valuesPlacer.addFieldIfDiffers(entity::getPhoto, storedEntity::getPhoto, PHOTO, Types.BLOB);
+        valuesPlacer.addFieldIfDiffers(account::getCountry, storedAccount::getCountry, COUNTRY, Types.VARCHAR);
+        valuesPlacer.addFieldIfDiffers(account::getCity, storedAccount::getCity, CITY, Types.VARCHAR);
+        valuesPlacer.addFieldIfDiffers(account::getRole, storedAccount::getRole, ROLE, Types.CHAR, Role::toString);
+        valuesPlacer.addFieldIfDiffers(account::getPhoto, storedAccount::getPhoto, PHOTO, Types.BLOB);
 
-        valuesPlacer.addKey(entity::getEmail, EMAIL, Types.VARCHAR);
+        valuesPlacer.addKey(storedAccount::getEmail, EMAIL, Types.VARCHAR);
         return valuesPlacer;
     }
 

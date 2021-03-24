@@ -3,7 +3,6 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -13,7 +12,6 @@ public class DialogDaoFacadeImpl implements DialogDaoFacade {
     private final Dao<Dialog> dialogDao;
     private final OneToManyDao<Dialog> accountDialogsDao;
 
-    @Autowired
     public DialogDaoFacadeImpl(Dao<Dialog> dialogDao, OneToManyDao<Dialog> accountDialogs) {
         this.dialogDao = dialogDao;
         this.accountDialogsDao = accountDialogs;

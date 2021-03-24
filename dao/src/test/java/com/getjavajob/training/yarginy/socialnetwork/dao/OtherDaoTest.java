@@ -1,9 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DataSetsDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacade;
@@ -32,8 +30,8 @@ public class OtherDaoTest {
     private GroupDaoFacade groupDaoFacade;
     @Autowired
     private AccountDaoFacade accountDaoFacade;
-    private Account account = new AccountImpl("test", "test", "test@test.test");
-    private Account owner = new AccountImpl("testOwner", "testOwner", "testOwner@test.test");
+    private Account account = new Account("test", "test", "test@test.test");
+    private Account owner = new Account("testOwner", "testOwner", "testOwner@test.test");
     private Group group1;
     private Group group2;
     private Group group3;
@@ -46,11 +44,11 @@ public class OtherDaoTest {
         account = accountDaoFacade.select(account);
         accountDaoFacade.create(owner);
         owner = accountDaoFacade.select(owner);
-        group1 = new GroupImpl("testGroup1", owner);
-        group2 = new GroupImpl("testGroup2", owner);
-        group3 = new GroupImpl("testGroup3", owner);
-        group4 = new GroupImpl("testGroup4", owner);
-        group5 = new GroupImpl("testGroup5", owner);
+        group1 = new Group("testGroup1", owner);
+        group2 = new Group("testGroup2", owner);
+        group3 = new Group("testGroup3", owner);
+        group4 = new Group("testGroup4", owner);
+        group5 = new Group("testGroup5", owner);
 
         groupDaoFacade.create(group1);
         group1 = groupDaoFacade.select(group1);

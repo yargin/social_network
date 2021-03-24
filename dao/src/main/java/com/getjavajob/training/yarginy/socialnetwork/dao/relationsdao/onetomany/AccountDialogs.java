@@ -3,7 +3,6 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AccountDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.DialogDao;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -18,9 +17,8 @@ public class AccountDialogs implements OneToManyDao<Dialog> {
     private static final String DIALOG_ALIAS = "d";
     private final AccountDao accountDao;
     private final DialogDao dialogDao;
-    private final JdbcTemplate template;
+    private final transient JdbcTemplate template;
 
-    @Autowired
     public AccountDialogs(JdbcTemplate template, AccountDao accountDao, DialogDao dialogDao) {
         this.accountDao = accountDao;
         this.dialogDao = dialogDao;

@@ -151,8 +151,8 @@ function addBlurListener(input, value) {
 
 //add phone to array & to page
 function addPhone(value, error, type) {
-    var listId = '';
-    var divId = '';
+    var listId;
+    var divId;
     if (type !== 'work') {
         privatePhones.push(value);
         listId = 'privatePhonesList';
@@ -217,13 +217,11 @@ function deletePhone(valueToDelete) {
 }
 
 function acceptPhones() {
-    // alert('accept private phones ' + privatePhones);
-    // alert('accept work phones ' + workPhones);
-    var checked = checkForErrorAddName(privatePhones, 'privatePhone');
+    var checked = checkForErrorAddName(privatePhones, 'privatePhones');
     if (!checked) {
         return false;
     }
-    checked = checkForErrorAddName(workPhones, 'workPhone');
+    checked = checkForErrorAddName(workPhones, 'workPhones');
     return checked;
 }
 
@@ -234,8 +232,7 @@ function checkForErrorAddName(phones, type) {
             document.getElementById(phones[i]).focus();
             return false;
         }
-        document.getElementById(phones[i]).setAttribute('name', type + i);
-        // alert('in one phone check ' + document.getElementById(phones[i]).getAttribute('name'));
+        document.getElementById(phones[i]).setAttribute('name', type + '[' + i + '].number');
     }
     return true;
 }

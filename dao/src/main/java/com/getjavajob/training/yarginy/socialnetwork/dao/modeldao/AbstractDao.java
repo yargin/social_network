@@ -16,9 +16,9 @@ import java.util.function.Supplier;
 
 public abstract class AbstractDao<E extends Entity> implements Dao<E> {
     private static final String WHERE = " WHERE ";
-    private final NamedParameterJdbcTemplate namedTemplate;
-    protected final JdbcTemplate template;
-    protected final SimpleJdbcInsert jdbcInsert;
+    protected final transient JdbcTemplate template;
+    protected final transient SimpleJdbcInsert jdbcInsert;
+    private final transient NamedParameterJdbcTemplate namedTemplate;
     private final String alias;
     private final String tableName;
 
@@ -26,7 +26,11 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
                           String table, String tableAlias) {
         this.template = template;
         this.jdbcInsert = jdbcInsert;
-        this.jdbcInsert.withTableName(table);
+        if (table.contains("`")) {
+            this.jdbcInsert.withTableName(table.substring(1, table.length() - 1));
+        } else {
+            this.jdbcInsert.withTableName(table);
+        }
         this.namedTemplate = namedTemplate;
         this.tableName = table;
         alias = tableAlias;

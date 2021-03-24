@@ -1,7 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsDaoFacade;
 import org.junit.After;
@@ -24,8 +23,8 @@ public class FriendshipsRequestsDaoTest {
     private FriendshipsDaoFacade friendshipsDaoFacade;
     @Autowired
     private AccountDaoFacade accountDaoFacade;
-    private Account firstAccount = new AccountImpl("firstTest", "test", "first@test.test");
-    private Account secondAccount = new AccountImpl("secondTest", "test", "second@test.test");
+    private Account firstAccount = new Account("firstTest", "test", "first@test.test");
+    private Account secondAccount = new Account("secondTest", "test", "second@test.test");
 
     @Before
     public void initTestValues() {

@@ -2,27 +2,70 @@ package com.getjavajob.training.yarginy.socialnetwork.common.models.message;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 
-public interface Message extends Entity {
-    Account getAuthor();
+import static java.util.Arrays.copyOf;
 
-    void setAuthor(Account author);
+@Component
+@Scope("prototype")
+public class Message implements Entity {
+    private long id;
+    private Account author;
+    private String text;
+    private byte[] image;
+    private Timestamp date;
+    private long receiverId;
 
-    String getText();
+    @Override
+    public long getId() {
+        return id;
+    }
 
-    void setText(String text);
+    @Override
+    public void setId(long id) {
+        this.id = id;
+    }
 
-    byte[] getImage();
+    public Account getAuthor() {
+        return author;
+    }
 
-    void setImage(byte[] image);
+    public void setAuthor(Account author) {
+        this.author = author;
+    }
 
-    Timestamp getDate();
+    public String getText() {
+        return text;
+    }
 
-    void setDate(Timestamp date);
+    public void setText(String text) {
+        this.text = text;
+    }
 
-    long getReceiverId();
+    public byte[] getImage() {
+        return image;
+    }
 
-    void setReceiverId(long receiverId);
+    public void setImage(byte[] image) {
+        this.image = copyOf(image, image.length);
+    }
+
+    public Timestamp getDate() {
+        return date;
+    }
+
+    public void setDate(Timestamp date) {
+        this.date = date;
+    }
+
+    public long getReceiverId() {
+        return receiverId;
+    }
+
+    public void setReceiverId(long receiverId) {
+        this.receiverId = receiverId;
+    }
 }

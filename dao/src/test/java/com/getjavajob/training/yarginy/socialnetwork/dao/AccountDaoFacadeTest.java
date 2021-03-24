@@ -1,8 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import org.junit.After;
 import org.junit.Before;
@@ -19,7 +17,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoOverrideSpringConfig.xml"})
 public class AccountDaoFacadeTest {
-    private Account account = new AccountImpl();
+    private Account account = new Account();
     @Autowired
     private AccountDaoFacade accountDaoFacade;
 
@@ -44,14 +42,7 @@ public class AccountDaoFacadeTest {
         try {
             account.setEmail(null);
             actual = accountDaoFacade.create(account);
-        } catch (IncorrectDataException e) {
-            actual = false;
-        }
-        assertSame(false, actual);
-        try {
-            account.setEmail("");
-            actual = accountDaoFacade.create(account);
-        } catch (IncorrectDataException e) {
+        } catch (IllegalArgumentException e) {
             actual = false;
         }
         assertFalse(actual);
@@ -99,16 +90,16 @@ public class AccountDaoFacadeTest {
 
     @Test
     public void testUpdateNonExistingAccount() {
-        Account nonExisting = new AccountImpl();
+        Account nonExisting = new Account();
         nonExisting.setEmail("email@that.doesnt.exist");
-        Account anotherNonExisting = new AccountImpl();
+        Account anotherNonExisting = new Account();
         anotherNonExisting.setEmail("anotheremail@that.doesnt.exist");
         assertFalse(accountDaoFacade.update(nonExisting, anotherNonExisting));
     }
 
     @Test
     public void testDeleteNonExisting() {
-        Account nonExisting = new AccountImpl();
+        Account nonExisting = new Account();
         nonExisting.setEmail("testEmail@that.doesnt.exist");
         assertFalse(accountDaoFacade.delete(nonExisting));
     }

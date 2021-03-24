@@ -2,7 +2,6 @@
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/fmt" prefix = "fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <fmt:setBundle basename="label"/>
-<%--<fmt:setLocale value="en"/>--%>
 
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 
@@ -23,11 +22,11 @@
         <div style="min-width: 300px;">
             <c:if test="${not empty sessionScope.user}">
                 <fmt:message key="layout.welcome"/>
-                <a href="${context}/wall">${sessionScope.user.getName()}</a>
-                <form action="${context}/search">
-                    <input type="text" name="searchString" placeholder="<fmt:message key="button.searchHolder"/>">
-                    <input type="hidden" name="page" value="1">
-                    <button type="submit"><fmt:message key="button.search"/></button>
+                <a href="${context}/account/wall">${sessionScope.user.name}</a>
+                <form action="${context}/search" id="search">
+                    <input type="text" name="searchString" id="searchString"
+                           placeholder="<fmt:message key="button.searchHolder"/>">
+                    <button type="submit" id="searchButton"><fmt:message key="button.search"/></button>
                 </form>
             </c:if>
         </div>
@@ -36,10 +35,10 @@
 <div class="wrapper">
     <div class="menu">
         <ul>
-            <li><a href="${context}/wall"><fmt:message key="menu.homepage"/></a></li>
-            <li><a href="${context}/friends"><fmt:message key="menu.friends"/></a></li>
-            <li><a href="${context}/dialogs"><fmt:message key="menu.messages"/></a></li>
-            <li><a href="${context}/groups"><fmt:message key="menu.groups"/></a></li>
+            <li><a href="${context}/account/wall"><fmt:message key="menu.homepage"/></a></li>
+            <li><a href="${context}/account/friends"><fmt:message key="menu.friends"/></a></li>
+            <li><a href="${context}/account/dialogs"><fmt:message key="menu.messages"/></a></li>
+            <li><a href="${context}/account/groups"><fmt:message key="menu.groups"/></a></li>
             <li><a href="#"><fmt:message key="menu.settings"/></a></li>
             <li><a href="${context}/logout"><fmt:message key="menu.quit"/></a></li>
         </ul>

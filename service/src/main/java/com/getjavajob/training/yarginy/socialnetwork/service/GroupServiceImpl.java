@@ -9,7 +9,6 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DataSetsDaoFaca
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsMembersDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsModeratorsDaoFacade;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -26,7 +25,6 @@ public class GroupServiceImpl implements GroupService {
     private final GroupsModeratorsDaoFacade moderatorsDao;
     private final DataSetsDaoFacade dataSetsDaoFacade;
 
-    @Autowired
     public GroupServiceImpl(GroupDaoFacade groupDaoFacade, GroupsMembersDaoFacade membersDao,
                             GroupsModeratorsDaoFacade moderatorsDao, DataSetsDaoFacade dataSetsDaoFacade) {
         this.groupDaoFacade = groupDaoFacade;
@@ -46,9 +44,6 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    //todo add pagination to all lists selections
-    //todo add page entity in service layer
-    //todo look at spring data
     public Collection<Group> getAccountGroups(long accountId) {
         return membersDao.selectAccountGroups(accountId);
     }
@@ -60,7 +55,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public boolean isOwner(long accountId, long groupId) {
-        return groupDaoFacade.isOwner(groupId, accountId);
+        return groupDaoFacade.isOwner(accountId, groupId);
     }
 
     @Override

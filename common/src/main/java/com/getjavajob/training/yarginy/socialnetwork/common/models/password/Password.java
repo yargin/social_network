@@ -2,22 +2,57 @@ package com.getjavajob.training.yarginy.socialnetwork.common.models.password;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
-/**
- * special {@link Entity} that doesn't have id number, so {@link #getId()} & {@link #setId(long)} throw
- * {@link UnsupportedOperationException}
- */
-public interface Password extends Entity {
-    Account getAccount();
+import java.util.Objects;
 
-    void setAccount(Account account);
+@Component
+@Scope("prototype")
+public class Password implements Entity {
+    private Account account;
+    private String stringPassword;
 
-    String getPassword();
+    public Account getAccount() {
+        return account;
+    }
 
-    /**
-     * checks & encrypts password before assignment
-     *
-     * @param password to check, encrypt & assign
-     */
-    void setPassword(String password);
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public String getStringPassword() {
+        return stringPassword;
+    }
+
+    public void setStringPassword(String stringPassword) {
+        this.stringPassword = stringPassword;
+    }
+
+    @Override
+    public long getId() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setId(long id) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Password password1 = (Password) o;
+        return Objects.equals(account, password1.account) && Objects.equals(stringPassword, password1.stringPassword);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(account, stringPassword);
+    }
 }

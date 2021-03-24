@@ -4,7 +4,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchableDto;
 import com.getjavajob.training.yarginy.socialnetwork.dao.otherdao.DataSetsDao;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -14,7 +13,6 @@ import java.util.Map;
 public class DataSetsDaoFacadeImpl implements DataSetsDaoFacade {
     private final DataSetsDao dataSetsDao;
 
-    @Autowired
     public DataSetsDaoFacadeImpl(DataSetsDao dataSetsDao) {
         this.dataSetsDao = dataSetsDao;
     }

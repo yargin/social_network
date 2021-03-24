@@ -1,10 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacade;
 import org.junit.After;
@@ -24,8 +21,8 @@ public class GroupDaoFacadeTest {
     private AccountDaoFacade accountDaoFacade;
     @Autowired
     private GroupDaoFacade groupDaoFacade;
-    private final Group GROUP = new GroupImpl();
-    private Account account = new AccountImpl("test", "test", "test@test.com");
+    private final Group GROUP = new Group();
+    private Account account = new Account("test", "test", "test@test.com");
 
     @Before
     public void testValuesInit() {
@@ -54,7 +51,7 @@ public class GroupDaoFacadeTest {
         try {
             GROUP.setName(null);
             groupDaoFacade.create(GROUP);
-        } catch (IncorrectDataException e) {
+        } catch (IllegalArgumentException e) {
             assertFalse(false);
         }
     }
@@ -69,7 +66,7 @@ public class GroupDaoFacadeTest {
     public void testUpdateOwner() {
         groupDaoFacade.create(GROUP);
         Group storedGroup = groupDaoFacade.select(GROUP);
-        Account newOwner = new AccountImpl("testOwner", "newOwner", "newOwner@test.test");
+        Account newOwner = new Account("testOwner", "newOwner", "newOwner@test.test");
         accountDaoFacade.create(newOwner);
         newOwner = accountDaoFacade.select(newOwner);
         GROUP.setOwner(newOwner);
@@ -104,16 +101,16 @@ public class GroupDaoFacadeTest {
 
     @Test
     public void testUpdateNonExistingGroup() {
-        Group nonExisting = new GroupImpl();
+        Group nonExisting = new Group();
         nonExisting.setName("non existing group");
-        Group anotherNonExisting = new GroupImpl();
+        Group anotherNonExisting = new Group();
         anotherNonExisting.setName("another non existing group");
         assertFalse(groupDaoFacade.update(anotherNonExisting, nonExisting));
     }
 
     @Test
     public void testDeleteNonExisting() {
-        Group nonExisting = new GroupImpl();
+        Group nonExisting = new Group();
         nonExisting.setName("non existing group");
         nonExisting.setId(66666666666L);
         assertFalse(groupDaoFacade.delete(nonExisting));

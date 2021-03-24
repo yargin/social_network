@@ -24,7 +24,7 @@
     <!--    interface - proxied methods-->
     <aop:config>
         <aop:pointcut id="accountUpdate"
-                      expression="execution(* com.getjavajob.training.yarginy.socialnetwork.service.AccountInfoServiceImpl.update(..))"/>
+                      expression="execution(* com.getjavajob.training.yarginy.socialnetwork.service.AccountServiceImpl.updateAccount(..))"/>
         <aop:pointcut id="accountCreate"
                       expression="execution(* com.getjavajob.training.yarginy.socialnetwork.service.AccountServiceImpl.createAccount(..))"/>
         <aop:pointcut id="register"

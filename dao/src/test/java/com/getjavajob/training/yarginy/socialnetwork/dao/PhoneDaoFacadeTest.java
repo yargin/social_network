@@ -1,9 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
@@ -20,7 +18,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoOverrideSpringConfig.xml"})
 public class PhoneDaoFacadeTest {
-    private final Phone phone = new PhoneImpl();
+    private final Phone phone = new Phone();
     @Autowired
     private PhoneDaoFacade phoneDaoFacade;
     @Autowired
@@ -29,7 +27,7 @@ public class PhoneDaoFacadeTest {
     @Before
     public void initTestValues() {
         phone.setNumber("123321");
-        Account account = new AccountImpl("test", "test", "test@test.test");
+        Account account = new Account("test", "test", "test@test.test");
         accountDao.create(account);
         account = accountDao.select(account);
         phone.setOwner(account);
@@ -56,7 +54,7 @@ public class PhoneDaoFacadeTest {
     @Test
     public void testCreateWrongOwner() {
         phoneDaoFacade.delete(phoneDaoFacade.select(phone));
-        Account wrongAccount = new AccountImpl();
+        Account wrongAccount = new Account();
         wrongAccount.setId(-1);
         phone.setOwner(wrongAccount);
         try {
@@ -88,9 +86,9 @@ public class PhoneDaoFacadeTest {
 
     @Test
     public void testUpdateNonExisting() {
-        Phone nonExisting = new PhoneImpl();
+        Phone nonExisting = new Phone();
         nonExisting.setNumber("000000");
-        Phone anotherNonExisting = new PhoneImpl();
+        Phone anotherNonExisting = new Phone();
         anotherNonExisting.setNumber("00000");
         assertFalse(phoneDaoFacade.update(nonExisting, anotherNonExisting));
     }
@@ -103,7 +101,7 @@ public class PhoneDaoFacadeTest {
 
     @Test
     public void testDeleteNonExisting() {
-        Phone nonExisting = new PhoneImpl();
+        Phone nonExisting = new Phone();
         nonExisting.setNumber("000000");
         assertFalse(phoneDaoFacade.delete(nonExisting));
     }

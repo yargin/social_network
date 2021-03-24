@@ -3,7 +3,6 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AccountDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.PhoneDao;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -16,9 +15,8 @@ public class AccountPhonesDao implements OneToManyDao<Phone> {
     private static final String ACC_ALIAS = "acc";
     private final PhoneDao phoneDao;
     private final AccountDao accountDao;
-    private final JdbcTemplate template;
+    private final transient JdbcTemplate template;
 
-    @Autowired
     public AccountPhonesDao(JdbcTemplate template, PhoneDao phoneDao, AccountDao accountDao) {
         this.phoneDao = phoneDao;
         this.accountDao = accountDao;

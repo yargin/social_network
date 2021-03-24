@@ -1,31 +1,108 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.models.group;
 
+import com.getjavajob.training.yarginy.socialnetwork.common.models.AbstractEntity;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.sql.Date;
+import java.util.Arrays;
+import java.util.Objects;
 
-/**
- * provides object model of relational entity Group
- */
-public interface Group extends Entity {
-    String getName();
+import static java.util.Objects.isNull;
 
-    void setName(String name);
+@Component
+@Scope("prototype")
+public class Group extends AbstractEntity implements Entity {
+    private String name;
+    private String description;
+    private Account owner;
+    private Date creationDate;
+    private byte[] photo;
 
-    String getDescription();
+    public Group() {
+    }
 
-    void setDescription(String description);
+    public Group(String name, Account owner) {
+        this.name = name;
+        this.owner = owner;
+    }
 
-    Account getOwner();
+    @Override
+    public long getId() {
+        return getIdNumber();
+    }
 
-    void setOwner(Account entity);
+    @Override
+    public void setId(long id) {
+        setIdNumber(id);
+    }
 
-    Date getCreationDate();
+    public String getName() {
+        return name;
+    }
 
-    void setCreationDate(Date date);
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    byte[] getPhoto();
+    public Account getOwner() {
+        return owner;
+    }
 
-    void setPhoto(byte[] photo);
+    public void setOwner(Account owner) {
+        this.owner = owner;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public byte[] getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(byte[] photo) {
+        if (!isNull(photo)) {
+            this.photo = Arrays.copyOf(photo, photo.length);
+        }
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (isNull(o)) {
+            return false;
+        }
+        if (this == o) {
+            return true;
+        }
+        if (o instanceof Group) {
+            Group group = (Group) o;
+            return Objects.equals(name, group.getName());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
+    }
+
+    @Override
+    public String toString() {
+        return "GroupImpl{name = '" + name + "'}";
+    }
 }

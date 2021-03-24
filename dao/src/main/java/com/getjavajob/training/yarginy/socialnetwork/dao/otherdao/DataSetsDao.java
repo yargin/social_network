@@ -4,30 +4,26 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.Searchable;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchableDto;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchableImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchableType;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AccountDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.GroupDao;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.util.Objects.isNull;
+import static java.util.Arrays.fill;
 
 @Component("dataSetsDao")
 public class DataSetsDao implements Serializable {
     private static final int ACCOUNTS_GROUPS_PARAMETERS_NUMBER = 3;
-    private final JdbcTemplate template;
+    private final transient JdbcTemplate template;
     private final AccountDao accountDao;
     private final GroupDao groupDao;
 
-    @Autowired
     public DataSetsDao(JdbcTemplate template, AccountDao accountDao, GroupDao groupDao) {
         this.template = template;
         this.accountDao = accountDao;
@@ -67,7 +63,7 @@ public class DataSetsDao implements Serializable {
 
     private String getAllUnjoinedGroupsQuery() {
         return "SELECT " + groupDao.getViewFields("g") + ", gmr.group_id requested" +
-                " FROM _groups g LEFT JOIN " +
+                " FROM `Groups` g LEFT JOIN " +
                 " (SELECT group_id FROM groups_memberships_requests" +
                 " WHERE account_id = ?) gmr " +
                 " ON gmr.group_id = g.id " +
@@ -79,9 +75,9 @@ public class DataSetsDao implements Serializable {
     public SearchableDto searchAccountsGroups(String searchString, int pageNumber, int limit) {
         String query = searchAccountsAndGroupsQuery(pageNumber, limit);
         String[] searchParameters = new String[ACCOUNTS_GROUPS_PARAMETERS_NUMBER];
-        Arrays.fill(searchParameters, '%' + searchString + '%');
+        fill(searchParameters, '%' + searchString + '%');
         Collection<Searchable> entities = template.query(query, (resultSet, i) -> {
-            Searchable searchable = new SearchableImpl();
+            Searchable searchable = new Searchable();
             searchable.setId(resultSet.getLong("id"));
             searchable.setName(resultSet.getString("name"));
             if ("user".equals(resultSet.getString("type"))) {
@@ -94,8 +90,7 @@ public class DataSetsDao implements Serializable {
         SearchableDto searchableDto = new SearchableDto(entities);
         Integer rowsNumber = template.queryForObject(accountsAndGroupsRowCountQuery(), (resultSet, i) ->
                 resultSet.getInt("rows_number"), (Object[]) searchParameters);
-        assert !isNull(rowsNumber);
-        searchableDto.setPages(rowsNumber, limit);
+        searchableDto.setPages(rowsNumber == null ? 0 : rowsNumber, limit);
         return searchableDto;
     }
 
@@ -105,7 +100,7 @@ public class DataSetsDao implements Serializable {
                 " (SELECT id, 'user' type, CONCAT(name, ' ', surname) name FROM accounts " +
                 " WHERE UPPER(name) LIKE UPPER(?) or UPPER(surname) LIKE UPPER(?)" +
                 " UNION " +
-                " SELECT id, 'group' type, name name FROM _groups " +
+                " SELECT id, 'group' type, name name FROM `Groups` " +
                 " WHERE UPPER(name) LIKE UPPER(?) ) s " +
                 " LIMIT " + limit + " OFFSET " + (pageNumber - 1) * limit + ';';
     }
@@ -115,7 +110,7 @@ public class DataSetsDao implements Serializable {
                 " (SELECT id, 'user' type, CONCAT(name, ' ', surname) name FROM accounts " +
                 " WHERE UPPER(name) LIKE UPPER(?) or UPPER(surname) LIKE UPPER(?)" +
                 " UNION " +
-                " SELECT id, 'group' type, name name FROM _groups " +
+                " SELECT id, 'group' type, name name FROM `Groups` " +
                 " WHERE UPPER(name) LIKE UPPER(?) ) s ;";
     }
 }

@@ -1,9 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DataSetsDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacade;
@@ -31,11 +29,11 @@ public class GroupMembersModeratorsTest {
     private GroupsModeratorsDaoFacade moderatorsDao;
     @Autowired
     private AccountDaoFacade accountDaoFacade;
-    private Account account1 = new AccountImpl("test1", "test1", "test1@test.test");
-    private Account account2 = new AccountImpl("test2", "test2", "test2@test.test");
-    private Account account3 = new AccountImpl("test3", "test3", "test3@test.test");
-    private Account account4 = new AccountImpl("test4", "test4", "test4@test.test");
-    private Group group = new GroupImpl("testGroup", account1);
+    private Account account1 = new Account("test1", "test1", "test1@test.test");
+    private Account account2 = new Account("test2", "test2", "test2@test.test");
+    private Account account3 = new Account("test3", "test3", "test3@test.test");
+    private Account account4 = new Account("test4", "test4", "test4@test.test");
+    private Group group = new Group("testGroup", account1);
 
     @Before
     public void testValuesInit() {

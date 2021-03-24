@@ -1,9 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacade;
 import org.junit.After;
@@ -33,15 +31,15 @@ public class AccountsGroupsTest {
 
     @Before
     public void initTestValues() {
-        account = new AccountImpl("test account", "test surname", "test@test.com");
+        account = new Account("test account", "test surname", "test@test.com");
         accountDaoFacade.create(account);
         account = accountDaoFacade.select(account);
 
-        firstGroup = new GroupImpl("first test group", account);
+        firstGroup = new Group("first test group", account);
         groupDaoFacade.create(firstGroup);
         firstGroup = groupDaoFacade.select(firstGroup);
 
-        secondGroup = new GroupImpl("second test group", account);
+        secondGroup = new Group("second test group", account);
         groupDaoFacade.create(secondGroup);
         secondGroup = groupDaoFacade.select(secondGroup);
     }

@@ -1,9 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.DialogImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogDaoFacade;
 import org.junit.After;
@@ -25,9 +23,9 @@ public class DialogsTest {
     private DialogDaoFacade dialogDaoFacade;
     @Autowired
     private AccountDaoFacade accountDaoFacade;
-    private Account firstAccount = new AccountImpl("test1", "test1", "test1@test.test");
-    private Account secondAccount = new AccountImpl("test2", "test2", "test2@test.test");
-    private Dialog dialog = new DialogImpl(firstAccount, secondAccount);
+    private Account firstAccount = new Account("test1", "test1", "test1@test.test");
+    private Account secondAccount = new Account("test2", "test2", "test2@test.test");
+    private Dialog dialog = new Dialog(firstAccount, secondAccount);
 
     @Before
     public void initTestValues() {
@@ -56,7 +54,7 @@ public class DialogsTest {
         dialogDaoFacade.delete(dialog);
         assertTrue(dialogDaoFacade.create(dialog));
         assertEquals(dialog, dialogDaoFacade.select(dialog));
-        Dialog testDialog = new DialogImpl(secondAccount, firstAccount);
+        Dialog testDialog = new Dialog(secondAccount, firstAccount);
         assertFalse(dialogDaoFacade.create(testDialog));
     }
 

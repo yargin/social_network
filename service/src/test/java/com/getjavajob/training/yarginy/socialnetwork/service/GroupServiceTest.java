@@ -3,9 +3,7 @@ package com.getjavajob.training.yarginy.socialnetwork.service;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.DataFlowViolationException;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.group.GroupImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsModeratorsDaoFacade;
 import org.junit.Test;
@@ -28,9 +26,9 @@ public class GroupServiceTest {
 
     @Test
     public void testCreateGroup() {
-        Account owner = new AccountImpl("test", "test", "test@email.com");
+        Account owner = new Account("test", "test", "test@email.com");
         owner.setId(1);
-        Group group = new GroupImpl("testGroup", null);
+        Group group = new Group("testGroup", null);
         group.setId(1);
         assertThrows(DataFlowViolationException.class, () -> groupService.createGroup(group));
         group.setOwner(owner);

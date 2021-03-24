@@ -3,16 +3,12 @@ package com.getjavajob.training.yarginy.socialnetwork.service;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.password.PasswordImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandleHelper;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PasswordDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
-import com.getjavajob.training.yarginy.socialnetwork.service.infokeepers.AccountInfoKeeper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -26,20 +22,14 @@ public class AuthServiceImpl implements AuthService {
     private final AccountDaoFacade accountDaoFacade;
     private final PasswordDaoFacade passwordDaoFacade;
     private final PhoneDaoFacade phoneDaoFacade;
-    private final DataHandleHelper dataHandleHelper;
+    private final DataHandler dataHandler;
 
-    @Autowired
-    public AuthServiceImpl(DataHandleHelper dataHandleHelper, AccountDaoFacade accountDaoFacade,
+    public AuthServiceImpl(DataHandler dataHandler, AccountDaoFacade accountDaoFacade,
                            PasswordDaoFacade passwordDaoFacade, PhoneDaoFacade phoneDaoFacade) {
-        this.dataHandleHelper = dataHandleHelper;
+        this.dataHandler = dataHandler;
         this.accountDaoFacade = accountDaoFacade;
         this.passwordDaoFacade = passwordDaoFacade;
         this.phoneDaoFacade = phoneDaoFacade;
-    }
-
-    @Override
-    public boolean register(AccountInfoKeeper accountInfoKeeper, Password password) {
-        return register(accountInfoKeeper.getAccount(), accountInfoKeeper.getPhones(), password);
     }
 
     @Override
@@ -55,7 +45,8 @@ public class AuthServiceImpl implements AuthService {
         if (!phoneDaoFacade.create(phones)) {
             throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
         }
-        password.setPassword(dataHandleHelper.encrypt(password.getPassword()));
+        password.setAccount(savedAccount);
+        password.setStringPassword(dataHandler.encrypt(password.getStringPassword()));
         if (!passwordDaoFacade.create(password)) {
             throw new IllegalStateException();
         }
@@ -64,16 +55,16 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public Account login(String email, String password) {
-        Password passwordObject = new PasswordImpl();
-        Account account = new AccountImpl();
+        Password passwordObject = new Password();
+        Account account = new Account();
         account.setEmail(email);
         passwordObject.setAccount(account);
-        passwordObject.setPassword(password);
+        passwordObject.setStringPassword(password);
         passwordObject = passwordDaoFacade.select(passwordObject);
         if (passwordObject.equals(getNullPassword())) {
             throw new IncorrectDataException(IncorrectData.WRONG_EMAIL);
         }
-        if (!passwordObject.getPassword().equals(dataHandleHelper.encrypt(password))) {
+        if (!passwordObject.getStringPassword().equals(dataHandler.encrypt(password))) {
             throw new IncorrectDataException(IncorrectData.WRONG_PASSWORD);
         }
         return accountDaoFacade.select(account);

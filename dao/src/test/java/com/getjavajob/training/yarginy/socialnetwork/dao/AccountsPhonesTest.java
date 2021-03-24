@@ -1,9 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.AccountImpl;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.PhoneImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
 import org.junit.After;
@@ -28,14 +26,14 @@ public class AccountsPhonesTest {
     @Autowired
     private PhoneDaoFacade phoneDaoFacade;
     private final Collection<Phone> phones = new ArrayList<>();
-    private Account account = new AccountImpl("test", "testtest", "test@test.test");
+    private Account account = new Account("test", "testtest", "test@test.test");
 
     @Before
     public void initTestValues() {
         accountDaoFacade.create(account);
         account = accountDaoFacade.select(account);
-        phones.add(new PhoneImpl("11111111111111111111111", account));
-        phones.add(new PhoneImpl("22222222222222222222222", account));
+        phones.add(new Phone("11111111111111111111111", account));
+        phones.add(new Phone("22222222222222222222222", account));
     }
 
     @After

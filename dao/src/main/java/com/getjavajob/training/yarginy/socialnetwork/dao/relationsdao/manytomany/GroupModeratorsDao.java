@@ -4,7 +4,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AccountDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.GroupDao;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -23,12 +22,11 @@ public class GroupModeratorsDao implements ManyToManyDao<Account, Group> {
     private static final String TABLE = "groups_moderators";
     private static final String ACCOUNT_ID = "account_id";
     private static final String GROUP_ID = "group_id";
-    private final JdbcTemplate template;
-    private final SimpleJdbcInsert insertTemplate;
+    private final transient JdbcTemplate template;
+    private final transient SimpleJdbcInsert insertTemplate;
     private final GroupDao groupDao;
     private final AccountDao accountDao;
 
-    @Autowired
     public GroupModeratorsDao(JdbcTemplate template, SimpleJdbcInsert insertTemplate, GroupDao groupDao,
                               AccountDao accountDao) {
         this.template = template;
@@ -40,7 +38,7 @@ public class GroupModeratorsDao implements ManyToManyDao<Account, Group> {
 
     @Override
     public Collection<Group> selectByFirst(long accountId) {
-        String query = "SELECT " + groupDao.getViewFields(GROUP_ALIAS) + " FROM _groups gr JOIN groups_moderators " +
+        String query = "SELECT " + groupDao.getViewFields(GROUP_ALIAS) + " FROM Groups gr JOIN groups_moderators " +
                 "gr_m ON gr.id = gr_m.group_id WHERE gr_m.account_id = ?";
         return template.query(query, new Object[]{accountId}, groupDao.getSuffixedViewRowMapper(GROUP_ALIAS));
     }

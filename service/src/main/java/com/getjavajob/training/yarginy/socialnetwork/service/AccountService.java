@@ -4,21 +4,18 @@ package com.getjavajob.training.yarginy.socialnetwork.service;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.service.infokeepers.AccountInfoKeeper;
 
 import java.io.Serializable;
 import java.util.Collection;
 
 public interface AccountService extends Serializable {
-    AccountInfoKeeper getAccountInfo(long id);
-
     Account get(long id);
 
     Account get(Account account);
 
     boolean createAccount(Account account, Collection<Phone> phones);
 
-    boolean updateAccount(Account account, Account storedAccount);
+    boolean updateAccount(Account account, Account storedAccount, Collection<Phone> phones, Collection<Phone> storedPhones);
 
     boolean deleteAccount(Account account);
 
