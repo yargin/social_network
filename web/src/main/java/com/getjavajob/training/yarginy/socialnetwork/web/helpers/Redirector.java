@@ -6,7 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.*;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.ACCOUNT_WALL;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.LOGIN;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.REDIRECT;
 import static java.util.Objects.isNull;
 
 @Component

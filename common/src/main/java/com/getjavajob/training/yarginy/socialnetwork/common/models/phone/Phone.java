@@ -1,7 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.models.phone;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.AbstractEntity;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.AbstractModel;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
 import org.springframework.context.annotation.Scope;
@@ -14,7 +14,7 @@ import static java.util.Objects.isNull;
 
 @Component
 @Scope("prototype")
-public class Phone extends AbstractEntity implements Entity {
+public class Phone extends AbstractModel implements Model {
     private String number;
     private PhoneType type;
     private Account owner;

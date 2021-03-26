@@ -15,7 +15,8 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Collection;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory.getNullPassword;
+import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullPassword;
+
 
 @Service("authService")
 public class AuthServiceImpl implements AuthService {

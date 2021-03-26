@@ -1,26 +1,26 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
 
 import java.io.Serializable;
 import java.util.Collection;
 
 /**
- * represents many-to-many relationship between two equal {@link Entity}
+ * represents many-to-many relationship between two equal {@link Model}
  *
- * @param <E> entity type
+ * @param <E> Model type
  */
-public interface SelfManyToManyDao<E extends Entity> extends Serializable {
+public interface SelfManyToManyDao<E extends Model> extends Serializable {
     /**
-     * selects all participants related to {@link Entity}
+     * selects all participants related to {@link Model}
      *
-     * @param id {@link Entity}'s id that other participants related to
+     * @param id {@link Model}'s id that other participants related to
      * @return {@link Collection} of participants
      */
     Collection<E> select(long id);
 
     /**
-     * creates new relation between two {@link Entity}
+     * creates new relation between two {@link Model}
      *
      * @param firstId  member of relationship
      * @param secondId member of relationship
@@ -29,7 +29,7 @@ public interface SelfManyToManyDao<E extends Entity> extends Serializable {
     boolean create(long firstId, long secondId);
 
     /**
-     * examines that relation between two {@link Entity}
+     * examines that relation between two {@link Model}
      *
      * @param firstId  member of relationship
      * @param secondId member of relationship
@@ -38,7 +38,7 @@ public interface SelfManyToManyDao<E extends Entity> extends Serializable {
     boolean relationExists(long firstId, long secondId);
 
     /**
-     * deletes relation between two {@link Entity}
+     * deletes relation between two {@link Model}
      *
      * @param firstId  member of relationship
      * @param secondId member of relationship

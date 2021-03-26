@@ -51,7 +51,7 @@ public class DialogMessageDaoImpl implements DialogMessageDaoFacade {
 
     @Override
     public Message getNullMessage() {
-        return dialogMessageDao.getNullEntity();
+        return dialogMessageDao.getNullModel();
     }
 
     @Override

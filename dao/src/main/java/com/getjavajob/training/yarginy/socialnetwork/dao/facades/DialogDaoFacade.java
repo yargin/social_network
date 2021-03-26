@@ -10,7 +10,7 @@ public interface DialogDaoFacade extends Serializable {
 
     Dialog select(Dialog dialog);
 
-    Dialog getNullEntity();
+    Dialog getNullModel();
 
     boolean create(Dialog dialog);
 

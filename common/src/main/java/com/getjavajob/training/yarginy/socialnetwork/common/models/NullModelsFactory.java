@@ -7,8 +7,8 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Messa
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 
-public abstract class NullEntitiesFactory {
-    private NullEntitiesFactory() {
+public abstract class NullModelsFactory {
+    private NullModelsFactory() {
     }
 
     public static Account getNullAccount() {

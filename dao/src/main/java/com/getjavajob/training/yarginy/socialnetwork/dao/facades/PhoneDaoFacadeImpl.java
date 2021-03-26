@@ -64,7 +64,7 @@ public class PhoneDaoFacadeImpl implements PhoneDaoFacade {
 
     @Override
     public Phone getNullPhone() {
-        return phoneDao.getNullEntity();
+        return phoneDao.getNullModel();
     }
 
     @Override

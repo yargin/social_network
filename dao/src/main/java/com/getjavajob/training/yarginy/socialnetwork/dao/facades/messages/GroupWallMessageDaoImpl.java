@@ -51,7 +51,7 @@ public class GroupWallMessageDaoImpl implements GroupWallMessageDaoFacade {
 
     @Override
     public Message getNullMessage() {
-        return groupWallMessageDao.getNullEntity();
+        return groupWallMessageDao.getNullModel();
     }
 
     @Override

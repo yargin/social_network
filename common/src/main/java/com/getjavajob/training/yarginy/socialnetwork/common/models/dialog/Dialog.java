@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.models.dialog;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ import static java.util.Objects.isNull;
 
 @Component
 @Scope("prototype")
-public class Dialog implements Entity {
+public class Dialog implements Model {
     private long id;
     private Account firstAccount;
     private Account secondAccount;

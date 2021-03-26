@@ -10,7 +10,10 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.RECEIVER_ID;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTER_ID;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER_ID;
+
 
 @Component
 public class MessageAccessChecker extends HandlerInterceptorAdapter {

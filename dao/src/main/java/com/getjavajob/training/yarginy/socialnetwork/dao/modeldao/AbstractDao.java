@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -14,7 +14,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import java.util.Collection;
 import java.util.function.Supplier;
 
-public abstract class AbstractDao<E extends Entity> implements Dao<E> {
+public abstract class AbstractDao<E extends Model> implements Dao<E> {
     private static final String WHERE = " WHERE ";
     protected final transient JdbcTemplate template;
     protected final transient SimpleJdbcInsert jdbcInsert;
@@ -44,7 +44,7 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
         } catch (TransientDataAccessException e) {
             throw new IllegalStateException(e);
         } catch (EmptyResultDataAccessException e) {
-            return getNullEntity();
+            return getNullModel();
         }
     }
 
@@ -56,7 +56,7 @@ public abstract class AbstractDao<E extends Entity> implements Dao<E> {
         } catch (TransientDataAccessException e) {
             throw new IllegalArgumentException(e);
         } catch (EmptyResultDataAccessException e) {
-            return getNullEntity();
+            return getNullModel();
         }
     }
 

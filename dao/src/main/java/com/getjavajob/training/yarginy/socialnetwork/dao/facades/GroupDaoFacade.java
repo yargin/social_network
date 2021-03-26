@@ -11,7 +11,7 @@ public interface GroupDaoFacade extends Serializable {
 
     Group select(Group group);
 
-    Group getNullEntity();
+    Group getNullModel();
 
     boolean create(Group group);
 

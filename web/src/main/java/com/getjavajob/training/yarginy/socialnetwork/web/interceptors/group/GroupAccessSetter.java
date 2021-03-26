@@ -10,7 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.RECEIVER_ID;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTED_ID;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTER_ID;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER;
 import static java.util.Objects.isNull;
 
 @Component

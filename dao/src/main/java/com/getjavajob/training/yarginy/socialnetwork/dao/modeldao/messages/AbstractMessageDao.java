@@ -1,6 +1,5 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.messages;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AbstractDao;
@@ -14,6 +13,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
 import java.sql.Types;
 
+import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullMessage;
 import static java.util.Objects.isNull;
 
 public abstract class AbstractMessageDao extends AbstractDao<Message> {
@@ -36,8 +36,8 @@ public abstract class AbstractMessageDao extends AbstractDao<Message> {
     }
 
     @Override
-    public Message getNullEntity() {
-        return NullEntitiesFactory.getNullMessage();
+    public Message getNullModel() {
+        return getNullMessage();
     }
 
     @Override

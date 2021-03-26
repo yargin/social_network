@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoOverrideSpringConfig.xml"})
@@ -85,7 +87,7 @@ public class GroupDaoFacadeTest {
     @Test
     public void testSelectNonExistingGroup() {
         Group actual = groupDaoFacade.select(GROUP);
-        assertEquals(groupDaoFacade.getNullEntity(), actual);
+        assertEquals(groupDaoFacade.getNullModel(), actual);
     }
 
     @Test
@@ -121,7 +123,7 @@ public class GroupDaoFacadeTest {
         groupDaoFacade.create(GROUP);
         GROUP.setId(groupDaoFacade.select(GROUP).getId());
         assertTrue(groupDaoFacade.delete(GROUP));
-        assertEquals(groupDaoFacade.getNullEntity(), groupDaoFacade.select(GROUP));
+        assertEquals(groupDaoFacade.getNullModel(), groupDaoFacade.select(GROUP));
     }
 
     @Test

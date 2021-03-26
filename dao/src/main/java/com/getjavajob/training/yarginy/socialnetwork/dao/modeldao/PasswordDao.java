@@ -1,6 +1,5 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -11,6 +10,8 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Types;
+
+import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullPassword;
 
 @Repository
 public class PasswordDao extends AbstractDao<Password> {
@@ -43,8 +44,8 @@ public class PasswordDao extends AbstractDao<Password> {
     }
 
     @Override
-    public Password getNullEntity() {
-        return NullEntitiesFactory.getNullPassword();
+    public Password getNullModel() {
+        return getNullPassword();
     }
 
     @Override

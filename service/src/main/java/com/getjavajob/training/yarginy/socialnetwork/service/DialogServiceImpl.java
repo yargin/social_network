@@ -66,6 +66,6 @@ public class DialogServiceImpl implements DialogService {
 
     @Override
     public Dialog getNullDialog() {
-        return dialogDaoFacade.getNullEntity();
+        return dialogDaoFacade.getNullModel();
     }
 }

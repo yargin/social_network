@@ -1,7 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.models.group;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.AbstractEntity;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -14,7 +13,8 @@ import static java.util.Objects.isNull;
 
 @Component
 @Scope("prototype")
-public class Group extends AbstractEntity implements Entity {
+public class Group implements Model {
+    private long id;
     private String name;
     private String description;
     private Account owner;
@@ -31,12 +31,12 @@ public class Group extends AbstractEntity implements Entity {
 
     @Override
     public long getId() {
-        return getIdNumber();
+        return id;
     }
 
     @Override
     public void setId(long id) {
-        setIdNumber(id);
+        this.id = id;
     }
 
     public String getName() {

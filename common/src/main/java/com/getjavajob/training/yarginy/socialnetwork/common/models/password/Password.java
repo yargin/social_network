@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.models.password;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -9,7 +9,7 @@ import java.util.Objects;
 
 @Component
 @Scope("prototype")
-public class Password implements Entity {
+public class Password implements Model {
     private Account account;
     private String stringPassword;
 

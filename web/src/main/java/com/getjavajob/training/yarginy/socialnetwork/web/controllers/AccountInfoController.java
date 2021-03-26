@@ -19,7 +19,12 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.Collection;
 import java.util.Map;
 
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.ALL_GROUPS_LIST;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.DIALOGS;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.GROUPS;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTED_ID;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.TAB;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER_ID;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.ACCOUNT_WALL_VIEW;
 
 @Controller

@@ -23,8 +23,7 @@ public class AccountDaoFacadeImpl implements AccountDaoFacade {
     public AccountDaoFacadeImpl(Dao<Account> accountDao,
                                 @Qualifier("groupOwnersDao") OneToManyDao<Group> accountGroupsDao,
                                 @Qualifier("groupMembershipDao") ManyToManyDao<Account, Group> accountsInGroupsDao,
-                                OneToManyDao<Phone> accountPhonesDao,
-                                SelfManyToManyDao<Account> accountFriendsDao) {
+                                OneToManyDao<Phone> accountPhonesDao, SelfManyToManyDao<Account> accountFriendsDao) {
         this.accountDao = accountDao;
         this.accountGroupsDao = accountGroupsDao;
         this.accountsInGroupsDao = accountsInGroupsDao;
@@ -43,8 +42,8 @@ public class AccountDaoFacadeImpl implements AccountDaoFacade {
     }
 
     @Override
-    public Account getNullEntity() {
-        return accountDao.getNullEntity();
+    public Account getNullModel() {
+        return accountDao.getNullModel();
     }
 
     @Override

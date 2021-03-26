@@ -29,6 +29,6 @@ public class PasswordDaoFacadeImpl implements PasswordDaoFacade {
 
     @Override
     public Password getNullPassword() {
-        return passwordDao.getNullEntity();
+        return passwordDao.getNullModel();
     }
 }

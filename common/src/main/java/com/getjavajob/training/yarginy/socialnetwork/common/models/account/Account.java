@@ -1,12 +1,18 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.models.account;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.AbstractEntity;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.sql.Date;
 import java.util.Arrays;
 import java.util.Objects;
@@ -15,15 +21,22 @@ import static java.util.Objects.isNull;
 
 @Component("account")
 @Scope("prototype")
-public class Account extends AbstractEntity implements Entity {
+@Entity
+@Table(name = "accounts")
+public class Account implements Model {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
     private String name;
     private String surname;
     private String patronymic;
+    @Enumerated(EnumType.STRING)
     private Sex sex;
     private Date birthDate;
     private Date registrationDate;
     private String email;
     private String additionalEmail;
+    @Enumerated(EnumType.STRING)
     private Role role;
     private String icq;
     private String skype;
@@ -46,12 +59,12 @@ public class Account extends AbstractEntity implements Entity {
 
     @Override
     public long getId() {
-        return getIdNumber();
+        return id;
     }
 
     @Override
     public void setId(long id) {
-        setIdNumber(id);
+        this.id = id;
     }
 
     public String getName() {

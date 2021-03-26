@@ -1,7 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.DataFlowViolationException;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,6 +11,8 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Types;
+
+import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullDialog;
 
 @Repository("dialogDao")
 public class DialogDao extends AbstractDao<Dialog> {
@@ -62,7 +63,7 @@ public class DialogDao extends AbstractDao<Dialog> {
             try {
                 dialog.setId(resultSet.getLong(ID + dialogSuffix));
             } catch (DataFlowViolationException e) {
-                return getNullEntity();
+                return getNullModel();
             }
             Account firstAccount = accountDao.getSuffixedViewRowMapper(firstAccountSuffix).mapRow(resultSet, i);
             Account secondAccount = accountDao.getSuffixedViewRowMapper(secondAccountSuffix).mapRow(resultSet, i);
@@ -141,8 +142,8 @@ public class DialogDao extends AbstractDao<Dialog> {
     }
 
     @Override
-    public Dialog getNullEntity() {
-        return NullEntitiesFactory.getNullDialog();
+    public Dialog getNullModel() {
+        return getNullDialog();
     }
 
 }

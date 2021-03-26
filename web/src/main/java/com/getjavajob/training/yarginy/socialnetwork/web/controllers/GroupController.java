@@ -8,14 +8,25 @@ import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collection;
 import java.util.Map;
 
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.*;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.PHOTO;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.RECEIVER_ID;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTER_ID;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.TAB;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.GROUP_MEMBERS;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.GROUP_MODERATORS;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.GROUP_REQUESTS;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.GROUP_WALL;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.REDIRECT;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.GROUP_VIEW;
 
 @Controller

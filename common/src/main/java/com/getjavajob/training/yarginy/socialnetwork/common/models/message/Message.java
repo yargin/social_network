@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.models.message;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ import static java.util.Arrays.copyOf;
 
 @Component
 @Scope("prototype")
-public class Message implements Entity {
+public class Message implements Model {
     private long id;
     private Account author;
     private String text;

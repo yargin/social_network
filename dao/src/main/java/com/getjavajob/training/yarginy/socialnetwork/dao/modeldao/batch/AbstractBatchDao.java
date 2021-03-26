@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.batch;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.Entity;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AbstractDao;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public abstract class AbstractBatchDao<E extends Entity> extends AbstractDao<E> implements BatchDao<E> {
+public abstract class AbstractBatchDao<E extends Model> extends AbstractDao<E> implements BatchDao<E> {
     protected AbstractBatchDao(JdbcTemplate template, SimpleJdbcInsert jdbcInsert, NamedParameterJdbcTemplate namedTemplate,
                                String table, String tableAlias) {
         super(template, jdbcInsert, namedTemplate, table, tableAlias);

@@ -51,7 +51,7 @@ public class AccountWallMessageDaoImpl implements AccountWallMessageDaoFacade {
 
     @Override
     public Message getNullMessage() {
-        return accountWallMessageDao.getNullEntity();
+        return accountWallMessageDao.getNullModel();
     }
 
     @Override

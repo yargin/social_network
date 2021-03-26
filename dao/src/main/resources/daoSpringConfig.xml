@@ -15,8 +15,26 @@
 
     <import resource="classpath:commonSpringConfig.xml"/>
 
-    <!--                        jndi-name="jdbc/Local-MySql"-->
+    <!--    Local-MySql-->
     <jee:jndi-lookup id="dataSource" jndi-name="jdbc/Heroku-Jaws" expected-type="javax.sql.DataSource"/>
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="com.getjavajob.training.yarginy.socialnetwork.common.models"/>
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="showSql" value="true"/>
+                <property name="databasePlatform" value="org.hibernate.dialect.MySQLDialect"/>
+            </bean>
+        </property>
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.physical_naming_strategy">
+                    com.getjavajob.training.yarginy.socialnetwork.common.utils.CamelCaseToSnakeCaseNamingStrategy
+                </prop>
+            </props>
+        </property>
+    </bean>
 
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate" scope="prototype">
         <constructor-arg ref="dataSource"/>

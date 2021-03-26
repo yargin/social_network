@@ -12,7 +12,7 @@ public interface AccountDaoFacade extends Serializable {
 
     Account select(Account account);
 
-    Account getNullEntity();
+    Account getNullModel();
 
     boolean create(Account account);
 

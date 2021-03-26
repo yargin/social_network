@@ -36,8 +36,8 @@ public class GroupDaoFacadeImpl implements GroupDaoFacade {
     }
 
     @Override
-    public Group getNullEntity() {
-        return groupDao.getNullEntity();
+    public Group getNullModel() {
+        return groupDao.getNullModel();
     }
 
     @Override
@@ -72,7 +72,7 @@ public class GroupDaoFacadeImpl implements GroupDaoFacade {
 
     @Override
     public Group getNullGroup() {
-        return groupDao.getNullEntity();
+        return groupDao.getNullModel();
     }
 
     @Override

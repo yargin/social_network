@@ -28,8 +28,8 @@ public class DialogDaoFacadeImpl implements DialogDaoFacade {
     }
 
     @Override
-    public Dialog getNullEntity() {
-        return dialogDao.getNullEntity();
+    public Dialog getNullModel() {
+        return dialogDao.getNullModel();
     }
 
     @Override

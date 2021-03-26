@@ -12,7 +12,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Collection;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoOverrideSpringConfig.xml"})
@@ -70,10 +72,10 @@ public class AccountDaoFacadeTest {
     public void testSelectNonExistingAccount() {
         account = accountDaoFacade.select(account);
         accountDaoFacade.delete(account);
-        Account actual = accountDaoFacade.select(accountDaoFacade.getNullEntity());
-        assertEquals(accountDaoFacade.getNullEntity(), actual);
+        Account actual = accountDaoFacade.select(accountDaoFacade.getNullModel());
+        assertEquals(accountDaoFacade.getNullModel(), actual);
         actual = accountDaoFacade.select(actual);
-        assertEquals(accountDaoFacade.getNullEntity(), actual);
+        assertEquals(accountDaoFacade.getNullModel(), actual);
     }
 
     @Test
@@ -109,7 +111,7 @@ public class AccountDaoFacadeTest {
         accountDaoFacade.create(account);
         account = accountDaoFacade.select(account);
         assertTrue(accountDaoFacade.delete(account));
-        assertEquals(accountDaoFacade.getNullEntity(), accountDaoFacade.select(account));
+        assertEquals(accountDaoFacade.getNullModel(), accountDaoFacade.select(account));
     }
 
     @Test

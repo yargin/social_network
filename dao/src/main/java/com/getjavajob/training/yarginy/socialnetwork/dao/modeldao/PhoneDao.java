@@ -1,7 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.DataFlowViolationException;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Types;
 
+import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullPhone;
 import static java.util.Objects.isNull;
 
 @Repository
@@ -40,8 +40,8 @@ public class PhoneDao extends AbstractBatchDao<Phone> {
     }
 
     @Override
-    public Phone getNullEntity() {
-        return NullEntitiesFactory.getNullPhone();
+    public Phone getNullModel() {
+        return getNullPhone();
     }
 
     @Override
@@ -85,7 +85,7 @@ public class PhoneDao extends AbstractBatchDao<Phone> {
         return (resultSet, i) -> {
             Phone phone = getSuffixedViewRowMapper(phoneSuffix).mapRow(resultSet, i);
             if (phone == null) {
-                return getNullEntity();
+                return getNullModel();
             }
             Account account = accountDao.getSuffixedViewRowMapper(accountSuffix).mapRow(resultSet, i);
             phone.setOwner(account);
@@ -99,7 +99,7 @@ public class PhoneDao extends AbstractBatchDao<Phone> {
             try {
                 phone.setId(resultSet.getLong(ID + phoneSuffix));
             } catch (DataFlowViolationException e) {
-                return getNullEntity();
+                return getNullModel();
             }
             phone.setNumber(resultSet.getString(NUMBER + phoneSuffix));
             String phoneType = resultSet.getString(TYPE + phoneSuffix);

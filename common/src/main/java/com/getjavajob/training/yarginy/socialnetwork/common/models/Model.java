@@ -8,7 +8,7 @@ import java.io.Serializable;
  * represents model as entity
  */
 @Component
-public interface Entity extends Serializable {
+public interface Model extends Serializable {
     /**
      * get entity's number unique identifier, usually auto-generated
      *

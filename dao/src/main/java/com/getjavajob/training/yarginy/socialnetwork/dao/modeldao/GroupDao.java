@@ -1,7 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.DataFlowViolationException;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.batch.AbstractBatchDao;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Types;
 
+import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullGroup;
 import static java.util.Objects.isNull;
 
 @Repository("groupDao")
@@ -60,8 +60,8 @@ public class GroupDao extends AbstractBatchDao<Group> {
     }
 
     @Override
-    public Group getNullEntity() {
-        return NullEntitiesFactory.getNullGroup();
+    public Group getNullModel() {
+        return getNullGroup();
     }
 
     @Override
@@ -112,7 +112,7 @@ public class GroupDao extends AbstractBatchDao<Group> {
             try {
                 group.setId(resultSet.getLong(ID + suffix));
             } catch (DataFlowViolationException e) {
-                return getNullEntity();
+                return getNullModel();
             }
             group.setName(resultSet.getString(NAME + suffix));
             return group;
@@ -122,8 +122,8 @@ public class GroupDao extends AbstractBatchDao<Group> {
     public RowMapper<Group> getSuffixedRowMapper(String groupSuffix, String accountSuffix) {
         return (resultSet, i) -> {
             Group group = getViewRowMapper().mapRow(resultSet, i);
-            if (group == null) {
-                return getNullEntity();
+            if (isNull(group)) {
+                return getNullModel();
             }
             group.setDescription(resultSet.getString(DESCRIPTION + groupSuffix));
             group.setCreationDate(resultSet.getDate(CREATION_DATE + groupSuffix));

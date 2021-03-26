@@ -14,7 +14,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Collection;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoOverrideSpringConfig.xml"})
@@ -72,13 +74,13 @@ public class DialogsTest {
     @Test
     public void testSelectNonExistingDialog() {
         dialogDaoFacade.delete(dialog);
-        assertEquals(dialogDaoFacade.getNullEntity(), dialogDaoFacade.select(dialog));
+        assertEquals(dialogDaoFacade.getNullModel(), dialogDaoFacade.select(dialog));
     }
 
     @Test
     public void testDeleteDialog() {
         assertTrue(dialogDaoFacade.delete(dialog));
-        assertEquals(dialogDaoFacade.getNullEntity(), dialogDaoFacade.select(dialog));
+        assertEquals(dialogDaoFacade.getNullModel(), dialogDaoFacade.select(dialog));
     }
 
     @Test

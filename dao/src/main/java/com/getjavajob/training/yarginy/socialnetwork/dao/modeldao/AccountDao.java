@@ -1,7 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.modeldao;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.DataFlowViolationException;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
@@ -12,8 +11,21 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.sql.Types;
+import java.util.Collection;
 
+import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullAccount;
 import static java.util.Objects.isNull;
 
 @Repository
@@ -39,9 +51,88 @@ public class AccountDao extends AbstractDao<Account> {
             ADDITIONAL_EMAIL, COUNTRY, CITY, REGISTRATION_DATE, ROLE, PHOTO};
     private static final String[] VIEW_FIELDS = {ID, NAME, SURNAME, EMAIL};
     private final String selectAll = "SELECT " + getFields(ALIAS) + " FROM " + getTable(ALIAS);
+    private final EntityManagerFactory entityManagerFactory;
 
-    public AccountDao(JdbcTemplate template, SimpleJdbcInsert jdbcInsert, NamedParameterJdbcTemplate namedTemplate) {
+    public AccountDao(JdbcTemplate template, SimpleJdbcInsert jdbcInsert, NamedParameterJdbcTemplate namedTemplate,
+                      EntityManagerFactory entityManagerFactory) {
         super(template, jdbcInsert, namedTemplate, TABLE, ALIAS);
+        this.entityManagerFactory = entityManagerFactory;
+    }
+
+    @Override
+    public Collection<Account> selectAll() {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+//
+//        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+//        CriteriaQuery<Account> criteriaQuery = builder.createQuery(Account.class);
+//        Root<Account> root = criteriaQuery.from(Account.class);
+//        criteriaQuery.select(root);
+//
+//        TypedQuery<Account> query = entityManager.createQuery(criteriaQuery);
+//        return query.getResultList();
+
+        Query query = entityManager.createQuery("select a from Account a", Account.class);
+        return query.getResultList();
+    }
+
+    @Override
+    public Account select(long id) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        Account account = entityManager.find(Account.class, id);
+        //todo find out if i need it
+//        if (!isNull(account)) {
+//            entityManager.detach(account);
+//        }
+        return isNull(account) ? getNullModel() : account;
+    }
+
+    @Override
+    public Account select(Account account) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Account> criteriaQuery = builder.createQuery(Account.class);
+        Root<Account> root = criteriaQuery.from(Account.class);
+        criteriaQuery.select(root).where(builder.equal(root.get(EMAIL), account.getEmail()));
+
+        TypedQuery<Account> accountTypedQuery = entityManager.createQuery(criteriaQuery);
+        try {
+            return accountTypedQuery.getSingleResult();
+        } catch (NoResultException e) {
+            return getNullModel();
+        } catch (NonUniqueResultException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
+    @Override
+    public boolean delete(Account account) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        Account accountToDelete = entityManager.find(Account.class, account.getId());
+        if (isNull(accountToDelete)) {
+            transaction.rollback();
+            return false;
+        }
+        entityManager.remove(accountToDelete);
+        transaction.commit();
+        return true;
+    }
+
+    @Override
+    public boolean create(Account entity) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        try {
+            entityManager.persist(entity);
+            transaction.commit();
+            return true;
+        } catch (EntityExistsException e) {
+            transaction.rollback();
+            return false;
+        }
     }
 
     @Override
@@ -90,7 +181,7 @@ public class AccountDao extends AbstractDao<Account> {
             try {
                 account.setId(resultSet.getLong(ID + suffix));
             } catch (DataFlowViolationException e) {
-                return getNullEntity();
+                return getNullModel();
             }
             account.setName(resultSet.getString(NAME + suffix));
             account.setSurname(resultSet.getString(SURNAME + suffix));
@@ -178,7 +269,7 @@ public class AccountDao extends AbstractDao<Account> {
     }
 
     @Override
-    public Account getNullEntity() {
-        return NullEntitiesFactory.getNullAccount();
+    public Account getNullModel() {
+        return getNullAccount();
     }
 }
