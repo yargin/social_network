@@ -5,6 +5,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.*;
 import java.sql.Date;
 import java.util.Arrays;
 import java.util.Objects;
@@ -13,10 +14,16 @@ import static java.util.Objects.isNull;
 
 @Component
 @Scope("prototype")
+@Entity
+@Table(name = "groups")
 public class Group implements Model {
+    @Id
+    @GeneratedValue
     private long id;
+    @Column(nullable = false)
     private String name;
     private String description;
+    @ManyToOne
     private Account owner;
     private Date creationDate;
     private byte[] photo;

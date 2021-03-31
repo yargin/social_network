@@ -3,16 +3,11 @@ package com.getjavajob.training.yarginy.socialnetwork.common.models.account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Date;
 import java.util.Arrays;
 import java.util.Objects;
@@ -25,16 +20,20 @@ import static java.util.Objects.isNull;
 @Table(name = "accounts")
 public class Account implements Model {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private long id;
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private String surname;
     private String patronymic;
     @Enumerated(EnumType.STRING)
     private Sex sex;
     private Date birthDate;
     private Date registrationDate;
+    @Column(unique = true, nullable = false)
     private String email;
+    @Column(unique = true)
     private String additionalEmail;
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -43,6 +42,8 @@ public class Account implements Model {
     private String city;
     private String country;
     private byte[] photo;
+    @Version
+    private long version;
 
     public Account() {
     }
@@ -180,6 +181,15 @@ public class Account implements Model {
             this.photo = Arrays.copyOf(photo, photo.length);
         }
     }
+
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(long version) {
+        this.version = version;
+    }
+
 
     @Override
     public boolean equals(Object o) {

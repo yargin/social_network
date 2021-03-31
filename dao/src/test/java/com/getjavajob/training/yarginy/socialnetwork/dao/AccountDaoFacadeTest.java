@@ -25,8 +25,7 @@ public class AccountDaoFacadeTest {
 
     @After
     public void deleteTestValues() {
-        account = accountDaoFacade.select(account);
-        accountDaoFacade.delete(account);
+        accountDaoFacade.delete(accountDaoFacade.select(account));
     }
 
     @Before
@@ -34,23 +33,22 @@ public class AccountDaoFacadeTest {
         account.setEmail("test@test.test");
         account.setName("test");
         account.setSurname("test");
-        account = accountDaoFacade.select(account);
-        accountDaoFacade.delete(account);
+        accountDaoFacade.delete(accountDaoFacade.select(account));
     }
 
     @Test
     public void testCreateAccount() {
-        boolean actual;
+        boolean created;
         try {
             account.setEmail(null);
-            actual = accountDaoFacade.create(account);
+            created = accountDaoFacade.create(account);
         } catch (IllegalArgumentException e) {
-            actual = false;
+            created = false;
         }
-        assertFalse(actual);
+        assertFalse(created);
         account.setEmail("test@test.test");
-        actual = accountDaoFacade.create(account);
-        assertTrue(actual);
+        created = accountDaoFacade.create(account);
+        assertTrue(created);
     }
 
     @Test

@@ -3,49 +3,29 @@ package com.getjavajob.training.yarginy.socialnetwork.dao;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AccountDao;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Collection;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static java.lang.Thread.sleep;
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoOverrideSpringConfig.xml"})
 public class JpaTest {
-    private static final Account ACCOUNT = new Account("testName", "testSurname", "testEmail");
-    private static final Account FISRT_ACCOUNT = new Account("testtName", "testSSurname", "testEEmail");
-    private static final MapSqlParameterSource PARAMETER_SOURCE = new MapSqlParameterSource();
+    private final Account account = new Account("testName", "testSurname", "testEmail");
     @Autowired
     private AccountDao accountDao;
-    @Autowired
-    private SimpleJdbcInsert insert;
-
-    @BeforeClass
-    public static void init() {
-        PARAMETER_SOURCE.addValue("name", "testName");
-        PARAMETER_SOURCE.addValue("surname", "testSurname");
-        PARAMETER_SOURCE.addValue("email", "testEmail");
-    }
 
     @Before
     public void initValues() {
-        insert.setTableName("Accounts");
-        try {
-            insert.setGeneratedKeyName("id");
-            long id = insert.executeAndReturnKey(PARAMETER_SOURCE).longValue();
-            ACCOUNT.setId(id);
-        } catch (DuplicateKeyException ignore) {
-        }
+        accountDao.delete(accountDao.select(account));
+        accountDao.create(account);
     }
 
     @Test
@@ -56,31 +36,68 @@ public class JpaTest {
 
     @Test
     public void testGetAccountById() {
-        Account selectedAccount = accountDao.select(1);
-        assertEquals(ACCOUNT, selectedAccount);
+        Account selectedAccount = accountDao.select(account.getId());
+        assertEquals(account, selectedAccount);
         selectedAccount = accountDao.select(22);
         assertEquals(accountDao.getNullModel(), selectedAccount);
     }
 
     @Test
     public void testGetAccountByIdentifier() {
-        assertEquals(ACCOUNT, accountDao.select(ACCOUNT));
+        assertEquals(account, accountDao.select(account));
         assertEquals(accountDao.getNullModel(), accountDao.select(new Account("newTestAccount", "")));
     }
 
     @Test
     public void testDeleteAccount() {
-        assertTrue(accountDao.delete(ACCOUNT));
+        assertTrue(accountDao.delete(account));
         Collection<Account> accounts = accountDao.selectAll();
         assertEquals(0, accounts.size());
-        assertFalse(accountDao.delete(ACCOUNT));
+        assertFalse(accountDao.delete(account));
     }
 
     @Test
     public void testCreateAccount() {
-        Account account = new Account("newAcc", "newAcc", "newAcc");
-        assertTrue(accountDao.create(account));
-        assertEquals(account, accountDao.select(account));
-        assertFalse(accountDao.create(account));
+        Account newAccount = new Account("newAcc", "newAcc", "newAcc");
+        assertTrue(accountDao.create(newAccount));
+        assertEquals(newAccount, accountDao.select(newAccount));
+        assertFalse(accountDao.create(newAccount));
+        accountDao.delete(newAccount);
+    }
+
+    @Test
+    public void testUpdate() {
+        AtomicBoolean lock = new AtomicBoolean(false);
+        AtomicBoolean updated = new AtomicBoolean();
+        long id = account.getId();
+        Thread thread1 = new Thread(() -> {
+            Account account1 = accountDao.select(id);
+            account1.setCountry("Russia");
+            accountDao.update(account1);
+            lock.set(true);
+        });
+        Thread thread2 = new Thread(() -> {
+            Account account2 = accountDao.select(id);
+            while (!lock.get()) {
+                try {
+                    sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            account2.setCity("SPb");
+            updated.set(accountDao.update(account2));
+        });
+        thread2.start();
+        thread1.start();
+        try {
+            thread1.join();
+            thread2.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        assertFalse(updated.get());
+        assertNull(accountDao.select(id).getCity());
+        assertEquals("Russia", accountDao.select(id).getCountry());
     }
 }

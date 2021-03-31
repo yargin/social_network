@@ -11,17 +11,11 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.NoResultException;
-import javax.persistence.NonUniqueResultException;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transaction;
 import java.sql.Types;
 import java.util.Collection;
 
@@ -62,16 +56,7 @@ public class AccountDao extends AbstractDao<Account> {
     @Override
     public Collection<Account> selectAll() {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-//
-//        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-//        CriteriaQuery<Account> criteriaQuery = builder.createQuery(Account.class);
-//        Root<Account> root = criteriaQuery.from(Account.class);
-//        criteriaQuery.select(root);
-//
-//        TypedQuery<Account> query = entityManager.createQuery(criteriaQuery);
-//        return query.getResultList();
-
-        Query query = entityManager.createQuery("select a from Account a", Account.class);
+        TypedQuery<Account> query = entityManager.createQuery("select a from Account a", Account.class);
         return query.getResultList();
     }
 
@@ -79,23 +64,15 @@ public class AccountDao extends AbstractDao<Account> {
     public Account select(long id) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         Account account = entityManager.find(Account.class, id);
-        //todo find out if i need it
-//        if (!isNull(account)) {
-//            entityManager.detach(account);
-//        }
         return isNull(account) ? getNullModel() : account;
     }
 
     @Override
     public Account select(Account account) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-
-        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Account> criteriaQuery = builder.createQuery(Account.class);
-        Root<Account> root = criteriaQuery.from(Account.class);
-        criteriaQuery.select(root).where(builder.equal(root.get(EMAIL), account.getEmail()));
-
-        TypedQuery<Account> accountTypedQuery = entityManager.createQuery(criteriaQuery);
+        TypedQuery<Account> accountTypedQuery = entityManager.createQuery("select a from Account a where a.email = " +
+                ":email", Account.class);
+        accountTypedQuery.setParameter(EMAIL, account.getEmail());
         try {
             return accountTypedQuery.getSingleResult();
         } catch (NoResultException e) {
@@ -115,24 +92,52 @@ public class AccountDao extends AbstractDao<Account> {
             transaction.rollback();
             return false;
         }
-        entityManager.remove(accountToDelete);
+        try {
+            entityManager.remove(accountToDelete);
+        } catch (OptimisticLockException e) {
+            transaction.rollback();
+            return false;
+        }
         transaction.commit();
         return true;
     }
 
     @Override
-    public boolean create(Account entity) {
+    public boolean create(Account account) {
+        if (account.getId() != 0) {
+            return false;
+        }
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {
-            entityManager.persist(entity);
+            entityManager.persist(account);
             transaction.commit();
             return true;
         } catch (EntityExistsException e) {
             transaction.rollback();
             return false;
+        } catch (PersistenceException e) {
+            throw new IllegalArgumentException(e);
         }
+    }
+
+    public EntityManager get() {
+        return entityManagerFactory.createEntityManager();
+    }
+
+    public boolean update(Account account) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        try {
+            entityManager.merge(account);
+        } catch (OptimisticLockException e) {
+            transaction.rollback();
+            return false;
+        }
+        transaction.commit();
+        return true;
     }
 
     @Override
