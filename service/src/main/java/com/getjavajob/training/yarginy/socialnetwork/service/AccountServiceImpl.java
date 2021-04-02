@@ -16,6 +16,10 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Collection;
 
+import static com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData.*;
+import static java.sql.Date.*;
+import static java.time.LocalDate.*;
+
 @Service
 public class AccountServiceImpl implements AccountService {
     private final AccountDaoFacade accountDaoFacade;
@@ -43,12 +47,12 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean createAccount(Account account, Collection<Phone> phones) {
-        account.setRegistrationDate(Date.valueOf(LocalDate.now()));
+        account.setRegistrationDate(valueOf(now()));
         if (!accountDaoFacade.create(account)) {
-            throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
+            throw new IncorrectDataException(EMAIL_DUPLICATE);
         }
         if (!phoneDaoFacade.create(phones)) {
-            throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
+            throw new IncorrectDataException(PHONE_DUPLICATE);
         }
         return true;
     }
@@ -57,10 +61,10 @@ public class AccountServiceImpl implements AccountService {
     public boolean updateAccount(Account account, Account storedAccount, Collection<Phone> phones,
                                  Collection<Phone> storedPhones) {
         if (!accountDaoFacade.update(account, storedAccount)) {
-            throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
+            throw new IncorrectDataException(EMAIL_DUPLICATE);
         }
         if (!phoneDaoFacade.update(phones, storedPhones)) {
-            throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
+            throw new IncorrectDataException(PHONE_DUPLICATE);
         }
         return true;
     }
@@ -91,7 +95,7 @@ public class AccountServiceImpl implements AccountService {
         try {
             return friendshipDao.removeFriendship(firstId, secondId);
         } catch (IllegalArgumentException e) {
-            throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
+            throw new IncorrectDataException(WRONG_REQUEST);
         }
     }
 
@@ -100,7 +104,7 @@ public class AccountServiceImpl implements AccountService {
         try {
             return friendshipDao.areFriends(firstId, secondId);
         } catch (IllegalArgumentException e) {
-            throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
+            throw new IncorrectDataException(WRONG_REQUEST);
         }
     }
 
@@ -109,7 +113,7 @@ public class AccountServiceImpl implements AccountService {
         try {
             return friendshipDao.selectFriends(accountId);
         } catch (IllegalArgumentException e) {
-            throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
+            throw new IncorrectDataException(WRONG_REQUEST);
         }
     }
 
@@ -123,7 +127,7 @@ public class AccountServiceImpl implements AccountService {
         try {
             return friendshipDao.createRequest(requester, receiver);
         } catch (IllegalArgumentException e) {
-            throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
+            throw new IncorrectDataException(WRONG_REQUEST);
         }
     }
 
@@ -132,7 +136,7 @@ public class AccountServiceImpl implements AccountService {
         try {
             return friendshipDao.deleteRequest(requester, receiver);
         } catch (IllegalArgumentException e) {
-            throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
+            throw new IncorrectDataException(WRONG_REQUEST);
         }
     }
 

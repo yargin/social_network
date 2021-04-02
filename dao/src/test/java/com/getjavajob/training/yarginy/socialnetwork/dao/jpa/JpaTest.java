@@ -11,6 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Collection;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.lang.Thread.sleep;
 import static org.junit.Assert.*;
@@ -30,13 +31,13 @@ public class JpaTest {
     @After
     public void deleteValues() {
         accountDao.delete(accountDao.select(account));
-
     }
-//    @Test
-//    public void testSelectAll() {
-//        Collection<Account> accounts = accountDao.selectAll();
-//        assertTrue(accounts.size() > 0);
-//    }
+
+    @Test
+    public void testSelectAll() {
+        Collection<Account> accounts = accountDao.selectAll();
+        assertTrue(accounts.size() > 0);
+    }
 
     @Test
     public void testGetAccountById() {
@@ -69,40 +70,40 @@ public class JpaTest {
         assertFalse(accountDao.create(new Account("newAcc", "newAcc", "newAcc")));
         accountDao.delete(newAccount);
     }
-//
-//    @Test
-//    public void testUpdate() {
-//        AtomicBoolean lock = new AtomicBoolean(false);
-//        AtomicBoolean updated = new AtomicBoolean();
-//        long id = account.getId();
-//        Thread thread1 = new Thread(() -> {
-//            Account account1 = accountDao.select(id);
-//            account1.setCountry("Russia");
-//            accountDao.update(account1);
-//            lock.set(true);
-//        });
-//        Thread thread2 = new Thread(() -> {
-//            Account account2 = accountDao.select(id);
-//            while (!lock.get()) {
-//                try {
-//                    sleep(10);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//            account2.setCity("SPb");
-//            updated.set(accountDao.update(account2));
-//        });
-//        thread2.start();
-//        thread1.start();
-//        try {
-//            thread1.join();
-//            thread2.join();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        assertFalse(updated.get());
-//        assertNull(accountDao.select(id).getCity());
-//        assertEquals("Russia", accountDao.select(id).getCountry());
-//    }
+
+    @Test
+    public void testUpdate() {
+        AtomicBoolean lock = new AtomicBoolean(false);
+        AtomicBoolean updated = new AtomicBoolean();
+        long id = account.getId();
+        Thread thread1 = new Thread(() -> {
+            Account account1 = accountDao.select(id);
+            account1.setCountry("Russia");
+            accountDao.update(account1);
+            lock.set(true);
+        });
+        Thread thread2 = new Thread(() -> {
+            Account account2 = accountDao.select(id);
+            while (!lock.get()) {
+                try {
+                    sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            account2.setCity("SPb");
+            updated.set(accountDao.update(account2));
+        });
+        thread2.start();
+        thread1.start();
+        try {
+            thread1.join();
+            thread2.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        assertFalse(updated.get());
+        assertNull(accountDao.select(id).getCity());
+        assertEquals("Russia", accountDao.select(id).getCountry());
+    }
 }
