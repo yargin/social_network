@@ -4,6 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.DataFlowV
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.batch.AbstractBatchDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.jpa.JpaBatchDao;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -11,7 +12,9 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.*;
 import java.sql.Types;
+import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullGroup;
 import static java.util.Objects.isNull;

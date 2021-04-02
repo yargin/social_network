@@ -24,7 +24,8 @@ public abstract class AbstractMessagesDao implements OneToManyDao<Message> {
 
     @Override
     public Collection<Message> selectMany(long accountId) {
-        String query = "SELECT " + messageDao.getViewFields(ALIAS) + ", " + accountDao.getViewFields(ACC_ALIAS) +
+        String query = "SELECT " + messageDao.getViewFields(ALIAS) + ", " +
+//                accountDao.getViewFields(ACC_ALIAS) +
                 " FROM " + messageDao.getTable(ALIAS) + " JOIN accounts as acc ON mess.author = acc.id WHERE " +
                 "mess.receiver_id = ? ORDER BY mess.posted DESC";
         return template.query(query, getManyRowMapper(), accountId);

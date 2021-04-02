@@ -2,6 +2,8 @@ package com.getjavajob.training.yarginy.socialnetwork.dao;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.AccountDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.jpa.JpaAccountDao;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,19 +22,23 @@ import static org.junit.Assert.*;
 public class JpaTest {
     private final Account account = new Account("testName", "testSurname", "testEmail");
     @Autowired
-    private AccountDao accountDao;
+    private JpaAccountDao accountDao;
 
     @Before
     public void initValues() {
-        accountDao.delete(accountDao.select(account));
         accountDao.create(account);
     }
 
-    @Test
-    public void testSelectAll() {
-        Collection<Account> accounts = accountDao.selectAll();
-        assertTrue(accounts.size() > 0);
+    @After
+    public void deleteValues() {
+        accountDao.delete(accountDao.select(account));
+
     }
+//    @Test
+//    public void testSelectAll() {
+//        Collection<Account> accounts = accountDao.selectAll();
+//        assertTrue(accounts.size() > 0);
+//    }
 
     @Test
     public void testGetAccountById() {
@@ -62,42 +68,43 @@ public class JpaTest {
         assertTrue(accountDao.create(newAccount));
         assertEquals(newAccount, accountDao.select(newAccount));
         assertFalse(accountDao.create(newAccount));
+        assertFalse(accountDao.create(new Account("newAcc", "newAcc", "newAcc")));
         accountDao.delete(newAccount);
     }
-
-    @Test
-    public void testUpdate() {
-        AtomicBoolean lock = new AtomicBoolean(false);
-        AtomicBoolean updated = new AtomicBoolean();
-        long id = account.getId();
-        Thread thread1 = new Thread(() -> {
-            Account account1 = accountDao.select(id);
-            account1.setCountry("Russia");
-            accountDao.update(account1);
-            lock.set(true);
-        });
-        Thread thread2 = new Thread(() -> {
-            Account account2 = accountDao.select(id);
-            while (!lock.get()) {
-                try {
-                    sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            account2.setCity("SPb");
-            updated.set(accountDao.update(account2));
-        });
-        thread2.start();
-        thread1.start();
-        try {
-            thread1.join();
-            thread2.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        assertFalse(updated.get());
-        assertNull(accountDao.select(id).getCity());
-        assertEquals("Russia", accountDao.select(id).getCountry());
-    }
+//
+//    @Test
+//    public void testUpdate() {
+//        AtomicBoolean lock = new AtomicBoolean(false);
+//        AtomicBoolean updated = new AtomicBoolean();
+//        long id = account.getId();
+//        Thread thread1 = new Thread(() -> {
+//            Account account1 = accountDao.select(id);
+//            account1.setCountry("Russia");
+//            accountDao.update(account1);
+//            lock.set(true);
+//        });
+//        Thread thread2 = new Thread(() -> {
+//            Account account2 = accountDao.select(id);
+//            while (!lock.get()) {
+//                try {
+//                    sleep(10);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//            account2.setCity("SPb");
+//            updated.set(accountDao.update(account2));
+//        });
+//        thread2.start();
+//        thread1.start();
+//        try {
+//            thread1.join();
+//            thread2.join();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        assertFalse(updated.get());
+//        assertNull(accountDao.select(id).getCity());
+//        assertEquals("Russia", accountDao.select(id).getCountry());
+//    }
 }

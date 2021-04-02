@@ -4,6 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.DataFlowV
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.jpa.JpaDao;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -12,10 +13,6 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import javax.transaction.Transaction;
 import java.sql.Types;
 import java.util.Collection;
 
@@ -114,7 +111,7 @@ public class AccountDao extends AbstractDao<Account> {
             entityManager.persist(account);
             transaction.commit();
             return true;
-        } catch (EntityExistsException e) {
+        } catch (RollbackException e) {
             transaction.rollback();
             return false;
         } catch (PersistenceException e) {

@@ -3,7 +3,7 @@ package com.getjavajob.training.yarginy.socialnetwork.common.models.account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
-import org.springframework.context.annotation.Lazy;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +11,7 @@ import javax.persistence.*;
 import java.sql.Date;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Set;
 
 import static java.util.Objects.isNull;
 

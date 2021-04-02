@@ -5,15 +5,30 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.util.Objects;
 
 import static java.util.Objects.isNull;
 
 @Component
 @Scope("prototype")
+@Entity
+@Table(name = "dialogs")
 public class Dialog implements Model {
+    @Id
+    @GeneratedValue
     private long id;
+    @ManyToOne
+    @JoinColumn(name = "first_id", referencedColumnName = "id")
     private Account firstAccount;
+    @ManyToOne
+    @JoinColumn(name = "second_id", referencedColumnName = "id")
     private Account secondAccount;
 
     public Dialog() {

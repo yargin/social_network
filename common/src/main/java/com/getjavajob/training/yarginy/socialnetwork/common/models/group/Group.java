@@ -20,10 +20,11 @@ public class Group implements Model {
     @Id
     @GeneratedValue
     private long id;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
     private String description;
     @ManyToOne
+    @JoinColumn(name = "owner_id", referencedColumnName = "id")
     private Account owner;
     private Date creationDate;
     private byte[] photo;
