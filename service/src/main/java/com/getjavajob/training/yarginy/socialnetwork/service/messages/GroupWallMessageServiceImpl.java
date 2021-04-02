@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.service.messages;
 
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages.GroupWallMessageDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.messages.GroupWallMessageDaoFacade;
 import org.springframework.stereotype.Service;
 
 @Service("groupWallMessageService")

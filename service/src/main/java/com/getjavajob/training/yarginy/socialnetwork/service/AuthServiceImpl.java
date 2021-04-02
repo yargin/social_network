@@ -6,9 +6,9 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Accou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PasswordDaoFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.AccountDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.PasswordDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.PhoneDaoFacade;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;

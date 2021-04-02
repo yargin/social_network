@@ -1,7 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.service.messages;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages.MessageDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.messages.MessageDao;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;

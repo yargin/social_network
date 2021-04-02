@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.service.messages;
 
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages.MessageDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.messages.MessageDao;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
