@@ -1,21 +1,19 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.otherdao;
+package com.getjavajob.training.yarginy.socialnetwork.service.dto;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class AccountInfo {
+public class AccountInfoXml {
     private Account account;
     private List<Phone> phones;
 
-    public AccountInfo(Account account, List<Phone> phones) {
+    public AccountInfoXml(Account account, Collection<Phone> phones) {
         this.account = account;
-        this.phones = phones;
+        this.phones = new ArrayList<>(phones);
     }
 
     public Account getAccount() {
@@ -30,7 +28,7 @@ public class AccountInfo {
         return phones;
     }
 
-    public void setPhones(List<Phone> phones) {
-        this.phones = phones;
+    public void setPhones(Collection<Phone> phones) {
+        this.phones = new ArrayList<>(phones);
     }
 }

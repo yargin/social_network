@@ -36,11 +36,5 @@
         <constructor-arg ref="jdbcTemplate"/>
     </bean>
 
-    <bean id="xStream" class="com.thoughtworks.xstream.XStream">
-        <constructor-arg ref="xmlDriver"/>
-    </bean>
-
-    <bean id="xmlDriver" class="com.thoughtworks.xstream.io.xml.Dom4JDriver"/>
-
     <context:component-scan base-package="com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates"/>
 </beans>

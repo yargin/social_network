@@ -117,8 +117,6 @@ public abstract class AbstractDao<E extends Model> implements Dao<E> {
 
     public abstract RowMapper<E> getRowMapper();
 
-    //test table
-
     protected abstract String[] getFieldsList();
 
     public String getFields(String alias) {

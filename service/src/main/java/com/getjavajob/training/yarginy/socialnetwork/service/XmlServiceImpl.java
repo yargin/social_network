@@ -1,30 +1,26 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.otherdao;
+package com.getjavajob.training.yarginy.socialnetwork.service;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoXml;
 import com.thoughtworks.xstream.XStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Collection;
 
 @Component
-public class XmlAccountDao {
+public class XmlServiceImpl implements XmlService {
     private XStream xstream;
-
-    @Autowired
-    public XmlAccountDao(XStream xstream) {
-        this.xstream = xstream;
-    }
 
     @Autowired
     public void setXstream(XStream xstream) {
         this.xstream = xstream;
     }
 
-    public String toXml(Account account, List<Phone> phones) {
-        xstream.processAnnotations(AccountInfo.class);
-        xstream.alias("accountInfo" , AccountInfo.class);
+    public String toXml(Account account, Collection<Phone> phones) {
+        xstream.alias("accountInfo" , AccountInfoXml.class);
+
         xstream.alias("account" , Account.class);
         xstream.omitField(Account.class, "id");
         xstream.omitField(Account.class, "email");
@@ -35,15 +31,15 @@ public class XmlAccountDao {
         xstream.omitField(Phone.class, "owner");
         xstream.omitField(Phone.class, "id");
 
-        AccountInfo accountInfo = new AccountInfo(account, phones);
-        return xstream.toXML(accountInfo);
+        AccountInfoXml accountInfoXml = new AccountInfoXml(account, phones);
+        return xstream.toXML(accountInfoXml);
     }
 
-    public AccountInfo fromXml(String xml) {
-        xstream.alias("accountInfo" , AccountInfo.class);
+    public AccountInfoXml fromXml(String xml) {
+        xstream.alias("accountInfo" , AccountInfoXml.class);
         xstream.alias("account" , Account.class);
         xstream.alias("phone", Phone.class);
         Object object = xstream.fromXML(xml);
-        return (AccountInfo) object;
+        return (AccountInfoXml) object;
     }
 }

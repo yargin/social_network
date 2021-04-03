@@ -63,9 +63,9 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
-    <!--    <tx:annotation-driven proxy-target-class="true" transaction-manager="transactionManager"/>-->
+    <bean id="xStream" class="com.thoughtworks.xstream.XStream">
+        <constructor-arg ref="xmlDriver"/>
+    </bean>
 
-    <!--    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" >-->
-    <!--        <property name="dataSource" ref="dataSource"/>-->
-    <!--    </bean>-->
+    <bean id="xmlDriver" class="com.thoughtworks.xstream.io.xml.Dom4JDriver"/>
 </beans>
