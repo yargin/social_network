@@ -49,6 +49,8 @@
     <div>
         <a href="${context}/account/update?id=${id}"><fmt:message key="label.updateInfo" bundle="${label}"/></a><br>
         <a href="${context}/account/delete?id=${id}" onclick='return confirmation("${confirmText}")'><fmt:message
-                key="label.deleteAccount" bundle="${label}"/></a>
+                key="label.deleteAccount" bundle="${label}"/></a><br>
+        <a href="${context}/account/savexml?id=${id}" download="account id ${id}.xml">
+            <fmt:message key="label.saveAccountInfo" bundle="${label}"/> </a>
     </div>
 </c:if>

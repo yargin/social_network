@@ -6,6 +6,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
+
 <script type="text/javascript" src="${context}/js/phonesEdit.js"></script>
 <script type="text/javascript" src="${context}/js/confirmationDialog.js"></script>
 

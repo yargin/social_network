@@ -7,6 +7,8 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
 import com.getjavajob.training.yarginy.socialnetwork.service.AuthService;
+import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoXml;
+import com.getjavajob.training.yarginy.socialnetwork.service.xml.AccountInfoXmlServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers.AccountInfoMvcModel;
 import com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers.PhoneView;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.updaters.AccountFieldsUpdater;
@@ -22,10 +24,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
 
@@ -44,15 +51,18 @@ import static java.util.stream.Collectors.toList;
 public class AccountCrudController {
     private final AuthService authService;
     private final AccountService accountService;
+    private final AccountInfoXmlServiceImpl accountInfoXmlService;
     private final RegistrationValidator registrationValidator;
     private final AccountInfoValidator accountInfoValidator;
 
     public AccountCrudController(AuthService authService, AccountInfoValidator accountInfoValidator,
-                                 AccountService accountService, RegistrationValidator registrationValidator) {
+                                 AccountService accountService, RegistrationValidator registrationValidator,
+                                 AccountInfoXmlServiceImpl accountInfoXmlService) {
         this.authService = authService;
         this.accountService = accountService;
         this.registrationValidator = registrationValidator;
         this.accountInfoValidator = accountInfoValidator;
+        this.accountInfoXmlService = accountInfoXmlService;
     }
 
     @GetMapping("/registration")
@@ -119,11 +129,13 @@ public class AccountCrudController {
         return updater.getModelAndView(model);
     }
 
+
     @PostMapping("/account/update")
     public ModelAndView performUpdate(HttpSession session, @ModelAttribute AccountInfoMvcModel model,
                                       @RequestParam(required = false) String save, BindingResult result) {
         AccountFieldsUpdater updater = new AccountFieldsUpdater(session, ACCOUNT_UPDATE_VIEW);
 
+        //todo fix
         if ("cancel".equals(save)) {
             return updater.acceptActionOrRetry(true, model);
         }
@@ -158,12 +170,51 @@ public class AccountCrudController {
         return updater.acceptActionOrRetry(updated, model);
     }
 
+    @PostMapping("/account/upload")
+    public ModelAndView loadUploadedAccountInfo(@RequestParam MultipartFile accountDataXml, HttpSession session,
+                                                @ModelAttribute AccountInfoMvcModel accountInfoMvcModel,
+                                                BindingResult result, HttpServletRequest request,
+                                                @RequestAttribute long id) throws IOException {
+        String xml = new String(accountDataXml.getBytes(), StandardCharsets.UTF_8);
+        try {
+            AccountInfoXml accountXml = accountInfoXmlService.fromXml(xml);
+            accountXml.getAccount().setPhoto(new byte[0]);
+            Account account = accountXml.getAccount();
+            account.setId(id);
+            accountInfoMvcModel.setAccount(account);
+            accountInfoMvcModel.setPrivatePhones(getPhoneViews(accountXml.getPhones(), PRIVATE));
+            accountInfoMvcModel.setWorkPhones(getPhoneViews(accountXml.getPhones(), WORK));
+        } catch (IllegalStateException e) {
+            request.setAttribute("uploadError", "error.wrongXml");
+            return showUpdate(session, id);
+        } catch (IllegalArgumentException e) {
+            request.setAttribute("uploadError", "error.wrongAccountData");
+            return showUpdate(session, id);
+        }
+        return performUpdate(session, accountInfoMvcModel, "", result);
+    }
+
     @GetMapping("/account/delete")
+    //todo fix
     public String delete(@ModelAttribute Account accountToDelete) {
         if (accountService.deleteAccount(accountToDelete)) {
             return REDIRECT + LOGOUT;
         }
         return "error";
+    }
+
+    @GetMapping("/account/savexml")
+    public void getFile(HttpServletResponse response, @RequestAttribute long id) throws IOException {
+        Account account = accountService.get(id);
+        Collection<Phone> allPhones = accountService.getPhones(id);
+        String accountXml = accountInfoXmlService.toXml(new AccountInfoXml(account, allPhones));
+
+        AccountInfoMvcModel model = new AccountInfoMvcModel();
+        model.setAccount(account);
+        model.setPrivatePhones(getPhoneViews(allPhones, PRIVATE));
+        model.setWorkPhones(getPhoneViews(allPhones, WORK));
+
+        response.getWriter().print(accountXml);
     }
 
     @InitBinder

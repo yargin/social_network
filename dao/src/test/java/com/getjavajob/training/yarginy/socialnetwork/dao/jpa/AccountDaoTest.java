@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestJpaSpringConfig.xml"})
-public class JpaTest {
+public class AccountDaoTest {
     private final Account account = new Account("testName", "testSurname", "testEmail");
     @Autowired
     private JpaAccountDao accountDao;

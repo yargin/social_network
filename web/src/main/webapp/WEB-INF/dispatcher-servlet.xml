@@ -61,6 +61,8 @@
             <mvc:mapping path="/group/update*"/>
             <mvc:mapping path="/account/delete*"/>
             <mvc:mapping path="/account/update*"/>
+            <mvc:mapping path="/account/savexml*"/>
+            <mvc:mapping path="/account/upload*"/>
             <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.common.OneIdInterceptor"/>
         </mvc:interceptor>
 
@@ -118,6 +120,8 @@
             <mvc:mapping path="/friendship/remove*"/>
             <mvc:mapping path="/account/delete*"/>
             <mvc:mapping path="/account/update*"/>
+            <mvc:mapping path="/account/savexml*"/>
+            <mvc:mapping path="account/upload*"/>
             <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.account.AccountOwnerChecker"/>
         </mvc:interceptor>
 
