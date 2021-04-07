@@ -22,4 +22,8 @@ public interface Model extends Serializable {
      * @param id unique number identifier
      */
     void setId(long id);
+
+    long getVersion();
+
+    void setVersion(long version);
 }

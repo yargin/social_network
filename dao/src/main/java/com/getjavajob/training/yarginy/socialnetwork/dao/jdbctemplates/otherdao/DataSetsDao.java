@@ -1,7 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.otherdao;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.Searchable;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchableDto;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchableType;

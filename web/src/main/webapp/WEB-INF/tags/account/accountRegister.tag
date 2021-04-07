@@ -1,4 +1,4 @@
-<%@ tag import="com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex" %>
+<%@ tag import="com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.Sex" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="common" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="account" tagdir="/WEB-INF/tags/account" %>
@@ -14,7 +14,7 @@
     <%--@elvariable id="accountInfoMvcModel" type="com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers.AccountInfoMvcModel"--%>
     <form:form action="${context}/registration" method="post" enctype="multipart/form-data"
                onsubmit="return acceptPhones()" modelAttribute="accountInfoMvcModel">
-        <%--@elvariable id="account" type="com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account"--%>
+        <%--@elvariable id="account" type="com.getjavajob.training.yarginy.socialnetwork.common.models.Account"--%>
         <spring:message code="form.name" var="formName"/>
         <form:input type="text" path="account.name" value="${account.name}" placeholder="${formName}"
                     required="required"/> <br>

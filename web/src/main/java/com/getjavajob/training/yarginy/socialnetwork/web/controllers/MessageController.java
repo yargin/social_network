@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.controllers;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Message;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.Redirector;
 import org.springframework.beans.factory.annotation.Qualifier;

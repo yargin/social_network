@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 
 import java.io.Serializable;
 import java.util.Collection;

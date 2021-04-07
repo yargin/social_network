@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.relationsdao.manytomany;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.modeldao.AccountDao;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
@@ -63,7 +63,7 @@ public class FriendshipsRequestsDao implements ManyToManyDao<Account, Account> {
         } catch (DuplicateKeyException e) {
             return false;
         } catch (DataIntegrityViolationException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(e);
         }
     }
 

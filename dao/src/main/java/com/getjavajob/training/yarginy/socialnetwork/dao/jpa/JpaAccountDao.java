@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.jpa;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
@@ -9,7 +9,7 @@ import java.util.function.Supplier;
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullAccount;
 
 @Repository
-public class JpaAccountDao extends GenericDao<Account> {
+public class JpaAccountDao extends JpaGenericDao<Account> {
     @Override
     protected Supplier<Account> getSelectByPk(EntityManager entityManager, long id) {
         return () -> entityManager.find(Account.class, id);
@@ -33,6 +33,11 @@ public class JpaAccountDao extends GenericDao<Account> {
     @Override
     public Account getNullModel() {
         return getNullAccount();
+    }
+
+    @Override
+    protected Supplier<Account> getModelReference(EntityManager entityManager, Account account) {
+        return () -> entityManager.getReference(Account.class, account.getId());
     }
 }
 

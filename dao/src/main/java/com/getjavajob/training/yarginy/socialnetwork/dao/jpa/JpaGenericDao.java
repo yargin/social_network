@@ -18,8 +18,8 @@ import java.util.function.Supplier;
 import static java.util.Objects.isNull;
 
 @Repository
-public abstract class GenericDao<E extends Model> implements JpaDao<E> {
-    private transient EntityManagerFactory entityManagerFactory;
+public abstract class JpaGenericDao<E extends Model> implements JpaDao<E> {
+    protected transient EntityManagerFactory entityManagerFactory;
 
     @Autowired
     public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
@@ -31,6 +31,8 @@ public abstract class GenericDao<E extends Model> implements JpaDao<E> {
     protected abstract Supplier<E> getSelectByPk(EntityManager entityManager, long id);
 
     protected abstract Supplier<TypedQuery<E>> getSelectAll(EntityManager entityManager);
+
+    protected abstract Supplier<E> getModelReference(EntityManager entityManager, E model);
 
     @Override
     public E select(long id) {
@@ -65,22 +67,15 @@ public abstract class GenericDao<E extends Model> implements JpaDao<E> {
     @Override
     public boolean create(E model) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        if (model.getId() != 0) {
-            return false;
-        }
-        //check if exists by alt key
-        TypedQuery<E> query = getSelectByAltKey(entityManager, model).get();
-        if (!query.getResultList().isEmpty()) {
-            return false;
-        }
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {
             entityManager.persist(model);
             transaction.commit();
             return true;
-        } catch (PersistenceException e) {
-            throw new IllegalArgumentException(e);
+        } catch (PersistenceException | IllegalArgumentException e) {
+            transaction.rollback();
+            return false;
         }
     }
 
@@ -91,34 +86,34 @@ public abstract class GenericDao<E extends Model> implements JpaDao<E> {
         transaction.begin();
         try {
             entityManager.merge(model);
+            transaction.commit();
+            model.setVersion(getModelReference(entityManager, model).get().getVersion());
+            return true;
         } catch (OptimisticLockException e) {
+            throw new IllegalStateException(e);
+        } catch (PersistenceException | IllegalArgumentException e) {
             transaction.rollback();
             return false;
         }
-        transaction.commit();
-        return true;
     }
 
-    /*
-    when remove passed as parameter - detached entity may be removed - need to select from context
-     */
     @Override
     public boolean delete(E model) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
-        E modelToDelete = getSelectByPk(entityManager, model.getId()).get();
-        if (getNullModel().equals(modelToDelete)) {
-            transaction.rollback();
-            return false;
-        }
         try {
-            entityManager.remove(modelToDelete);
-        } catch (OptimisticLockException | IllegalArgumentException e) {
+            E entityToDelete = getModelReference(entityManager, model).get();
+            entityManager.remove(entityToDelete);
+            transaction.commit();
+            return true;
+        } catch (PersistenceException | IllegalArgumentException e) {
             transaction.rollback();
             return false;
         }
-        transaction.commit();
-        return true;
+    }
+
+    public EntityManager getEntityManager() {
+        return entityManagerFactory.createEntityManager();
     }
 }

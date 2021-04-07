@@ -1,7 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Password;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;

@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.relationsdao.onetomany;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Message;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.modeldao.AccountDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.modeldao.messages.AbstractMessageDao;
 import org.springframework.dao.EmptyResultDataAccessException;

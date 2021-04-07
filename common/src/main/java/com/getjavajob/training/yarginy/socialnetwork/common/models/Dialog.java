@@ -1,17 +1,18 @@
-package com.getjavajob.training.yarginy.socialnetwork.common.models.dialog;
+package com.getjavajob.training.yarginy.socialnetwork.common.models;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.persistence.Version;
 import java.util.Objects;
 
 import static java.util.Objects.isNull;
@@ -19,17 +20,20 @@ import static java.util.Objects.isNull;
 @Component
 @Scope("prototype")
 @Entity
-@Table(name = "dialogs")
+@Table(name = "dialogs", uniqueConstraints = {@UniqueConstraint(name = "dialogs_accounts_id",
+        columnNames = {"first_id", "second_id"})})
 public class Dialog implements Model {
     @Id
     @GeneratedValue
     private long id;
     @ManyToOne
-    @JoinColumn(name = "first_id", referencedColumnName = "id")
+    @JoinColumn(nullable = false, name = "first_id", foreignKey = @ForeignKey(name = "dialogs_accounts_id_fk"))
     private Account firstAccount;
     @ManyToOne
-    @JoinColumn(name = "second_id", referencedColumnName = "id")
+    @JoinColumn(nullable = false, name = "second_id", foreignKey = @ForeignKey(name = "dialogs_accounts_id_fk_2"))
     private Account secondAccount;
+    @Version
+    private long version;
 
     public Dialog() {
     }
@@ -77,6 +81,16 @@ public class Dialog implements Model {
         } else {
             this.secondAccount = secondAccount;
         }
+    }
+
+    @Override
+    public long getVersion() {
+        return version;
+    }
+
+    @Override
+    public void setVersion(long version) {
+        this.version = version;
     }
 
     @Override

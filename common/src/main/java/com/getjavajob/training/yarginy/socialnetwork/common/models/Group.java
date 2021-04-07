@@ -1,7 +1,5 @@
-package com.getjavajob.training.yarginy.socialnetwork.common.models.group;
+package com.getjavajob.training.yarginy.socialnetwork.common.models;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -24,10 +22,12 @@ public class Group implements Model {
     private String name;
     private String description;
     @ManyToOne
-    @JoinColumn(name = "owner_id", referencedColumnName = "id")
+    @JoinColumn(name = "owner_id", foreignKey = @ForeignKey(name = "C_11"))
     private Account owner;
     private Date creationDate;
     private byte[] photo;
+    @Version
+    private long version;
 
     public Group() {
     }
@@ -87,6 +87,14 @@ public class Group implements Model {
 
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(long version) {
+        this.version = version;
     }
 
     @Override

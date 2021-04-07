@@ -1,23 +1,32 @@
-package com.getjavajob.training.yarginy.socialnetwork.common.models.message;
+package com.getjavajob.training.yarginy.socialnetwork.common.models;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Version;
 import java.sql.Timestamp;
 
 import static java.util.Arrays.copyOf;
 
 @Component
 @Scope("prototype")
+@Entity
 public class Message implements Model {
+    @Id
+    @GeneratedValue
     private long id;
+    @ManyToOne
     private Account author;
     private String text;
     private byte[] image;
     private Timestamp date;
     private long receiverId;
+    @Version
+    private long version;
 
     @Override
     public long getId() {
@@ -67,5 +76,15 @@ public class Message implements Model {
 
     public void setReceiverId(long receiverId) {
         this.receiverId = receiverId;
+    }
+
+    @Override
+    public long getVersion() {
+        return version;
+    }
+
+    @Override
+    public void setVersion(long version) {
+        this.version = version;
     }
 }

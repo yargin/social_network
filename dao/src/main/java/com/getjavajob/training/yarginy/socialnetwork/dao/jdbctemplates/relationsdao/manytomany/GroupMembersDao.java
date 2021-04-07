@@ -1,7 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.relationsdao.manytomany;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.modeldao.AccountDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.modeldao.GroupDao;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -68,7 +68,7 @@ public class GroupMembersDao implements ManyToManyDao<Account, Group> {
         } catch (DuplicateKeyException e) {
             return false;
         } catch (DataIntegrityViolationException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(e);
         }
     }
 

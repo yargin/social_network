@@ -1,7 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.jpa;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.JpaAccountDao;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +17,7 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestJpaSpringConfig.xml"})
-public class AccountDaoTest {
+public class JpaAccountDaoTest {
     private final Account account = new Account("testName", "testSurname", "testEmail");
     @Autowired
     private JpaAccountDao accountDao;
@@ -30,7 +29,7 @@ public class AccountDaoTest {
 
     @After
     public void deleteValues() {
-        accountDao.delete(accountDao.select(account));
+        accountDao.delete(account);
     }
 
     @Test
@@ -63,11 +62,14 @@ public class AccountDaoTest {
 
     @Test
     public void testCreateAccount() {
+        assertFalse(accountDao.create(account));
         Account newAccount = new Account("newAcc", "newAcc", "newAcc");
         assertTrue(accountDao.create(newAccount));
         assertEquals(newAccount, accountDao.select(newAccount));
         assertFalse(accountDao.create(newAccount));
         assertFalse(accountDao.create(new Account("newAcc", "newAcc", "newAcc")));
+        Account newDuplicateEmailAccount = new Account("newAcc", "newAcc", "testEmail");
+        assertFalse(accountDao.create(newDuplicateEmailAccount));
         accountDao.delete(newAccount);
     }
 
@@ -92,7 +94,12 @@ public class AccountDaoTest {
                 }
             }
             account2.setCity("SPb");
-            updated.set(accountDao.update(account2));
+            try {
+                accountDao.update(account2);
+                updated.set(true);
+            } catch (IllegalStateException e) {
+                updated.set(false);
+            }
         });
         thread2.start();
         thread1.start();

@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.tests;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.FriendshipsDaoFacade;
 import org.junit.After;

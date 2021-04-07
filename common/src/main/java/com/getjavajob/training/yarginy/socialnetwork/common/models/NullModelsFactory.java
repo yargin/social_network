@@ -1,12 +1,5 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.models;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
-
 public abstract class NullModelsFactory {
     private NullModelsFactory() {
     }

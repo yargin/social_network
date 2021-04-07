@@ -1,10 +1,9 @@
-package com.getjavajob.training.yarginy.socialnetwork.common.models.password;
+package com.getjavajob.training.yarginy.socialnetwork.common.models;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.Version;
 import java.util.Objects;
 
 @Component
@@ -12,6 +11,8 @@ import java.util.Objects;
 public class Password implements Model {
     private Account account;
     private String stringPassword;
+    @Version
+    private long version;
 
     public Account getAccount() {
         return account;
@@ -37,6 +38,16 @@ public class Password implements Model {
     @Override
     public void setId(long id) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public long getVersion() {
+        return version;
+    }
+
+    @Override
+    public void setVersion(long version) {
+        this.version = version;
     }
 
     @Override

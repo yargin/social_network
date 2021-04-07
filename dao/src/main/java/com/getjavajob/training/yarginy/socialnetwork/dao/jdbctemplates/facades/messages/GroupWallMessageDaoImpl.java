@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.messages;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Message;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.relationsdao.onetomany.OneToManyDao;
 import org.springframework.beans.factory.annotation.Qualifier;

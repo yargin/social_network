@@ -35,6 +35,7 @@ public interface JpaDao<E extends Model> extends Serializable {
      *
      * @param model       object containing new values {@link E}
      * @return if modification was successful, false if doesn't exists
+     * @throws IllegalStateException if model was updated concurrently and performing update will lost those updates
      */
     boolean update(E model);
 
@@ -43,6 +44,7 @@ public interface JpaDao<E extends Model> extends Serializable {
      *
      * @param model {@link E} to delete
      * @return if deletion was successful, false if doesn't exists
+     * @throws IllegalStateException if model was updated concurrently and performing delete will lost those updates
      */
     boolean delete(E model);
 

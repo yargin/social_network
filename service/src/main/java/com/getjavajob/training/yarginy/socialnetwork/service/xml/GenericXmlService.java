@@ -14,14 +14,15 @@ public abstract class GenericXmlService<E> implements XmlService<E> {
         return xstream.toXML(object);
     }
 
+    //todo check lost exceptions
     @Override
     public E fromXml(String xml) {
         try {
             return (E) xstream.fromXML(xml);
         } catch (ConversionException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(e);
         } catch (StreamException | ClassCastException e) {
-            throw new IllegalStateException();
+            throw new IllegalStateException(e);
         }
     }
 }

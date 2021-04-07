@@ -1,14 +1,13 @@
-package com.getjavajob.training.yarginy.socialnetwork.common.models.phone;
+package com.getjavajob.training.yarginy.socialnetwork.common.models;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.PhoneType;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.Version;
 import java.util.Objects;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType.PRIVATE;
+import static com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.PhoneType.PRIVATE;
 import static java.util.Objects.isNull;
 
 @Component
@@ -18,6 +17,8 @@ public class Phone implements Model {
     private String number;
     private PhoneType type;
     private Account owner;
+    @Version
+    private long version;
 
     public Phone() {
         type = PRIVATE;
@@ -61,6 +62,16 @@ public class Phone implements Model {
     @Override
     public void setId(long id) {
         this.id = id;
+    }
+
+    @Override
+    public long getVersion() {
+        return version;
+    }
+
+    @Override
+    public void setVersion(long version) {
+        this.version = version;
     }
 
     @Override

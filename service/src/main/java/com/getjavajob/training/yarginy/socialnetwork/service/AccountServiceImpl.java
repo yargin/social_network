@@ -1,19 +1,16 @@
 package com.getjavajob.training.yarginy.socialnetwork.service;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.DataFlowViolationException;
-import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.DialogDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.FriendshipsDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.PhoneDaoFacade;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData.*;

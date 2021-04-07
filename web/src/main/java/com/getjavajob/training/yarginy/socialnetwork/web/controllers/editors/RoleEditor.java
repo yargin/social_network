@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.controllers.editors;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.Role;
 
 import java.beans.PropertyEditorSupport;
 

@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.relationsdao.onetomany.OneToManyDao;
 import org.springframework.stereotype.Component;

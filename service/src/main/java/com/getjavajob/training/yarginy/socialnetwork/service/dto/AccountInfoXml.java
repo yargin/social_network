@@ -1,7 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.service.dto;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
 
 import java.util.ArrayList;
 import java.util.Collection;

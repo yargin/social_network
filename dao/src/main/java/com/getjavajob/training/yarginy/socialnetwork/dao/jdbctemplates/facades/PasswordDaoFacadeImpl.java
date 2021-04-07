@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Password;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.modeldao.Dao;
 import org.springframework.stereotype.Component;
 

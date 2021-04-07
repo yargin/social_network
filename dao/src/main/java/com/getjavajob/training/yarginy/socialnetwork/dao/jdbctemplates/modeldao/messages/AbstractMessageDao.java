@@ -1,7 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.modeldao.messages;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Message;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.modeldao.AbstractDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.modeldao.AccountDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.modeldao.UpdateValuesPlacer;

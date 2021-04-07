@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.helpers.updaters;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 import org.springframework.web.servlet.ModelAndView;
