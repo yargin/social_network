@@ -2,9 +2,11 @@ package com.getjavajob.training.yarginy.socialnetwork.web.controllers;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.Message;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.GroupWallMessage;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.Message;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
+import com.getjavajob.training.yarginy.socialnetwork.service.messages.GroupWallMessageService;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -34,10 +36,10 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Vie
 public class GroupController {
     private final GroupService groupService;
     private final DataHandler dataHandler;
-    private final MessageService messageService;
+    private final GroupWallMessageService messageService;
 
     public GroupController(GroupService groupService, DataHandler dataHandler,
-                           @Qualifier("groupWallMessageService") MessageService messageService) {
+                           GroupWallMessageService messageService) {
         this.groupService = groupService;
         this.dataHandler = dataHandler;
         this.messageService = messageService;
@@ -46,9 +48,10 @@ public class GroupController {
     @GetMapping("/wall")
     public ModelAndView getGroupWall(@RequestAttribute long id) {
         ModelAndView modelAndView = new ModelAndView(GROUP_VIEW);
-        Collection<Message> messages = messageService.selectMessages(id);
+        Group group = groupService.get(id);
+        Collection<GroupWallMessage> messages = messageService.selectMessages(id);
         modelAndView.addObject("messages", messages);
-        addInfoAndPhoto(modelAndView, id);
+        addInfoAndPhoto(modelAndView, group);
         modelAndView.addObject("type", "groupWall");
         modelAndView.addObject("id", id);
         modelAndView.addObject(TAB, "wall");
@@ -60,7 +63,8 @@ public class GroupController {
         ModelAndView modelAndView = new ModelAndView(GROUP_VIEW);
         Collection<Account> requesters = groupService.getGroupRequests(id);
         modelAndView.addObject("requesters", requesters);
-        addInfoAndPhoto(modelAndView, id);
+        Group group = groupService.get(id);
+        addInfoAndPhoto(modelAndView, group);
         modelAndView.addObject(TAB, "requests");
         return modelAndView;
     }
@@ -70,7 +74,8 @@ public class GroupController {
         ModelAndView modelAndView = new ModelAndView(GROUP_VIEW);
         Map<Account, Boolean> members = groupService.getGroupMembersModerators(id);
         modelAndView.addObject("members", members);
-        addInfoAndPhoto(modelAndView, id);
+        Group group = groupService.get(id);
+        addInfoAndPhoto(modelAndView, group);
         modelAndView.addObject(TAB, "members");
         return modelAndView;
     }
@@ -120,13 +125,13 @@ public class GroupController {
         ModelAndView modelAndView = new ModelAndView(GROUP_VIEW);
         Collection<Account> moderators = groupService.getModerators(id);
         modelAndView.addObject("moderators", moderators);
-        addInfoAndPhoto(modelAndView, id);
+        Group group = groupService.get(id);
+        addInfoAndPhoto(modelAndView, group);
         modelAndView.addObject(TAB, "moderators");
         return modelAndView;
     }
 
-    private void addInfoAndPhoto(ModelAndView modelAndView, long id) {
-        Group group = groupService.get(id);
+    private void addInfoAndPhoto(ModelAndView modelAndView, Group group) {
         modelAndView.addObject(PHOTO, dataHandler.getHtmlPhoto(group.getPhoto()));
         modelAndView.addObject("group", group);
     }

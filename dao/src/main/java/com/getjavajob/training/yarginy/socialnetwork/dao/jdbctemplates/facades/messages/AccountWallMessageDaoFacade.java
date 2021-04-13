@@ -1,4 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.messages;
 
-public interface AccountWallMessageDaoFacade extends MessageDao {
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.AccountWallMessage;
+
+public interface AccountWallMessageDaoFacade extends MessageDao<Account, AccountWallMessage> {
 }

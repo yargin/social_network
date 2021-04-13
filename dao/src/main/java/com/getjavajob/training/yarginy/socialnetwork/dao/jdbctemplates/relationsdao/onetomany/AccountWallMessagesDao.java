@@ -5,7 +5,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.modeldao.
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-@Repository("accountWallMessagesDao")
+//@Repository("accountWallMessagesDao")
 public class AccountWallMessagesDao extends AbstractMessagesDao {
     public AccountWallMessagesDao(JdbcTemplate template, AccountWallMessageDao manyDao, AccountDao accountDao) {
         super(template, manyDao, accountDao);

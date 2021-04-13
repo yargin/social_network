@@ -46,6 +46,10 @@ public class Account implements Model {
     public Account() {
     }
 
+    public Account(long id) {
+        this.id = id;
+    }
+
     public Account(String name, String email) {
         this.name = name;
         this.email = email;

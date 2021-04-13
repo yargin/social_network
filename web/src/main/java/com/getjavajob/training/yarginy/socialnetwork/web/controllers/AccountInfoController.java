@@ -3,12 +3,11 @@ package com.getjavajob.training.yarginy.socialnetwork.web.controllers;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.Message;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.AccountWallMessage;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
-import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
+import com.getjavajob.training.yarginy.socialnetwork.service.messages.AccountWallMessageService;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.AccountInfoHelper;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,10 +32,10 @@ public class AccountInfoController {
     private final AccountInfoHelper infoHelper;
     private final AccountService accountService;
     private final GroupService groupService;
-    private final MessageService messageService;
+    private final AccountWallMessageService messageService;
 
     public AccountInfoController(AccountInfoHelper infoHelper, AccountService accountService, GroupService groupService,
-                                 @Qualifier("accountWallMessageService") MessageService messageService) {
+                                 AccountWallMessageService messageService) {
         this.infoHelper = infoHelper;
         this.accountService = accountService;
         this.groupService = groupService;
@@ -48,8 +47,9 @@ public class AccountInfoController {
                                  @SessionAttribute(USER_ID) long sessionId) {
         long id = requestedId == null ? sessionId : requestedId;
         ModelAndView modelAndView = new ModelAndView(ACCOUNT_WALL_VIEW);
-        infoHelper.setAccountInfo(modelAndView, id);
-        Collection<Message> messages = messageService.selectMessages(id);
+        Account account = accountService.get(id);
+        infoHelper.setAccountInfo(modelAndView, account);
+        Collection<AccountWallMessage> messages = messageService.selectMessages(id);
         modelAndView.addObject("messages", messages);
         modelAndView.addObject("type", "accountWall");
         modelAndView.addObject("id", id);
@@ -66,7 +66,8 @@ public class AccountInfoController {
         Collection<Account> requesters = accountService.getFriendshipRequests(id);
         modelAndView.addObject("requesters", requesters);
 
-        infoHelper.setAccountInfo(modelAndView, id);
+        Account account = accountService.get(id);
+        infoHelper.setAccountInfo(modelAndView, account);
 
         modelAndView.addObject(TAB, "friendshipRequestsList");
         return modelAndView;
@@ -80,7 +81,8 @@ public class AccountInfoController {
 
         modelAndView.addObject("friends", accountService.getFriends(id));
 
-        infoHelper.setAccountInfo(modelAndView, id);
+        Account account = accountService.get(id);
+        infoHelper.setAccountInfo(modelAndView, account);
         modelAndView.addObject(TAB, "friendsList");
         return modelAndView;
     }
@@ -92,7 +94,9 @@ public class AccountInfoController {
         ModelAndView modelAndView = new ModelAndView("accountpages/dialogs");
         Collection<Dialog> dialogs = accountService.getDialogs(id);
         modelAndView.addObject(DIALOGS, dialogs);
-        infoHelper.setAccountInfo(modelAndView, id);
+
+        Account account = accountService.get(id);
+        infoHelper.setAccountInfo(modelAndView, account);
         modelAndView.addObject(TAB, "dialogs");
         return modelAndView;
     }
@@ -111,7 +115,9 @@ public class AccountInfoController {
             Collection<Group> joinedGroups = groupService.getAccountGroups(id);
             modelAndView.addObject(GROUPS, joinedGroups);
         }
-        infoHelper.setAccountInfo(modelAndView, id);
+
+        Account account = accountService.get(id);
+        infoHelper.setAccountInfo(modelAndView, account);
         modelAndView.addObject(TAB, "groups");
         return modelAndView;
     }

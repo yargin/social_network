@@ -1,7 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.service;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.Message;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.Message;
 
 import java.io.Serializable;
 
@@ -10,7 +10,7 @@ public interface DialogService extends Serializable {
 
     Dialog get(Dialog dialog);
 
-    boolean create(Dialog dialog, Message message);
+    boolean create(Dialog dialog, Message<Dialog> message);
 
     boolean delete(Dialog dialog);
 

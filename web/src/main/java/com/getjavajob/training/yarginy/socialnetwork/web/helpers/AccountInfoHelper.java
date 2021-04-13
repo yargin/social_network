@@ -28,12 +28,11 @@ public class AccountInfoHelper {
         this.dataHandler = dataHandler;
     }
 
-    public void setAccountInfo(ModelAndView modelAndView, long id) {
-        Account account = accountService.get(id);
+    public void setAccountInfo(ModelAndView modelAndView, Account account) {
         modelAndView.addObject("user", account);
         modelAndView.addObject(PHOTO, dataHandler.getHtmlPhoto(account.getPhoto()));
 
-        Collection<Phone> phones = accountService.getPhones(id);
+        Collection<Phone> phones = accountService.getPhones(account.getId());
         Collection<Phone> privatePhones = phones.stream().filter(phone -> PRIVATE.equals(phone.getType())).
                 collect(Collectors.toList());
         modelAndView.addObject("privatePhones", privatePhones);

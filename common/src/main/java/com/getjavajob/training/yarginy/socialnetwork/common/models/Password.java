@@ -3,13 +3,27 @@ package com.getjavajob.training.yarginy.socialnetwork.common.models;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
 import javax.persistence.Version;
 import java.util.Objects;
 
 @Component
 @Scope("prototype")
+@Entity
+@Table(name = "passwords")
 public class Password implements Model {
+    @Id
+    @OneToOne
+    @PrimaryKeyJoinColumn(name = "email", referencedColumnName = "email", foreignKey = @ForeignKey(name = "c_21"))
     private Account account;
+    @Id
+    @Column(name = "password")
     private String stringPassword;
     @Version
     private long version;

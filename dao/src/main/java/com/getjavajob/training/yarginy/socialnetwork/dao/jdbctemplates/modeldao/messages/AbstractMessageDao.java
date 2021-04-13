@@ -1,7 +1,8 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.modeldao.messages;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.Message;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.Message;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.AccountWallMessage;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.modeldao.AbstractDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.modeldao.AccountDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.modeldao.UpdateValuesPlacer;
@@ -42,7 +43,8 @@ public abstract class AbstractMessageDao extends AbstractDao<Message> {
 
     @Override
     protected Object[] getObjectAltKeys(Message message) {
-        return new Object[]{message.getAuthor().getId(), message.getReceiverId(), message.getDate()};
+//        return new Object[]{message.getAuthor().getId(), message.getReceiverId(), message.getDate()};
+        return new Object[]{message.getAuthor().getId(), message.getId(), message.getPosted()};
     }
 
     @Override
@@ -51,8 +53,8 @@ public abstract class AbstractMessageDao extends AbstractDao<Message> {
         parameters.addValue(AUTHOR, message.getAuthor().getId(), Types.BIGINT);
         parameters.addValue(MESSAGE, message.getText(), Types.VARCHAR);
         parameters.addValue(IMAGE, message.getImage(), Types.BLOB);
-        parameters.addValue(RECEIVER_ID, message.getReceiverId(), Types.BIGINT);
-        parameters.addValue(POSTED, message.getDate(), Types.TIMESTAMP);
+//        parameters.addValue(RECEIVER_ID, message.getReceiverId(), Types.BIGINT);
+        parameters.addValue(POSTED, message.getPosted(), Types.TIMESTAMP);
         return parameters;
     }
 
@@ -62,8 +64,8 @@ public abstract class AbstractMessageDao extends AbstractDao<Message> {
         valuesPlacer.addFieldIfDiffers(message::getAuthor, storedMessage::getAuthor, AUTHOR, Types.BIGINT, Account::getId);
         valuesPlacer.addFieldIfDiffers(message::getText, storedMessage::getText, MESSAGE, Types.VARCHAR);
         valuesPlacer.addFieldIfDiffers(message::getImage, storedMessage::getImage, IMAGE, Types.BLOB);
-        valuesPlacer.addFieldIfDiffers(message::getReceiverId, storedMessage::getReceiverId, RECEIVER_ID, Types.BIGINT);
-        valuesPlacer.addFieldIfDiffers(message::getDate, storedMessage::getDate, POSTED, Types.TIMESTAMP);
+//        valuesPlacer.addFieldIfDiffers(message::getReceiverId, storedMessage::getReceiverId, RECEIVER_ID, Types.BIGINT);
+        valuesPlacer.addFieldIfDiffers(message::getPosted, storedMessage::getPosted, POSTED, Types.TIMESTAMP);
 
         valuesPlacer.addKey(storedMessage::getId, ID, Types.BIGINT);
         return valuesPlacer;
@@ -83,12 +85,13 @@ public abstract class AbstractMessageDao extends AbstractDao<Message> {
     public RowMapper<Message> getSuffixedViewRowMapper(String messageSuffix, String authorSuffix) {
         return (resultSet, i) -> {
             Account author = accountDao.getSuffixedViewRowMapper(authorSuffix).mapRow(resultSet, i);
-            Message message = new Message();
+//            Message message = new Message();
+            Message message = new AccountWallMessage();
             message.setAuthor(author);
             message.setId(resultSet.getLong(ID + messageSuffix));
             message.setText(resultSet.getString(MESSAGE + messageSuffix));
-            message.setDate(resultSet.getTimestamp(POSTED + messageSuffix));
-            message.setReceiverId(resultSet.getLong(RECEIVER_ID + messageSuffix));
+            message.setPosted(resultSet.getTimestamp(POSTED + messageSuffix));
+//            message.setReceiverId(resultSet.getLong(RECEIVER_ID + messageSuffix));
             byte[] image = resultSet.getBytes(IMAGE + messageSuffix);
             if (!isNull(image)) {
                 message.setImage(image);

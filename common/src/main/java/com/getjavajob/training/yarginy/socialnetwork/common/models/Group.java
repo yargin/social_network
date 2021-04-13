@@ -22,14 +22,19 @@ public class Group implements Model {
     private String name;
     private String description;
     @ManyToOne
-    @JoinColumn(name = "owner_id", foreignKey = @ForeignKey(name = "C_11"))
+    @JoinColumn(nullable = false, name = "owner_id", foreignKey = @ForeignKey(name = "c_11"))
     private Account owner;
+    @Column(nullable = false)
     private Date creationDate;
     private byte[] photo;
     @Version
     private long version;
 
     public Group() {
+    }
+
+    public Group(long id) {
+        this.id = id;
     }
 
     public Group(String name, Account owner) {

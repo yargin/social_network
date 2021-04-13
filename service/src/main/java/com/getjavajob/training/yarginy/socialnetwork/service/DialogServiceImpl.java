@@ -2,7 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.service;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.Message;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.Message;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.DialogDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -30,12 +30,11 @@ public class DialogServiceImpl implements DialogService {
     }
 
     @Override
-    public boolean create(Dialog dialog, Message message) {
+    public boolean create(Dialog dialog, Message<Dialog> message) {
         if (!dialogDaoFacade.create(dialog)) {
             throw new IllegalStateException();
         }
-        Dialog createdDialog = dialogDaoFacade.select(dialog);
-        message.setReceiverId(createdDialog.getId());
+        message.setReceiver(dialogDaoFacade.select(dialog));
         if (!messageService.addMessage(message)) {
             throw new IllegalStateException();
         }
@@ -50,11 +49,9 @@ public class DialogServiceImpl implements DialogService {
     @Override
     public Dialog getByTalkers(long firstAccountId, long secondAccountId) {
         Dialog dialog = new Dialog();
-        Account firstAccount = new Account();
-        firstAccount.setId(firstAccountId);
+        Account firstAccount = new Account(firstAccountId);
         dialog.setFirstAccount(firstAccount);
-        Account secondAccount = new Account();
-        secondAccount.setId(secondAccountId);
+        Account secondAccount = new Account(secondAccountId);
         dialog.setSecondAccount(secondAccount);
         return dialogDaoFacade.select(dialog);
     }

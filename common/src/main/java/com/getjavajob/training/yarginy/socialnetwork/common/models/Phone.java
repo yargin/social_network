@@ -4,6 +4,12 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldat
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Version;
 import java.util.Objects;
 
@@ -12,10 +18,15 @@ import static java.util.Objects.isNull;
 
 @Component
 @Scope("prototype")
+@Entity
+@Table(name = "phones")
 public class Phone implements Model {
+    @Id
     private long id;
     private String number;
+    @Enumerated(EnumType.STRING)
     private PhoneType type;
+    @ManyToOne
     private Account owner;
     @Version
     private long version;

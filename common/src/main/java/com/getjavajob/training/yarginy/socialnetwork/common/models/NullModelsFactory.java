@@ -1,12 +1,16 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.models;
 
+import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.AccountWallMessage;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.DialogMessage;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.GroupWallMessage;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.Message;
+
 public abstract class NullModelsFactory {
     private NullModelsFactory() {
     }
 
     public static Account getNullAccount() {
-        Account nullAccount = new Account();
-        nullAccount.setId(-1);
+        Account nullAccount = new Account(-1);
         nullAccount.setName("doesn't exist");
         nullAccount.setSurname("doesn't exist");
         nullAccount.setEmail("email@doesnt.exist");
@@ -36,9 +40,27 @@ public abstract class NullModelsFactory {
     }
 
     public static Message getNullMessage() {
-        Message message = new Message();
+        Message message = new AccountWallMessage();
         message.setAuthor(getNullAccount());
         return message;
+    }
+
+    public static AccountWallMessage getNullAccountWallMessage() {
+        AccountWallMessage accountWallMessage = new AccountWallMessage();
+        accountWallMessage.setAuthor(getNullAccount());
+        return accountWallMessage;
+    }
+
+    public static DialogMessage getNullDialogMessage() {
+        DialogMessage dialogMessage = new DialogMessage();
+        dialogMessage.setAuthor(getNullAccount());
+        return dialogMessage;
+    }
+
+    public static GroupWallMessage getNullGroupWallMessage() {
+        GroupWallMessage groupWallMessage = new GroupWallMessage();
+        groupWallMessage.setAuthor(getNullAccount());
+        return groupWallMessage;
     }
 
     public static Dialog getNullDialog() {
