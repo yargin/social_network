@@ -7,8 +7,11 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceException;
+
+import java.util.Collection;
 
 import static java.util.Objects.isNull;
 
@@ -27,6 +30,22 @@ public abstract class GenericManyToManyDao<F extends Model, S extends Model> imp
 
     protected abstract JpaManyToMany<F, S> genericCreateObject(EntityManager entityManager, long firstId, long secondId);
 
+    protected abstract Collection<S> genericSelectByFirst(long firstId);
+
+    protected abstract Collection<F> genericSelectBySecond(long secondId);
+
+    @Override
+    public Collection<S> selectByFirst(long firstId) {
+        checkId(firstId);
+        return genericSelectByFirst(firstId);
+    }
+
+    @Override
+    public Collection<F> selectBySecond(long secondId) {
+        checkId(secondId);
+        return genericSelectBySecond(secondId);
+    }
+
     @Override
     public boolean create(long firstId, long secondId) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
@@ -37,6 +56,8 @@ public abstract class GenericManyToManyDao<F extends Model, S extends Model> imp
             entityManager.persist(manyToMany);
             transaction.commit();
             return true;
+        } catch (EntityNotFoundException e) {
+            throw new IllegalArgumentException(e);
         } catch (PersistenceException | IllegalArgumentException e) {
             transaction.rollback();
             return false;
@@ -63,6 +84,12 @@ public abstract class GenericManyToManyDao<F extends Model, S extends Model> imp
         } catch (PersistenceException | IllegalArgumentException e) {
             transaction.rollback();
             return false;
+        }
+    }
+
+    private void checkId(long... ids) {
+        for (long id : ids) {
+            if (id < 1) { throw new IllegalArgumentException(); }
         }
     }
 }

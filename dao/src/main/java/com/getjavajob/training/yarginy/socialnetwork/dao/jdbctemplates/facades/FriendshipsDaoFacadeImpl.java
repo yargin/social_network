@@ -1,8 +1,11 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.JpaSelfManyToMany;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.relationsdao.manytomany.ManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.relationsdao.manytomany.SelfManyToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationsdao.manytomany.JpaManyToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationsdao.selfmanytomany.JpaSelfManyToManyDao;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
@@ -10,11 +13,12 @@ import java.util.Collection;
 
 @Component("friendshipsDaoFacade")
 public class FriendshipsDaoFacadeImpl implements FriendshipsDaoFacade {
-    private final SelfManyToManyDao<Account> friendshipDao;
-    private final ManyToManyDao<Account, Account> friendshipRequestsDao;
+    private final JpaSelfManyToManyDao<Account> friendshipDao;
+    private final JpaManyToManyDao<Account, Account> friendshipRequestsDao;
 
-    public FriendshipsDaoFacadeImpl(SelfManyToManyDao<Account> friendshipDao,
-                                    @Qualifier("friendshipRequestsDao") ManyToManyDao<Account, Account> friendshipRequestsDao) {
+    public FriendshipsDaoFacadeImpl(@Qualifier("jpaFriendshipDao") JpaSelfManyToManyDao<Account> friendshipDao,
+                                    @Qualifier("jpaFriendshipRequestsDao") JpaManyToManyDao<Account, Account>
+                                            friendshipRequestsDao) {
         this.friendshipDao = friendshipDao;
         this.friendshipRequestsDao = friendshipRequestsDao;
     }

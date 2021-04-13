@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
@@ -23,11 +24,11 @@ public class FriendshipRequest implements JpaManyToMany<Account, Account> {
     private FriendshipRequestsKey friendshipRequestsKey;
     @ManyToOne
     @MapsId("requester")
-    @JoinColumn(name = "requester")
+    @JoinColumn(name = "requester", foreignKey = @ForeignKey(name = "c_28"))
     private Account requester;
     @ManyToOne
     @MapsId("receiver")
-    @JoinColumn(name = "receiver")
+    @JoinColumn(name = "receiver", foreignKey = @ForeignKey(name = "c_29"))
     private Account receiver;
 
     public FriendshipRequest() {

@@ -3,16 +3,20 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.modeldao.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.relationsdao.onetomany.OneToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.JpaDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationsdao.onetomany.JpaOneToManyDao;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
 @Component("dialogDaoFacade")
 public class DialogDaoFacadeImpl implements DialogDaoFacade {
-    private final Dao<Dialog> dialogDao;
-    private final OneToManyDao<Dialog> accountDialogsDao;
+    private final JpaDao<Dialog> dialogDao;
+    private final JpaOneToManyDao<Dialog> accountDialogsDao;
 
-    public DialogDaoFacadeImpl(Dao<Dialog> dialogDao, OneToManyDao<Dialog> accountDialogs) {
+    public DialogDaoFacadeImpl(@Qualifier("jpaDialogDao") JpaDao<Dialog> dialogDao,
+                               JpaOneToManyDao<Dialog> accountDialogs) {
         this.dialogDao = dialogDao;
         this.accountDialogsDao = accountDialogs;
     }
@@ -39,7 +43,8 @@ public class DialogDaoFacadeImpl implements DialogDaoFacade {
 
     @Override
     public boolean update(Dialog dialog, Dialog storedDialog) {
-        return dialogDao.update(dialog, storedDialog);
+        return dialogDao.update(dialog);
+//        return dialogDao.update(dialog, storedDialog);
     }
 
     @Override

@@ -46,8 +46,6 @@ ALTER TABLE Groups_members
 
 ALTER TABLE Groups_members ADD CONSTRAINT C_14 FOREIGN KEY (group_id) REFERENCES `groups` (id) ON DELETE CASCADE;
 
-ALTER TABLE Groups_members ADD CONSTRAINT C_Groups_members_3 UNIQUE (account_id, group_id);
-
 CREATE TABLE IF NOT EXISTS Friendships
 (
     first_account  BIGINT UNSIGNED,
@@ -61,9 +59,7 @@ ALTER TABLE Friendships
 ALTER TABLE Friendships
     ADD CONSTRAINT C_17 FOREIGN KEY (second_account) REFERENCES Accounts (id) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE Friendships ADD CHECK (first_account < second_account);
-
-ALTER TABLE Friendships ADD CONSTRAINT C_Friendships_3 UNIQUE (first_account, second_account);
+ALTER TABLE Friendships ADD CHECK (first_account > second_account);
 
 CREATE TABLE IF NOT EXISTS Phones
 (
@@ -80,13 +76,11 @@ ALTER TABLE Phones ADD CONSTRAINT C_19 CHECK (type IN ('PRIVATE', 'WORK'));
 
 CREATE TABLE Passwords (
     email VARCHAR(40),
-    password VARCHAR(255)
+    password VARCHAR(255),
+    CONSTRAINT c_21 FOREIGN KEY (email) REFERENCES Accounts (email) ON DELETE CASCADE ON UPDATE CASCADE;
 );
 
-ALTER TABLE Passwords ADD CONSTRAINT C_20 PRIMARY KEY(email, password);
-
-ALTER TABLE Passwords
-ADD CONSTRAINT C_21 FOREIGN KEY (email) REFERENCES Accounts (email) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE Passwords ADD CONSTRAINT C_20 PRIMARY KEY(email);
 
 CREATE TABLE IF NOT EXISTS Groups_moderators
 (
@@ -116,8 +110,6 @@ ALTER TABLE Groups_memberships_requests
 ALTER TABLE Groups_memberships_requests
     ADD CONSTRAINT C_27 FOREIGN KEY (group_id) REFERENCES `groups` (id) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE Groups_memberships_requests ADD CONSTRAINT C_Groups_memberships_requests_3 UNIQUE (account_id, group_id);
-
 CREATE TABLE IF NOT EXISTS Friendships_requests
 (
     requester BIGINT UNSIGNED,
@@ -130,8 +122,6 @@ ALTER TABLE Friendships_requests
 
 ALTER TABLE Friendships_requests
     ADD CONSTRAINT C_29 FOREIGN KEY (receiver) REFERENCES Accounts (id) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE Friendships_requests ADD CONSTRAINT C_Friendships_requests_3 UNIQUE (receiver, requester);
 
 CREATE TABLE `account_wall_messages`
 (

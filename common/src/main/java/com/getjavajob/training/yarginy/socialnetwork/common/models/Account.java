@@ -39,6 +39,7 @@ public class Account implements Model {
     private String skype;
     private String city;
     private String country;
+    @Lob
     private byte[] photo;
     @Version
     private long version;

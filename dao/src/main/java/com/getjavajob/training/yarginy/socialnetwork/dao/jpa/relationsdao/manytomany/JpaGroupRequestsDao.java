@@ -12,7 +12,7 @@ import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.GroupRequest.createGroupRequestKey;
 
-@Repository
+@Repository("jpaGroupRequestsDao")
 public class JpaGroupRequestsDao extends GenericManyToManyDao<Account, Group> {
     @Override
     protected JpaManyToMany<Account, Group> genericGetReference(EntityManager entityManager, long accountId,
@@ -34,7 +34,7 @@ public class JpaGroupRequestsDao extends GenericManyToManyDao<Account, Group> {
     }
 
     @Override
-    public Collection<Group> selectByFirst(long accountId) {
+    public Collection<Group> genericSelectByFirst(long accountId) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         Account account = new Account(accountId);
         TypedQuery<Group> query = entityManager.createQuery("select g.group from GroupRequest g " +
@@ -44,7 +44,7 @@ public class JpaGroupRequestsDao extends GenericManyToManyDao<Account, Group> {
     }
 
     @Override
-    public Collection<Account> selectBySecond(long groupId) {
+    public Collection<Account> genericSelectBySecond(long groupId) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         Group group = new Group(groupId);
         TypedQuery<Account> query = entityManager.createQuery("select g.account from GroupRequest g " +

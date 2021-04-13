@@ -13,9 +13,9 @@ import java.util.Collection;
 
 import static java.util.Objects.isNull;
 
-@Repository
+@Repository("jpaAccountDialogsDao")
 public class JpaAccountDialogs implements JpaOneToManyDao<Dialog> {
-    private EntityManagerFactory entityManagerFactory;
+    private transient EntityManagerFactory entityManagerFactory;
     private JpaDialogDao dialogDao;
 
     @Autowired
@@ -32,8 +32,9 @@ public class JpaAccountDialogs implements JpaOneToManyDao<Dialog> {
     public Collection<Dialog> selectMany(long accountId) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         Account account = new Account(accountId);
-        TypedQuery<Dialog> selectMany = entityManager.createQuery("select d from Dialog d " +
-                "where d.firstAccount = :account or d.secondAccount = :account", Dialog.class);
+        TypedQuery<Dialog> selectMany = entityManager.createQuery("select d from Dialog d join fetch d.firstAccount f " +
+                "join fetch d.secondAccount s where d.firstAccount = :account or d.secondAccount = :account",
+                Dialog.class);
         selectMany.setParameter("account", account);
         return selectMany.getResultList();
     }

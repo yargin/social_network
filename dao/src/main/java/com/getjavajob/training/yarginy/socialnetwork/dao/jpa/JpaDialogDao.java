@@ -1,30 +1,77 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.jpa;
 
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import java.util.function.Supplier;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullDialog;
+import static java.util.Objects.isNull;
 
-@Repository
+@Repository("jpaDialogDao")
 public class JpaDialogDao extends JpaGenericDao<Dialog> {
     @Override
     protected Supplier<TypedQuery<Dialog>> getSelectAll(EntityManager entityManager) {
-        return () -> entityManager.createQuery("select d from Dialog d", Dialog.class);
+        return () -> entityManager.createQuery("select d from Dialog d join fetch d.firstAccount f " +
+                "join fetch d.secondAccount s", Dialog.class);
     }
 
     @Override
     protected Supplier<TypedQuery<Dialog>> getSelectByAltKey(EntityManager entityManager, Dialog dialog) {
         return () -> {
-            TypedQuery<Dialog> query = entityManager.createQuery("select d from Dialog d where (d.firstAccount = :fid " +
-                    "and d.secondAccount = :sid) or (d.secondAccount = :fid and d.firstAccount = :sid)", Dialog.class);
-            query.setParameter("fid", dialog.getFirstAccount());
-            query.setParameter("sid", dialog.getSecondAccount());
+            Account firstAccount = dialog.getFirstAccount();
+            Account secondAccount = dialog.getSecondAccount();
+            if (isNull(firstAccount) || isNull(secondAccount)) {
+                throw  new IllegalArgumentException();
+            }
+            Account greaterAccount;
+            Account lowerAccount;
+            if (firstAccount.getId() > secondAccount.getId()) {
+                greaterAccount = firstAccount;
+                lowerAccount = secondAccount;
+            } else {
+                lowerAccount = firstAccount;
+                greaterAccount = secondAccount;
+            }
+
+            TypedQuery<Dialog> query = entityManager.createQuery("select d from Dialog d join fetch d.firstAccount f " +
+                    "join fetch d.secondAccount s where d.firstAccount = :greaterAccount " +
+                    "and d.secondAccount = :lowerAccount", Dialog.class);
+            query.setParameter("greaterAccount", greaterAccount);
+            query.setParameter("lowerAccount", lowerAccount);
             return query;
         };
+    }
+
+    @Override
+    public boolean create(Dialog dialog) {
+        checkSwapAccounts(dialog);
+        return super.create(dialog);
+    }
+
+    @Override
+    public boolean update(Dialog dialog) {
+        checkSwapAccounts(dialog);
+        return super.update(dialog);
+    }
+
+    private void checkSwapAccounts(Dialog dialog) {
+        Account firstAccount = dialog.getFirstAccount();
+        Account secondAccount = dialog.getSecondAccount();
+        if (isNull(firstAccount) || isNull(secondAccount)) {
+            throw  new IllegalArgumentException();
+        }
+        Account greaterAccount;
+        if (firstAccount.getId() < secondAccount.getId()) {
+            greaterAccount = secondAccount;
+            dialog.setSecondAccount(dialog.getFirstAccount());
+            dialog.setFirstAccount(greaterAccount);
+        }
     }
 
     @Override

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
@@ -24,11 +25,11 @@ public class GroupModerator implements JpaManyToMany<Account, Group> {
     private GroupModeratorKey key;
     @ManyToOne
     @MapsId("accountId")
-    @JoinColumn(name = "account_id")
+    @JoinColumn(name = "account_id", foreignKey = @ForeignKey(name = "c_24"))
     private Account account;
     @ManyToOne
     @MapsId("groupId")
-    @JoinColumn(name = "group_id")
+    @JoinColumn(name = "group_id", foreignKey = @ForeignKey(name = "c_25"))
     private Group group;
 
     public GroupModerator() {

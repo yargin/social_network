@@ -16,12 +16,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static java.sql.Date.valueOf;
+import static java.time.LocalDate.of;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestH2OverrideSpringConfig.xml"})
+@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestJpaSpringConfig.xml"})
 public class AccountsInGroupsTest {
     @Autowired
     private GroupDaoFacade groupDaoFacade;
@@ -43,6 +45,7 @@ public class AccountsInGroupsTest {
         account = accountDaoFacade.select(account);
         owner = accountDaoFacade.select(owner);
         group.setOwner(owner);
+        group.setCreationDate(valueOf(of(2020, 2, 2)));
         groupDaoFacade.create(group);
         group = groupDaoFacade.select(group);
     }

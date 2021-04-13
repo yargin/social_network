@@ -13,7 +13,7 @@ import java.util.Collection;
 
 import static java.util.Objects.isNull;
 
-@Repository
+@Repository("jpaGroupWallMessagesDao")
 public class JpaGroupWallMessagesDao implements JpaOneToManyDao<GroupWallMessage> {
     private transient EntityManagerFactory entityManagerFactory;
     private JpaGroupWallMessageDao messageDao;

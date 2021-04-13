@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
@@ -20,8 +22,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestH2OverrideSpringConfig.xml"})
-public class GroupMembershipRequestsTest {
+@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestJpaSpringConfig.xml"})
+public class GroupMembershipRequestsDaoTest {
     @Autowired
     private GroupDaoFacade groupDaoFacade;
     @Autowired
@@ -39,6 +41,7 @@ public class GroupMembershipRequestsTest {
         accountDaoFacade.create(requester);
         requester = accountDaoFacade.select(requester);
         group.setOwner(owner);
+        group.setCreationDate(Date.valueOf(LocalDate.of(2020, 2, 2)));
         groupDaoFacade.create(group);
         group = groupDaoFacade.select(group);
     }

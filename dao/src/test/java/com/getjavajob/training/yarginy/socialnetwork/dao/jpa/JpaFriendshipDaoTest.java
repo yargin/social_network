@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import static java.util.Collections.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -42,14 +43,21 @@ public class JpaFriendshipDaoTest {
     public void testCreateSelectDeleteFriendship() {
         long firstId = firstAccount.getId();
         long secondId = secondAccount.getId();
+        try {
+            friendshipDao.create(firstId, 1111111);
+        } catch (IllegalArgumentException e) {
+            assertTrue(true);
+        }
         assertTrue(friendshipDao.create(firstId, secondId));
         Friendship friendship = new Friendship();
         friendship.setFirstAccount(firstAccount);
         friendship.setSecondAccount(secondAccount);
         assertEquals(singletonList(secondAccount), friendshipDao.select(firstId));
+        assertEquals(emptyList(), friendshipDao.select(1111111));
         assertEquals(singletonList(firstAccount), friendshipDao.select(secondId));
         assertTrue(friendshipDao.relationExists(firstId, secondId));
         assertTrue(friendshipDao.relationExists(secondId, firstId));
+        assertFalse(friendshipDao.delete(firstId, 1111111));
         assertTrue(friendshipDao.delete(firstId, secondId));
         assertFalse(friendshipDao.relationExists(firstId, secondId));
         assertFalse(friendshipDao.relationExists(secondId, firstId));

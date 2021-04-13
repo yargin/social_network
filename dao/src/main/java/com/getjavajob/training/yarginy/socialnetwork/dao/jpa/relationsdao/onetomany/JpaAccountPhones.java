@@ -13,9 +13,9 @@ import java.util.Collection;
 
 import static java.util.Objects.isNull;
 
-@Repository
+@Repository("jpaAccountPhonesDao")
 public class JpaAccountPhones implements JpaOneToManyDao<Phone> {
-    private EntityManagerFactory entityManagerFactory;
+    private transient EntityManagerFactory entityManagerFactory;
     private JpaPhoneDao phoneDao;
 
     @Autowired
@@ -32,7 +32,7 @@ public class JpaAccountPhones implements JpaOneToManyDao<Phone> {
     public Collection<Phone> selectMany(long accountId) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         Account account = new Account(accountId);
-        TypedQuery<Phone> selectMany = entityManager.createQuery("select p from Phone p " +
+        TypedQuery<Phone> selectMany = entityManager.createQuery("select p from Phone p join fetch p.owner o " +
                 "where p.owner = :owner", Phone.class);
         selectMany.setParameter("owner", account);
         return selectMany.getResultList();

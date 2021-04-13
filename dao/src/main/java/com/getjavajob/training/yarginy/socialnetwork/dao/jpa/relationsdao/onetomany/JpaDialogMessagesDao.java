@@ -13,7 +13,7 @@ import java.util.Collection;
 
 import static java.util.Objects.isNull;
 
-@Repository
+@Repository("jpaDialogMessagesDao")
 public class JpaDialogMessagesDao implements JpaOneToManyDao<DialogMessage> {
     private transient EntityManagerFactory entityManagerFactory;
     private JpaDialogMessageDao messageDao;
@@ -34,7 +34,7 @@ public class JpaDialogMessagesDao implements JpaOneToManyDao<DialogMessage> {
         Dialog dialog = new Dialog();
         dialog.setId(dialogId);
         TypedQuery<DialogMessage> selectMany = entityManager.createQuery("select m from DialogMessage m " +
-                "where m.receiver = :receiver", DialogMessage.class);
+                "join fetch m.author a join fetch m.receiver r where m.receiver = :receiver", DialogMessage.class);
         selectMany.setParameter("receiver", dialog);
         return selectMany.getResultList();
     }

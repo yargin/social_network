@@ -7,6 +7,16 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.modeldao.
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.relationsdao.manytomany.ManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.relationsdao.manytomany.SelfManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.relationsdao.onetomany.OneToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.JpaAccountDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.JpaDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.JpaPhoneDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationsdao.manytomany.JpaGroupMembershipDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationsdao.manytomany.JpaManyToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationsdao.onetomany.JpaAccountGroups;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationsdao.onetomany.JpaAccountPhones;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationsdao.onetomany.JpaOneToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationsdao.selfmanytomany.JpaFriendshipDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationsdao.selfmanytomany.JpaSelfManyToManyDao;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
@@ -14,20 +24,20 @@ import java.util.Collection;
 
 @Component("accountDaoFacade")
 public class AccountDaoFacadeImpl implements AccountDaoFacade {
-    private final Dao<Account> accountDao;
-    private final OneToManyDao<Group> accountGroupsDao;
-    private final ManyToManyDao<Account, Group> accountsInGroupsDao;
-    private final OneToManyDao<Phone> accountPhonesDao;
-    private final SelfManyToManyDao<Account> accountFriendsDao;
+    private final JpaDao<Account> accountDao;
+    private final JpaOneToManyDao<Group> accountGroupsDao;
+    private final JpaOneToManyDao<Phone> accountPhonesDao;
+    private final JpaManyToManyDao<Account, Group> accountsInGroupsDao;
+    private final JpaSelfManyToManyDao<Account> accountFriendsDao;
 
-    public AccountDaoFacadeImpl(Dao<Account> accountDao,
-                                @Qualifier("groupOwnersDao") OneToManyDao<Group> accountGroupsDao,
-                                @Qualifier("groupMembershipDao") ManyToManyDao<Account, Group> accountsInGroupsDao,
-                                OneToManyDao<Phone> accountPhonesDao, SelfManyToManyDao<Account> accountFriendsDao) {
+    public AccountDaoFacadeImpl(@Qualifier("jpaAccountDao") JpaDao<Account> accountDao,
+                                JpaOneToManyDao<Group> accountGroupsDao, JpaOneToManyDao<Phone> accountPhonesDao,
+                                @Qualifier("jpaGroupMembershipDao") JpaManyToManyDao<Account, Group> accountsInGroupsDao,
+                                @Qualifier("jpaFriendshipDao") JpaSelfManyToManyDao<Account> accountFriendsDao) {
         this.accountDao = accountDao;
         this.accountGroupsDao = accountGroupsDao;
-        this.accountsInGroupsDao = accountsInGroupsDao;
         this.accountPhonesDao = accountPhonesDao;
+        this.accountsInGroupsDao = accountsInGroupsDao;
         this.accountFriendsDao = accountFriendsDao;
     }
 
@@ -53,7 +63,8 @@ public class AccountDaoFacadeImpl implements AccountDaoFacade {
 
     @Override
     public boolean update(Account account, Account storedAccount) {
-        return accountDao.update(account, storedAccount);
+//        return accountDao.update(account, storedAccount);
+        return accountDao.update(account);
     }
 
     @Override

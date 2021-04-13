@@ -7,6 +7,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.Se
 import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchableType;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.modeldao.AccountDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.modeldao.GroupDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -20,19 +21,24 @@ import static java.util.Arrays.fill;
 @Component("dataSetsDao")
 public class DataSetsDao implements Serializable {
     private static final int ACCOUNTS_GROUPS_PARAMETERS_NUMBER = 3;
-    private final transient JdbcTemplate template;
     private final AccountDao accountDao;
     private final GroupDao groupDao;
+    private transient JdbcTemplate template;
 
-    public DataSetsDao(JdbcTemplate template, AccountDao accountDao, GroupDao groupDao) {
-        this.template = template;
+    @Autowired
+    public DataSetsDao(AccountDao accountDao, GroupDao groupDao) {
         this.accountDao = accountDao;
         this.groupDao = groupDao;
     }
 
+    @Autowired
+    public void setTemplate(JdbcTemplate template) {
+        this.template = template;
+    }
+
     public Map<Account, Boolean> getGroupMembersModerators(long groupId) {
         Map<Account, Boolean> membersModerators = new HashMap<>();
-        template.query(getGroupMembersAdModeratorsQUery(), (resultSet, i) -> {
+        template.query(getGroupMembersAndModeratorsQuery(), (resultSet, i) -> {
             Account account = accountDao.getSuffixedViewRowMapper("a").mapRow(resultSet, i);
             long isModerator = resultSet.getLong("moderator");
             membersModerators.put(account, isModerator != 0);
@@ -41,7 +47,7 @@ public class DataSetsDao implements Serializable {
         return membersModerators;
     }
 
-    private String getGroupMembersAdModeratorsQUery() {
+    private String getGroupMembersAndModeratorsQuery() {
         return "SELECT " + accountDao.getViewFields("a") + ", gmods.account_id moderator " +
                 "FROM Groups_members gmems " +
                 "LEFT JOIN Accounts a ON a.id = gmems.account_id " +

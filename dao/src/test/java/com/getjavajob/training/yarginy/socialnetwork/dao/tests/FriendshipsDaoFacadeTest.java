@@ -20,7 +20,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestH2OverrideSpringConfig.xml"})
+@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestJpaSpringConfig.xml"})
 public class FriendshipsDaoFacadeTest {
     @Autowired
     private AccountDaoFacade accountDaoFacade;
@@ -45,8 +45,8 @@ public class FriendshipsDaoFacadeTest {
 
     @Test
     public void testSelectNoFriends() {
-        Collection<Account> friends = friendshipsDaoFacade.selectFriends(0);
-        assertSame(true, friends.isEmpty());
+        Collection<Account> friends = friendshipsDaoFacade.selectFriends(111111);
+        assertTrue(friends.isEmpty());
     }
 
     @Test
@@ -65,8 +65,8 @@ public class FriendshipsDaoFacadeTest {
 
     @Test
     public void testNonExistingAccount() {
-        Collection<Account> friends = friendshipsDaoFacade.selectFriends(0);
-        assertSame(true, friends.isEmpty());
+        Collection<Account> friends = friendshipsDaoFacade.selectFriends(1111111);
+        assertTrue(friends.isEmpty());
     }
 
     @Test

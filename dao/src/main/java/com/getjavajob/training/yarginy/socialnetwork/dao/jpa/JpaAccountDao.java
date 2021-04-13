@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullAccount;
 
-@Repository
+@Repository("jpaAccountDao")
 public class JpaAccountDao extends JpaGenericDao<Account> {
     @Override
     protected Supplier<Account> getSelectByPk(EntityManager entityManager, long id) {

@@ -9,12 +9,11 @@ import java.util.function.Supplier;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullGroup;
 
-@Repository
+@Repository("jpaGroupDao")
 public class JpaGroupDao extends JpaGenericDao<Group> {
     @Override
     protected Supplier<TypedQuery<Group>> getSelectAll(EntityManager entityManager) {
-//        return () -> entityManager.createQuery("select g from Group g join fetch g.owner", Group.class);
-        return () -> entityManager.createQuery("select g from Group g", Group.class);
+        return () -> entityManager.createQuery("select g from Group g join fetch g.owner o", Group.class);
     }
 
     @Override
@@ -25,8 +24,8 @@ public class JpaGroupDao extends JpaGenericDao<Group> {
     @Override
     protected Supplier<TypedQuery<Group>> getSelectByAltKey(EntityManager entityManager, Group group) {
         return () -> {
-//            TypedQuery<Group> query = entityManager.createQuery("select g from Group g join fetch g.owner where g.name = :name", Group.class);
-            TypedQuery<Group> query = entityManager.createQuery("select g from Group g where g.name = :name", Group.class);
+            TypedQuery<Group> query = entityManager.createQuery("select g from Group g join fetch g.owner o " +
+                    "where g.name = :name", Group.class);
             query.setParameter("name", group.getName());
             return query;
         };

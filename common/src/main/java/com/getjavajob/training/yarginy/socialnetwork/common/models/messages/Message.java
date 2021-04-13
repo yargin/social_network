@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 import java.sql.Timestamp;
@@ -25,6 +26,7 @@ public abstract class Message<E extends Model> implements Model {
     private long id;
     @Column(name = "message")
     protected String text;
+    @Lob
     protected byte[] image;
     @Column(name = "posted")
     protected Timestamp posted;

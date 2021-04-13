@@ -13,15 +13,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Collections;
 
+import static java.util.Collections.*;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestH2OverrideSpringConfig.xml"})
+@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestJpaSpringConfig.xml"})
 public class GroupModeratorsTest {
     @Autowired
     private GroupsModeratorsDaoFacade groupsModeratorsDaoFacade;
@@ -40,6 +43,7 @@ public class GroupModeratorsTest {
         accountDaoFacade.create(moderator);
         moderator = accountDaoFacade.select(moderator);
         group.setOwner(owner);
+        group.setCreationDate(Date.valueOf(LocalDate.of(2020, 2, 2)));
         groupDaoFacade.create(group);
         group = groupDaoFacade.select(group);
     }
@@ -68,6 +72,6 @@ public class GroupModeratorsTest {
     @Test
     public void testSelectModerators() {
         groupsModeratorsDaoFacade.addGroupModerator(moderator.getId(), group.getId());
-        assertEquals(Collections.singletonList(moderator), groupsModeratorsDaoFacade.selectModerators(group.getId()));
+        assertEquals(singletonList(moderator), groupsModeratorsDaoFacade.selectModerators(group.getId()));
     }
 }

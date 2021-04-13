@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
@@ -21,14 +22,14 @@ import java.util.Objects;
 @Table(name = "friendships")
 public class Friendship implements JpaSelfManyToMany<Account> {
     @EmbeddedId
-    private FriendshipKey friendshipKey = new FriendshipKey();
+    private FriendshipKey friendshipKey;
     @ManyToOne
     @MapsId("firstAccountId")
-    @JoinColumn(name = "first_account")
+    @JoinColumn(name = "first_account", foreignKey = @ForeignKey(name = "c_16"))
     private Account firstAccount;
     @ManyToOne
     @MapsId("secondAccountId")
-    @JoinColumn(name = "second_account")
+    @JoinColumn(name = "second_account", foreignKey = @ForeignKey(name = "c_17"))
     private Account secondAccount;
 
     public Friendship() {

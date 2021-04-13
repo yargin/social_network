@@ -13,9 +13,9 @@ import java.util.Collection;
 
 import static java.util.Objects.isNull;
 
-@Repository
+@Repository("jpaAccountGroupsDao")
 public class JpaAccountGroups implements JpaOneToManyDao<Group> {
-    private EntityManagerFactory entityManagerFactory;
+    private transient EntityManagerFactory entityManagerFactory;
     private JpaGroupDao groupDao;
 
     @Autowired
@@ -32,8 +32,8 @@ public class JpaAccountGroups implements JpaOneToManyDao<Group> {
     public Collection<Group> selectMany(long accountId) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         Account account = new Account(accountId);
-        TypedQuery<Group> selectMany = entityManager.createQuery("select g from Group g where g.owner = :owner",
-                Group.class);
+        TypedQuery<Group> selectMany = entityManager.createQuery("select g from Group g join fetch g.owner o" +
+                        " where g.owner = :owner", Group.class);
         selectMany.setParameter("owner", account);
         return selectMany.getResultList();
     }

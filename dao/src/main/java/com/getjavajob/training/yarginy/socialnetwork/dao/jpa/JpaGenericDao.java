@@ -1,6 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.jpa;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
+import org.hibernate.PropertyValueException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -12,6 +13,7 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.OptimisticLockException;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
+import java.beans.PropertyVetoException;
 import java.util.Collection;
 import java.util.function.Supplier;
 
@@ -74,6 +76,9 @@ public abstract class JpaGenericDao<E extends Model> implements JpaDao<E> {
             transaction.commit();
             return true;
         } catch (PersistenceException | IllegalArgumentException e) {
+            if (e.getCause().getClass() == PropertyValueException.class) {
+                throw new IllegalArgumentException(e);
+            }
             transaction.rollback();
             return false;
         }

@@ -19,7 +19,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestH2OverrideSpringConfig.xml"})
+@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestJpaSpringConfig.xml"})
 public class DialogsTest {
     @Autowired
     private DialogDaoFacade dialogDaoFacade;
@@ -54,7 +54,7 @@ public class DialogsTest {
     @Test
     public void testCreateDialog() {
         dialogDaoFacade.delete(dialog);
-        assertTrue(dialogDaoFacade.create(dialog));
+        assertTrue(dialogDaoFacade.create(new Dialog(firstAccount, secondAccount)));
         assertEquals(dialog, dialogDaoFacade.select(dialog));
         Dialog testDialog = new Dialog(secondAccount, firstAccount);
         assertFalse(dialogDaoFacade.create(testDialog));

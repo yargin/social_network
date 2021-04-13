@@ -18,9 +18,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestH2OverrideSpringConfig.xml"})
+@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestJpaSpringConfig.xml"})
 public class PhoneDaoFacadeTest {
-    private final Phone phone = new Phone();
+    private Phone phone = new Phone();
     @Autowired
     private PhoneDaoFacade phoneDaoFacade;
     @Autowired
@@ -34,28 +34,28 @@ public class PhoneDaoFacadeTest {
         account = accountDao.select(account);
         phone.setOwner(account);
         phone.setType(PhoneType.PRIVATE);
+        phoneDaoFacade.create(phone);
     }
 
     @After
     public void deleteTestValues() {
-        phoneDaoFacade.delete(phoneDaoFacade.select(phone));
+        phoneDaoFacade.delete(phone);
     }
 
     @Test
     public void testCreatePhone() {
-        phoneDaoFacade.delete(phoneDaoFacade.select(phone));
-        assertTrue(phoneDaoFacade.create(phone));
+        phoneDaoFacade.delete(phone);
+        Phone newPhone = new Phone(phone.getNumber(), phone.getOwner());
+        assertTrue(phoneDaoFacade.create(newPhone));
     }
 
     @Test
     public void testCreateExisting() {
-        phoneDaoFacade.create(phone);
         assertFalse(phoneDaoFacade.create(phone));
     }
 
     @Test
     public void testCreateWrongOwner() {
-        phoneDaoFacade.delete(phoneDaoFacade.select(phone));
         Account wrongAccount = new Account();
         wrongAccount.setId(-1);
         phone.setOwner(wrongAccount);
@@ -69,7 +69,6 @@ public class PhoneDaoFacadeTest {
 
     @Test
     public void testSelectPhone() {
-        phoneDaoFacade.create(phone);
         Phone actual = phoneDaoFacade.select(phone);
         assertEquals(phone, actual);
     }
@@ -81,7 +80,6 @@ public class PhoneDaoFacadeTest {
 
     @Test
     public void testUpdatePhone() {
-        phoneDaoFacade.create(phone);
         phone.setType(PhoneType.WORK);
         assertTrue(phoneDaoFacade.update(phone, phoneDaoFacade.select(phone)));
     }
@@ -97,8 +95,7 @@ public class PhoneDaoFacadeTest {
 
     @Test
     public void testDeletePhone() {
-        phoneDaoFacade.create(phone);
-        assertTrue(phoneDaoFacade.delete(phoneDaoFacade.select(phone)));
+        assertTrue(phoneDaoFacade.delete(phone));
     }
 
     @Test

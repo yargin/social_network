@@ -13,7 +13,7 @@ import java.util.Collection;
 
 import static java.util.Objects.isNull;
 
-@Repository("accountWallMessagesDao")
+@Repository("jpaAccountWallMessagesDao")
 public class JpaAccountWallMessagesDao implements JpaOneToManyDao<AccountWallMessage> {
     private transient EntityManagerFactory entityManagerFactory;
     private JpaAccountWallMessageDao messageDao;

@@ -6,20 +6,18 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.Jp
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.EntityTransaction;
-import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
+import java.util.ArrayList;
 import java.util.Collection;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.Friendship.*;
+import static com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.Friendship.createFriendshipKey;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-@Repository
+@Repository("jpaFriendshipDao")
 public class JpaFriendshipDao extends GenericSelfManyToMany<Account> {
     @Override
-    public Collection<Account> select(long id) {
+    public Collection<Account> genericSelect(long id) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         Account friend = new Account(id);
         TypedQuery<Account> firstQuery = entityManager.createQuery("select f.firstAccount from Friendship f " +

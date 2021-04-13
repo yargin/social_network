@@ -17,7 +17,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestH2OverrideSpringConfig.xml"})
+@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestJpaSpringConfig.xml"})
 public class AccountDaoFacadeTest {
     private Account account = new Account();
     @Autowired
@@ -46,7 +46,7 @@ public class AccountDaoFacadeTest {
             created = false;
         }
         assertFalse(created);
-        account.setEmail("test@test.test");
+        account = new Account("test", "test", "test@test.test");
         created = accountDaoFacade.create(account);
         assertTrue(created);
     }
@@ -107,7 +107,6 @@ public class AccountDaoFacadeTest {
     @Test
     public void testDeleteAccount() {
         accountDaoFacade.create(account);
-        account = accountDaoFacade.select(account);
         assertTrue(accountDaoFacade.delete(account));
         assertEquals(accountDaoFacade.getNullModel(), accountDaoFacade.select(account));
     }

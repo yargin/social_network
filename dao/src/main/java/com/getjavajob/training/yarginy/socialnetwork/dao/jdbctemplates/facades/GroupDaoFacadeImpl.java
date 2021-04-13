@@ -6,6 +6,9 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.modeldao.
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.relationsdao.manytomany.ManyToManyDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.relationsdao.onetomany.AccountGroupsDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.relationsdao.onetomany.OneToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.JpaDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationsdao.manytomany.JpaManyToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationsdao.onetomany.JpaOneToManyDao;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
@@ -13,13 +16,14 @@ import java.util.Collection;
 
 @Component("groupDaoFacade")
 public class GroupDaoFacadeImpl implements GroupDaoFacade {
-    private final Dao<Group> groupDao;
-    private final OneToManyDao<Group> accountsOwnedGroupsDao;
-    private final ManyToManyDao<Account, Group> accountsGroupMembershipDao;
+    private final JpaDao<Group> groupDao;
+    private final JpaOneToManyDao<Group> accountsOwnedGroupsDao;
+    private final JpaManyToManyDao<Account, Group> accountsGroupMembershipDao;
 
-    public GroupDaoFacadeImpl(Dao<Group> groupDao,
-                              AccountGroupsDao accountsOwnedGroupsDao,
-                              @Qualifier("groupMembershipDao") ManyToManyDao<Account, Group> accountsGroupMembershipDao) {
+    public GroupDaoFacadeImpl(@Qualifier("jpaGroupDao") JpaDao<Group> groupDao,
+                              JpaOneToManyDao<Group> accountsOwnedGroupsDao,
+                              @Qualifier("jpaGroupMembershipDao") JpaManyToManyDao<Account, Group>
+                                      accountsGroupMembershipDao) {
         this.groupDao = groupDao;
         this.accountsOwnedGroupsDao = accountsOwnedGroupsDao;
         this.accountsGroupMembershipDao = accountsGroupMembershipDao;
@@ -47,7 +51,9 @@ public class GroupDaoFacadeImpl implements GroupDaoFacade {
 
     @Override
     public boolean update(Group group, Group storedGroup) {
-        return groupDao.update(group, storedGroup);
+
+        return groupDao.update(group);
+//        return groupDao.update(group, storedGroup);
     }
 
     @Override

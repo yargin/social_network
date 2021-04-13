@@ -12,14 +12,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
+import static java.sql.Date.*;
+import static java.time.LocalDate.*;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestH2OverrideSpringConfig.xml"})
+@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestJpaSpringConfig.xml"})
 public class AccountsGroupsTest {
     @Autowired
     public AccountDaoFacade accountDaoFacade;
@@ -36,10 +40,12 @@ public class AccountsGroupsTest {
         account = accountDaoFacade.select(account);
 
         firstGroup = new Group("first test group", account);
+        firstGroup.setCreationDate(valueOf(of(2020, 2, 2)));
         groupDaoFacade.create(firstGroup);
         firstGroup = groupDaoFacade.select(firstGroup);
 
         secondGroup = new Group("second test group", account);
+        secondGroup.setCreationDate(valueOf(of(2020, 2, 2)));
         groupDaoFacade.create(secondGroup);
         secondGroup = groupDaoFacade.select(secondGroup);
     }

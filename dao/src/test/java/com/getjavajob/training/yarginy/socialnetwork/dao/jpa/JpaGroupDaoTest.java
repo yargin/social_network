@@ -11,8 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Collection;
 
+import static java.sql.Date.*;
+import static java.time.LocalDate.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -31,7 +35,14 @@ public class JpaGroupDaoTest {
     public void initValues() {
         accountDao.create(owner);
         group.setOwner(accountDao.select(owner));
+        group.setCreationDate(valueOf(of(2020, 2, 2)));
         groupDao.create(group);
+    }
+
+    @Test
+    public void testGetGroupByIdentifier() {
+        assertEquals(group, groupDao.select(group));
+        assertEquals(groupDao.getNullModel(), groupDao.select(new Group("newTestGroup", owner)));
     }
 
     @After
@@ -52,12 +63,6 @@ public class JpaGroupDaoTest {
         assertEquals(group, selectedGroup);
         selectedGroup = groupDao.select(22);
         assertEquals(groupDao.getNullModel(), selectedGroup);
-    }
-
-    @Test
-    public void testGetGroupByIdentifier() {
-        assertEquals(group, groupDao.select(group));
-        assertEquals(groupDao.getNullModel(), groupDao.select(new Group("newTestGroup", owner)));
     }
 
     @Test

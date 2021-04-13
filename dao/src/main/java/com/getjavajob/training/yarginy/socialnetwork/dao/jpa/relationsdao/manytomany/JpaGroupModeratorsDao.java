@@ -9,13 +9,12 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import java.awt.*;
 import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.GroupModerator.createGroupModeratorKey;
 
 
-@Repository
+@Repository("jpaGroupModeratorsDao")
 public class JpaGroupModeratorsDao extends GenericManyToManyDao<Account, Group> {
     @Override
     protected JpaManyToMany<Account, Group> genericGetReference(EntityManager entityManager, long accountId,
@@ -37,7 +36,7 @@ public class JpaGroupModeratorsDao extends GenericManyToManyDao<Account, Group> 
     }
 
     @Override
-    public Collection<Group> selectByFirst(long accountId) {
+    public Collection<Group> genericSelectByFirst(long accountId) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         Account account = new Account(accountId);
         TypedQuery<Group> query = entityManager.createQuery("select g.group from GroupModerator g " +
@@ -47,7 +46,7 @@ public class JpaGroupModeratorsDao extends GenericManyToManyDao<Account, Group> 
     }
 
     @Override
-    public Collection<Account> selectBySecond(long groupId) {
+    public Collection<Account> genericSelectBySecond(long groupId) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         Group group = new Group(groupId);
         TypedQuery<Account> query = entityManager.createQuery("select g.account from GroupModerator g " +

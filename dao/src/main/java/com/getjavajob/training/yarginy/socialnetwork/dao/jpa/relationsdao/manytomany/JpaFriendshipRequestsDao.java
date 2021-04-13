@@ -3,21 +3,19 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationsdao.manyt
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.FriendshipRequest;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.JpaManyToMany;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.JpaSelfManyToMany;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
+import java.util.ArrayList;
 import java.util.Collection;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.FriendshipRequest.*;
+import static com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.FriendshipRequest.createFriendshipRequestsKey;
 
-@Repository
+@Repository("jpaFriendshipRequestsDao")
 public class JpaFriendshipRequestsDao extends GenericManyToManyDao<Account, Account> {
     @Override
-    public Collection<Account> selectByFirst(long requesterId) {
+    public Collection<Account> genericSelectByFirst(long requesterId) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         Account requester = new Account(requesterId);
         TypedQuery<Account> query = entityManager.createQuery("select f.receiver from FriendshipRequest f " +
@@ -27,7 +25,7 @@ public class JpaFriendshipRequestsDao extends GenericManyToManyDao<Account, Acco
     }
 
     @Override
-    public Collection<Account> selectBySecond(long receiverId) {
+    public Collection<Account> genericSelectBySecond(long receiverId) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         Account receiver = new Account(receiverId);
         TypedQuery<Account> query = entityManager.createQuery("select f.requester from FriendshipRequest f " +

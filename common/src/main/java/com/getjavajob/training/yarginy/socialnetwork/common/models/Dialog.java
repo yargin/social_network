@@ -56,15 +56,7 @@ public class Dialog implements Model {
     }
 
     public void setFirstAccount(Account firstAccount) {
-        if (secondAccount != null && firstAccount.getId() > secondAccount.getId()) {
-            this.firstAccount = secondAccount;
-            this.secondAccount = firstAccount;
-        } else if (this.firstAccount != null) {
-            this.secondAccount = this.firstAccount;
-            this.firstAccount = firstAccount;
-        } else {
-            this.firstAccount = firstAccount;
-        }
+        this.firstAccount = firstAccount;
     }
 
     public Account getSecondAccount() {
@@ -72,15 +64,7 @@ public class Dialog implements Model {
     }
 
     public void setSecondAccount(Account secondAccount) {
-        if (firstAccount != null && firstAccount.getId() > secondAccount.getId()) {
-            this.secondAccount = firstAccount;
-            this.firstAccount = secondAccount;
-        } else if (this.secondAccount != null) {
-            this.firstAccount = this.secondAccount;
-            this.secondAccount = secondAccount;
-        } else {
-            this.secondAccount = secondAccount;
-        }
+        this.secondAccount = secondAccount;
     }
 
     @Override

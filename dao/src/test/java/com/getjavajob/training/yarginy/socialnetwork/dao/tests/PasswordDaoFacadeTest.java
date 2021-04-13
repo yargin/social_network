@@ -17,9 +17,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestH2OverrideSpringConfig.xml"})
+@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestJpaSpringConfig.xml"})
 public class PasswordDaoFacadeTest {
-    private static final Account ACCOUNT = new Account();
+    private static final Account ACCOUNT = new Account("testName", "testSurname", "password@test.com");
     private static final Password PASSWORD = new Password();
     @Autowired
     private AccountDaoFacade accountDaoFacade;
@@ -28,22 +28,20 @@ public class PasswordDaoFacadeTest {
 
     @Before
     public void initTestValues() {
-        ACCOUNT.setEmail("password@test.com");
-        ACCOUNT.setName("testAccount");
-        ACCOUNT.setSurname("testSurname");
-        accountDaoFacade.delete(accountDaoFacade.select(ACCOUNT));
-        assert accountDaoFacade.create(ACCOUNT);
-        PASSWORD.setAccount(ACCOUNT);
+        accountDaoFacade.create(ACCOUNT);
+        PASSWORD.setAccount(accountDaoFacade.select(ACCOUNT));
         PASSWORD.setStringPassword("qwe123rty");
     }
 
     @After
     public void deleteTestValues() {
-        assert accountDaoFacade.delete(accountDaoFacade.select(ACCOUNT));
+        passwordDaoFacade.delete(PASSWORD);
+        accountDaoFacade.delete(accountDaoFacade.select(ACCOUNT));
     }
 
     @Test
     public void testCreate() {
+        PASSWORD.setAccount(ACCOUNT);
         assertTrue(passwordDaoFacade.create(PASSWORD));
     }
 
@@ -59,7 +57,7 @@ public class PasswordDaoFacadeTest {
         accountDaoFacade.create(ACCOUNT);
         passwordDaoFacade.create(PASSWORD);
         PASSWORD.setStringPassword("updatedPassword1");
-        //mistake because select by both
+//        password.setAccount(accountDaoFacade.select(ACCOUNT));
         assertTrue(passwordDaoFacade.update(PASSWORD, passwordDaoFacade.select(PASSWORD)));
         PASSWORD.setStringPassword("qwe123rty");
     }
@@ -74,8 +72,10 @@ public class PasswordDaoFacadeTest {
     @Test
     public void testSelect() {
         accountDaoFacade.create(ACCOUNT);
-        passwordDaoFacade.create(PASSWORD);
-        assertEquals(PASSWORD, passwordDaoFacade.select(PASSWORD));
+        PASSWORD.setAccount(ACCOUNT);
+        assertTrue(passwordDaoFacade.create(PASSWORD));
+        Password pass = passwordDaoFacade.select(PASSWORD);
+        assertEquals(PASSWORD, pass);
     }
 
     @Test

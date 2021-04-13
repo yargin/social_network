@@ -19,7 +19,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestH2OverrideSpringConfig.xml"})
+@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestJpaSpringConfig.xml"})
 public class BatchPhoneDaoFacadeTest {
     @Autowired
     private PhoneDaoFacade phoneDaoFacade;
@@ -53,7 +53,7 @@ public class BatchPhoneDaoFacadeTest {
         phoneDaoFacade.create(testPhones);
         testPhones = phoneDaoFacade.selectPhonesByOwner(testAccount.getId());
         testPhones.add(new Phone("777-777", testAccount));
-        assertTrue(phoneDaoFacade.delete(testPhones));
+        assertFalse(phoneDaoFacade.delete(testPhones));
     }
 
     @Test
