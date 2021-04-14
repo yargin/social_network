@@ -23,7 +23,7 @@ import java.util.Objects;
 @Table(name = "groups_members")
 public class GroupMembership implements JpaManyToMany<Account, Group> {
     @EmbeddedId
-    private GroupMembershipKey groupMembershipKey;
+    private GroupMembershipKey groupMembershipKey = new GroupMembershipKey();
     @ManyToOne
     @MapsId("accountId")
     @JoinColumn(name = "account_id", foreignKey = @ForeignKey(name = "c_13"))
@@ -63,9 +63,7 @@ public class GroupMembership implements JpaManyToMany<Account, Group> {
 
     @Embeddable
     static class GroupMembershipKey implements Serializable {
-        @Column(name = "account_id")
         private long accountId;
-        @Column(name = "group_id")
         private long groupId;
 
         public GroupMembershipKey() {

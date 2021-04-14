@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
@@ -39,6 +41,7 @@ public class GroupMembersModeratorsTest {
 
     @Before
     public void testValuesInit() {
+        group.setCreationDate(Date.valueOf(LocalDate.of(2020, 2, 2)));
         groupDaoFacade.delete(group);
         accountDaoFacade.create(account1);
         account1 = accountDaoFacade.select(account1);

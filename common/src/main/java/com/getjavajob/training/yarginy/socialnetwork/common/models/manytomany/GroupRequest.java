@@ -22,7 +22,7 @@ import java.util.Objects;
 @Table(name = "groups_memberships_requests")
 public class GroupRequest implements JpaManyToMany<Account, Group> {
     @EmbeddedId
-    private GroupRequestKey key;
+    private GroupRequestKey groupRequestKey = new GroupRequestKey();
     @ManyToOne
     @MapsId("accountId")
     @JoinColumn(name = "account_id", foreignKey = @ForeignKey(name = "c_26"))

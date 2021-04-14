@@ -49,22 +49,11 @@ public class JpaDialogDao extends JpaGenericDao<Dialog> {
     }
 
     @Override
-    public boolean create(Dialog dialog) {
-        checkSwapAccounts(dialog);
-        return super.create(dialog);
-    }
-
-    @Override
-    public boolean update(Dialog dialog) {
-        checkSwapAccounts(dialog);
-        return super.update(dialog);
-    }
-
-    private void checkSwapAccounts(Dialog dialog) {
+    protected boolean checkEntity(Dialog dialog) {
         Account firstAccount = dialog.getFirstAccount();
         Account secondAccount = dialog.getSecondAccount();
         if (isNull(firstAccount) || isNull(secondAccount)) {
-            throw  new IllegalArgumentException();
+            return false;
         }
         Account greaterAccount;
         if (firstAccount.getId() < secondAccount.getId()) {
@@ -72,6 +61,13 @@ public class JpaDialogDao extends JpaGenericDao<Dialog> {
             dialog.setSecondAccount(dialog.getFirstAccount());
             dialog.setFirstAccount(greaterAccount);
         }
+        return true;
+    }
+
+    @Override
+    protected void prepareModelRelations(EntityManager entityManager, Dialog dialog) {
+        dialog.setFirstAccount(entityManager.getReference(Account.class, dialog.getFirstAccount().getId()));
+        dialog.setSecondAccount(entityManager.getReference(Account.class, dialog.getSecondAccount().getId()));
     }
 
     @Override

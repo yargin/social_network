@@ -22,7 +22,7 @@ import java.util.Objects;
 @Table(name = "friendships")
 public class Friendship implements JpaSelfManyToMany<Account> {
     @EmbeddedId
-    private FriendshipKey friendshipKey;
+    private FriendshipKey friendshipKey = new FriendshipKey();
     @ManyToOne
     @MapsId("firstAccountId")
     @JoinColumn(name = "first_account", foreignKey = @ForeignKey(name = "c_16"))
@@ -62,7 +62,6 @@ public class Friendship implements JpaSelfManyToMany<Account> {
 
     @Embeddable
     static class FriendshipKey implements Serializable {
-        @Column(name = "first_account")
         private long firstAccountId;
         @Column(name = "second_account")
         private long secondAccountId;
@@ -96,7 +95,8 @@ public class Friendship implements JpaSelfManyToMany<Account> {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             FriendshipKey friendshipKey = (FriendshipKey) o;
-            return firstAccountId == friendshipKey.firstAccountId && secondAccountId == friendshipKey.secondAccountId;
+            return firstAccountId == friendshipKey.getFirstAccountId() &&
+                    secondAccountId == friendshipKey.getSecondAccountId();
         }
 
         @Override

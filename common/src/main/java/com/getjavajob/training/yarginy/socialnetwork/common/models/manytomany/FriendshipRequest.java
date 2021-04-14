@@ -21,7 +21,7 @@ import java.util.Objects;
 @Table(name = "friendships_requests")
 public class FriendshipRequest implements JpaManyToMany<Account, Account> {
     @EmbeddedId
-    private FriendshipRequestsKey friendshipRequestsKey;
+    private FriendshipRequestsKey friendshipRequestsKey = new FriendshipRequestsKey();
     @ManyToOne
     @MapsId("requester")
     @JoinColumn(name = "requester", foreignKey = @ForeignKey(name = "c_28"))

@@ -48,6 +48,7 @@ public abstract class GenericManyToManyDao<F extends Model, S extends Model> imp
 
     @Override
     public boolean create(long firstId, long secondId) {
+        checkId(firstId, secondId);
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
@@ -73,6 +74,7 @@ public abstract class GenericManyToManyDao<F extends Model, S extends Model> imp
 
     @Override
     public boolean delete(long firstId, long secondId) {
+        checkId(firstId, secondId);
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();

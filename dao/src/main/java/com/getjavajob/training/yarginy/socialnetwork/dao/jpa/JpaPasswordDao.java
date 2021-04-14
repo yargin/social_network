@@ -1,11 +1,8 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.jpa;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Password;
-import org.hibernate.PropertyValueException;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.Access;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.OptimisticLockException;
@@ -15,6 +12,7 @@ import javax.persistence.TypedQuery;
 import java.util.function.Supplier;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullPassword;
+import static java.util.Objects.isNull;
 
 
 @Repository("jpaPasswordDao")
@@ -51,22 +49,13 @@ public class JpaPasswordDao extends JpaGenericDao<Password> {
     }
 
     @Override
-    public boolean create(Password password) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        try {
-            password.setAccount(entityManager.merge(password.getAccount()));
-            entityManager.persist(password);
-            transaction.commit();
-            return true;
-        } catch (PersistenceException | IllegalArgumentException e) {
-            if (e.getCause().getClass() == PropertyValueException.class) {
-                throw new IllegalArgumentException(e);
-            }
-            transaction.rollback();
-            return false;
-        }
+    protected boolean checkEntity(Password password) {
+        return !isNull(password.getAccount());
+    }
+
+    @Override
+    protected void prepareModelRelations(EntityManager entityManager, Password password) {
+        password.setAccount(entityManager.merge(password.getAccount()));
     }
 
     @Override

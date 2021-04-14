@@ -24,7 +24,7 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestJpaSpringConfig.xml"})
 public class JpaGroupDaoTest {
-    private final Account owner= new Account("testName", "testSurname", "testEmail");
+    private final Account owner= new Account("testOwnerName", "testOwnerSurname", "testOwnerEmail");
     private final Group group = new Group("testName", owner);
     @Autowired
     private JpaGroupDao groupDao;
@@ -33,7 +33,8 @@ public class JpaGroupDaoTest {
 
     @Before
     public void initValues() {
-        accountDao.create(owner);
+        accountDao.delete(owner);
+        assertTrue(accountDao.create(owner));
         group.setOwner(accountDao.select(owner));
         group.setCreationDate(valueOf(of(2020, 2, 2)));
         groupDao.create(group);
@@ -75,12 +76,16 @@ public class JpaGroupDaoTest {
 
     @Test
     public void testCreateGroup() {
+//        groupDao.delete(new Group("newGroup", owner));
         assertFalse(groupDao.create(group));
         Group newGroup = new Group("newGroup", owner);
+        newGroup.setCreationDate(valueOf(of(2020, 2, 2)));
         assertTrue(groupDao.create(newGroup));
         assertEquals(newGroup, groupDao.select(newGroup));
         assertFalse(groupDao.create(newGroup));
-        assertFalse(groupDao.create(new Group("newGroup", owner)));
+        newGroup = new Group("newGroup", owner);
+        newGroup.setCreationDate(valueOf(of(2020, 2, 2)));
+        assertFalse(groupDao.create(newGroup));
         groupDao.delete(newGroup);
     }
 

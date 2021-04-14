@@ -31,6 +31,16 @@ public class JpaAccountDao extends JpaGenericDao<Account> {
     }
 
     @Override
+    protected boolean checkEntity(Account model) {
+        return true;
+    }
+
+    @Override
+    protected void prepareModelRelations(EntityManager entityManager, Account model) {
+        //nothing to prepare
+    }
+
+    @Override
     public Account getNullModel() {
         return getNullAccount();
     }

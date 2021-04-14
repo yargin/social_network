@@ -107,10 +107,8 @@ public class GroupDaoFacadeTest {
 
     @Test
     public void testUpdateNonExistingGroup() {
-        Group nonExisting = new Group();
-        nonExisting.setName("non existing group");
-        Group anotherNonExisting = new Group();
-        anotherNonExisting.setName("another non existing group");
+        Group nonExisting = new Group("non existing group", account);
+        Group anotherNonExisting = new Group("another non existing group", account);
         assertFalse(groupDaoFacade.update(anotherNonExisting, nonExisting));
     }
 

@@ -68,10 +68,14 @@ public abstract class JpaGenericDao<E extends Model> implements JpaDao<E> {
 
     @Override
     public boolean create(E model) {
+        if (!checkEntity(model)) {
+            throw new IllegalArgumentException();
+        }
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {
+            prepareModelRelations(entityManager, model);
             entityManager.persist(model);
             transaction.commit();
             return true;
@@ -84,8 +88,15 @@ public abstract class JpaGenericDao<E extends Model> implements JpaDao<E> {
         }
     }
 
+    protected abstract boolean checkEntity(E model);
+
+    protected abstract void prepareModelRelations(EntityManager entityManager, E model);
+
     @Override
     public boolean update(E model) {
+        if (!checkEntity(model)) {
+            throw new IllegalArgumentException();
+        }
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();

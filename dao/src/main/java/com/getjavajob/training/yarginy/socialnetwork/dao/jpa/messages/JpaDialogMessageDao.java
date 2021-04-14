@@ -1,5 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.jpa.messages;
 
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.DialogMessage;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.JpaGenericDao;
 import org.springframework.stereotype.Repository;
@@ -9,6 +11,7 @@ import javax.persistence.TypedQuery;
 import java.util.function.Supplier;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullDialogMessage;
+import static java.util.Objects.isNull;
 
 @Repository("jpaDialogMessageDao")
 public class JpaDialogMessageDao extends JpaGenericDao<DialogMessage> {
@@ -42,5 +45,16 @@ public class JpaDialogMessageDao extends JpaGenericDao<DialogMessage> {
     @Override
     protected Supplier<DialogMessage> getModelReference(EntityManager entityManager, DialogMessage message) {
         return () -> entityManager.getReference(DialogMessage.class, message.getId());
+    }
+
+    @Override
+    protected boolean checkEntity(DialogMessage message) {
+        return !(isNull(message.getReceiver()) || isNull(message.getAuthor()));
+    }
+
+    @Override
+    protected void prepareModelRelations(EntityManager entityManager, DialogMessage message) {
+        message.setAuthor(entityManager.getReference(Account.class, message.getAuthor().getId()));
+        message.setReceiver(entityManager.getReference(Dialog.class, message.getReceiver().getId()));
     }
 }

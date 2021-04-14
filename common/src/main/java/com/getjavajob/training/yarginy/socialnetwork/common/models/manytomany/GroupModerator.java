@@ -22,7 +22,7 @@ import java.util.Objects;
 @Table(name = "groups_moderators")
 public class GroupModerator implements JpaManyToMany<Account, Group> {
     @EmbeddedId
-    private GroupModeratorKey key;
+    private GroupModeratorKey key = new GroupModeratorKey();
     @ManyToOne
     @MapsId("accountId")
     @JoinColumn(name = "account_id", foreignKey = @ForeignKey(name = "c_24"))

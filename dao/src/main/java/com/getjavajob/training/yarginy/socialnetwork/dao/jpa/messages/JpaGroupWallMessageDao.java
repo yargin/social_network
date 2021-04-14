@@ -1,5 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.jpa.messages;
 
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.GroupWallMessage;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.JpaGenericDao;
 import org.springframework.stereotype.Repository;
@@ -9,6 +11,7 @@ import javax.persistence.TypedQuery;
 import java.util.function.Supplier;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullGroupWallMessage;
+import static java.util.Objects.isNull;
 
 @Repository("jpaGroupWallMessageDao")
 public class JpaGroupWallMessageDao extends JpaGenericDao<GroupWallMessage> {
@@ -42,5 +45,16 @@ public class JpaGroupWallMessageDao extends JpaGenericDao<GroupWallMessage> {
     @Override
     protected Supplier<GroupWallMessage> getModelReference(EntityManager entityManager, GroupWallMessage message) {
         return () -> entityManager.getReference(GroupWallMessage.class, message.getId());
+    }
+
+    @Override
+    protected boolean checkEntity(GroupWallMessage message) {
+        return !(isNull(message.getReceiver()) || isNull(message.getAuthor()));
+    }
+
+    @Override
+    protected void prepareModelRelations(EntityManager entityManager, GroupWallMessage message) {
+        message.setAuthor(entityManager.getReference(Account.class, message.getAuthor().getId()));
+        message.setReceiver(entityManager.getReference(Group.class, message.getReceiver().getId()));
     }
 }
