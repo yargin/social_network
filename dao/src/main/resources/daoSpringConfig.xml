@@ -27,21 +27,11 @@
         <constructor-arg ref="dataSource"/>
     </bean>
 
-    <bean id="namedTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate"
-          scope="prototype">
-        <constructor-arg ref="jdbcTemplate"/>
-    </bean>
-
-    <bean id="jdbcInsert" class="org.springframework.jdbc.core.simple.SimpleJdbcInsert" scope="prototype">
-        <constructor-arg ref="jdbcTemplate"/>
-    </bean>
-
     <context:component-scan base-package="com.getjavajob.training.yarginy.socialnetwork.dao"/>
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="packagesToScan" value="com.getjavajob.training.yarginy.socialnetwork.common.models"/>
-        <!--        <property name="persistenceUnitName" value="myUnit"/>-->
         <property name="jpaVendorAdapter">
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
                 <property name="showSql" value="true"/>

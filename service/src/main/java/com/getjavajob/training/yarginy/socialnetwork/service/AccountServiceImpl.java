@@ -5,10 +5,10 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.AccountDaoFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.DialogDaoFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.FriendshipsDaoFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.PhoneDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;

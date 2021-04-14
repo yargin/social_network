@@ -2,10 +2,10 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.tests;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
-import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.AccountDaoFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.DataSetsDaoFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.GroupDaoFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.GroupsMembersDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DataSetsDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsMembersDaoFacade;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +16,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Map;
 
+import static java.sql.Date.valueOf;
+import static java.time.LocalDate.of;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -45,10 +47,15 @@ public class OtherDaoTest {
         accountDaoFacade.create(owner);
         owner = accountDaoFacade.select(owner);
         group1 = new Group("testGroup1", owner);
+        group1.setCreationDate(valueOf(of(2020, 2, 2)));
         group2 = new Group("testGroup2", owner);
+        group2.setCreationDate(valueOf(of(2020, 2, 2)));
         group3 = new Group("testGroup3", owner);
+        group3.setCreationDate(valueOf(of(2020, 2, 2)));
         group4 = new Group("testGroup4", owner);
+        group4.setCreationDate(valueOf(of(2020, 2, 2)));
         group5 = new Group("testGroup5", owner);
+        group5.setCreationDate(valueOf(of(2020, 2, 2)));
 
         groupDaoFacade.create(group1);
         group1 = groupDaoFacade.select(group1);

@@ -1,6 +1,12 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.controllers;
 
+import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.AccountWallMessage;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.DialogMessage;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.GroupWallMessage;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.Message;
+import com.getjavajob.training.yarginy.socialnetwork.service.messages.AccountWallMessageService;
+import com.getjavajob.training.yarginy.socialnetwork.service.messages.DialogMessagesService;
+import com.getjavajob.training.yarginy.socialnetwork.service.messages.GroupWallMessageService;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.Redirector;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,14 +26,14 @@ import static java.util.Objects.isNull;
 @Controller
 @RequestMapping("/message")
 public class MessageController {
-    private final MessageService accountWallMessageService;
-    private final MessageService groupWallMessageService;
-    private final MessageService accountPrivateMessageService;
+    private final AccountWallMessageService accountWallMessageService;
+    private final GroupWallMessageService groupWallMessageService;
+    private final DialogMessagesService accountPrivateMessageService;
     private final Redirector redirector;
 
-    public MessageController(@Qualifier("accountWallMessageService") MessageService accountWallMessageService,
-                             @Qualifier("groupWallMessageService") MessageService groupWallMessageService,
-                             @Qualifier("dialogMessageService") MessageService accountPrivateMessageService,
+    public MessageController(AccountWallMessageService accountWallMessageService,
+                             GroupWallMessageService groupWallMessageService,
+                             DialogMessagesService accountPrivateMessageService,
                              Redirector redirector) {
         this.accountWallMessageService = accountWallMessageService;
         this.groupWallMessageService = groupWallMessageService;
@@ -40,11 +46,12 @@ public class MessageController {
                              HttpServletRequest req) {
         if (!message.getText().isEmpty() || !isNull(message.getImage()) && message.getImage().length != 0) {
             if ("accountWall".equals(type)) {
-                accountWallMessageService.addMessage(message);
+                //todo fix casting
+                accountWallMessageService.addMessage((AccountWallMessage) message);
             } else if ("accountPrivate".equals(type)) {
-                accountPrivateMessageService.addMessage(message);
+                accountPrivateMessageService.addMessage((DialogMessage) message);
             } else if ("groupWall".equals(type)) {
-                groupWallMessageService.addMessage(message);
+                groupWallMessageService.addMessage((GroupWallMessage) message);
             }
         }
         return redirector.redirectBackView(req);
@@ -54,11 +61,11 @@ public class MessageController {
     public String deleteMessage(@RequestParam("type") String type, @ModelAttribute Message message,
                                 HttpServletRequest req) {
         if ("accountWall".equals(type)) {
-            accountWallMessageService.deleteMessage(message);
+            accountWallMessageService.deleteMessage((AccountWallMessage) message);
         } else if ("accountPrivate".equals(type)) {
-            accountPrivateMessageService.deleteMessage(message);
+            accountPrivateMessageService.deleteMessage((DialogMessage) message);
         } else if ("groupWall".equals(type)) {
-            groupWallMessageService.deleteMessage(message);
+            groupWallMessageService.deleteMessage((GroupWallMessage) message);
         }
         return redirector.redirectBackView(req);
     }

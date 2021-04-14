@@ -2,7 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.service.messages;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.GroupWallMessage;
-import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.messages.GroupWallMessageFacadeDaoImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages.GroupWallMessageFacadeDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -12,7 +12,7 @@ public abstract class NullModelsFactory {
     public static Account getNullAccount() {
         Account nullAccount = new Account(-1);
         nullAccount.setName("doesn't exist");
-        nullAccount.setSurname("doesn't exist");
+        nullAccount.setSurname(null);
         nullAccount.setEmail("email@doesnt.exist");
         return nullAccount;
     }

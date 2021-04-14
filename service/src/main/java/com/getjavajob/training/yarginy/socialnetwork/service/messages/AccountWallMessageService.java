@@ -2,7 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.service.messages;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.AccountWallMessage;
-import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.messages.AccountWallMessageDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages.AccountWallMessageDaoFacade;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -11,7 +11,7 @@ import java.util.Collection;
 
 import static java.util.Objects.isNull;
 
-@Service("accountWallMessageService")
+@Service
 public class AccountWallMessageService implements MessageService<Account, AccountWallMessage> {
     private final AccountWallMessageDaoFacade messageDao;
 

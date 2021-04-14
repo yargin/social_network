@@ -3,8 +3,8 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.tests;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.PhoneType;
-import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.AccountDaoFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.PhoneDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,11 +25,11 @@ public class PhoneDaoFacadeTest {
     private PhoneDaoFacade phoneDaoFacade;
     @Autowired
     private AccountDaoFacade accountDao;
+    private Account account = new Account("test", "test", "test@test.test");
 
     @Before
     public void initTestValues() {
         phone.setNumber("123321");
-        Account account = new Account("test", "test", "test@test.test");
         accountDao.create(account);
         account = accountDao.select(account);
         phone.setOwner(account);
@@ -39,6 +39,7 @@ public class PhoneDaoFacadeTest {
 
     @After
     public void deleteTestValues() {
+        accountDao.delete(account);
         phoneDaoFacade.delete(phone);
     }
 

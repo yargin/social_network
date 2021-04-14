@@ -5,9 +5,9 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldat
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
-import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.AccountDaoFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.PasswordDaoFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.PhoneDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PasswordDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

@@ -2,10 +2,10 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.tests;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
-import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.AccountDaoFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.DataSetsDaoFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.GroupDaoFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.GroupsModeratorsDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DataSetsDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsModeratorsDaoFacade;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

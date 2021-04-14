@@ -2,8 +2,8 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.tests;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Password;
-import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.AccountDaoFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.PasswordDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PasswordDaoFacade;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,8 +19,8 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestJpaSpringConfig.xml"})
 public class PasswordDaoFacadeTest {
-    private static final Account ACCOUNT = new Account("testName", "testSurname", "password@test.com");
-    private static final Password PASSWORD = new Password();
+    private final Account account = new Account("testName", "testSurname", "password@test.com");
+    private final Password password = new Password();
     @Autowired
     private AccountDaoFacade accountDaoFacade;
     @Autowired
@@ -28,54 +28,54 @@ public class PasswordDaoFacadeTest {
 
     @Before
     public void initTestValues() {
-        accountDaoFacade.create(ACCOUNT);
-        PASSWORD.setAccount(accountDaoFacade.select(ACCOUNT));
-        PASSWORD.setStringPassword("qwe123rty");
+        accountDaoFacade.create(account);
+        password.setAccount(account);
+        password.setStringPassword("qwe123rty");
     }
 
     @After
     public void deleteTestValues() {
-        passwordDaoFacade.delete(PASSWORD);
-        accountDaoFacade.delete(accountDaoFacade.select(ACCOUNT));
+        passwordDaoFacade.delete(password);
+        accountDaoFacade.delete(account);
     }
 
     @Test
     public void testCreate() {
-        PASSWORD.setAccount(ACCOUNT);
-        assertTrue(passwordDaoFacade.create(PASSWORD));
+        password.setAccount(account);
+        assertTrue(passwordDaoFacade.create(password));
     }
 
     @Test
     public void testCreateExisting() {
-        accountDaoFacade.create(ACCOUNT);
-        passwordDaoFacade.create(PASSWORD);
-        assertFalse(passwordDaoFacade.create(PASSWORD));
+        accountDaoFacade.create(account);
+        passwordDaoFacade.create(password);
+        Password passwordd = passwordDaoFacade.select(password);
+        passwordDaoFacade.select(password);
+        assertFalse(passwordDaoFacade.create(password));
     }
 
     @Test
     public void testUpdate() {
-        accountDaoFacade.create(ACCOUNT);
-        passwordDaoFacade.create(PASSWORD);
-        PASSWORD.setStringPassword("updatedPassword1");
-//        password.setAccount(accountDaoFacade.select(ACCOUNT));
-        assertTrue(passwordDaoFacade.update(PASSWORD, passwordDaoFacade.select(PASSWORD)));
-        PASSWORD.setStringPassword("qwe123rty");
+        accountDaoFacade.create(account);
+        passwordDaoFacade.create(password);
+        password.setStringPassword("updatedPassword1");
+        assertTrue(passwordDaoFacade.update(password, passwordDaoFacade.select(password)));
+        password.setStringPassword("qwe123rty");
     }
 
     @Test
     public void testUpdateNonExisting() {
-        PASSWORD.setAccount(new Account("petya", "fake@email.com"));
-        assertFalse(passwordDaoFacade.update(PASSWORD, passwordDaoFacade.select(PASSWORD)));
-        PASSWORD.setAccount(ACCOUNT);
+        password.setAccount(new Account("petya", "fake@email.com"));
+        assertFalse(passwordDaoFacade.update(password, passwordDaoFacade.select(password)));
+        password.setAccount(account);
     }
 
     @Test
     public void testSelect() {
-        accountDaoFacade.create(ACCOUNT);
-        PASSWORD.setAccount(ACCOUNT);
-        assertTrue(passwordDaoFacade.create(PASSWORD));
-        Password pass = passwordDaoFacade.select(PASSWORD);
-        assertEquals(PASSWORD, pass);
+        accountDaoFacade.create(account);
+        password.setAccount(account);
+        assertTrue(passwordDaoFacade.create(password));
+        assertEquals(password, passwordDaoFacade.select(password));
     }
 
     @Test

@@ -2,8 +2,8 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.tests;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
-import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.AccountDaoFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.jdbctemplates.facades.GroupDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacade;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,9 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -30,6 +28,7 @@ public class GroupDaoFacadeTest {
     private GroupDaoFacade groupDaoFacade;
     private Group group = new Group();
     private Account account = new Account("test", "test", "test@test.com");
+    private Account newOwner = new Account("testOwner", "newOwner", "newOwner@test.test");
 
     @Before
     public void testValuesInit() {
@@ -43,6 +42,7 @@ public class GroupDaoFacadeTest {
     @After
     public void testValuesDelete() {
         accountDaoFacade.delete(account);
+        accountDaoFacade.delete(newOwner);
         group = groupDaoFacade.select(group);
         groupDaoFacade.delete(group);
     }
@@ -72,7 +72,6 @@ public class GroupDaoFacadeTest {
     public void testUpdateOwner() {
         groupDaoFacade.create(group);
         Group storedGroup = groupDaoFacade.select(group);
-        Account newOwner = new Account("testOwner", "newOwner", "newOwner@test.test");
         accountDaoFacade.create(newOwner);
         newOwner = accountDaoFacade.select(newOwner);
         group.setOwner(newOwner);

@@ -1,6 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.controllers;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.AccountInfoHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.Redirector;
@@ -65,7 +66,8 @@ public class FriendshipController {
             modelAndView.addObject(ERROR, "error.wrongRequest");
         }
 
-        infoHelper.setAccountInfo(modelAndView, receiverId);
+        Account account = accountService.get(receiverId);
+        infoHelper.setAccountInfo(modelAndView, account);
         modelAndView.addObject(TAB, "addFriend");
         modelAndView.addObject(REQUESTED_ID, receiverId);
         return modelAndView;
