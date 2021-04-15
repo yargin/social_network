@@ -14,14 +14,8 @@ import java.util.Collection;
 import static java.util.Objects.isNull;
 
 @Repository("jpaAccountWallMessagesDao")
-public class AccountWallMessagesDao implements OneToManyDao<AccountWallMessage> {
-    private transient EntityManagerFactory entityManagerFactory;
+public class AccountWallMessagesDao extends GenericOneToManyDao<AccountWallMessage> {
     private AccountWallMessageDao messageDao;
-
-    @Autowired
-    public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
-        this.entityManagerFactory = entityManagerFactory;
-    }
 
     @Autowired
     public void setMessageDao(AccountWallMessageDao messageDao) {
@@ -29,8 +23,7 @@ public class AccountWallMessagesDao implements OneToManyDao<AccountWallMessage> 
     }
 
     @Override
-    public Collection<AccountWallMessage> selectMany(long accountId) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+    public Collection<AccountWallMessage> genericSelectMany(EntityManager entityManager, long accountId) {
         Account account = new Account(accountId);
         TypedQuery<AccountWallMessage> selectMany = entityManager.createQuery("select m from AccountWallMessage m " +
                 "where m.receiver = :receiver", AccountWallMessage.class);

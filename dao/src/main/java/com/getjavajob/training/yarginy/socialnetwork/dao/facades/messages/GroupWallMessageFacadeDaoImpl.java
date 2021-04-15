@@ -34,9 +34,7 @@ public class GroupWallMessageFacadeDaoImpl implements GroupWallMessageDaoFacade 
     }
 
     @Override
-    public boolean update(GroupWallMessage message, GroupWallMessage storedMessage) {
-        //todo
-//        return groupWallMessageDao.update(message, storedMessage);
+    public boolean update(GroupWallMessage message) {
         return groupWallMessageDao.update(message);
     }
 

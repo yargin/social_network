@@ -51,7 +51,7 @@ public class AccountInfoController {
         infoHelper.setAccountInfo(modelAndView, account);
         Collection<AccountWallMessage> messages = messageService.selectMessages(id);
         modelAndView.addObject("messages", messages);
-        modelAndView.addObject("type", "accountWall");
+        modelAndView.addObject("type", "account");
         modelAndView.addObject("id", id);
         modelAndView.addObject(TAB, "wall");
         return modelAndView;

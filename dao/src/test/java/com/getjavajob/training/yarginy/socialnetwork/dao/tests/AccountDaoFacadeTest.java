@@ -81,8 +81,7 @@ public class AccountDaoFacadeTest {
         accountDaoFacade.create(account);
         String newPatronymic = "new Patronymic";
         account.setPatronymic(newPatronymic);
-        Account storedAccount = accountDaoFacade.select(account);
-        boolean actual = accountDaoFacade.update(account, storedAccount);
+        boolean actual = accountDaoFacade.update(account);
         assertTrue(actual);
         Account storageAccount = accountDaoFacade.select(account);
         assertEquals(newPatronymic, storageAccount.getPatronymic());
@@ -92,9 +91,7 @@ public class AccountDaoFacadeTest {
     public void testUpdateNonExistingAccount() {
         Account nonExisting = new Account();
         nonExisting.setEmail("email@that.doesnt.exist");
-        Account anotherNonExisting = new Account();
-        anotherNonExisting.setEmail("anotheremail@that.doesnt.exist");
-        assertFalse(accountDaoFacade.update(nonExisting, anotherNonExisting));
+        assertFalse(accountDaoFacade.update(nonExisting));
     }
 
     @Test

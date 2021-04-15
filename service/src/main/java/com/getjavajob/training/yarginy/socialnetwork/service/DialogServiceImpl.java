@@ -2,19 +2,18 @@ package com.getjavajob.training.yarginy.socialnetwork.service;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.DialogMessage;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.Message;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogDaoFacade;
-import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.getjavajob.training.yarginy.socialnetwork.service.messages.DialogMessagesService;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DialogServiceImpl implements DialogService {
     private final DialogDaoFacade dialogDaoFacade;
-    private final MessageService messageService;
+    private final DialogMessagesService messageService;
 
-    public DialogServiceImpl(DialogDaoFacade dialogDaoFacade, @Qualifier("dialogMessageService") MessageService
-            messageService) {
+    public DialogServiceImpl(DialogDaoFacade dialogDaoFacade, DialogMessagesService messageService) {
         this.dialogDaoFacade = dialogDaoFacade;
         this.messageService = messageService;
     }
@@ -30,7 +29,7 @@ public class DialogServiceImpl implements DialogService {
     }
 
     @Override
-    public boolean create(Dialog dialog, Message<Dialog> message) {
+    public boolean create(Dialog dialog, DialogMessage message) {
         if (!dialogDaoFacade.create(dialog)) {
             throw new IllegalStateException();
         }

@@ -3,8 +3,12 @@
 <%@ taglib prefix="common" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 
+<c:if test="${not empty concurrentError}">
+    <script>alert('<fmt:message key="${concurrentError}" bundle="${error}"/>')</script>
+</c:if>
 <common:layout>
     <div class="info">
             <%--@elvariable id="group" type="com.getjavajob.training.yarginy.socialnetwork.common.models.Group"--%>

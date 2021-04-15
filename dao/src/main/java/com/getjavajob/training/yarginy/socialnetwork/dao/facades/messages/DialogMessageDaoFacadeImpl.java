@@ -34,9 +34,7 @@ public class DialogMessageDaoFacadeImpl implements DialogMessageDaoFacade {
     }
 
     @Override
-    public boolean update(DialogMessage message, DialogMessage storedMessage) {
-        //todo
-//        return dialogMessageDao.update(message, storedMessage);
+    public boolean update(DialogMessage message) {
         return dialogMessageDao.update(message);
     }
 

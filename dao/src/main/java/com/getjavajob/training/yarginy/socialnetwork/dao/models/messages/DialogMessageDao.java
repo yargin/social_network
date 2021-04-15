@@ -24,10 +24,10 @@ public class DialogMessageDao extends GenericDao<DialogMessage> {
     protected Supplier<TypedQuery<DialogMessage>> getSelectByAltKey(EntityManager entityManager, DialogMessage message) {
         return () -> {
             TypedQuery<DialogMessage> query = entityManager.createQuery("select m from DialogMessage m " +
-                            "where m.author = :author and m.receiver = :receiver and m.posted = :posted", DialogMessage.class);
+                            "where m.author = :author and m.receiver = :receiver and m.date = :posted", DialogMessage.class);
             query.setParameter("author", message.getAuthor());
             query.setParameter("receiver", message.getReceiver());
-            query.setParameter("posted", message.getPosted());
+            query.setParameter("posted", message.getDate());
             return query;
         };
     }

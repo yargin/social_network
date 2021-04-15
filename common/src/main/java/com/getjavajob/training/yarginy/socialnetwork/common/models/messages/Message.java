@@ -29,7 +29,7 @@ public abstract class Message<E extends Model> implements Model {
     @Lob
     protected byte[] image;
     @Column(name = "posted")
-    protected Timestamp posted;
+    protected Timestamp date;
     @Version
     private long version;
 
@@ -63,12 +63,12 @@ public abstract class Message<E extends Model> implements Model {
         this.image = copyOf(image, image.length);
     }
 
-    public Timestamp getPosted() {
-        return posted;
+    public Timestamp getDate() {
+        return date;
     }
 
-    public void setPosted(Timestamp date) {
-        this.posted = date;
+    public void setDate(Timestamp date) {
+        this.date = date;
     }
 
     public abstract Account getAuthor();
@@ -92,13 +92,13 @@ public abstract class Message<E extends Model> implements Model {
 
     protected boolean implementedEquals(Message<? extends Model> message) {
         return Objects.equals(text, message.text) && Arrays.equals(image, message.image) &&
-                Objects.equals(posted, message.posted) && Objects.equals(getReceiver(), message.getReceiver()) &&
+                Objects.equals(date, message.date) && Objects.equals(getReceiver(), message.getReceiver()) &&
                 Objects.equals(getAuthor(), message.getAuthor());
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(text, posted, getReceiver(), getAuthor());
+        int result = Objects.hash(text, date, getReceiver(), getAuthor());
         result = 31 * result + Arrays.hashCode(image);
         return result;
     }

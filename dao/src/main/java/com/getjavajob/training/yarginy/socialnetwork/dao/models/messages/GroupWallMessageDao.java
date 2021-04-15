@@ -24,10 +24,10 @@ public class GroupWallMessageDao extends GenericDao<GroupWallMessage> {
     protected Supplier<TypedQuery<GroupWallMessage>> getSelectByAltKey(EntityManager entityManager, GroupWallMessage message) {
         return () -> {
             TypedQuery<GroupWallMessage> query = entityManager.createQuery("select m from GroupWallMessage m " +
-                    "where m.author = :author and m.receiver = :receiver and m.posted = :posted", GroupWallMessage.class);
+                    "where m.author = :author and m.receiver = :receiver and m.date = :posted", GroupWallMessage.class);
             query.setParameter("author", message.getAuthor());
             query.setParameter("receiver", message.getReceiver());
-            query.setParameter("posted", message.getPosted());
+            query.setParameter("posted", message.getDate());
             return query;
         };
     }

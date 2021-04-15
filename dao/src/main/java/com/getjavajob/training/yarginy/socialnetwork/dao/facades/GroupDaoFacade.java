@@ -15,7 +15,7 @@ public interface GroupDaoFacade extends Serializable {
 
     boolean create(Group group);
 
-    boolean update(Group group, Group storedGroup);
+    boolean update(Group group);
 
     boolean delete(Group group);
 

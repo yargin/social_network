@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestJpaSpringConfig.xml"})
@@ -32,9 +33,8 @@ public class JpaAccountWallMessageDaoTest {
         AccountWallMessage message = new AccountWallMessage();
         message.setAuthor(author);
         message.setReceiver(receiver);
-        message.setPosted(Timestamp.valueOf(LocalDateTime.of(2020, 12, 12, 12, 12)));
+        message.setDate(Timestamp.valueOf(LocalDateTime.of(2020, 12, 12, 12, 12)));
         message.setText("some message");
-        accountWallMessageDao.create(message);
-        assertEquals(message, accountWallMessageDao.select(message));
+        assertTrue(accountWallMessageDao.create(message));
     }
 }

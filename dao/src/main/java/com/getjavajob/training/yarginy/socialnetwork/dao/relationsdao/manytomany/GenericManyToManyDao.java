@@ -17,7 +17,7 @@ import static java.util.Objects.isNull;
 
 @Repository
 public abstract class GenericManyToManyDao<F extends Model, S extends Model> implements ManyToManyDao<F, S> {
-    protected transient EntityManagerFactory entityManagerFactory;
+    private transient EntityManagerFactory entityManagerFactory;
 
     @Autowired
     public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
@@ -30,20 +30,26 @@ public abstract class GenericManyToManyDao<F extends Model, S extends Model> imp
 
     protected abstract JpaManyToMany<F, S> genericCreateObject(EntityManager entityManager, long firstId, long secondId);
 
-    protected abstract Collection<S> genericSelectByFirst(long firstId);
+    protected abstract Collection<S> genericSelectByFirst(EntityManager entityManager, long firstId);
 
-    protected abstract Collection<F> genericSelectBySecond(long secondId);
+    protected abstract Collection<F> genericSelectBySecond(EntityManager entityManager, long secondId);
 
     @Override
     public Collection<S> selectByFirst(long firstId) {
         checkId(firstId);
-        return genericSelectByFirst(firstId);
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        Collection<S> secondEntities = genericSelectByFirst(entityManager, firstId);
+        entityManager.close();
+        return secondEntities;
     }
 
     @Override
     public Collection<F> selectBySecond(long secondId) {
         checkId(secondId);
-        return genericSelectBySecond(secondId);
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        Collection<F> firstEntities = genericSelectBySecond(entityManager, secondId);
+        entityManager.close();
+        return firstEntities;
     }
 
     @Override
@@ -56,11 +62,13 @@ public abstract class GenericManyToManyDao<F extends Model, S extends Model> imp
         try {
             entityManager.persist(manyToMany);
             transaction.commit();
+            entityManager.close();
             return true;
         } catch (EntityNotFoundException e) {
             throw new IllegalArgumentException(e);
         } catch (PersistenceException | IllegalArgumentException e) {
             transaction.rollback();
+            entityManager.close();
             return false;
         }
     }
@@ -69,6 +77,7 @@ public abstract class GenericManyToManyDao<F extends Model, S extends Model> imp
     public boolean relationExists(long firstId, long secondId) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         JpaManyToMany<F, S> manyToMany = genericFind(entityManager, firstId, secondId);
+        entityManager.close();
         return !isNull(manyToMany);
     }
 
@@ -82,9 +91,11 @@ public abstract class GenericManyToManyDao<F extends Model, S extends Model> imp
             JpaManyToMany<F, S> manyToMany = genericGetReference(entityManager, firstId, secondId);
             entityManager.remove(manyToMany);
             transaction.commit();
+            entityManager.close();
             return true;
         } catch (PersistenceException | IllegalArgumentException e) {
             transaction.rollback();
+            entityManager.close();
             return false;
         }
     }

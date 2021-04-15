@@ -34,7 +34,6 @@ public class AccountServiceTest {
     @InjectMocks
     private AccountServiceImpl accountService;
     private Account account;
-    private Account storedAccount;
     private Collection<Phone> phones;
     private Collection<Phone> storedPhones;
 
@@ -79,16 +78,16 @@ public class AccountServiceTest {
 
     @Test
     public void testUpdateAccount() {
-        when(accountDaoFacade.update(account, storedAccount)).thenReturn(true);
+        when(accountDaoFacade.update(account)).thenReturn(true);
         when(phoneDaoFacade.update(phones, storedPhones)).thenReturn(true);
-        assertTrue(accountService.updateAccount(account, storedAccount, phones, storedPhones));
+        assertTrue(accountService.updateAccount(account, phones, storedPhones));
     }
 
     @Test(expected = IncorrectDataException.class)
     public void testUpdateAccountFail() {
-        when(accountDaoFacade.update(account, storedAccount)).thenReturn(false);
+        when(accountDaoFacade.update(account)).thenReturn(false);
         when(phoneDaoFacade.update(phones, storedPhones)).thenReturn(true);
-        accountService.updateAccount(account, storedAccount, phones, storedPhones);
+        accountService.updateAccount(account, phones, storedPhones);
     }
 
     @Test

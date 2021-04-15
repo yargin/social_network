@@ -71,11 +71,10 @@ public class GroupDaoFacadeTest {
     @Test
     public void testUpdateOwner() {
         groupDaoFacade.create(group);
-        Group storedGroup = groupDaoFacade.select(group);
         accountDaoFacade.create(newOwner);
         newOwner = accountDaoFacade.select(newOwner);
         group.setOwner(newOwner);
-        assertTrue(groupDaoFacade.update(group, storedGroup));
+        assertTrue(groupDaoFacade.update(group));
     }
 
     @Test
@@ -99,16 +98,15 @@ public class GroupDaoFacadeTest {
         String newDescription = "new Description";
         group.setDescription(newDescription);
         Group storedGroup = groupDaoFacade.select(group);
-        assertTrue(groupDaoFacade.update(group, storedGroup));
+        assertTrue(groupDaoFacade.update(group));
         storedGroup = groupDaoFacade.select(group);
         assertEquals(newDescription, storedGroup.getDescription());
     }
 
     @Test
     public void testUpdateNonExistingGroup() {
-        Group nonExisting = new Group("non existing group", account);
         Group anotherNonExisting = new Group("another non existing group", account);
-        assertFalse(groupDaoFacade.update(anotherNonExisting, nonExisting));
+        assertFalse(groupDaoFacade.update(anotherNonExisting));
     }
 
     @Test

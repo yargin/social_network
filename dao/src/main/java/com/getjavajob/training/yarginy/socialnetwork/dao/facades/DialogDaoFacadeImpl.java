@@ -13,8 +13,8 @@ public class DialogDaoFacadeImpl implements DialogDaoFacade {
     private final Dao<Dialog> dialogDao;
     private final OneToManyDao<Dialog> accountDialogsDao;
 
-    public DialogDaoFacadeImpl(@Qualifier("jpaDialogDao") Dao<Dialog> dialogDao,
-                               OneToManyDao<Dialog> accountDialogs) {
+    public DialogDaoFacadeImpl(@Qualifier("dialogDao") Dao<Dialog> dialogDao,
+                               @Qualifier("accountDialogsDao") OneToManyDao<Dialog> accountDialogs) {
         this.dialogDao = dialogDao;
         this.accountDialogsDao = accountDialogs;
     }
@@ -40,9 +40,8 @@ public class DialogDaoFacadeImpl implements DialogDaoFacade {
     }
 
     @Override
-    public boolean update(Dialog dialog, Dialog storedDialog) {
+    public boolean update(Dialog dialog) {
         return dialogDao.update(dialog);
-//        return dialogDao.update(dialog, storedDialog);
     }
 
     @Override

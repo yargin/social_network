@@ -14,7 +14,7 @@ public interface DialogDaoFacade extends Serializable {
 
     boolean create(Dialog dialog);
 
-    boolean update(Dialog dialog, Dialog storedDialog);
+    boolean update(Dialog dialog);
 
     boolean delete(Dialog dialog);
 

@@ -59,7 +59,7 @@ public class AuthServiceImpl implements AuthService {
         Password passwordObject = new Password();
         Account account = new Account();
         account.setEmail(email);
-        passwordObject.setAccount(account);
+        passwordObject.setAccount(accountDaoFacade.select(account));
         passwordObject.setStringPassword(password);
         passwordObject = passwordDaoFacade.select(passwordObject);
         if (passwordObject.equals(getNullPassword())) {

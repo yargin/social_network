@@ -12,7 +12,7 @@ public interface PhoneDaoFacade extends Serializable {
 
     boolean create(Phone phone);
 
-    boolean update(Phone phone, Phone storedPhone);
+    boolean update(Phone phone);
 
     boolean delete(Phone phone);
 

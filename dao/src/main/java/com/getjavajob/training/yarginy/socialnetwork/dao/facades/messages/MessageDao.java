@@ -14,7 +14,7 @@ public interface MessageDao<O extends Model, E extends Message<O>> extends Seria
 
     boolean create(E message);
 
-    boolean update(E message, E storedMessage);
+    boolean update(E message);
 
     boolean delete(E message);
 

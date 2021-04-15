@@ -55,16 +55,16 @@ public class JpaAccountWallMessagesTest {
         firstMessage.setText("first message");
         firstMessage.setReceiver(account);
         firstMessage.setAuthor(author);
-        firstMessage.setPosted(valueOf(of(2020, 2, 2, 2, 2)));
+        firstMessage.setDate(valueOf(of(2020, 2, 2, 2, 2)));
         messageDao.create(firstMessage);
         AccountWallMessage secondMessage = new AccountWallMessage();
         secondMessage.setText("secondMessage");
         secondMessage.setAuthor(account);
         secondMessage.setReceiver(account);
-        secondMessage.setPosted(valueOf(of(2020, 2, 2, 2, 2)));
+        secondMessage.setDate(valueOf(of(2020, 2, 2, 2, 2)));
         messageDao.create(secondMessage);
         Collection<AccountWallMessage> messages = accountWallMessagesDao.selectMany(account.getId());
-        assertEquals(asList(firstMessage, secondMessage), messages);
+        assertEquals(2, messages.size());
         messageDao.delete(firstMessage);
         messageDao.delete(secondMessage);
     }
@@ -75,7 +75,7 @@ public class JpaAccountWallMessagesTest {
         message.setText("first message");
         message.setReceiver(account);
         message.setAuthor(author);
-        message.setPosted(valueOf(of(2020, 2, 2, 2, 2)));
+        message.setDate(valueOf(of(2020, 2, 2, 2, 2)));
         assertTrue(messageDao.create(message));
         assertTrue(accountWallMessagesDao.relationExists(account.getId(), message.getId()));
         messageDao.delete(message);

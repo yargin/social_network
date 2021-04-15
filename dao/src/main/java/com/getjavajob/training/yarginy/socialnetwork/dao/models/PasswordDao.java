@@ -5,11 +5,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Password;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.EntityTransaction;
-import javax.persistence.OptimisticLockException;
-import javax.persistence.PersistenceException;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.function.Supplier;
 
@@ -17,14 +12,8 @@ import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullMo
 import static java.util.Objects.isNull;
 
 
-@Repository("jpaPasswordDao")
+@Repository("passwordDao")
 public class PasswordDao extends GenericDao<Password> {
-    private AccountDao accountDao;
-
-    public PasswordDao(AccountDao accountDao) {
-        this.accountDao = accountDao;
-    }
-
     @Override
     public Password getNullModel() {
         return getNullPassword();
@@ -63,41 +52,12 @@ public class PasswordDao extends GenericDao<Password> {
 
     @Override
     protected void prepareModelRelations(EntityManager entityManager, Password password) {
-//        TypedQuery<Account> query = entityManager.createQuery("select a from Account a where a.email = :email",
-//                Account.class);
-//        query.setParameter("email", password.getAccount().getEmail());
-//        try {
-//            Account account = query.getSingleResult();
-//            password.setAccount(entityManager.getReference(Account.class, account.getId()));
-//        } catch (NoResultException | NonUniqueResultException e) {
-//            throw new IllegalArgumentException(e);
-//        }
-
-//        password.setAccount(entityManager.merge(password.getAccount()));
-
-        Account account;
-        try {
-            password.setAccount(entityManager.getReference(Account.class, password.getAccount().getId()));
-        } catch (EntityNotFoundException e) {
-            password.setAccount(entityManager.merge(password.getAccount()));
-        }
+        password.setAccount(entityManager.getReference(Account.class, password.getAccount().getId()));
     }
 
     @Override
-    public boolean update(Password password) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        try {
-            Query query = entityManager.createQuery("update Password set stringPassword =: password where email =: email");
-            query.setParameter("password", password.getStringPassword());
-            query.setParameter("email", password.getAccount().getEmail());
-            return query.executeUpdate() > 0;
-        } catch (OptimisticLockException e) {
-            throw new IllegalStateException(e);
-        } catch (PersistenceException | IllegalArgumentException e) {
-            transaction.rollback();
-            return false;
-        }
+    public boolean update(Password model) {
+        delete(model);
+        return create(model);
     }
 }

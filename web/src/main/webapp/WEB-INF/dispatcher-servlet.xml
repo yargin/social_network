@@ -67,7 +67,7 @@
         </mvc:interceptor>
 
         <mvc:interceptor>
-            <mvc:mapping path="/message/*"/>
+            <mvc:mapping path="/message/**"/>
             <mvc:mapping path="/dialog/create*"/>
             <mvc:mapping path="/dialog/new*"/>
             <mvc:mapping path="/friendship/*"/>
@@ -103,7 +103,7 @@
         </mvc:interceptor>
 
         <mvc:interceptor>
-            <mvc:mapping path="/message/*"/>
+            <mvc:mapping path="/message/**"/>
             <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.message.MessageAccessChecker"/>
         </mvc:interceptor>
 

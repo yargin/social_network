@@ -76,7 +76,6 @@ public class DialogController {
         modelAndView.addObject(dialog);
         Collection<DialogMessage> messages = messageService.selectMessages(id);
         modelAndView.addObject("messages", messages);
-        modelAndView.addObject("type", "accountPrivate");
         modelAndView.addObject(TAB, "dialog");
         return modelAndView;
     }

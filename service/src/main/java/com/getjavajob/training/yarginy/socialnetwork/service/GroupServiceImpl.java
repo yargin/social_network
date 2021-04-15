@@ -11,6 +11,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsMembersDa
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsModeratorsDaoFacade;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.OptimisticLockException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Collection;
@@ -142,9 +143,13 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public boolean updateGroup(Group group, Group storedGroup) {
-        if (!groupDaoFacade.update(group, storedGroup)) {
-            throw new IncorrectDataException(IncorrectData.GROUP_DUPLICATE);
+    public boolean updateGroup(Group group) {
+        try {
+            if (!groupDaoFacade.update(group)) {
+                throw new IncorrectDataException(IncorrectData.GROUP_DUPLICATE);
+            }
+        } catch (OptimisticLockException e) {
+            return false;
         }
         return true;
     }

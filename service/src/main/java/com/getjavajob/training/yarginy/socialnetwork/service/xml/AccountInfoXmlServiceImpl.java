@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 public class AccountInfoXmlServiceImpl extends GenericXmlService<AccountInfoXml> {
     @Autowired
     public void setXstream(XStream xstream) {
+        //todo check once again
+        this.xstream = xstream;
         xstream.alias("accountInfo" , AccountInfoXml.class);
 
         xstream.alias("account" , Account.class);
@@ -24,5 +26,6 @@ public class AccountInfoXmlServiceImpl extends GenericXmlService<AccountInfoXml>
         xstream.alias("phone", Phone.class);
         xstream.omitField(Phone.class, "owner");
         xstream.omitField(Phone.class, "id");
+        xstream.omitField(Phone.class, "version");
     }
 }

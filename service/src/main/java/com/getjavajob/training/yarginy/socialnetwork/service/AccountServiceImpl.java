@@ -11,6 +11,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsDaoF
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.OptimisticLockException;
 import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData.*;
@@ -55,9 +56,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean updateAccount(Account account, Account storedAccount, Collection<Phone> phones,
-                                 Collection<Phone> storedPhones) {
-        if (!accountDaoFacade.update(account, storedAccount)) {
+    public boolean updateAccount(Account account, Collection<Phone> phones, Collection<Phone> storedPhones) {
+        if (!accountDaoFacade.update(account)) {
             throw new IncorrectDataException(EMAIL_DUPLICATE);
         }
         if (!phoneDaoFacade.update(phones, storedPhones)) {

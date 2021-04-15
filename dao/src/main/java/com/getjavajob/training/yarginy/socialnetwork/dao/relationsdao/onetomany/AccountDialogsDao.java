@@ -14,14 +14,8 @@ import java.util.Collection;
 import static java.util.Objects.isNull;
 
 @Repository("accountDialogsDao")
-public class AccountDialogsDao implements OneToManyDao<Dialog> {
-    private transient EntityManagerFactory entityManagerFactory;
+public class AccountDialogsDao extends GenericOneToManyDao<Dialog> {
     private DialogDao dialogDao;
-
-    @Autowired
-    public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
-        this.entityManagerFactory = entityManagerFactory;
-    }
 
     @Autowired
     public void setDialogDao(DialogDao dialogDao) {
@@ -29,8 +23,7 @@ public class AccountDialogsDao implements OneToManyDao<Dialog> {
     }
 
     @Override
-    public Collection<Dialog> selectMany(long accountId) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+    public Collection<Dialog> genericSelectMany(EntityManager entityManager, long accountId) {
         Account account = new Account(accountId);
         TypedQuery<Dialog> selectMany = entityManager.createQuery("select d from Dialog d join fetch d.firstAccount f " +
                 "join fetch d.secondAccount s where d.firstAccount = :account or d.secondAccount = :account",

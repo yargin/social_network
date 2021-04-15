@@ -34,9 +34,8 @@ public class PhoneDaoFacadeImpl implements PhoneDaoFacade {
     }
 
     @Override
-    public boolean update(Phone phone, Phone storedPhone) {
+    public boolean update(Phone phone) {
         return phoneDao.update(phone);
-//        return phoneDao.update(phone, storedPhone);
     }
 
     @Override

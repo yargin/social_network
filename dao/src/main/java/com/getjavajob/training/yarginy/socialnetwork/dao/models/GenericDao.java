@@ -14,6 +14,7 @@ import javax.persistence.OptimisticLockException;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Supplier;
 
 import static java.util.Objects.isNull;
@@ -40,6 +41,7 @@ public abstract class GenericDao<E extends Model> implements Dao<E> {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         Supplier<E> selectByPkFunction = getSelectByPk(entityManager, id);
         E model = selectByPkFunction.get();
+        entityManager.close();
         return isNull(model) ? getNullModel() : model;
     }
 
@@ -49,10 +51,14 @@ public abstract class GenericDao<E extends Model> implements Dao<E> {
         Supplier<TypedQuery<E>> selectByAltKeyFunction = getSelectByAltKey(entityManager, model);
         TypedQuery<E> query = selectByAltKeyFunction.get();
         try {
-            return query.getSingleResult();
+            E result = query.getSingleResult();
+            entityManager.close();
+            return result;
         } catch (NoResultException e) {
+            entityManager.close();
             return getNullModel();
         } catch (NonUniqueResultException e) {
+            entityManager.close();
             throw new IllegalArgumentException(e);
         }
     }
@@ -62,7 +68,9 @@ public abstract class GenericDao<E extends Model> implements Dao<E> {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         Supplier<TypedQuery<E>> selectAll = getSelectAll(entityManager);
         TypedQuery<E> query = selectAll.get();
-        return query.getResultList();
+        List<E> resultList = query.getResultList();
+        entityManager.close();
+        return resultList;
     }
 
     @Override
@@ -76,13 +84,18 @@ public abstract class GenericDao<E extends Model> implements Dao<E> {
         try {
             prepareModelRelations(entityManager, model);
             entityManager.persist(model);
+            //todo watch
+//            entityManager.refresh(model);
             transaction.commit();
+            entityManager.close();
             return true;
         } catch (PersistenceException | IllegalArgumentException e) {
             if (e.getCause().getClass() == PropertyValueException.class) {
+                entityManager.close();
                 throw new IllegalArgumentException(e);
             }
             transaction.rollback();
+            entityManager.close();
             return false;
         }
     }
@@ -103,11 +116,14 @@ public abstract class GenericDao<E extends Model> implements Dao<E> {
             entityManager.merge(model);
             transaction.commit();
             model.setVersion(getModelReference(entityManager, model).get().getVersion());
+            entityManager.close();
             return true;
         } catch (OptimisticLockException e) {
+            entityManager.close();
             throw new IllegalStateException(e);
         } catch (PersistenceException | IllegalArgumentException e) {
             transaction.rollback();
+            entityManager.close();
             return false;
         }
     }
@@ -121,9 +137,11 @@ public abstract class GenericDao<E extends Model> implements Dao<E> {
             E entityToDelete = getModelReference(entityManager, model).get();
             entityManager.remove(entityToDelete);
             transaction.commit();
+            entityManager.close();
             return true;
         } catch (PersistenceException | IllegalArgumentException e) {
             transaction.rollback();
+            entityManager.close();
             return false;
         }
     }

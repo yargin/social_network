@@ -14,8 +14,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.common.models.manyto
 @Repository("jpaFriendshipRequestsDao")
 public class FriendshipRequestsDao extends GenericManyToManyDao<Account, Account> {
     @Override
-    public Collection<Account> genericSelectByFirst(long requesterId) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+    public Collection<Account> genericSelectByFirst(EntityManager entityManager, long requesterId) {
         Account requester = new Account(requesterId);
         TypedQuery<Account> query = entityManager.createQuery("select f.receiver from FriendshipRequest f " +
                 "where f.requester = :requester", Account.class);
@@ -24,8 +23,7 @@ public class FriendshipRequestsDao extends GenericManyToManyDao<Account, Account
     }
 
     @Override
-    public Collection<Account> genericSelectBySecond(long receiverId) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+    public Collection<Account> genericSelectBySecond(EntityManager entityManager, long receiverId) {
         Account receiver = new Account(receiverId);
         TypedQuery<Account> query = entityManager.createQuery("select f.requester from FriendshipRequest f " +
                 "where f.receiver = :receiver", Account.class);

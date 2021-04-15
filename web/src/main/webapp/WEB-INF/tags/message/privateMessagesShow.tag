@@ -24,11 +24,10 @@
             </p>
             <div style="min-width: 50px; border-bottom: none;">
                 <c:if test="${not empty admin or author.id == sessionScope.userId}">
-                    <form action="${context}/message/delete" method="post" style="margin-bottom: 5px;">
+                    <form action="${context}/message/dialog/delete" method="post" style="margin-bottom: 5px;">
                         <input type="hidden" value="${id}" name="receiverId">
                         <input type="hidden" value="${author.id}" name="requesterId">
                         <input type="hidden" value="${message.id}" name="id">
-                        <input type="hidden" value="${type}" name="type">
                         <button type="submit"><fmt:message key="button.delete"/></button>
                     </form>
                 </c:if>

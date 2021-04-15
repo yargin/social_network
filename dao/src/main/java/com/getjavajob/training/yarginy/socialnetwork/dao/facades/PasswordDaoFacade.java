@@ -1,6 +1,5 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Password;
 
 import java.io.Serializable;
@@ -10,7 +9,7 @@ public interface PasswordDaoFacade extends Serializable {
 
     boolean create(Password password);
 
-    boolean update(Password password, Password storedPassword);
+    boolean update(Password password);
 
     boolean delete(Password password);
 

@@ -52,8 +52,7 @@ public class AccountDaoFacadeImpl implements AccountDaoFacade {
     }
 
     @Override
-    public boolean update(Account account, Account storedAccount) {
-//        return accountDao.update(account, storedAccount);
+    public boolean update(Account account) {
         return accountDao.update(account);
     }
 

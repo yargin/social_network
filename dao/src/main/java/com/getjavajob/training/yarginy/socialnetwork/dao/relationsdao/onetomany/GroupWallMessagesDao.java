@@ -14,14 +14,8 @@ import java.util.Collection;
 import static java.util.Objects.isNull;
 
 @Repository("jpaGroupWallMessagesDao")
-public class GroupWallMessagesDao implements OneToManyDao<GroupWallMessage> {
-    private transient EntityManagerFactory entityManagerFactory;
+public class GroupWallMessagesDao extends GenericOneToManyDao<GroupWallMessage> {
     private GroupWallMessageDao messageDao;
-
-    @Autowired
-    public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
-        this.entityManagerFactory = entityManagerFactory;
-    }
 
     @Autowired
     public void setMessageDao(GroupWallMessageDao messageDao) {
@@ -29,8 +23,7 @@ public class GroupWallMessagesDao implements OneToManyDao<GroupWallMessage> {
     }
 
     @Override
-    public Collection<GroupWallMessage> selectMany(long groupId) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+    public Collection<GroupWallMessage> genericSelectMany(EntityManager entityManager, long groupId) {
         Group group = new Group();
         group.setId(groupId);
         TypedQuery<GroupWallMessage> selectMany = entityManager.createQuery("select m from GroupWallMessage m " +

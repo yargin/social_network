@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.GROUP;
@@ -83,7 +84,8 @@ public class GroupCrudController {
     }
 
     @GetMapping("/update")
-    public ModelAndView showUpdate(@RequestAttribute("id") long requestedId, HttpSession session) {
+    public ModelAndView showUpdate(@RequestAttribute("id") long requestedId, HttpSession session,
+                                   HttpServletRequest request) {
         GroupFieldsUpdater updater = new GroupFieldsUpdater(session, GROUP_UPDATE_VIEW);
         //select at first visit
         Group group = groupService.get(requestedId);
@@ -98,7 +100,7 @@ public class GroupCrudController {
     @PostMapping("/update")
     public ModelAndView performUpdate(HttpSession session, @ModelAttribute Group group, BindingResult result,
                                       @RequestParam(value = "save", required = false) String save,
-                                      @RequestAttribute("id") long requestedId) {
+                                      @RequestAttribute("id") long requestedId, HttpServletRequest request) {
         GroupFieldsUpdater updater = new GroupFieldsUpdater(session, GROUP_UPDATE_VIEW);
         if ("cancel".equals(save)) {
             return updater.acceptActionOrRetry(true, group);
@@ -112,20 +114,25 @@ public class GroupCrudController {
         } else {
             storedGroup.setPhoto(group.getPhoto());
         }
+        group.setVersion(storedGroup.getVersion());
 
         groupValidator.validate(group, result);
         if (result.hasErrors()) {
             return updater.getModelAndView(group);
         }
 
-        //for next view
-        return updateGroup(updater, group, storedGroup, result);
+        try {
+            return updateGroup(updater, group, result);
+        } catch (IllegalStateException e) {
+            request.setAttribute("concurrentError", "error.concurrentError");
+            return showUpdate(storedGroup.getId(), session, request);
+        }
     }
 
-    private ModelAndView updateGroup(GroupFieldsUpdater updater, Group group, Group storedGroup, BindingResult result) {
+    private ModelAndView updateGroup(GroupFieldsUpdater updater, Group group, BindingResult result) {
         boolean updated;
         try {
-            updated = groupService.updateGroup(group, storedGroup);
+            updated = groupService.updateGroup(group);
         } catch (IncorrectDataException e) {
             result.rejectValue("name", "error.duplicate");
             return updater.getModelAndView(group);

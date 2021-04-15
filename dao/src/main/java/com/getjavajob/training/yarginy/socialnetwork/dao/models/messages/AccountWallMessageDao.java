@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullAccountWallMessage;
 import static java.util.Objects.isNull;
 
-@Repository("jpaAccountWallMessageDao")
+@Repository("accountWallMessageDao")
 public class AccountWallMessageDao extends GenericDao<AccountWallMessage> {
     @Override
     public AccountWallMessage getNullModel() {
@@ -24,10 +24,10 @@ public class AccountWallMessageDao extends GenericDao<AccountWallMessage> {
                                                                          AccountWallMessage message) {
         return () -> {
             TypedQuery<AccountWallMessage> query = entityManager.createQuery("select m from AccountWallMessage m " +
-                    "where m.author = :author and m.receiver = :receiver and m.posted = :posted", AccountWallMessage.class);
+                    "where m.author = :author and m.receiver = :receiver and m.date = :posted", AccountWallMessage.class);
             query.setParameter("author", message.getAuthor());
             query.setParameter("receiver", message.getReceiver());
-            query.setParameter("posted", message.getPosted());
+            query.setParameter("posted", message.getDate());
             return query;
         };
     }

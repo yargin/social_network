@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullDialog;
 import static java.util.Objects.isNull;
 
-@Repository("jpaDialogDao")
+@Repository("dialogDao")
 public class DialogDao extends GenericDao<Dialog> {
     @Override
     protected Supplier<TypedQuery<Dialog>> getSelectAll(EntityManager entityManager) {

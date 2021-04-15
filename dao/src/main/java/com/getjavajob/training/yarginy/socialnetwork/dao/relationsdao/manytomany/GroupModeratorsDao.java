@@ -35,8 +35,7 @@ public class GroupModeratorsDao extends GenericManyToManyDao<Account, Group> {
     }
 
     @Override
-    public Collection<Group> genericSelectByFirst(long accountId) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+    public Collection<Group> genericSelectByFirst(EntityManager entityManager, long accountId) {
         Account account = new Account(accountId);
         TypedQuery<Group> query = entityManager.createQuery("select g.group from GroupModerator g " +
                 "where g.account = :account", Group.class);
@@ -45,8 +44,7 @@ public class GroupModeratorsDao extends GenericManyToManyDao<Account, Group> {
     }
 
     @Override
-    public Collection<Account> genericSelectBySecond(long groupId) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+    public Collection<Account> genericSelectBySecond(EntityManager entityManager, long groupId) {
         Group group = new Group(groupId);
         TypedQuery<Account> query = entityManager.createQuery("select g.account from GroupModerator g " +
                 "where g.group = :group", Account.class);

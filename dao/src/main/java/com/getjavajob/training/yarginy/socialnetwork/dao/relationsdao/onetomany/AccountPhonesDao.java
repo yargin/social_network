@@ -14,14 +14,8 @@ import java.util.Collection;
 import static java.util.Objects.isNull;
 
 @Repository("jpaAccountPhonesDao")
-public class AccountPhonesDao implements OneToManyDao<Phone> {
-    private transient EntityManagerFactory entityManagerFactory;
+public class AccountPhonesDao extends GenericOneToManyDao<Phone> {
     private PhoneDao phoneDao;
-
-    @Autowired
-    public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
-        this.entityManagerFactory = entityManagerFactory;
-    }
 
     @Autowired
     public void setPhoneDao(PhoneDao phoneDao) {
@@ -29,8 +23,7 @@ public class AccountPhonesDao implements OneToManyDao<Phone> {
     }
 
     @Override
-    public Collection<Phone> selectMany(long accountId) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+    public Collection<Phone> genericSelectMany(EntityManager entityManager, long accountId) {
         Account account = new Account(accountId);
         TypedQuery<Phone> selectMany = entityManager.createQuery("select p from Phone p join fetch p.owner o " +
                 "where p.owner = :owner", Phone.class);

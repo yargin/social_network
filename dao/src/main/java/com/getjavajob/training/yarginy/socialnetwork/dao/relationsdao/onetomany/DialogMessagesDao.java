@@ -14,14 +14,8 @@ import java.util.Collection;
 import static java.util.Objects.isNull;
 
 @Repository("jpaDialogMessagesDao")
-public class DialogMessagesDao implements OneToManyDao<DialogMessage> {
-    private transient EntityManagerFactory entityManagerFactory;
+public class DialogMessagesDao extends GenericOneToManyDao<DialogMessage> {
     private DialogMessageDao messageDao;
-
-    @Autowired
-    public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
-        this.entityManagerFactory = entityManagerFactory;
-    }
 
     @Autowired
     public void setMessageDao(DialogMessageDao messageDao) {
@@ -29,8 +23,7 @@ public class DialogMessagesDao implements OneToManyDao<DialogMessage> {
     }
 
     @Override
-    public Collection<DialogMessage> selectMany(long dialogId) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+    public Collection<DialogMessage> genericSelectMany(EntityManager entityManager, long dialogId) {
         Dialog dialog = new Dialog();
         dialog.setId(dialogId);
         TypedQuery<DialogMessage> selectMany = entityManager.createQuery("select m from DialogMessage m " +

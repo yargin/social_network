@@ -82,14 +82,13 @@ public class PhoneDaoFacadeTest {
     @Test
     public void testUpdatePhone() {
         phone.setType(PhoneType.WORK);
-        assertTrue(phoneDaoFacade.update(phone, phoneDaoFacade.select(phone)));
+        assertTrue(phoneDaoFacade.update(phone));
     }
 
     @Test
     public void testUpdateNonExisting() {
         Phone nonExisting = new Phone("000000", phone.getOwner());
-        Phone anotherNonExisting = new Phone("00000", phone.getOwner());
-        assertFalse(phoneDaoFacade.update(nonExisting, anotherNonExisting));
+        assertFalse(phoneDaoFacade.update(nonExisting));
     }
 
     @Test

@@ -24,7 +24,7 @@ public class JpaDialogDaoTest {
     private final Account firstAccount= new Account("testFirstName", "testFirstSurname", "testFirstEmail");
     private final Account secondAccount= new Account("testSecondName", "testSecondSurname", "testSecondEmail");
     private final Account thirdAccount= new Account("testThirdName", "testThirdSurname", "testThirdEmail");
-    private final Dialog dialog = new Dialog(firstAccount, secondAccount);
+    private Dialog dialog = new Dialog(firstAccount, secondAccount);
     @Autowired
     private DialogDao dialogDao;
     @Autowired
@@ -36,6 +36,7 @@ public class JpaDialogDaoTest {
         accountDao.create(secondAccount);
         accountDao.create(thirdAccount);
         dialogDao.create(dialog);
+        dialog = dialogDao.select(dialog);
     }
 
     @After
@@ -79,6 +80,7 @@ public class JpaDialogDaoTest {
         assertFalse(dialogDao.create(dialog));
         Dialog newDialog = new Dialog(thirdAccount, secondAccount);
         assertTrue(dialogDao.create(newDialog));
+        newDialog = dialogDao.select(newDialog);
         assertEquals(newDialog, dialogDao.select(newDialog));
         assertFalse(dialogDao.create(newDialog));
         assertFalse(dialogDao.create(new Dialog(thirdAccount, secondAccount)));

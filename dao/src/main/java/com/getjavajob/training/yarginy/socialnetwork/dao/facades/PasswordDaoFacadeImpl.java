@@ -1,15 +1,14 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Password;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.Dao;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.getjavajob.training.yarginy.socialnetwork.dao.models.PasswordDao;
 import org.springframework.stereotype.Component;
 
 @Component("passwordDaoFacade")
 public class PasswordDaoFacadeImpl implements PasswordDaoFacade {
-    private final Dao<Password> passwordDao;
+    private final PasswordDao passwordDao;
 
-    public PasswordDaoFacadeImpl(@Qualifier("jpaPasswordDao") Dao<Password> passwordDao) {
+    public PasswordDaoFacadeImpl(PasswordDao passwordDao) {
         this.passwordDao = passwordDao;
     }
 
@@ -24,9 +23,8 @@ public class PasswordDaoFacadeImpl implements PasswordDaoFacade {
     }
 
     @Override
-    public boolean update(Password password, Password storedPassword) {
+    public boolean update(Password password) {
         return passwordDao.update(password);
-//        return passwordDao.update(password, storedPassword);
     }
 
     @Override

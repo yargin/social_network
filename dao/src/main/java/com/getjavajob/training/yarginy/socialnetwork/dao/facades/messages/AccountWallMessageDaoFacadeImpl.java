@@ -13,7 +13,7 @@ public class AccountWallMessageDaoFacadeImpl implements AccountWallMessageDaoFac
     private final Dao<AccountWallMessage> accountWallMessageDao;
     private final AccountWallMessagesDao accountWallMessagesDao;
 
-    public AccountWallMessageDaoFacadeImpl(@Qualifier("jpaAccountWallMessageDao") Dao<AccountWallMessage> accountWallMessageDao,
+    public AccountWallMessageDaoFacadeImpl(@Qualifier("accountWallMessageDao") Dao<AccountWallMessage> accountWallMessageDao,
                                            AccountWallMessagesDao accountWallMessagesDao) {
         this.accountWallMessageDao = accountWallMessageDao;
         this.accountWallMessagesDao = accountWallMessagesDao;
@@ -35,9 +35,7 @@ public class AccountWallMessageDaoFacadeImpl implements AccountWallMessageDaoFac
     }
 
     @Override
-    public boolean update(AccountWallMessage message, AccountWallMessage storedMessage) {
-        //todo
-//        return accountWallMessageDao.update(message, storedMessage);
+    public boolean update(AccountWallMessage message) {
         return accountWallMessageDao.update(message);
     }
 

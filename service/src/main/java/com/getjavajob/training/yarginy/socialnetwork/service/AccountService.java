@@ -15,7 +15,7 @@ public interface AccountService extends Serializable {
 
     boolean createAccount(Account account, Collection<Phone> phones);
 
-    boolean updateAccount(Account account, Account storedAccount, Collection<Phone> phones, Collection<Phone> storedPhones);
+    boolean updateAccount(Account account, Collection<Phone> phones, Collection<Phone> storedPhones);
 
     boolean deleteAccount(Account account);
 

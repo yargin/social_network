@@ -24,7 +24,7 @@ public class AccountWallMessageService implements MessageService<Account, Accoun
         if (isNull(message.getImage()) && isNull(message.getText())) {
             return false;
         }
-        message.setPosted(Timestamp.valueOf(LocalDateTime.now().withNano(0)));
+        message.setDate(Timestamp.valueOf(LocalDateTime.now().withNano(0)));
         return messageDao.create(message);
     }
 

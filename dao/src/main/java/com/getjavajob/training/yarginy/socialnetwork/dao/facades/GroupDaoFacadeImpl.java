@@ -46,10 +46,8 @@ public class GroupDaoFacadeImpl implements GroupDaoFacade {
     }
 
     @Override
-    public boolean update(Group group, Group storedGroup) {
-
+    public boolean update(Group group) {
         return groupDao.update(group);
-//        return groupDao.update(group, storedGroup);
     }
 
     @Override

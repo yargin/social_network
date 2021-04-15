@@ -52,7 +52,7 @@ public class GroupController {
         Collection<GroupWallMessage> messages = messageService.selectMessages(id);
         modelAndView.addObject("messages", messages);
         addInfoAndPhoto(modelAndView, group);
-        modelAndView.addObject("type", "groupWall");
+        modelAndView.addObject("type", "group");
         modelAndView.addObject("id", id);
         modelAndView.addObject(TAB, "wall");
         return modelAndView;

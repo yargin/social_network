@@ -16,7 +16,7 @@ public interface AccountDaoFacade extends Serializable {
 
     boolean create(Account account);
 
-    boolean update(Account account, Account storedAccount);
+    boolean update(Account account);
 
     boolean delete(Account account);
 

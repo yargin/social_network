@@ -48,11 +48,13 @@ public abstract class GenericSelfManyToManyDao<E extends Model> implements SelfM
         try {
             entityManager.persist(manyToMany);
             transaction.commit();
+            entityManager.close();
             return true;
         } catch (EntityNotFoundException e) {
             throw new IllegalArgumentException(e);
         } catch (PersistenceException | IllegalArgumentException e) {
             transaction.rollback();
+            entityManager.close();
             return false;
         }
     }
@@ -62,6 +64,7 @@ public abstract class GenericSelfManyToManyDao<E extends Model> implements SelfM
         checkId(greaterId, lowerId);
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         JpaSelfManyToMany<E> manyToMany = genericFind(entityManager, greaterId, lowerId);
+        entityManager.close();
         return !isNull(manyToMany);
     }
 
@@ -75,9 +78,11 @@ public abstract class GenericSelfManyToManyDao<E extends Model> implements SelfM
             JpaSelfManyToMany<E> friendship = genericGetReference(entityManager, greaterId, lowerId);
             entityManager.remove(friendship);
             transaction.commit();
+            entityManager.close();
             return true;
         } catch (PersistenceException | IllegalArgumentException e) {
             transaction.rollback();
+            entityManager.close();
             return false;
         }
     }

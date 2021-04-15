@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.persistence.OptimisticLockException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -43,6 +44,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.LOGOUT;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.REDIRECT;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.ACCOUNT_UPDATE_VIEW;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.ACCOUNT_WALL_VIEW;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.REGISTRATION_VIEW;
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
@@ -131,7 +133,8 @@ public class AccountCrudController {
 
 
     @PostMapping("/account/update")
-    public ModelAndView performUpdate(HttpSession session, @ModelAttribute AccountInfoMvcModel model,
+    public ModelAndView performUpdate(HttpSession session, HttpServletRequest request,
+                                      @ModelAttribute AccountInfoMvcModel model,
                                       @RequestParam(required = false) String save, BindingResult result) {
         AccountFieldsUpdater updater = new AccountFieldsUpdater(session, ACCOUNT_UPDATE_VIEW);
 
@@ -146,6 +149,7 @@ public class AccountCrudController {
         account.setEmail(storedAccount.getEmail());
         account.setRegistrationDate(storedAccount.getRegistrationDate());
         account.setRole(storedAccount.getRole());
+        account.setVersion(storedAccount.getVersion());
 
         setNewPhotoOrGetPrevious(session, model);
 
@@ -153,7 +157,12 @@ public class AccountCrudController {
         if (result.hasErrors()) {
             return updater.getModelAndView(model);
         }
-        return update(updater, model, storedModel, result);
+        try {
+            return update(updater, model, storedModel, result);
+        } catch (IllegalStateException e) {
+            request.setAttribute("concurrentError", "error.concurrentError");
+            return showUpdate(session, storedAccount.getId());
+        }
     }
 
     private ModelAndView update(AccountFieldsUpdater updater, AccountInfoMvcModel model, AccountInfoMvcModel storedModel,
@@ -162,7 +171,7 @@ public class AccountCrudController {
         try {
             Collection<Phone> phones = updater.getPhonesFromModel(model);
             Collection<Phone> storedPhones = updater.getPhonesFromModel(storedModel);
-            updated = accountService.updateAccount(model.getAccount(), storedModel.getAccount(), phones, storedPhones);
+            updated = accountService.updateAccount(model.getAccount(), phones, storedPhones);
         } catch (IncorrectDataException e) {
             return updater.handleInfoExceptions(e, model, result);
         }
@@ -190,7 +199,7 @@ public class AccountCrudController {
             request.setAttribute("uploadError", "error.wrongAccountData");
             return showUpdate(session, id);
         }
-        return performUpdate(session, accountInfoMvcModel, "", result);
+        return performUpdate(session, request, accountInfoMvcModel, "", result);
     }
 
     @GetMapping("/account/delete")

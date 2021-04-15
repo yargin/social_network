@@ -44,7 +44,7 @@ public interface GroupService extends Serializable {
 
     boolean removeGroup(Group group);
 
-    boolean updateGroup(Group group, Group storedGroup);
+    boolean updateGroup(Group group);
 
     Map<Account, Boolean> getGroupMembersModerators(long groupId);
 

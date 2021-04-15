@@ -17,6 +17,7 @@ public abstract class BatchGenericDao<E extends Model> extends GenericDao<E> imp
         transaction.begin();
         if (!createEntities(entities, entityManager, transaction)) return false;
         transaction.commit();
+        entityManager.close();
         return true;
     }
 
@@ -42,6 +43,7 @@ public abstract class BatchGenericDao<E extends Model> extends GenericDao<E> imp
         transaction.begin();
         if (!deleteEntities(entities, entityManager, transaction)) return false;
         transaction.commit();
+        entityManager.close();
         return true;
     }
 
@@ -70,6 +72,7 @@ public abstract class BatchGenericDao<E extends Model> extends GenericDao<E> imp
         entitiesToCreate.removeAll(storedEntities);
         createEntities(entitiesToCreate, entityManager, transaction);
         transaction.commit();
+        entityManager.close();
         return true;
     }
 }

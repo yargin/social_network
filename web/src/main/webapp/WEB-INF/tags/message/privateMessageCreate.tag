@@ -7,12 +7,11 @@
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 
 <div class="wallMessage" style="margin-right: 40%">
-    <form action="${context}/message/add" method="post" enctype="multipart/form-data"
+    <form action="${context}/message/dialog/add" method="post" enctype="multipart/form-data"
           style="">
         <input type="hidden" value="${sessionScope.userId}" name="requesterId">
         <input type="hidden" value="${sessionScope.userId}" name="author.id">
         <input type="hidden" value="${id}" name="receiverId">
-        <input type="hidden" value="${type}" name="type">
         <div style=" border-bottom: none;">
             <textarea name="text" placeholder="<fmt:message key="form.inputText" bundle="${form}"/>"></textarea>
         </div>
