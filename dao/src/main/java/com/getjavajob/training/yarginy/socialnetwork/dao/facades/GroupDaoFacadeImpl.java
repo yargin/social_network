@@ -16,9 +16,9 @@ public class GroupDaoFacadeImpl implements GroupDaoFacade {
     private final OneToManyDao<Group> accountsOwnedGroupsDao;
     private final ManyToManyDao<Account, Group> accountsGroupMembershipDao;
 
-    public GroupDaoFacadeImpl(@Qualifier("jpaGroupDao") Dao<Group> groupDao,
-                              OneToManyDao<Group> accountsOwnedGroupsDao,
-                              @Qualifier("jpaGroupMembershipDao") ManyToManyDao<Account, Group>
+    public GroupDaoFacadeImpl(@Qualifier("groupDao") Dao<Group> groupDao,
+                              @Qualifier("accountGroupsDao") OneToManyDao<Group> accountsOwnedGroupsDao,
+                              @Qualifier("groupMembershipDao") ManyToManyDao<Account, Group>
                                       accountsGroupMembershipDao) {
         this.groupDao = groupDao;
         this.accountsOwnedGroupsDao = accountsOwnedGroupsDao;

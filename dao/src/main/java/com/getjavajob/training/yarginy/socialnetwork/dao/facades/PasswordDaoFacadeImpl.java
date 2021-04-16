@@ -1,14 +1,15 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Password;
+import com.getjavajob.training.yarginy.socialnetwork.dao.models.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.models.PasswordDao;
 import org.springframework.stereotype.Component;
 
 @Component("passwordDaoFacade")
 public class PasswordDaoFacadeImpl implements PasswordDaoFacade {
-    private final PasswordDao passwordDao;
+    private final Dao<Password> passwordDao;
 
-    public PasswordDaoFacadeImpl(PasswordDao passwordDao) {
+    public PasswordDaoFacadeImpl(Dao<Password> passwordDao) {
         this.passwordDao = passwordDao;
     }
 

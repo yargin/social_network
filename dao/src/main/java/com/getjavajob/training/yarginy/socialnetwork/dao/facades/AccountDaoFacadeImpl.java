@@ -20,10 +20,11 @@ public class AccountDaoFacadeImpl implements AccountDaoFacade {
     private final ManyToManyDao<Account, Group> accountsInGroupsDao;
     private final SelfManyToManyDao<Account> accountFriendsDao;
 
-    public AccountDaoFacadeImpl(@Qualifier("jpaAccountDao") Dao<Account> accountDao,
-                                OneToManyDao<Group> accountGroupsDao, OneToManyDao<Phone> accountPhonesDao,
-                                @Qualifier("jpaGroupMembershipDao") ManyToManyDao<Account, Group> accountsInGroupsDao,
-                                @Qualifier("jpaFriendshipDao") SelfManyToManyDao<Account> accountFriendsDao) {
+    public AccountDaoFacadeImpl(@Qualifier("accountDao") Dao<Account> accountDao,
+                                @Qualifier("accountGroupsDao") OneToManyDao<Group> accountGroupsDao,
+                                @Qualifier("accountPhonesDao") OneToManyDao<Phone> accountPhonesDao,
+                                @Qualifier("groupMembershipDao") ManyToManyDao<Account, Group> accountsInGroupsDao,
+                                @Qualifier("friendshipDao") SelfManyToManyDao<Account> accountFriendsDao) {
         this.accountDao = accountDao;
         this.accountGroupsDao = accountGroupsDao;
         this.accountPhonesDao = accountPhonesDao;

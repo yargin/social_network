@@ -1,6 +1,5 @@
 package com.getjavajob.training.yarginy.socialnetwork.service;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.DataFlowViolationException;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
@@ -11,7 +10,6 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsDaoF
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.OptimisticLockException;
 import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData.*;
@@ -75,15 +73,15 @@ public class AccountServiceImpl implements AccountService {
     public boolean addFriend(long firstId, long secondId) {
         try {
             addFriendTransactional(firstId, secondId);
-        } catch (DataFlowViolationException e) {
+        } catch (IllegalArgumentException e) {
             return false;
         }
         return true;
     }
 
     public void addFriendTransactional(long firstId, long secondId) {
-        if (!friendshipDao.deleteRequest(firstId, secondId) || !friendshipDao.createFriendship(firstId, secondId)) {
-            throw new DataFlowViolationException();
+        if (!friendshipDao.createFriendship(firstId, secondId) || !friendshipDao.deleteRequest(firstId, secondId)) {
+            throw new IllegalArgumentException();
         }
     }
 

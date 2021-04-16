@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.exceptions;
 
-public class IncorrectDataException extends RuntimeException {
+public class    IncorrectDataException extends RuntimeException {
     private final IncorrectData incorrectData;
 
     public IncorrectDataException(IncorrectData incorrectData) {

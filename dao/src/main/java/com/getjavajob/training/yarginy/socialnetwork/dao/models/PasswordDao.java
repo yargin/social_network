@@ -13,7 +13,7 @@ import static java.util.Objects.isNull;
 
 
 @Repository("passwordDao")
-public class PasswordDao extends GenericDao<Password> {
+public class PasswordDao extends GenericDaoTransactional<Password> {
     @Override
     public Password getNullModel() {
         return getNullPassword();

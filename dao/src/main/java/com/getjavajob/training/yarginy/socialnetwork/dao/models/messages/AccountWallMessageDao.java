@@ -3,6 +3,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.models.messages;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.AccountWallMessage;
 import com.getjavajob.training.yarginy.socialnetwork.dao.models.GenericDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.models.GenericDaoTransactional;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -13,7 +14,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullMo
 import static java.util.Objects.isNull;
 
 @Repository("accountWallMessageDao")
-public class AccountWallMessageDao extends GenericDao<AccountWallMessage> {
+public class AccountWallMessageDao extends GenericDaoTransactional<AccountWallMessage> {
     @Override
     public AccountWallMessage getNullModel() {
         return getNullAccountWallMessage();

@@ -50,6 +50,7 @@
                       expression="execution(* com.getjavajob.training.yarginy.socialnetwork.service.AccountServiceImpl.addFriendTransactional(..))"/>
         <aop:pointcut id="groupCreate"
                       expression="execution(* com.getjavajob.training.yarginy.socialnetwork.service.GroupServiceImpl.createGroupAndInviteOwner(..))"/>
+        <aop:advisor advice-ref="plainTx" pointcut-ref="addFriend"/>
         <aop:advisor advice-ref="plainTx" pointcut-ref="groupCreate"/>
     </aop:config>
 

@@ -2,8 +2,10 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
+import com.getjavajob.training.yarginy.socialnetwork.dao.models.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.models.DialogDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -15,10 +17,10 @@ import static java.util.Objects.isNull;
 
 @Repository("accountDialogsDao")
 public class AccountDialogsDao extends GenericOneToManyDao<Dialog> {
-    private DialogDao dialogDao;
+    private Dao<Dialog> dialogDao;
 
     @Autowired
-    public void setDialogDao(DialogDao dialogDao) {
+    public void setDialogDao(@Qualifier("dialogDao") Dao<Dialog> dialogDao) {
         this.dialogDao = dialogDao;
     }
 

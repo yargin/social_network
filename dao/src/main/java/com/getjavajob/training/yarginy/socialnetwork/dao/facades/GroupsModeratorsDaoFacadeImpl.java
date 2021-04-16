@@ -12,7 +12,7 @@ import java.util.Collection;
 public class GroupsModeratorsDaoFacadeImpl implements GroupsModeratorsDaoFacade {
     private final ManyToManyDao<Account, Group> groupModerators;
 
-    public GroupsModeratorsDaoFacadeImpl(@Qualifier("jpaGroupModeratorsDao") ManyToManyDao<Account, Group> groupModerators) {
+    public GroupsModeratorsDaoFacadeImpl(@Qualifier("groupModeratorsDao") ManyToManyDao<Account, Group> groupModerators) {
         this.groupModerators = groupModerators;
     }
 

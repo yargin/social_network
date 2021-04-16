@@ -13,7 +13,8 @@ public class PhoneDaoFacadeImpl implements PhoneDaoFacade {
     private final BatchDao<Phone> phoneDao;
     private final OneToManyDao<Phone> accountsPhonesDao;
 
-    public PhoneDaoFacadeImpl(@Qualifier("jpaPhoneDao") BatchDao<Phone> phoneDao, OneToManyDao<Phone> accountsPhonesDao) {
+    public PhoneDaoFacadeImpl(@Qualifier("phoneDao") BatchDao<Phone> phoneDao,
+                              @Qualifier("accountPhonesDao") OneToManyDao<Phone> accountsPhonesDao) {
         this.phoneDao = phoneDao;
         this.accountsPhonesDao = accountsPhonesDao;
     }

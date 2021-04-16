@@ -2,14 +2,21 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.models;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.function.Supplier;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullAccount;
 
-@Repository("jpaAccountDao")
-public class AccountDao extends GenericDao<Account> {
+@Repository("accountDao")
+public class AccountDao extends GenericDaoTransactional<Account> {
+//    @Override
+//    @Transactional
+//    public boolean createTransactional(Account model) {
+//        return super.createTransactional(model);
+//    }
+
     @Override
     protected Supplier<Account> getSelectByPk(EntityManager entityManager, long id) {
         return () -> entityManager.find(Account.class, id);

@@ -2,8 +2,10 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.AccountWallMessage;
+import com.getjavajob.training.yarginy.socialnetwork.dao.models.Dao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.models.messages.AccountWallMessageDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -13,12 +15,12 @@ import java.util.Collection;
 
 import static java.util.Objects.isNull;
 
-@Repository("jpaAccountWallMessagesDao")
+@Repository("accountWallMessagesDao")
 public class AccountWallMessagesDao extends GenericOneToManyDao<AccountWallMessage> {
-    private AccountWallMessageDao messageDao;
+    private Dao<AccountWallMessage> messageDao;
 
     @Autowired
-    public void setMessageDao(AccountWallMessageDao messageDao) {
+    public void setMessageDao(@Qualifier("accountWallMessageDao") Dao<AccountWallMessage> messageDao) {
         this.messageDao = messageDao;
     }
 

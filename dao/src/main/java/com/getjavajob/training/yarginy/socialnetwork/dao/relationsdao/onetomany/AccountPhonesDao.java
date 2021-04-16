@@ -2,23 +2,23 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.PhoneDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.models.Dao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 import java.util.Collection;
 
 import static java.util.Objects.isNull;
 
-@Repository("jpaAccountPhonesDao")
+@Repository("accountPhonesDao")
 public class AccountPhonesDao extends GenericOneToManyDao<Phone> {
-    private PhoneDao phoneDao;
+    private Dao<Phone> phoneDao;
 
     @Autowired
-    public void setPhoneDao(PhoneDao phoneDao) {
+    public void setPhoneDao(@Qualifier("phoneDao") Dao<Phone> phoneDao) {
         this.phoneDao = phoneDao;
     }
 

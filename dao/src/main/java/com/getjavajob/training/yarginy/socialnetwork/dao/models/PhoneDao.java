@@ -1,18 +1,27 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.models;
 
+import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
+import java.util.Collection;
 import java.util.function.Supplier;
 
+import static com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData.WRONG_ID;
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.*;
 import static java.util.Objects.isNull;
 
-@Repository("jpaPhoneDao")
-public class PhoneDao extends BatchGenericDao<Phone> {
+@Repository("phoneDao")
+public class PhoneDao extends BatchGenericTransactionalDao<Phone> {
     @Override
     public Phone getNullModel() {
         return getNullPhone();
@@ -52,4 +61,5 @@ public class PhoneDao extends BatchGenericDao<Phone> {
     protected Supplier<Phone> getModelReference(EntityManager entityManager, Phone phone) {
         return () -> entityManager.getReference(Phone.class, phone.getId());
     }
+
 }

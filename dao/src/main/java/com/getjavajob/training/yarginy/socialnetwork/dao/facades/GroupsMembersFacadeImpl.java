@@ -13,8 +13,8 @@ public class GroupsMembersFacadeImpl implements GroupsMembersDaoFacade {
     private final ManyToManyDao<Account, Group> groupMembershipDao;
     private final ManyToManyDao<Account, Group> membershipRequestsDao;
 
-    public GroupsMembersFacadeImpl(@Qualifier("jpaGroupMembershipDao") ManyToManyDao<Account, Group> groupMembershipDao,
-                                   @Qualifier("jpaGroupRequestsDao") ManyToManyDao<Account, Group> membershipRequestsDao) {
+    public GroupsMembersFacadeImpl(@Qualifier("groupMembershipDao") ManyToManyDao<Account, Group> groupMembershipDao,
+                                   @Qualifier("groupRequestsDao") ManyToManyDao<Account, Group> membershipRequestsDao) {
         this.groupMembershipDao = groupMembershipDao;
         this.membershipRequestsDao = membershipRequestsDao;
     }

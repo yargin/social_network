@@ -2,7 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.AccountWallMessage;
 import com.getjavajob.training.yarginy.socialnetwork.dao.models.Dao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.AccountWallMessagesDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
@@ -11,10 +11,12 @@ import java.util.Collection;
 @Repository("accountWallMessageDaoFacade")
 public class AccountWallMessageDaoFacadeImpl implements AccountWallMessageDaoFacade {
     private final Dao<AccountWallMessage> accountWallMessageDao;
-    private final AccountWallMessagesDao accountWallMessagesDao;
+    private final OneToManyDao<AccountWallMessage> accountWallMessagesDao;
 
-    public AccountWallMessageDaoFacadeImpl(@Qualifier("accountWallMessageDao") Dao<AccountWallMessage> accountWallMessageDao,
-                                           AccountWallMessagesDao accountWallMessagesDao) {
+    public AccountWallMessageDaoFacadeImpl(@Qualifier("accountWallMessageDao") Dao<AccountWallMessage>
+                                                   accountWallMessageDao,
+                                           @Qualifier("accountWallMessagesDao") OneToManyDao<AccountWallMessage>
+                                                   accountWallMessagesDao) {
         this.accountWallMessageDao = accountWallMessageDao;
         this.accountWallMessagesDao = accountWallMessagesDao;
     }

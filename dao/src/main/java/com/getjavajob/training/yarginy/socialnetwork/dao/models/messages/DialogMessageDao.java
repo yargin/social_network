@@ -4,6 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.DialogMessage;
 import com.getjavajob.training.yarginy.socialnetwork.dao.models.GenericDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.models.GenericDaoTransactional;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -13,8 +14,8 @@ import java.util.function.Supplier;
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullDialogMessage;
 import static java.util.Objects.isNull;
 
-@Repository("jpaDialogMessageDao")
-public class DialogMessageDao extends GenericDao<DialogMessage> {
+@Repository("dialogMessageDao")
+public class DialogMessageDao extends GenericDaoTransactional<DialogMessage> {
     @Override
     public DialogMessage getNullModel() {
         return getNullDialogMessage();

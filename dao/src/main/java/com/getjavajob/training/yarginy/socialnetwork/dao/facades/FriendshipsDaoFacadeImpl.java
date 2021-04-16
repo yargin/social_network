@@ -13,8 +13,8 @@ public class FriendshipsDaoFacadeImpl implements FriendshipsDaoFacade {
     private final SelfManyToManyDao<Account> friendshipDao;
     private final ManyToManyDao<Account, Account> friendshipRequestsDao;
 
-    public FriendshipsDaoFacadeImpl(@Qualifier("jpaFriendshipDao") SelfManyToManyDao<Account> friendshipDao,
-                                    @Qualifier("jpaFriendshipRequestsDao") ManyToManyDao<Account, Account>
+    public FriendshipsDaoFacadeImpl(@Qualifier("friendshipDao") SelfManyToManyDao<Account> friendshipDao,
+                                    @Qualifier("friendshipRequestsDao") ManyToManyDao<Account, Account>
                                             friendshipRequestsDao) {
         this.friendshipDao = friendshipDao;
         this.friendshipRequestsDao = friendshipRequestsDao;

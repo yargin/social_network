@@ -13,7 +13,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.common.models.manyto
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-@Repository("jpaFriendshipDao")
+@Repository("friendshipDao")
 public class FriendshipDao extends GenericSelfManyToManyDao<Account> {
     @Override
     public Collection<Account> genericSelect(long id) {

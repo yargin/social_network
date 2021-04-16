@@ -13,7 +13,7 @@ import java.util.Collection;
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.GroupMembership.createGroupMembershipKey;
 
 
-@Repository("jpaGroupMembershipDao")
+@Repository("groupMembershipDao")
 public class GroupMembershipDao extends GenericManyToManyDao<Account, Group> {
     @Override
     protected JpaManyToMany<Account, Group> genericGetReference(EntityManager entityManager, long accountId,

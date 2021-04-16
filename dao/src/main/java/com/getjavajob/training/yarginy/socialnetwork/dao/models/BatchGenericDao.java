@@ -5,74 +5,43 @@ import org.hibernate.PropertyValueException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import java.util.Collection;
 import java.util.HashSet;
 
-public abstract class BatchGenericDao<E extends Model> extends GenericDao<E> implements BatchDao<E> {
+public abstract class BatchGenericDao<E extends Model> extends GenericDaoTransactional<E> implements BatchDao<E> {
     @Override
     public boolean create(Collection<E> entities) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        if (!createEntities(entities, entityManager, transaction)) return false;
-        transaction.commit();
-        entityManager.close();
-        return true;
+        try {
+            return createTransactional(entities);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 
-    private boolean createEntities(Collection<E> entities, EntityManager entityManager, EntityTransaction transaction) {
-        for (E entity : entities) {
-            try {
-                entityManager.persist(entity);
-            } catch (PersistenceException | IllegalArgumentException e) {
-                if (e.getCause().getClass() == PropertyValueException.class) {
-                    throw new IllegalArgumentException(e);
-                }
-                transaction.rollback();
-                return false;
-            }
-        }
-        return true;
-    }
+    protected abstract boolean createTransactional(Collection<E> entities);
 
     @Override
     public boolean delete(Collection<E> entities) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        if (!deleteEntities(entities, entityManager, transaction)) return false;
-        transaction.commit();
-        entityManager.close();
-        return true;
+        try {
+            return deleteTransactional(entities);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 
-    private boolean deleteEntities(Collection<E> entities, EntityManager entityManager, EntityTransaction transaction) {
-        for (E entity : entities) {
-            try {
-                E entityToDelete = getModelReference(entityManager, entity).get();
-                entityManager.remove(entityToDelete);
-            } catch (PersistenceException | IllegalArgumentException e) {
-                transaction.rollback();
-                return false;
-            }
+    protected abstract boolean deleteTransactional(Collection<E> entities);
+
+    @Override
+    public boolean update(Collection<E> newEntities, Collection<E> storedEntities) {
+        try {
+            updateTransactional(newEntities, storedEntities);
+        } catch (IllegalArgumentException e) {
+            return false;
         }
         return true;
     }
 
-    @Override
-    public boolean update(Collection<E> newEntities, Collection<E> storedEntities) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        Collection<E> entitiesToDelete = new HashSet<>(storedEntities);
-        entitiesToDelete.removeAll(newEntities);
-        deleteEntities(entitiesToDelete, entityManager, transaction);
-        Collection<E> entitiesToCreate = new HashSet<>(newEntities);
-        entitiesToCreate.removeAll(storedEntities);
-        createEntities(entitiesToCreate, entityManager, transaction);
-        transaction.commit();
-        entityManager.close();
-        return true;
-    }
+    protected abstract void updateTransactional(Collection<E> newEntities, Collection<E> storedEntities);
 }

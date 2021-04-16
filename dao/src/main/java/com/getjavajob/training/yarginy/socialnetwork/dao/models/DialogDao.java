@@ -12,7 +12,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullMo
 import static java.util.Objects.isNull;
 
 @Repository("dialogDao")
-public class DialogDao extends GenericDao<Dialog> {
+public class DialogDao extends GenericDaoTransactional<Dialog> {
     @Override
     protected Supplier<TypedQuery<Dialog>> getSelectAll(EntityManager entityManager) {
         return () -> entityManager.createQuery("select d from Dialog d join fetch d.firstAccount f " +

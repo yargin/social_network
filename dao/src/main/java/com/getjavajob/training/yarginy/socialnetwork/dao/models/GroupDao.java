@@ -11,8 +11,8 @@ import java.util.function.Supplier;
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullGroup;
 import static java.util.Objects.isNull;
 
-@Repository("jpaGroupDao")
-public class GroupDao extends GenericDao<Group> {
+@Repository("groupDao")
+public class GroupDao extends GenericDaoTransactional<Group> {
     @Override
     protected Supplier<TypedQuery<Group>> getSelectAll(EntityManager entityManager) {
         return () -> entityManager.createQuery("select g from Group g join fetch g.owner o", Group.class);

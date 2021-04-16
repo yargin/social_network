@@ -2,23 +2,23 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.GroupWallMessage;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.messages.GroupWallMessageDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.models.Dao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 import java.util.Collection;
 
 import static java.util.Objects.isNull;
 
-@Repository("jpaGroupWallMessagesDao")
+@Repository("groupWallMessagesDao")
 public class GroupWallMessagesDao extends GenericOneToManyDao<GroupWallMessage> {
-    private GroupWallMessageDao messageDao;
+    private Dao<GroupWallMessage> messageDao;
 
     @Autowired
-    public void setMessageDao(GroupWallMessageDao messageDao) {
+    public void setMessageDao(@Qualifier("groupWallMessageDao") Dao<GroupWallMessage> messageDao) {
         this.messageDao = messageDao;
     }
 

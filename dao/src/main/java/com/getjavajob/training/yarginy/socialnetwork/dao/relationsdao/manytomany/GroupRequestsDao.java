@@ -12,7 +12,7 @@ import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.GroupRequest.createGroupRequestKey;
 
-@Repository("jpaGroupRequestsDao")
+@Repository("groupRequestsDao")
 public class GroupRequestsDao extends GenericManyToManyDao<Account, Group> {
     @Override
     protected JpaManyToMany<Account, Group> genericGetReference(EntityManager entityManager, long accountId,
