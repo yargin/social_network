@@ -17,7 +17,7 @@ import static java.lang.Thread.sleep;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestJpaSpringConfig.xml"})
+@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestOverrideSpringConfig.xml"})
 public class JpaAccountDaoTest {
     private final Account account = new Account("testName", "testSurname", "testEmail");
     @Autowired

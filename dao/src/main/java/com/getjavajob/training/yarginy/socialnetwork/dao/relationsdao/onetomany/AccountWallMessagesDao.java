@@ -26,7 +26,7 @@ public class AccountWallMessagesDao extends GenericOneToManyDao<AccountWallMessa
     public Collection<AccountWallMessage> genericSelectMany(EntityManager entityManager, long accountId) {
         Account account = new Account(accountId);
         TypedQuery<AccountWallMessage> selectMany = entityManager.createQuery("select m from AccountWallMessage m " +
-                "where m.receiver = :receiver", AccountWallMessage.class);
+                "where m.receiver = :receiver order by m.date desc", AccountWallMessage.class);
         selectMany.setParameter("receiver", account);
         return selectMany.getResultList();
     }

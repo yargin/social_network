@@ -14,7 +14,8 @@ CREATE TABLE IF NOT EXISTS Accounts
     skype             VARCHAR(40),
     city              VARCHAR(40),
     country           VARCHAR(40),
-    photo             MEDIUMBLOB
+    photo             MEDIUMBLOB,
+    version           BIGINT NOT NULL
 );
 
 ALTER TABLE Accounts ADD CHECK (sex IN ('MALE', 'FEMALE'));
@@ -28,7 +29,8 @@ CREATE TABLE IF NOT EXISTS `Groups`
     description   VARCHAR(500),
     owner_id      BIGINT UNSIGNED,
     creation_date DATE,
-    photo         MEDIUMBLOB
+    photo         MEDIUMBLOB,
+    version       BIGINT NOT NULL
 );
 
 ALTER TABLE `groups` ADD CONSTRAINT C_11 FOREIGN KEY (owner_id) REFERENCES Accounts (id);
@@ -66,7 +68,8 @@ CREATE TABLE IF NOT EXISTS Phones
     id       BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     number   VARCHAR(50)     NOT NULL UNIQUE,
     type     CHAR(7),
-    owner_id BIGINT UNSIGNED NOT NULL
+    owner_id BIGINT UNSIGNED NOT NULL,
+    version  BIGINT NOT NULL
 );
 
 ALTER TABLE Phones
@@ -125,12 +128,13 @@ ALTER TABLE Friendships_requests
 
 CREATE TABLE `account_wall_messages`
 (
-    `id`          bigint unsigned NOT NULL AUTO_INCREMENT,
-    `author`      bigint unsigned NOT NULL,
-    `message`     varchar(500),
-    `image`       mediumblob,
-    `receiver_id` bigint unsigned NOT NULL,
-    `posted`      datetime NOT NULL,
+    `id`          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `author`      BIGINT UNSIGNED NOT NULL,
+    `message`     VARCHAR(500),
+    `image`       MEDIUMBLOB,
+    `receiver_id` BIGINT UNSIGNED NOT NULL,
+    `posted`      DATETIME NOT NULL,,
+    version       BIGINT NOT NULL
     PRIMARY KEY (`id`),
     KEY           `C_32` (`receiver_id`),
     KEY           `C_31` (`author`),
@@ -140,12 +144,12 @@ CREATE TABLE `account_wall_messages`
 
 CREATE TABLE `group_wall_messages`
 (
-    `id`          bigint unsigned NOT NULL AUTO_INCREMENT,
-    `author`      bigint unsigned NOT NULL,
-    `message`     varchar(500),
-    `image`       mediumblob,
-    `receiver_id` bigint unsigned NOT NULL,
-    `posted`      datetime        NOT NULL,
+    `id`          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `author`      BIGINT UNSIGNED NOT NULL,
+    `message`     VARCHAR(500),
+    `image`       MEDIUMBLOB,
+    `receiver_id` BIGINT UNSIGNED NOT NULL,
+    `posted`      DATETIME        NOT NULL,
     PRIMARY KEY (`id`),
     KEY `C_36` (`receiver_id`),
     KEY `C_35` (`author`),
@@ -155,9 +159,9 @@ CREATE TABLE `group_wall_messages`
 
 CREATE TABLE dialogs
 (
-    id        bigint unsigned auto_increment PRIMARY KEY,
-    first_id  bigint unsigned NOT NULL,
-    second_id bigint unsigned NOT NULL,
+    id        BIGINT UNSIGNED auto_increment PRIMARY KEY,
+    first_id  BIGINT UNSIGNED NOT NULL,
+    second_id BIGINT UNSIGNED NOT NULL,
     CONSTRAINT dialogs_accounts_id_fk FOREIGN KEY (first_id) REFERENCES accounts (id) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT dialogs_accounts_id_fk_2 FOREIGN KEY (second_id) REFERENCES accounts (id) ON UPDATE CASCADE ON DELETE
         CASCADE,
@@ -166,12 +170,12 @@ CREATE TABLE dialogs
 
 CREATE TABLE `dialogs_messages`
 (
-    `id`          bigint unsigned NOT NULL AUTO_INCREMENT,
-    `author`      bigint unsigned NOT NULL,
-    `message`     varchar(500),
-    `image`       mediumblob,
-    `receiver_id` bigint unsigned NOT NULL,
-    `posted`      datetime        NOT NULL,
+    `id`          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `author`      BIGINT UNSIGNED NOT NULL,
+    `message`     VARCHAR(500),
+    `image`       MEDIUMBLOB,
+    `receiver_id` BIGINT UNSIGNED NOT NULL,
+    `posted`      DATETIME        NOT NULL,
     PRIMARY KEY (`id`),
     KEY `C_34` (`receiver_id`),
     KEY `C_33` (`author`),

@@ -19,7 +19,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestJpaSpringConfig.xml"})
+@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestOverrideSpringConfig.xml"})
 public class JpaDialogDaoTest {
     private final Account firstAccount= new Account("testFirstName", "testFirstSurname", "testFirstEmail");
     private final Account secondAccount= new Account("testSecondName", "testSecondSurname", "testSecondEmail");

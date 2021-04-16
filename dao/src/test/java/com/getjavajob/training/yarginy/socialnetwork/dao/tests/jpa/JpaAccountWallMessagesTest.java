@@ -17,12 +17,11 @@ import java.util.Collection;
 
 import static java.sql.Timestamp.valueOf;
 import static java.time.LocalDateTime.of;
-import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestJpaSpringConfig.xml"})
+@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestOverrideSpringConfig.xml"})
 public class JpaAccountWallMessagesTest {
     @Autowired
     private AccountWallMessagesDao accountWallMessagesDao;

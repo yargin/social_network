@@ -4,6 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
 import org.hibernate.PropertyValueException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -105,6 +106,7 @@ public abstract class GenericDao<E extends Model> implements Dao<E> {
     protected abstract void prepareModelRelations(EntityManager entityManager, E model);
 
     @Override
+    @Transactional
     public boolean update(E model) {
         if (!checkEntity(model)) {
             throw new IllegalArgumentException();

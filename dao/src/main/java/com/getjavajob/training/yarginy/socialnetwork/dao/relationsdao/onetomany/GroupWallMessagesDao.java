@@ -27,7 +27,7 @@ public class GroupWallMessagesDao extends GenericOneToManyDao<GroupWallMessage> 
         Group group = new Group();
         group.setId(groupId);
         TypedQuery<GroupWallMessage> selectMany = entityManager.createQuery("select m from GroupWallMessage m " +
-                "where m.receiver = :receiver", GroupWallMessage.class);
+                "where m.receiver = :receiver order by m.date desc", GroupWallMessage.class);
         selectMany.setParameter("receiver", group);
         return selectMany.getResultList();
     }
