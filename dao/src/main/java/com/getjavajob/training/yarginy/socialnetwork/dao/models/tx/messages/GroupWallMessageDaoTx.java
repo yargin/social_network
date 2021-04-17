@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.models.messages;
+package com.getjavajob.training.yarginy.socialnetwork.dao.models.tx.messages;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
@@ -13,8 +13,8 @@ import java.util.function.Supplier;
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullGroupWallMessage;
 import static java.util.Objects.isNull;
 
-@Repository("groupWallMessageDao")
-public class GroupWallMessageDao extends GenericDaoTransactional<GroupWallMessage> {
+@Repository
+public class GroupWallMessageDaoTx extends GenericDaoTransactional<GroupWallMessage> {
     @Override
     public GroupWallMessage getNullModel() {
         return getNullGroupWallMessage();
@@ -49,7 +49,7 @@ public class GroupWallMessageDao extends GenericDaoTransactional<GroupWallMessag
 
     @Override
     protected boolean checkEntity(GroupWallMessage message) {
-        return !(isNull(message.getReceiver()) || isNull(message.getAuthor()));
+        return isNull(message.getReceiver()) || isNull(message.getAuthor());
     }
 
     @Override

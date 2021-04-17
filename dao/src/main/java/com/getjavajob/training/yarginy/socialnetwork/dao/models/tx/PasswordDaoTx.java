@@ -1,7 +1,8 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.models;
+package com.getjavajob.training.yarginy.socialnetwork.dao.models.tx;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Password;
+import com.getjavajob.training.yarginy.socialnetwork.dao.models.GenericDaoTransactional;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -11,9 +12,8 @@ import java.util.function.Supplier;
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullPassword;
 import static java.util.Objects.isNull;
 
-
-@Repository("passwordDao")
-public class PasswordDao extends GenericDaoTransactional<Password> {
+@Repository
+public class PasswordDaoTx extends GenericDaoTransactional<Password> {
     @Override
     public Password getNullModel() {
         return getNullPassword();
@@ -47,7 +47,7 @@ public class PasswordDao extends GenericDaoTransactional<Password> {
 
     @Override
     protected boolean checkEntity(Password password) {
-        return !isNull(password.getAccount());
+        return isNull(password.getAccount());
     }
 
     @Override
@@ -56,8 +56,8 @@ public class PasswordDao extends GenericDaoTransactional<Password> {
     }
 
     @Override
-    public boolean update(Password model) {
-        delete(model);
-        return create(model);
+    public boolean updateTransactional(Password password) {
+        deleteTransactional(password);
+        return super.createTransactional(password);
     }
 }

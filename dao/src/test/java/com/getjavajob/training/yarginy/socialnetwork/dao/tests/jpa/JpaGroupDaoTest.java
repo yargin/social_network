@@ -2,8 +2,8 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.tests.jpa;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.AccountDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.GroupDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacadeImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacadeImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,9 +26,9 @@ public class JpaGroupDaoTest {
     private final Account owner= new Account("testOwnerName", "testOwnerSurname", "testOwnerEmail");
     private final Group group = new Group("testName", owner);
     @Autowired
-    private GroupDao groupDao;
+    private GroupDaoFacadeImpl groupDao;
     @Autowired
-    private AccountDao accountDao;
+    private AccountDaoFacadeImpl accountDao;
 
     @Before
     public void initValues() {

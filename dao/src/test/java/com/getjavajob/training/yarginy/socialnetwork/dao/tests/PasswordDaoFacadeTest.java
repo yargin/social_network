@@ -57,26 +57,6 @@ public class PasswordDaoFacadeTest {
     }
 
     @Test
-    public void testUpdate() {
-        accountDaoFacade.create(account);
-        passwordDaoFacade.create(password);
-        password.setStringPassword("updatedPassword1");
-        Collection<Account> accounts = accountDaoFacade.selectAll();
-        System.out.println("===================================================================");
-//        assertTrue(passwordDaoFacade.update(password, passwordDaoFacade.select(password)));
-        assertTrue(passwordDaoFacade.update(password));
-        System.out.println("===================================================================");
-        password.setStringPassword("qwe123rty");
-    }
-
-//    @Test
-    public void testUpdateNonExisting() {
-        password.setAccount(new Account("petya", "fake@email.com"));
-        assertFalse(passwordDaoFacade.update(password));
-        password.setAccount(account);
-    }
-
-    @Test
     public void testSelect() {
         accountDaoFacade.create(account);
         password.setAccount(account);

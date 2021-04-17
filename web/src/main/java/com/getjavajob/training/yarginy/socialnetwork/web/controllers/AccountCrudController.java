@@ -28,7 +28,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.persistence.OptimisticLockException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -44,7 +43,6 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.LOGOUT;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.REDIRECT;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.ACCOUNT_UPDATE_VIEW;
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.ACCOUNT_WALL_VIEW;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.REGISTRATION_VIEW;
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
@@ -142,6 +140,10 @@ public class AccountCrudController {
             return updater.acceptActionOrRetry(true, model);
         }
         AccountInfoMvcModel storedModel = (AccountInfoMvcModel) session.getAttribute(ACCOUNT_INFO);
+        if (isNull(storedModel)) {
+            request.setAttribute("concurrentError", "error.concurrentError");
+            return showUpdate(session, model.getAccount().getId());
+        }
         Account storedAccount = storedModel.getAccount();
         Account account = model.getAccount();
         //set non updatable values

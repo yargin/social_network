@@ -3,13 +3,11 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.AccountWallMessage;
 import com.getjavajob.training.yarginy.socialnetwork.dao.models.Dao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.messages.AccountWallMessageDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 import java.util.Collection;
 

@@ -1,7 +1,8 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.models;
+package com.getjavajob.training.yarginy.socialnetwork.dao.models.tx;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
+import com.getjavajob.training.yarginy.socialnetwork.dao.models.GenericDaoTransactional;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -11,8 +12,8 @@ import java.util.function.Supplier;
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullGroup;
 import static java.util.Objects.isNull;
 
-@Repository("groupDao")
-public class GroupDao extends GenericDaoTransactional<Group> {
+@Repository
+public class GroupDaoTx extends GenericDaoTransactional<Group> {
     @Override
     protected Supplier<TypedQuery<Group>> getSelectAll(EntityManager entityManager) {
         return () -> entityManager.createQuery("select g from Group g join fetch g.owner o", Group.class);
@@ -35,7 +36,7 @@ public class GroupDao extends GenericDaoTransactional<Group> {
 
     @Override
     protected boolean checkEntity(Group group) {
-        return !isNull(group.getOwner());
+        return isNull(group.getOwner());
     }
 
     @Override

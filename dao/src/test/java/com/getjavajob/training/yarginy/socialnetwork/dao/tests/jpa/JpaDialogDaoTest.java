@@ -2,8 +2,8 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.tests.jpa;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.AccountDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.DialogDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacadeImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogDaoFacadeImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,9 +26,9 @@ public class JpaDialogDaoTest {
     private final Account thirdAccount= new Account("testThirdName", "testThirdSurname", "testThirdEmail");
     private Dialog dialog = new Dialog(firstAccount, secondAccount);
     @Autowired
-    private DialogDao dialogDao;
+    private DialogDaoFacadeImpl dialogDao;
     @Autowired
-    private AccountDao accountDao;
+    private AccountDaoFacadeImpl accountDao;
 
     @Before
     public void initValues() {

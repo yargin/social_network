@@ -1,7 +1,8 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.models;
+package com.getjavajob.training.yarginy.socialnetwork.dao.models.tx;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
+import com.getjavajob.training.yarginy.socialnetwork.dao.models.GenericDaoTransactional;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -11,8 +12,8 @@ import java.util.function.Supplier;
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullDialog;
 import static java.util.Objects.isNull;
 
-@Repository("dialogDao")
-public class DialogDao extends GenericDaoTransactional<Dialog> {
+@Repository
+public class DialogDaoTx extends GenericDaoTransactional<Dialog> {
     @Override
     protected Supplier<TypedQuery<Dialog>> getSelectAll(EntityManager entityManager) {
         return () -> entityManager.createQuery("select d from Dialog d join fetch d.firstAccount f " +
@@ -51,7 +52,7 @@ public class DialogDao extends GenericDaoTransactional<Dialog> {
         Account firstAccount = dialog.getFirstAccount();
         Account secondAccount = dialog.getSecondAccount();
         if (isNull(firstAccount) || isNull(secondAccount)) {
-            return false;
+            return true;
         }
         Account greaterAccount;
         if (firstAccount.getId() < secondAccount.getId()) {
@@ -59,7 +60,7 @@ public class DialogDao extends GenericDaoTransactional<Dialog> {
             dialog.setSecondAccount(dialog.getFirstAccount());
             dialog.setFirstAccount(greaterAccount);
         }
-        return true;
+        return false;
     }
 
     @Override

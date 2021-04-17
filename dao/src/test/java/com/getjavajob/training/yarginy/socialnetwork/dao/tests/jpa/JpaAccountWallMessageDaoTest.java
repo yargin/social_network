@@ -2,8 +2,8 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.tests.jpa;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.AccountWallMessage;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.messages.AccountWallMessageDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.AccountDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacadeImpl;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages.AccountWallMessageDaoFacadeImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +20,9 @@ import static org.junit.Assert.assertTrue;
 @ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestOverrideSpringConfig.xml"})
 public class JpaAccountWallMessageDaoTest {
     @Autowired
-    private AccountWallMessageDao accountWallMessageDao;
+    private AccountWallMessageDaoFacadeImpl accountWallMessageDao;
     @Autowired
-    private AccountDao accountDao;
+    private AccountDaoFacadeImpl accountDao;
 
     @Test
     public void testCreateAndSelectByAltMessage() {

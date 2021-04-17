@@ -9,8 +9,6 @@ public interface PasswordDaoFacade extends Serializable {
 
     boolean create(Password password);
 
-    boolean update(Password password);
-
     boolean delete(Password password);
 
     Password getNullPassword();

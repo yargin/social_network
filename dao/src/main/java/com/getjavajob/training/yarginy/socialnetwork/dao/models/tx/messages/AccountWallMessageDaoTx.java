@@ -1,8 +1,7 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.models.messages;
+package com.getjavajob.training.yarginy.socialnetwork.dao.models.tx.messages;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.AccountWallMessage;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.GenericDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.models.GenericDaoTransactional;
 import org.springframework.stereotype.Repository;
 
@@ -13,8 +12,8 @@ import java.util.function.Supplier;
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullAccountWallMessage;
 import static java.util.Objects.isNull;
 
-@Repository("accountWallMessageDao")
-public class AccountWallMessageDao extends GenericDaoTransactional<AccountWallMessage> {
+@Repository
+public class AccountWallMessageDaoTx extends GenericDaoTransactional<AccountWallMessage> {
     @Override
     public AccountWallMessage getNullModel() {
         return getNullAccountWallMessage();
@@ -50,7 +49,7 @@ public class AccountWallMessageDao extends GenericDaoTransactional<AccountWallMe
 
     @Override
     protected boolean checkEntity(AccountWallMessage message) {
-        return !(isNull(message.getReceiver()) || isNull(message.getAuthor()));
+        return isNull(message.getReceiver()) || isNull(message.getAuthor());
     }
 
     @Override

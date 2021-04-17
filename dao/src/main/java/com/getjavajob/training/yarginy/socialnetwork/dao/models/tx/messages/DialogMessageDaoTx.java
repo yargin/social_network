@@ -1,9 +1,8 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.models.messages;
+package com.getjavajob.training.yarginy.socialnetwork.dao.models.tx.messages;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.DialogMessage;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.GenericDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.models.GenericDaoTransactional;
 import org.springframework.stereotype.Repository;
 
@@ -14,8 +13,8 @@ import java.util.function.Supplier;
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullDialogMessage;
 import static java.util.Objects.isNull;
 
-@Repository("dialogMessageDao")
-public class DialogMessageDao extends GenericDaoTransactional<DialogMessage> {
+@Repository
+public class DialogMessageDaoTx extends GenericDaoTransactional<DialogMessage> {
     @Override
     public DialogMessage getNullModel() {
         return getNullDialogMessage();
@@ -50,7 +49,7 @@ public class DialogMessageDao extends GenericDaoTransactional<DialogMessage> {
 
     @Override
     protected boolean checkEntity(DialogMessage message) {
-        return !(isNull(message.getReceiver()) || isNull(message.getAuthor()));
+        return isNull(message.getReceiver()) || isNull(message.getAuthor());
     }
 
     @Override

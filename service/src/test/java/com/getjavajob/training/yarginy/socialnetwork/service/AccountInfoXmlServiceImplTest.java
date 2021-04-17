@@ -21,7 +21,7 @@ import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:serviceTestOverrideSpringConfig.xml"})
+@ContextConfiguration(locations = {"classpath:serviceTestOverrideSpringConfig.xml"})
 @ActiveProfiles("xmlTest")
 public class AccountInfoXmlServiceImplTest {
     @Autowired

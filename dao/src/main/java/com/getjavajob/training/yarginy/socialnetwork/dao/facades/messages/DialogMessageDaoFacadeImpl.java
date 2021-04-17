@@ -2,8 +2,6 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.DialogMessage;
 import com.getjavajob.training.yarginy.socialnetwork.dao.models.Dao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.messages.DialogMessageDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.DialogMessagesDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;

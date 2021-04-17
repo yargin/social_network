@@ -21,13 +21,8 @@
        http://www.springframework.org/schema/aop
        http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-<!--    <tx:advice id="plainTx">-->
-<!--        <tx:attributes>-->
-<!--            <tx:method name="*"/>-->
-<!--        </tx:attributes>-->
-<!--    </tx:advice>-->
-    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource"/>
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
 
     <aop:aspectj-autoproxy proxy-target-class="true" />

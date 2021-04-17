@@ -88,6 +88,7 @@ public class PhoneDaoFacadeTest {
     @Test
     public void testUpdateNonExisting() {
         Phone nonExisting = new Phone("000000", phone.getOwner());
+        nonExisting.setId(1111);
         assertFalse(phoneDaoFacade.update(nonExisting));
     }
 
