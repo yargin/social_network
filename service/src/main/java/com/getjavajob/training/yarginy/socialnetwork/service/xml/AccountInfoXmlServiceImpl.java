@@ -3,16 +3,12 @@ package com.getjavajob.training.yarginy.socialnetwork.service.xml;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoXml;
-import com.thoughtworks.xstream.XStream;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AccountInfoXmlServiceImpl extends GenericXmlService<AccountInfoXml> {
-    @Autowired
-    public void setXstream(XStream xstream) {
-        //todo check once again
-        this.xstream = xstream;
+    @Override
+    protected void initXstream() {
         xstream.alias("accountInfo" , AccountInfoXml.class);
 
         xstream.alias("account" , Account.class);
