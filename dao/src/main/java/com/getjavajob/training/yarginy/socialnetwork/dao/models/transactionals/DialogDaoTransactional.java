@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.models.tx;
+package com.getjavajob.training.yarginy.socialnetwork.dao.models.transactionals;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
@@ -13,7 +13,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullMo
 import static java.util.Objects.isNull;
 
 @Repository
-public class DialogDaoTx extends GenericDaoTransactional<Dialog> {
+public class DialogDaoTransactional extends GenericDaoTransactional<Dialog> {
     @Override
     protected Supplier<TypedQuery<Dialog>> getSelectAll(EntityManager entityManager) {
         return () -> entityManager.createQuery("select d from Dialog d join fetch d.firstAccount f " +
@@ -26,7 +26,7 @@ public class DialogDaoTx extends GenericDaoTransactional<Dialog> {
             Account firstAccount = dialog.getFirstAccount();
             Account secondAccount = dialog.getSecondAccount();
             if (isNull(firstAccount) || isNull(secondAccount)) {
-                throw  new IllegalArgumentException();
+                throw new IllegalArgumentException();
             }
             Account greaterAccount;
             Account lowerAccount;

@@ -2,7 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytoman
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.GroupRequest;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.GroupModerator;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.JpaManyToMany;
 import org.springframework.stereotype.Repository;
 
@@ -10,19 +10,20 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.Collection;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.GroupRequest.createGroupRequestKey;
+import static com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.GroupModerator.createGroupModeratorKey;
 
-@Repository("groupRequestsDao")
-public class GroupRequestsDao extends GenericManyToManyDao<Account, Group> {
+
+@Repository
+public class GroupModeratorsDaoTransactional extends GenericManyToManyTransactional<Account, Group> {
     @Override
     protected JpaManyToMany<Account, Group> genericGetReference(EntityManager entityManager, long accountId,
                                                                 long groupId) {
-        return entityManager.getReference(GroupRequest.class, createGroupRequestKey(accountId, groupId));
+        return entityManager.getReference(GroupModerator.class, createGroupModeratorKey(accountId, groupId));
     }
 
     @Override
     protected JpaManyToMany<Account, Group> genericFind(EntityManager entityManager, long accountId, long groupId) {
-        return entityManager.find(GroupRequest.class, createGroupRequestKey(accountId, groupId));
+        return entityManager.find(GroupModerator.class, createGroupModeratorKey(accountId, groupId));
     }
 
     @Override
@@ -30,13 +31,13 @@ public class GroupRequestsDao extends GenericManyToManyDao<Account, Group> {
                                                                 long groupId) {
         Account account = entityManager.getReference(Account.class, accountId);
         Group group = entityManager.getReference(Group.class, groupId);
-        return new GroupRequest(account, group);
+        return new GroupModerator(account, group);
     }
 
     @Override
     public Collection<Group> genericSelectByFirst(EntityManager entityManager, long accountId) {
         Account account = new Account(accountId);
-        TypedQuery<Group> query = entityManager.createQuery("select g.group from GroupRequest g " +
+        TypedQuery<Group> query = entityManager.createQuery("select g.group from GroupModerator g " +
                 "where g.account = :account", Group.class);
         query.setParameter("account", account);
         return query.getResultList();
@@ -45,7 +46,7 @@ public class GroupRequestsDao extends GenericManyToManyDao<Account, Group> {
     @Override
     public Collection<Account> genericSelectBySecond(EntityManager entityManager, long groupId) {
         Group group = new Group(groupId);
-        TypedQuery<Account> query = entityManager.createQuery("select g.account from GroupRequest g " +
+        TypedQuery<Account> query = entityManager.createQuery("select g.account from GroupModerator g " +
                 "where g.group = :group", Account.class);
         query.setParameter("group", group);
         return query.getResultList();

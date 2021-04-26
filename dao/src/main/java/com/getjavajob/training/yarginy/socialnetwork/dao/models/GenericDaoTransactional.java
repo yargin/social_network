@@ -29,13 +29,15 @@ public abstract class GenericDaoTransactional<E extends Model> implements Serial
 
     protected abstract Supplier<E> getModelReference(EntityManager entityManager, E model);
 
-    public E select(long id) {
+    @Transactional
+    public E selectTransactional(long id) {
         Supplier<E> selectByPkFunction = getSelectByPk(entityManager, id);
         E model = selectByPkFunction.get();
         return isNull(model) ? getNullModel() : model;
     }
 
-    public E select(E model) {
+    @Transactional
+    public E selectTransactional(E model) {
         Supplier<TypedQuery<E>> selectByAltKeyFunction = getSelectByAltKey(entityManager, model);
         TypedQuery<E> query = selectByAltKeyFunction.get();
         try {
@@ -49,7 +51,8 @@ public abstract class GenericDaoTransactional<E extends Model> implements Serial
 
     protected abstract E getNullModel();
 
-    public Collection<E> selectAll() {
+    @Transactional
+    public Collection<E> selectAllTransactional() {
         Supplier<TypedQuery<E>> selectAll = getSelectAll(entityManager);
         TypedQuery<E> query = selectAll.get();
         return query.getResultList();

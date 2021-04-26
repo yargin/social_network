@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.models.tx;
+package com.getjavajob.training.yarginy.socialnetwork.dao.models.transactionals;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
@@ -13,7 +13,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullMo
 import static java.util.Objects.isNull;
 
 @Repository
-public class PhoneDaoTx extends BatchGenericDaoTransactional<Phone> {
+public class PhoneDaoTransactional extends BatchGenericDaoTransactional<Phone> {
     @Override
     public Phone getNullModel() {
         return getNullPhone();

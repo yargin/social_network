@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.models.tx;
+package com.getjavajob.training.yarginy.socialnetwork.dao.models.transactionals;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
@@ -13,7 +13,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullMo
 import static java.util.Objects.isNull;
 
 @Repository
-public class GroupDaoTx extends GenericDaoTransactional<Group> {
+public class GroupDaoTransactional extends GenericDaoTransactional<Group> {
     @Override
     protected Supplier<TypedQuery<Group>> getSelectAll(EntityManager entityManager) {
         return () -> entityManager.createQuery("select g from Group g join fetch g.owner o", Group.class);

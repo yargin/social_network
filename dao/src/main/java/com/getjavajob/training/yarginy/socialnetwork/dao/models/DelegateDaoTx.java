@@ -1,7 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.models;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
-import org.hibernate.PropertyValueException;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import javax.persistence.OptimisticLockException;
@@ -9,28 +8,26 @@ import javax.persistence.PersistenceException;
 
 import java.util.Collection;
 
-import static java.util.Objects.isNull;
-
-public class AbstractTxDelegateDao<E extends Model> implements Dao<E> {
+public class DelegateDaoTx<E extends Model> implements Dao<E> {
     private final GenericDaoTransactional<E> daoTransactional;
 
-    public AbstractTxDelegateDao(GenericDaoTransactional<E> daoTransactional) {
+    public DelegateDaoTx(GenericDaoTransactional<E> daoTransactional) {
         this.daoTransactional = daoTransactional;
     }
 
     @Override
     public E select(long id) {
-        return daoTransactional.select(id);
+        return daoTransactional.selectTransactional(id);
     }
 
     @Override
     public E select(E modelToSelect) {
-        return daoTransactional.select(modelToSelect);
+        return daoTransactional.selectTransactional(modelToSelect);
     }
 
     @Override
     public Collection<E> selectAll() {
-        return daoTransactional.selectAll();
+        return daoTransactional.selectAllTransactional();
     }
 
     @Override

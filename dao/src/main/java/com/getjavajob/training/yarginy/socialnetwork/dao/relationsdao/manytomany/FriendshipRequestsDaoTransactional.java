@@ -11,8 +11,8 @@ import java.util.Collection;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.FriendshipRequest.createFriendshipRequestsKey;
 
-@Repository("friendshipRequestsDao")
-public class FriendshipRequestsDao extends GenericManyToManyDao<Account, Account> {
+@Repository
+public class FriendshipRequestsDaoTransactional extends GenericManyToManyTransactional<Account, Account> {
     @Override
     public Collection<Account> genericSelectByFirst(EntityManager entityManager, long requesterId) {
         Account requester = new Account(requesterId);

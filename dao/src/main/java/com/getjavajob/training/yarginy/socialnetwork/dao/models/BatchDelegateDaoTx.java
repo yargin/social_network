@@ -1,22 +1,15 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.models;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
-import org.hibernate.PropertyValueException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
 import java.util.Collection;
-import java.util.HashSet;
 
 @Repository
-public class BatchAbstractTxDelegateDao<E extends Model> extends AbstractTxDelegateDao<E> implements BatchDao<E> {
+public class BatchDelegateDaoTx<E extends Model> extends DelegateDaoTx<E> implements BatchDao<E> {
     private final BatchGenericDaoTransactional<E> batchDaoTransactional;
 
-    public BatchAbstractTxDelegateDao(BatchGenericDaoTransactional<E> daoTransactional) {
+    public BatchDelegateDaoTx(BatchGenericDaoTransactional<E> daoTransactional) {
         super(daoTransactional);
         this.batchDaoTransactional = daoTransactional;
     }

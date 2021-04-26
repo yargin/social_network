@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.models.tx;
+package com.getjavajob.training.yarginy.socialnetwork.dao.models.transactionals;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.dao.models.GenericDaoTransactional;
@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullAccount;
 
 @Repository
-public class AccountDaoTx extends GenericDaoTransactional<Account> {
+public class AccountDaoTransactional extends GenericDaoTransactional<Account> {
     @Override
     protected Supplier<Account> getSelectByPk(EntityManager entityManager, long id) {
         return () -> entityManager.find(Account.class, id);

@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.models.tx.messages;
+package com.getjavajob.training.yarginy.socialnetwork.dao.models.transactionals.messages;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
@@ -14,7 +14,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullMo
 import static java.util.Objects.isNull;
 
 @Repository
-public class DialogMessageDaoTx extends GenericDaoTransactional<DialogMessage> {
+public class DialogMessageDaoTransactional extends GenericDaoTransactional<DialogMessage> {
     @Override
     public DialogMessage getNullModel() {
         return getNullDialogMessage();

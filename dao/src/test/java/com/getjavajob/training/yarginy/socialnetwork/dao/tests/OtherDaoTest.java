@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Collection;
 import java.util.Map;
 
 import static java.sql.Date.valueOf;
@@ -67,6 +68,7 @@ public class OtherDaoTest {
         group4 = groupDaoFacade.select(group4);
         groupDaoFacade.create(group5);
         group5 = groupDaoFacade.select(group5);
+        Collection<Group> groups = groupDaoFacade.selectAll();
 
         long accountId = account.getId();
         groupDaoFacade.addMember(accountId, group1.getId());

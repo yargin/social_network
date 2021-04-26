@@ -6,6 +6,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.models.Dao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -32,6 +33,7 @@ public class AccountPhonesDao extends GenericOneToManyDao<Phone> {
     }
 
     @Override
+    @Transactional
     public boolean relationExists(long accountId, long phoneId) {
         Phone phone = phoneDao.select(phoneId);
         return !isNull(phone.getOwner()) && phone.getOwner().getId() == accountId;

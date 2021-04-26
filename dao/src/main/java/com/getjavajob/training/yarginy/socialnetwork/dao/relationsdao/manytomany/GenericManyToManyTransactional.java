@@ -2,27 +2,23 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytoman
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.JpaManyToMany;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-
+import java.io.Serializable;
 import java.util.Collection;
 
 import static java.util.Objects.isNull;
 
 @Repository
-public abstract class GenericManyToManyDao<F extends Model, S extends Model> implements ManyToManyDao<F, S> {
-    private transient EntityManagerFactory entityManagerFactory;
-
-    @Autowired
-    public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
-        this.entityManagerFactory = entityManagerFactory;
-    }
+public abstract class GenericManyToManyTransactional<F extends Model, S extends Model> implements Serializable {
+    @PersistenceContext
+    private transient EntityManager entityManager;
 
     protected abstract JpaManyToMany<F, S> genericGetReference(EntityManager entityManager, long firstId, long secondId);
 
@@ -34,69 +30,48 @@ public abstract class GenericManyToManyDao<F extends Model, S extends Model> imp
 
     protected abstract Collection<F> genericSelectBySecond(EntityManager entityManager, long secondId);
 
-    @Override
-    public Collection<S> selectByFirst(long firstId) {
+    @Transactional
+    public Collection<S> selectByFirstTransactional(long firstId) {
         checkId(firstId);
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        Collection<S> secondEntities = genericSelectByFirst(entityManager, firstId);
-        entityManager.close();
-        return secondEntities;
+        return genericSelectByFirst(entityManager, firstId);
     }
 
-    @Override
-    public Collection<F> selectBySecond(long secondId) {
+    @Transactional
+    public Collection<F> selectBySecondTransactional(long secondId) {
         checkId(secondId);
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        Collection<F> firstEntities = genericSelectBySecond(entityManager, secondId);
-        entityManager.close();
-        return firstEntities;
+        return genericSelectBySecond(entityManager, secondId);
     }
 
-    @Override
-    public boolean create(long firstId, long secondId) {
+    @Transactional
+    public boolean createTransactional(long firstId, long secondId) {
         checkId(firstId, secondId);
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
         JpaManyToMany<F, S> manyToMany = genericCreateObject(entityManager, firstId, secondId);
         try {
             entityManager.persist(manyToMany);
-            transaction.commit();
-            entityManager.close();
+            entityManager.flush();
             return true;
         } catch (EntityNotFoundException e) {
             throw new IllegalArgumentException(e);
         } catch (PersistenceException | IllegalArgumentException e) {
-            transaction.rollback();
-            entityManager.close();
-            return false;
+            throw new IllegalStateException();
         }
     }
 
-    @Override
-    public boolean relationExists(long firstId, long secondId) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+    @Transactional
+    public boolean relationExistsTransactional(long firstId, long secondId) {
         JpaManyToMany<F, S> manyToMany = genericFind(entityManager, firstId, secondId);
-        entityManager.close();
         return !isNull(manyToMany);
     }
 
-    @Override
-    public boolean delete(long firstId, long secondId) {
+    @Transactional
+    public boolean deleteTransactional(long firstId, long secondId) {
         checkId(firstId, secondId);
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
         try {
             JpaManyToMany<F, S> manyToMany = genericGetReference(entityManager, firstId, secondId);
             entityManager.remove(manyToMany);
-            transaction.commit();
-            entityManager.close();
             return true;
         } catch (PersistenceException | IllegalArgumentException e) {
-            transaction.rollback();
-            entityManager.close();
-            return false;
+            throw new IllegalStateException();
         }
     }
 

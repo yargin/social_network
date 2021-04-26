@@ -13,11 +13,10 @@ import static com.getjavajob.training.yarginy.socialnetwork.common.models.manyto
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-@Repository("friendshipDao")
-public class FriendshipDao extends GenericSelfManyToManyDao<Account> {
+@Repository
+public class FriendshipDaoTransactional extends GenericSelfManyToManyDao<Account> {
     @Override
-    public Collection<Account> genericSelect(long id) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+    public Collection<Account> genericSelect(EntityManager entityManager, long id) {
         Account friend = new Account(id);
         TypedQuery<Account> firstQuery = entityManager.createQuery("select f.firstAccount from Friendship f " +
                 "where f.secondAccount = :friend", Account.class);

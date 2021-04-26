@@ -4,25 +4,24 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.JpaSelfManyToMany;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 import static java.util.Objects.isNull;
 
 @Repository
-public abstract class GenericSelfManyToManyDao<E extends Model> implements SelfManyToManyDao<E> {
-    protected transient EntityManagerFactory entityManagerFactory;
-
-    @Autowired
-    public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
-        this.entityManagerFactory = entityManagerFactory;
-    }
+public abstract class GenericSelfManyToManyDao<E extends Model> implements Serializable {
+    @PersistenceContext
+    private transient EntityManager entityManager;
 
     protected abstract JpaSelfManyToMany<E> genericGetReference(EntityManager entityManager, long greaterId, long lowerId);
 
@@ -30,60 +29,44 @@ public abstract class GenericSelfManyToManyDao<E extends Model> implements SelfM
 
     protected abstract JpaSelfManyToMany<E> genericCreateObject(EntityManager entityManager, long greaterId, long lowerId);
 
-    protected abstract Collection<E> genericSelect(long id);
+    protected abstract Collection<E> genericSelect(EntityManager entityManager, long id);
 
-    @Override
-    public Collection<E> select(long id) {
+    public Collection<E> selectTransactional(long id) {
         checkId(id);
-        return genericSelect(id);
+        return genericSelect(entityManager, id);
     }
 
-    @Override
-    public boolean create(long greaterId, long lowerId) {
+    @Transactional
+    public boolean createTransactional(long greaterId, long lowerId) {
         checkId(greaterId, lowerId);
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
         JpaSelfManyToMany<E> manyToMany = genericCreateObject(entityManager, greaterId, lowerId);
         try {
             entityManager.persist(manyToMany);
-            transaction.commit();
-            entityManager.close();
+            entityManager.flush();
             return true;
         } catch (EntityNotFoundException e) {
             throw new IllegalArgumentException(e);
         } catch (PersistenceException | IllegalArgumentException e) {
-            transaction.rollback();
-            entityManager.close();
-            return false;
+            throw new IllegalStateException(e);
         }
     }
 
-    @Override
-    public boolean relationExists(long greaterId, long lowerId) {
+    @Transactional
+    public boolean relationExistsTransactional(long greaterId, long lowerId) {
         checkId(greaterId, lowerId);
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         JpaSelfManyToMany<E> manyToMany = genericFind(entityManager, greaterId, lowerId);
-        entityManager.close();
         return !isNull(manyToMany);
     }
 
-    @Override
-    public boolean delete(long greaterId, long lowerId) {
+    @Transactional
+    public boolean deleteTransactional(long greaterId, long lowerId) {
         checkId(greaterId, lowerId);
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
         try {
             JpaSelfManyToMany<E> friendship = genericGetReference(entityManager, greaterId, lowerId);
             entityManager.remove(friendship);
-            transaction.commit();
-            entityManager.close();
             return true;
         } catch (PersistenceException | IllegalArgumentException e) {
-            transaction.rollback();
-            entityManager.close();
-            return false;
+            throw new IllegalStateException(e);
         }
     }
 

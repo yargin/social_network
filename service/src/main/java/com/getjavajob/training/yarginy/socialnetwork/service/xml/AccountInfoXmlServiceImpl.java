@@ -3,25 +3,48 @@ package com.getjavajob.training.yarginy.socialnetwork.service.xml;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoXml;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.ConversionException;
+import com.thoughtworks.xstream.io.StreamException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AccountInfoXmlServiceImpl extends GenericXmlService<AccountInfoXml> {
+public class AccountInfoXmlServiceImpl implements XmlService<AccountInfoXml> {
+    private XStream xstream;
+
+    @Autowired
+    public void setXstream(XStream xstream) {
+        this.xstream = xstream;
+        this.xstream.alias("accountInfo" , AccountInfoXml.class);
+
+        this.xstream.alias("account" , Account.class);
+        this.xstream.omitField(Account.class, "id");
+        this.xstream.omitField(Account.class, "email");
+        this.xstream.omitField(Account.class, "registrationDate");
+        this.xstream.omitField(Account.class, "version");
+        this.xstream.omitField(Account.class, "role");
+        this.xstream.omitField(Account.class, "photo");
+
+        this.xstream.alias("phone", Phone.class);
+        this.xstream.omitField(Phone.class, "owner");
+        this.xstream.omitField(Phone.class, "id");
+        this.xstream.omitField(Phone.class, "version");
+    }
+
     @Override
-    protected void initXstream() {
-        xstream.alias("accountInfo" , AccountInfoXml.class);
+    public String toXml(AccountInfoXml object) {
+        return xstream.toXML(object);
+    }
 
-        xstream.alias("account" , Account.class);
-        xstream.omitField(Account.class, "id");
-        xstream.omitField(Account.class, "email");
-        xstream.omitField(Account.class, "registrationDate");
-        xstream.omitField(Account.class, "version");
-        xstream.omitField(Account.class, "role");
-        xstream.omitField(Account.class, "photo");
-
-        xstream.alias("phone", Phone.class);
-        xstream.omitField(Phone.class, "owner");
-        xstream.omitField(Phone.class, "id");
-        xstream.omitField(Phone.class, "version");
+    @Override
+    public AccountInfoXml fromXml(String xml) {
+        try {
+            return (AccountInfoXml) xstream.fromXML(xml);
+        } catch (ConversionException e) {
+            throw new IllegalArgumentException(e);
+        } catch (StreamException | ClassCastException e) {
+            throw new IllegalStateException(e);
+        }
     }
 }

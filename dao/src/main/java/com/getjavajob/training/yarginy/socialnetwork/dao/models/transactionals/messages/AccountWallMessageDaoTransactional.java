@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.models.tx.messages;
+package com.getjavajob.training.yarginy.socialnetwork.dao.models.transactionals.messages;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.AccountWallMessage;
@@ -13,7 +13,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullMo
 import static java.util.Objects.isNull;
 
 @Repository
-public class AccountWallMessageDaoTx extends GenericDaoTransactional<AccountWallMessage> {
+public class AccountWallMessageDaoTransactional extends GenericDaoTransactional<AccountWallMessage> {
     @Override
     public AccountWallMessage getNullModel() {
         return getNullAccountWallMessage();
