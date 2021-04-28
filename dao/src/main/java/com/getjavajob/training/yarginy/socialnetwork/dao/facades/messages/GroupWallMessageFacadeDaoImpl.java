@@ -1,22 +1,33 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.GroupWallMessage;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.Dao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.utils.TransactionPerformer;
+import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.modeldaos.implementations.messages.NewGroupWallMessageDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.relationdaos.onetomany.implementations.messages.NewGroupWallMessagesDAo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
 @Component("groupWallMessageDaoFacade")
 public class GroupWallMessageFacadeDaoImpl implements GroupWallMessageDaoFacade {
-    private final Dao<GroupWallMessage> groupWallMessageDao;
-    private final OneToManyDao<GroupWallMessage> groupWallMessagesDao;
+    private NewGroupWallMessageDao groupWallMessageDao;
+    private NewGroupWallMessagesDAo groupWallMessagesDao;
+    private TransactionPerformer transactionPerformer;
 
-    public GroupWallMessageFacadeDaoImpl(@Qualifier("groupWallMessageDao") Dao<GroupWallMessage> groupWallMessageDao,
-                                         @Qualifier("groupWallMessagesDao") OneToManyDao<GroupWallMessage> groupWallMessagesDao) {
+    @Autowired
+    public void setGroupWallMessageDao(NewGroupWallMessageDao groupWallMessageDao) {
         this.groupWallMessageDao = groupWallMessageDao;
+    }
+
+    @Autowired
+    public void setGroupWallMessagesDao(NewGroupWallMessagesDAo groupWallMessagesDao) {
         this.groupWallMessagesDao = groupWallMessagesDao;
+    }
+
+    @Autowired
+    public void setTransactionPerformer(TransactionPerformer transactionPerformer) {
+        this.transactionPerformer = transactionPerformer;
     }
 
     @Override
@@ -31,17 +42,17 @@ public class GroupWallMessageFacadeDaoImpl implements GroupWallMessageDaoFacade 
 
     @Override
     public boolean create(GroupWallMessage message) {
-        return groupWallMessageDao.create(message);
+        return transactionPerformer.transactionPerformed(groupWallMessageDao::create, message);
     }
 
     @Override
     public boolean update(GroupWallMessage message) {
-        return groupWallMessageDao.update(message);
+        return transactionPerformer.transactionPerformed(groupWallMessageDao::update, message);
     }
 
     @Override
     public boolean delete(GroupWallMessage message) {
-        return groupWallMessageDao.delete(message);
+        return transactionPerformer.transactionPerformed(groupWallMessageDao::delete, message);
     }
 
     @Override

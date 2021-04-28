@@ -1,38 +1,45 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.ManyToManyDao;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.utils.TransactionPerformer;
+import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.relationdaos.manytomany.implementations.NewGroupModeratorsDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
 @Component("groupsModeratorsDaoFacade")
 public class GroupsModeratorsDaoFacadeImpl implements GroupsModeratorsDaoFacade {
-    private final ManyToManyDao<Account, Group> groupModerators;
+    private NewGroupModeratorsDao groupModeratorsDao;
+    private TransactionPerformer transactionPerformer;
 
-    public GroupsModeratorsDaoFacadeImpl(@Qualifier("groupModeratorsDao") ManyToManyDao<Account, Group> groupModerators) {
-        this.groupModerators = groupModerators;
+    @Autowired
+    public void setGroupModeratorsDao(NewGroupModeratorsDao groupModeratorsDao) {
+        this.groupModeratorsDao = groupModeratorsDao;
+    }
+
+    @Autowired
+    public void setTransactionPerformer(TransactionPerformer transactionPerformer) {
+        this.transactionPerformer = transactionPerformer;
     }
 
     @Override
     public boolean isModerator(long accountId, long groupId) {
-        return groupModerators.relationExists(accountId, groupId);
+        return groupModeratorsDao.relationExists(accountId, groupId);
     }
 
     @Override
     public Collection<Account> selectModerators(long groupId) {
-        return groupModerators.selectBySecond(groupId);
+        return groupModeratorsDao.selectBySecond(groupId);
     }
 
     @Override
     public boolean addGroupModerator(long accountId, long groupId) {
-        return groupModerators.create(accountId, groupId);
+        return transactionPerformer.transactionPerformed(groupModeratorsDao::create, accountId, groupId);
     }
 
     @Override
     public boolean deleteGroupModerator(long accountId, long groupId) {
-        return groupModerators.delete(accountId, groupId);
+        return transactionPerformer.transactionPerformed(groupModeratorsDao::delete, accountId, groupId);
     }
 }

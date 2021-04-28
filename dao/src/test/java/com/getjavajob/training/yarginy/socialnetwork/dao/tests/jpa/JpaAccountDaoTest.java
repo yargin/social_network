@@ -1,7 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.tests.jpa;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.concretedaos.AccountDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
 public class JpaAccountDaoTest {
     private final Account account = new Account("testName", "testSurname", "testEmail");
     @Autowired
-    private AccountDao accountDao;
+    private AccountDaoFacade accountDao;
 
     @Before
     public void initValues() {

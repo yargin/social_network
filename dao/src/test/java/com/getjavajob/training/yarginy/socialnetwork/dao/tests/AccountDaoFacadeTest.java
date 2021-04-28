@@ -1,7 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.tests;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.concretedaos.AccountDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +21,7 @@ import static org.junit.Assert.assertTrue;
 public class AccountDaoFacadeTest {
     private Account account = new Account();
     @Autowired
-    private AccountDao accountDao;
+    private AccountDaoFacade accountDao;
 
     @After
     public void deleteTestValues() {

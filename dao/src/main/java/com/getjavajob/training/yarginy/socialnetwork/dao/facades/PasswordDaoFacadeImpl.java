@@ -1,15 +1,24 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Password;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.Dao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.utils.TransactionPerformer;
+import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.modeldaos.implementations.NewPasswordDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component("passwordDaoFacade")
 public class PasswordDaoFacadeImpl implements PasswordDaoFacade {
-    private final Dao<Password> passwordDao;
+    private NewPasswordDao passwordDao;
+    private TransactionPerformer transactionPerformer;
 
-    public PasswordDaoFacadeImpl(Dao<Password> passwordDao) {
+    @Autowired
+    public void setPasswordDao(NewPasswordDao passwordDao) {
         this.passwordDao = passwordDao;
+    }
+
+    @Autowired
+    public void setTransactionPerformer(TransactionPerformer transactionPerformer) {
+        this.transactionPerformer = transactionPerformer;
     }
 
     @Override
@@ -19,12 +28,12 @@ public class PasswordDaoFacadeImpl implements PasswordDaoFacade {
 
     @Override
     public boolean create(Password password) {
-        return passwordDao.create(password);
+        return transactionPerformer.transactionPerformed(passwordDao::create, password);
     }
 
     @Override
     public boolean delete(Password password) {
-        return passwordDao.delete(password);
+        return transactionPerformer.transactionPerformed(passwordDao::delete, password);
     }
 
     @Override

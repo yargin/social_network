@@ -1,22 +1,33 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.Dao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.utils.TransactionPerformer;
+import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.modeldaos.implementations.NewDialogDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.relationdaos.onetomany.implementations.NewAccountDialogsDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
 @Component("dialogDaoFacade")
 public class DialogDaoFacadeImpl implements DialogDaoFacade {
-    private final Dao<Dialog> dialogDao;
-    private final OneToManyDao<Dialog> accountDialogsDao;
+    private NewDialogDao dialogDao;
+    private NewAccountDialogsDao accountDialogsDao;
+    private TransactionPerformer transactionPerformer;
 
-    public DialogDaoFacadeImpl(@Qualifier("dialogDao") Dao<Dialog> dialogDao,
-                               @Qualifier("accountDialogsDao") OneToManyDao<Dialog> accountDialogs) {
+    @Autowired
+    public void setDialogDao(NewDialogDao dialogDao) {
         this.dialogDao = dialogDao;
-        this.accountDialogsDao = accountDialogs;
+    }
+
+    @Autowired
+    public void setAccountDialogsDao(NewAccountDialogsDao accountDialogsDao) {
+        this.accountDialogsDao = accountDialogsDao;
+    }
+
+    @Autowired
+    public void setTransactionPerformer(TransactionPerformer transactionPerformer) {
+        this.transactionPerformer = transactionPerformer;
     }
 
     @Override
@@ -36,17 +47,17 @@ public class DialogDaoFacadeImpl implements DialogDaoFacade {
 
     @Override
     public boolean create(Dialog dialog) {
-        return dialogDao.create(dialog);
+        return transactionPerformer.transactionPerformed(dialogDao::create, dialog);
     }
 
     @Override
     public boolean update(Dialog dialog) {
-        return dialogDao.update(dialog);
+        return transactionPerformer.transactionPerformed(dialogDao::update, dialog);
     }
 
     @Override
     public boolean delete(Dialog dialog) {
-        return dialogDao.delete(dialog);
+        return transactionPerformer.transactionPerformed(dialogDao::delete, dialog);
     }
 
     @Override

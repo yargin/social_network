@@ -1,24 +1,33 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.AccountWallMessage;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.Dao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.utils.TransactionPerformer;
+import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.modeldaos.implementations.messages.NewAccountWallMessageDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.relationdaos.onetomany.implementations.messages.NewAccountWallMessagesDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 
 @Repository("accountWallMessageDaoFacade")
 public class AccountWallMessageDaoFacadeImpl implements AccountWallMessageDaoFacade {
-    private final Dao<AccountWallMessage> accountWallMessageDao;
-    private final OneToManyDao<AccountWallMessage> accountWallMessagesDao;
+    private NewAccountWallMessageDao accountWallMessageDao;
+    private NewAccountWallMessagesDao accountWallMessagesDao;
+    private TransactionPerformer transactionPerformer;
 
-    public AccountWallMessageDaoFacadeImpl(@Qualifier("accountWallMessageDao") Dao<AccountWallMessage>
-                                                   accountWallMessageDao,
-                                           @Qualifier("accountWallMessagesDao") OneToManyDao<AccountWallMessage>
-                                                   accountWallMessagesDao) {
+    @Autowired
+    public void setAccountWallMessageDao(NewAccountWallMessageDao accountWallMessageDao) {
         this.accountWallMessageDao = accountWallMessageDao;
+    }
+
+    @Autowired
+    public void setAccountWallMessagesDao(NewAccountWallMessagesDao accountWallMessagesDao) {
         this.accountWallMessagesDao = accountWallMessagesDao;
+    }
+
+    @Autowired
+    public void setTransactionPerformer(TransactionPerformer transactionPerformer) {
+        this.transactionPerformer = transactionPerformer;
     }
 
     @Override
@@ -33,17 +42,17 @@ public class AccountWallMessageDaoFacadeImpl implements AccountWallMessageDaoFac
 
     @Override
     public boolean create(AccountWallMessage message) {
-        return accountWallMessageDao.create(message);
+        return transactionPerformer.transactionPerformed(accountWallMessageDao::create, message);
     }
 
     @Override
     public boolean update(AccountWallMessage message) {
-        return accountWallMessageDao.update(message);
+        return transactionPerformer.transactionPerformed(accountWallMessageDao::update, message);
     }
 
     @Override
     public boolean delete(AccountWallMessage message) {
-        return accountWallMessageDao.delete(message);
+        return transactionPerformer.transactionPerformed(accountWallMessageDao::delete, message);
     }
 
     @Override

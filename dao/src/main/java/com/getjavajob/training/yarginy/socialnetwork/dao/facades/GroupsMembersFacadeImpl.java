@@ -2,20 +2,25 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.ManyToManyDao;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.relationdaos.manytomany.implementations.NewGroupMembershipDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.relationdaos.manytomany.implementations.NewGroupRequestsDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
 @Component("groupsMembersDaoFacade")
 public class GroupsMembersFacadeImpl implements GroupsMembersDaoFacade {
-    private final ManyToManyDao<Account, Group> groupMembershipDao;
-    private final ManyToManyDao<Account, Group> membershipRequestsDao;
+    private NewGroupMembershipDao groupMembershipDao;
+    private NewGroupRequestsDao membershipRequestsDao;
 
-    public GroupsMembersFacadeImpl(@Qualifier("groupMembershipDao") ManyToManyDao<Account, Group> groupMembershipDao,
-                                   @Qualifier("groupRequestsDao") ManyToManyDao<Account, Group> membershipRequestsDao) {
+    @Autowired
+    public void setGroupMembershipDao(NewGroupMembershipDao groupMembershipDao) {
         this.groupMembershipDao = groupMembershipDao;
+    }
+
+    @Autowired
+    public void setMembershipRequestsDao(NewGroupRequestsDao membershipRequestsDao) {
         this.membershipRequestsDao = membershipRequestsDao;
     }
 
@@ -31,12 +36,22 @@ public class GroupsMembersFacadeImpl implements GroupsMembersDaoFacade {
 
     @Override
     public boolean joinGroup(long accountId, long groupId) {
-        return groupMembershipDao.create(accountId, groupId);
+        try {
+            groupMembershipDao.create(accountId, groupId);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 
     @Override
     public boolean leaveGroup(long accountId, long groupId) {
-        return groupMembershipDao.delete(accountId, groupId);
+        try {
+            groupMembershipDao.delete(accountId, groupId);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 
     @Override
@@ -51,12 +66,22 @@ public class GroupsMembersFacadeImpl implements GroupsMembersDaoFacade {
 
     @Override
     public boolean createRequest(long accountId, long groupId) {
-        return membershipRequestsDao.create(accountId, groupId);
+        try {
+            membershipRequestsDao.create(accountId, groupId);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 
     @Override
     public boolean removeRequest(long accountId, long groupId) {
-        return membershipRequestsDao.delete(accountId, groupId);
+        try {
+            membershipRequestsDao.delete(accountId, groupId);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 
     @Override

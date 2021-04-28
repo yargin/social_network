@@ -1,22 +1,33 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.DialogMessage;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.Dao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.utils.TransactionPerformer;
+import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.modeldaos.implementations.messages.NewDialogMessageDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.relationdaos.onetomany.implementations.messages.NewDialogMessagesDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
 @Component("dialogMessageDaoFacade")
 public class DialogMessageDaoFacadeImpl implements DialogMessageDaoFacade {
-    private final Dao<DialogMessage> dialogMessageDao;
-    private final OneToManyDao<DialogMessage> dialogsMessagesDao;
+    private NewDialogMessageDao dialogMessageDao;
+    private NewDialogMessagesDao dialogsMessagesDao;
+    private TransactionPerformer transactionPerformer;
 
-    public DialogMessageDaoFacadeImpl(@Qualifier("dialogMessageDao") Dao<DialogMessage> dialogMessageDao,
-                                      @Qualifier("dialogMessagesDao") OneToManyDao<DialogMessage> dialogsMessagesDao) {
+    @Autowired
+    public void setDialogMessageDao(NewDialogMessageDao dialogMessageDao) {
         this.dialogMessageDao = dialogMessageDao;
+    }
+
+    @Autowired
+    public void setDialogsMessagesDao(NewDialogMessagesDao dialogsMessagesDao) {
         this.dialogsMessagesDao = dialogsMessagesDao;
+    }
+
+    @Autowired
+    public void setTransactionPerformer(TransactionPerformer transactionPerformer) {
+        this.transactionPerformer = transactionPerformer;
     }
 
     @Override
@@ -31,17 +42,17 @@ public class DialogMessageDaoFacadeImpl implements DialogMessageDaoFacade {
 
     @Override
     public boolean create(DialogMessage message) {
-        return dialogMessageDao.create(message);
+        return transactionPerformer.transactionPerformed(dialogMessageDao::create, message);
     }
 
     @Override
     public boolean update(DialogMessage message) {
-        return dialogMessageDao.update(message);
+        return transactionPerformer.transactionPerformed(dialogMessageDao::update, message);
     }
 
     @Override
     public boolean delete(DialogMessage message) {
-        return dialogMessageDao.delete(message);
+        return transactionPerformer.transactionPerformed(dialogMessageDao::delete, message);
     }
 
     @Override

@@ -1,22 +1,33 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.BatchDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.utils.TransactionPerformer;
+import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.modeldaos.implementations.NewPhoneDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.relationdaos.onetomany.implementations.NewAccountPhonesDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
 @Component("phoneDaoFacade")
 public class PhoneDaoFacadeImpl implements PhoneDaoFacade {
-    private final BatchDao<Phone> phoneDao;
-    private final OneToManyDao<Phone> accountsPhonesDao;
+    private NewPhoneDao phoneDao;
+    private NewAccountPhonesDao accountsPhonesDao;
+    private TransactionPerformer transactionPerformer;
 
-    public PhoneDaoFacadeImpl(@Qualifier("phoneDao") BatchDao<Phone> phoneDao,
-                              @Qualifier("accountPhonesDao") OneToManyDao<Phone> accountsPhonesDao) {
+    @Autowired
+    public void setPhoneDao(NewPhoneDao phoneDao) {
         this.phoneDao = phoneDao;
+    }
+
+    @Autowired
+    public void setAccountsPhonesDao(NewAccountPhonesDao accountsPhonesDao) {
         this.accountsPhonesDao = accountsPhonesDao;
+    }
+
+    @Autowired
+    public void setTransactionPerformer(TransactionPerformer transactionPerformer) {
+        this.transactionPerformer = transactionPerformer;
     }
 
     @Override
@@ -31,27 +42,27 @@ public class PhoneDaoFacadeImpl implements PhoneDaoFacade {
 
     @Override
     public boolean create(Phone phone) {
-        return phoneDao.create(phone);
+        return transactionPerformer.transactionPerformed(phoneDao::create, phone);
     }
 
     @Override
     public boolean update(Phone phone) {
-        return phoneDao.update(phone);
+        return transactionPerformer.transactionPerformed(phoneDao::update, phone);
     }
 
     @Override
     public boolean update(Collection<Phone> storedPhones, Collection<Phone> newPhones) {
-        return phoneDao.update(storedPhones, newPhones);
+        return transactionPerformer.transactionPerformed(phoneDao::update, storedPhones, newPhones);
     }
 
     @Override
     public boolean delete(Phone phone) {
-        return phoneDao.delete(phone);
+        return transactionPerformer.transactionPerformed(phoneDao::delete, phone);
     }
 
     @Override
     public boolean delete(Collection<Phone> phones) {
-        return phoneDao.delete(phones);
+        return transactionPerformer.transactionPerformed(phoneDao::delete, phones);
     }
 
     @Override
@@ -71,6 +82,6 @@ public class PhoneDaoFacadeImpl implements PhoneDaoFacade {
 
     @Override
     public boolean create(Collection<Phone> phones) {
-        return phoneDao.create(phones);
+        return transactionPerformer.transactionPerformed(phoneDao::create, phones);
     }
 }

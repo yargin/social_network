@@ -2,27 +2,40 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
-import com.getjavajob.training.yarginy.socialnetwork.dao.models.Dao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.ManyToManyDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.utils.TransactionPerformer;
+import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.modeldaos.implementations.NewGroupDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.relationdaos.manytomany.implementations.NewGroupMembershipDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.relationdaos.onetomany.implementations.NewOwnerGroupsDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
 @Component("groupDaoFacade")
 public class GroupDaoFacadeImpl implements GroupDaoFacade {
-    private final Dao<Group> groupDao;
-    private final OneToManyDao<Group> accountsOwnedGroupsDao;
-    private final ManyToManyDao<Account, Group> accountsGroupMembershipDao;
+    private NewGroupDao groupDao;
+    private NewOwnerGroupsDao accountsOwnedGroupsDao;
+    private NewGroupMembershipDao accountsGroupMembershipDao;
+    private TransactionPerformer transactionPerformer;
 
-    public GroupDaoFacadeImpl(@Qualifier("groupDao") Dao<Group> groupDao,
-                              @Qualifier("accountGroupsDao") OneToManyDao<Group> accountsOwnedGroupsDao,
-                              @Qualifier("groupMembershipDao") ManyToManyDao<Account, Group>
-                                      accountsGroupMembershipDao) {
+    @Autowired
+    public void setGroupDao(NewGroupDao groupDao) {
         this.groupDao = groupDao;
+    }
+
+    @Autowired
+    public void setAccountsOwnedGroupsDao(NewOwnerGroupsDao accountsOwnedGroupsDao) {
         this.accountsOwnedGroupsDao = accountsOwnedGroupsDao;
+    }
+
+    @Autowired
+    public void setAccountsGroupMembershipDao(NewGroupMembershipDao accountsGroupMembershipDao) {
         this.accountsGroupMembershipDao = accountsGroupMembershipDao;
+    }
+
+    @Autowired
+    public void setTransactionPerformer(TransactionPerformer transactionPerformer) {
+        this.transactionPerformer = transactionPerformer;
     }
 
     @Override
@@ -42,17 +55,17 @@ public class GroupDaoFacadeImpl implements GroupDaoFacade {
 
     @Override
     public boolean create(Group group) {
-        return groupDao.create(group);
+        return transactionPerformer.transactionPerformed(groupDao::create, group);
     }
 
     @Override
     public boolean update(Group group) {
-        return groupDao.update(group);
+        return transactionPerformer.transactionPerformed(groupDao::update, group);
     }
 
     @Override
     public boolean delete(Group group) {
-        return groupDao.delete(group);
+        return transactionPerformer.transactionPerformed(groupDao::delete, group);
     }
 
     @Override
@@ -82,11 +95,11 @@ public class GroupDaoFacadeImpl implements GroupDaoFacade {
 
     @Override
     public boolean addMember(long accountId, long groupId) {
-        return accountsGroupMembershipDao.create(accountId, groupId);
+        return transactionPerformer.transactionPerformed(accountsGroupMembershipDao::create, accountId, groupId);
     }
 
     @Override
     public boolean removeMember(long accountId, long groupId) {
-        return accountsGroupMembershipDao.delete(accountId, groupId);
+        return transactionPerformer.transactionPerformed(accountsGroupMembershipDao::delete, accountId, groupId);
     }
 }
