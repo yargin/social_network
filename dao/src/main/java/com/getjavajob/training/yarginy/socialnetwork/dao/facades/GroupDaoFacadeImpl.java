@@ -2,39 +2,26 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.utils.TransactionPerformer;
-import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.modeldaos.implementations.NewGroupDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.relationdaos.manytomany.implementations.NewGroupMembershipDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.relationdaos.onetomany.implementations.NewOwnerGroupsDao;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.TransactionPerformer;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldaos.implementations.GroupDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.manytomany.implementations.GroupMembershipDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.onetomany.implementations.OwnerGroupsDao;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
 @Component("groupDaoFacade")
 public class GroupDaoFacadeImpl implements GroupDaoFacade {
-    private NewGroupDao groupDao;
-    private NewOwnerGroupsDao accountsOwnedGroupsDao;
-    private NewGroupMembershipDao accountsGroupMembershipDao;
-    private TransactionPerformer transactionPerformer;
+    private final GroupDao groupDao;
+    private final OwnerGroupsDao accountsOwnedGroupsDao;
+    private final GroupMembershipDao accountsGroupMembershipDao;
+    private final TransactionPerformer transactionPerformer;
 
-    @Autowired
-    public void setGroupDao(NewGroupDao groupDao) {
+    public GroupDaoFacadeImpl(GroupDao groupDao, OwnerGroupsDao accountsOwnedGroupsDao,
+                              GroupMembershipDao accountsGroupMembershipDao, TransactionPerformer transactionPerformer) {
         this.groupDao = groupDao;
-    }
-
-    @Autowired
-    public void setAccountsOwnedGroupsDao(NewOwnerGroupsDao accountsOwnedGroupsDao) {
         this.accountsOwnedGroupsDao = accountsOwnedGroupsDao;
-    }
-
-    @Autowired
-    public void setAccountsGroupMembershipDao(NewGroupMembershipDao accountsGroupMembershipDao) {
         this.accountsGroupMembershipDao = accountsGroupMembershipDao;
-    }
-
-    @Autowired
-    public void setTransactionPerformer(TransactionPerformer transactionPerformer) {
         this.transactionPerformer = transactionPerformer;
     }
 

@@ -1,25 +1,20 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.utils.TransactionPerformer;
-import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.relationdaos.manytomany.implementations.NewGroupModeratorsDao;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.TransactionPerformer;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.manytomany.implementations.GroupModeratorsDao;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
 @Component("groupsModeratorsDaoFacade")
 public class GroupsModeratorsDaoFacadeImpl implements GroupsModeratorsDaoFacade {
-    private NewGroupModeratorsDao groupModeratorsDao;
-    private TransactionPerformer transactionPerformer;
+    private final GroupModeratorsDao groupModeratorsDao;
+    private final TransactionPerformer transactionPerformer;
 
-    @Autowired
-    public void setGroupModeratorsDao(NewGroupModeratorsDao groupModeratorsDao) {
+    public GroupsModeratorsDaoFacadeImpl(GroupModeratorsDao groupModeratorsDao,
+                                         TransactionPerformer transactionPerformer) {
         this.groupModeratorsDao = groupModeratorsDao;
-    }
-
-    @Autowired
-    public void setTransactionPerformer(TransactionPerformer transactionPerformer) {
         this.transactionPerformer = transactionPerformer;
     }
 

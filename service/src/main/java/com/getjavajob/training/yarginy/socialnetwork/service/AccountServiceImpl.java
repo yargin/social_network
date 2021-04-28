@@ -4,6 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.TransactionPerformer;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsDaoFacade;
@@ -22,13 +23,18 @@ public class AccountServiceImpl implements AccountService {
     private final PhoneDaoFacade phoneDaoFacade;
     private final FriendshipsDaoFacade friendshipDao;
     private final DialogDaoFacade dialogsDao;
+    private final TransactionPerformer transactionPerformer;
+    private final AccountServiceTransactional serviceTransactional;
 
-    public AccountServiceImpl(AccountDaoFacade accountDaoFacade, PhoneDaoFacade phoneDaoFacade, FriendshipsDaoFacade friendshipDao,
-                              DialogDaoFacade dialogDaoFacade) {
+    public AccountServiceImpl(AccountDaoFacade accountDaoFacade, PhoneDaoFacade phoneDaoFacade,
+                              FriendshipsDaoFacade friendshipDao, DialogDaoFacade dialogDaoFacade,
+                              TransactionPerformer transactionPerformer, AccountServiceTransactional serviceTransactional) {
         this.accountDaoFacade = accountDaoFacade;
         this.phoneDaoFacade = phoneDaoFacade;
         this.friendshipDao = friendshipDao;
         this.dialogsDao = dialogDaoFacade;
+        this.transactionPerformer = transactionPerformer;
+        this.serviceTransactional = serviceTransactional;
     }
 
     @Override
@@ -71,18 +77,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean addFriend(long firstId, long secondId) {
-        try {
-            addFriendTransactional(firstId, secondId);
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
-        return true;
-    }
-
-    public void addFriendTransactional(long firstId, long secondId) {
-        if (!friendshipDao.createFriendship(firstId, secondId) || !friendshipDao.deleteRequest(firstId, secondId)) {
-            throw new IllegalArgumentException();
-        }
+        return transactionPerformer.transactionPerformed(serviceTransactional::addFriendTransactional, firstId, secondId);
     }
 
     @Override

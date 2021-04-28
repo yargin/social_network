@@ -1,32 +1,24 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.AccountWallMessage;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.utils.TransactionPerformer;
-import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.modeldaos.implementations.messages.NewAccountWallMessageDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.relationdaos.onetomany.implementations.messages.NewAccountWallMessagesDao;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.TransactionPerformer;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldaos.implementations.messages.AccountWallMessageDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.onetomany.implementations.messages.AccountWallMessagesDao;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 
 @Repository("accountWallMessageDaoFacade")
 public class AccountWallMessageDaoFacadeImpl implements AccountWallMessageDaoFacade {
-    private NewAccountWallMessageDao accountWallMessageDao;
-    private NewAccountWallMessagesDao accountWallMessagesDao;
-    private TransactionPerformer transactionPerformer;
+    private final AccountWallMessageDao accountWallMessageDao;
+    private final AccountWallMessagesDao accountWallMessagesDao;
+    private final TransactionPerformer transactionPerformer;
 
-    @Autowired
-    public void setAccountWallMessageDao(NewAccountWallMessageDao accountWallMessageDao) {
+    public AccountWallMessageDaoFacadeImpl(AccountWallMessageDao accountWallMessageDao,
+                                           AccountWallMessagesDao accountWallMessagesDao,
+                                           TransactionPerformer transactionPerformer) {
         this.accountWallMessageDao = accountWallMessageDao;
-    }
-
-    @Autowired
-    public void setAccountWallMessagesDao(NewAccountWallMessagesDao accountWallMessagesDao) {
         this.accountWallMessagesDao = accountWallMessagesDao;
-    }
-
-    @Autowired
-    public void setTransactionPerformer(TransactionPerformer transactionPerformer) {
         this.transactionPerformer = transactionPerformer;
     }
 

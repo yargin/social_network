@@ -3,7 +3,6 @@ package com.getjavajob.training.yarginy.socialnetwork.service.messages;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.GroupWallMessage;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages.GroupWallMessageFacadeDaoImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -14,10 +13,9 @@ import static java.util.Objects.isNull;
 
 @Service
 public class GroupWallMessageService implements MessageService<Group, GroupWallMessage> {
-    private GroupWallMessageFacadeDaoImpl messageDao;
+    private final GroupWallMessageFacadeDaoImpl messageDao;
 
-    @Autowired
-    public void setMessageDao(GroupWallMessageFacadeDaoImpl messageDao) {
+    public GroupWallMessageService(GroupWallMessageFacadeDaoImpl messageDao) {
         this.messageDao = messageDao;
     }
 

@@ -1,32 +1,23 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.DialogMessage;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.utils.TransactionPerformer;
-import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.modeldaos.implementations.messages.NewDialogMessageDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.relationdaos.onetomany.implementations.messages.NewDialogMessagesDao;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.TransactionPerformer;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldaos.implementations.messages.DialogMessageDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.onetomany.implementations.messages.DialogMessagesDao;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
 @Component("dialogMessageDaoFacade")
 public class DialogMessageDaoFacadeImpl implements DialogMessageDaoFacade {
-    private NewDialogMessageDao dialogMessageDao;
-    private NewDialogMessagesDao dialogsMessagesDao;
-    private TransactionPerformer transactionPerformer;
+    private final DialogMessageDao dialogMessageDao;
+    private final DialogMessagesDao dialogsMessagesDao;
+    private final TransactionPerformer transactionPerformer;
 
-    @Autowired
-    public void setDialogMessageDao(NewDialogMessageDao dialogMessageDao) {
+    public DialogMessageDaoFacadeImpl(DialogMessageDao dialogMessageDao, DialogMessagesDao dialogsMessagesDao,
+                                      TransactionPerformer transactionPerformer) {
         this.dialogMessageDao = dialogMessageDao;
-    }
-
-    @Autowired
-    public void setDialogsMessagesDao(NewDialogMessagesDao dialogsMessagesDao) {
         this.dialogsMessagesDao = dialogsMessagesDao;
-    }
-
-    @Autowired
-    public void setTransactionPerformer(TransactionPerformer transactionPerformer) {
         this.transactionPerformer = transactionPerformer;
     }
 

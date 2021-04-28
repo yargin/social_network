@@ -1,23 +1,17 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Password;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.utils.TransactionPerformer;
-import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.modeldaos.implementations.NewPasswordDao;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.TransactionPerformer;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldaos.implementations.PasswordDao;
 import org.springframework.stereotype.Component;
 
 @Component("passwordDaoFacade")
 public class PasswordDaoFacadeImpl implements PasswordDaoFacade {
-    private NewPasswordDao passwordDao;
-    private TransactionPerformer transactionPerformer;
+    private final PasswordDao passwordDao;
+    private final TransactionPerformer transactionPerformer;
 
-    @Autowired
-    public void setPasswordDao(NewPasswordDao passwordDao) {
+    public PasswordDaoFacadeImpl(PasswordDao passwordDao, TransactionPerformer transactionPerformer) {
         this.passwordDao = passwordDao;
-    }
-
-    @Autowired
-    public void setTransactionPerformer(TransactionPerformer transactionPerformer) {
         this.transactionPerformer = transactionPerformer;
     }
 

@@ -1,32 +1,22 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.utils.TransactionPerformer;
-import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.modeldaos.implementations.NewDialogDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.relationdaos.onetomany.implementations.NewAccountDialogsDao;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.TransactionPerformer;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldaos.implementations.DialogDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.onetomany.implementations.AccountDialogsDao;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
 @Component("dialogDaoFacade")
 public class DialogDaoFacadeImpl implements DialogDaoFacade {
-    private NewDialogDao dialogDao;
-    private NewAccountDialogsDao accountDialogsDao;
-    private TransactionPerformer transactionPerformer;
+    private final DialogDao dialogDao;
+    private final AccountDialogsDao accountDialogsDao;
+    private final TransactionPerformer transactionPerformer;
 
-    @Autowired
-    public void setDialogDao(NewDialogDao dialogDao) {
+    public DialogDaoFacadeImpl(DialogDao dialogDao, AccountDialogsDao accountDialogsDao, TransactionPerformer transactionPerformer) {
         this.dialogDao = dialogDao;
-    }
-
-    @Autowired
-    public void setAccountDialogsDao(NewAccountDialogsDao accountDialogsDao) {
         this.accountDialogsDao = accountDialogsDao;
-    }
-
-    @Autowired
-    public void setTransactionPerformer(TransactionPerformer transactionPerformer) {
         this.transactionPerformer = transactionPerformer;
     }
 

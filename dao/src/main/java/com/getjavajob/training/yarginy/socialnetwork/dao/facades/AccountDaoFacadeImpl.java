@@ -3,53 +3,33 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.utils.TransactionPerformer;
-import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.modeldaos.implementations.NewAccountDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.relationdaos.manytomany.implementations.NewGroupMembershipDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.relationdaos.onetomany.implementations.NewAccountPhonesDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.relationdaos.onetomany.implementations.NewOwnerGroupsDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.relationdaos.selfmanytomany.implementations.NewFriendshipsDao;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.TransactionPerformer;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldaos.implementations.AccountDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.manytomany.implementations.GroupMembershipDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.onetomany.implementations.AccountPhonesDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.onetomany.implementations.OwnerGroupsDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.selfmanytomany.implementations.FriendshipsDao;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
 @Component("accountDaoFacade")
 public class AccountDaoFacadeImpl implements AccountDaoFacade {
-    private NewAccountDao accountDao;
-    private NewOwnerGroupsDao accountGroupsDao;
-    private NewAccountPhonesDao accountPhonesDao;
-    private NewGroupMembershipDao accountsInGroupsDao;
-    private NewFriendshipsDao accountFriendsDao;
-    private TransactionPerformer transactionPerformer;
+    private final AccountDao accountDao;
+    private final OwnerGroupsDao accountGroupsDao;
+    private final AccountPhonesDao accountPhonesDao;
+    private final GroupMembershipDao accountsInGroupsDao;
+    private final FriendshipsDao accountFriendsDao;
+    private final TransactionPerformer transactionPerformer;
 
-    @Autowired
-    public void setAccountDao(NewAccountDao accountDao) {
+    public AccountDaoFacadeImpl(AccountDao accountDao, OwnerGroupsDao accountGroupsDao, AccountPhonesDao accountPhonesDao,
+                                GroupMembershipDao accountsInGroupsDao, FriendshipsDao accountFriendsDao,
+                                TransactionPerformer transactionPerformer) {
         this.accountDao = accountDao;
-    }
-
-    @Autowired
-    public void setAccountGroupsDao(NewOwnerGroupsDao accountGroupsDao) {
         this.accountGroupsDao = accountGroupsDao;
-    }
-
-    @Autowired
-    public void setAccountPhonesDao(NewAccountPhonesDao accountPhonesDao) {
         this.accountPhonesDao = accountPhonesDao;
-    }
-
-    @Autowired
-    public void setAccountsInGroupsDao(NewGroupMembershipDao accountsInGroupsDao) {
         this.accountsInGroupsDao = accountsInGroupsDao;
-    }
-
-    @Autowired
-    public void setAccountFriendsDao(NewFriendshipsDao accountFriendsDao) {
         this.accountFriendsDao = accountFriendsDao;
-    }
-
-    @Autowired
-    public void setTransactionPerformer(TransactionPerformer transactionPerformer) {
         this.transactionPerformer = transactionPerformer;
     }
 

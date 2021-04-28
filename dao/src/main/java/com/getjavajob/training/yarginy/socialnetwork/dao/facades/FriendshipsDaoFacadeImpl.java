@@ -1,32 +1,23 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.utils.TransactionPerformer;
-import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.relationdaos.manytomany.implementations.NewFriendshipRequestsDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.relationdaos.selfmanytomany.implementations.NewFriendshipsDao;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.TransactionPerformer;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.manytomany.implementations.FriendshipRequestsDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.selfmanytomany.implementations.FriendshipsDao;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
 @Component("friendshipsDaoFacade")
 public class FriendshipsDaoFacadeImpl implements FriendshipsDaoFacade {
-    private NewFriendshipsDao friendshipDao;
-    private NewFriendshipRequestsDao friendshipRequestsDao;
-    private TransactionPerformer transactionPerformer;
+    private final FriendshipsDao friendshipDao;
+    private final FriendshipRequestsDao friendshipRequestsDao;
+    private final TransactionPerformer transactionPerformer;
 
-    @Autowired
-    public void setFriendshipDao(NewFriendshipsDao friendshipDao) {
+    public FriendshipsDaoFacadeImpl(FriendshipsDao friendshipDao, FriendshipRequestsDao friendshipRequestsDao,
+                                    TransactionPerformer transactionPerformer) {
         this.friendshipDao = friendshipDao;
-    }
-
-    @Autowired
-    public void setFriendshipRequestsDao(NewFriendshipRequestsDao friendshipRequestsDao) {
         this.friendshipRequestsDao = friendshipRequestsDao;
-    }
-
-    @Autowired
-    public void setTransactionPerformer(TransactionPerformer transactionPerformer) {
         this.transactionPerformer = transactionPerformer;
     }
 

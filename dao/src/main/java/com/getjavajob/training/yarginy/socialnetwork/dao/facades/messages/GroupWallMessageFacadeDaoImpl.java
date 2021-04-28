@@ -1,32 +1,24 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.GroupWallMessage;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.utils.TransactionPerformer;
-import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.modeldaos.implementations.messages.NewGroupWallMessageDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.relationdaos.onetomany.implementations.messages.NewGroupWallMessagesDAo;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.TransactionPerformer;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldaos.implementations.messages.GroupWallMessageDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.onetomany.implementations.messages.GroupWallMessagesDAo;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
 @Component("groupWallMessageDaoFacade")
 public class GroupWallMessageFacadeDaoImpl implements GroupWallMessageDaoFacade {
-    private NewGroupWallMessageDao groupWallMessageDao;
-    private NewGroupWallMessagesDAo groupWallMessagesDao;
-    private TransactionPerformer transactionPerformer;
+    private final GroupWallMessageDao groupWallMessageDao;
+    private final GroupWallMessagesDAo groupWallMessagesDao;
+    private final TransactionPerformer transactionPerformer;
 
-    @Autowired
-    public void setGroupWallMessageDao(NewGroupWallMessageDao groupWallMessageDao) {
+    public GroupWallMessageFacadeDaoImpl(GroupWallMessageDao groupWallMessageDao,
+                                         GroupWallMessagesDAo groupWallMessagesDao,
+                                         TransactionPerformer transactionPerformer) {
         this.groupWallMessageDao = groupWallMessageDao;
-    }
-
-    @Autowired
-    public void setGroupWallMessagesDao(NewGroupWallMessagesDAo groupWallMessagesDao) {
         this.groupWallMessagesDao = groupWallMessagesDao;
-    }
-
-    @Autowired
-    public void setTransactionPerformer(TransactionPerformer transactionPerformer) {
         this.transactionPerformer = transactionPerformer;
     }
 

@@ -1,32 +1,23 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.utils.TransactionPerformer;
-import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.modeldaos.implementations.NewPhoneDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.relationdaos.onetomany.implementations.NewAccountPhonesDao;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.TransactionPerformer;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldaos.implementations.PhoneDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.onetomany.implementations.AccountPhonesDao;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
 @Component("phoneDaoFacade")
 public class PhoneDaoFacadeImpl implements PhoneDaoFacade {
-    private NewPhoneDao phoneDao;
-    private NewAccountPhonesDao accountsPhonesDao;
-    private TransactionPerformer transactionPerformer;
+    private final PhoneDao phoneDao;
+    private final AccountPhonesDao accountsPhonesDao;
+    private final TransactionPerformer transactionPerformer;
 
-    @Autowired
-    public void setPhoneDao(NewPhoneDao phoneDao) {
+    public PhoneDaoFacadeImpl(PhoneDao phoneDao, AccountPhonesDao accountsPhonesDao,
+                              TransactionPerformer transactionPerformer) {
         this.phoneDao = phoneDao;
-    }
-
-    @Autowired
-    public void setAccountsPhonesDao(NewAccountPhonesDao accountsPhonesDao) {
         this.accountsPhonesDao = accountsPhonesDao;
-    }
-
-    @Autowired
-    public void setTransactionPerformer(TransactionPerformer transactionPerformer) {
         this.transactionPerformer = transactionPerformer;
     }
 

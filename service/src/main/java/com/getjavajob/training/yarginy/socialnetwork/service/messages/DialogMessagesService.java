@@ -14,10 +14,9 @@ import static java.util.Objects.isNull;
 
 @Service
 public class DialogMessagesService implements MessageService<Dialog, DialogMessage> {
-    private DialogMessageDaoFacadeImpl messageDao;
+    private final DialogMessageDaoFacadeImpl messageDao;
 
-    @Autowired
-    public void setMessageDao(DialogMessageDaoFacadeImpl messageDao) {
+    public DialogMessagesService(DialogMessageDaoFacadeImpl messageDao) {
         this.messageDao = messageDao;
     }
 

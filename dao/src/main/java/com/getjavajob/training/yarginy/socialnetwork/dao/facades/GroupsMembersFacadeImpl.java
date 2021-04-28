@@ -2,25 +2,19 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
-import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.relationdaos.manytomany.implementations.NewGroupMembershipDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.newdaos.relationdaos.manytomany.implementations.NewGroupRequestsDao;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.manytomany.implementations.GroupMembershipDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.manytomany.implementations.GroupRequestsDao;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
 @Component("groupsMembersDaoFacade")
 public class GroupsMembersFacadeImpl implements GroupsMembersDaoFacade {
-    private NewGroupMembershipDao groupMembershipDao;
-    private NewGroupRequestsDao membershipRequestsDao;
+    private final GroupMembershipDao groupMembershipDao;
+    private final GroupRequestsDao membershipRequestsDao;
 
-    @Autowired
-    public void setGroupMembershipDao(NewGroupMembershipDao groupMembershipDao) {
+    public GroupsMembersFacadeImpl(GroupMembershipDao groupMembershipDao, GroupRequestsDao membershipRequestsDao) {
         this.groupMembershipDao = groupMembershipDao;
-    }
-
-    @Autowired
-    public void setMembershipRequestsDao(NewGroupRequestsDao membershipRequestsDao) {
         this.membershipRequestsDao = membershipRequestsDao;
     }
 
