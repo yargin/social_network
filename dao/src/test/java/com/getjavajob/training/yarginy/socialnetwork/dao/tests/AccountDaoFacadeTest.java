@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Arrays;
 import java.util.Collection;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -33,7 +35,6 @@ public class AccountDaoFacadeTest {
         account.setEmail("test@test.test");
         account.setName("test");
         account.setSurname("test");
-//        accountDao.delete(accountDao.select(account));
     }
 
     @Test
@@ -59,10 +60,30 @@ public class AccountDaoFacadeTest {
 
     @Test
     public void testSelectAccount() {
+        byte[] bytes = new byte[10000];
+        byte i = 1;
+        Arrays.fill(bytes, i);
+        account.setPhoto(bytes);
+        accountDao.create(account);
+        Account actual = accountDao.select(account);
+        assertEquals(account, actual);
+        actual = accountDao.select(actual);
+        assertEquals(account, actual);
+        System.out.println("==============================================");
+        actual = accountDao.selectFullInfo(account.getId());
+        assertArrayEquals(account.getPhoto(), actual.getPhoto());
+    }
+
+    @Test
+    public void testSelectAccountById() {
+        byte[] bytes = new byte[10000];
+        byte i = 1;
+        Arrays.fill(bytes, i);
+        account.setPhoto(bytes);
         accountDao.create(account);
         Account actual = accountDao.select(account.getId());
         assertEquals(account, actual);
-        actual = accountDao.select(actual);
+        actual = accountDao.select(actual.getId());
         assertEquals(account, actual);
     }
 

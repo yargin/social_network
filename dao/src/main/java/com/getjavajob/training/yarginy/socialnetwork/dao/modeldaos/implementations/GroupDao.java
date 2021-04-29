@@ -5,8 +5,11 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldaos.GenericBatchDao;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullGroup;
@@ -16,7 +19,15 @@ import static java.util.Objects.isNull;
 public class GroupDao extends GenericBatchDao<Group> {
     @Override
     protected Supplier<TypedQuery<Group>> getSelectAll(EntityManager entityManager) {
-        return () -> entityManager.createQuery("select g from Group g join fetch g.owner o", Group.class);
+        return () -> entityManager.createQuery("select g from Group g", Group.class);
+    }
+
+    @Override
+    public Group selectFullInfo(long id) {
+        EntityGraph<?> graph = entityManager.createEntityGraph("graph.Group.allProperties");
+        Map<String, Object> hints = new HashMap<>();
+        hints.put("javax.persistence.fetchgraph", graph);
+        return entityManager.find(Group.class, id, hints);
     }
 
     @Override
@@ -27,7 +38,7 @@ public class GroupDao extends GenericBatchDao<Group> {
     @Override
     protected Supplier<TypedQuery<Group>> getSelectByAltKey(EntityManager entityManager, Group group) {
         return () -> {
-            TypedQuery<Group> query = entityManager.createQuery("select g from Group g join fetch g.owner o " +
+            TypedQuery<Group> query = entityManager.createQuery("select g from Group g join g.owner o " +
                     "where g.name = :name", Group.class);
             query.setParameter("name", group.getName());
             return query;

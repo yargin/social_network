@@ -10,17 +10,19 @@ import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.Table;
 
 @Component
 @Scope("prototype")
 @Entity
 @Table(name = "account_wall_messages")
+@NamedEntityGraph(name = "graph.AccountWallMessage.allProperties", includeAllAttributes = true)
 public class AccountWallMessage extends Message<Account> {
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "receiver_id", foreignKey = @ForeignKey(name = "c_32"))
     private Account receiver;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "author", foreignKey = @ForeignKey(name = "c_31"))
     private Account author;
 

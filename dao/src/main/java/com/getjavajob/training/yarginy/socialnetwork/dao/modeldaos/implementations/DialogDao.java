@@ -5,8 +5,11 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldaos.GenericDao;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullDialog;
@@ -16,8 +19,15 @@ import static java.util.Objects.isNull;
 public class DialogDao extends GenericDao<Dialog> {
     @Override
     protected Supplier<TypedQuery<Dialog>> getSelectAll(EntityManager entityManager) {
-        return () -> entityManager.createQuery("select d from Dialog d join fetch d.firstAccount f " +
-                "join fetch d.secondAccount s", Dialog.class);
+        return () -> entityManager.createQuery("select d from Dialog d", Dialog.class);
+    }
+
+    @Override
+    public Dialog selectFullInfo(long id) {
+        EntityGraph<?> graph = entityManager.createEntityGraph("graph.Dialog.allProperties");
+        Map<String, Object> hints = new HashMap<>();
+        hints.put("javax.persistence.fetchgraph", graph);
+        return entityManager.find(Dialog.class, id, hints);
     }
 
     @Override

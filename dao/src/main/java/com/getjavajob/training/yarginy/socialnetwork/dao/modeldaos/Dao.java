@@ -15,6 +15,14 @@ public interface Dao<E extends Model> extends Serializable {
     E select(long id);
 
     /**
+     * retrieves all {@link E} data specified by id
+     *
+     * @param id {@link E}'s number
+     * @return {@link E} that was found or getNullModel() if any wasn't found
+     */
+    E selectFullInfo(long id);
+
+    /**
      * retrieves {@link Model} from storage according specified data, generally alternate key
      *
      * @param modelToSelect {@link E} with initialised alternate key

@@ -20,7 +20,7 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestOverrideSpringConfig.xml"})
 public class PhoneDaoFacadeTest {
-    private Phone phone = new Phone();
+    private final Phone phone = new Phone();
     @Autowired
     private PhoneDaoFacade phoneDaoFacade;
     @Autowired
@@ -70,6 +70,7 @@ public class PhoneDaoFacadeTest {
 
     @Test
     public void testSelectPhone() {
+        System.out.println("======================================================");
         Phone actual = phoneDaoFacade.select(phone);
         assertEquals(phone, actual);
     }

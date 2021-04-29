@@ -8,11 +8,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
@@ -25,6 +27,7 @@ import static java.util.Objects.isNull;
 @Scope("prototype")
 @Entity
 @Table(name = "phones")
+@NamedEntityGraph(name = "graph.Phone.allProperties", includeAllAttributes = true)
 public class Phone implements Model {
     @Id
     @GeneratedValue
@@ -33,7 +36,7 @@ public class Phone implements Model {
     private String number;
     @Enumerated(EnumType.STRING)
     private PhoneType type;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "owner_id", foreignKey = @ForeignKey(name = "c_18"))
     private Account owner;
     @Version

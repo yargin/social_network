@@ -98,6 +98,6 @@ public class JpaGroupDaoTest {
         accountDao.create(newOwner);
         group.setOwner(newOwner);
         assertTrue(groupDao.update(group));
-        assertEquals(newOwner, groupDao.select(group).getOwner());
+        assertEquals(newOwner, groupDao.selectFullInfo(group.getId()).getOwner());
     }
 }

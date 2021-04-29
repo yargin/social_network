@@ -8,6 +8,8 @@ import java.util.Collection;
 public interface PhoneDaoFacade extends Serializable {
     Phone select(long id);
 
+    Phone selectFullInfo(long id);
+
     Phone select(Phone phone);
 
     boolean create(Phone phone);

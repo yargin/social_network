@@ -26,6 +26,11 @@ public class DialogDaoFacadeImpl implements DialogDaoFacade {
     }
 
     @Override
+    public Dialog selectFullInfo(long id) {
+        return dialogDao.selectFullInfo(id);
+    }
+
+    @Override
     public Dialog select(Dialog dialog) {
         return dialogDao.select(dialog);
     }

@@ -77,11 +77,11 @@ public abstract class GenericDao<E extends Model> implements Dao<E> {
     @Transactional
     public void update(E model) {
         Supplier<E> storedSupplier = getModelReference(entityManager, model);
-        E stored = storedSupplier.get();
-        if (stored.getId() == 0 || checkEntity(model)) {
-            throw new IllegalArgumentException();
-        }
         try {
+            E stored = storedSupplier.get();
+            if (stored.getId() == 0 || checkEntity(model)) {
+                throw new IllegalArgumentException();
+            }
             entityManager.merge(model);
         } catch (OptimisticLockException e) {
             throw new IllegalStateException(e);
@@ -94,8 +94,8 @@ public abstract class GenericDao<E extends Model> implements Dao<E> {
     @Override
     @Transactional
     public void delete(E model) {
-        E entityToDelete = getModelReference(entityManager, model).get();
         try {
+            E entityToDelete = getModelReference(entityManager, model).get();
             entityManager.remove(entityToDelete);
         } catch (RuntimeException e) {
             throw new IllegalArgumentException(e);

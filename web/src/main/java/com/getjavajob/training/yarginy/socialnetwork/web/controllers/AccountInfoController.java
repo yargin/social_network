@@ -47,7 +47,7 @@ public class AccountInfoController {
                                  @SessionAttribute(USER_ID) long sessionId) {
         long id = requestedId == null ? sessionId : requestedId;
         ModelAndView modelAndView = new ModelAndView(ACCOUNT_WALL_VIEW);
-        Account account = accountService.get(id);
+        Account account = accountService.getFullInfo(id);
         infoHelper.setAccountInfo(modelAndView, account);
         Collection<AccountWallMessage> messages = messageService.selectMessages(id);
         modelAndView.addObject("messages", messages);
@@ -66,7 +66,7 @@ public class AccountInfoController {
         Collection<Account> requesters = accountService.getFriendshipRequests(id);
         modelAndView.addObject("requesters", requesters);
 
-        Account account = accountService.get(id);
+        Account account = accountService.getFullInfo(id);
         infoHelper.setAccountInfo(modelAndView, account);
 
         modelAndView.addObject(TAB, "friendshipRequestsList");
@@ -81,7 +81,7 @@ public class AccountInfoController {
 
         modelAndView.addObject("friends", accountService.getFriends(id));
 
-        Account account = accountService.get(id);
+        Account account = accountService.getFullInfo(id);
         infoHelper.setAccountInfo(modelAndView, account);
         modelAndView.addObject(TAB, "friendsList");
         return modelAndView;
@@ -95,7 +95,7 @@ public class AccountInfoController {
         Collection<Dialog> dialogs = accountService.getDialogs(id);
         modelAndView.addObject(DIALOGS, dialogs);
 
-        Account account = accountService.get(id);
+        Account account = accountService.getFullInfo(id);
         infoHelper.setAccountInfo(modelAndView, account);
         modelAndView.addObject(TAB, "dialogs");
         return modelAndView;
@@ -116,7 +116,7 @@ public class AccountInfoController {
             modelAndView.addObject(GROUPS, joinedGroups);
         }
 
-        Account account = accountService.get(id);
+        Account account = accountService.getFullInfo(id);
         infoHelper.setAccountInfo(modelAndView, account);
         modelAndView.addObject(TAB, "groups");
         return modelAndView;

@@ -11,6 +11,8 @@ import java.util.Collection;
 public interface AccountService extends Serializable {
     Account get(long id);
 
+    Account getFullInfo(long id);
+
     Account get(Account account);
 
     boolean createAccount(Account account, Collection<Phone> phones);

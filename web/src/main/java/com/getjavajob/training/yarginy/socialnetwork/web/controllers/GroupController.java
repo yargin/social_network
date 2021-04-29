@@ -48,7 +48,7 @@ public class GroupController {
     @GetMapping("/wall")
     public ModelAndView getGroupWall(@RequestAttribute long id) {
         ModelAndView modelAndView = new ModelAndView(GROUP_VIEW);
-        Group group = groupService.get(id);
+        Group group = groupService.getFullInfo(id);
         Collection<GroupWallMessage> messages = messageService.selectMessages(id);
         modelAndView.addObject("messages", messages);
         addInfoAndPhoto(modelAndView, group);
@@ -63,7 +63,7 @@ public class GroupController {
         ModelAndView modelAndView = new ModelAndView(GROUP_VIEW);
         Collection<Account> requesters = groupService.getGroupRequests(id);
         modelAndView.addObject("requesters", requesters);
-        Group group = groupService.get(id);
+        Group group = groupService.getFullInfo(id);
         addInfoAndPhoto(modelAndView, group);
         modelAndView.addObject(TAB, "requests");
         return modelAndView;
@@ -74,7 +74,7 @@ public class GroupController {
         ModelAndView modelAndView = new ModelAndView(GROUP_VIEW);
         Map<Account, Boolean> members = groupService.getGroupMembersModerators(id);
         modelAndView.addObject("members", members);
-        Group group = groupService.get(id);
+        Group group = groupService.getFullInfo(id);
         addInfoAndPhoto(modelAndView, group);
         modelAndView.addObject(TAB, "members");
         return modelAndView;
@@ -125,7 +125,7 @@ public class GroupController {
         ModelAndView modelAndView = new ModelAndView(GROUP_VIEW);
         Collection<Account> moderators = groupService.getModerators(id);
         modelAndView.addObject("moderators", moderators);
-        Group group = groupService.get(id);
+        Group group = groupService.getFullInfo(id);
         addInfoAndPhoto(modelAndView, group);
         modelAndView.addObject(TAB, "moderators");
         return modelAndView;

@@ -8,6 +8,8 @@ import java.util.Collection;
 public interface DialogDaoFacade extends Serializable {
     Dialog select(long id);
 
+    Dialog selectFullInfo(long id);
+
     Dialog select(Dialog dialog);
 
     Dialog getNullModel();

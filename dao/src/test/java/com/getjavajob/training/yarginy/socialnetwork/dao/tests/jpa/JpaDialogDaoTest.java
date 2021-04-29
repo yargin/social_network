@@ -55,7 +55,7 @@ public class JpaDialogDaoTest {
 
     @Test
     public void testGetDialogById() {
-        Dialog selectedDialog = dialogDao.select(dialog.getId());
+        Dialog selectedDialog = dialogDao.selectFullInfo(dialog.getId());
         assertEquals(dialog, selectedDialog);
         selectedDialog = dialogDao.select(22);
         assertEquals(dialogDao.getNullModel(), selectedDialog);

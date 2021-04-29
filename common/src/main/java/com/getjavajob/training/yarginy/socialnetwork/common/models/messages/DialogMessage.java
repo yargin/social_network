@@ -6,20 +6,23 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.Table;
 
 @Component
 @Scope("prototype")
 @Entity
 @Table(name = "dialogs_messages")
+@NamedEntityGraph(name = "graph.DialogMessage.allProperties", includeAllAttributes = true)
 public class DialogMessage extends Message<Dialog> {
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "receiver_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "c_34"))
     private Dialog receiver;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "author", referencedColumnName = "id", foreignKey = @ForeignKey(name = "c_33"))
     private Account author;
 

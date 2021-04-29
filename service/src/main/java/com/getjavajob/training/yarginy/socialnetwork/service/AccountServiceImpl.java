@@ -9,7 +9,9 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacad
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 
@@ -26,9 +28,11 @@ public class AccountServiceImpl implements AccountService {
     private final TransactionPerformer transactionPerformer;
     private final AccountServiceTransactional serviceTransactional;
 
+    @Autowired
     public AccountServiceImpl(AccountDaoFacade accountDaoFacade, PhoneDaoFacade phoneDaoFacade,
                               FriendshipsDaoFacade friendshipDao, DialogDaoFacade dialogDaoFacade,
-                              TransactionPerformer transactionPerformer, AccountServiceTransactional serviceTransactional) {
+                              TransactionPerformer transactionPerformer,
+                              AccountServiceTransactional serviceTransactional) {
         this.accountDaoFacade = accountDaoFacade;
         this.phoneDaoFacade = phoneDaoFacade;
         this.friendshipDao = friendshipDao;
@@ -40,6 +44,11 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account get(long id) {
         return accountDaoFacade.select(id);
+    }
+
+    @Override
+    public Account getFullInfo(long id) {
+        return accountDaoFacade.selectFullInfo(id);
     }
 
     @Override

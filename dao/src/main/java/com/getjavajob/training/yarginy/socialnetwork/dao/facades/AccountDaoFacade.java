@@ -10,6 +10,8 @@ import java.util.Collection;
 public interface AccountDaoFacade extends Serializable {
     Account select(long id);
 
+    Account selectFullInfo(long id);
+
     Account select(Account account);
 
     Account getNullModel();

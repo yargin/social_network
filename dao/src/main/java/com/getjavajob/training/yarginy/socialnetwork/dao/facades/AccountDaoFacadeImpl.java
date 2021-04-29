@@ -39,6 +39,11 @@ public class AccountDaoFacadeImpl implements AccountDaoFacade {
     }
 
     @Override
+    public Account selectFullInfo(long id) {
+        return accountDao.selectFullInfo(id);
+    }
+
+    @Override
     public Account select(Account account) {
         return accountDao.select(account);
     }

@@ -3,14 +3,14 @@ package com.getjavajob.training.yarginy.socialnetwork.common.models;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.Access;
-import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
@@ -20,11 +20,12 @@ import java.util.Objects;
 @Scope("prototype")
 @Entity
 @Table(name = "passwords")
+@NamedEntityGraph(name = "graph.Password.allProperties", includeAllAttributes = true)
 public class Password implements Model {
     @Id
     @Column(name = "email")
     private String email;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @MapsId("email")
     @JoinColumn(name="email", referencedColumnName="email", foreignKey = @ForeignKey(name = "c_21"))
     private Account account;

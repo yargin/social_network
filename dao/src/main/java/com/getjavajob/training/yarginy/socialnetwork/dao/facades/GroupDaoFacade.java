@@ -9,6 +9,8 @@ import java.util.Collection;
 public interface GroupDaoFacade extends Serializable {
     Group select(long id);
 
+    Group selectFullInfo(long id);
+
     Group select(Group group);
 
     Group getNullModel();

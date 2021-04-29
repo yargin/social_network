@@ -12,6 +12,8 @@ public interface GroupService extends Serializable {
 
     Group get(long id);
 
+    Group getFullInfo(long id);
+
     Collection<Group> getAccountGroups(long accountId);
 
     Collection<Group> getAllGroups();

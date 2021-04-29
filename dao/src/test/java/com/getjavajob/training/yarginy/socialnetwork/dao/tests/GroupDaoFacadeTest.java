@@ -11,10 +11,13 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Arrays;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -78,10 +81,31 @@ public class GroupDaoFacadeTest {
     }
 
     @Test
+    @Transactional
     public void testSelectGroup() {
+        byte[] bytes = new byte[10000];
+        byte i = 1;
+        Arrays.fill(bytes, i);
+        group.setPhoto(bytes);
         groupDaoFacade.create(group);
         Group actual = groupDaoFacade.select(group);
+        assertArrayEquals(actual.getPhoto(), bytes);
         assertEquals(group, actual);
+        actual = groupDaoFacade.select(actual.getId());
+        assertEquals(group, actual);
+    }
+
+    @Test
+    @Transactional
+    public void testSelectGroupById() {
+        byte[] bytes = new byte[10000];
+        byte i = 1;
+        Arrays.fill(bytes, i);
+        group.setPhoto(bytes);
+        groupDaoFacade.create(group);
+        Group actual = groupDaoFacade.select(group.getId());
+        assertEquals(group, actual);
+        assertArrayEquals(actual.getPhoto(), bytes);
         actual = groupDaoFacade.select(actual.getId());
         assertEquals(group, actual);
     }

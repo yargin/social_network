@@ -8,22 +8,25 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsModeratorsDaoFacade;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"classpath:serviceTestOverrideSpringConfig.xml"})
+@ActiveProfiles("groupServiceTest")
 public class GroupServiceTest {
-    @Mock
+    @Autowired
     private GroupDaoFacade groupDaoFacade;
-    @Mock
+    @Autowired
     private GroupsModeratorsDaoFacade moderatorsDao;
-    @InjectMocks
+    @Autowired
     private GroupServiceImpl groupService;
 
     @Test

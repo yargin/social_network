@@ -5,8 +5,11 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Password;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldaos.GenericDao;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullPassword;
@@ -28,6 +31,11 @@ public class PasswordDao extends GenericDao<Password> {
             query.setParameter("email", password.getAccount().getEmail());
             return query;
         };
+    }
+
+    @Override
+    public Password selectFullInfo(long id) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

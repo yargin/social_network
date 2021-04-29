@@ -60,10 +60,6 @@
         </tx:attributes>
     </tx:advice>
 
-<!--    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">-->
-<!--        <property name="dataSource" ref="dataSource"/>-->
-<!--    </bean>-->
-
     <bean id="xStream" class="com.thoughtworks.xstream.XStream">
         <constructor-arg ref="xmlDriver"/>
     </bean>

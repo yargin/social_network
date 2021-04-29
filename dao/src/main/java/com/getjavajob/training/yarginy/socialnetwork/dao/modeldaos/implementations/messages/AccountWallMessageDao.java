@@ -2,11 +2,15 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.modeldaos.implementati
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.AccountWallMessage;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.DialogMessage;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldaos.GenericDao;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullAccountWallMessage;
@@ -30,6 +34,14 @@ public class AccountWallMessageDao extends GenericDao<AccountWallMessage> {
             query.setParameter("posted", message.getDate());
             return query;
         };
+    }
+
+    @Override
+    public AccountWallMessage selectFullInfo(long id) {
+        EntityGraph<?> graph = entityManager.createEntityGraph("graph.AccountWallMessage.allProperties");
+        Map<String, Object> hints = new HashMap<>();
+        hints.put("javax.persistence.fetchgraph", graph);
+        return entityManager.find(AccountWallMessage.class, id, hints);
     }
 
     @Override

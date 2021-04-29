@@ -118,7 +118,7 @@ public class AccountCrudController {
     public ModelAndView showUpdate(HttpSession session, @RequestAttribute long id) {
         AccountFieldsUpdater updater = new AccountFieldsUpdater(session, ACCOUNT_UPDATE_VIEW);
         AccountInfoMvcModel model = new AccountInfoMvcModel();
-        Account account = accountService.get(id);
+        Account account = accountService.getFullInfo(id);
         model.setAccount(account);
         Collection<Phone> allPhones = accountService.getPhones(id);
         model.setPrivatePhones(getPhoneViews(allPhones, PRIVATE));

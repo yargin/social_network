@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
@@ -22,14 +23,15 @@ import static java.util.Objects.isNull;
 @Entity
 @Table(name = "dialogs", uniqueConstraints = {@UniqueConstraint(name = "dialogs_accounts_id",
         columnNames = {"first_id", "second_id"})})
+@NamedEntityGraph(name = "graph.Dialog.allProperties", includeAllAttributes = true)
 public class Dialog implements Model {
     @Id
     @GeneratedValue
     private long id;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "first_id", foreignKey = @ForeignKey(name = "dialogs_accounts_id_fk"))
     private Account firstAccount;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "second_id", foreignKey = @ForeignKey(name = "dialogs_accounts_id_fk_2"))
     private Account secondAccount;
     @Version

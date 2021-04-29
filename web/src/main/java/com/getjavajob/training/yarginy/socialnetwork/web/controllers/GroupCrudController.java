@@ -88,7 +88,7 @@ public class GroupCrudController {
                                    HttpServletRequest request) {
         GroupFieldsUpdater updater = new GroupFieldsUpdater(session, GROUP_UPDATE_VIEW);
         //select at first visit
-        Group group = groupService.get(requestedId);
+        Group group = groupService.getFullInfo(requestedId);
 
         //save to session if wasn't
         if (isNull(session.getAttribute(GROUP))) {

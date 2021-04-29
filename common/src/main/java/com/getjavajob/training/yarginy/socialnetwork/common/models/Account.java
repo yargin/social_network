@@ -16,6 +16,7 @@ import static java.util.Objects.isNull;
 @Scope("prototype")
 @Entity
 @Table(name = "accounts")
+@NamedEntityGraph(name = "graph.Account.allProperties", includeAllAttributes = true)
 public class Account implements Model {
     @Id
     @GeneratedValue
@@ -40,6 +41,7 @@ public class Account implements Model {
     private String city;
     private String country;
     @Lob
+    @Basic(fetch = FetchType.LAZY)
     private byte[] photo;
     @Version
     private long version;

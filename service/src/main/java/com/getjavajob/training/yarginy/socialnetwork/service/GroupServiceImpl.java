@@ -10,6 +10,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsMembersDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsModeratorsDaoFacade;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.OptimisticLockException;
 import java.util.Collection;
@@ -42,6 +43,11 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public Group get(long id) {
+        return groupDaoFacade.select(id);
+    }
+
+    @Override
+    public Group getFullInfo(long id) {
         return groupDaoFacade.select(id);
     }
 

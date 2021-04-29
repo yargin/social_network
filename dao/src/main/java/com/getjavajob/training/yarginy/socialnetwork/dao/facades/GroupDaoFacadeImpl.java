@@ -31,6 +31,11 @@ public class GroupDaoFacadeImpl implements GroupDaoFacade {
     }
 
     @Override
+    public Group selectFullInfo(long id) {
+        return groupDao.selectFullInfo(id);
+    }
+
+    @Override
     public Group select(Group group) {
         return groupDao.select(group);
     }

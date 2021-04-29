@@ -5,8 +5,11 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldaos.GenericBatchDao;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullPhone;
@@ -22,11 +25,19 @@ public class PhoneDao extends GenericBatchDao<Phone> {
     @Override
     protected Supplier<TypedQuery<Phone>> getSelectByAltKey(EntityManager entityManager, Phone phone) {
         return () -> {
-            TypedQuery<Phone> query = entityManager.createQuery("select p from Phone p join fetch p.owner a " +
-                    "where p.number = :number", Phone.class);
+            TypedQuery<Phone> query = entityManager.createQuery("select p from Phone p where p.number = :number",
+                    Phone.class);
             query.setParameter("number", phone.getNumber());
             return query;
         };
+    }
+
+    @Override
+    public Phone selectFullInfo(long id) {
+        EntityGraph<?> graph = entityManager.createEntityGraph("graph.Phone.allProperties");
+        Map<String, Object> hints = new HashMap<>();
+        hints.put("javax.persistence.fetchgraph", graph);
+        return entityManager.find(Phone.class, id, hints);
     }
 
     @Override

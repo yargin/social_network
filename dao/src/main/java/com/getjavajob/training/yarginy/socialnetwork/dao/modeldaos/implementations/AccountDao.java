@@ -4,8 +4,11 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldaos.GenericDao;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullAccount;
@@ -16,6 +19,15 @@ public class AccountDao extends GenericDao<Account> {
     protected Supplier<Account> getSelectByPk(EntityManager entityManager, long id) {
         return () -> entityManager.find(Account.class, id);
     }
+
+    @Override
+    public Account selectFullInfo(long id) {
+        EntityGraph<?> graph = entityManager.createEntityGraph("graph.Account.allProperties");
+        Map<String, Object> hints = new HashMap<>();
+        hints.put("javax.persistence.fetchgraph", graph);
+        return entityManager.find(Account.class, id, hints);
+    }
+
 
     @Override
     protected Supplier<TypedQuery<Account>> getSelectAll(EntityManager entityManager) {

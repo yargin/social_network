@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS Accounts
+CREATE TABLE Accounts
 (
     id                BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name              VARCHAR(40) NOT NULL,
@@ -22,7 +22,7 @@ ALTER TABLE Accounts ADD CHECK (sex IN ('MALE', 'FEMALE'));
 
 ALTER TABLE Accounts ADD CHECK (role IN ('ADMIN', 'USER'));
 
-CREATE TABLE IF NOT EXISTS `Groups`
+CREATE TABLE `Groups`
 (
     id            BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name          VARCHAR(50) NOT NULL UNIQUE,
@@ -63,7 +63,7 @@ ALTER TABLE Friendships
 
 ALTER TABLE Friendships ADD CHECK (first_account > second_account);
 
-CREATE TABLE IF NOT EXISTS Phones
+CREATE TABLE Phones
 (
     id       BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     number   VARCHAR(50)     NOT NULL UNIQUE,
@@ -85,7 +85,7 @@ CREATE TABLE Passwords (
 
 ALTER TABLE Passwords ADD CONSTRAINT C_20 PRIMARY KEY(email);
 
-CREATE TABLE IF NOT EXISTS Groups_moderators
+CREATE TABLE Groups_moderators
 (
     account_id BIGINT UNSIGNED,
     group_id   BIGINT UNSIGNED,
@@ -100,7 +100,7 @@ ALTER TABLE Groups_moderators
 
 ALTER TABLE Groups_moderators ADD CONSTRAINT C_Groups_moderators_3 UNIQUE (account_id, group_id);
 
-CREATE TABLE IF NOT EXISTS Groups_memberships_requests
+CREATE TABLE Groups_memberships_requests
 (
     account_id BIGINT UNSIGNED,
     group_id   BIGINT UNSIGNED,
@@ -113,7 +113,7 @@ ALTER TABLE Groups_memberships_requests
 ALTER TABLE Groups_memberships_requests
     ADD CONSTRAINT C_27 FOREIGN KEY (group_id) REFERENCES `groups` (id) ON DELETE CASCADE ON UPDATE CASCADE;
 
-CREATE TABLE IF NOT EXISTS Friendships_requests
+CREATE TABLE `Friendships_requests`
 (
     requester BIGINT UNSIGNED,
     receiver  BIGINT UNSIGNED,
@@ -133,8 +133,8 @@ CREATE TABLE `account_wall_messages`
     `message`     VARCHAR(500),
     `image`       MEDIUMBLOB,
     `receiver_id` BIGINT UNSIGNED NOT NULL,
-    `posted`      DATETIME NOT NULL,,
-    version       BIGINT NOT NULL
+    `posted`      DATETIME NOT NULL,
+    `version`     BIGINT NOT NULL,
     PRIMARY KEY (`id`),
     KEY           `C_32` (`receiver_id`),
     KEY           `C_31` (`author`),
@@ -150,6 +150,7 @@ CREATE TABLE `group_wall_messages`
     `image`       MEDIUMBLOB,
     `receiver_id` BIGINT UNSIGNED NOT NULL,
     `posted`      DATETIME        NOT NULL,
+    `version`     BIGINT NOT NULL,
     PRIMARY KEY (`id`),
     KEY `C_36` (`receiver_id`),
     KEY `C_35` (`author`),
@@ -162,6 +163,7 @@ CREATE TABLE dialogs
     id        BIGINT UNSIGNED auto_increment PRIMARY KEY,
     first_id  BIGINT UNSIGNED NOT NULL,
     second_id BIGINT UNSIGNED NOT NULL,
+    `version`     BIGINT NOT NULL,
     CONSTRAINT dialogs_accounts_id_fk FOREIGN KEY (first_id) REFERENCES accounts (id) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT dialogs_accounts_id_fk_2 FOREIGN KEY (second_id) REFERENCES accounts (id) ON UPDATE CASCADE ON DELETE
         CASCADE,
@@ -176,6 +178,7 @@ CREATE TABLE `dialogs_messages`
     `image`       MEDIUMBLOB,
     `receiver_id` BIGINT UNSIGNED NOT NULL,
     `posted`      DATETIME        NOT NULL,
+    `version`     BIGINT NOT NULL,
     PRIMARY KEY (`id`),
     KEY `C_34` (`receiver_id`),
     KEY `C_33` (`author`),

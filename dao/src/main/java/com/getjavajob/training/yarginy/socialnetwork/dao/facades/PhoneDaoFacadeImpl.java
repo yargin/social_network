@@ -27,6 +27,11 @@ public class PhoneDaoFacadeImpl implements PhoneDaoFacade {
     }
 
     @Override
+    public Phone selectFullInfo(long id) {
+        return phoneDao.selectFullInfo(id);
+    }
+
+    @Override
     public Phone select(Phone phone) {
         return phoneDao.select(phone);
     }

@@ -14,6 +14,7 @@ import static java.util.Objects.isNull;
 @Scope("prototype")
 @Entity
 @Table(name = "groups")
+@NamedEntityGraph(name = "graph.Group.allProperties", includeAllAttributes = true)
 public class Group implements Model {
     @Id
     @GeneratedValue
@@ -21,11 +22,13 @@ public class Group implements Model {
     @Column(nullable = false, unique = true)
     private String name;
     private String description;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "owner_id", foreignKey = @ForeignKey(name = "c_11"))
     private Account owner;
     @Column(nullable = false)
     private Date creationDate;
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
     private byte[] photo;
     @Version
     private long version;

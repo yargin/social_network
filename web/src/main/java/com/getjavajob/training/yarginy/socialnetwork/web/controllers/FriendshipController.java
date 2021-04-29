@@ -66,7 +66,7 @@ public class FriendshipController {
             modelAndView.addObject(ERROR, "error.wrongRequest");
         }
 
-        Account account = accountService.get(receiverId);
+        Account account = accountService.getFullInfo(receiverId);
         infoHelper.setAccountInfo(modelAndView, account);
         modelAndView.addObject(TAB, "addFriend");
         modelAndView.addObject(REQUESTED_ID, receiverId);
