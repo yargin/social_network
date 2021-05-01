@@ -22,7 +22,7 @@ public class GroupWallMessage extends Message<Group> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "receiver_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "c_36"))
     private Group receiver;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(nullable = false, name = "author", referencedColumnName = "id", foreignKey = @ForeignKey(name = "c_35"))
     private Account author;
 

@@ -67,19 +67,15 @@ public class AccountDaoFacadeTest {
         accountDao.create(account);
         Account actual = accountDao.select(account);
         assertEquals(account, actual);
-        actual = accountDao.select(actual);
-        assertEquals(account, actual);
-        System.out.println("==============================================");
+        //todo
         actual = accountDao.selectFullInfo(account.getId());
-        assertArrayEquals(account.getPhoto(), actual.getPhoto());
+        byte[] origin = account.getPhoto();
+        byte[] selected = actual.getPhoto();
+        assertArrayEquals(origin, selected);
     }
 
     @Test
     public void testSelectAccountById() {
-        byte[] bytes = new byte[10000];
-        byte i = 1;
-        Arrays.fill(bytes, i);
-        account.setPhoto(bytes);
         accountDao.create(account);
         Account actual = accountDao.select(account.getId());
         assertEquals(account, actual);

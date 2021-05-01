@@ -5,10 +5,12 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.DialogMessage;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.GroupWallMessage;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldaos.GenericDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldaos.implementations.DialogDao;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +21,12 @@ import static java.util.Objects.isNull;
 
 @Repository
 public class DialogMessageDao extends GenericDao<DialogMessage> {
+    private final DialogDao dialogDao;
+
+    public DialogMessageDao(DialogDao dialogDao) {
+        this.dialogDao = dialogDao;
+    }
+
     @Override
     public DialogMessage getNullModel() {
         return getNullDialogMessage();
@@ -60,13 +68,13 @@ public class DialogMessageDao extends GenericDao<DialogMessage> {
     }
 
     @Override
-    protected boolean checkEntity(DialogMessage message) {
+    protected boolean checkEntityFail(DialogMessage message) {
         return isNull(message.getReceiver()) || isNull(message.getAuthor());
     }
 
     @Override
     protected void prepareModelRelations(EntityManager entityManager, DialogMessage message) {
-        message.setAuthor(entityManager.getReference(Account.class, message.getAuthor().getId()));
         message.setReceiver(entityManager.getReference(Dialog.class, message.getReceiver().getId()));
+        message.setAuthor(entityManager.getReference(Account.class, message.getAuthor().getId()));
     }
 }

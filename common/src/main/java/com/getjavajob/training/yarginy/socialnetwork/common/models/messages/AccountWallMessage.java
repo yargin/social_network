@@ -22,7 +22,7 @@ public class AccountWallMessage extends Message<Account> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "receiver_id", foreignKey = @ForeignKey(name = "c_32"))
     private Account receiver;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(nullable = false, name = "author", foreignKey = @ForeignKey(name = "c_31"))
     private Account author;
 

@@ -40,6 +40,10 @@ public class Dialog implements Model {
     public Dialog() {
     }
 
+    public Dialog(long id) {
+        this.id = id;
+    }
+
     public Dialog(Account firstAccount, Account secondAccount) {
         this.firstAccount = firstAccount;
         this.secondAccount = secondAccount;
@@ -94,7 +98,7 @@ public class Dialog implements Model {
         return Objects.equals(getFirstAccount(), dialog.getFirstAccount()) &&
                 Objects.equals(getSecondAccount(), dialog.getSecondAccount()) ||
                 Objects.equals(getFirstAccount(), dialog.getSecondAccount()) &&
-                        Objects.equals(getSecondAccount(), dialog.getFirstAccount());
+                Objects.equals(getSecondAccount(), dialog.getFirstAccount());
     }
 
     @Override

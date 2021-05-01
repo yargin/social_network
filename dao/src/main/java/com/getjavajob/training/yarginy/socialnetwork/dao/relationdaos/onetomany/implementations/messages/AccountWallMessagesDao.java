@@ -29,7 +29,7 @@ public class AccountWallMessagesDao implements OneToManyDao<AccountWallMessage> 
     public Collection<AccountWallMessage> selectMany(long accountId) {
         Account account = new Account(accountId);
         TypedQuery<AccountWallMessage> selectMany = entityManager.createQuery("select m from AccountWallMessage m " +
-                "where m.receiver = :receiver order by m.date desc", AccountWallMessage.class);
+                "join fetch m.author where m.receiver = :receiver order by m.date desc", AccountWallMessage.class);
         selectMany.setParameter("receiver", account);
         return selectMany.getResultList();
     }

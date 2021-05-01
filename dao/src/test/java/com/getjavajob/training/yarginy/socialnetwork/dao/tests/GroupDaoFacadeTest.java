@@ -80,6 +80,7 @@ public class GroupDaoFacadeTest {
         assertTrue(groupDaoFacade.update(group));
     }
 
+    //todo
     @Test
     @Transactional
     public void testSelectGroup() {

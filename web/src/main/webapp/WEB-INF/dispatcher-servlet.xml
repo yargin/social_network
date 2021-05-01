@@ -63,6 +63,7 @@
             <mvc:mapping path="/account/update*"/>
             <mvc:mapping path="/account/savexml*"/>
             <mvc:mapping path="/account/upload*"/>
+            <mvc:mapping path="/message/*/delete*"/>
             <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.common.OneIdInterceptor"/>
         </mvc:interceptor>
 

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,7 +61,7 @@ public class GroupWallMessageDao extends GenericDao<GroupWallMessage> {
     }
 
     @Override
-    protected boolean checkEntity(GroupWallMessage message) {
+    protected boolean checkEntityFail(GroupWallMessage message) {
         return isNull(message.getReceiver()) || isNull(message.getAuthor());
     }
 

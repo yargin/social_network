@@ -48,7 +48,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public Group getFullInfo(long id) {
-        return groupDaoFacade.select(id);
+        return groupDaoFacade.selectFullInfo(id);
     }
 
     @Override
@@ -68,10 +68,8 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public boolean acceptRequest(long accountId, long groupId) {
-        if (!membersDao.joinGroup(accountId, groupId)) {
-            return false;
-        }
-        return membersDao.removeRequest(accountId, groupId);
+        return transactionPerformer.transactionPerformed(serviceTransactional::acceptRequestTransactional,
+                accountId, groupId);
     }
 
     @Override
@@ -84,8 +82,11 @@ public class GroupServiceImpl implements GroupService {
         if (groupDaoFacade.isOwner(accountId, groupId)) {
             return false;
         }
-        moderatorsDao.deleteGroupModerator(accountId, groupId);
-        return groupDaoFacade.removeMember(accountId, groupId);
+        boolean isRemoved = groupDaoFacade.removeMember(accountId, groupId);
+        if (isRemoved) {
+            moderatorsDao.deleteGroupModerator(accountId, groupId);
+        }
+        return isRemoved;
     }
 
     @Override

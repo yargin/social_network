@@ -1,7 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.manytomany;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.JpaManyToMany;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.ManyToMany;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -33,22 +33,22 @@ public abstract class GenericManyToMany<F extends Model, S extends Model> implem
         return genericSelectBySecond(entityManager, secondId);
     }
 
-    protected abstract JpaManyToMany<F, S> genericFind(EntityManager entityManager, long firstId, long secondId);
+    protected abstract ManyToMany<F, S> genericFind(EntityManager entityManager, long firstId, long secondId);
 
     @Override
     @Transactional
     public boolean relationExists(long firstId, long secondId) {
-        JpaManyToMany<F, S> manyToMany = genericFind(entityManager, firstId, secondId);
+        ManyToMany<F, S> manyToMany = genericFind(entityManager, firstId, secondId);
         return !isNull(manyToMany);
     }
 
-    protected abstract JpaManyToMany<F, S> genericCreateObject(EntityManager entityManager, long firstId, long secondId);
+    protected abstract ManyToMany<F, S> genericCreateObject(EntityManager entityManager, long firstId, long secondId);
 
     @Override
     @Transactional
     public void create(long firstId, long secondId) {
         checkId(firstId, secondId);
-        JpaManyToMany<F, S> manyToMany = genericCreateObject(entityManager, firstId, secondId);
+        ManyToMany<F, S> manyToMany = genericCreateObject(entityManager, firstId, secondId);
         try {
             entityManager.persist(manyToMany);
             entityManager.flush();
@@ -57,14 +57,14 @@ public abstract class GenericManyToMany<F extends Model, S extends Model> implem
         }
     }
 
-    protected abstract JpaManyToMany<F, S> genericGetReference(EntityManager entityManager, long firstId, long secondId);
+    protected abstract ManyToMany<F, S> genericGetReference(EntityManager entityManager, long firstId, long secondId);
 
     @Override
     @Transactional
     public void delete(long firstId, long secondId) {
         checkId(firstId, secondId);
         try {
-            JpaManyToMany<F, S> manyToMany = genericGetReference(entityManager, firstId, secondId);
+            ManyToMany<F, S> manyToMany = genericGetReference(entityManager, firstId, secondId);
             entityManager.remove(manyToMany);
         } catch (PersistenceException e) {
             throw new IllegalArgumentException(e);

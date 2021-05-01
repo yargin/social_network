@@ -9,6 +9,8 @@ import java.io.Serializable;
 public interface DialogService extends Serializable {
     Dialog get(long dialogId);
 
+    Dialog getFullInfo(long dialogId);
+
     Dialog get(Dialog dialog);
 
     boolean create(Dialog dialog, DialogMessage message);

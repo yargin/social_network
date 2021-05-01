@@ -10,6 +10,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.onetomany.
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.onetomany.implementations.OwnerGroupsDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.selfmanytomany.implementations.FriendshipsDao;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 

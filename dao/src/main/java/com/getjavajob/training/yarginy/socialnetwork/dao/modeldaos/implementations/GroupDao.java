@@ -4,6 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldaos.GenericBatchDao;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
@@ -23,6 +24,7 @@ public class GroupDao extends GenericBatchDao<Group> {
     }
 
     @Override
+    @Transactional
     public Group selectFullInfo(long id) {
         EntityGraph<?> graph = entityManager.createEntityGraph("graph.Group.allProperties");
         Map<String, Object> hints = new HashMap<>();
@@ -38,7 +40,7 @@ public class GroupDao extends GenericBatchDao<Group> {
     @Override
     protected Supplier<TypedQuery<Group>> getSelectByAltKey(EntityManager entityManager, Group group) {
         return () -> {
-            TypedQuery<Group> query = entityManager.createQuery("select g from Group g join g.owner o " +
+            TypedQuery<Group> query = entityManager.createQuery("select g from Group g join fetch g.owner o " +
                     "where g.name = :name", Group.class);
             query.setParameter("name", group.getName());
             return query;
@@ -46,7 +48,7 @@ public class GroupDao extends GenericBatchDao<Group> {
     }
 
     @Override
-    protected boolean checkEntity(Group group) {
+    protected boolean checkEntityFail(Group group) {
         return isNull(group.getOwner());
     }
 

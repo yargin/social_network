@@ -2,7 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.manytoman
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.FriendshipRequest;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.JpaManyToMany;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.ManyToMany;
 import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.manytomany.GenericManyToMany;
 import org.springframework.stereotype.Repository;
 
@@ -18,7 +18,7 @@ public class FriendshipRequestsDao extends GenericManyToMany<Account, Account> {
     public Collection<Account> genericSelectByFirst(EntityManager entityManager, long requesterId) {
         Account requester = new Account(requesterId);
         TypedQuery<Account> query = entityManager.createQuery("select f.receiver from FriendshipRequest f " +
-                "where f.requester = :requester", Account.class);
+                "join f.receiver where f.requester = :requester", Account.class);
         query.setParameter("requester", requester);
         return query.getResultList();
     }
@@ -27,26 +27,26 @@ public class FriendshipRequestsDao extends GenericManyToMany<Account, Account> {
     public Collection<Account> genericSelectBySecond(EntityManager entityManager, long receiverId) {
         Account receiver = new Account(receiverId);
         TypedQuery<Account> query = entityManager.createQuery("select f.requester from FriendshipRequest f " +
-                "where f.receiver = :receiver", Account.class);
+                "join f.requester where f.receiver = :receiver", Account.class);
         query.setParameter("receiver", receiver);
         return query.getResultList();
     }
 
     @Override
-    protected JpaManyToMany<Account, Account> genericGetReference(EntityManager entityManager, long requesterId,
-                                                                  long receiverId) {
+    protected ManyToMany<Account, Account> genericGetReference(EntityManager entityManager, long requesterId,
+                                                               long receiverId) {
         return entityManager.getReference(FriendshipRequest.class, createFriendshipRequestsKey(requesterId, receiverId));
     }
 
     @Override
-    protected JpaManyToMany<Account, Account> genericFind(EntityManager entityManager, long requesterId,
-                                                          long receiverId) {
+    protected ManyToMany<Account, Account> genericFind(EntityManager entityManager, long requesterId,
+                                                       long receiverId) {
         return entityManager.find(FriendshipRequest.class, createFriendshipRequestsKey(requesterId, receiverId));
     }
 
     @Override
-    protected JpaManyToMany<Account, Account> genericCreateObject(EntityManager entityManager, long requesterId,
-                                                                  long receiverId) {
+    protected ManyToMany<Account, Account> genericCreateObject(EntityManager entityManager, long requesterId,
+                                                               long receiverId) {
         Account requester = entityManager.getReference(Account.class, requesterId);
         Account receiver = entityManager.getReference(Account.class, receiverId);
         return new FriendshipRequest(requester, receiver);

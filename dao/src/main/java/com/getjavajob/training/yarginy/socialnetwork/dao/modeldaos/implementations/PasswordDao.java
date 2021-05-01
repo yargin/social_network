@@ -54,7 +54,7 @@ public class PasswordDao extends GenericDao<Password> {
     }
 
     @Override
-    protected boolean checkEntity(Password password) {
+    protected boolean checkEntityFail(Password password) {
         return isNull(password.getAccount());
     }
 

@@ -7,7 +7,7 @@
 
 <common:layout>
     <div class="post">
-            <%--@elvariable id="group" type="com.getjavajob.training.yarginy.socialnetwork.common.models.Group"--%>
+        <%--@elvariable id="group" type="com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers.GroupDto"--%>
         <form:form action="${context}/group/create" method="post" enctype="multipart/form-data" modelAttribute="group">
             <spring:message code="form.groupName" var="namePlaceholder"/>
             <form:input value="${group.name}" path="name" placeholder="${namePlaceholder}" required="required"/>

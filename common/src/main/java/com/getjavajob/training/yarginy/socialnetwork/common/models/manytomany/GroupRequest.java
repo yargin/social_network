@@ -20,7 +20,7 @@ import java.util.Objects;
 @Scope("prototype")
 @Entity
 @Table(name = "groups_memberships_requests")
-public class GroupRequest implements JpaManyToMany<Account, Group> {
+public class GroupRequest implements ManyToMany<Account, Group> {
     @EmbeddedId
     private GroupRequestKey groupRequestKey = new GroupRequestKey();
     @ManyToOne

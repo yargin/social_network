@@ -6,6 +6,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsMembersDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsModeratorsDaoFacade;
 import org.springframework.stereotype.Component;
 
@@ -19,10 +20,13 @@ import static java.util.Objects.isNull;
 public class GroupServiceTransactional implements Serializable {
     private final GroupDaoFacade groupDaoFacade;
     private final GroupsModeratorsDaoFacade moderatorsDao;
+    private final GroupsMembersDaoFacade membersDao;
 
-    public GroupServiceTransactional(GroupDaoFacade groupDaoFacade, GroupsModeratorsDaoFacade moderatorsDao) {
+    public GroupServiceTransactional(GroupDaoFacade groupDaoFacade, GroupsModeratorsDaoFacade moderatorsDao,
+                                     GroupsMembersDaoFacade membersDao) {
         this.groupDaoFacade = groupDaoFacade;
         this.moderatorsDao = moderatorsDao;
+        this.membersDao = membersDao;
     }
 
     public void createGroupAndInviteOwner(Group group) {
@@ -37,6 +41,12 @@ public class GroupServiceTransactional implements Serializable {
         Group createdGroup = groupDaoFacade.select(group);
         if (!groupDaoFacade.addMember(owner.getId(), createdGroup.getId()) ||
                 !moderatorsDao.addGroupModerator(owner.getId(), createdGroup.getId())) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public void acceptRequestTransactional(long accountId, long groupId) {
+        if (!membersDao.joinGroup(accountId, groupId) || !membersDao.removeRequest(accountId, groupId)) {
             throw new IllegalArgumentException();
         }
     }

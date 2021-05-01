@@ -5,7 +5,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -21,7 +20,7 @@ import java.util.Objects;
 @Scope("prototype")
 @Entity
 @Table(name = "groups_members")
-public class GroupMembership implements JpaManyToMany<Account, Group> {
+public class GroupMembership implements ManyToMany<Account, Group> {
     @EmbeddedId
     private GroupMembershipKey groupMembershipKey = new GroupMembershipKey();
     @ManyToOne

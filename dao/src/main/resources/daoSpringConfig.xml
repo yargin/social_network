@@ -29,10 +29,6 @@
 
     <tx:annotation-driven/>
 
-
-
-
-
     <import resource="classpath:commonSpringConfig.xml"/>
 
     <jee:jndi-lookup id="dataSource" jndi-name="jdbc/Local-MySql" expected-type="javax.sql.DataSource"/>
@@ -58,6 +54,7 @@
                     com.getjavajob.training.yarginy.socialnetwork.common.utils.CamelCaseToSnakeCaseNamingStrategy
                 </prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.globally_quoted_identifiers">true</prop>
             </props>
         </property>
     </bean>

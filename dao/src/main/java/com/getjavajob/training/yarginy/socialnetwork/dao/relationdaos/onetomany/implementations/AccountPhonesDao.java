@@ -28,7 +28,7 @@ public class AccountPhonesDao implements OneToManyDao<Phone> {
     @Transactional
     public Collection<Phone> selectMany(long accountId) {
         Account account = new Account(accountId);
-        TypedQuery<Phone> selectMany = entityManager.createQuery("select p from Phone p join fetch p.owner o " +
+        TypedQuery<Phone> selectMany = entityManager.createQuery("select p from Phone p join fetch p.owner " +
                 "where p.owner = :owner", Phone.class);
         selectMany.setParameter("owner", account);
         return selectMany.getResultList();

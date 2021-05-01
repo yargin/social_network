@@ -3,6 +3,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.modeldaos.implementati
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldaos.GenericDao;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
@@ -21,13 +22,13 @@ public class AccountDao extends GenericDao<Account> {
     }
 
     @Override
+    @Transactional
     public Account selectFullInfo(long id) {
         EntityGraph<?> graph = entityManager.createEntityGraph("graph.Account.allProperties");
         Map<String, Object> hints = new HashMap<>();
         hints.put("javax.persistence.fetchgraph", graph);
         return entityManager.find(Account.class, id, hints);
     }
-
 
     @Override
     protected Supplier<TypedQuery<Account>> getSelectAll(EntityManager entityManager) {
@@ -45,7 +46,7 @@ public class AccountDao extends GenericDao<Account> {
     }
 
     @Override
-    protected boolean checkEntity(Account account) {
+    protected boolean checkEntityFail(Account account) {
         return false;
     }
 

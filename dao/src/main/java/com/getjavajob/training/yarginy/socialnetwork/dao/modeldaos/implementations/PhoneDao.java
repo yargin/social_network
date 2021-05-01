@@ -4,9 +4,11 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldaos.GenericBatchDao;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +35,7 @@ public class PhoneDao extends GenericBatchDao<Phone> {
     }
 
     @Override
+    @Transactional
     public Phone selectFullInfo(long id) {
         EntityGraph<?> graph = entityManager.createEntityGraph("graph.Phone.allProperties");
         Map<String, Object> hints = new HashMap<>();
@@ -46,7 +49,7 @@ public class PhoneDao extends GenericBatchDao<Phone> {
     }
 
     @Override
-    protected boolean checkEntity(Phone phone) {
+    protected boolean checkEntityFail(Phone phone) {
         return isNull(phone.getOwner());
     }
 

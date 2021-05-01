@@ -3,15 +3,11 @@ package com.getjavajob.training.yarginy.socialnetwork.web.controllers;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.DialogMessage;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.Message;
 import com.getjavajob.training.yarginy.socialnetwork.service.DialogService;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.DialogMessagesService;
-import com.getjavajob.training.yarginy.socialnetwork.service.messages.MessageService;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.Redirector;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,14 +64,15 @@ public class DialogController {
 
     @GetMapping("/show")
     public ModelAndView showDialog(HttpServletRequest req, @RequestParam long id) {
-        Dialog dialog = dialogService.get(id);
+        Dialog dialog = dialogService.getFullInfo(id);
         if (Objects.equals(dialog, dialogService.getNullDialog())) {
             return new ModelAndView(redirector.redirectBackView(req));
         }
         ModelAndView modelAndView = new ModelAndView(DIALOG_VIEW);
-        modelAndView.addObject(dialog);
+        modelAndView.addObject("dialog", dialog);
         Collection<DialogMessage> messages = messageService.selectMessages(id);
         modelAndView.addObject("messages", messages);
+        modelAndView.addObject("type", "dialog");
         modelAndView.addObject(TAB, "dialog");
         return modelAndView;
     }

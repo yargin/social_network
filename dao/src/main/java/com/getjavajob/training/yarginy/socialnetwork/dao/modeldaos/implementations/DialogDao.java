@@ -4,6 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldaos.GenericDao;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
@@ -23,6 +24,7 @@ public class DialogDao extends GenericDao<Dialog> {
     }
 
     @Override
+    @Transactional
     public Dialog selectFullInfo(long id) {
         EntityGraph<?> graph = entityManager.createEntityGraph("graph.Dialog.allProperties");
         Map<String, Object> hints = new HashMap<>();
@@ -58,7 +60,7 @@ public class DialogDao extends GenericDao<Dialog> {
     }
 
     @Override
-    protected boolean checkEntity(Dialog dialog) {
+    protected boolean checkEntityFail(Dialog dialog) {
         Account firstAccount = dialog.getFirstAccount();
         Account secondAccount = dialog.getSecondAccount();
         if (isNull(firstAccount) || isNull(secondAccount)) {

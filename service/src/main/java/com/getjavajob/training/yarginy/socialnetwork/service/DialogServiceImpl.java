@@ -23,6 +23,11 @@ public class DialogServiceImpl implements DialogService {
     }
 
     @Override
+    public Dialog getFullInfo(long dialogId) {
+        return dialogDaoFacade.selectFullInfo(dialogId);
+    }
+
+    @Override
     public Dialog get(Dialog dialog) {
         return dialogDaoFacade.select(dialog);
     }

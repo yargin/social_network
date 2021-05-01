@@ -70,7 +70,6 @@ public class PhoneDaoFacadeTest {
 
     @Test
     public void testSelectPhone() {
-        System.out.println("======================================================");
         Phone actual = phoneDaoFacade.select(phone);
         assertEquals(phone, actual);
     }

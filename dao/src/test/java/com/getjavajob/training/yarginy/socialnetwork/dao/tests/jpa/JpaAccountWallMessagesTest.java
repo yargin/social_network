@@ -11,6 +11,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 
@@ -22,8 +24,6 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestOverrideSpringConfig.xml"})
 public class JpaAccountWallMessagesTest {
-    @Autowired
-    private AccountWallMessageDaoFacadeImpl accountWallMessagesDao;
     @Autowired
     private AccountWallMessageDaoFacadeImpl messageDao;
     @Autowired
@@ -61,22 +61,33 @@ public class JpaAccountWallMessagesTest {
         secondMessage.setReceiver(account);
         secondMessage.setDate(valueOf(of(2020, 2, 2, 2, 2)));
         messageDao.create(secondMessage);
-        Collection<AccountWallMessage> messages = accountWallMessagesDao.getMessages(account.getId());
+        Collection<AccountWallMessage> messages = messageDao.getMessages(account.getId());
         assertEquals(2, messages.size());
         messageDao.delete(firstMessage);
         messageDao.delete(secondMessage);
     }
 
     @Test
+    @Transactional
+    public void testTransactions() {
+        accountDao.create(author);
+        accountDao.create(author);
+        accountDao.create(author);
+        Account account1 = accountDao.select(author);
+        System.out.println(account1);
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.NEVER)
     public void testMessageExists() {
-        AccountWallMessage message = new AccountWallMessage();
-        message.setText("first message");
-        message.setReceiver(account);
-        message.setAuthor(author);
-        message.setDate(valueOf(of(2020, 2, 2, 2, 2)));
-        assertTrue(messageDao.create(message));
         //todo
-//        assertTrue(accountWallMessagesDao.relationExists(account.getId(), message.getId()));
-        messageDao.delete(message);
+//        AccountWallMessage message = new AccountWallMessage();
+//        message.setText("first message");
+//        message.setReceiver(account);
+//        message.setAuthor(author);
+//        message.setDate(valueOf(of(2020, 2, 2, 2, 2)));
+//        assertTrue(messageDao.create(message));
+//        assertEquals(message, messageDao.select(message));
+//        messageDao.delete(message);
     }
 }

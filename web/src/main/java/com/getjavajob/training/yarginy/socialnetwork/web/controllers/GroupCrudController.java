@@ -4,6 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
+import com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers.GroupDto;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.updaters.GroupFieldsUpdater;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 import com.getjavajob.training.yarginy.socialnetwork.web.validators.GroupValidator;
@@ -17,12 +18,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import java.sql.Date;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.GROUP;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.PHOTO;
@@ -49,10 +51,11 @@ public class GroupCrudController {
     }
 
     @PostMapping("/create")
-    public ModelAndView performCreation(HttpSession session, @ModelAttribute Group group,
+    public ModelAndView performCreation(HttpSession session, @ModelAttribute("group") GroupDto groupDto,
                                         @RequestParam(value = "save", required = false) String save,
-                                        BindingResult result, @SessionAttribute("user") Account owner) {
+                                        BindingResult result) {
         GroupFieldsUpdater updater = new GroupFieldsUpdater(session, GROUP_CREATE_VIEW);
+        Group group = groupDto.getGroup();
         if ("cancel".equals(save)) {
             return updater.acceptActionOrRetry(true, null);
         }
@@ -68,7 +71,7 @@ public class GroupCrudController {
             return updater.getModelAndView(group);
         }
 
-        group.setOwner(owner);
+        group.setOwner((Account) session.getAttribute("user"));
         return createGroup(updater, group, result);
     }
 
@@ -98,10 +101,12 @@ public class GroupCrudController {
     }
 
     @PostMapping("/update")
-    public ModelAndView performUpdate(HttpSession session, @ModelAttribute Group group, BindingResult result,
+    public ModelAndView performUpdate(HttpSession session, @ModelAttribute("group") GroupDto groupDto,
                                       @RequestParam(value = "save", required = false) String save,
-                                      @RequestAttribute("id") long requestedId, HttpServletRequest request) {
+                                      @RequestAttribute("id") long requestedId, HttpServletRequest request,
+                                      BindingResult result) {
         GroupFieldsUpdater updater = new GroupFieldsUpdater(session, GROUP_UPDATE_VIEW);
+        Group group = groupDto.getGroup();
         if ("cancel".equals(save)) {
             return updater.acceptActionOrRetry(true, group);
         }

@@ -1,7 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.selfmanytomany;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.JpaSelfManyToMany;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.SelfManyToMany;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -26,7 +26,7 @@ public abstract class GenericSelfManyToMany<E extends Model> implements SelfMany
         return genericSelect(entityManager, id);
     }
 
-    protected abstract JpaSelfManyToMany<E> genericCreateObject(EntityManager entityManager, long greaterId, long lowerId);
+    protected abstract SelfManyToMany<E> genericCreateObject(EntityManager entityManager, long greaterId, long lowerId);
 
     @Override
     @Transactional
@@ -37,7 +37,7 @@ public abstract class GenericSelfManyToMany<E extends Model> implements SelfMany
         long greaterId = max(firstId, secondId);
         long lowerId = min(firstId, secondId);
         checkId(greaterId, lowerId);
-        JpaSelfManyToMany<E> manyToMany = genericCreateObject(entityManager, greaterId, lowerId);
+        SelfManyToMany<E> manyToMany = genericCreateObject(entityManager, greaterId, lowerId);
         try {
             entityManager.persist(manyToMany);
             entityManager.flush();
@@ -46,7 +46,7 @@ public abstract class GenericSelfManyToMany<E extends Model> implements SelfMany
         }
     }
 
-    protected abstract JpaSelfManyToMany<E> genericFind(EntityManager entityManager, long greaterId, long lowerId);
+    protected abstract SelfManyToMany<E> genericFind(EntityManager entityManager, long greaterId, long lowerId);
 
     @Override
     @Transactional
@@ -57,11 +57,11 @@ public abstract class GenericSelfManyToMany<E extends Model> implements SelfMany
         long greaterId = max(firstId, secondId);
         long lowerId = min(firstId, secondId);
         checkId(greaterId, lowerId);
-        JpaSelfManyToMany<E> manyToMany = genericFind(entityManager, greaterId, lowerId);
+        SelfManyToMany<E> manyToMany = genericFind(entityManager, greaterId, lowerId);
         return !isNull(manyToMany);
     }
 
-    protected abstract JpaSelfManyToMany<E> genericGetReference(EntityManager entityManager, long greaterId, long lowerId);
+    protected abstract SelfManyToMany<E> genericGetReference(EntityManager entityManager, long greaterId, long lowerId);
 
     @Override
     @Transactional
@@ -73,7 +73,7 @@ public abstract class GenericSelfManyToMany<E extends Model> implements SelfMany
         long lowerId = min(firstId, secondId);
         checkId(greaterId, lowerId);
         try {
-            JpaSelfManyToMany<E> friendship = genericGetReference(entityManager, greaterId, lowerId);
+            SelfManyToMany<E> friendship = genericGetReference(entityManager, greaterId, lowerId);
             entityManager.remove(friendship);
         } catch (PersistenceException e) {
             throw new IllegalArgumentException(e);

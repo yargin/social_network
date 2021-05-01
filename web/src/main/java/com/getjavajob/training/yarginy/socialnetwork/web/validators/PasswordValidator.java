@@ -34,25 +34,24 @@ public class PasswordValidator implements Validator {
         }
     }
 
-//    todo doesn't showed
-private void validateStringPassword(String password, Errors errors) {
-    String fieldName = "password.stringPassword";
-    if (isNull(password)) {
-        errors.rejectValue(fieldName, NOT_PASSWORD);
-        return;
+    private void validateStringPassword(String password, Errors errors) {
+        String fieldName = "password.stringPassword";
+        if (isNull(password)) {
+            errors.rejectValue(fieldName, NOT_PASSWORD);
+            return;
+        }
+        if (password.length() < MIN_PASSWORD) {
+            errors.rejectValue(fieldName, "error.passwordTooShort");
+        }
+        if (password.length() > MAX_PASSWORD) {
+            errors.rejectValue(fieldName, "error.passwordTooLong");
+        }
+        Pattern lettersDigitsOnly = Pattern.compile("[a-zA-Z0-9]+");
+        Pattern hasLetterPattern = Pattern.compile(".*[a-zA-Z].*");
+        Pattern hasDigitPattern = Pattern.compile(".*\\d.*");
+        if (!lettersDigitsOnly.matcher(password).matches() && !hasLetterPattern.matcher(password).matches() &&
+                !hasDigitPattern.matcher(password).matches()) {
+            errors.rejectValue(fieldName, NOT_PASSWORD);
+        }
     }
-    if (password.length() < MIN_PASSWORD) {
-        errors.rejectValue(fieldName, "error.passwordTooShort");
-    }
-    if (password.length() > MAX_PASSWORD) {
-        errors.rejectValue(fieldName, "error.passwordTooLong");
-    }
-    Pattern lettersDigitsOnly = Pattern.compile("[a-zA-Z0-9]+");
-    Pattern hasLetterPattern = Pattern.compile(".*[a-zA-Z].*");
-    Pattern hasDigitPattern = Pattern.compile(".*\\d.*");
-    if (!lettersDigitsOnly.matcher(password).matches() || !hasLetterPattern.matcher(password).matches() ||
-            !hasDigitPattern.matcher(password).matches()) {
-        errors.rejectValue(fieldName, NOT_PASSWORD);
-    }
-}
 }

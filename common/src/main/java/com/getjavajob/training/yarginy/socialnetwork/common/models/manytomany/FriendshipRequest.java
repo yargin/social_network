@@ -19,7 +19,7 @@ import java.util.Objects;
 @Scope("prototype")
 @Entity
 @Table(name = "friendships_requests")
-public class FriendshipRequest implements JpaManyToMany<Account, Account> {
+public class FriendshipRequest implements ManyToMany<Account, Account> {
     @EmbeddedId
     private FriendshipRequestsKey friendshipRequestsKey = new FriendshipRequestsKey();
     @ManyToOne

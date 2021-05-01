@@ -58,10 +58,7 @@ public class AccountsGroupsTest {
     @Test
     public void testSelectGroups() {
         List<Group> expectedGroups = asList(firstGroup, secondGroup);
-        //todo
-        System.out.println("==================================================");
         Collection<Group> actualGroups = accountDaoFacade.getOwnedGroups(account.getId());
-        System.out.println("==================================================");
         assertEquals(expectedGroups, actualGroups);
     }
 }

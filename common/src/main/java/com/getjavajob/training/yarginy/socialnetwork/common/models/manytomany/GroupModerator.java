@@ -20,7 +20,7 @@ import java.util.Objects;
 @Scope("prototype")
 @Entity
 @Table(name = "groups_moderators")
-public class GroupModerator implements JpaManyToMany<Account, Group> {
+public class GroupModerator implements ManyToMany<Account, Group> {
     @EmbeddedId
     private GroupModeratorKey key = new GroupModeratorKey();
     @ManyToOne

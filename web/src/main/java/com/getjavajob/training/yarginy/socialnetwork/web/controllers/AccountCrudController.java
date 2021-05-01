@@ -205,8 +205,8 @@ public class AccountCrudController {
     }
 
     @GetMapping("/account/delete")
-    //todo fix
-    public String delete(@ModelAttribute Account accountToDelete) {
+    public String delete(@RequestAttribute long id) {
+        Account accountToDelete = new Account(id);
         if (accountService.deleteAccount(accountToDelete)) {
             return REDIRECT + LOGOUT;
         }

@@ -28,8 +28,8 @@ public class AccountDialogsDao implements OneToManyDao<Dialog> {
     @Transactional
     public Collection<Dialog> selectMany(long accountId) {
         Account account = new Account(accountId);
-        TypedQuery<Dialog> selectMany = entityManager.createQuery("select d from Dialog d join fetch d.firstAccount f " +
-                        "join fetch d.secondAccount s where d.firstAccount = :account or d.secondAccount = :account",
+        TypedQuery<Dialog> selectMany = entityManager.createQuery("select d from Dialog d join fetch d.firstAccount " +
+                        "join fetch d.secondAccount where d.firstAccount = :account or d.secondAccount = :account",
                 Dialog.class);
         selectMany.setParameter("account", account);
         return selectMany.getResultList();

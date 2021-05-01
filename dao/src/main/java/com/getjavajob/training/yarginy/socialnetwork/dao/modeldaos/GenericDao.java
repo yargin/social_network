@@ -46,7 +46,7 @@ public abstract class GenericDao<E extends Model> implements Dao<E> {
         }
     }
 
-    protected abstract boolean checkEntity(E model);
+    protected abstract boolean checkEntityFail(E model);
 
     protected abstract void prepareModelRelations(EntityManager entityManager, E model);
 
@@ -54,13 +54,10 @@ public abstract class GenericDao<E extends Model> implements Dao<E> {
     @Transactional
     public void create(E model) {
         try {
-            if (model.getId() != 0) {
+            if (model.getId() != 0 || checkEntityFail(model)) {
                 throw new IllegalArgumentException();
             }
         } catch (UnsupportedOperationException ignore) {
-        }
-        if (checkEntity(model)) {
-            throw new IllegalArgumentException();
         }
         try {
             prepareModelRelations(entityManager, model);
@@ -79,7 +76,7 @@ public abstract class GenericDao<E extends Model> implements Dao<E> {
         Supplier<E> storedSupplier = getModelReference(entityManager, model);
         try {
             E stored = storedSupplier.get();
-            if (stored.getId() == 0 || checkEntity(model)) {
+            if (stored.getId() == 0 || checkEntityFail(model)) {
                 throw new IllegalArgumentException();
             }
             entityManager.merge(model);

@@ -45,11 +45,11 @@ public class MessageAccessChecker extends HandlerInterceptorAdapter {
 
         boolean hasAccess = false;
         String type = req.getParameter("type");
-        if ("accountWall".equals(type)) {
+        if ("account".equals(type)) {
             hasAccess = isAuthor || isReceiver;
-        } else if ("accountPrivate".equals(type)) {
+        } else if ("dialog".equals(type)) {
             hasAccess = isAuthor || dialogService.isTalker(currentUserId, receiverId);
-        } else if ("groupWall".equals(type)) {
+        } else if ("group".equals(type)) {
             hasAccess = isAuthor || groupService.isModerator(currentUserId, receiverId) || groupService.
                     isOwner(currentUserId, receiverId);
         }

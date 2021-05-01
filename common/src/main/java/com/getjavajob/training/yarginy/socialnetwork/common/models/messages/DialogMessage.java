@@ -22,7 +22,7 @@ public class DialogMessage extends Message<Dialog> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "receiver_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "c_34"))
     private Dialog receiver;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(nullable = false, name = "author", referencedColumnName = "id", foreignKey = @ForeignKey(name = "c_33"))
     private Account author;
 

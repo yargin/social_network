@@ -28,6 +28,7 @@
                         <input type="hidden" value="${id}" name="receiverId">
                         <input type="hidden" value="${author.id}" name="requesterId">
                         <input type="hidden" value="${message.id}" name="id">
+                        <input type="hidden" value="${type}" name="type">
                         <button type="submit"><fmt:message key="button.delete"/></button>
                     </form>
                 </c:if>

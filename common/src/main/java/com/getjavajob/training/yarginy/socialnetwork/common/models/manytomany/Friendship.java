@@ -20,7 +20,7 @@ import java.util.Objects;
 @Scope("prototype")
 @Entity
 @Table(name = "friendships")
-public class Friendship implements JpaSelfManyToMany<Account> {
+public class Friendship implements SelfManyToMany<Account> {
     @EmbeddedId
     private FriendshipKey friendshipKey = new FriendshipKey();
     @ManyToOne

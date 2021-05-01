@@ -8,10 +8,9 @@
 
 <div class="wallMessage" style="margin-left: 10%; margin-right: 10%">
     <form action="${context}/message/${type}/add" method="post" enctype="multipart/form-data">
-        <input type="hidden" value="${sessionScope.userId}" name="author.id">
         <input type="hidden" value="${sessionScope.userId}" name="requesterId">
-        <input type="hidden" value="${id}" name="receiver.id">
         <input type="hidden" value="${id}" name="receiverId">
+        <input type="hidden" value="${type}" name="type">
         <div style=" border-bottom: none;">
             <textarea name="text" placeholder="<fmt:message key="form.inputText" bundle="${form}"/>"></textarea>
         </div>
