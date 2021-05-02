@@ -37,6 +37,7 @@ public class OwnerGroupsDao implements OneToManyDao<Group> {
     @Override
     public boolean relationExists(long accountId, long groupId) {
         Group group = groupDao.select(groupId);
-        return !isNull(group.getOwner()) && group.getOwner().getId() == accountId;
+        Account owner = group.getOwner();
+        return !isNull(owner) && owner.getId() == accountId;
     }
 }

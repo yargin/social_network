@@ -48,12 +48,12 @@
         <form:errors path="account.additionalEmail" element="div"/>
 
         <spring:message code="form.password" var="formPassword"/>
-        <form:input type="password" path="password.stringPassword" placeholder="${formPassword}"/> <br>
-        <form:errors path="password.stringPassword" element="div"/>
+        <form:input type="password" path="password" placeholder="${formPassword}"/> <br>
+        <form:errors path="password" element="div"/>
 
         <spring:message code="form.confirmPassword" var="formConfirmPassword"/>
-        <form:input type="password" path="confirmPassword.stringPassword" placeholder="${formConfirmPassword}"/> <br>
-        <form:errors path="confirmPassword.stringPassword" element="div"/>
+        <form:input type="password" path="confirmPassword" placeholder="${formConfirmPassword}"/> <br>
+        <form:errors path="confirmPassword" element="div"/>
 
         <label><spring:message code="form.birthdate"/></label>
         <form:input type="date" path="account.birthDate" value="${account.birthDate}"/> <br>

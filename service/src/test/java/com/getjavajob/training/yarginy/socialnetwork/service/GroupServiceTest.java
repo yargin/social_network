@@ -35,7 +35,7 @@ public class GroupServiceTest {
         owner.setId(1);
         Group group = new Group("testGroup", null);
         group.setId(1);
-        assertThrows(DataFlowViolationException.class, () -> groupService.createGroup(group));
+        assertThrows(NullPointerException.class, () -> groupService.createGroup(group));
         group.setOwner(owner);
         when(groupDaoFacade.create(group)).thenReturn(false);
         assertThrows(IncorrectDataException.class, () -> groupService.createGroup(group));

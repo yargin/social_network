@@ -18,6 +18,8 @@
                id="accountUpdate" modelAttribute="accountInfoMvcModel">
 
         <%--@elvariable id="account" type="com.getjavajob.training.yarginy.socialnetwork.common.models.Account"--%>
+        <form:hidden path="account.id" value="${account.id}"/>
+
         <label><spring:message code="form.name"/></label>
         <form:input type="text" path="account.name" value="${account.name}" required="required"/> <br>
         <form:errors path="account.name" element="div"/>

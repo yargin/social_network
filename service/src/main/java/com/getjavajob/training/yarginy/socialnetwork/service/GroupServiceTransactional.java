@@ -32,7 +32,7 @@ public class GroupServiceTransactional implements Serializable {
     public void createGroupAndInviteOwner(Group group) {
         Account owner = group.getOwner();
         if (isNull(owner)) {
-            throw new DataFlowViolationException("owner can't be null");
+            throw new NullPointerException("owner can't be null");
         }
         group.setCreationDate(Date.valueOf(LocalDate.now()));
         if (!groupDaoFacade.create(group)) {

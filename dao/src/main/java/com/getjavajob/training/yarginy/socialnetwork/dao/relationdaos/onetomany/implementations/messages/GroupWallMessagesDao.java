@@ -15,12 +15,12 @@ import java.util.Collection;
 import static java.util.Objects.isNull;
 
 @Repository
-public class GroupWallMessagesDAo implements OneToManyDao<GroupWallMessage> {
+public class GroupWallMessagesDao implements OneToManyDao<GroupWallMessage> {
     @PersistenceContext
     private transient EntityManager entityManager;
     private final GroupWallMessageDao messageDao;
 
-    public GroupWallMessagesDAo(GroupWallMessageDao messageDao) {
+    public GroupWallMessagesDao(GroupWallMessageDao messageDao) {
         this.messageDao = messageDao;
     }
 
@@ -38,6 +38,7 @@ public class GroupWallMessagesDAo implements OneToManyDao<GroupWallMessage> {
     @Override
     public boolean relationExists(long groupId, long messageId) {
         GroupWallMessage message = messageDao.select(messageId);
-        return !isNull(message.getReceiver()) && message.getReceiver().getId() == groupId;
+        Group  receiver = message.getReceiver();
+        return !isNull(receiver) && receiver.getId() == groupId;
     }
 }

@@ -24,18 +24,18 @@ public class PasswordValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         AccountInfoMvcModel model = (AccountInfoMvcModel) target;
-        Password password = model.getPassword();
+        String password = model.getPassword();
         if (isNull(password)) {
-            errors.rejectValue("password.stringPassword", NOT_PASSWORD);
+            errors.rejectValue("password", NOT_PASSWORD);
         } else if (!password.equals(model.getConfirmPassword())) {
-            errors.rejectValue("confirmPassword.stringPassword", "error.passwordNotMatch");
+            errors.rejectValue("confirmPassword", "error.passwordNotMatch");
         } else {
-            validateStringPassword(password.getStringPassword(), errors);
+            validateStringPassword(password, errors);
         }
     }
 
     private void validateStringPassword(String password, Errors errors) {
-        String fieldName = "password.stringPassword";
+        String fieldName = "password";
         if (isNull(password)) {
             errors.rejectValue(fieldName, NOT_PASSWORD);
             return;
@@ -49,7 +49,7 @@ public class PasswordValidator implements Validator {
         Pattern lettersDigitsOnly = Pattern.compile("[a-zA-Z0-9]+");
         Pattern hasLetterPattern = Pattern.compile(".*[a-zA-Z].*");
         Pattern hasDigitPattern = Pattern.compile(".*\\d.*");
-        if (!lettersDigitsOnly.matcher(password).matches() && !hasLetterPattern.matcher(password).matches() &&
+        if (!lettersDigitsOnly.matcher(password).matches() || !hasLetterPattern.matcher(password).matches() ||
                 !hasDigitPattern.matcher(password).matches()) {
             errors.rejectValue(fieldName, NOT_PASSWORD);
         }

@@ -38,7 +38,9 @@ public class AccountDialogsDao implements OneToManyDao<Dialog> {
     @Override
     public boolean relationExists(long accountId, long dialogId) {
         Dialog dialog = dialogDao.select(dialogId);
-        return !isNull(dialog.getFirstAccount()) && dialog.getFirstAccount().getId() == accountId ||
-                !isNull(dialog.getSecondAccount()) && dialog.getSecondAccount().getId() == accountId;
+        Account firstAccount = dialog.getFirstAccount();
+        Account secondAccount = dialog.getSecondAccount();
+        return !isNull(firstAccount) && !isNull(secondAccount) && (firstAccount.getId() == accountId ||
+                 secondAccount.getId() == accountId);
     }
 }

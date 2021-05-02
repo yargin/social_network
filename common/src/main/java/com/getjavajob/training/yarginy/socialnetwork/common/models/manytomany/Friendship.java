@@ -63,7 +63,6 @@ public class Friendship implements SelfManyToMany<Account> {
     @Embeddable
     static class FriendshipKey implements Serializable {
         private long firstAccountId;
-        @Column(name = "second_account")
         private long secondAccountId;
 
         public FriendshipKey() {

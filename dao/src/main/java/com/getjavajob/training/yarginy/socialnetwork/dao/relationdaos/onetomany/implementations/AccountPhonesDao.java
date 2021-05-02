@@ -37,6 +37,7 @@ public class AccountPhonesDao implements OneToManyDao<Phone> {
     @Override
     public boolean relationExists(long accountId, long phoneId) {
         Phone phone = phoneDao.select(phoneId);
-        return !isNull(phone.getOwner()) && phone.getOwner().getId() == accountId;
+        Account owner = phone.getOwner();
+        return !isNull(owner) && owner.getId() == accountId;
     }
 }

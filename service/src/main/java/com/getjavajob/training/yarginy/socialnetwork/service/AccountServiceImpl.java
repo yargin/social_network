@@ -28,7 +28,6 @@ public class AccountServiceImpl implements AccountService {
     private final TransactionPerformer transactionPerformer;
     private final AccountServiceTransactional serviceTransactional;
 
-    @Autowired
     public AccountServiceImpl(AccountDaoFacade accountDaoFacade, PhoneDaoFacade phoneDaoFacade,
                               FriendshipsDaoFacade friendshipDao, DialogDaoFacade dialogDaoFacade,
                               TransactionPerformer transactionPerformer,

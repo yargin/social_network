@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 public interface AuthService extends Serializable {
-    boolean register(Account account, Collection<Phone> phones, Password password);
+    boolean register(Account account, Collection<Phone> phones, String password);
 
     Account login(String email, String password);
 }

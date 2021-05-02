@@ -34,7 +34,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public boolean register(Account account, Collection<Phone> phones, Password password) {
+    public boolean register(Account account, Collection<Phone> phones, String password) {
         account.setRegistrationDate(Date.valueOf(LocalDate.now()));
         if (!accountDaoFacade.create(account)) {
             throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
@@ -46,9 +46,8 @@ public class AuthServiceImpl implements AuthService {
         if (!phoneDaoFacade.create(phones)) {
             throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
         }
-        password.setAccount(savedAccount);
-        password.setStringPassword(dataHandler.encrypt(password.getStringPassword()));
-        if (!passwordDaoFacade.create(password)) {
+        Password passwordObject = new Password(savedAccount, dataHandler.encrypt(password));
+        if (!passwordDaoFacade.create(passwordObject)) {
             throw new IllegalStateException();
         }
         return true;

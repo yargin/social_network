@@ -39,6 +39,7 @@ public class DialogMessagesDao implements OneToManyDao<DialogMessage> {
     @Override
     public boolean relationExists(long dialogId, long messageId) {
         DialogMessage message = messageDao.select(messageId);
-        return !isNull(message.getReceiver()) && message.getReceiver().getId() == dialogId;
+        Dialog receiver = message.getReceiver();
+        return !isNull(receiver) && receiver.getId() == dialogId;
     }
 }

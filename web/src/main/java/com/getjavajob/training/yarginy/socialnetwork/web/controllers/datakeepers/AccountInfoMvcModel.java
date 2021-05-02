@@ -10,8 +10,8 @@ import java.util.List;
 @Component
 public class AccountInfoMvcModel implements Serializable {
     private Account account;
-    private Password password;
-    private Password confirmPassword;
+    private String password;
+    private String confirmPassword;
     private List<PhoneView> privatePhones;
     private List<PhoneView> workPhones;
 
@@ -23,19 +23,19 @@ public class AccountInfoMvcModel implements Serializable {
         this.account = account;
     }
 
-    public Password getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(Password password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
-    public Password getConfirmPassword() {
+    public String getConfirmPassword() {
         return confirmPassword;
     }
 
-    public void setConfirmPassword(Password confirmPassword) {
+    public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
     }
 

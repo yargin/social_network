@@ -80,16 +80,15 @@ public class GroupDaoFacadeTest {
         assertTrue(groupDaoFacade.update(group));
     }
 
-    //todo
     @Test
-    @Transactional
     public void testSelectGroup() {
         byte[] bytes = new byte[10000];
         byte i = 1;
         Arrays.fill(bytes, i);
         group.setPhoto(bytes);
         groupDaoFacade.create(group);
-        Group actual = groupDaoFacade.select(group);
+        Group created = groupDaoFacade.select(group);
+        Group actual = groupDaoFacade.selectFullInfo(created.getId());
         assertArrayEquals(actual.getPhoto(), bytes);
         assertEquals(group, actual);
         actual = groupDaoFacade.select(actual.getId());
@@ -97,14 +96,14 @@ public class GroupDaoFacadeTest {
     }
 
     @Test
-    @Transactional
     public void testSelectGroupById() {
         byte[] bytes = new byte[10000];
         byte i = 1;
         Arrays.fill(bytes, i);
         group.setPhoto(bytes);
         groupDaoFacade.create(group);
-        Group actual = groupDaoFacade.select(group.getId());
+        Group created = groupDaoFacade.select(group);
+        Group actual = groupDaoFacade.selectFullInfo(created.getId());
         assertEquals(group, actual);
         assertArrayEquals(actual.getPhoto(), bytes);
         actual = groupDaoFacade.select(actual.getId());

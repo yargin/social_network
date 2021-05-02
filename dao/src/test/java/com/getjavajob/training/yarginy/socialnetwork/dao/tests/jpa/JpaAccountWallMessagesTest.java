@@ -33,6 +33,8 @@ public class JpaAccountWallMessagesTest {
 
     @Before
     public void initValues() {
+        //todo remove that line
+        accountDao.delete(author);
         if (!accountDao.create(account)) {
             account = accountDao.select(account);
         }
@@ -67,26 +69,26 @@ public class JpaAccountWallMessagesTest {
         messageDao.delete(secondMessage);
     }
 
-    @Test
-    @Transactional
-    public void testTransactions() {
-        accountDao.create(author);
-        accountDao.create(author);
-        accountDao.create(author);
-        Account account1 = accountDao.select(author);
-        System.out.println(account1);
-    }
+//    @Test
+//    @Transactional
+//    public void testTransactions() {
+//        accountDao.create(author);
+//        accountDao.create(author);
+//        accountDao.create(author);
+//        Account account1 = accountDao.select(author);
+//        System.out.println(account1);
+//    }
 
     @Test
-    @Transactional(propagation = Propagation.NEVER)
+    @Transactional
     public void testMessageExists() {
+        AccountWallMessage message = new AccountWallMessage();
+        message.setText("first message");
+        message.setReceiver(account);
+        message.setAuthor(author);
+        message.setDate(valueOf(of(2020, 2, 2, 2, 2)));
+        assertTrue(messageDao.create(message));
         //todo
-//        AccountWallMessage message = new AccountWallMessage();
-//        message.setText("first message");
-//        message.setReceiver(account);
-//        message.setAuthor(author);
-//        message.setDate(valueOf(of(2020, 2, 2, 2, 2)));
-//        assertTrue(messageDao.create(message));
 //        assertEquals(message, messageDao.select(message));
 //        messageDao.delete(message);
     }

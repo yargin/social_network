@@ -100,7 +100,7 @@ public class AccountCrudController {
                                   BindingResult result) {
         boolean registered;
         Collection<Phone> phones = updater.getPhonesFromModel(accountInfoMvcModel);
-        Password password = accountInfoMvcModel.getPassword();
+        String password = accountInfoMvcModel.getPassword();
         try {
             registered = authService.register(accountInfoMvcModel.getAccount(), phones, password);
         } catch (IncorrectDataException e) {

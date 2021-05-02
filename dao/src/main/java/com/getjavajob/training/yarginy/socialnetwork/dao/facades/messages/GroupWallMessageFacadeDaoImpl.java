@@ -3,7 +3,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.GroupWallMessage;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.TransactionPerformer;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldaos.implementations.messages.GroupWallMessageDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.onetomany.implementations.messages.GroupWallMessagesDAo;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.onetomany.implementations.messages.GroupWallMessagesDao;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -11,11 +11,11 @@ import java.util.Collection;
 @Component("groupWallMessageDaoFacade")
 public class GroupWallMessageFacadeDaoImpl implements GroupWallMessageDaoFacade {
     private final GroupWallMessageDao groupWallMessageDao;
-    private final GroupWallMessagesDAo groupWallMessagesDao;
+    private final GroupWallMessagesDao groupWallMessagesDao;
     private final TransactionPerformer transactionPerformer;
 
     public GroupWallMessageFacadeDaoImpl(GroupWallMessageDao groupWallMessageDao,
-                                         GroupWallMessagesDAo groupWallMessagesDao,
+                                         GroupWallMessagesDao groupWallMessagesDao,
                                          TransactionPerformer transactionPerformer) {
         this.groupWallMessageDao = groupWallMessageDao;
         this.groupWallMessagesDao = groupWallMessagesDao;

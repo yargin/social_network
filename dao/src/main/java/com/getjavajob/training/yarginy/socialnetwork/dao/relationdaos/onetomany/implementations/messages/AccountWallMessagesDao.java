@@ -37,6 +37,7 @@ public class AccountWallMessagesDao implements OneToManyDao<AccountWallMessage> 
     @Override
     public boolean relationExists(long accountId, long messageId) {
         AccountWallMessage message = messageDao.select(messageId);
-        return !isNull(message.getReceiver()) && message.getReceiver().getId() ==  accountId;
+        Account receiver = message.getReceiver();
+        return !isNull(receiver) && receiver.getId() == accountId;
     }
 }
