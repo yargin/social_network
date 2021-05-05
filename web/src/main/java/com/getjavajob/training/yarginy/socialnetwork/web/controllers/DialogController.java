@@ -69,11 +69,11 @@ public class DialogController {
             return new ModelAndView(redirector.redirectBackView(req));
         }
         ModelAndView modelAndView = new ModelAndView(DIALOG_VIEW);
-        modelAndView.addObject("dialog", dialog);
+        modelAndView.addObject(DIALOG, dialog);
         Collection<DialogMessage> messages = messageService.selectMessages(id);
         modelAndView.addObject("messages", messages);
-        modelAndView.addObject("type", "dialog");
-        modelAndView.addObject(TAB, "dialog");
+        modelAndView.addObject("type", DIALOG);
+        modelAndView.addObject(TAB, DIALOG);
         return modelAndView;
     }
 

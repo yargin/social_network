@@ -11,7 +11,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -121,9 +120,8 @@ public class GroupDaoFacadeTest {
         groupDaoFacade.create(group);
         String newDescription = "new Description";
         group.setDescription(newDescription);
-        Group storedGroup = groupDaoFacade.select(group);
         assertTrue(groupDaoFacade.update(group));
-        storedGroup = groupDaoFacade.select(group);
+        Group storedGroup = groupDaoFacade.select(group);
         assertEquals(newDescription, storedGroup.getDescription());
     }
 

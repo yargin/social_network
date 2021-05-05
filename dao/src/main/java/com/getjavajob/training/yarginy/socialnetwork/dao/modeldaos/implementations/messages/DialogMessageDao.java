@@ -3,14 +3,11 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.modeldaos.implementati
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.DialogMessage;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.GroupWallMessage;
 import com.getjavajob.training.yarginy.socialnetwork.dao.modeldaos.GenericDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldaos.implementations.DialogDao;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,12 +18,6 @@ import static java.util.Objects.isNull;
 
 @Repository
 public class DialogMessageDao extends GenericDao<DialogMessage> {
-    private final DialogDao dialogDao;
-
-    public DialogMessageDao(DialogDao dialogDao) {
-        this.dialogDao = dialogDao;
-    }
-
     @Override
     public DialogMessage getNullModel() {
         return getNullDialogMessage();

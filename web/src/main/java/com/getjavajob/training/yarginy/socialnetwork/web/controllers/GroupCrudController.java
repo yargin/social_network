@@ -24,8 +24,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import java.sql.Date;
-
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.GROUP;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.PHOTO;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.REDIRECT;

@@ -58,6 +58,7 @@ public abstract class GenericDao<E extends Model> implements Dao<E> {
                 throw new IllegalArgumentException();
             }
         } catch (UnsupportedOperationException ignore) {
+            //password doesn't have id, but other handling is same
         }
         try {
             prepareModelRelations(entityManager, model);

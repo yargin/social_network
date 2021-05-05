@@ -4,7 +4,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;

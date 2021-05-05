@@ -4,6 +4,9 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 
 import java.sql.Date;
+import java.util.Arrays;
+
+import static java.util.Objects.isNull;
 
 public class GroupDto {
     private long id;
@@ -58,7 +61,9 @@ public class GroupDto {
     }
 
     public void setPhoto(byte[] photo) {
-        this.photo = photo;
+        if (!isNull(photo)) {
+            this.photo = Arrays.copyOf(photo, photo.length);
+        }
     }
 
     public Group getGroup() {

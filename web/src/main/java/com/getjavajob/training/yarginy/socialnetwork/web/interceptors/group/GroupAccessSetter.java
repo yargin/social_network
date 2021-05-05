@@ -25,7 +25,7 @@ public class GroupAccessSetter extends HandlerInterceptorAdapter {
     }
 
     @Override
-    public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) {
         HttpSession session = req.getSession();
         long requestedGroupId;
         Object objectId = req.getAttribute(REQUESTED_ID);

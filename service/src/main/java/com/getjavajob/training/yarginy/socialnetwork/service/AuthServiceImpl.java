@@ -6,6 +6,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.ModelsFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PasswordDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
@@ -24,13 +25,16 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordDaoFacade passwordDaoFacade;
     private final PhoneDaoFacade phoneDaoFacade;
     private final DataHandler dataHandler;
+    private final ModelsFactory modelsFactory;
 
     public AuthServiceImpl(DataHandler dataHandler, AccountDaoFacade accountDaoFacade,
-                           PasswordDaoFacade passwordDaoFacade, PhoneDaoFacade phoneDaoFacade) {
+                           PasswordDaoFacade passwordDaoFacade, PhoneDaoFacade phoneDaoFacade,
+                            ModelsFactory modelsFactory) {
         this.dataHandler = dataHandler;
         this.accountDaoFacade = accountDaoFacade;
         this.passwordDaoFacade = passwordDaoFacade;
         this.phoneDaoFacade = phoneDaoFacade;
+        this.modelsFactory = modelsFactory;
     }
 
     @Override
@@ -46,7 +50,7 @@ public class AuthServiceImpl implements AuthService {
         if (!phoneDaoFacade.create(phones)) {
             throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
         }
-        Password passwordObject = new Password(savedAccount, dataHandler.encrypt(password));
+        Password passwordObject = modelsFactory.getPassword(savedAccount, dataHandler.encrypt(password));
         if (!passwordDaoFacade.create(passwordObject)) {
             throw new IllegalStateException();
         }

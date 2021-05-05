@@ -10,6 +10,9 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.Grou
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.Message;
 
 import java.sql.Timestamp;
+import java.util.Arrays;
+
+import static java.util.Objects.isNull;
 
 public class MessageDto {
     private long id;
@@ -38,7 +41,9 @@ public class MessageDto {
     }
 
     public void setImage(byte[] image) {
-        this.image = image;
+        if (!isNull(image)) {
+            this.image = Arrays.copyOf(image, image.length);
+        }
     }
 
     public Timestamp getDate() {

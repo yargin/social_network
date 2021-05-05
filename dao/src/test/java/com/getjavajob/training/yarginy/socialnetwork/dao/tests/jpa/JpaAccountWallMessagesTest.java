@@ -11,15 +11,12 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 
 import static java.sql.Timestamp.valueOf;
 import static java.time.LocalDateTime.of;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestOverrideSpringConfig.xml"})
@@ -33,8 +30,6 @@ public class JpaAccountWallMessagesTest {
 
     @Before
     public void initValues() {
-        //todo remove that line
-        accountDao.delete(author);
         if (!accountDao.create(account)) {
             account = accountDao.select(account);
         }
@@ -67,29 +62,5 @@ public class JpaAccountWallMessagesTest {
         assertEquals(2, messages.size());
         messageDao.delete(firstMessage);
         messageDao.delete(secondMessage);
-    }
-
-//    @Test
-//    @Transactional
-//    public void testTransactions() {
-//        accountDao.create(author);
-//        accountDao.create(author);
-//        accountDao.create(author);
-//        Account account1 = accountDao.select(author);
-//        System.out.println(account1);
-//    }
-
-    @Test
-    @Transactional
-    public void testMessageExists() {
-        AccountWallMessage message = new AccountWallMessage();
-        message.setText("first message");
-        message.setReceiver(account);
-        message.setAuthor(author);
-        message.setDate(valueOf(of(2020, 2, 2, 2, 2)));
-        assertTrue(messageDao.create(message));
-        //todo
-//        assertEquals(message, messageDao.select(message));
-//        messageDao.delete(message);
     }
 }

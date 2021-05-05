@@ -1,7 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.common.models.messages;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 

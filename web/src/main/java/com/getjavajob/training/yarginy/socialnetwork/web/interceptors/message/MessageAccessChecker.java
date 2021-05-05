@@ -4,6 +4,8 @@ import com.getjavajob.training.yarginy.socialnetwork.service.DialogService;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.AccountInfoHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.Redirector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -13,10 +15,13 @@ import javax.servlet.http.HttpServletResponse;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.RECEIVER_ID;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTER_ID;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER_ID;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Messages.CHECK_FAILED;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Messages.CHECK_PASSED;
 
 
 @Component
 public class MessageAccessChecker extends HandlerInterceptorAdapter {
+    private static final Logger logger = LoggerFactory.getLogger(MessageAccessChecker.class);
     private final GroupService groupService;
     private final DialogService dialogService;
     private final AccountInfoHelper infoHelper;
@@ -54,8 +59,10 @@ public class MessageAccessChecker extends HandlerInterceptorAdapter {
                     isOwner(currentUserId, receiverId);
         }
         if (!hasAccess) {
+            logger.info(CHECK_FAILED);
             redirector.redirectToReferer(req, resp);
         }
+        logger.info(CHECK_PASSED);
         return hasAccess;
     }
 }

@@ -3,7 +3,6 @@ package com.getjavajob.training.yarginy.socialnetwork.common.models;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.AccountWallMessage;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.DialogMessage;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.GroupWallMessage;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.Message;
 
 public abstract class NullModelsFactory {
     private NullModelsFactory() {
@@ -37,12 +36,6 @@ public abstract class NullModelsFactory {
         nullPassword.setStringPassword("nullPassword0");
         nullPassword.setAccount(getNullAccount());
         return nullPassword;
-    }
-
-    public static Message getNullMessage() {
-        Message message = new AccountWallMessage();
-        message.setAuthor(getNullAccount());
-        return message;
     }
 
     public static AccountWallMessage getNullAccountWallMessage() {

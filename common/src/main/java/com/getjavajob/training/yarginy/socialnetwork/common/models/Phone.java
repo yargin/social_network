@@ -16,7 +16,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 import java.util.Objects;
 
@@ -49,7 +48,7 @@ public class Phone implements Model {
     public Phone(String number, Account owner) {
         this.number = number;
         this.owner = owner;
-        setType(PRIVATE);
+        this.type = PRIVATE;
     }
 
     public String getNumber() {

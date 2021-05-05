@@ -1,10 +1,8 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.controllers;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.AccountWallMessage;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.DialogMessage;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.GroupWallMessage;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.Message;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.AccountWallMessageService;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.DialogMessagesService;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.GroupWallMessageService;

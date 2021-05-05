@@ -9,15 +9,15 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacad
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData.*;
-import static java.sql.Date.*;
-import static java.time.LocalDate.*;
+import static com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData.EMAIL_DUPLICATE;
+import static com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData.PHONE_DUPLICATE;
+import static com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData.WRONG_REQUEST;
+import static java.sql.Date.valueOf;
+import static java.time.LocalDate.now;
 
 @Service
 public class AccountServiceImpl implements AccountService {

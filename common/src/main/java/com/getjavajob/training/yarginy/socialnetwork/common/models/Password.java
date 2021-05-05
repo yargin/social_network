@@ -22,12 +22,13 @@ import java.util.Objects;
 @Table(name = "passwords")
 @NamedEntityGraph(name = "graph.Password.allProperties", includeAllAttributes = true)
 public class Password implements Model {
+    private static final String COLUMN_EMAIL = "email";
     @Id
-    @Column(name = "email")
+    @Column(name = COLUMN_EMAIL)
     private String email;
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId("email")
-    @JoinColumn(name="email", referencedColumnName="email", foreignKey = @ForeignKey(name = "c_21"))
+    @JoinColumn(name= COLUMN_EMAIL, referencedColumnName= COLUMN_EMAIL, foreignKey = @ForeignKey(name = "c_21"))
     private Account account;
     @Column(name = "password")
     private String stringPassword;

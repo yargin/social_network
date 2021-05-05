@@ -3,7 +3,6 @@ package com.getjavajob.training.yarginy.socialnetwork.service.messages;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.DialogMessage;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages.DialogMessageDaoFacadeImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
