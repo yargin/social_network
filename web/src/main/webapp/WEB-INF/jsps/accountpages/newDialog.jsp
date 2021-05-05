@@ -9,12 +9,10 @@
     <div class="wallMessage" style="margin-right: 40%">
         <form action="${context}/dialog/create" method="post" enctype="multipart/form-data">
             <input type="hidden" value="${sessionScope.userId}" name="requesterId">
-            <input type="hidden" value="${sessionScope.userId}" name="author.id">
             <input type="hidden" value="${id}" name="receiverId">
-            <input type="hidden" value="${id}" name="receiver.id">
             <input type="hidden" value="${type}" name="type">
             <div style=" border-bottom: none;">
-                <textarea name="text" placeholder="asd"></textarea>
+                <textarea name="text"></textarea>
             </div>
             <br>
             <input type="file" name="imageUpload" accept="image/*"

@@ -4,16 +4,24 @@ import com.getjavajob.training.yarginy.socialnetwork.service.DialogService;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.AccountInfoHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.Redirector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.RECEIVER_ID;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTER_ID;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER_ID;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Messages.CHECK_FAILED;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Messages.CHECK_PASSED;
+
 
 @Component
 public class MessageAccessChecker extends HandlerInterceptorAdapter {
+    private static final Logger logger = LoggerFactory.getLogger(MessageAccessChecker.class);
     private final GroupService groupService;
     private final DialogService dialogService;
     private final AccountInfoHelper infoHelper;
@@ -42,17 +50,19 @@ public class MessageAccessChecker extends HandlerInterceptorAdapter {
 
         boolean hasAccess = false;
         String type = req.getParameter("type");
-        if ("accountWall".equals(type)) {
+        if ("account".equals(type)) {
             hasAccess = isAuthor || isReceiver;
-        } else if ("accountPrivate".equals(type)) {
+        } else if ("dialog".equals(type)) {
             hasAccess = isAuthor || dialogService.isTalker(currentUserId, receiverId);
-        } else if ("groupWall".equals(type)) {
+        } else if ("group".equals(type)) {
             hasAccess = isAuthor || groupService.isModerator(currentUserId, receiverId) || groupService.
                     isOwner(currentUserId, receiverId);
         }
         if (!hasAccess) {
+            logger.info(CHECK_FAILED);
             redirector.redirectToReferer(req, resp);
         }
+        logger.info(CHECK_PASSED);
         return hasAccess;
     }
 }

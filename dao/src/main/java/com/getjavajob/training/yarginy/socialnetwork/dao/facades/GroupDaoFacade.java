@@ -1,7 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -9,13 +9,15 @@ import java.util.Collection;
 public interface GroupDaoFacade extends Serializable {
     Group select(long id);
 
+    Group selectFullInfo(long id);
+
     Group select(Group group);
 
-    Group getNullEntity();
+    Group getNullModel();
 
     boolean create(Group group);
 
-    boolean update(Group group, Group storedGroup);
+    boolean update(Group group);
 
     boolean delete(Group group);
 

@@ -1,4 +1,4 @@
-<%@ tag import="com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex" %>
+<%@ tag import="com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.Sex" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="common" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="account" tagdir="/WEB-INF/tags/account" %>
@@ -14,7 +14,7 @@
     <%--@elvariable id="accountInfoMvcModel" type="com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers.AccountInfoMvcModel"--%>
     <form:form action="${context}/registration" method="post" enctype="multipart/form-data"
                onsubmit="return acceptPhones()" modelAttribute="accountInfoMvcModel">
-        <%--@elvariable id="account" type="com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account"--%>
+        <%--@elvariable id="account" type="com.getjavajob.training.yarginy.socialnetwork.common.models.Account"--%>
         <spring:message code="form.name" var="formName"/>
         <form:input type="text" path="account.name" value="${account.name}" placeholder="${formName}"
                     required="required"/> <br>
@@ -48,12 +48,12 @@
         <form:errors path="account.additionalEmail" element="div"/>
 
         <spring:message code="form.password" var="formPassword"/>
-        <form:input type="password" path="password.stringPassword" placeholder="${formPassword}"/> <br>
-        <form:errors path="password.stringPassword" element="div"/>
+        <form:input type="password" path="password" placeholder="${formPassword}"/> <br>
+        <form:errors path="password" element="div"/>
 
         <spring:message code="form.confirmPassword" var="formConfirmPassword"/>
-        <form:input type="password" path="confirmPassword.stringPassword" placeholder="${formConfirmPassword}"/> <br>
-        <form:errors path="confirmPassword.stringPassword" element="div"/>
+        <form:input type="password" path="confirmPassword" placeholder="${formConfirmPassword}"/> <br>
+        <form:errors path="confirmPassword" element="div"/>
 
         <label><spring:message code="form.birthdate"/></label>
         <form:input type="date" path="account.birthDate" value="${account.birthDate}"/> <br>

@@ -1,15 +1,18 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Password;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.TransactionPerformer;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldaos.implementations.PasswordDao;
 import org.springframework.stereotype.Component;
 
 @Component("passwordDaoFacade")
 public class PasswordDaoFacadeImpl implements PasswordDaoFacade {
-    private final Dao<Password> passwordDao;
+    private final PasswordDao passwordDao;
+    private final TransactionPerformer transactionPerformer;
 
-    public PasswordDaoFacadeImpl(Dao<Password> passwordDao) {
+    public PasswordDaoFacadeImpl(PasswordDao passwordDao, TransactionPerformer transactionPerformer) {
         this.passwordDao = passwordDao;
+        this.transactionPerformer = transactionPerformer;
     }
 
     @Override
@@ -19,16 +22,16 @@ public class PasswordDaoFacadeImpl implements PasswordDaoFacade {
 
     @Override
     public boolean create(Password password) {
-        return passwordDao.create(password);
+        return transactionPerformer.transactionPerformed(passwordDao::create, password);
     }
 
     @Override
-    public boolean update(Password password, Password storedPassword) {
-        return passwordDao.update(password, storedPassword);
+    public boolean delete(Password password) {
+        return transactionPerformer.transactionPerformed(passwordDao::delete, password);
     }
 
     @Override
     public Password getNullPassword() {
-        return passwordDao.getNullEntity();
+        return passwordDao.getNullModel();
     }
 }

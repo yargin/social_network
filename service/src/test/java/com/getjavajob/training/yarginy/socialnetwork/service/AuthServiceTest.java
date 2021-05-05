@@ -1,10 +1,11 @@
 package com.getjavajob.training.yarginy.socialnetwork.service;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.Sex;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Password;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.ModelsFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PasswordDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
@@ -12,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.sql.Date;
@@ -31,6 +33,8 @@ public class AuthServiceTest {
     @Mock
     private PhoneDaoFacade phoneDaoFacade;
     @Mock
+    private ModelsFactory modelsFactory;
+    @Mock
     private DataHandler dataHandler;
     @InjectMocks
     private AuthServiceImpl authService;
@@ -44,14 +48,15 @@ public class AuthServiceTest {
         Phone firstPhone = new Phone("8921123", account);
         Phone secondPhone = new Phone("1231211", account);
         Collection<Phone> phones = asList(firstPhone, secondPhone);
-        Password password = new Password();
-        password.setStringPassword("123qwe123");
-        password.setAccount(account);
         when(accountDaoFacade.create(account)).thenReturn(true);
         when(accountDaoFacade.select(account)).thenReturn(account);
         when(phoneDaoFacade.create(phones)).thenReturn(true);
+        Password password = Mockito.mock(Password.class);
+        String stringPassword = "123qwe123";
+        when(dataHandler.encrypt(stringPassword)).thenReturn(stringPassword);
+        when(modelsFactory.getPassword(account, stringPassword)).thenReturn(password);
         when(passwordDaoFacade.create(password)).thenReturn(true);
-        boolean registered = authService.register(account, phones, password);
+        boolean registered = authService.register(account, phones, stringPassword);
         assertTrue(registered);
     }
 }

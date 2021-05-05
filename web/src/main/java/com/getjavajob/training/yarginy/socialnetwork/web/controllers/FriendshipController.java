@@ -1,18 +1,28 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.controllers;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.AccountInfoHelper;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.Redirector;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.*;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.ERROR;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTED_ID;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.TAB;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.FRIENDS;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.FRIENDSHIP_REQUESTS;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.REDIRECT;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.FRIENDSHIP_REQUEST_VIEW;
 import static java.util.Objects.isNull;
 
@@ -56,7 +66,8 @@ public class FriendshipController {
             modelAndView.addObject(ERROR, "error.wrongRequest");
         }
 
-        infoHelper.setAccountInfo(modelAndView, receiverId);
+        Account account = accountService.getFullInfo(receiverId);
+        infoHelper.setAccountInfo(modelAndView, account);
         modelAndView.addObject(TAB, "addFriend");
         modelAndView.addObject(REQUESTED_ID, receiverId);
         return modelAndView;

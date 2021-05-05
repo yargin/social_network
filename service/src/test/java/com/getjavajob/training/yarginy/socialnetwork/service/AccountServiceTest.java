@@ -1,38 +1,45 @@
 package com.getjavajob.training.yarginy.socialnetwork.service;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"classpath:serviceTestOverrideSpringConfig.xml"})
+@ActiveProfiles("accountServiceTest")
 public class AccountServiceTest {
-    @Mock
-    private AccountDaoFacade accountDaoFacade;
-    @Mock
-    private FriendshipsDaoFacade friendsDao;
-    @Mock
+    @Autowired
+    private AccountServiceTransactional accountServiceTransactional;
+    @Autowired
     private PhoneDaoFacade phoneDaoFacade;
-    @InjectMocks
+    @Autowired
+    private FriendshipsDaoFacade friendsDao;
+    @Autowired
+    private AccountDaoFacade accountDaoFacade;
+    @Autowired
     private AccountServiceImpl accountService;
     private Account account;
-    private Account storedAccount;
     private Collection<Phone> phones;
     private Collection<Phone> storedPhones;
 
@@ -77,16 +84,16 @@ public class AccountServiceTest {
 
     @Test
     public void testUpdateAccount() {
-        when(accountDaoFacade.update(account, storedAccount)).thenReturn(true);
+        when(accountDaoFacade.update(account)).thenReturn(true);
         when(phoneDaoFacade.update(phones, storedPhones)).thenReturn(true);
-        assertTrue(accountService.updateAccount(account, storedAccount, phones, storedPhones));
+        assertTrue(accountService.updateAccount(account, phones, storedPhones));
     }
 
     @Test(expected = IncorrectDataException.class)
     public void testUpdateAccountFail() {
-        when(accountDaoFacade.update(account, storedAccount)).thenReturn(false);
+        when(accountDaoFacade.update(account)).thenReturn(false);
         when(phoneDaoFacade.update(phones, storedPhones)).thenReturn(true);
-        accountService.updateAccount(account, storedAccount, phones, storedPhones);
+        accountService.updateAccount(account, phones, storedPhones);
     }
 
     @Test
@@ -99,8 +106,8 @@ public class AccountServiceTest {
 
     @Test
     public void testAddFriend() {
-        when(friendsDao.deleteRequest(account.getId(), 13)).thenReturn(true);
-        when(friendsDao.createFriendship(account.getId(), 13)).thenReturn(false);
+        doThrow(IllegalArgumentException.class).when(accountServiceTransactional).addFriendTransactional(account.getId(),
+                13);
         assertFalse(accountService.addFriend(account.getId(), 13));
     }
 

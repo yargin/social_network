@@ -1,24 +1,25 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.Message;
 
 import java.io.Serializable;
 import java.util.Collection;
 
-public interface MessageDao extends Serializable {
-    Message select(long id);
+public interface MessageDao<O extends Model, E extends Message<O>> extends Serializable {
+    E select(long id);
 
-    Message select(Message message);
+    E select(E message);
 
-    boolean create(Message message);
+    boolean create(E message);
 
-    boolean update(Message message, Message storedMessage);
+    boolean update(E message);
 
-    boolean delete(Message message);
+    boolean delete(E message);
 
-    Collection<Message> selectAll();
+    Collection<E> selectAll();
 
-    Message getNullMessage();
+    E getNullMessage();
 
-    Collection<Message> getMessages(long id);
+    Collection<E> getMessages(long oneId);
 }

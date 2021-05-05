@@ -61,11 +61,14 @@
             <mvc:mapping path="/group/update*"/>
             <mvc:mapping path="/account/delete*"/>
             <mvc:mapping path="/account/update*"/>
+            <mvc:mapping path="/account/savexml*"/>
+            <mvc:mapping path="/account/upload*"/>
+            <mvc:mapping path="/message/*/delete*"/>
             <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.common.OneIdInterceptor"/>
         </mvc:interceptor>
 
         <mvc:interceptor>
-            <mvc:mapping path="/message/*"/>
+            <mvc:mapping path="/message/**"/>
             <mvc:mapping path="/dialog/create*"/>
             <mvc:mapping path="/dialog/new*"/>
             <mvc:mapping path="/friendship/*"/>
@@ -101,7 +104,7 @@
         </mvc:interceptor>
 
         <mvc:interceptor>
-            <mvc:mapping path="/message/*"/>
+            <mvc:mapping path="/message/**"/>
             <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.message.MessageAccessChecker"/>
         </mvc:interceptor>
 
@@ -118,6 +121,8 @@
             <mvc:mapping path="/friendship/remove*"/>
             <mvc:mapping path="/account/delete*"/>
             <mvc:mapping path="/account/update*"/>
+            <mvc:mapping path="/account/savexml*"/>
+            <mvc:mapping path="account/upload*"/>
             <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.account.AccountOwnerChecker"/>
         </mvc:interceptor>
 

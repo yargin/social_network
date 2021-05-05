@@ -1,19 +1,27 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.controllers;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
+import com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers.GroupDto;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.updaters.GroupFieldsUpdater;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 import com.getjavajob.training.yarginy.socialnetwork.web.validators.GroupValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.GROUP;
@@ -41,10 +49,11 @@ public class GroupCrudController {
     }
 
     @PostMapping("/create")
-    public ModelAndView performCreation(HttpSession session, @ModelAttribute Group group,
+    public ModelAndView performCreation(HttpSession session, @ModelAttribute("group") GroupDto groupDto,
                                         @RequestParam(value = "save", required = false) String save,
-                                        BindingResult result, @SessionAttribute("user") Account owner) {
+                                        BindingResult result) {
         GroupFieldsUpdater updater = new GroupFieldsUpdater(session, GROUP_CREATE_VIEW);
+        Group group = groupDto.getGroup();
         if ("cancel".equals(save)) {
             return updater.acceptActionOrRetry(true, null);
         }
@@ -60,7 +69,7 @@ public class GroupCrudController {
             return updater.getModelAndView(group);
         }
 
-        group.setOwner(owner);
+        group.setOwner((Account) session.getAttribute("user"));
         return createGroup(updater, group, result);
     }
 
@@ -76,10 +85,11 @@ public class GroupCrudController {
     }
 
     @GetMapping("/update")
-    public ModelAndView showUpdate(@RequestAttribute("id") long requestedId, HttpSession session) {
+    public ModelAndView showUpdate(@RequestAttribute("id") long requestedId, HttpSession session,
+                                   HttpServletRequest request) {
         GroupFieldsUpdater updater = new GroupFieldsUpdater(session, GROUP_UPDATE_VIEW);
         //select at first visit
-        Group group = groupService.get(requestedId);
+        Group group = groupService.getFullInfo(requestedId);
 
         //save to session if wasn't
         if (isNull(session.getAttribute(GROUP))) {
@@ -89,10 +99,12 @@ public class GroupCrudController {
     }
 
     @PostMapping("/update")
-    public ModelAndView performUpdate(HttpSession session, @ModelAttribute Group group, BindingResult result,
+    public ModelAndView performUpdate(HttpSession session, @ModelAttribute("group") GroupDto groupDto,
                                       @RequestParam(value = "save", required = false) String save,
-                                      @RequestAttribute("id") long requestedId) {
+                                      @RequestAttribute("id") long requestedId, HttpServletRequest request,
+                                      BindingResult result) {
         GroupFieldsUpdater updater = new GroupFieldsUpdater(session, GROUP_UPDATE_VIEW);
+        Group group = groupDto.getGroup();
         if ("cancel".equals(save)) {
             return updater.acceptActionOrRetry(true, group);
         }
@@ -105,20 +117,25 @@ public class GroupCrudController {
         } else {
             storedGroup.setPhoto(group.getPhoto());
         }
+        group.setVersion(storedGroup.getVersion());
 
         groupValidator.validate(group, result);
         if (result.hasErrors()) {
             return updater.getModelAndView(group);
         }
 
-        //for next view
-        return updateGroup(updater, group, storedGroup, result);
+        try {
+            return updateGroup(updater, group, result);
+        } catch (IllegalStateException e) {
+            request.setAttribute("concurrentError", "error.concurrentError");
+            return showUpdate(storedGroup.getId(), session, request);
+        }
     }
 
-    private ModelAndView updateGroup(GroupFieldsUpdater updater, Group group, Group storedGroup, BindingResult result) {
+    private ModelAndView updateGroup(GroupFieldsUpdater updater, Group group, BindingResult result) {
         boolean updated;
         try {
-            updated = groupService.updateGroup(group, storedGroup);
+            updated = groupService.updateGroup(group);
         } catch (IncorrectDataException e) {
             result.rejectValue("name", "error.duplicate");
             return updater.getModelAndView(group);

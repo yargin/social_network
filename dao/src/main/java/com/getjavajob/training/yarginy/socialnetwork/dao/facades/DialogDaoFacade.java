@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -8,13 +8,15 @@ import java.util.Collection;
 public interface DialogDaoFacade extends Serializable {
     Dialog select(long id);
 
+    Dialog selectFullInfo(long id);
+
     Dialog select(Dialog dialog);
 
-    Dialog getNullEntity();
+    Dialog getNullModel();
 
     boolean create(Dialog dialog);
 
-    boolean update(Dialog dialog, Dialog storedDialog);
+    boolean update(Dialog dialog);
 
     boolean delete(Dialog dialog);
 

@@ -1,5 +1,5 @@
-<%--@elvariable id="user" type="com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account"--%>
-<%@ tag import="com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex" %>
+<%--@elvariable id="user" type="com.getjavajob.training.yarginy.socialnetwork.common.models.Account"--%>
+<%@ tag import="com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.Sex" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <fmt:setBundle basename="form" var="form"/>
@@ -49,6 +49,8 @@
     <div>
         <a href="${context}/account/update?id=${id}"><fmt:message key="label.updateInfo" bundle="${label}"/></a><br>
         <a href="${context}/account/delete?id=${id}" onclick='return confirmation("${confirmText}")'><fmt:message
-                key="label.deleteAccount" bundle="${label}"/></a>
+                key="label.deleteAccount" bundle="${label}"/></a><br>
+        <a href="${context}/account/savexml?id=${id}" download="account id ${id}.xml">
+            <fmt:message key="label.saveAccountInfo" bundle="${label}"/> </a>
     </div>
 </c:if>

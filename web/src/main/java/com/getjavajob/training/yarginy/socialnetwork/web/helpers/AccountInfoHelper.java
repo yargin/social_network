@@ -1,8 +1,8 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.helpers;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.Role;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
 import org.springframework.stereotype.Component;
@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType.PRIVATE;
-import static com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType.WORK;
+import static com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.PhoneType.PRIVATE;
+import static com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.PhoneType.WORK;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.PHOTO;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER;
 import static java.util.Objects.isNull;
@@ -28,12 +28,11 @@ public class AccountInfoHelper {
         this.dataHandler = dataHandler;
     }
 
-    public void setAccountInfo(ModelAndView modelAndView, long id) {
-        Account account = accountService.get(id);
+    public void setAccountInfo(ModelAndView modelAndView, Account account) {
         modelAndView.addObject("user", account);
         modelAndView.addObject(PHOTO, dataHandler.getHtmlPhoto(account.getPhoto()));
 
-        Collection<Phone> phones = accountService.getPhones(id);
+        Collection<Phone> phones = accountService.getPhones(account.getId());
         Collection<Phone> privatePhones = phones.stream().filter(phone -> PRIVATE.equals(phone.getType())).
                 collect(Collectors.toList());
         modelAndView.addObject("privatePhones", privatePhones);

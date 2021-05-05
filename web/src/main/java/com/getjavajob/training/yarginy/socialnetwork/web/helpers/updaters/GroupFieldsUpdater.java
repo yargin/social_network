@@ -1,13 +1,15 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.helpers.updaters;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.GROUP;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.PHOTO;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTED_ID;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.GROUP_WALL;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.REDIRECT;
 import static java.util.Objects.isNull;

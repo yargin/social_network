@@ -1,8 +1,8 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -10,13 +10,15 @@ import java.util.Collection;
 public interface AccountDaoFacade extends Serializable {
     Account select(long id);
 
+    Account selectFullInfo(long id);
+
     Account select(Account account);
 
-    Account getNullEntity();
+    Account getNullModel();
 
     boolean create(Account account);
 
-    boolean update(Account account, Account storedAccount);
+    boolean update(Account account);
 
     boolean delete(Account account);
 

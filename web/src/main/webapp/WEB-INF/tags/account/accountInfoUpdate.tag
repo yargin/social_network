@@ -1,4 +1,4 @@
-<%@ tag import="com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Sex" %>
+<%@ tag import="com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.Sex" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="common" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="account" tagdir="/WEB-INF/tags/account" %>
@@ -6,6 +6,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
+
 <script type="text/javascript" src="${context}/js/phonesEdit.js"></script>
 <script type="text/javascript" src="${context}/js/confirmationDialog.js"></script>
 
@@ -16,7 +17,9 @@
                onsubmit='return confirmation("${confirmText}", acceptPhones())'
                id="accountUpdate" modelAttribute="accountInfoMvcModel">
 
-        <%--@elvariable id="account" type="com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account"--%>
+        <%--@elvariable id="account" type="com.getjavajob.training.yarginy.socialnetwork.common.models.Account"--%>
+        <form:hidden path="account.id" value="${account.id}"/>
+
         <label><spring:message code="form.name"/></label>
         <form:input type="text" path="account.name" value="${account.name}" required="required"/> <br>
         <form:errors path="account.name" element="div"/>

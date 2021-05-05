@@ -1,35 +1,36 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.ManyToManyDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.SelfManyToManyDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.TransactionPerformer;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldaos.implementations.AccountDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.manytomany.implementations.GroupMembershipDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.onetomany.implementations.AccountPhonesDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.onetomany.implementations.OwnerGroupsDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.selfmanytomany.implementations.FriendshipsDao;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
 @Component("accountDaoFacade")
 public class AccountDaoFacadeImpl implements AccountDaoFacade {
-    private final Dao<Account> accountDao;
-    private final OneToManyDao<Group> accountGroupsDao;
-    private final ManyToManyDao<Account, Group> accountsInGroupsDao;
-    private final OneToManyDao<Phone> accountPhonesDao;
-    private final SelfManyToManyDao<Account> accountFriendsDao;
+    private final AccountDao accountDao;
+    private final OwnerGroupsDao accountGroupsDao;
+    private final AccountPhonesDao accountPhonesDao;
+    private final GroupMembershipDao accountsInGroupsDao;
+    private final FriendshipsDao accountFriendsDao;
+    private final TransactionPerformer transactionPerformer;
 
-    public AccountDaoFacadeImpl(Dao<Account> accountDao,
-                                @Qualifier("groupOwnersDao") OneToManyDao<Group> accountGroupsDao,
-                                @Qualifier("groupMembershipDao") ManyToManyDao<Account, Group> accountsInGroupsDao,
-                                OneToManyDao<Phone> accountPhonesDao,
-                                SelfManyToManyDao<Account> accountFriendsDao) {
+    public AccountDaoFacadeImpl(AccountDao accountDao, OwnerGroupsDao accountGroupsDao, AccountPhonesDao accountPhonesDao,
+                                GroupMembershipDao accountsInGroupsDao, FriendshipsDao accountFriendsDao,
+                                TransactionPerformer transactionPerformer) {
         this.accountDao = accountDao;
         this.accountGroupsDao = accountGroupsDao;
-        this.accountsInGroupsDao = accountsInGroupsDao;
         this.accountPhonesDao = accountPhonesDao;
+        this.accountsInGroupsDao = accountsInGroupsDao;
         this.accountFriendsDao = accountFriendsDao;
+        this.transactionPerformer = transactionPerformer;
     }
 
     @Override
@@ -38,28 +39,33 @@ public class AccountDaoFacadeImpl implements AccountDaoFacade {
     }
 
     @Override
+    public Account selectFullInfo(long id) {
+        return accountDao.selectFullInfo(id);
+    }
+
+    @Override
     public Account select(Account account) {
         return accountDao.select(account);
     }
 
     @Override
-    public Account getNullEntity() {
-        return accountDao.getNullEntity();
+    public Account getNullModel() {
+        return accountDao.getNullModel();
     }
 
     @Override
     public boolean create(Account account) {
-        return accountDao.create(account);
+        return transactionPerformer.transactionPerformed(accountDao::create, account);
     }
 
     @Override
-    public boolean update(Account account, Account storedAccount) {
-        return accountDao.update(account, storedAccount);
+    public boolean update(Account account) {
+        return transactionPerformer.transactionPerformed(accountDao::update, account);
     }
 
     @Override
     public boolean delete(Account account) {
-        return accountDao.delete(account);
+        return transactionPerformer.transactionPerformed(accountDao::delete, account);
     }
 
     @Override

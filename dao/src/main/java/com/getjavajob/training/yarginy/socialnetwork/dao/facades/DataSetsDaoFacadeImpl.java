@@ -1,9 +1,9 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchableDto;
-import com.getjavajob.training.yarginy.socialnetwork.dao.otherdao.DataSetsDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.otherdaos.DataSetsDao;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;

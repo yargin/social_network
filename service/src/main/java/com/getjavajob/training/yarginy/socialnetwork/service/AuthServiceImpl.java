@@ -2,10 +2,11 @@ package com.getjavajob.training.yarginy.socialnetwork.service;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Password;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.ModelsFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PasswordDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
@@ -15,7 +16,8 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Collection;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullEntitiesFactory.getNullPassword;
+import static com.getjavajob.training.yarginy.socialnetwork.common.utils.NullModelsFactory.getNullPassword;
+
 
 @Service("authService")
 public class AuthServiceImpl implements AuthService {
@@ -23,17 +25,20 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordDaoFacade passwordDaoFacade;
     private final PhoneDaoFacade phoneDaoFacade;
     private final DataHandler dataHandler;
+    private final ModelsFactory modelsFactory;
 
     public AuthServiceImpl(DataHandler dataHandler, AccountDaoFacade accountDaoFacade,
-                           PasswordDaoFacade passwordDaoFacade, PhoneDaoFacade phoneDaoFacade) {
+                           PasswordDaoFacade passwordDaoFacade, PhoneDaoFacade phoneDaoFacade,
+                            ModelsFactory modelsFactory) {
         this.dataHandler = dataHandler;
         this.accountDaoFacade = accountDaoFacade;
         this.passwordDaoFacade = passwordDaoFacade;
         this.phoneDaoFacade = phoneDaoFacade;
+        this.modelsFactory = modelsFactory;
     }
 
     @Override
-    public boolean register(Account account, Collection<Phone> phones, Password password) {
+    public boolean register(Account account, Collection<Phone> phones, String password) {
         account.setRegistrationDate(Date.valueOf(LocalDate.now()));
         if (!accountDaoFacade.create(account)) {
             throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
@@ -45,9 +50,8 @@ public class AuthServiceImpl implements AuthService {
         if (!phoneDaoFacade.create(phones)) {
             throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
         }
-        password.setAccount(savedAccount);
-        password.setStringPassword(dataHandler.encrypt(password.getStringPassword()));
-        if (!passwordDaoFacade.create(password)) {
+        Password passwordObject = modelsFactory.getPassword(savedAccount, dataHandler.encrypt(password));
+        if (!passwordDaoFacade.create(passwordObject)) {
             throw new IllegalStateException();
         }
         return true;
@@ -58,7 +62,7 @@ public class AuthServiceImpl implements AuthService {
         Password passwordObject = new Password();
         Account account = new Account();
         account.setEmail(email);
-        passwordObject.setAccount(account);
+        passwordObject.setAccount(accountDaoFacade.select(account));
         passwordObject.setStringPassword(password);
         passwordObject = passwordDaoFacade.select(passwordObject);
         if (passwordObject.equals(getNullPassword())) {

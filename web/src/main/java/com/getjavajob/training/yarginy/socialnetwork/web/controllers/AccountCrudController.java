@@ -1,12 +1,13 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.controllers;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.password.Password;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.PhoneType;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
 import com.getjavajob.training.yarginy.socialnetwork.service.AuthService;
+import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoXml;
+import com.getjavajob.training.yarginy.socialnetwork.service.xml.AccountInfoXmlServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers.AccountInfoMvcModel;
 import com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers.PhoneView;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.updaters.AccountFieldsUpdater;
@@ -16,16 +17,26 @@ import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType.PRIVATE;
-import static com.getjavajob.training.yarginy.socialnetwork.common.models.phone.additionaldata.PhoneType.WORK;
+import static com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.PhoneType.PRIVATE;
+import static com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.PhoneType.WORK;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.ACCOUNT_INFO;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.PHOTO;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.LOGOUT;
@@ -39,15 +50,18 @@ import static java.util.stream.Collectors.toList;
 public class AccountCrudController {
     private final AuthService authService;
     private final AccountService accountService;
+    private final AccountInfoXmlServiceImpl accountInfoXmlService;
     private final RegistrationValidator registrationValidator;
     private final AccountInfoValidator accountInfoValidator;
 
     public AccountCrudController(AuthService authService, AccountInfoValidator accountInfoValidator,
-                                 AccountService accountService, RegistrationValidator registrationValidator) {
+                                 AccountService accountService, RegistrationValidator registrationValidator,
+                                 AccountInfoXmlServiceImpl accountInfoXmlService) {
         this.authService = authService;
         this.accountService = accountService;
         this.registrationValidator = registrationValidator;
         this.accountInfoValidator = accountInfoValidator;
+        this.accountInfoXmlService = accountInfoXmlService;
     }
 
     @GetMapping("/registration")
@@ -85,7 +99,7 @@ public class AccountCrudController {
                                   BindingResult result) {
         boolean registered;
         Collection<Phone> phones = updater.getPhonesFromModel(accountInfoMvcModel);
-        Password password = accountInfoMvcModel.getPassword();
+        String password = accountInfoMvcModel.getPassword();
         try {
             registered = authService.register(accountInfoMvcModel.getAccount(), phones, password);
         } catch (IncorrectDataException e) {
@@ -103,7 +117,7 @@ public class AccountCrudController {
     public ModelAndView showUpdate(HttpSession session, @RequestAttribute long id) {
         AccountFieldsUpdater updater = new AccountFieldsUpdater(session, ACCOUNT_UPDATE_VIEW);
         AccountInfoMvcModel model = new AccountInfoMvcModel();
-        Account account = accountService.get(id);
+        Account account = accountService.getFullInfo(id);
         model.setAccount(account);
         Collection<Phone> allPhones = accountService.getPhones(id);
         model.setPrivatePhones(getPhoneViews(allPhones, PRIVATE));
@@ -114,8 +128,10 @@ public class AccountCrudController {
         return updater.getModelAndView(model);
     }
 
+
     @PostMapping("/account/update")
-    public ModelAndView performUpdate(HttpSession session, @ModelAttribute AccountInfoMvcModel model,
+    public ModelAndView performUpdate(HttpSession session, HttpServletRequest request,
+                                      @ModelAttribute AccountInfoMvcModel model,
                                       @RequestParam(required = false) String save, BindingResult result) {
         AccountFieldsUpdater updater = new AccountFieldsUpdater(session, ACCOUNT_UPDATE_VIEW);
 
@@ -123,6 +139,10 @@ public class AccountCrudController {
             return updater.acceptActionOrRetry(true, model);
         }
         AccountInfoMvcModel storedModel = (AccountInfoMvcModel) session.getAttribute(ACCOUNT_INFO);
+        if (isNull(storedModel)) {
+            request.setAttribute("concurrentError", "error.concurrentError");
+            return showUpdate(session, model.getAccount().getId());
+        }
         Account storedAccount = storedModel.getAccount();
         Account account = model.getAccount();
         //set non updatable values
@@ -130,6 +150,7 @@ public class AccountCrudController {
         account.setEmail(storedAccount.getEmail());
         account.setRegistrationDate(storedAccount.getRegistrationDate());
         account.setRole(storedAccount.getRole());
+        account.setVersion(storedAccount.getVersion());
 
         setNewPhotoOrGetPrevious(session, model);
 
@@ -137,7 +158,12 @@ public class AccountCrudController {
         if (result.hasErrors()) {
             return updater.getModelAndView(model);
         }
-        return update(updater, model, storedModel, result);
+        try {
+            return update(updater, model, storedModel, result);
+        } catch (IllegalStateException e) {
+            request.setAttribute("concurrentError", "error.concurrentError");
+            return showUpdate(session, storedAccount.getId());
+        }
     }
 
     private ModelAndView update(AccountFieldsUpdater updater, AccountInfoMvcModel model, AccountInfoMvcModel storedModel,
@@ -146,19 +172,58 @@ public class AccountCrudController {
         try {
             Collection<Phone> phones = updater.getPhonesFromModel(model);
             Collection<Phone> storedPhones = updater.getPhonesFromModel(storedModel);
-            updated = accountService.updateAccount(model.getAccount(), storedModel.getAccount(), phones, storedPhones);
+            updated = accountService.updateAccount(model.getAccount(), phones, storedPhones);
         } catch (IncorrectDataException e) {
             return updater.handleInfoExceptions(e, model, result);
         }
         return updater.acceptActionOrRetry(updated, model);
     }
 
+    @PostMapping("/account/upload")
+    public ModelAndView loadUploadedAccountInfo(@RequestParam MultipartFile accountDataXml, HttpSession session,
+                                                @ModelAttribute AccountInfoMvcModel accountInfoMvcModel,
+                                                BindingResult result, HttpServletRequest request,
+                                                @RequestAttribute long id) throws IOException {
+        String xml = new String(accountDataXml.getBytes(), StandardCharsets.UTF_8);
+        try {
+            AccountInfoXml accountXml = accountInfoXmlService.fromXml(xml);
+            accountXml.getAccount().setPhoto(new byte[0]);
+            Account account = accountXml.getAccount();
+            account.setId(id);
+            accountInfoMvcModel.setAccount(account);
+            accountInfoMvcModel.setPrivatePhones(getPhoneViews(accountXml.getPhones(), PRIVATE));
+            accountInfoMvcModel.setWorkPhones(getPhoneViews(accountXml.getPhones(), WORK));
+        } catch (IllegalStateException e) {
+            request.setAttribute("uploadError", "error.wrongXml");
+            return showUpdate(session, id);
+        } catch (IllegalArgumentException e) {
+            request.setAttribute("uploadError", "error.wrongAccountData");
+            return showUpdate(session, id);
+        }
+        return performUpdate(session, request, accountInfoMvcModel, "", result);
+    }
+
     @GetMapping("/account/delete")
-    public String delete(@ModelAttribute Account accountToDelete) {
+    public String delete(@RequestAttribute long id) {
+        Account accountToDelete = new Account(id);
         if (accountService.deleteAccount(accountToDelete)) {
             return REDIRECT + LOGOUT;
         }
         return "error";
+    }
+
+    @GetMapping("/account/savexml")
+    public void getFile(HttpServletResponse response, @RequestAttribute long id) throws IOException {
+        Account account = accountService.get(id);
+        Collection<Phone> allPhones = accountService.getPhones(id);
+        String accountXml = accountInfoXmlService.toXml(new AccountInfoXml(account, allPhones));
+
+        AccountInfoMvcModel model = new AccountInfoMvcModel();
+        model.setAccount(account);
+        model.setPrivatePhones(getPhoneViews(allPhones, PRIVATE));
+        model.setWorkPhones(getPhoneViews(allPhones, WORK));
+
+        response.getWriter().print(accountXml);
     }
 
     @InitBinder

@@ -11,8 +11,6 @@
 
     <groupId>com.getjavajob.training.yarginy.socialnetwork.web</groupId>
     <artifactId>web</artifactId>
-    <!--    todo don't forget to change packaging type-->
-    <!--    todo try again from start-->
     <packaging>war</packaging>
     <properties>
         <tomcat.version>9.0.41</tomcat.version>

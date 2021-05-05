@@ -1,28 +1,28 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldao.Dao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.ManyToManyDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.AccountGroupsDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.onetomany.OneToManyDao;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.TransactionPerformer;
+import com.getjavajob.training.yarginy.socialnetwork.dao.modeldaos.implementations.GroupDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.manytomany.implementations.GroupMembershipDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.onetomany.implementations.OwnerGroupsDao;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
 @Component("groupDaoFacade")
 public class GroupDaoFacadeImpl implements GroupDaoFacade {
-    private final Dao<Group> groupDao;
-    private final OneToManyDao<Group> accountsOwnedGroupsDao;
-    private final ManyToManyDao<Account, Group> accountsGroupMembershipDao;
+    private final GroupDao groupDao;
+    private final OwnerGroupsDao accountsOwnedGroupsDao;
+    private final GroupMembershipDao accountsGroupMembershipDao;
+    private final TransactionPerformer transactionPerformer;
 
-    public GroupDaoFacadeImpl(Dao<Group> groupDao,
-                              AccountGroupsDao accountsOwnedGroupsDao,
-                              @Qualifier("groupMembershipDao") ManyToManyDao<Account, Group> accountsGroupMembershipDao) {
+    public GroupDaoFacadeImpl(GroupDao groupDao, OwnerGroupsDao accountsOwnedGroupsDao,
+                              GroupMembershipDao accountsGroupMembershipDao, TransactionPerformer transactionPerformer) {
         this.groupDao = groupDao;
         this.accountsOwnedGroupsDao = accountsOwnedGroupsDao;
         this.accountsGroupMembershipDao = accountsGroupMembershipDao;
+        this.transactionPerformer = transactionPerformer;
     }
 
     @Override
@@ -31,28 +31,33 @@ public class GroupDaoFacadeImpl implements GroupDaoFacade {
     }
 
     @Override
+    public Group selectFullInfo(long id) {
+        return groupDao.selectFullInfo(id);
+    }
+
+    @Override
     public Group select(Group group) {
         return groupDao.select(group);
     }
 
     @Override
-    public Group getNullEntity() {
-        return groupDao.getNullEntity();
+    public Group getNullModel() {
+        return groupDao.getNullModel();
     }
 
     @Override
     public boolean create(Group group) {
-        return groupDao.create(group);
+        return transactionPerformer.transactionPerformed(groupDao::create, group);
     }
 
     @Override
-    public boolean update(Group group, Group storedGroup) {
-        return groupDao.update(group, storedGroup);
+    public boolean update(Group group) {
+        return transactionPerformer.transactionPerformed(groupDao::update, group);
     }
 
     @Override
     public boolean delete(Group group) {
-        return groupDao.delete(group);
+        return transactionPerformer.transactionPerformed(groupDao::delete, group);
     }
 
     @Override
@@ -72,7 +77,7 @@ public class GroupDaoFacadeImpl implements GroupDaoFacade {
 
     @Override
     public Group getNullGroup() {
-        return groupDao.getNullEntity();
+        return groupDao.getNullModel();
     }
 
     @Override
@@ -82,11 +87,11 @@ public class GroupDaoFacadeImpl implements GroupDaoFacade {
 
     @Override
     public boolean addMember(long accountId, long groupId) {
-        return accountsGroupMembershipDao.create(accountId, groupId);
+        return transactionPerformer.transactionPerformed(accountsGroupMembershipDao::create, accountId, groupId);
     }
 
     @Override
     public boolean removeMember(long accountId, long groupId) {
-        return accountsGroupMembershipDao.delete(accountId, groupId);
+        return transactionPerformer.transactionPerformed(accountsGroupMembershipDao::delete, accountId, groupId);
     }
 }

@@ -1,27 +1,31 @@
 package com.getjavajob.training.yarginy.socialnetwork.service;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.DataFlowViolationException;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsModeratorsDaoFacade;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"classpath:serviceTestOverrideSpringConfig.xml"})
+@ActiveProfiles("groupServiceTest")
 public class GroupServiceTest {
-    @Mock
+    @Autowired
     private GroupDaoFacade groupDaoFacade;
-    @Mock
+    @Autowired
     private GroupsModeratorsDaoFacade moderatorsDao;
-    @InjectMocks
+    @Autowired
     private GroupServiceImpl groupService;
 
     @Test
@@ -30,7 +34,7 @@ public class GroupServiceTest {
         owner.setId(1);
         Group group = new Group("testGroup", null);
         group.setId(1);
-        assertThrows(DataFlowViolationException.class, () -> groupService.createGroup(group));
+        assertThrows(NullPointerException.class, () -> groupService.createGroup(group));
         group.setOwner(owner);
         when(groupDaoFacade.create(group)).thenReturn(false);
         assertThrows(IncorrectDataException.class, () -> groupService.createGroup(group));

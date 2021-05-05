@@ -2,16 +2,20 @@
 
 <Context>
     <Resource name="jdbc/Local-MySql" auth="Container" type="javax.sql.DataSource"
-              driverClassName="com.mysql.cj.jdbc.Driver"
-              factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
-              maxTotal="10" minIdle="2" maxWaitMillis="10000"
-              username="root" password="12131415a"
-              url="jdbc:mysql://localhost:3306/social_network?serverTimezone=UTC"/>
+              factory="com.zaxxer.hikari.HikariJNDIFactory"
+              minimumIdle="2" maximumPoolSize="10"
+              connectionTimeout="10000"
+              dataSourceClassName="com.mysql.cj.jdbc.MysqlDataSource"
+              dataSource.url="jdbc:mysql://localhost:3306/social_network?serverTimezone=UTC"
+              dataSource.user="root"
+              dataSource.password="12131415a"/>
 
     <Resource name="jdbc/Heroku-Jaws" auth="Container" type="javax.sql.DataSource"
-              driverClassName="com.mysql.cj.jdbc.Driver"
-              factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
-              maxTotal="3" minIdle="2" maxWaitMillis="10000"
-              username="ob3tdoreg91spqkc" password="tpkl0gslmimomhgg"
-              url="jdbc:mysql://q2gen47hi68k1yrb.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/crmpcpc571dqa7ra"/>
+              factory="com.zaxxer.hikari.HikariJNDIFactory"
+              minimumIdle="2" maximumPoolSize="3"
+              connectionTimeout="10000"
+              dataSourceClassName="com.mysql.cj.jdbc.MysqlDataSource"
+              dataSource.url="jdbc:mysql://q2gen47hi68k1yrb.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/crmpcpc571dqa7ra"
+              dataSource.user="ob3tdoreg91spqkc"
+              dataSource.password="tpkl0gslmimomhgg"/>
 </Context>

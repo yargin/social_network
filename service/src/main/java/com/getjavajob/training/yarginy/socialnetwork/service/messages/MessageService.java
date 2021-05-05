@@ -1,14 +1,15 @@
 package com.getjavajob.training.yarginy.socialnetwork.service.messages;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.message.Message;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.Message;
 
 import java.io.Serializable;
 import java.util.Collection;
 
-public interface MessageService extends Serializable {
-    boolean addMessage(Message message);
+public interface MessageService<O extends Model, E extends Message<O>> extends Serializable {
+    boolean addMessage(E message);
 
-    boolean deleteMessage(Message message);
+    boolean deleteMessage(E message);
 
-    Collection<Message> selectMessages(long id);
+    Collection<E> selectMessages(long oneId);
 }

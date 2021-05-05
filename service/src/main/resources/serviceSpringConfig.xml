@@ -31,26 +31,24 @@
                       expression="execution(* com.getjavajob.training.yarginy.socialnetwork.service.AuthService.register(..))"/>
         <aop:pointcut id="dialogCreate"
                       expression="execution(* com.getjavajob.training.yarginy.socialnetwork.service.DialogServiceImpl.create(..))"/>
-        <aop:pointcut id="groupJoin"
-                      expression="execution(* com.getjavajob.training.yarginy.socialnetwork.service.GroupServiceImpl.acceptRequest(..))"/>
-        <aop:pointcut id="groupLeave"
-                      expression="execution(* com.getjavajob.training.yarginy.socialnetwork.service.GroupServiceImpl.leaveGroup(..))"/>
 
         <aop:advisor advice-ref="plainTx" pointcut-ref="accountUpdate"/>
         <aop:advisor advice-ref="plainTx" pointcut-ref="accountCreate"/>
         <aop:advisor advice-ref="plainTx" pointcut-ref="register"/>
         <aop:advisor advice-ref="plainTx" pointcut-ref="dialogCreate"/>
-        <aop:advisor advice-ref="plainTx" pointcut-ref="groupJoin"/>
-        <aop:advisor advice-ref="plainTx" pointcut-ref="groupLeave"/>
     </aop:config>
 
     <!--    byte-code proxied methods-->
     <aop:config proxy-target-class="true">
         <aop:pointcut id="addFriend"
-                      expression="execution(* com.getjavajob.training.yarginy.socialnetwork.service.AccountServiceImpl.addFriendTransactional(..))"/>
+                      expression="execution(* com.getjavajob.training.yarginy.socialnetwork.service.AccountServiceTransactional.addFriendTransactional(..))"/>
         <aop:pointcut id="groupCreate"
-                      expression="execution(* com.getjavajob.training.yarginy.socialnetwork.service.GroupServiceImpl.createGroupAndInviteOwner(..))"/>
+                      expression="execution(* com.getjavajob.training.yarginy.socialnetwork.service.GroupServiceTransactional.createGroupAndInviteOwner(..))"/>
+        <aop:pointcut id="acceptGroupRequest"
+                      expression="execution(* com.getjavajob.training.yarginy.socialnetwork.service.GroupServiceTransactional.acceptRequestTransactional(..))"/>
+        <aop:advisor advice-ref="plainTx" pointcut-ref="addFriend"/>
         <aop:advisor advice-ref="plainTx" pointcut-ref="groupCreate"/>
+        <aop:advisor advice-ref="plainTx" pointcut-ref="acceptGroupRequest"/>
     </aop:config>
 
     <tx:advice id="plainTx">
@@ -59,13 +57,9 @@
         </tx:attributes>
     </tx:advice>
 
-    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource"/>
+    <bean id="xStream" class="com.thoughtworks.xstream.XStream">
+        <constructor-arg ref="xmlDriver"/>
     </bean>
 
-    <!--    <tx:annotation-driven proxy-target-class="true" transaction-manager="transactionManager"/>-->
-
-    <!--    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" >-->
-    <!--        <property name="dataSource" ref="dataSource"/>-->
-    <!--    </bean>-->
+    <bean id="xmlDriver" class="com.thoughtworks.xstream.io.xml.Dom4JDriver"/>
 </beans>

@@ -1,22 +1,19 @@
 package com.getjavajob.training.yarginy.socialnetwork.service;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.DataFlowViolationException;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.TransactionPerformer;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DataSetsDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsMembersDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsModeratorsDaoFacade;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
-import java.time.LocalDate;
+import javax.persistence.OptimisticLockException;
 import java.util.Collection;
 import java.util.Map;
-
-import static java.util.Objects.isNull;
 
 @Service
 public class GroupServiceImpl implements GroupService {
@@ -24,13 +21,18 @@ public class GroupServiceImpl implements GroupService {
     private final GroupsMembersDaoFacade membersDao;
     private final GroupsModeratorsDaoFacade moderatorsDao;
     private final DataSetsDaoFacade dataSetsDaoFacade;
+    private final TransactionPerformer transactionPerformer;
+    private final GroupServiceTransactional serviceTransactional;
 
     public GroupServiceImpl(GroupDaoFacade groupDaoFacade, GroupsMembersDaoFacade membersDao,
-                            GroupsModeratorsDaoFacade moderatorsDao, DataSetsDaoFacade dataSetsDaoFacade) {
+                            GroupsModeratorsDaoFacade moderatorsDao, DataSetsDaoFacade dataSetsDaoFacade,
+                            TransactionPerformer transactionPerformer, GroupServiceTransactional serviceTransactional) {
         this.groupDaoFacade = groupDaoFacade;
         this.membersDao = membersDao;
         this.moderatorsDao = moderatorsDao;
         this.dataSetsDaoFacade = dataSetsDaoFacade;
+        this.transactionPerformer = transactionPerformer;
+        this.serviceTransactional = serviceTransactional;
     }
 
     @Override
@@ -41,6 +43,11 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public Group get(long id) {
         return groupDaoFacade.select(id);
+    }
+
+    @Override
+    public Group getFullInfo(long id) {
+        return groupDaoFacade.selectFullInfo(id);
     }
 
     @Override
@@ -60,10 +67,8 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public boolean acceptRequest(long accountId, long groupId) {
-        if (!membersDao.joinGroup(accountId, groupId)) {
-            return false;
-        }
-        return membersDao.removeRequest(accountId, groupId);
+        return transactionPerformer.transactionPerformed(serviceTransactional::acceptRequestTransactional,
+                accountId, groupId);
     }
 
     @Override
@@ -76,8 +81,11 @@ public class GroupServiceImpl implements GroupService {
         if (groupDaoFacade.isOwner(accountId, groupId)) {
             return false;
         }
-        moderatorsDao.deleteGroupModerator(accountId, groupId);
-        return groupDaoFacade.removeMember(accountId, groupId);
+        boolean isRemoved = groupDaoFacade.removeMember(accountId, groupId);
+        if (isRemoved) {
+            moderatorsDao.deleteGroupModerator(accountId, groupId);
+        }
+        return isRemoved;
     }
 
     @Override
@@ -112,28 +120,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public boolean createGroup(Group group) {
-        try {
-            createGroupAndInviteOwner(group);
-            return true;
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
-    }
-
-    public void createGroupAndInviteOwner(Group group) {
-        Account owner = group.getOwner();
-        if (isNull(owner)) {
-            throw new DataFlowViolationException("owner can't be null");
-        }
-        group.setCreationDate(Date.valueOf(LocalDate.now()));
-        if (!groupDaoFacade.create(group)) {
-            throw new IncorrectDataException(IncorrectData.GROUP_DUPLICATE);
-        }
-        Group createdGroup = groupDaoFacade.select(group);
-        if (!groupDaoFacade.addMember(owner.getId(), createdGroup.getId()) ||
-                !moderatorsDao.addGroupModerator(owner.getId(), createdGroup.getId())) {
-            throw new IllegalArgumentException();
-        }
+        return transactionPerformer.transactionPerformed(serviceTransactional::createGroupAndInviteOwner, group);
     }
 
     @Override
@@ -142,9 +129,13 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public boolean updateGroup(Group group, Group storedGroup) {
-        if (!groupDaoFacade.update(group, storedGroup)) {
-            throw new IncorrectDataException(IncorrectData.GROUP_DUPLICATE);
+    public boolean updateGroup(Group group) {
+        try {
+            if (!groupDaoFacade.update(group)) {
+                throw new IncorrectDataException(IncorrectData.GROUP_DUPLICATE);
+            }
+        } catch (OptimisticLockException e) {
+            return false;
         }
         return true;
     }

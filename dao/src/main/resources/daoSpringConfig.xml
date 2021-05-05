@@ -3,6 +3,8 @@
        xmlns="http://www.springframework.org/schema/beans"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
 
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -11,25 +13,49 @@
        http://www.springframework.org/schema/context/spring-context.xsd
 
        http://www.springframework.org/schema/jee
-       http://www.springframework.org/schema/jee/spring-jee.xsd">
+       http://www.springframework.org/schema/jee/spring-jee.xsd
+
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+
+    <aop:aspectj-autoproxy proxy-target-class="true" />
+
+    <tx:annotation-driven/>
 
     <import resource="classpath:commonSpringConfig.xml"/>
 
-    <!--                        jndi-name="jdbc/Local-MySql"-->
-    <jee:jndi-lookup id="dataSource" jndi-name="jdbc/Heroku-Jaws" expected-type="javax.sql.DataSource"/>
+    <jee:jndi-lookup id="dataSource" jndi-name="jdbc/Local-MySql" expected-type="javax.sql.DataSource"/>
 
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate" scope="prototype">
         <constructor-arg ref="dataSource"/>
     </bean>
 
-    <bean id="namedTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate"
-          scope="prototype">
-        <constructor-arg ref="jdbcTemplate"/>
-    </bean>
-
-    <bean id="jdbcInsert" class="org.springframework.jdbc.core.simple.SimpleJdbcInsert" scope="prototype">
-        <constructor-arg ref="jdbcTemplate"/>
-    </bean>
-
     <context:component-scan base-package="com.getjavajob.training.yarginy.socialnetwork.dao"/>
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="com.getjavajob.training.yarginy.socialnetwork.common.models"/>
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="showSql" value="false"/>
+                <property name="databasePlatform" value="org.hibernate.dialect.MySQL5Dialect"/>
+            </bean>
+        </property>
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.physical_naming_strategy">
+                    com.getjavajob.training.yarginy.socialnetwork.common.utils.CamelCaseToSnakeCaseNamingStrategy
+                </prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.globally_quoted_identifiers">true</prop>
+            </props>
+        </property>
+    </bean>
 </beans>

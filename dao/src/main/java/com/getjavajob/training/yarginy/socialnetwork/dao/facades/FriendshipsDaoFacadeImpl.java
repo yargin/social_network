@@ -1,22 +1,24 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.ManyToManyDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationsdao.manytomany.SelfManyToManyDao;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.TransactionPerformer;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.manytomany.implementations.FriendshipRequestsDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.selfmanytomany.implementations.FriendshipsDao;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
 @Component("friendshipsDaoFacade")
 public class FriendshipsDaoFacadeImpl implements FriendshipsDaoFacade {
-    private final SelfManyToManyDao<Account> friendshipDao;
-    private final ManyToManyDao<Account, Account> friendshipRequestsDao;
+    private final FriendshipsDao friendshipDao;
+    private final FriendshipRequestsDao friendshipRequestsDao;
+    private final TransactionPerformer transactionPerformer;
 
-    public FriendshipsDaoFacadeImpl(SelfManyToManyDao<Account> friendshipDao,
-                                    @Qualifier("friendshipRequestsDao") ManyToManyDao<Account, Account> friendshipRequestsDao) {
+    public FriendshipsDaoFacadeImpl(FriendshipsDao friendshipDao, FriendshipRequestsDao friendshipRequestsDao,
+                                    TransactionPerformer transactionPerformer) {
         this.friendshipDao = friendshipDao;
         this.friendshipRequestsDao = friendshipRequestsDao;
+        this.transactionPerformer = transactionPerformer;
     }
 
     @Override
@@ -26,12 +28,12 @@ public class FriendshipsDaoFacadeImpl implements FriendshipsDaoFacade {
 
     @Override
     public boolean createFriendship(long firstId, long secondId) {
-        return friendshipDao.create(firstId, secondId);
+        return transactionPerformer.transactionPerformed(friendshipDao::create, firstId, secondId);
     }
 
     @Override
     public boolean removeFriendship(long firstId, long secondId) {
-        return friendshipDao.delete(firstId, secondId);
+        return transactionPerformer.transactionPerformed(friendshipDao::delete, firstId, secondId);
     }
 
     @Override
@@ -41,12 +43,12 @@ public class FriendshipsDaoFacadeImpl implements FriendshipsDaoFacade {
 
     @Override
     public boolean createRequest(long requesterId, long receiverId) {
-        return friendshipRequestsDao.create(requesterId, receiverId);
+        return transactionPerformer.transactionPerformed(friendshipRequestsDao::create, requesterId, receiverId);
     }
 
     @Override
     public boolean deleteRequest(long requesterId, long receiverId) {
-        return friendshipRequestsDao.delete(requesterId, receiverId);
+        return transactionPerformer.transactionPerformed(friendshipRequestsDao::delete, requesterId, receiverId);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.interceptors.common;
 
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.Redirector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -12,6 +14,8 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 
 @Component
 public class TwoIdsInterceptor extends HandlerInterceptorAdapter {
+    private static final String WRONG_IDS = "parsing ids({}, {}) failed. Redirect back";
+    private static final Logger logger = LoggerFactory.getLogger(TwoIdsInterceptor.class);
     private final Redirector redirector;
 
     public TwoIdsInterceptor(Redirector redirector) {
@@ -28,15 +32,18 @@ public class TwoIdsInterceptor extends HandlerInterceptorAdapter {
             firstRequestedId = Long.parseLong(stringFirstRequestedId);
             secondRequestedId = Long.parseLong(stringSecondRequestedId);
         } catch (NumberFormatException e) {
+            logger.info(WRONG_IDS, stringFirstRequestedId, stringSecondRequestedId);
             redirector.redirectToReferer(req, resp);
             return false;
         }
         if (firstRequestedId < 1 || secondRequestedId < 1) {
+            logger.info(WRONG_IDS, stringFirstRequestedId, stringSecondRequestedId);
             redirector.redirectToReferer(req, resp);
             return false;
         }
         req.setAttribute(REQUESTER_ID, firstRequestedId);
         req.setAttribute(RECEIVER_ID, secondRequestedId);
+        logger.info("parsed ids number successfully");
         return true;
     }
 }

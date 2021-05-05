@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -8,11 +8,13 @@ import java.util.Collection;
 public interface PhoneDaoFacade extends Serializable {
     Phone select(long id);
 
+    Phone selectFullInfo(long id);
+
     Phone select(Phone phone);
 
     boolean create(Phone phone);
 
-    boolean update(Phone phone, Phone storedPhone);
+    boolean update(Phone phone);
 
     boolean delete(Phone phone);
 

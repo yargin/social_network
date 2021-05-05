@@ -26,6 +26,7 @@ public final class Attributes {
     public static final String MESSAGE = "message";
     public static final String TAB = "tab";
     public static final String DIALOGS = "dialogs";
+    public static final String DIALOG = "dialog";
     public static final String ALL_GROUPS_LIST = "allgroups";
 
     private Attributes() {

@@ -1,20 +1,23 @@
 package com.getjavajob.training.yarginy.socialnetwork.service;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.DataFlowViolationException;
-import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
 import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.dialog.Dialog;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.phone.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.TransactionPerformer;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.Collection;
+
+import static com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData.EMAIL_DUPLICATE;
+import static com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData.PHONE_DUPLICATE;
+import static com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData.WRONG_REQUEST;
+import static java.sql.Date.valueOf;
+import static java.time.LocalDate.now;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -22,18 +25,29 @@ public class AccountServiceImpl implements AccountService {
     private final PhoneDaoFacade phoneDaoFacade;
     private final FriendshipsDaoFacade friendshipDao;
     private final DialogDaoFacade dialogsDao;
+    private final TransactionPerformer transactionPerformer;
+    private final AccountServiceTransactional serviceTransactional;
 
-    public AccountServiceImpl(AccountDaoFacade accountDaoFacade, PhoneDaoFacade phoneDaoFacade, FriendshipsDaoFacade friendshipDao,
-                              DialogDaoFacade dialogDaoFacade) {
+    public AccountServiceImpl(AccountDaoFacade accountDaoFacade, PhoneDaoFacade phoneDaoFacade,
+                              FriendshipsDaoFacade friendshipDao, DialogDaoFacade dialogDaoFacade,
+                              TransactionPerformer transactionPerformer,
+                              AccountServiceTransactional serviceTransactional) {
         this.accountDaoFacade = accountDaoFacade;
         this.phoneDaoFacade = phoneDaoFacade;
         this.friendshipDao = friendshipDao;
         this.dialogsDao = dialogDaoFacade;
+        this.transactionPerformer = transactionPerformer;
+        this.serviceTransactional = serviceTransactional;
     }
 
     @Override
     public Account get(long id) {
         return accountDaoFacade.select(id);
+    }
+
+    @Override
+    public Account getFullInfo(long id) {
+        return accountDaoFacade.selectFullInfo(id);
     }
 
     @Override
@@ -43,24 +57,23 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean createAccount(Account account, Collection<Phone> phones) {
-        account.setRegistrationDate(Date.valueOf(LocalDate.now()));
+        account.setRegistrationDate(valueOf(now()));
         if (!accountDaoFacade.create(account)) {
-            throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
+            throw new IncorrectDataException(EMAIL_DUPLICATE);
         }
         if (!phoneDaoFacade.create(phones)) {
-            throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
+            throw new IncorrectDataException(PHONE_DUPLICATE);
         }
         return true;
     }
 
     @Override
-    public boolean updateAccount(Account account, Account storedAccount, Collection<Phone> phones,
-                                 Collection<Phone> storedPhones) {
-        if (!accountDaoFacade.update(account, storedAccount)) {
-            throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
+    public boolean updateAccount(Account account, Collection<Phone> phones, Collection<Phone> storedPhones) {
+        if (!accountDaoFacade.update(account)) {
+            throw new IncorrectDataException(EMAIL_DUPLICATE);
         }
         if (!phoneDaoFacade.update(phones, storedPhones)) {
-            throw new IncorrectDataException(IncorrectData.PHONE_DUPLICATE);
+            throw new IncorrectDataException(PHONE_DUPLICATE);
         }
         return true;
     }
@@ -72,18 +85,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean addFriend(long firstId, long secondId) {
-        try {
-            addFriendTransactional(firstId, secondId);
-        } catch (DataFlowViolationException e) {
-            return false;
-        }
-        return true;
-    }
-
-    public void addFriendTransactional(long firstId, long secondId) {
-        if (!friendshipDao.deleteRequest(firstId, secondId) || !friendshipDao.createFriendship(firstId, secondId)) {
-            throw new DataFlowViolationException();
-        }
+        return transactionPerformer.transactionPerformed(serviceTransactional::addFriendTransactional, firstId, secondId);
     }
 
     @Override
@@ -91,7 +93,7 @@ public class AccountServiceImpl implements AccountService {
         try {
             return friendshipDao.removeFriendship(firstId, secondId);
         } catch (IllegalArgumentException e) {
-            throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
+            throw new IncorrectDataException(WRONG_REQUEST);
         }
     }
 
@@ -100,7 +102,7 @@ public class AccountServiceImpl implements AccountService {
         try {
             return friendshipDao.areFriends(firstId, secondId);
         } catch (IllegalArgumentException e) {
-            throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
+            throw new IncorrectDataException(WRONG_REQUEST);
         }
     }
 
@@ -109,7 +111,7 @@ public class AccountServiceImpl implements AccountService {
         try {
             return friendshipDao.selectFriends(accountId);
         } catch (IllegalArgumentException e) {
-            throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
+            throw new IncorrectDataException(WRONG_REQUEST);
         }
     }
 
@@ -123,7 +125,7 @@ public class AccountServiceImpl implements AccountService {
         try {
             return friendshipDao.createRequest(requester, receiver);
         } catch (IllegalArgumentException e) {
-            throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
+            throw new IncorrectDataException(WRONG_REQUEST);
         }
     }
 
@@ -132,7 +134,7 @@ public class AccountServiceImpl implements AccountService {
         try {
             return friendshipDao.deleteRequest(requester, receiver);
         } catch (IllegalArgumentException e) {
-            throw new IncorrectDataException(IncorrectData.WRONG_REQUEST);
+            throw new IncorrectDataException(WRONG_REQUEST);
         }
     }
 

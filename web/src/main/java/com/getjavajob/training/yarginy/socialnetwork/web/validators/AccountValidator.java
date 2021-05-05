@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.validators;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -37,9 +37,11 @@ public class AccountValidator implements Validator {
         String email = account.getEmail();
         checkEmail(email, "account.email", errors);
         String additionalEmail = account.getAdditionalEmail();
-        checkEmail(additionalEmail, additionalEmailPath, errors);
-        if (!isNull(email) && email.equals(additionalEmail)) {
-            errors.rejectValue(additionalEmailPath, "error.sameAdditionalEmail");
+        if (!isNull(additionalEmail)) {
+            checkEmail(additionalEmail, additionalEmailPath, errors);
+            if (!isNull(email) && email.equals(additionalEmail)) {
+                errors.rejectValue(additionalEmailPath, "error.sameAdditionalEmail");
+            }
         }
         checkBirthDate(account.getBirthDate(), errors);
     }

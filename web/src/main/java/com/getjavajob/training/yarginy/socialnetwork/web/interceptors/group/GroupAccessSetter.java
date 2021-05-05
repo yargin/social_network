@@ -1,7 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.interceptors.group;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.additionaldata.Role;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -10,7 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.*;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.RECEIVER_ID;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTED_ID;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTER_ID;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER;
 import static java.util.Objects.isNull;
 
 @Component
@@ -22,7 +25,7 @@ public class GroupAccessSetter extends HandlerInterceptorAdapter {
     }
 
     @Override
-    public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) {
         HttpSession session = req.getSession();
         long requestedGroupId;
         Object objectId = req.getAttribute(REQUESTED_ID);

@@ -1,7 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.service;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.account.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.group.Group;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -11,6 +11,8 @@ public interface GroupService extends Serializable {
     Group get(Group group);
 
     Group get(long id);
+
+    Group getFullInfo(long id);
 
     Collection<Group> getAccountGroups(long accountId);
 
@@ -44,7 +46,7 @@ public interface GroupService extends Serializable {
 
     boolean removeGroup(Group group);
 
-    boolean updateGroup(Group group, Group storedGroup);
+    boolean updateGroup(Group group);
 
     Map<Account, Boolean> getGroupMembersModerators(long groupId);
 
