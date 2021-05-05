@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullAccountWallMessage;
+import static com.getjavajob.training.yarginy.socialnetwork.common.utils.NullModelsFactory.getNullAccountWallMessage;
 import static java.util.Objects.isNull;
 
 @Repository

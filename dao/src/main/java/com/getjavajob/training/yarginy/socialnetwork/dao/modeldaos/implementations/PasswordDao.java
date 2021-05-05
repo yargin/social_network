@@ -9,7 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.function.Supplier;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullPassword;
+import static com.getjavajob.training.yarginy.socialnetwork.common.utils.NullModelsFactory.getNullPassword;
 import static java.util.Objects.isNull;
 
 @Repository

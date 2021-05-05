@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullAccount;
+import static com.getjavajob.training.yarginy.socialnetwork.common.utils.NullModelsFactory.getNullAccount;
 
 @Repository
 public class AccountDao extends GenericDao<Account> {

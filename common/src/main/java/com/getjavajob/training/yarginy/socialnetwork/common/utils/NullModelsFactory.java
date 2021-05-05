@@ -1,5 +1,10 @@
-package com.getjavajob.training.yarginy.socialnetwork.common.models;
+package com.getjavajob.training.yarginy.socialnetwork.common.utils;
 
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Password;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.AccountWallMessage;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.DialogMessage;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.GroupWallMessage;

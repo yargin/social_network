@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.models.NullModelsFactory.getNullDialog;
+import static com.getjavajob.training.yarginy.socialnetwork.common.utils.NullModelsFactory.getNullDialog;
 import static java.util.Objects.isNull;
 
 @Repository
