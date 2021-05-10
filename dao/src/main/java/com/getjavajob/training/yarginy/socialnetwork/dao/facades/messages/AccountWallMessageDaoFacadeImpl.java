@@ -2,8 +2,8 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.AccountWallMessage;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.TransactionPerformer;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldaos.implementations.messages.AccountWallMessageDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.onetomany.implementations.messages.AccountWallMessagesDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.modeldaos.implementations.messages.AccountWallMessageDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.onetomany.implementations.messages.AccountWallMessagesDao;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;

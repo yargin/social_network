@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn">
+    <Appenders>
+        <Console name="ConsoleErr" target="SYSTEM_ERR"/>
+    </Appenders>
+    <Loggers>
+        <Root level="error">
+            <AppenderRef ref="ConsoleErr"/>
+        </Root>
+    </Loggers>
+</Configuration>

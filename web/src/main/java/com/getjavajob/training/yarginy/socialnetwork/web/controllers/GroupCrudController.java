@@ -117,7 +117,9 @@ public class GroupCrudController {
         } else {
             storedGroup.setPhoto(group.getPhoto());
         }
+        group.setCreationDate(storedGroup.getCreationDate());
         group.setVersion(storedGroup.getVersion());
+        group.setOwner(storedGroup.getOwner());
 
         groupValidator.validate(group, result);
         if (result.hasErrors()) {

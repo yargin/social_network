@@ -3,8 +3,8 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.TransactionPerformer;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.manytomany.implementations.GroupMembershipDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.manytomany.implementations.GroupRequestsDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.manytomany.implementations.GroupMembershipDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.manytomany.implementations.GroupRequestsDao;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;

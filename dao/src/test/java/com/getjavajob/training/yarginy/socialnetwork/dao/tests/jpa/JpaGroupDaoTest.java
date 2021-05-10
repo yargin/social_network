@@ -20,11 +20,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+//todo
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestOverrideSpringConfig.xml"})
 public class JpaGroupDaoTest {
     private final Account owner= new Account("testOwnerName", "testOwnerSurname", "testOwnerEmail");
-    private final Group group = new Group("testName", owner);
+    private Group group = new Group("testName", owner);
     @Autowired
     private GroupDaoFacadeImpl groupDao;
     @Autowired
@@ -47,6 +48,7 @@ public class JpaGroupDaoTest {
 
     @After
     public void deleteValues() {
+        group = groupDao.select(group);
         groupDao.delete(group);
         accountDao.delete(owner);
     }
@@ -75,7 +77,6 @@ public class JpaGroupDaoTest {
 
     @Test
     public void testCreateGroup() {
-//        groupDao.delete(new Group("newGroup", owner));
         assertFalse(groupDao.create(group));
         Group newGroup = new Group("newGroup", owner);
         newGroup.setCreationDate(valueOf(of(2020, 2, 2)));
@@ -96,6 +97,7 @@ public class JpaGroupDaoTest {
         assertEquals(description, groupDao.select(group).getDescription());
         Account newOwner = new Account("newOwner", "newOwner", "newOwner");
         accountDao.create(newOwner);
+        group = groupDao.select(group);
         group.setOwner(newOwner);
         assertTrue(groupDao.update(group));
         assertEquals(newOwner, groupDao.selectFullInfo(group.getId()).getOwner());

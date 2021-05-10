@@ -2,7 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.TransactionPerformer;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.manytomany.implementations.GroupModeratorsDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.manytomany.implementations.GroupModeratorsDao;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;

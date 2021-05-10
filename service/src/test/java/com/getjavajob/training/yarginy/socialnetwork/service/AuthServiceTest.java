@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -36,6 +37,8 @@ public class AuthServiceTest {
     private ModelsFactory modelsFactory;
     @Mock
     private DataHandler dataHandler;
+    @Mock
+    private PasswordEncoder passwordEncoder;
     @InjectMocks
     private AuthServiceImpl authService;
 
@@ -53,7 +56,7 @@ public class AuthServiceTest {
         when(phoneDaoFacade.create(phones)).thenReturn(true);
         Password password = Mockito.mock(Password.class);
         String stringPassword = "123qwe123";
-        when(dataHandler.encrypt(stringPassword)).thenReturn(stringPassword);
+        when(passwordEncoder.encode(stringPassword)).thenReturn(stringPassword);
         when(modelsFactory.getPassword(account, stringPassword)).thenReturn(password);
         when(passwordDaoFacade.create(password)).thenReturn(true);
         boolean registered = authService.register(account, phones, stringPassword);

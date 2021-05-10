@@ -4,11 +4,11 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.TransactionPerformer;
-import com.getjavajob.training.yarginy.socialnetwork.dao.modeldaos.implementations.AccountDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.manytomany.implementations.GroupMembershipDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.onetomany.implementations.AccountPhonesDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.onetomany.implementations.OwnerGroupsDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.relationdaos.selfmanytomany.implementations.FriendshipsDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.modeldaos.implementations.AccountDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.manytomany.implementations.GroupMembershipDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.onetomany.implementations.AccountPhonesDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.selfmanytomany.implementations.FriendshipsDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.repositories.RepoGroupDao;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -16,21 +16,21 @@ import java.util.Collection;
 @Component("accountDaoFacade")
 public class AccountDaoFacadeImpl implements AccountDaoFacade {
     private final AccountDao accountDao;
-    private final OwnerGroupsDao accountGroupsDao;
+    private final RepoGroupDao repoGroupDao;
     private final AccountPhonesDao accountPhonesDao;
     private final GroupMembershipDao accountsInGroupsDao;
     private final FriendshipsDao accountFriendsDao;
     private final TransactionPerformer transactionPerformer;
 
-    public AccountDaoFacadeImpl(AccountDao accountDao, OwnerGroupsDao accountGroupsDao, AccountPhonesDao accountPhonesDao,
+    public AccountDaoFacadeImpl(AccountDao accountDao, AccountPhonesDao accountPhonesDao,
                                 GroupMembershipDao accountsInGroupsDao, FriendshipsDao accountFriendsDao,
-                                TransactionPerformer transactionPerformer) {
+                                TransactionPerformer transactionPerformer, RepoGroupDao repoGroupDao) {
         this.accountDao = accountDao;
-        this.accountGroupsDao = accountGroupsDao;
         this.accountPhonesDao = accountPhonesDao;
         this.accountsInGroupsDao = accountsInGroupsDao;
         this.accountFriendsDao = accountFriendsDao;
         this.transactionPerformer = transactionPerformer;
+        this.repoGroupDao = repoGroupDao;
     }
 
     @Override
@@ -75,7 +75,7 @@ public class AccountDaoFacadeImpl implements AccountDaoFacade {
 
     @Override
     public Collection<Group> getOwnedGroups(long accountId) {
-        return accountGroupsDao.selectMany(accountId);
+        return repoGroupDao.findByOwner(new Account(accountId));
     }
 
     @Override

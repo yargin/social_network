@@ -3,7 +3,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchableDto;
-import com.getjavajob.training.yarginy.socialnetwork.dao.otherdaos.DataSetsDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jdbc.DataSetsDao;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;

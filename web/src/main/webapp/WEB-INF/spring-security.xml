@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <http>
+        <intercept-url  pattern="/account/delete/**" access="hasAuthority('ADMIN')" />
+        <intercept-url  pattern="/" access="hasAnyAuthority('USER', 'ADMIN')" />
+        <form-login
+                login-page="/login"
+                username-parameter="email"
+                password-parameter="password"
+                default-target-url="/wall"/>
+        <logout
+                logout-url="/logout"
+                logout-success-url="/login"/>
+        <access-denied-handler error-page="/error"/>
+    </http>
+<!--    <http/>-->
+
+    <beans:bean id="userService" class="com.getjavajob.training.yarginy.socialnetwork.service.SpringSecAuthService"/>
+
+    <beans:bean id="daoAuthProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+        <beans:property name="userDetailsService" ref="userService"/>
+        <beans:property name="passwordEncoder" value="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+    </beans:bean>
+
+    <authentication-manager>
+        <authentication-provider ref="daoAuthProvider"/>
+    </authentication-manager>
+</beans:beans>

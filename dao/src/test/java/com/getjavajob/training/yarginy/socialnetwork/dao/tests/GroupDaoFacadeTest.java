@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Collection;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -51,6 +52,8 @@ public class GroupDaoFacadeTest {
 
     @Test
     public void testCreateGroup() {
+        groupDaoFacade.delete(group);
+        Collection<Group> groups = groupDaoFacade.selectAll();
         assertTrue(groupDaoFacade.create(group));
     }
 

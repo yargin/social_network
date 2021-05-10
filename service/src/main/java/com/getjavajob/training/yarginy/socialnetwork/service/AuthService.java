@@ -2,6 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.service;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.io.Serializable;
 import java.util.Collection;
