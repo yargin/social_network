@@ -12,6 +12,8 @@ import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Objects;
@@ -20,6 +22,7 @@ import java.util.Objects;
 @Scope("prototype")
 @Entity
 @Table(name = "groups_members")
+@NamedEntityGraph(name = "graph.GroupMembers.members", attributeNodes = {@NamedAttributeNode("account")})
 public class GroupMembership implements ManyToMany<Account, Group> {
     @EmbeddedId
     private GroupMembershipKey groupMembershipKey = new GroupMembershipKey();
@@ -38,6 +41,10 @@ public class GroupMembership implements ManyToMany<Account, Group> {
     public GroupMembership(Account account, Group group) {
         this.account = account;
         this.group = group;
+    }
+
+    public GroupMembership(Account account) {
+        this.account = account;
     }
 
     public Account getAccount() {

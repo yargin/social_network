@@ -2,19 +2,25 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.manyt
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.GroupMembersModerators;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.GroupMembership;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.ManyToMany;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.manytomany.GenericManyToMany;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.Collection;
+import java.util.Map;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.GroupMembership.createGroupMembershipKey;
 
 @Repository
 public class GroupMembershipDao extends GenericManyToMany<Account, Group> {
+    @PersistenceContext
+    private EntityManager entityManager;
+
     @Override
     protected ManyToMany<Account, Group> genericGetReference(EntityManager entityManager, long accountId,
                                                              long groupId) {
@@ -50,5 +56,35 @@ public class GroupMembershipDao extends GenericManyToMany<Account, Group> {
                 "join g.account where g.group = :group", Account.class);
         query.setParameter("group", group);
         return query.getResultList();
+    }
+
+    public Collection<GroupMembersModerators> getMembers(Group group) {
+//        TypedQuery<GroupMembersModerators> query = entityManager.createQuery("select " +
+//                "new GroupMembersModerators(g.account, case when md.account is null then false else true end) " +
+//                "from GroupMembership g join g.account " +
+//                "left join GroupModerator md on md.account = g.account and " +
+//                "md.group = g.group where g.group = :group", GroupMembersModerators.class);
+
+        //todo when using g.account jpa fetches all account's fields and makes 4 selections for each account
+        TypedQuery<GroupMembersModerators> query = entityManager.createQuery("select " +
+                "new GroupMembersModerators(g.account.id, g.account.name, g.account.surname, g.account.email, " +
+                "case when md.account is null then false else true end) " +
+                "from GroupMembership g join g.account " +
+                "left join GroupModerator md on md.account = g.account and md.group = g.group " +
+                "where g.group = :group", GroupMembersModerators.class);
+        query.setParameter("group", group);
+        return query.getResultList();
+    }
+
+    public Collection<Group> selectUnJoinedGroups(Account account) {
+        //todo it's for inner request
+        TypedQuery<Group> requestedQuery = entityManager.createQuery("select gr.group from GroupRequest gr " +
+                "where gr.account = :account", Group.class);
+        requestedQuery.setParameter("account", account);
+        TypedQuery<Group> unjoinedQuery = entityManager.createQuery("select gm.group from GroupMembership gm " +
+                "where gm.account <> :account", Group.class);
+        requestedQuery.setParameter("account", account);
+        Collection<Group> unjoined = unjoinedQuery.getResultList();
+        return requestedQuery.getResultList();
     }
 }

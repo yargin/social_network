@@ -48,6 +48,7 @@ public class AccountInfoController {
     @GetMapping("/wall")
     public ModelAndView showWall(@RequestParam(value = REQUESTED_ID, required = false) Long requestedId,
                                  @SessionAttribute(USER_ID) long sessionId) {
+        //todo
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
         long id = requestedId == null ? sessionId : requestedId;
