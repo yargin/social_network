@@ -9,25 +9,33 @@
 	http://www.springframework.org/schema/security/spring-security.xsd">
 
     <http>
-        <intercept-url  pattern="/account/delete/**" access="hasAuthority('ADMIN')" />
-        <intercept-url  pattern="/" access="hasAnyAuthority('USER', 'ADMIN')" />
+        <csrf disabled="true"/>
+        <anonymous enabled="false"/>
+        <intercept-url pattern="/account/delete/**" access="hasAuthority('ADMIN')" />
+        <intercept-url pattern="/" access="hasAnyAuthority('USER', 'ADMIN')" />
         <form-login
                 login-page="/login"
                 username-parameter="email"
                 password-parameter="password"
-                default-target-url="/wall"/>
+                default-target-url="/account/wall"
+                authentication-failure-handler-ref="loginFailureHandler"
+        />
         <logout
                 logout-url="/logout"
                 logout-success-url="/login"/>
-        <access-denied-handler error-page="/error"/>
+        <access-denied-handler error-page="/login"/>
     </http>
 <!--    <http/>-->
+
+    <beans:bean id="loginFailureHandler" class="com.getjavajob.training.yarginy.socialnetwork.web.filters.LoginFailureFilter"/>
+
+    <beans:import resource="classpath*:commonSpringConfig.xml"/>
 
     <beans:bean id="userService" class="com.getjavajob.training.yarginy.socialnetwork.service.SpringSecAuthService"/>
 
     <beans:bean id="daoAuthProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
         <beans:property name="userDetailsService" ref="userService"/>
-        <beans:property name="passwordEncoder" value="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+        <beans:property name="passwordEncoder" ref="encoder"/>
     </beans:bean>
 
     <authentication-manager>

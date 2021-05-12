@@ -4,6 +4,10 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.service.AuthService;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.Redirector;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,11 +51,18 @@ public class AuthController {
     @GetMapping(LOGIN)
     public String showLogin(HttpServletRequest req, @CookieValue(required = false) String email,
                             @CookieValue(required = false) String password) {
-        try {
-            Account account = authService.login(email, password);
-            assignSessionParameters(req, account);
+        //cookies
+//        try {
+//            Account account = authService.login(email, password);
+//            assignSessionParameters(req, account);
+//            return redirector.redirectBackView(req);
+//        } catch (Exception e) {
+//            return LOGIN_VIEW;
+//        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!isNull(authentication) && authentication.isAuthenticated()) {
             return redirector.redirectBackView(req);
-        } catch (Exception e) {
+        } else {
             return LOGIN_VIEW;
         }
     }
@@ -61,7 +72,7 @@ public class AuthController {
         req.getSession().setAttribute(USER_ID, account.getId());
     }
 
-    @PostMapping(LOGIN)
+    @PostMapping("/login")
     public ModelAndView login(@RequestParam String email, @RequestParam String password, HttpServletRequest req,
                               @RequestParam(required = false) String rememberMe, HttpServletResponse resp) {
         Account account;
@@ -89,34 +100,34 @@ public class AuthController {
             return modelAndView;
         }
 
-        if ("on".equals(rememberMe)) {
-            Cookie emailCookie = new Cookie(EMAIL, email);
-            emailCookie.setMaxAge(2);
-            Cookie passwordCookie = new Cookie(PASSWORD, email);
-            passwordCookie.setMaxAge(2);
-            resp.addCookie(emailCookie);
-            resp.addCookie(passwordCookie);
-        }
+//        if ("on".equals(rememberMe)) {
+//            Cookie emailCookie = new Cookie(EMAIL, email);
+//            emailCookie.setMaxAge(2);
+//            Cookie passwordCookie = new Cookie(PASSWORD, email);
+//            passwordCookie.setMaxAge(2);
+//            resp.addCookie(emailCookie);
+//            resp.addCookie(passwordCookie);
+//        }
 
         assignSessionParameters(req, account);
         return new ModelAndView(redirector.redirectBackView(req));
     }
 
-    @GetMapping("/logout")
-    public String logout(HttpServletRequest req, HttpServletResponse resp, HttpSession session) {
-        session.invalidate();
-
-        Cookie[] cookies = req.getCookies();
-
-        if (!isNull(cookies)) {
-            for (Cookie cookie : cookies) {
-                if (USER_NAME.equals(cookie.getName()) || PASSWORD.equals(cookie.getName())) {
-                    cookie.setValue("");
-                    cookie.setMaxAge(0);
-                    resp.addCookie(cookie);
-                }
-            }
-        }
-        return REDIRECT + LOGIN;
-    }
+//    @GetMapping("/logout")
+//    public String logout(HttpServletRequest req, HttpServletResponse resp, HttpSession session) {
+//        session.invalidate();
+//
+//        Cookie[] cookies = req.getCookies();
+//
+//        if (!isNull(cookies)) {
+//            for (Cookie cookie : cookies) {
+//                if (USER_NAME.equals(cookie.getName()) || PASSWORD.equals(cookie.getName())) {
+//                    cookie.setValue("");
+//                    cookie.setMaxAge(0);
+//                    resp.addCookie(cookie);
+//                }
+//            }
+//        }
+//        return REDIRECT + LOGIN;
+//    }
 }

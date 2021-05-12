@@ -8,6 +8,9 @@ import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.AccountWallMessageService;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.AccountInfoHelper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.AuthenticationFilter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +48,8 @@ public class AccountInfoController {
     @GetMapping("/wall")
     public ModelAndView showWall(@RequestParam(value = REQUESTED_ID, required = false) Long requestedId,
                                  @SessionAttribute(USER_ID) long sessionId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
         long id = requestedId == null ? sessionId : requestedId;
         ModelAndView modelAndView = new ModelAndView(ACCOUNT_WALL_VIEW);
         Account account = accountService.getFullInfo(id);

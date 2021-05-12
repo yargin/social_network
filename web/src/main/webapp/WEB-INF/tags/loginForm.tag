@@ -9,8 +9,7 @@
     <form action="${context}/login" method="post">
         <c:if test="${not empty logerror}"><fmt:message key="${logerror}" bundle="${error}"/><br></c:if>
         <input type="email" name="email" placeholder="<fmt:message key="form.email" bundle="${form}"/>"
-               value="<c:if test="${not empty email}">${email}</c:if>"
-               required>
+               value="<c:if test="${not empty email}">${email}</c:if>" required>
         <br>
         <input type="password" name="password" placeholder="<fmt:message key="form.password" bundle="${form}"/>"
                required>

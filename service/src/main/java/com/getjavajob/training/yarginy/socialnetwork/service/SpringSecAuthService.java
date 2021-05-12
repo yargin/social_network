@@ -41,12 +41,11 @@ public class SpringSecAuthService implements UserDetailsService {
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         Account account = new Account();
         account.setEmail(s);
-        account = accountDaoFacade.select(account);
         Password password = new Password();
         password.setAccount(account);
         password = passwordDaoFacade.select(password);
         if (password.equals(getNullPassword())) {
-            throw new IncorrectDataException(IncorrectData.WRONG_EMAIL);
+            throw new UsernameNotFoundException("not found");
         }
         return new User(account.getEmail(), password.getStringPassword(), getAuthorities(account));
     }

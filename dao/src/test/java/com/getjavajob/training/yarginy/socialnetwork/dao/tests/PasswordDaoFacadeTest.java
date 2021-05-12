@@ -59,7 +59,14 @@ public class PasswordDaoFacadeTest {
         accountDaoFacade.create(account);
         password.setAccount(account);
         assertTrue(passwordDaoFacade.create(password));
-        assertEquals(password, passwordDaoFacade.select(password));
+        Account testAccount = new Account();
+        testAccount.setEmail(account.getEmail());
+        Password testPassword = new Password();
+        testPassword.setAccount(testAccount);
+        System.out.println("============");
+        Password created = passwordDaoFacade.select(testPassword);
+        System.out.println("==============");
+        assertEquals(password, created);
     }
 
     @Test
