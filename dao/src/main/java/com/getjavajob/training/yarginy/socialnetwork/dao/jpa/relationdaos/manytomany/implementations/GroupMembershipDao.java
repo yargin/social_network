@@ -5,6 +5,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.GroupMembersModerators;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.GroupMembership;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.ManyToMany;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.UnJoinedGroups;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.manytomany.GenericManyToMany;
 import org.springframework.stereotype.Repository;
 
@@ -76,15 +77,11 @@ public class GroupMembershipDao extends GenericManyToMany<Account, Group> {
         return query.getResultList();
     }
 
-    public Collection<Group> selectUnJoinedGroups(Account account) {
-        //todo it's for inner request
-        TypedQuery<Group> requestedQuery = entityManager.createQuery("select gr.group from GroupRequest gr " +
-                "where gr.account = :account", Group.class);
-        requestedQuery.setParameter("account", account);
-        TypedQuery<Group> unjoinedQuery = entityManager.createQuery("select gm.group from GroupMembership gm " +
-                "where gm.account <> :account", Group.class);
-        requestedQuery.setParameter("account", account);
-        Collection<Group> unjoined = unjoinedQuery.getResultList();
-        return requestedQuery.getResultList();
+    public Collection<UnJoinedGroups> selectUnJoinedGroups(Account account) {
+        TypedQuery<Group> unjoinedQuery = entityManager.createQuery("select new UnJoinedGroups(gm.group, true) " +
+                "from GroupMembership gm " +
+                "left join GroupRequest gr on gr.account = gm.account where gm.account <> :account ", Group.class);
+        unjoinedQuery.setParameter("account", account);
+        return unjoinedQuery.getResultList();
     }
 }

@@ -38,6 +38,10 @@ public class GroupMembership implements ManyToMany<Account, Group> {
     public GroupMembership() {
     }
 
+    public GroupMembership(Group group) {
+        this.group = group;
+    }
+
     public GroupMembership(Account account, Group group) {
         this.account = account;
         this.group = group;

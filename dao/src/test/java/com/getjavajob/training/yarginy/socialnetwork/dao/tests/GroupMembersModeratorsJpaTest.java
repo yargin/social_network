@@ -7,6 +7,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacad
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacadeImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.manytomany.implementations.GroupMembershipDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.manytomany.implementations.GroupModeratorsDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.manytomany.implementations.GroupRequestsDao;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,11 +30,13 @@ public class GroupMembersModeratorsJpaTest {
     private GroupMembershipDao groupMembershipDao;
     @Autowired
     private GroupModeratorsDao groupModeratorsDao;
+    @Autowired
+    private GroupRequestsDao groupRequestsDao;
+    private Account first = new Account("first", "first", "first");
     private Group group;
 
     @Before
     public void initValues() {
-        Account first = new Account("first", "first", "first");
         accountDaoFacade.create(first);
         first = accountDaoFacade.select(first);
         Account second = new Account("second", "second", "second");
@@ -55,13 +58,22 @@ public class GroupMembersModeratorsJpaTest {
         groupMembershipDao.create(forth.getId(), group.getId());
         groupModeratorsDao.create(first.getId(), group.getId());
         groupModeratorsDao.create(second.getId(), group.getId());
-
+        groupRequestsDao.create(first.getId(), group.getId());
+        groupRequestsDao.create(third.getId(), group.getId());
     }
+
     @Test
     public void testCreateSelectMembersAndModerators() {
         group = groupDao.select(group);
         System.out.println("====================================");
         Collection<GroupMembersModerators> groupMembersModerators = groupMembershipDao.getMembers(group);
         System.out.println("====================================");
+    }
+
+    @Test
+    public void testGetUnJoinedGroupsNotRequested() {
+        System.out.println("================================");
+        Collection<Group> unjoined = groupMembershipDao.selectUnJoinedGroups(acc)
+        System.out.println("================================");
     }
 }
