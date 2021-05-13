@@ -15,30 +15,12 @@ DROP TABLE IF EXISTS Accounts;
 
 CREATE TABLE IF NOT EXISTS Accounts
 (
-    id
-    BIGINT
-    UNSIGNED
-    AUTO_INCREMENT
-    PRIMARY
-    KEY,
-    name
-    VARCHAR
-(
-    40
-) NOT NULL,
-    surname VARCHAR
-(
-    40
-) NOT NULL,
-    patronymic VARCHAR
-(
-    40
-),
-    sex CHAR
-(
-    6
-),
-    birth_date DATE,
+    id                BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name              VARCHAR(40) NOT NULL,
+    surname           VARCHAR(40) NOT NULL,
+    patronymic        VARCHAR(40),
+    sex               CHAR(6),
+    birth_date        DATE,
     registration_date DATE,
     role              CHAR(5) DEFAULT 'USER',
     email             VARCHAR(40) NOT NULL UNIQUE,
@@ -58,25 +40,14 @@ ALTER TABLE Accounts
 
 CREATE TABLE IF NOT EXISTS `Groups`
 (
-    id
-    BIGINT
-    UNSIGNED
-    AUTO_INCREMENT
-    PRIMARY
-    KEY,
-    name
-    VARCHAR
-(
-    50
-) NOT NULL UNIQUE,
-    description VARCHAR
-(
-    500
-),
-    owner_id BIGINT UNSIGNED,
+    id            BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name          VARCHAR(50) NOT NULL UNIQUE,
+    description   VARCHAR(500),
+    owner_id      BIGINT UNSIGNED,
     creation_date DATE,
-    photo MEDIUMBLOB
-    );
+    photo         MEDIUMBLOB,
+    version       BIGINT      NOT NULL
+);
 
 ALTER TABLE `Groups`
     ADD CONSTRAINT C_11 FOREIGN KEY (owner_id) REFERENCES Accounts (id) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -84,10 +55,7 @@ ALTER TABLE `Groups`
 CREATE TABLE IF NOT EXISTS Groups_members
 (
     account_id BIGINT NOT NULL,
-    group_id
-    BIGINT
-    NOT
-    NULL
+    group_id   BIGINT NOT NULL
 );
 
 ALTER TABLE Groups_members
@@ -101,19 +69,10 @@ ALTER TABLE Groups_members
 
 CREATE TABLE IF NOT EXISTS Friendships
 (
-    first_account
-    BIGINT
-    UNSIGNED,
-    second_account
-    BIGINT
-    UNSIGNED,
-    PRIMARY
-    KEY
-(
-    first_account,
-    second_account
-)
-    );
+    first_account  BIGINT UNSIGNED,
+    second_account BIGINT UNSIGNED,
+    PRIMARY KEY (first_account, second_account)
+);
 
 ALTER TABLE Friendships
     ADD CONSTRAINT C_16 FOREIGN KEY (first_account) REFERENCES Accounts (id) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -129,7 +88,8 @@ CREATE TABLE IF NOT EXISTS Phones
     id       BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     number   VARCHAR(50)     NOT NULL UNIQUE,
     type     CHAR(7),
-    owner_id BIGINT UNSIGNED NOT NULL
+    owner_id BIGINT UNSIGNED NOT NULL,
+    version  BIGINT          NOT NULL
 );
 
 ALTER TABLE Phones
@@ -141,7 +101,8 @@ ALTER TABLE Phones
 CREATE TABLE Passwords
 (
     email    VARCHAR(40)  NOT NULL,
-    password VARCHAR(255) NOT NULL
+    password VARCHAR(255) NOT NULL,
+    version  BIGINT       NOT NULL
 );
 
 ALTER TABLE Passwords
@@ -152,19 +113,10 @@ ALTER TABLE Passwords
 
 CREATE TABLE IF NOT EXISTS Groups_moderators
 (
-    account_id
-    BIGINT
-    UNSIGNED,
-    group_id
-    BIGINT
-    UNSIGNED,
-    PRIMARY
-    KEY
-(
-    account_id,
-    group_id
-)
-    );
+    account_id BIGINT UNSIGNED,
+    group_id   BIGINT UNSIGNED,
+    PRIMARY KEY (account_id, group_id)
+);
 
 ALTER TABLE Groups_moderators
     ADD CONSTRAINT C_24 FOREIGN KEY (account_id) REFERENCES Accounts (id) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -174,19 +126,10 @@ ALTER TABLE Groups_moderators
 
 CREATE TABLE IF NOT EXISTS Groups_memberships_requests
 (
-    account_id
-    BIGINT
-    UNSIGNED,
-    group_id
-    BIGINT
-    UNSIGNED,
-    PRIMARY
-    KEY
-(
-    account_id,
-    group_id
-)
-    );
+    account_id BIGINT UNSIGNED,
+    group_id   BIGINT UNSIGNED,
+    PRIMARY KEY (account_id, group_id)
+);
 
 ALTER TABLE Groups_memberships_requests
     ADD CONSTRAINT C_26 FOREIGN KEY (account_id) REFERENCES Accounts (id) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -196,19 +139,10 @@ ALTER TABLE Groups_memberships_requests
 
 CREATE TABLE IF NOT EXISTS Friendships_requests
 (
-    requester
-    BIGINT
-    UNSIGNED,
-    receiver
-    BIGINT
-    UNSIGNED,
-    PRIMARY
-    KEY
-(
-    requester,
-    receiver
-)
-    );
+    requester BIGINT UNSIGNED,
+    receiver  BIGINT UNSIGNED,
+    PRIMARY KEY (requester, receiver)
+);
 
 ALTER TABLE Friendships_requests
     ADD CONSTRAINT C_28 FOREIGN KEY (requester) REFERENCES Accounts (id) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -223,7 +157,8 @@ CREATE TABLE `account_wall_messages`
     `message`     varchar(500),
     `image`       mediumblob,
     `receiver_id` bigint unsigned NOT NULL,
-    `posted`      datetime        NOT NULL
+    `posted`      datetime        NOT NULL,
+    `version`     BIGINT          NOT NULL
 );
 
 ALTER TABLE account_wall_messages
@@ -239,7 +174,8 @@ CREATE TABLE `group_wall_messages`
     `message`     varchar(500),
     `image`       mediumblob,
     `receiver_id` bigint unsigned NOT NULL,
-    `posted`      datetime        NOT NULL
+    `posted`      datetime        NOT NULL,
+    `version`     BIGINT          NOT NULL
 );
 
 ALTER TABLE group_wall_messages
@@ -253,6 +189,7 @@ CREATE TABLE dialogs
     id        bigint unsigned auto_increment PRIMARY KEY,
     first_id  bigint unsigned NOT NULL,
     second_id bigint unsigned NOT NULL,
+    `version` BIGINT          NOT NULL,
     CONSTRAINT dialogs_accounts_id_fk FOREIGN KEY (first_id) REFERENCES accounts (id) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT dialogs_accounts_id_fk_2 FOREIGN KEY (second_id) REFERENCES accounts (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
@@ -265,6 +202,7 @@ CREATE TABLE `dialogs_messages`
     `image`       mediumblob,
     `receiver_id` bigint unsigned NOT NULL,
     `posted`      datetime        NOT NULL,
+    `version`     BIGINT          NOT NULL,
     PRIMARY KEY (`id`)
 );
 

@@ -5,7 +5,18 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldat
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.Table;
+import javax.persistence.Version;
 import java.sql.Date;
 import java.util.Arrays;
 import java.util.Objects;
@@ -54,13 +65,18 @@ public class Account implements Model {
     }
 
     public Account(String name, String email) {
-        this.name = name;
-        this.email = email;
+        this(0, name, null, email);
     }
 
     public Account(String name, String surname, String email) {
-        this(name, email);
+        this(0, name, surname, email);
+    }
+
+    public Account(long id, String name, String surname, String email) {
+        this.id = id;
+        this.name = name;
         this.surname = surname;
+        this.email = email;
     }
 
     @Override
