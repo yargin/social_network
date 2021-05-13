@@ -2,7 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchableDto;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchablesDto;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jdbc.DataSetsDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.manytomany.AdditionalManyToManyDao;
 import org.springframework.stereotype.Component;
@@ -31,7 +31,7 @@ public class DataSetsDaoFacadeImpl implements DataSetsDaoFacade {
     }
 
     @Override
-    public SearchableDto searchAccountsGroups(String searchString, int pageNumber, int limit) {
+    public SearchablesDto searchAccountsGroups(String searchString, int pageNumber, int limit) {
         return dataSetsDao.searchAccountsGroups(searchString, pageNumber, limit);
     }
 }

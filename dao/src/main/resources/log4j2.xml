@@ -2,8 +2,12 @@
 <Configuration status="warn">
     <Appenders>
         <Console name="ConsoleErr" target="SYSTEM_ERR"/>
+        <Console name="Console" target="SYSTEM_OUT"/>
     </Appenders>
     <Loggers>
+        <Logger name="com.getjavajob.training.yarginy.socialnetwork.dao.tests" level="debug">
+            <AppenderRef ref="Console"/>
+        </Logger>
         <Root level="error">
             <AppenderRef ref="ConsoleErr"/>
         </Root>

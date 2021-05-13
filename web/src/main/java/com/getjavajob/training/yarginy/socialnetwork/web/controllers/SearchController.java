@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.controllers;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchableDto;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchablesDto;
 import com.getjavajob.training.yarginy.socialnetwork.service.DataSetsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +28,7 @@ public class SearchController {
 
     @GetMapping("/find")
     @ResponseBody
-    public SearchableDto getResult(@RequestParam(required = false) String string, @RequestParam int page) {
+    public SearchablesDto getResult(@RequestParam(required = false) String string, @RequestParam int page) {
         return dataSetsService.searchAccountsGroups(string, page, LIMIT);
     }
 }

@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.service;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchableDto;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchablesDto;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DataSetsDaoFacade;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ public class DataSetsServiceImpl implements DataSetsService {
     }
 
     @Override
-    public SearchableDto searchAccountsGroups(String searchString, int pageNumber, int limit) {
+    public SearchablesDto searchAccountsGroups(String searchString, int pageNumber, int limit) {
         return dataSetsDaoFacade.searchAccountsGroups(searchString, pageNumber, limit);
     }
 }

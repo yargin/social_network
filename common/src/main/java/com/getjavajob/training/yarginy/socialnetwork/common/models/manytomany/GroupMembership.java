@@ -6,10 +6,11 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.ColumnResult;
-import javax.persistence.ConstructorResult;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.EntityResult;
+import javax.persistence.FieldResult;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -26,17 +27,24 @@ import java.util.Objects;
 @Entity
 @Table(name = "groups_members")
 @NamedEntityGraph(name = "graph.GroupMembers.members", attributeNodes = {@NamedAttributeNode("account")})
-@SqlResultSetMapping(name = "rsMapping.groupMembersAreModerators",
-        classes = @ConstructorResult(targetClass = Account.class,
-                columns = {
-                        @ColumnResult(name = "id", type = Long.class),
-                        @ColumnResult(name = "name"),
-                        @ColumnResult(name = "surname"),
-                        @ColumnResult(name = "email")
-                }),
-        columns = {
-                @ColumnResult(name = "is_moderator", type = Boolean.class)
+@SqlResultSetMapping(name = "rsMapping.groupMembersAreModerators"
+//        , classes = @ConstructorResult(targetClass = Account.class,
+//                columns = {
+//                        @ColumnResult(name = "id", type = Long.class),
+//                        @ColumnResult(name = "name"),
+//                        @ColumnResult(name = "surname"),
+//                        @ColumnResult(name = "email")
+//                })
+        , entities = @EntityResult(entityClass = Account.class,
+        fields = {
+                @FieldResult(name = "id", column = "id"),
+                @FieldResult(name = "name", column = "name"),
+                @FieldResult(name = "surname", column = "surname"),
+                @FieldResult(name = "email", column = "email"),
         })
+        , columns = {
+        @ColumnResult(name = "is_moderator", type = Boolean.class)
+})
 public class GroupMembership implements ManyToMany<Account, Group> {
     @EmbeddedId
     private final GroupMembershipKey groupMembershipKey = new GroupMembershipKey();

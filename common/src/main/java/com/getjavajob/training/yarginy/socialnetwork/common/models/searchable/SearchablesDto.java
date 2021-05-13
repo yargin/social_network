@@ -2,11 +2,11 @@ package com.getjavajob.training.yarginy.socialnetwork.common.models.searchable;
 
 import java.util.Collection;
 
-public class SearchableDto {
+public class SearchablesDto {
     private final Collection<Searchable> searchAbles;
     private int[] pages;
 
-    public SearchableDto(Collection<Searchable> searchAbles) {
+    public SearchablesDto(Collection<Searchable> searchAbles) {
         this.searchAbles = searchAbles;
     }
 

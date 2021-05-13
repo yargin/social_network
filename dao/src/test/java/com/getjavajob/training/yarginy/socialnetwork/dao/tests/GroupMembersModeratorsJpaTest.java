@@ -12,6 +12,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -26,6 +28,7 @@ import static org.junit.Assert.assertSame;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestOverrideSpringConfig.xml"})
 public class GroupMembersModeratorsJpaTest {
+    private static final Logger logger = LoggerFactory.getLogger(GroupMembersModeratorsJpaTest.class);
     @Autowired
     private GroupDaoFacadeImpl groupDao;
     @Autowired
@@ -51,7 +54,7 @@ public class GroupMembersModeratorsJpaTest {
 
     @Before
     public void initValues() {
-        //acounts
+        //accounts
         accountDaoFacade.create(firstAccount);
         firstAccount = accountDaoFacade.select(firstAccount);
         accountDaoFacade.create(secondAccount);
@@ -97,8 +100,12 @@ public class GroupMembersModeratorsJpaTest {
         groupModeratorsDao.create(firstAccount.getId(), firstGroup.getId());
         groupModeratorsDao.create(secondAccount.getId(), firstGroup.getId());
 
+        logger.info("==================================================");
         Map<Account, Boolean> groupMembersAreModerators = additionalManyToManyDao.getGroupMembersAreModerators(
                 firstGroup.getId());
+        logger.info("==================================================");
+
+        firstAccount = accountDaoFacade.select(firstAccount);
         assertSame(4, groupMembersAreModerators.size());
         assertSame(2L, groupMembersAreModerators.entrySet().stream().filter(Map.Entry::getValue).count());
     }

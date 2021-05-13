@@ -2,7 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchableDto;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchablesDto;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -12,5 +12,5 @@ public interface DataSetsDaoFacade extends Serializable {
 
     Map<Group, Boolean> getAllUnjoinedGroupsAreRequested(long accountId);
 
-    SearchableDto searchAccountsGroups(String searchString, int pageNumber, int limit);
+    SearchablesDto searchAccountsGroups(String searchString, int pageNumber, int limit);
 }
