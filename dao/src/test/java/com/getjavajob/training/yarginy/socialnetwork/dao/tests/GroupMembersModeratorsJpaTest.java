@@ -50,7 +50,6 @@ public class GroupMembersModeratorsJpaTest {
     private Group secondGroup = new Group("secondGroup", firstAccount);
     private Group thirdGroup = new Group("thirdGroup", firstAccount);
     private Group forthGroup = new Group("forthGroup", firstAccount);
-    private Group group;
 
     @Before
     public void initValues() {
@@ -81,10 +80,10 @@ public class GroupMembersModeratorsJpaTest {
 
     @After
     public void deleteTestValues() {
-        accountDaoFacade.delete(firstAccount);
-        accountDaoFacade.delete(secondAccount);
-        accountDaoFacade.delete(thirdAccount);
-        accountDaoFacade.delete(firstAccount);
+//        accountDaoFacade.delete(firstAccount);
+//        accountDaoFacade.delete(secondAccount);
+//        accountDaoFacade.delete(thirdAccount);
+//        accountDaoFacade.delete(firstAccount);
         groupDao.delete(firstGroup);
         groupDao.delete(secondGroup);
         groupDao.delete(thirdGroup);
@@ -100,6 +99,7 @@ public class GroupMembersModeratorsJpaTest {
         groupModeratorsDao.create(firstAccount.getId(), firstGroup.getId());
         groupModeratorsDao.create(secondAccount.getId(), firstGroup.getId());
 
+        //todo
         logger.info("==================================================");
         Map<Account, Boolean> groupMembersAreModerators = additionalManyToManyDao.getGroupMembersAreModerators(
                 firstGroup.getId());

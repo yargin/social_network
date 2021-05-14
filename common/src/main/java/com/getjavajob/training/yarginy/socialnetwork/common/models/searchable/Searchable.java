@@ -10,6 +10,15 @@ public class Searchable {
     private String name;
     private SearchableType type;
 
+    public Searchable() {
+    }
+
+    public Searchable(long id, String name, SearchableType type) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+    }
+
     public long getId() {
         return id;
     }

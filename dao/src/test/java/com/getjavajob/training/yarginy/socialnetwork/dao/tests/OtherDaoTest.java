@@ -2,6 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.tests;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchablesDto;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DataSetsDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacade;
@@ -10,6 +11,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -19,12 +22,14 @@ import java.util.Map;
 
 import static java.sql.Date.valueOf;
 import static java.time.LocalDate.of;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestOverrideSpringConfig.xml"})
 public class OtherDaoTest {
+    private static final Logger logger = LoggerFactory.getLogger(OtherDaoTest.class);
     @Autowired
     private DataSetsDaoFacade dataSetsDaoFacade;
     @Autowired
@@ -33,8 +38,8 @@ public class OtherDaoTest {
     private GroupDaoFacade groupDaoFacade;
     @Autowired
     private AccountDaoFacade accountDaoFacade;
-    private Account account = new Account("test", "test", "test@test.test");
-    private Account owner = new Account("testOwner", "testOwner", "testOwner@test.test");
+    private Account account = new Account("testt", "test", "test@test.test");
+    private Account owner = new Account("testtOwner", "testOwner", "testOwner@test.test");
     private Group group1;
     private Group group2;
     private Group group3;
@@ -47,15 +52,15 @@ public class OtherDaoTest {
         account = accountDaoFacade.select(account);
         accountDaoFacade.create(owner);
         owner = accountDaoFacade.select(owner);
-        group1 = new Group("testGroup1", owner);
+        group1 = new Group("testtGroup1", owner);
         group1.setCreationDate(valueOf(of(2020, 2, 2)));
-        group2 = new Group("testGroup2", owner);
+        group2 = new Group("testtGroup2", owner);
         group2.setCreationDate(valueOf(of(2020, 2, 2)));
-        group3 = new Group("testGroup3", owner);
+        group3 = new Group("testtGroup3", owner);
         group3.setCreationDate(valueOf(of(2020, 2, 2)));
-        group4 = new Group("testGroup4", owner);
+        group4 = new Group("testtGroup4", owner);
         group4.setCreationDate(valueOf(of(2020, 2, 2)));
-        group5 = new Group("testGroup5", owner);
+        group5 = new Group("testtGroup5", owner);
         group5.setCreationDate(valueOf(of(2020, 2, 2)));
 
         groupDaoFacade.create(group1);
@@ -94,5 +99,11 @@ public class OtherDaoTest {
         assertTrue(allGroups.get(group2));
         assertTrue(allGroups.get(group3));
         assertFalse(allGroups.get(group4));
+    }
+
+    @Test
+    public void testFindSearchables() {
+        SearchablesDto searchablesDto = dataSetsDaoFacade.searchAccountsGroups("testt", 1, 10);
+        assertEquals(7, searchablesDto.getSearchAbles().size());
     }
 }

@@ -14,7 +14,10 @@ import java.util.Collection;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.lang.Thread.sleep;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestOverrideSpringConfig.xml"})
@@ -56,8 +59,7 @@ public class JpaAccountDaoTest {
     @Test
     public void testDeleteAccount() {
         assertTrue(accountDao.delete(account));
-        Collection<Account> accounts = accountDao.selectAll();
-        assertEquals(0, accounts.size());
+        assertEquals(accountDao.getNullModel(), accountDao.select(account));
         assertFalse(accountDao.delete(account));
     }
 

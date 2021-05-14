@@ -6,17 +6,14 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.EntityResult;
-import javax.persistence.FieldResult;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
 import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -26,21 +23,13 @@ import java.util.Objects;
 @Scope("prototype")
 @Entity
 @Table(name = "groups_members")
-@NamedEntityGraph(name = "graph.GroupMembers.members", attributeNodes = {@NamedAttributeNode("account")})
 @SqlResultSetMapping(name = "rsMapping.groupMembersAreModerators"
-//        , classes = @ConstructorResult(targetClass = Account.class,
-//                columns = {
-//                        @ColumnResult(name = "id", type = Long.class),
-//                        @ColumnResult(name = "name"),
-//                        @ColumnResult(name = "surname"),
-//                        @ColumnResult(name = "email")
-//                })
-        , entities = @EntityResult(entityClass = Account.class,
-        fields = {
-                @FieldResult(name = "id", column = "id"),
-                @FieldResult(name = "name", column = "name"),
-                @FieldResult(name = "surname", column = "surname"),
-                @FieldResult(name = "email", column = "email"),
+        , classes = @ConstructorResult(targetClass = Account.class,
+        columns = {
+                @ColumnResult(name = "id", type = Long.class),
+                @ColumnResult(name = "name"),
+                @ColumnResult(name = "surname"),
+                @ColumnResult(name = "email")
         })
         , columns = {
         @ColumnResult(name = "is_moderator", type = Boolean.class)

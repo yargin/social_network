@@ -5,11 +5,11 @@
         <Console name="Console" target="SYSTEM_OUT"/>
     </Appenders>
     <Loggers>
-        <Logger name="com.getjavajob.training.yarginy.socialnetwork.dao.tests" level="debug">
-            <AppenderRef ref="Console"/>
-        </Logger>
-        <Root level="error">
+        <Root level="error" additivity="false">
             <AppenderRef ref="ConsoleErr"/>
         </Root>
+        <Logger name="com.getjavajob.training.yarginy.socialnetwork.dao.tests" level="debug" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
     </Loggers>
 </Configuration>
