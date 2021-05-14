@@ -14,7 +14,7 @@
         <input type="password" name="password" placeholder="<fmt:message key="form.password" bundle="${form}"/>"
                required>
         <br>
-        <fmt:message key="form.rememberMe" bundle="${form}"/><input type="checkbox" name="rememberMe">
+        <fmt:message key="form.rememberMe" bundle="${form}"/><input type="checkbox" name="remember-me">
         <br>
         <button type="submit"><fmt:message key="button.login" bundle="${label}"/></button>
         <br>

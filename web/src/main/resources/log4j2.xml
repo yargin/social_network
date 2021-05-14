@@ -11,7 +11,7 @@
         <Logger name="com.getjavajob.training.yarginy.socialnetwork.web.interceptors" level="debug" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>
-        <Root level="info">
+        <Root level="info" additivity="false">
             <AppenderRef ref="Console"/>
         </Root>
     </Loggers>

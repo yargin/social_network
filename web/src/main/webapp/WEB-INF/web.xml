@@ -22,7 +22,7 @@
     </listener>
 
     <session-config>
-        <session-timeout>10</session-timeout>
+        <session-timeout>1</session-timeout>
     </session-config>
 
     <servlet>
@@ -67,5 +67,6 @@
     <filter-mapping>
         <filter-name>springSecurityFilterChain</filter-name>
         <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
     </filter-mapping>
 </web-app>

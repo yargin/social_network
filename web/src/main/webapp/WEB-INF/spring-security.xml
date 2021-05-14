@@ -11,8 +11,8 @@
     <http>
         <csrf disabled="true"/>
         <anonymous enabled="false"/>
-        <intercept-url pattern="/account/delete/**" access="hasAuthority('ADMIN')" />
-        <intercept-url pattern="/" access="hasAnyAuthority('USER', 'ADMIN')" />
+        <intercept-url pattern="/account/delete/**" access="hasAuthority('ADMIN')"/>
+        <intercept-url pattern="/" access="hasAnyAuthority('USER', 'ADMIN')"/>
         <form-login
                 login-page="/login"
                 username-parameter="email"
@@ -22,10 +22,11 @@
         />
         <logout
                 logout-url="/logout"
-                logout-success-url="/login"/>
+                logout-success-url="/login"
+                delete-cookies="JSESSIONID"/>
+        <remember-me key="uniqueAndSecret" user-service-ref="springSecAuthService"/>
         <access-denied-handler error-page="/login"/>
     </http>
-<!--    <http/>-->
 
     <beans:bean id="loginFailureHandler" class="com.getjavajob.training.yarginy.socialnetwork.web.filters.LoginFailureFilter"/>
 
@@ -36,6 +37,7 @@
     <beans:bean id="daoAuthProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
         <beans:property name="userDetailsService" ref="userService"/>
         <beans:property name="passwordEncoder" ref="encoder"/>
+        <beans:property name="hideUserNotFoundExceptions" value="false"/>
     </beans:bean>
 
     <authentication-manager>

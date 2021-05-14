@@ -44,13 +44,13 @@
     <mvc:resources mapping="/font/*" location="font"/>
 
     <mvc:interceptors>
-<!--        <mvc:interceptor>-->
-<!--            <mvc:mapping path="/**"/>-->
-<!--            <mvc:mapping path="/*"/>-->
-<!--            <mvc:exclude-mapping path="/registration"/>-->
-<!--            <mvc:exclude-mapping path="/login"/>-->
-<!--            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.common.AuthChecker"/>-->
-<!--        </mvc:interceptor>-->
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:mapping path="/*"/>
+            <mvc:exclude-mapping path="/registration"/>
+            <mvc:exclude-mapping path="/login"/>
+            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.common.SessionAuthChecker"/>
+        </mvc:interceptor>
 
         <mvc:interceptor>
             <mvc:mapping path="/dialog/show*"/>

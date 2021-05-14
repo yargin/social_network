@@ -1,10 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.service;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData;
-import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectDataException;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Password;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PasswordDaoFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,7 +10,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -23,14 +19,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.common.utils.NullMod
 
 @Service
 public class SpringSecAuthService implements UserDetailsService {
-    private AccountDaoFacade accountDaoFacade;
     private PasswordDaoFacade passwordDaoFacade;
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    public void setAccountDaoFacade(AccountDaoFacade accountDaoFacade) {
-        this.accountDaoFacade = accountDaoFacade;
-    }
 
     @Autowired
     public void setPasswordDaoFacade(PasswordDaoFacade passwordDaoFacade) {
@@ -45,8 +34,9 @@ public class SpringSecAuthService implements UserDetailsService {
         password.setAccount(account);
         password = passwordDaoFacade.select(password);
         if (password.equals(getNullPassword())) {
-            throw new UsernameNotFoundException("not found");
+            throw new UsernameNotFoundException("user not found");
         }
+        account = password.getAccount();
         return new User(account.getEmail(), password.getStringPassword(), getAuthorities(account));
     }
 

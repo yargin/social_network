@@ -7,7 +7,7 @@ CREATE TABLE Accounts
     sex               CHAR(6),
     birth_date        DATE,
     registration_date DATE,
-    role              CHAR(5) DEFAULT 'USER',
+    role              CHAR(5)     NOT NULL DEFAULT 'USER',
     email             VARCHAR(40) NOT NULL UNIQUE,
     additional_email  VARCHAR(40) UNIQUE,
     icq               VARCHAR(40),
@@ -15,7 +15,7 @@ CREATE TABLE Accounts
     city              VARCHAR(40),
     country           VARCHAR(40),
     photo             MEDIUMBLOB,
-    version           BIGINT NOT NULL
+    version           BIGINT      NOT NULL
 );
 
 ALTER TABLE Accounts ADD CHECK (sex IN ('MALE', 'FEMALE'));
@@ -78,9 +78,9 @@ ADD CONSTRAINT C_18 FOREIGN KEY (owner_id) REFERENCES Accounts (id) ON DELETE CA
 ALTER TABLE Phones ADD CONSTRAINT C_19 CHECK (type IN ('PRIVATE', 'WORK'));
 
 CREATE TABLE Passwords (
-    email VARCHAR(40),
-    password VARCHAR(255),
-    CONSTRAINT c_21 FOREIGN KEY (email) REFERENCES Accounts (email) ON DELETE CASCADE ON UPDATE CASCADE;
+                           email VARCHAR(40),
+                           password VARCHAR(255),
+                           CONSTRAINT c_21 FOREIGN KEY (email) REFERENCES Accounts (email) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 ALTER TABLE Passwords ADD CONSTRAINT C_20 PRIMARY KEY(email);
