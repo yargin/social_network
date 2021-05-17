@@ -15,14 +15,12 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Objects;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.ERROR;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTED_ID;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.TAB;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.FRIENDS;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.FRIENDSHIP_REQUESTS;
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.REDIRECT;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.FRIENDSHIP_REQUEST_VIEW;
 import static java.util.Objects.isNull;
 
@@ -40,23 +38,23 @@ public class FriendshipController {
     }
 
     @PostMapping("/accept")
-    public String acceptFriendship(@RequestParam String accept, @RequestParam Long requesterId,
-                                   @RequestParam Long receiverId) {
+    public String acceptFriendship(@RequestParam String accept, @RequestAttribute Long requesterId,
+                                   @RequestAttribute long receiverId) {
         if ("true".equals(accept)) {
             accountService.addFriend(requesterId, receiverId);
         } else {
             accountService.deleteFriendshipRequest(requesterId, receiverId);
         }
-        return REDIRECT + FRIENDSHIP_REQUESTS + "?id=" + receiverId;
+        return redirector.getMvcPathForRedirect(FRIENDSHIP_REQUESTS, receiverId);
     }
 
     @GetMapping("/add")
-    public ModelAndView addFriend(@RequestAttribute Long requesterId, @RequestAttribute(required = false) String friend,
-                                  @SessionAttribute Long userId, @RequestAttribute Long receiverId,
+    public ModelAndView addFriend(@RequestAttribute long requesterId, @RequestAttribute(required = false) String friend,
+                                  @SessionAttribute long userId, @RequestAttribute long receiverId,
                                   HttpServletRequest req) {
         ModelAndView modelAndView = new ModelAndView(FRIENDSHIP_REQUEST_VIEW);
 
-        if (isNull(requesterId) || !isNull(friend) || !Objects.equals(userId, requesterId)) {
+        if (!isNull(friend) || userId != requesterId) {
             return new ModelAndView(redirector.redirectBackView(req));
         }
 
@@ -74,8 +72,8 @@ public class FriendshipController {
     }
 
     @PostMapping("/remove")
-    public String removeFromFriends(@RequestAttribute Long requesterId, @RequestAttribute Long receiverId) {
+    public String removeFromFriends(@RequestAttribute long requesterId, @RequestAttribute long receiverId) {
         accountService.removeFriend(requesterId, receiverId);
-        return REDIRECT + FRIENDS + "?id=" + receiverId;
+        return redirector.getMvcPathForRedirect(FRIENDS, receiverId);
     }
 }

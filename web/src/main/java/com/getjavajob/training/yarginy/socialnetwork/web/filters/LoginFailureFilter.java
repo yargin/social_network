@@ -1,5 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.filters;
 
+import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Messages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -23,10 +24,10 @@ public class LoginFailureFilter implements AuthenticationFailureHandler {
         String email = req.getParameter("email");
         if (e instanceof UsernameNotFoundException) {
             req.setAttribute("logerror", "error.wrongEmail");
-            logger.info("authentication failed - user not found");
+            logger.info(Messages.TWO_STRINGS_WITH_SPACE, req.getRequestURI(), "authentication failed - user not found");
         } else if (e instanceof BadCredentialsException) {
             req.setAttribute("logerror", "error.wrongPassword");
-            logger.info("authentication failed - wrong password");
+            logger.info(Messages.TWO_STRINGS_WITH_SPACE, req.getRequestURI(), "authentication failed - wrong password");
         }
         req.setAttribute("email", email);
         req.getRequestDispatcher(LOGIN).forward(req, resp);

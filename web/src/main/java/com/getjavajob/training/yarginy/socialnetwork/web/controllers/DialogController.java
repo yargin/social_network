@@ -59,11 +59,11 @@ public class DialogController {
         }
         dialogService.create(dialog, message);
         long createdId = dialogService.get(dialog).getId();
-        return REDIRECT + "/dialog/show?" + REQUESTED_ID + '=' + createdId;
+        return redirector.getMvcPathForRedirect(DIALOG, createdId);
     }
 
     @GetMapping("/show")
-    public ModelAndView showDialog(HttpServletRequest req, @RequestParam long id) {
+    public ModelAndView showDialog(HttpServletRequest req, @RequestAttribute long id) {
         Dialog dialog = dialogService.getFullInfo(id);
         if (Objects.equals(dialog, dialogService.getNullDialog())) {
             return new ModelAndView(redirector.redirectBackView(req));

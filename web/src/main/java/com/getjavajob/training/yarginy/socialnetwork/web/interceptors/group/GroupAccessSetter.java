@@ -3,6 +3,8 @@ package com.getjavajob.training.yarginy.socialnetwork.web.interceptors.group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -14,10 +16,13 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTED_ID;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTER_ID;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Messages.CHECK_PASSED;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Messages.TWO_STRINGS_WITH_SPACE;
 import static java.util.Objects.isNull;
 
 @Component
 public class GroupAccessSetter extends HandlerInterceptorAdapter {
+    private static final Logger logger = LoggerFactory.getLogger(GroupAccessSetter.class);
     private final GroupService groupService;
 
     public GroupAccessSetter(GroupService groupService) {
@@ -59,6 +64,7 @@ public class GroupAccessSetter extends HandlerInterceptorAdapter {
         if (groupService.isModerator(requesterId, requestedGroupId)) {
             req.setAttribute("moderator", true);
         }
+        logger.info(TWO_STRINGS_WITH_SPACE, req.getRequestURI(), CHECK_PASSED);
         return true;
     }
 }

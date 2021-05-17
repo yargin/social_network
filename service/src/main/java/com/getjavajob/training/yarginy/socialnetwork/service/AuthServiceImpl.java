@@ -5,27 +5,21 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
-import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.ModelsFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PasswordDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.utils.NullModelsFactory.getNullPassword;
+import static java.util.Objects.isNull;
 
 
 @Service("authService")
@@ -34,7 +28,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordDaoFacade passwordDaoFacade;
     private final PhoneDaoFacade phoneDaoFacade;
     private final ModelsFactory modelsFactory;
-    private final PasswordEncoder passwordEncoder;
+    private final transient PasswordEncoder passwordEncoder;
 
     public AuthServiceImpl(AccountDaoFacade accountDaoFacade, PasswordDaoFacade passwordDaoFacade,
                            PhoneDaoFacade phoneDaoFacade, ModelsFactory modelsFactory,
@@ -49,6 +43,9 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public boolean register(Account account, Collection<Phone> phones, String password) {
         account.setRegistrationDate(Date.valueOf(LocalDate.now()));
+        if (isNull(account.getRole())) {
+            account.setRole(Role.USER);
+        }
         if (!accountDaoFacade.create(account)) {
             throw new IncorrectDataException(IncorrectData.EMAIL_DUPLICATE);
         }
@@ -66,6 +63,7 @@ public class AuthServiceImpl implements AuthService {
         return true;
     }
 
+    //todo remove method & rename class
     @Override
     public Account login(String email, String password) {
         Password storedPassword = new Password();

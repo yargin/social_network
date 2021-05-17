@@ -1,8 +1,8 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.helpers;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
 import org.springframework.stereotype.Component;
@@ -30,6 +30,7 @@ public class AccountInfoHelper {
 
     public void setAccountInfo(ModelAndView modelAndView, Account account) {
         modelAndView.addObject("user", account);
+        modelAndView.addObject("id", account.getId());
         modelAndView.addObject(PHOTO, dataHandler.getHtmlPhoto(account.getPhoto()));
 
         Collection<Phone> phones = accountService.getPhones(account.getId());
@@ -41,6 +42,7 @@ public class AccountInfoHelper {
         modelAndView.addObject("workPhones", workPhones);
     }
 
+    //todo use spring security
     public boolean isAdmin(HttpServletRequest req) {
         Account account = (Account) req.getSession().getAttribute(USER);
         if ((!isNull(account.getRole()) && (Role.ADMIN.equals(account.getRole())))) {

@@ -44,4 +44,8 @@ public class Redirector {
         }
         return REDIRECT + referer;
     }
+
+    public String getMvcPathForRedirect(String destination, long id) {
+        return REDIRECT + destination + "?id=" + id;
+    }
 }

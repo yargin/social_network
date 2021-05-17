@@ -17,7 +17,7 @@ import java.util.Collections;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.utils.NullModelsFactory.getNullPassword;
 
-@Service
+@Service("userService")
 public class SpringSecAuthService implements UserDetailsService {
     private PasswordDaoFacade passwordDaoFacade;
 

@@ -53,8 +53,17 @@
         </mvc:interceptor>
 
         <mvc:interceptor>
+            <mvc:mapping path="/account/wall"/>
+            <mvc:mapping path="/account/requests"/>
+            <mvc:mapping path="/account/friends"/>
+            <mvc:mapping path="/account/dialogs"/>
+            <mvc:mapping path="/account/groups"/>
+            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.common.IdSetter"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
             <mvc:mapping path="/dialog/show*"/>
-            <mvc:mapping path="/group/wall*"/>
+            <mvc:mapping path="/group/wall**"/>
             <mvc:mapping path="/group/moderators*"/>
             <mvc:mapping path="/group/requests*"/>
             <mvc:mapping path="/group/members*"/>
@@ -65,6 +74,11 @@
             <mvc:mapping path="/account/savexml*"/>
             <mvc:mapping path="/account/upload*"/>
             <mvc:mapping path="/message/*/delete*"/>
+            <mvc:mapping path="/account/wall*"/>
+            <mvc:mapping path="/account/requests*"/>
+            <mvc:mapping path="/account/friends*"/>
+            <mvc:mapping path="/account/dialogs*"/>
+            <mvc:mapping path="/account/groups*"/>
             <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.common.OneIdInterceptor"/>
         </mvc:interceptor>
 

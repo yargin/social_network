@@ -10,6 +10,7 @@ import com.getjavajob.training.yarginy.socialnetwork.service.messages.AccountWal
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.AccountInfoHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
@@ -52,15 +53,12 @@ public class AccountInfoController {
         Collection<AccountWallMessage> messages = messageService.selectMessages(id);
         modelAndView.addObject("messages", messages);
         modelAndView.addObject("type", "account");
-        modelAndView.addObject("id", id);
         modelAndView.addObject(TAB, "wall");
         return modelAndView;
     }
 
     @GetMapping("/requests")
-    public ModelAndView getFriendshipRequests(@RequestParam(value = REQUESTED_ID, required = false) Long requestedId,
-                                              @SessionAttribute(USER_ID) long sessionId) {
-        long id = requestedId == null ? sessionId : requestedId;
+    public ModelAndView getFriendshipRequests(@RequestAttribute long id) {
         ModelAndView modelAndView = new ModelAndView("accountpages/friendshipRequestsList");
 
         Collection<Account> requesters = accountService.getFriendshipRequests(id);

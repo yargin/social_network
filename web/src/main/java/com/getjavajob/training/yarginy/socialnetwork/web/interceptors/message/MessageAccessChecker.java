@@ -17,6 +17,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER_ID;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Messages.CHECK_FAILED;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Messages.CHECK_PASSED;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Messages.TWO_STRINGS_WITH_SPACE;
 
 
 @Component
@@ -59,10 +60,10 @@ public class MessageAccessChecker extends HandlerInterceptorAdapter {
                     isOwner(currentUserId, receiverId);
         }
         if (!hasAccess) {
-            logger.info(CHECK_FAILED);
+            logger.info(TWO_STRINGS_WITH_SPACE, req.getRequestURI(), CHECK_FAILED);
             redirector.redirectToReferer(req, resp);
         }
-        logger.info(CHECK_PASSED);
+        logger.info(TWO_STRINGS_WITH_SPACE, req.getRequestURI(), CHECK_PASSED);
         return hasAccess;
     }
 }

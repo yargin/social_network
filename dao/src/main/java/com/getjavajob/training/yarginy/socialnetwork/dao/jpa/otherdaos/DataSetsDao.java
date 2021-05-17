@@ -24,6 +24,7 @@ public class DataSetsDao implements Serializable {
     @PersistenceContext
     private transient EntityManager entityManager;
 
+    //todo move to groupModeratorsDao
     public Map<Account, Boolean> getGroupMembersAreModerators(long groupId) {
         Query query = entityManager.createNativeQuery("SELECT a.id id, a.name name, a.surname surname, a.email email, " +
                 "(CASE WHEN gmods.account_id <> 0 THEN TRUE ELSE FALSE END) is_moderator " +
@@ -31,7 +32,8 @@ public class DataSetsDao implements Serializable {
                 "JOIN Accounts a ON a.id = gmems.account_id " +
                 "LEFT JOIN groups_moderators gmods " +
                 "ON gmems.account_id = gmods.account_id AND gmems.group_id = gmods.group_id " +
-                "WHERE gmems.group_id = :groupId", "rsMapping.groupMembersAreModerators").setParameter("groupId", groupId);
+                "WHERE gmems.group_id = :groupId", "rsMapping.groupMembersAreModerators");
+        query.setParameter("groupId", groupId);
         List<Object[]> rawMembersAreModerators = query.getResultList();
         Map<Account, Boolean> membersAreModerators = new HashMap<>();
         for (Object[] raw : rawMembersAreModerators) {
@@ -42,6 +44,7 @@ public class DataSetsDao implements Serializable {
         return membersAreModerators;
     }
 
+    //todo move to groupMembershipDao
     public Map<Group, Boolean> selectUnJoinedGroupsAreRequested(long accountId) {
         Query query = entityManager.createNativeQuery("SELECT g.id, g.name, gmr.group_id requested" +
                 " FROM `Groups` g LEFT JOIN " +
@@ -50,7 +53,7 @@ public class DataSetsDao implements Serializable {
                 " ON gmr.group_id = g.id " +
                 " WHERE g.id NOT IN " +
                 " (SELECT group_id FROM groups_members" +
-                " WHERE account_id = ?);");
+                " WHERE account_id = ?)");
         query.setParameter(1, accountId);
         query.setParameter(2, accountId);
         List<Object[]> result = query.getResultList();
@@ -97,7 +100,7 @@ public class DataSetsDao implements Serializable {
                 " UNION " +
                 " SELECT id, 'group' type, name name FROM `Groups` " +
                 " WHERE UPPER(name) LIKE UPPER(?) ) s " +
-                " LIMIT " + limit + " OFFSET " + (pageNumber - 1) * limit + ';';
+                " LIMIT " + limit + " OFFSET " + (pageNumber - 1) * limit;
     }
 
     private String accountsAndGroupsRowCountQuery() {
@@ -106,6 +109,6 @@ public class DataSetsDao implements Serializable {
                 " WHERE UPPER(name) LIKE UPPER(?) or UPPER(surname) LIKE UPPER(?)" +
                 " UNION " +
                 " SELECT id, 'group' type, name name FROM `Groups` " +
-                " WHERE UPPER(name) LIKE UPPER(?) ) s ;";
+                " WHERE UPPER(name) LIKE UPPER(?) ) s";
     }
 }

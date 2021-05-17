@@ -39,7 +39,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.common.models.additi
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.PhoneType.WORK;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.ACCOUNT_INFO;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.PHOTO;
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.LOGOUT;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.ACCOUNT_WALL;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.REDIRECT;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.ACCOUNT_UPDATE_VIEW;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.REGISTRATION_VIEW;
@@ -206,9 +206,12 @@ public class AccountCrudController {
     @GetMapping("/account/delete")
     public String delete(@RequestAttribute long id) {
         Account accountToDelete = new Account(id);
+//        try {
         if (accountService.deleteAccount(accountToDelete)) {
-            return REDIRECT + LOGOUT;
+            return REDIRECT + ACCOUNT_WALL;
         }
+//        } catch (AccessDeniedException e) {
+//        }
         return "error";
     }
 

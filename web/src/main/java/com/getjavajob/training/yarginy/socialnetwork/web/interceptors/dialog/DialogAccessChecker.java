@@ -15,6 +15,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER_ID;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Messages.CHECK_FAILED;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Messages.CHECK_PASSED;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Messages.TWO_STRINGS_WITH_SPACE;
 
 @Component
 public class DialogAccessChecker extends HandlerInterceptorAdapter {
@@ -35,11 +36,11 @@ public class DialogAccessChecker extends HandlerInterceptorAdapter {
         long currentUserId = (long) req.getSession().getAttribute(USER_ID);
 
         if (infoHelper.isAdmin(req) || dialogService.isTalker(currentUserId, dialogId)) {
-            logger.info(CHECK_PASSED);
+            logger.info(TWO_STRINGS_WITH_SPACE, req.getRequestURI(), CHECK_PASSED);
             return true;
         }
         redirector.redirectToReferer(req, res);
-        logger.info(CHECK_FAILED);
+        logger.info(TWO_STRINGS_WITH_SPACE, req.getRequestURI(), CHECK_FAILED);
         return false;
     }
 }

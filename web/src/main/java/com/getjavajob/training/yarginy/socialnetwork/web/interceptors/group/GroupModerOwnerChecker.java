@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Messages.CHECK_FAILED;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Messages.CHECK_PASSED;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Messages.TWO_STRINGS_WITH_SPACE;
 import static java.util.Objects.isNull;
 
 @Component
@@ -21,11 +22,11 @@ public class GroupModerOwnerChecker extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) throws Exception {
         if (!isNull(req.getAttribute("admin")) || !isNull(req.getAttribute("owner")) || !isNull(req.
                 getAttribute("moderator"))) {
-            logger.info(CHECK_PASSED);
+            logger.info(TWO_STRINGS_WITH_SPACE, req.getRequestURI(), CHECK_PASSED);
             return true;
         }
         resp.sendRedirect(req.getContextPath() + Pages.ACCOUNT_WALL);
-        logger.info(CHECK_FAILED);
+        logger.info(TWO_STRINGS_WITH_SPACE, req.getRequestURI(), CHECK_FAILED);
         return false;
     }
 }

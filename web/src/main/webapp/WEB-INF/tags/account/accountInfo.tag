@@ -6,6 +6,7 @@
 <fmt:setBundle basename="label" var="label"/>
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 <script src="${context}/js/phonesEdit.js" defer></script>
+<script type="text/javascript" src="${context}/js/confirmationDialog.js"></script>
 <fmt:message key="label.areYouSure" var="confirmText" bundle="${label}"/>
 
 <div class="info">
@@ -48,8 +49,8 @@
 <c:if test="${not empty owner or not empty admin}">
     <div>
         <a href="${context}/account/update?id=${id}"><fmt:message key="label.updateInfo" bundle="${label}"/></a><br>
-        <a href="${context}/account/delete?id=${id}" onclick='return confirmation("${confirmText}")'><fmt:message
-                key="label.deleteAccount" bundle="${label}"/></a><br>
+        <a href="${context}/account/delete?id=${id}" onclick='return confirmation("${confirmText}", true)'>
+            <fmt:message key="label.deleteAccount" bundle="${label}"/></a><br>
         <a href="${context}/account/savexml?id=${id}" download="account id ${id}.xml">
             <fmt:message key="label.saveAccountInfo" bundle="${label}"/> </a>
     </div>

@@ -5,7 +5,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacadeImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacadeImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsMembersDaoFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.manytomany.AdditionalManyToManyDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.otherdaos.DataSetsDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.manytomany.implementations.GroupModeratorsDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.manytomany.implementations.GroupRequestsDao;
 import org.junit.After;
@@ -38,7 +38,7 @@ public class GroupMembersModeratorsJpaTest {
     @Autowired
     private GroupModeratorsDao groupModeratorsDao;
     @Autowired
-    private AdditionalManyToManyDao additionalManyToManyDao;
+    private DataSetsDao additionalManyToManyDao;
 
     @Autowired
     private GroupRequestsDao groupRequestsDao;
@@ -63,7 +63,7 @@ public class GroupMembersModeratorsJpaTest {
         accountDaoFacade.create(forthAccount);
         forthAccount = accountDaoFacade.select(forthAccount);
 
-        //group
+        //groups
         firstGroup.setCreationDate(Date.valueOf(LocalDate.of(2020, 2, 2)));
         groupDao.create(firstGroup);
         firstGroup = groupDao.select(firstGroup);
@@ -80,10 +80,10 @@ public class GroupMembersModeratorsJpaTest {
 
     @After
     public void deleteTestValues() {
-//        accountDaoFacade.delete(firstAccount);
-//        accountDaoFacade.delete(secondAccount);
-//        accountDaoFacade.delete(thirdAccount);
-//        accountDaoFacade.delete(firstAccount);
+        accountDaoFacade.delete(firstAccount);
+        accountDaoFacade.delete(secondAccount);
+        accountDaoFacade.delete(thirdAccount);
+        accountDaoFacade.delete(firstAccount);
         groupDao.delete(firstGroup);
         groupDao.delete(secondGroup);
         groupDao.delete(thirdGroup);
@@ -99,11 +99,8 @@ public class GroupMembersModeratorsJpaTest {
         groupModeratorsDao.create(firstAccount.getId(), firstGroup.getId());
         groupModeratorsDao.create(secondAccount.getId(), firstGroup.getId());
 
-        //todo
-        logger.info("==================================================");
         Map<Account, Boolean> groupMembersAreModerators = additionalManyToManyDao.getGroupMembersAreModerators(
                 firstGroup.getId());
-        logger.info("==================================================");
 
         firstAccount = accountDaoFacade.select(firstAccount);
         assertSame(4, groupMembersAreModerators.size());
@@ -120,8 +117,6 @@ public class GroupMembersModeratorsJpaTest {
         assertSame(3, unJoinedGroups.size());
         int newSize = unJoinedGroups.entrySet().stream().filter(Map.Entry::getValue).collect(Collectors.toMap(
                 Map.Entry::getKey, (e) -> true)).size();
-        //todo check
-//        assertSame(2L, unJoinedGroups.stream().filter(UnJoinedGroups::isRequestSent).count());
         assertSame(2, newSize);
     }
 }

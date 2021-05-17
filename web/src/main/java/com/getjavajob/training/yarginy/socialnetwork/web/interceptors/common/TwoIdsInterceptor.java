@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.RECEIVER_ID;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTER_ID;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Messages.TWO_STRINGS_WITH_SPACE;
 
 @Component
 public class TwoIdsInterceptor extends HandlerInterceptorAdapter {
@@ -43,7 +44,7 @@ public class TwoIdsInterceptor extends HandlerInterceptorAdapter {
         }
         req.setAttribute(REQUESTER_ID, firstRequestedId);
         req.setAttribute(RECEIVER_ID, secondRequestedId);
-        logger.info("parsed ids number successfully");
+        logger.info(TWO_STRINGS_WITH_SPACE, req.getRequestURI(), "parsed ids number successfully");
         return true;
     }
 }

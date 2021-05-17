@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER_ID;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Messages.CHECK_PASSED;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Messages.TWO_STRINGS_WITH_SPACE;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.LOGIN;
 import static java.util.Objects.isNull;
 
@@ -35,6 +36,7 @@ public class SessionAuthChecker extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession(true);
+        logger.info("=================NEW CHAIN==================");
         Object userIdObject = session.getAttribute(USER_ID);
         if (isNull(userIdObject)) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -54,9 +56,10 @@ public class SessionAuthChecker extends HandlerInterceptorAdapter {
             account = accountService.get(account);
             session.setAttribute(USER, account);
             session.setAttribute(USER_ID, account.getId());
-            logger.info("account info set successfully from security context to session");
+            logger.info(TWO_STRINGS_WITH_SPACE, request.getRequestURI(), "account info set successfully from security " +
+                    "context to session");
         } else {
-            logger.info(CHECK_PASSED);
+            logger.info(TWO_STRINGS_WITH_SPACE, request.getRequestURI(), CHECK_PASSED);
         }
         return true;
     }

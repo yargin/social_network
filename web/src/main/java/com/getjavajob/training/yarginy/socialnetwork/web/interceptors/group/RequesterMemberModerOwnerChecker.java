@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Messages.CHECK_FAILED;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Messages.CHECK_PASSED;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Messages.TWO_STRINGS_WITH_SPACE;
 import static java.util.Objects.isNull;
 
 @Component
@@ -22,11 +23,11 @@ public class RequesterMemberModerOwnerChecker extends HandlerInterceptorAdapter 
         boolean isMemberRequester = !isNull(req.getAttribute("member")) && !isNull(req.getAttribute("requestOwner"));
         if (!isNull(req.getAttribute("admin")) || !isNull(req.getAttribute("moderator")) ||
                 !isNull(req.getAttribute("owner")) || isMemberRequester) {
-            logger.info(CHECK_PASSED);
+            logger.info(TWO_STRINGS_WITH_SPACE, req.getRequestURI(), CHECK_PASSED);
             return true;
         }
         res.sendRedirect(req.getContextPath() + Pages.ACCOUNT_WALL);
-        logger.info(CHECK_FAILED);
+        logger.info(TWO_STRINGS_WITH_SPACE, req.getRequestURI(), CHECK_FAILED);
         return false;
     }
 }

@@ -3,6 +3,8 @@ package com.getjavajob.training.yarginy.socialnetwork.web.interceptors.account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -13,9 +15,12 @@ import javax.servlet.http.HttpSession;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.REQUESTED_ID;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER_ID;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Messages.CHECK_PASSED;
+import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Messages.TWO_STRINGS_WITH_SPACE;
 
 @Component
 public class AccountAccessSetter extends HandlerInterceptorAdapter {
+    private static final Logger logger = LoggerFactory.getLogger(AccountAccessSetter.class);
     private final AccountService accountService;
 
     public AccountAccessSetter(AccountService accountService) {
@@ -49,6 +54,7 @@ public class AccountAccessSetter extends HandlerInterceptorAdapter {
         if (Role.ADMIN.equals(account.getRole())) {
             req.setAttribute("admin", true);
         }
+        logger.info(TWO_STRINGS_WITH_SPACE, req.getRequestURI(), CHECK_PASSED);
 
         return true;
     }

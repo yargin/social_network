@@ -67,7 +67,6 @@ public class AccountDaoFacadeTest {
         accountDao.create(account);
         Account actual = accountDao.select(account);
         assertEquals(account, actual);
-        //todo
         actual = accountDao.selectFullInfo(account.getId());
         byte[] origin = account.getPhoto();
         byte[] selected = actual.getPhoto();

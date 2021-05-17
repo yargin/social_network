@@ -11,8 +11,6 @@
     <http>
         <csrf disabled="true"/>
         <anonymous enabled="false"/>
-        <intercept-url pattern="/account/delete/**" access="hasAuthority('ADMIN')"/>
-        <intercept-url pattern="/" access="hasAnyAuthority('USER', 'ADMIN')"/>
         <form-login
                 login-page="/login"
                 username-parameter="email"
@@ -24,11 +22,14 @@
                 logout-url="/logout"
                 logout-success-url="/login"
                 delete-cookies="JSESSIONID"/>
-        <remember-me key="uniqueAndSecret" user-service-ref="springSecAuthService"/>
+        <remember-me key="uniqueAndSecret" user-service-ref="userService"/>
         <access-denied-handler error-page="/login"/>
     </http>
 
-    <beans:bean id="loginFailureHandler" class="com.getjavajob.training.yarginy.socialnetwork.web.filters.LoginFailureFilter"/>
+    <global-method-security secured-annotations="enabled" pre-post-annotations="enabled"/>
+
+    <beans:bean id="loginFailureHandler"
+                class="com.getjavajob.training.yarginy.socialnetwork.web.filters.LoginFailureFilter"/>
 
     <beans:import resource="classpath*:commonSpringConfig.xml"/>
 
