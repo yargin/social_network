@@ -12,8 +12,42 @@
           type="text/css" rel="stylesheet">
     <meta charset="UTF-8">
     <title><fmt:message key="title"/></title>
+
+
+    <%--===================================================================--%>
+    <%--    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>--%>
+    <%--    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>--%>
+    <%--    <script>--%>
+    <%--        $(function() {--%>
+    <%--            $( "#dialog-1" ).dialog({--%>
+    <%--                autoOpen: false,--%>
+    <%--                buttons: {--%>
+    <%--                    Ok: function() {--%>
+    <%--                        alert("you pressed ok");--%>
+    <%--                        $(this).dialog("close");--%>
+    <%--                    }--%>
+    <%--                }--%>
+    <%--            });--%>
+    <%--            $( "#opener" ).click(function() {--%>
+    <%--                $( "#dialog-1" ).dialog( "open" );--%>
+    <%--            });--%>
+    <%--        });--%>
+    <%--    </script>--%>
+    <%--    <style>--%>
+    <%--        .ui-widget-header,.ui-state-default, ui-button {--%>
+    <%--            background:#b9cd6d;--%>
+    <%--            border: 2px solid black;--%>
+    <%--            color: #FFFFFF;--%>
+    <%--            font-weight: bold;--%>
+    <%--        }--%>
+    <%--    </style>--%>
+    <%--===================================================================--%>
 </head>
 <body>
+
+<%--<div id = "dialog-1"--%>
+<%--     title = "Dialog Title goes here...">This my first jQuery UI Dialog!</div>--%>
+<%--<button   id="opener">BUTTON</button>--%>
 
 <div class="wrapper">
     <div class="header">

@@ -14,6 +14,7 @@ import com.getjavajob.training.yarginy.socialnetwork.web.helpers.updaters.Accoun
 import com.getjavajob.training.yarginy.socialnetwork.web.validators.composite.AccountInfoValidator;
 import com.getjavajob.training.yarginy.socialnetwork.web.validators.composite.RegistrationValidator;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
@@ -40,7 +42,6 @@ import static com.getjavajob.training.yarginy.socialnetwork.common.models.additi
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.ACCOUNT_INFO;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.PHOTO;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.ACCOUNT_WALL;
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.REDIRECT;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.ACCOUNT_UPDATE_VIEW;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.REGISTRATION_VIEW;
 import static java.util.Objects.isNull;
@@ -204,20 +205,18 @@ public class AccountCrudController {
     }
 
     @GetMapping("/account/delete")
+    @ResponseBody
     public String delete(@RequestAttribute long id) {
         Account accountToDelete = new Account(id);
-//        try {
-        if (accountService.deleteAccount(accountToDelete)) {
-            return REDIRECT + ACCOUNT_WALL;
+        try {
+            if (accountService.deleteAccount(accountToDelete)) {
+                return ACCOUNT_WALL;
+            }
+        } catch (AccessDeniedException e) {
+            return "";
         }
-//        } catch (AccessDeniedException e) {
-//        }
         return "error";
     }
-
-//    @GetMapping("/access/showerror")
-//    @ResponseBody
-//    public
 
     @GetMapping("/account/savexml")
     public void getFile(HttpServletResponse response, @RequestAttribute long id) throws IOException {

@@ -5,9 +5,17 @@
 <fmt:setBundle basename="form" var="form"/>
 <fmt:setBundle basename="label" var="label"/>
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
+
+<fmt:message key="label.notEnoughPermissions" var="notEnoughPermissions" bundle="${label}"/>
+<fmt:message key="label.areYouSure" var="areYuSure" bundle="${label}"/>
+<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
 <script src="${context}/js/phonesEdit.js" defer></script>
 <script type="text/javascript" src="${context}/js/confirmationDialog.js"></script>
-<fmt:message key="label.areYouSure" var="confirmText" bundle="${label}"/>
+<script type="text/javascript" src="${context}/js/executeAccordingToPermissions.js"></script>
+<script>
+    initExec('${context}', '${notEnoughPermissions}', '${areYuSure}');
+</script>
+
 
 <div class="info">
     <fmt:message key="form.name" bundle="${form}"/> : ${user.name}<br>
@@ -49,7 +57,9 @@
 <c:if test="${not empty owner or not empty admin}">
     <div>
         <a href="${context}/account/update?id=${id}"><fmt:message key="label.updateInfo" bundle="${label}"/></a><br>
-        <a href="${context}/account/delete?id=${id}" onclick='return confirmation("${confirmText}", true)'>
+            <%--        <a href="${context}/account/delete?id=${id}" onclick='return confirmation("${confirmText}", true)'>--%>
+            <%--            <fmt:message key="label.deleteAccount" bundle="${label}"/></a><br>--%>
+        <a nohref onclick="tryToExecute('${context}/account/delete?id=${id}')">
             <fmt:message key="label.deleteAccount" bundle="${label}"/></a><br>
         <a href="${context}/account/savexml?id=${id}" download="account id ${id}.xml">
             <fmt:message key="label.saveAccountInfo" bundle="${label}"/> </a>

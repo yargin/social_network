@@ -30,10 +30,11 @@ CREATE TABLE `Groups`
     owner_id      BIGINT UNSIGNED,
     creation_date DATE,
     photo         MEDIUMBLOB,
-    version       BIGINT NOT NULL
+    version       BIGINT      NOT NULL
 );
 
-ALTER TABLE `groups` ADD CONSTRAINT C_11 FOREIGN KEY (owner_id) REFERENCES Accounts (id);
+ALTER TABLE `groups`
+    ADD CONSTRAINT C_11 FOREIGN KEY (owner_id) REFERENCES Accounts (id) ON DELETE SET NULL;
 
 CREATE TABLE IF NOT EXISTS Groups_members
 (
@@ -41,7 +42,8 @@ CREATE TABLE IF NOT EXISTS Groups_members
     group_id   BIGINT UNSIGNED
 );
 
-ALTER TABLE Groups_members ADD CONSTRAINT C_12 PRIMARY KEY (account_id, group_id);
+ALTER TABLE Groups_members
+    ADD CONSTRAINT C_12 PRIMARY KEY (account_id, group_id);
 
 ALTER TABLE Groups_members
     ADD CONSTRAINT C_13 FOREIGN KEY (account_id) REFERENCES Accounts (id) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -77,10 +79,11 @@ ADD CONSTRAINT C_18 FOREIGN KEY (owner_id) REFERENCES Accounts (id) ON DELETE CA
 
 ALTER TABLE Phones ADD CONSTRAINT C_19 CHECK (type IN ('PRIVATE', 'WORK'));
 
-CREATE TABLE Passwords (
-                           email VARCHAR(40),
-                           password VARCHAR(255),
-                           CONSTRAINT c_21 FOREIGN KEY (email) REFERENCES Accounts (email) ON DELETE CASCADE ON UPDATE CASCADE
+CREATE TABLE Passwords
+(
+    email    VARCHAR(40),
+    password VARCHAR(255),
+    CONSTRAINT c_21 FOREIGN KEY (email) REFERENCES Accounts (email) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 ALTER TABLE Passwords ADD CONSTRAINT C_20 PRIMARY KEY(email);
