@@ -1,5 +1,5 @@
 <%@ tag description="" pageEncoding="UTF-8" %>
-<%@ taglib uri = "http://java.sun.com/jsp/jstl/fmt" prefix = "fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <fmt:setBundle basename="label"/>
 
@@ -8,84 +8,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link href="${context}/css/style.css"
-          type="text/css" rel="stylesheet">
+    <link href="${context}/css/style.css" type="text/css" rel="stylesheet">
     <meta charset="UTF-8">
     <title><fmt:message key="title"/></title>
-    <link rel="stylesheet" href="./jqueryui_1.12.1/jquery-ui.css">
-
-    <%--===================================================================--%>
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script>
-        $(function () {
-            $("#dialog-1").dialog({
-                autoOpen: false,
-                modal: true,
-                buttons: {
-                    Ok: function () {
-                        alert("you pressed ok");
-                        $(this).dialog("close");
-                    },
-                    Cancel: function () {
-                        alert("you pressed Cancel");
-                        $(this).dialog("close");
-                    }
-                },
-                title: "Success",
-                position: {
-                    my: "middle top",
-                    at: "middle top"
-                }
-            });
-            $("#dialog-1.ui-dialog-titlebar").hide();
-            $("#opener").click(function () {
-                $("#dialog-1").dialog("open");
-            });
-        });
-    </script>
-    <style>
-        .ui-widget-header {
-            /*background:wheat !important;*/
-            /*border: 2px solid black;*/
-            /*display: flex;*/
-            /*justify-content: space-around;*/
-            /*color: red;*/
-            /*font-weight: bold;*/
-            /*padding: 3px;*/
-            height: 0px;
-        }
-
-        .ui-widget-content.ui-dialog {
-            margin-top: 5%;
-            background: wheat !important;
-            border: 2px solid black;
-            padding: 3px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-        }
-
-        .ui-dialog-buttonpane {
-            text-align: center;
-            float: none !important;
-            /*display: flex;*/
-            /*justify-content: space-around;*/
-            /*flex-direction: row;*/
-            /*align-items: center;*/
-            padding: 3px;
-            border: 2px solid black;
-        }
-    </style>
-    <%--    ===================================================================--%>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
+
 <body>
-
-<div id="dialog-1"
-     title="Dialog Title goes here...">This my first jQuery UI Dialog!
-</div>
-<button id="opener">BUTTON</button>
-
 <div class="wrapper">
     <div class="header">
         <img src="${context}/img/java.png" id="logo">

@@ -36,6 +36,7 @@ public abstract class GenericBatchDao<E extends Model> extends GenericDao<E> imp
     @Override
     @Transactional
     public void update(Collection<E> newEntities, Collection<E> storedEntities) {
+        //todo phones are not coming from update form
         Collection<E> entitiesToDelete = new HashSet<>(storedEntities);
         entitiesToDelete.removeAll(newEntities);
         delete(entitiesToDelete);

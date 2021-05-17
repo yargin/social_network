@@ -4,18 +4,21 @@
 <%@ taglib prefix="account" tagdir="/WEB-INF/tags/account" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:bundle basename="label"/>
 
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 
+<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript" src="${context}/js/phonesEdit.js"></script>
-<script type="text/javascript" src="${context}/js/confirmationDialog.js"></script>
+<script type="text/javascript" src="${context}/js/confirmDialogScript.js"></script>
 
 <div class="info">
     <spring:message code="label.saveUpdates" var="confirmText"/>
     <%--@elvariable id="accountInfoMvcModel" type="com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers.AccountInfoMvcModel"--%>
     <form:form action="${context}/account/update?id=${id}" method="post" enctype="multipart/form-data"
-               onsubmit='return confirmation("${confirmText}", acceptPhones())'
-               id="accountUpdate" modelAttribute="accountInfoMvcModel">
+               id="confirmAbleForm" modelAttribute="accountInfoMvcModel">
 
         <%--@elvariable id="account" type="com.getjavajob.training.yarginy.socialnetwork.common.models.Account"--%>
         <form:hidden path="account.id" value="${account.id}"/>
@@ -74,8 +77,16 @@
         <spring:message code="form.uploadImage" var="uploadImage"/>
         <form:input type="file" path="account.photo" accept="image/*" title="${uploadImage}"/> <br>
 
-        <button type="submit" name="save" value="save"><spring:message code="button.save"/></button>
-        <button type="submit" name="save" value="cancel" onclick="skipConfirmation()" formnovalidate>
+        <button type="submit" id="opener" name="save" value="save"><spring:message code="button.save"/></button>
+        <button type="button" name="save" value="cancel" onclick="skip()" formnovalidate>
             <spring:message code="button.cancel"/></button>
     </form:form>
 </div>
+
+<div id="confirmDialog"><fmt:message key="label.areYouSure"/></div>
+<script>
+    initDialog('<fmt:message key="label.ok"/>', '<fmt:message key="label.cancel"/>',
+        () => {
+            $("#confirmAbleForm").submit();
+        }, acceptPhones());
+</script>

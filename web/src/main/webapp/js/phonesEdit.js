@@ -226,6 +226,7 @@ function acceptPhones() {
 }
 
 function checkForErrorAddName(phones, type) {
+    2
     for (var i = 0; i < phones.length; i++) {
         var errorDiv = document.getElementById(phones[i] + ERROR_POSTFIX);
         if (errorDiv.firstChild != null && errorDiv.firstChild.textContent !== '') {

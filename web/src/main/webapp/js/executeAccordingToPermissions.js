@@ -9,20 +9,18 @@ function initExec(contextAddr, failErr, confirmationMess) {
 }
 
 function tryToExecute(targetUrl) {
-    if (confirm(confirmationMessage)) {
-        $.ajax({
-            url: targetUrl,
-            dataType: 'text',
-            success: function (successUrl) {
-                if (successUrl === "") {
-                    alert(failMessage);
-                } else {
-                    $(location).attr('href', execContext + successUrl);
-                }
-            },
-            fail: function () {
-                $(location).attr('href', execContext + '/account/wall');
+    $.ajax({
+        url: targetUrl,
+        dataType: 'text',
+        success: function (successUrl) {
+            if (successUrl === "") {
+                alert(failMessage);
+            } else {
+                $(location).attr('href', execContext + successUrl);
             }
-        });
-    }
+        },
+        fail: function () {
+            $(location).attr('href', execContext + '/account/wall');
+        }
+    });
 }

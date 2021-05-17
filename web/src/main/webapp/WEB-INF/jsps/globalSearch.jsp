@@ -7,9 +7,11 @@
 
 <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
 <script type="text/javascript" src="${context}/js/search.js"></script>
+<fmt:message key="label.nothingFound" var="nothingFound"/>
+<fmt:message key="label.user" var="user"/>
+<fmt:message key="label.group" var="group"/>
 <script>
-    init('<fmt:message key="label.nothingFound"/>', '<fmt:message key="label.user"/>' + ' : ',
-        '<fmt:message key="label.group"/>' + ' : ', '${context}', '${searchString}');
+    init('${nothingFound}', '${user}' + ' : ', '${group}' + ' : ', '${context}', '${searchString}');
 </script>
 
 <common:layout>
