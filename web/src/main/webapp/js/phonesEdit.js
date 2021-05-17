@@ -16,8 +16,8 @@ var blurListeners = new Map();
 var duplicateNumber;
 var anotherDuplicate;
 
-function init(deleteButtonTex, tooShortErr, tooLongErr, notPhoneErr, duplicateErr) {
-    deleteText = deleteButtonTex;
+function init(deleteButtonText, tooShortErr, tooLongErr, notPhoneErr, duplicateErr) {
+    deleteText = deleteButtonText;
     tooShortError = tooShortErr;
     tooLongError = tooLongErr;
     notPhoneError = notPhoneErr;

@@ -215,6 +215,10 @@ public class AccountCrudController {
         return "error";
     }
 
+//    @GetMapping("/access/showerror")
+//    @ResponseBody
+//    public
+
     @GetMapping("/account/savexml")
     public void getFile(HttpServletResponse response, @RequestAttribute long id) throws IOException {
         Account account = accountService.get(id);
