@@ -1,24 +1,19 @@
 var execContext;
-var failMessage;
-var confirmationMessage;
 
-function initExec(contextAddr, failErr, confirmationMess) {
+function initExec(contextAddr) {
     execContext = contextAddr;
-    failMessage = failErr;
-    confirmationMessage = confirmationMess;
 }
 
 function tryToExecute(targetUrl) {
     //add dialog here
-    alert("here");
     $.ajax({
         url: targetUrl,
         dataType: 'text',
-        success: function (successUrl) {
-            if (successUrl === "") {
+        success: function (successString) {
+            if (successString === "") {
                 $("#notification").dialog("open");
             } else {
-                $(location).attr('href', execContext + successUrl);
+                $(location).attr('href', execContext + successString);
             }
         },
         fail: function () {

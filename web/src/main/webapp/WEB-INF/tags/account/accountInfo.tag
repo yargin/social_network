@@ -6,17 +6,15 @@
 <fmt:setBundle basename="label" var="label"/>
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 
-<fmt:message key="label.notEnoughPermissions" var="notEnoughPermissions" bundle="${label}"/>
-<fmt:message key="label.areYouSure" var="areYouSure" bundle="${label}"/>
 <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript" src="${context}/js/phonesEdit.js" defer></script>
+<script type="text/javascript" src="${context}/js/notification.js"></script>
 <script type="text/javascript" src="${context}/js/executeAccordingToPermissions.js"></script>
 <script type="text/javascript" src="${context}/js/confirmationDialog.js"></script>
 <script>
-    initExec('${context}', '${notEnoughPermissions}', '${areYouSure}');
+    initExec('${context}');
 </script>
-
 
 <div class="info">
     <fmt:message key="form.name" bundle="${form}"/> : ${user.name}<br>
@@ -58,18 +56,19 @@
 <c:if test="${not empty owner or not empty admin}">
     <div>
         <a href="${context}/account/update?id=${id}"><fmt:message key="label.updateInfo" bundle="${label}"/></a><br>
-            <%--        <a href="${context}/account/delete?id=${id}" onclick='return confirmation("${confirmText}", true)'>--%>
-            <%--            <fmt:message key="label.deleteAccount" bundle="${label}"/></a><br>--%>
-        <a nohref id="opener" style="cursor: pointer">
-            <fmt:message key="label.deleteAccount" bundle="${label}"/></a><br>
+        <a nohref id="opener" style="cursor: pointer"><fmt:message key="label.deleteAccount" bundle="${label}"/></a><br>
         <a href="${context}/account/savexml?id=${id}" download="account id ${id}.xml">
             <fmt:message key="label.saveAccountInfo" bundle="${label}"/> </a>
     </div>
 </c:if>
 
-<div id="confirmDialog"><fmt:message key="label.areYouSure"/></div>
+<div id="confirmDialog"><fmt:message key="label.areYouSure" bundle="${label}"/></div>
 
-<script>initDialog('<fmt:message key="label.ok"/>', '<fmt:message key="label.cancel"/>',
+<div id="notification">
+    <fmt:message key="label.notEnoughPermissions" bundle="${label}"/>
+</div>
+
+<script>initDialog('<fmt:message key="label.ok" bundle="${label}"/>', '<fmt:message key="label.cancel" bundle="${label}"/>',
     () => {
         tryToExecute('${context}/account/delete?id=${id}')
     })</script>

@@ -36,7 +36,7 @@ $(function () {
 
     $("#opener").click(function (e) {
         e.preventDefault();
-        if (additionalChecks !== undefined && additionalChecks()) {
+        if (additionalChecks === undefined || additionalChecks()) {
             $("#confirmDialog").dialog("open");
         }
     });
