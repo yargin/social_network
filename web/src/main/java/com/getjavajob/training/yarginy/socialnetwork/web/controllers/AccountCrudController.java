@@ -4,12 +4,14 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.PhoneType;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
 import com.getjavajob.training.yarginy.socialnetwork.service.AuthService;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoXml;
 import com.getjavajob.training.yarginy.socialnetwork.service.xml.AccountInfoXmlServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers.AccountInfoMvcModel;
 import com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers.PhoneView;
+import com.getjavajob.training.yarginy.socialnetwork.web.helpers.Redirector;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.updaters.AccountFieldsUpdater;
 import com.getjavajob.training.yarginy.socialnetwork.web.validators.composite.AccountInfoValidator;
 import com.getjavajob.training.yarginy.socialnetwork.web.validators.composite.RegistrationValidator;
@@ -54,15 +56,17 @@ public class AccountCrudController {
     private final AccountInfoXmlServiceImpl accountInfoXmlService;
     private final RegistrationValidator registrationValidator;
     private final AccountInfoValidator accountInfoValidator;
+    private final Redirector redirector;
 
     public AccountCrudController(AuthService authService, AccountInfoValidator accountInfoValidator,
                                  AccountService accountService, RegistrationValidator registrationValidator,
-                                 AccountInfoXmlServiceImpl accountInfoXmlService) {
+                                 AccountInfoXmlServiceImpl accountInfoXmlService, Redirector redirector) {
         this.authService = authService;
         this.accountService = accountService;
         this.registrationValidator = registrationValidator;
         this.accountInfoValidator = accountInfoValidator;
         this.accountInfoXmlService = accountInfoXmlService;
+        this.redirector = redirector;
     }
 
     @GetMapping("/registration")
@@ -236,5 +240,21 @@ public class AccountCrudController {
     public void registerPhotoEditor(WebDataBinder binder) {
         binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
         binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+    }
+
+    @GetMapping("/account/upgraderole")
+    public String upgradeAccountRoleToAdmin(@RequestAttribute long id) {
+        try {
+            accountService.setRole(new Account(id), Role.ADMIN);
+        } catch (AccessDeniedException e) {
+            return "";
+        }
+        return redirector.getMvcPathForRedirect(ACCOUNT_WALL, id);
+    }
+
+    @GetMapping("/account/downgraderole")
+    public String downgradeAccountRoleToAdmin(@RequestAttribute long id) {
+        accountService.setRole(new Account(id), Role.USER);
+        return redirector.getMvcPathForRedirect(ACCOUNT_WALL, id);
     }
 }

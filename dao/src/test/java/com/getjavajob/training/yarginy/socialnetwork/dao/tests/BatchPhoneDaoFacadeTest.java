@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestOverrideSpringConfig.xml"})
@@ -52,7 +53,7 @@ public class BatchPhoneDaoFacadeTest {
         phoneDaoFacade.create(testPhones);
         testPhones = phoneDaoFacade.selectPhonesByOwner(testAccount.getId());
         testPhones.add(new Phone("777-777", testAccount));
-        assertFalse(phoneDaoFacade.delete(testPhones));
+        assertTrue(phoneDaoFacade.delete(testPhones));
     }
 
     @Test

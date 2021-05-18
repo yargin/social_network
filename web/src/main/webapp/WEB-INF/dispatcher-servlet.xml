@@ -79,6 +79,8 @@
             <mvc:mapping path="/account/friends*"/>
             <mvc:mapping path="/account/dialogs*"/>
             <mvc:mapping path="/account/groups*"/>
+            <mvc:mapping path="/account/upgraderole*"/>
+            <mvc:mapping path="/account/downgraderole*"/>
             <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.common.OneIdInterceptor"/>
         </mvc:interceptor>
 

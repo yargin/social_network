@@ -4,6 +4,7 @@ package com.getjavajob.training.yarginy.socialnetwork.service;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.Role;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -20,6 +21,8 @@ public interface AccountService extends Serializable {
     boolean updateAccount(Account account, Collection<Phone> phones, Collection<Phone> storedPhones);
 
     boolean deleteAccount(Account account);
+
+    boolean setRole(Account account, Role role);
 
     boolean addFriend(long firstId, long secondId);
 

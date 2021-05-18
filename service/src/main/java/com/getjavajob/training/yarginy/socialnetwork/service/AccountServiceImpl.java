@@ -4,6 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.TransactionPerformer;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogDaoFacade;
@@ -13,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Objects;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData.EMAIL_DUPLICATE;
 import static com.getjavajob.training.yarginy.socialnetwork.common.exceptions.IncorrectData.PHONE_DUPLICATE;
@@ -83,6 +85,15 @@ public class AccountServiceImpl implements AccountService {
     @PreAuthorize("hasAuthority('ADMIN')")
     public boolean deleteAccount(Account account) {
         return accountDaoFacade.delete(account);
+    }
+
+    @Override
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public boolean setRole(Account account, Role role) {
+        if (!Objects.equals(account.getRole(), role)) {
+            return accountDaoFacade.setRole(account, role);
+        }
+        return true;
     }
 
     @Override

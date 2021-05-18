@@ -1,12 +1,14 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.jpa.modeldaos.implementations;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.modeldaos.GenericDao;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,5 +65,17 @@ public class AccountDao extends GenericDao<Account> {
     @Override
     protected Supplier<Account> getModelReference(EntityManager entityManager, Account account) {
         return () -> entityManager.getReference(Account.class, account.getId());
+    }
+
+    @Transactional
+    public void setRole(Account account, Role role) {
+        try {
+            Query query = entityManager.createQuery("update Account a set a.role = :role where a.id = :id");
+            query.setParameter("role", role);
+            query.setParameter("id", account.getId());
+            query.executeUpdate();
+        } catch (RuntimeException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 }

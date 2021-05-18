@@ -7,53 +7,47 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.LongFunction;
-import java.util.function.Supplier;
 
 @Component
 public class TransactionPerformer implements Serializable {
+    //for model crud operations
     public <E extends Model> boolean transactionPerformed(Consumer<E> consumer, E model) {
-        try {
-            consumer.accept(model);
-            return true;
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
+        return perform(() -> consumer.accept(model));
     }
 
+    //for models batch updates
     public <E extends Model> boolean transactionPerformed(BiConsumer<Collection<E>, Collection<E>> consumer,
                                                           Collection<E> storedModels, Collection<E> newModels) {
-        try {
-            consumer.accept(storedModels, newModels);
-            return true;
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
+        return perform(() -> consumer.accept(storedModels, newModels));
     }
 
+    //for models batch create delete
     public <E extends Model> boolean transactionPerformed(Consumer<Collection<E>> consumer, Collection<E> models) {
-        try {
-            consumer.accept(models);
-            return true;
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
+        return perform(() -> consumer.accept(models));
     }
 
+    //for many to many relations
     public boolean transactionPerformed(LongBiConsumer consumer, long firstId, long secondId) {
+        return perform(() -> consumer.accept(firstId, secondId));
+    }
+
+    //for one field updates
+    public <E extends Model, P> boolean transactionPerformed(BiConsumer<E, P> biConsumer, E model, P object) {
+        return perform(() -> biConsumer.accept(model, object));
+    }
+
+    //for one field updates
+    public <E extends Model, P extends Enum<P>> boolean transactionPerformed(BiConsumer<E, P> biConsumer, E model,
+                                                                             P object) {
+        return perform(() -> biConsumer.accept(model, object));
+    }
+
+    private boolean perform(OperationPerformer performer) {
         try {
-            consumer.accept(firstId, secondId);
+            performer.perform();
             return true;
         } catch (IllegalArgumentException e) {
             return false;
-        }
-    }
-
-    public <E extends Model> E transactionPerformed(Supplier<E> supplier, LongFunction<E> function, long id) {
-        try {
-            return function.apply(id);
-        } catch (IllegalArgumentException e) {
-            return supplier.get();
         }
     }
 }

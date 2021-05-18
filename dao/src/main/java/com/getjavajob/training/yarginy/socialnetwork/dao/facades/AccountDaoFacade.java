@@ -3,6 +3,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.Role;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -21,6 +22,8 @@ public interface AccountDaoFacade extends Serializable {
     boolean update(Account account);
 
     boolean delete(Account account);
+
+    boolean setRole(Account account, Role role);
 
     Collection<Account> selectAll();
 

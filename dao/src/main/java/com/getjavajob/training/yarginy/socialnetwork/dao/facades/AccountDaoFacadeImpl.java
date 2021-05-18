@@ -3,6 +3,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.TransactionPerformer;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.modeldaos.implementations.AccountDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.manytomany.implementations.GroupMembershipDao;
@@ -66,6 +67,11 @@ public class AccountDaoFacadeImpl implements AccountDaoFacade {
     @Override
     public boolean delete(Account account) {
         return transactionPerformer.transactionPerformed(accountDao::delete, account);
+    }
+
+    @Override
+    public boolean setRole(Account account, Role role) {
+        return transactionPerformer.transactionPerformed(accountDao::setRole, account, role);
     }
 
     @Override
