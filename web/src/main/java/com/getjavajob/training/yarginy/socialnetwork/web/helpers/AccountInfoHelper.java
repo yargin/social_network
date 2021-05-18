@@ -5,18 +5,18 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.PhoneType.PRIVATE;
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.PhoneType.WORK;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.PHOTO;
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.USER;
-import static java.util.Objects.isNull;
 
 @Component
 public class AccountInfoHelper {
@@ -42,13 +42,9 @@ public class AccountInfoHelper {
         modelAndView.addObject("workPhones", workPhones);
     }
 
-    //todo use spring security
-    public boolean isAdmin(HttpServletRequest req) {
-        Account account = (Account) req.getSession().getAttribute(USER);
-        if ((!isNull(account.getRole()) && (Role.ADMIN.equals(account.getRole())))) {
-            req.setAttribute("admin", true);
-            return true;
-        }
-        return false;
+    public boolean isAdmin() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        GrantedAuthority authority = authentication.getAuthorities().iterator().next();
+        return Role.ADMIN.toString().equals(authority.getAuthority());
     }
 }

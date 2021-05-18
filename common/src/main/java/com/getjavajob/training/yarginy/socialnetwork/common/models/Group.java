@@ -3,7 +3,19 @@ package com.getjavajob.training.yarginy.socialnetwork.common.models;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.Table;
+import javax.persistence.Version;
 import java.sql.Date;
 import java.util.Arrays;
 import java.util.Objects;
@@ -23,7 +35,7 @@ public class Group implements Model {
     private String name;
     private String description;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, name = "owner_id", foreignKey = @ForeignKey(name = "c_11"))
+    @JoinColumn(name = "owner_id", foreignKey = @ForeignKey(name = "c_11"))
     private Account owner;
     @Column(nullable = false)
     private Date creationDate;

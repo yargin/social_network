@@ -42,7 +42,8 @@ public class MessageAccessChecker extends HandlerInterceptorAdapter {
         long receiverId = (long) req.getAttribute(RECEIVER_ID);
         long currentUserId = (long) req.getSession().getAttribute(USER_ID);
 
-        if (infoHelper.isAdmin(req)) {
+        if (infoHelper.isAdmin()) {
+            req.setAttribute("admin", true);
             return true;
         }
 

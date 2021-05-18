@@ -35,7 +35,11 @@ public class DialogAccessChecker extends HandlerInterceptorAdapter {
         long dialogId = (long) req.getAttribute(REQUESTED_ID);
         long currentUserId = (long) req.getSession().getAttribute(USER_ID);
 
-        if (infoHelper.isAdmin(req) || dialogService.isTalker(currentUserId, dialogId)) {
+        boolean isAdmin = infoHelper.isAdmin();
+        if (isAdmin) {
+            req.setAttribute("admin", true);
+        }
+        if (isAdmin || dialogService.isTalker(currentUserId, dialogId)) {
             logger.info(TWO_STRINGS_WITH_SPACE, req.getRequestURI(), CHECK_PASSED);
             return true;
         }
