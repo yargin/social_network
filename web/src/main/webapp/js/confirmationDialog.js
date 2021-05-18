@@ -1,19 +1,47 @@
-var skip = false;
+var additionalChecks;
+var okButtonText;
+var cancelButtonText;
+var callback;
 
-function skipConfirmation() {
-    skip = true;
+function initDialog(okButtonLabel, cancelButtonLabel, callbackFunction, additionalChecksFunction) {
+    okButtonText = okButtonLabel;
+    cancelButtonText = cancelButtonLabel;
+    additionalChecks = additionalChecksFunction;
+    callback = callbackFunction;
 }
 
-function confirmation(confirmMessage, innerChecks) {
-    if (skip) {
-        return true;
-    }
-    // alert('in confirmation function' + innerChecks);
-    if (innerChecks !== undefined) {
-        if (innerChecks) {
-            return confirm(confirmMessage);
+$(function () {
+    $("#confirmDialog").dialog({
+        autoOpen: false,
+        modal: true,
+        buttons: [{
+            text: okButtonText,
+            click: function () {
+                callback();
+                $(this).dialog("close");
+            }
+        }, {
+            text: cancelButtonText,
+            click: function () {
+                $(this).dialog("close");
+            }
+        }],
+        position: {
+            my: "middle top",
+            at: "middle top"
         }
-        return false;
-    }
-    return false;
+    });
+
+    $("#confirmDialog.ui-dialog-titlebar").hide();
+
+    $("#opener").click(function (e) {
+        e.preventDefault();
+        if (additionalChecks === undefined || additionalChecks) {
+            $("#confirmDialog").dialog("open");
+        }
+    });
+});
+
+function skip() {
+    $("#confirmAbleForm").submit();
 }

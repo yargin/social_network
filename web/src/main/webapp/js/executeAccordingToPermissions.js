@@ -1,3 +1,5 @@
+import * as notification from './notification.js'
+
 var execContext;
 var failMessage;
 var confirmationMessage;
@@ -14,7 +16,7 @@ function tryToExecute(targetUrl) {
         dataType: 'text',
         success: function (successUrl) {
             if (successUrl === "") {
-                alert(failMessage);
+                notification.showNotification();
             } else {
                 $(location).attr('href', execContext + successUrl);
             }

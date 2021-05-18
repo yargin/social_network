@@ -60,7 +60,7 @@
         <a href="${context}/account/update?id=${id}"><fmt:message key="label.updateInfo" bundle="${label}"/></a><br>
             <%--        <a href="${context}/account/delete?id=${id}" onclick='return confirmation("${confirmText}", true)'>--%>
             <%--            <fmt:message key="label.deleteAccount" bundle="${label}"/></a><br>--%>
-        <a nohref id="opener" style="cursor: pointer">
+        <a nohref id="opener">
             <fmt:message key="label.deleteAccount" bundle="${label}"/></a><br>
         <a href="${context}/account/savexml?id=${id}" download="account id ${id}.xml">
             <fmt:message key="label.saveAccountInfo" bundle="${label}"/> </a>
@@ -69,6 +69,7 @@
 
 <div id="confirmDialog"><fmt:message key="label.areYouSure"/></div>
 
-<script>initDialog('<fmt:message key="label.ok"/>', '<fmt:message key="label.cancel"/>', () => {
-    tryToExecute('${context}/account/delete?id=${id}')
-})</script>
+<script>initDialog('<fmt:message key="label.ok"/>', '<fmt:message key="label.cancel"/>',
+    () => {
+        tryToExecute('${context}/account/delete?id=${id}')
+    })</script>
