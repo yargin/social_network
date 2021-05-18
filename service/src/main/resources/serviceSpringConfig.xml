@@ -28,7 +28,7 @@
         <aop:pointcut id="accountCreate"
                       expression="execution(* com.getjavajob.training.yarginy.socialnetwork.service.AccountServiceImpl.createAccount(..))"/>
         <aop:pointcut id="register"
-                      expression="execution(* com.getjavajob.training.yarginy.socialnetwork.service.AuthService.register(..))"/>
+                      expression="execution(* com.getjavajob.training.yarginy.socialnetwork.service.RegisterService.register(..))"/>
         <aop:pointcut id="dialogCreate"
                       expression="execution(* com.getjavajob.training.yarginy.socialnetwork.service.DialogServiceImpl.create(..))"/>
 

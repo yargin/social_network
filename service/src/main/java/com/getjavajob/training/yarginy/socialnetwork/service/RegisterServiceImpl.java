@@ -18,21 +18,20 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Collection;
 
-import static com.getjavajob.training.yarginy.socialnetwork.common.utils.NullModelsFactory.getNullPassword;
 import static java.util.Objects.isNull;
 
 
 @Service("authService")
-public class AuthServiceImpl implements AuthService {
+public class RegisterServiceImpl implements RegisterService {
     private final AccountDaoFacade accountDaoFacade;
     private final PasswordDaoFacade passwordDaoFacade;
     private final PhoneDaoFacade phoneDaoFacade;
     private final ModelsFactory modelsFactory;
     private final transient PasswordEncoder passwordEncoder;
 
-    public AuthServiceImpl(AccountDaoFacade accountDaoFacade, PasswordDaoFacade passwordDaoFacade,
-                           PhoneDaoFacade phoneDaoFacade, ModelsFactory modelsFactory,
-                           @Qualifier("encoder") PasswordEncoder passwordEncoder) {
+    public RegisterServiceImpl(AccountDaoFacade accountDaoFacade, PasswordDaoFacade passwordDaoFacade,
+                               PhoneDaoFacade phoneDaoFacade, ModelsFactory modelsFactory,
+                               @Qualifier("encoder") PasswordEncoder passwordEncoder) {
         this.accountDaoFacade = accountDaoFacade;
         this.passwordDaoFacade = passwordDaoFacade;
         this.phoneDaoFacade = phoneDaoFacade;
@@ -61,23 +60,5 @@ public class AuthServiceImpl implements AuthService {
             throw new IllegalStateException();
         }
         return true;
-    }
-
-    //todo remove method & rename class
-    @Override
-    public Account login(String email, String password) {
-        Password storedPassword = new Password();
-        Account account = new Account();
-        account.setEmail(email);
-        storedPassword.setAccount(accountDaoFacade.select(account));
-        storedPassword.setStringPassword(password);
-        storedPassword = passwordDaoFacade.select(storedPassword);
-        if (storedPassword.equals(getNullPassword())) {
-            throw new IncorrectDataException(IncorrectData.WRONG_EMAIL);
-        }
-        if (!passwordEncoder.matches(password, storedPassword.getStringPassword())) {
-            throw new IncorrectDataException(IncorrectData.WRONG_PASSWORD);
-        }
-        return accountDaoFacade.select(account);
     }
 }

@@ -4,6 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Map;
 
 public interface GroupsModeratorsDaoFacade extends Serializable {
     Collection<Account> selectModerators(long groupId);
@@ -13,4 +14,6 @@ public interface GroupsModeratorsDaoFacade extends Serializable {
     boolean deleteGroupModerator(long accountId, long groupId);
 
     boolean isModerator(long accountId, long groupId);
+
+    Map<Account, Boolean> getGroupMembersAreModerators(long groupId);
 }

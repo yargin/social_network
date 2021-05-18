@@ -5,7 +5,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacadeImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacadeImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsMembersDaoFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.otherdaos.DataSetsDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.manytomany.implementations.GroupModeratorsDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.manytomany.implementations.GroupRequestsDao;
 import org.junit.After;
@@ -37,8 +36,6 @@ public class GroupMembersModeratorsJpaTest {
     private GroupsMembersDaoFacade groupMembershipDao;
     @Autowired
     private GroupModeratorsDao groupModeratorsDao;
-    @Autowired
-    private DataSetsDao additionalManyToManyDao;
 
     @Autowired
     private GroupRequestsDao groupRequestsDao;
@@ -99,7 +96,7 @@ public class GroupMembersModeratorsJpaTest {
         groupModeratorsDao.create(firstAccount.getId(), firstGroup.getId());
         groupModeratorsDao.create(secondAccount.getId(), firstGroup.getId());
 
-        Map<Account, Boolean> groupMembersAreModerators = additionalManyToManyDao.getGroupMembersAreModerators(
+        Map<Account, Boolean> groupMembersAreModerators = groupModeratorsDao.getGroupMembersAreModerators(
                 firstGroup.getId());
 
         firstAccount = accountDaoFacade.select(firstAccount);
@@ -113,7 +110,7 @@ public class GroupMembersModeratorsJpaTest {
         groupRequestsDao.create(firstAccount.getId(), secondGroup.getId());
         groupMembershipDao.joinGroup(firstAccount.getId(), thirdGroup.getId());
 
-        Map<Group, Boolean> unJoinedGroups = additionalManyToManyDao.selectUnJoinedGroupsAreRequested(firstAccount.getId());
+        Map<Group, Boolean> unJoinedGroups = groupMembershipDao.getAllUnjoinedGroupsAreRequested(firstAccount.getId());
         assertSame(3, unJoinedGroups.size());
         int newSize = unJoinedGroups.entrySet().stream().filter(Map.Entry::getValue).collect(Collectors.toMap(
                 Map.Entry::getKey, (e) -> true)).size();

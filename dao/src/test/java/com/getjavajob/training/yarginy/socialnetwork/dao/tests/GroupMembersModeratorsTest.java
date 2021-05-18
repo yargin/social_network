@@ -3,7 +3,6 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.tests;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DataSetsDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsModeratorsDaoFacade;
 import org.junit.After;
@@ -25,8 +24,6 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestOverrideSpringConfig.xml"})
 public class GroupMembersModeratorsTest {
-    @Autowired
-    private DataSetsDaoFacade dataSetsDaoFacade;
     @Autowired
     private GroupDaoFacade groupDaoFacade;
     @Autowired
@@ -73,7 +70,7 @@ public class GroupMembersModeratorsTest {
 
     @Test
     public void testGetMembersModerators() {
-        Map<Account, Boolean> membersModerators = dataSetsDaoFacade.getGroupMembersAreModerators(group.getId());
+        Map<Account, Boolean> membersModerators = moderatorsDao.getGroupMembersAreModerators(group.getId());
         assertTrue(membersModerators.get(account1));
         assertTrue(membersModerators.get(account2));
         assertFalse(membersModerators.get(account3));

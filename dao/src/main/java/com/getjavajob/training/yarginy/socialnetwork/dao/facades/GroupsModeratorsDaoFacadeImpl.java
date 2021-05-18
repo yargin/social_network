@@ -6,6 +6,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.manyto
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.Map;
 
 @Component("groupsModeratorsDaoFacade")
 public class GroupsModeratorsDaoFacadeImpl implements GroupsModeratorsDaoFacade {
@@ -36,5 +37,10 @@ public class GroupsModeratorsDaoFacadeImpl implements GroupsModeratorsDaoFacade 
     @Override
     public boolean deleteGroupModerator(long accountId, long groupId) {
         return transactionPerformer.transactionPerformed(groupModeratorsDao::delete, accountId, groupId);
+    }
+
+    @Override
+    public Map<Account, Boolean> getGroupMembersAreModerators(long groupId) {
+        return groupModeratorsDao.getGroupMembersAreModerators(groupId);
     }
 }

@@ -5,7 +5,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.TransactionPerformer;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DataSetsDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsMembersDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsModeratorsDaoFacade;
@@ -20,17 +19,15 @@ public class GroupServiceImpl implements GroupService {
     private final GroupDaoFacade groupDaoFacade;
     private final GroupsMembersDaoFacade membersDao;
     private final GroupsModeratorsDaoFacade moderatorsDao;
-    private final DataSetsDaoFacade dataSetsDaoFacade;
     private final TransactionPerformer transactionPerformer;
     private final GroupServiceTransactional serviceTransactional;
 
     public GroupServiceImpl(GroupDaoFacade groupDaoFacade, GroupsMembersDaoFacade membersDao,
-                            GroupsModeratorsDaoFacade moderatorsDao, DataSetsDaoFacade dataSetsDaoFacade,
-                            TransactionPerformer transactionPerformer, GroupServiceTransactional serviceTransactional) {
+                            GroupsModeratorsDaoFacade moderatorsDao, TransactionPerformer transactionPerformer,
+                            GroupServiceTransactional serviceTransactional) {
         this.groupDaoFacade = groupDaoFacade;
         this.membersDao = membersDao;
         this.moderatorsDao = moderatorsDao;
-        this.dataSetsDaoFacade = dataSetsDaoFacade;
         this.transactionPerformer = transactionPerformer;
         this.serviceTransactional = serviceTransactional;
     }
@@ -152,11 +149,11 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public Map<Account, Boolean> getGroupMembersModerators(long groupId) {
-        return dataSetsDaoFacade.getGroupMembersAreModerators(groupId);
+        return moderatorsDao.getGroupMembersAreModerators(groupId);
     }
 
     @Override
     public Map<Group, Boolean> getAllUnjoinedGroupsAreRequested(long accountId) {
-        return dataSetsDaoFacade.getAllUnjoinedGroupsAreRequested(accountId);
+        return membersDao.getAllUnjoinedGroupsAreRequested(accountId);
     }
 }

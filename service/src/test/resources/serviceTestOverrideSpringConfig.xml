@@ -53,9 +53,6 @@
         <bean id="groupsMembersDaoFacade" class="org.mockito.Mockito" factory-method="mock">
             <constructor-arg value="com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsMembersDaoFacade"/>
         </bean>
-        <bean id="dataSetsDaoFacade" class="org.mockito.Mockito" factory-method="mock">
-            <constructor-arg value="com.getjavajob.training.yarginy.socialnetwork.dao.facades.DataSetsDaoFacadeImpl"/>
-        </bean>
         <bean id="groupServiceTransactional" class="com.getjavajob.training.yarginy.socialnetwork.service.GroupServiceTransactional">
             <constructor-arg ref="groupDaoFacade"/>
             <constructor-arg ref="groupsModeratorsDaoFacade"/>
@@ -66,7 +63,6 @@
             <constructor-arg ref="groupDaoFacade"/>
             <constructor-arg ref="groupsMembersDaoFacade"/>
             <constructor-arg ref="groupsModeratorsDaoFacade"/>
-            <constructor-arg ref="dataSetsDaoFacade"/>
             <constructor-arg ref="transactionPerformer"/>
             <constructor-arg ref="groupServiceTransactional"/>
         </bean>

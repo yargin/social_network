@@ -8,6 +8,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.manyto
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.Map;
 
 @Component("groupsMembersDaoFacade")
 public class GroupsMembersFacadeImpl implements GroupsMembersDaoFacade {
@@ -65,5 +66,10 @@ public class GroupsMembersFacadeImpl implements GroupsMembersDaoFacade {
     @Override
     public boolean isMember(long accountId, long groupId) {
         return groupMembershipDao.relationExists(accountId, groupId);
+    }
+
+    @Override
+    public Map<Group, Boolean> getAllUnjoinedGroupsAreRequested(long accountId) {
+        return groupMembershipDao.selectUnJoinedGroupsAreRequested(accountId);
     }
 }

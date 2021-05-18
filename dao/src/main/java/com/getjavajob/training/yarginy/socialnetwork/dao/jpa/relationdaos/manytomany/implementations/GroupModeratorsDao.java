@@ -6,10 +6,15 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.Gr
 import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.ManyToMany;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.manytomany.GenericManyToMany;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.GroupModerator.createGroupModeratorKey;
 
@@ -50,5 +55,25 @@ public class GroupModeratorsDao extends GenericManyToMany<Account, Group> {
                 "join g.account where g.group = :group", Account.class);
         query.setParameter("group", group);
         return query.getResultList();
+    }
+
+    @Transactional
+    public Map<Account, Boolean> getGroupMembersAreModerators(long groupId) {
+        Query query = entityManager.createNativeQuery("SELECT a.id id, a.name name, a.surname surname, a.email email, " +
+                "(CASE WHEN gmods.account_id <> 0 THEN TRUE ELSE FALSE END) is_moderator " +
+                "FROM Groups_members gmems " +
+                "JOIN Accounts a ON a.id = gmems.account_id " +
+                "LEFT JOIN groups_moderators gmods " +
+                "ON gmems.account_id = gmods.account_id AND gmems.group_id = gmods.group_id " +
+                "WHERE gmems.group_id = :groupId", "rsMapping.groupMembersAreModerators");
+        query.setParameter("groupId", groupId);
+        List<Object[]> rawMembersAreModerators = query.getResultList();
+        Map<Account, Boolean> membersAreModerators = new HashMap<>();
+        for (Object[] raw : rawMembersAreModerators) {
+            Account member = (Account) raw[1];
+            Boolean isModerator = (Boolean) raw[0];
+            membersAreModerators.put(member, isModerator);
+        }
+        return membersAreModerators;
     }
 }

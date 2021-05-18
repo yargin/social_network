@@ -4,9 +4,9 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.searchable.SearchablesDto;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
-import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DataSetsDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsMembersDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.SearchDaoFacadeImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +31,7 @@ import static org.junit.Assert.assertTrue;
 public class OtherDaoTest {
     private static final Logger logger = LoggerFactory.getLogger(OtherDaoTest.class);
     @Autowired
-    private DataSetsDaoFacade dataSetsDaoFacade;
+    private SearchDaoFacadeImpl searchDaoFacade;
     @Autowired
     private GroupsMembersDaoFacade membersDao;
     @Autowired
@@ -95,7 +95,7 @@ public class OtherDaoTest {
 
     @Test
     public void testGetAllUnjoinedGroupsAreRequested() {
-        Map<Group, Boolean> allGroups = dataSetsDaoFacade.getAllUnjoinedGroupsAreRequested(account.getId());
+        Map<Group, Boolean> allGroups = membersDao.getAllUnjoinedGroupsAreRequested(account.getId());
         assertTrue(allGroups.get(group2));
         assertTrue(allGroups.get(group3));
         assertFalse(allGroups.get(group4));
@@ -103,7 +103,7 @@ public class OtherDaoTest {
 
     @Test
     public void testFindSearchables() {
-        SearchablesDto searchablesDto = dataSetsDaoFacade.searchAccountsGroups("testt", 1, 10);
+        SearchablesDto searchablesDto = searchDaoFacade.searchAccountsGroups("testt", 1, 10);
         assertEquals(7, searchablesDto.getSearchAbles().size());
     }
 }

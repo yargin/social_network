@@ -13,7 +13,7 @@ import static java.util.Objects.isNull;
 
 public abstract class GenericManyToMany<F extends Model, S extends Model> implements ManyToManyDao<F, S> {
     @PersistenceContext
-    private transient EntityManager entityManager;
+    protected transient EntityManager entityManager;
 
     protected abstract Collection<S> genericSelectByFirst(EntityManager entityManager, long firstId);
 

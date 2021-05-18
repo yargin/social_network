@@ -33,7 +33,7 @@
 
     <beans:import resource="classpath*:commonSpringConfig.xml"/>
 
-    <beans:bean id="userService" class="com.getjavajob.training.yarginy.socialnetwork.service.SpringSecAuthService"/>
+    <beans:bean id="userService" class="com.getjavajob.training.yarginy.socialnetwork.service.AuthService"/>
 
     <beans:bean id="daoAuthProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
         <beans:property name="userDetailsService" ref="userService"/>

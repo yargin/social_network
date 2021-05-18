@@ -6,7 +6,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.PhoneType;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.Role;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
-import com.getjavajob.training.yarginy.socialnetwork.service.AuthService;
+import com.getjavajob.training.yarginy.socialnetwork.service.RegisterService;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoXml;
 import com.getjavajob.training.yarginy.socialnetwork.service.xml.AccountInfoXmlServiceImpl;
 import com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers.AccountInfoMvcModel;
@@ -51,17 +51,17 @@ import static java.util.stream.Collectors.toList;
 
 @Controller
 public class AccountCrudController {
-    private final AuthService authService;
+    private final RegisterService registerService;
     private final AccountService accountService;
     private final AccountInfoXmlServiceImpl accountInfoXmlService;
     private final RegistrationValidator registrationValidator;
     private final AccountInfoValidator accountInfoValidator;
     private final Redirector redirector;
 
-    public AccountCrudController(AuthService authService, AccountInfoValidator accountInfoValidator,
+    public AccountCrudController(RegisterService registerService, AccountInfoValidator accountInfoValidator,
                                  AccountService accountService, RegistrationValidator registrationValidator,
                                  AccountInfoXmlServiceImpl accountInfoXmlService, Redirector redirector) {
-        this.authService = authService;
+        this.registerService = registerService;
         this.accountService = accountService;
         this.registrationValidator = registrationValidator;
         this.accountInfoValidator = accountInfoValidator;
@@ -106,7 +106,7 @@ public class AccountCrudController {
         Collection<Phone> phones = updater.getPhonesFromModel(accountInfoMvcModel);
         String password = accountInfoMvcModel.getPassword();
         try {
-            registered = authService.register(accountInfoMvcModel.getAccount(), phones, password);
+            registered = registerService.register(accountInfoMvcModel.getAccount(), phones, password);
         } catch (IncorrectDataException e) {
             return updater.handleInfoExceptions(e, accountInfoMvcModel, result);
         }

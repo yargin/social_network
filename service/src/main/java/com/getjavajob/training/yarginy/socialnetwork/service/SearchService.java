@@ -6,6 +6,6 @@ import org.springframework.stereotype.Service;
 import java.io.Serializable;
 
 @Service
-public interface DataSetsService extends Serializable {
+public interface SearchService extends Serializable {
     SearchablesDto searchAccountsGroups(String searchString, int pageNumber, int limit);
 }

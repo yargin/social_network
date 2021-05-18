@@ -5,6 +5,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Map;
 
 public interface GroupsMembersDaoFacade extends Serializable {
     Collection<Group> selectAccountGroups(long accountId);
@@ -24,4 +25,6 @@ public interface GroupsMembersDaoFacade extends Serializable {
     boolean removeRequest(long accountId, long groupId);
 
     boolean isMember(long accountId, long groupId);
+
+    Map<Group, Boolean> getAllUnjoinedGroupsAreRequested(long accountId);
 }

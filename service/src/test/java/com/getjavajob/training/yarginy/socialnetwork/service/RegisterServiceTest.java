@@ -1,9 +1,9 @@
 package com.getjavajob.training.yarginy.socialnetwork.service;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.Sex;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.Sex;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.ModelsFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
@@ -26,7 +26,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class AuthServiceTest {
+public class RegisterServiceTest {
     @Mock
     private AccountDaoFacade accountDaoFacade;
     @Mock
@@ -40,7 +40,7 @@ public class AuthServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
     @InjectMocks
-    private AuthServiceImpl authService;
+    private RegisterServiceImpl authService;
 
     @Test
     public void testRegister() {
