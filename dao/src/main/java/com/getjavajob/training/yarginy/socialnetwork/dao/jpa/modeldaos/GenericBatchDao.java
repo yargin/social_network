@@ -3,7 +3,9 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.jpa.modeldaos;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -25,18 +27,19 @@ public abstract class GenericBatchDao<E extends Model> extends GenericDao<E> imp
     public void delete(Collection<E> entities) {
         for (E entity : entities) {
             try {
-                E entityToDelete = getModelReference(entityManager, entity).get();
-                entityManager.remove(entityToDelete);
+                Query query = getDeleteByAltKeyQuery(entityManager, entity);
+                query.executeUpdate();
             } catch (PersistenceException e) {
                 throw new IllegalArgumentException(e);
             }
         }
     }
 
+    protected abstract Query getDeleteByAltKeyQuery(EntityManager entityManager, E model);
+
     @Override
     @Transactional
     public void update(Collection<E> newEntities, Collection<E> storedEntities) {
-        //todo phones are not coming from update form
         Collection<E> entitiesToDelete = new HashSet<>(storedEntities);
         entitiesToDelete.removeAll(newEntities);
         delete(entitiesToDelete);

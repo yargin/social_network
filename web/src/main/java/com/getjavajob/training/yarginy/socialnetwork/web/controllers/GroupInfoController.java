@@ -18,6 +18,7 @@ import java.util.Map;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.PHOTO;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Attributes.TAB;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.GROUP_VIEW;
+import static java.util.Objects.isNull;
 
 @Controller
 @RequestMapping("/group")
@@ -80,7 +81,11 @@ public class GroupInfoController {
     }
 
     private void addInfoAndPhoto(ModelAndView modelAndView, Group group) {
-        modelAndView.addObject(PHOTO, dataHandler.getHtmlPhoto(group.getPhoto()));
+        //todo find out if needed
+        byte[] photo = group.getPhoto();
+        if (!isNull(photo)) {
+            modelAndView.addObject(PHOTO, dataHandler.getHtmlPhoto(photo));
+        }
         modelAndView.addObject("group", group);
     }
 }

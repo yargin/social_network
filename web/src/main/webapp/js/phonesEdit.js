@@ -217,6 +217,7 @@ function deletePhone(valueToDelete) {
 }
 
 function acceptPhones() {
+    // alert(privatePhones);
     var checked = checkForErrorAddName(privatePhones, 'privatePhones');
     if (!checked) {
         return false;

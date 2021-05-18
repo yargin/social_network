@@ -1,5 +1,3 @@
-import * as notification from './notification.js'
-
 var execContext;
 var failMessage;
 var confirmationMessage;
@@ -11,12 +9,14 @@ function initExec(contextAddr, failErr, confirmationMess) {
 }
 
 function tryToExecute(targetUrl) {
+    //add dialog here
+    alert("here");
     $.ajax({
         url: targetUrl,
         dataType: 'text',
         success: function (successUrl) {
             if (successUrl === "") {
-                notification.showNotification();
+                $("#notification").dialog("open");
             } else {
                 $(location).attr('href', execContext + successUrl);
             }

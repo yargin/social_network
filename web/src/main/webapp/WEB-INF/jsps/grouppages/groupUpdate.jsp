@@ -6,9 +6,16 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 
+<fmt:setBundle basename="error" var="error"/>
 <c:if test="${not empty concurrentError}">
-    <script>alert('<fmt:message key="${concurrentError}" bundle="${error}"/>')</script>
+    <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script type="text/javascript" src="${context}/js/notification.js" defer></script>
+    <div id="notification">
+        <fmt:message key="${concurrentError}" bundle="${error}"/>
+    </div>
 </c:if>
+
 <common:layout>
     <div class="info">
             <%--@elvariable id="group" type="com.getjavajob.training.yarginy.socialnetwork.common.models.Group"--%>

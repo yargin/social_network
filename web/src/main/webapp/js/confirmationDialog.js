@@ -6,8 +6,8 @@ var callback;
 function initDialog(okButtonLabel, cancelButtonLabel, callbackFunction, additionalChecksFunction) {
     okButtonText = okButtonLabel;
     cancelButtonText = cancelButtonLabel;
-    additionalChecks = additionalChecksFunction;
     callback = callbackFunction;
+    additionalChecks = additionalChecksFunction;
 }
 
 $(function () {
@@ -36,7 +36,7 @@ $(function () {
 
     $("#opener").click(function (e) {
         e.preventDefault();
-        if (additionalChecks === undefined || additionalChecks) {
+        if (additionalChecks !== undefined && additionalChecks()) {
             $("#confirmDialog").dialog("open");
         }
     });

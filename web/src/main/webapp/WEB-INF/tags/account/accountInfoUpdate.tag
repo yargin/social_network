@@ -5,14 +5,21 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<fmt:bundle basename="label"/>
+<fmt:setBundle basename="label" var="label"/>
+<fmt:setBundle basename="error" var="error"/>
 
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 
 <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript" src="${context}/js/phonesEdit.js"></script>
-<script type="text/javascript" src="${context}/js/confirmDialogScript.js"></script>
+<script type="text/javascript" src="${context}/js/confirmationDialog.js"></script>
+<c:if test="${not empty concurrentError}">
+    <script type="text/javascript" src="${context}/js/notification.js" defer></script>
+    <div id="notification">
+        <fmt:message key="${concurrentError}" bundle="${error}"/>
+    </div>
+</c:if>
 
 <div class="info">
     <spring:message code="label.saveUpdates" var="confirmText"/>
@@ -83,10 +90,12 @@
     </form:form>
 </div>
 
-<div id="confirmDialog"><fmt:message key="label.areYouSure"/></div>
+<div id="confirmDialog"><fmt:message key="label.areYouSure" bundle="${label}"/></div>
 <script>
-    initDialog('<fmt:message key="label.ok"/>', '<fmt:message key="label.cancel"/>',
+    initDialog('<fmt:message key="label.ok" bundle="${label}"/>', '<fmt:message key="label.cancel" bundle="${label}"/>',
         () => {
             $("#confirmAbleForm").submit();
-        }, acceptPhones());
+        }, () => {
+            return acceptPhones();
+        });
 </script>

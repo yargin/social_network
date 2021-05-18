@@ -8,9 +8,6 @@
 
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 
-<c:if test="${not empty concurrentError}">
-    <script>alert('<fmt:message key="${concurrentError}" bundle="${error}"/>')</script>
-</c:if>
 <common:layout>
     <div class="post">
         <account:accountInfoUpdate/>

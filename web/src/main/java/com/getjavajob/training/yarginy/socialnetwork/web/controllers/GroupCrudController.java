@@ -85,8 +85,7 @@ public class GroupCrudController {
     }
 
     @GetMapping("/update")
-    public ModelAndView showUpdate(@RequestAttribute("id") long requestedId, HttpSession session,
-                                   HttpServletRequest request) {
+    public ModelAndView showUpdate(@RequestAttribute("id") long requestedId, HttpSession session) {
         GroupFieldsUpdater updater = new GroupFieldsUpdater(session, GROUP_UPDATE_VIEW);
         //select at first visit
         Group group = groupService.getFullInfo(requestedId);
@@ -109,6 +108,10 @@ public class GroupCrudController {
             return updater.acceptActionOrRetry(true, group);
         }
         Group storedGroup = (Group) session.getAttribute(GROUP);
+        if (isNull(storedGroup)) {
+            request.setAttribute("concurrentError", "error.concurrentError");
+            return showUpdate(group.getId(), session);
+        }
 
         //for further views
         group.setId(requestedId);
@@ -130,7 +133,7 @@ public class GroupCrudController {
             return updateGroup(updater, group, result);
         } catch (IllegalStateException e) {
             request.setAttribute("concurrentError", "error.concurrentError");
-            return showUpdate(storedGroup.getId(), session, request);
+            return showUpdate(storedGroup.getId(), session);
         }
     }
 

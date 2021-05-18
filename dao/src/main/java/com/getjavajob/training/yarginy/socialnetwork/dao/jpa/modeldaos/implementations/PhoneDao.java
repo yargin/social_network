@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.HashMap;
 import java.util.Map;
@@ -65,5 +66,12 @@ public class PhoneDao extends GenericBatchDao<Phone> {
     @Override
     protected Supplier<Phone> getModelReference(EntityManager entityManager, Phone phone) {
         return () -> entityManager.getReference(Phone.class, phone.getId());
+    }
+
+    @Override
+    protected Query getDeleteByAltKeyQuery(EntityManager entityManager, Phone phone) {
+        Query query = entityManager.createQuery("delete from Phone p where p.number = :number");
+        query.setParameter("number", phone.getNumber());
+        return query;
     }
 }

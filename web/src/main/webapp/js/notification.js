@@ -12,10 +12,5 @@ $(function () {
             at: "middle top"
         }
     });
-
-    $("#notification.ui-dialog-titlebar").hide();
+    $("#notification").hide();
 });
-
-function showNotification() {
-    $("#notification").dialog("open");
-}
