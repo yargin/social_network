@@ -4,6 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.GroupRequest;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.ManyToMany;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.ModelsFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.manytomany.GenericManyToMany;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +16,12 @@ import static com.getjavajob.training.yarginy.socialnetwork.common.models.manyto
 
 @Repository
 public class GroupRequestsDao extends GenericManyToMany<Account, Group> {
+    private final ModelsFactory factory;
+
+    public GroupRequestsDao(ModelsFactory factory) {
+        this.factory = factory;
+    }
+
     @Override
     protected ManyToMany<Account, Group> genericGetReference(EntityManager entityManager, long accountId,
                                                              long groupId) {
@@ -36,7 +43,7 @@ public class GroupRequestsDao extends GenericManyToMany<Account, Group> {
 
     @Override
     public Collection<Group> genericSelectByFirst(EntityManager entityManager, long accountId) {
-        Account account = new Account(accountId);
+        Account account = factory.getAccount(accountId);
         TypedQuery<Group> query = entityManager.createQuery("select g.group from GroupRequest g join g.group " +
                 "where g.account = :account", Group.class);
         query.setParameter("account", account);
@@ -45,7 +52,7 @@ public class GroupRequestsDao extends GenericManyToMany<Account, Group> {
 
     @Override
     public Collection<Account> genericSelectBySecond(EntityManager entityManager, long groupId) {
-        Group group = new Group(groupId);
+        Group group = factory.getGroup(groupId);
         TypedQuery<Account> query = entityManager.createQuery("select g.account from GroupRequest g " +
                 "join g.account where g.group = :group", Account.class);
         query.setParameter("group", group);

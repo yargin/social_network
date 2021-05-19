@@ -4,6 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.GroupMembership;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.ManyToMany;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.ModelsFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.manytomany.GenericManyToMany;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,12 @@ import static java.util.Objects.isNull;
 
 @Repository
 public class GroupMembershipDao extends GenericManyToMany<Account, Group> {
+    private final ModelsFactory factory;
+
+    public GroupMembershipDao(ModelsFactory factory) {
+        this.factory = factory;
+    }
+
     @Override
     protected ManyToMany<Account, Group> genericGetReference(EntityManager entityManager, long accountId,
                                                              long groupId) {
@@ -42,7 +49,7 @@ public class GroupMembershipDao extends GenericManyToMany<Account, Group> {
 
     @Override
     public Collection<Group> genericSelectByFirst(EntityManager entityManager, long accountId) {
-        Account account = new Account(accountId);
+        Account account = factory.getAccount(accountId);
         TypedQuery<Group> query = entityManager.createQuery("select gm.group from GroupMembership gm " +
                 "join gm.group where gm.account = :account", Group.class);
         query.setParameter("account", account);
@@ -51,7 +58,7 @@ public class GroupMembershipDao extends GenericManyToMany<Account, Group> {
 
     @Override
     public Collection<Account> genericSelectBySecond(EntityManager entityManager, long groupId) {
-        Group group = new Group(groupId);
+        Group group = factory.getGroup(groupId);
         TypedQuery<Account> query = entityManager.createQuery("select g.account from GroupMembership g " +
                 "join g.account where g.group = :group", Account.class);
         query.setParameter("group", group);
@@ -73,7 +80,7 @@ public class GroupMembershipDao extends GenericManyToMany<Account, Group> {
         List<Object[]> result = query.getResultList();
         Map<Group, Boolean> unJoinedGroupAreRequested = new HashMap<>();
         for (Object[] raw : result) {
-            Group group = new Group(((BigInteger) raw[0]).longValue());
+            Group group = factory.getGroup(((BigInteger) raw[0]).longValue());
             group.setName((String) raw[1]);
             unJoinedGroupAreRequested.put(group, !isNull(raw[2]));
         }

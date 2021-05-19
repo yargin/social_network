@@ -3,6 +3,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.selfm
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.Friendship;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.SelfManyToMany;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.ModelsFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.selfmanytomany.GenericSelfManyToMany;
 import org.springframework.stereotype.Repository;
 
@@ -14,9 +15,15 @@ import static com.getjavajob.training.yarginy.socialnetwork.common.models.manyto
 
 @Repository
 public class FriendshipsDao extends GenericSelfManyToMany<Account> {
+    private final ModelsFactory factory;
+
+    public FriendshipsDao(ModelsFactory factory) {
+        this.factory = factory;
+    }
+
     @Override
     public Collection<Account> genericSelect(EntityManager entityManager, long id) {
-        Account friend = new Account(id);
+        Account friend = factory.getAccount(id);
         TypedQuery<Account> firstQuery = entityManager.createQuery("select f.firstAccount from Friendship f " +
                 "join f.firstAccount where f.secondAccount = :friend", Account.class);
         firstQuery.setParameter("friend", friend);

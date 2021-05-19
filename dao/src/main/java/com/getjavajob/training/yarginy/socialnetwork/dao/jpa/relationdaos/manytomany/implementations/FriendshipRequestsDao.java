@@ -3,6 +3,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.manyt
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.FriendshipRequest;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.ManyToMany;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.ModelsFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.manytomany.GenericManyToMany;
 import org.springframework.stereotype.Repository;
 
@@ -14,9 +15,15 @@ import static com.getjavajob.training.yarginy.socialnetwork.common.models.manyto
 
 @Repository
 public class FriendshipRequestsDao extends GenericManyToMany<Account, Account> {
+    private final ModelsFactory factory;
+
+    public FriendshipRequestsDao(ModelsFactory factory) {
+        this.factory = factory;
+    }
+
     @Override
     public Collection<Account> genericSelectByFirst(EntityManager entityManager, long requesterId) {
-        Account requester = new Account(requesterId);
+        Account requester = factory.getAccount(requesterId);
         TypedQuery<Account> query = entityManager.createQuery("select f.receiver from FriendshipRequest f " +
                 "join f.receiver where f.requester = :requester", Account.class);
         query.setParameter("requester", requester);
@@ -25,7 +32,7 @@ public class FriendshipRequestsDao extends GenericManyToMany<Account, Account> {
 
     @Override
     public Collection<Account> genericSelectBySecond(EntityManager entityManager, long receiverId) {
-        Account receiver = new Account(receiverId);
+        Account receiver = factory.getAccount(receiverId);
         TypedQuery<Account> query = entityManager.createQuery("select f.requester from FriendshipRequest f " +
                 "join f.requester where f.receiver = :receiver", Account.class);
         query.setParameter("receiver", receiver);

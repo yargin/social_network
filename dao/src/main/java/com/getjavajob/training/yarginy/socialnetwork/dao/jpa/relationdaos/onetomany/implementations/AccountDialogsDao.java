@@ -2,6 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.oneto
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.ModelsFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.modeldaos.implementations.DialogDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.onetomany.OneToManyDao;
 import org.springframework.stereotype.Repository;
@@ -16,18 +17,20 @@ import static java.util.Objects.isNull;
 
 @Repository
 public class AccountDialogsDao implements OneToManyDao<Dialog> {
+    private final DialogDao dialogDao;
+    private final ModelsFactory factory;
     @PersistenceContext
     private transient EntityManager entityManager;
-    private final DialogDao dialogDao;
 
-    public AccountDialogsDao(DialogDao dialogDao) {
+    public AccountDialogsDao(DialogDao dialogDao, ModelsFactory modelsFactory) {
         this.dialogDao = dialogDao;
+        this.factory = modelsFactory;
     }
 
     @Override
     @Transactional
     public Collection<Dialog> selectMany(long accountId) {
-        Account account = new Account(accountId);
+        Account account = factory.getAccount(accountId);
         TypedQuery<Dialog> selectMany = entityManager.createQuery("select d from Dialog d join fetch d.firstAccount " +
                         "join fetch d.secondAccount where d.firstAccount = :account or d.secondAccount = :account",
                 Dialog.class);

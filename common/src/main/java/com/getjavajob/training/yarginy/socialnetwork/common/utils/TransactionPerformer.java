@@ -42,9 +42,9 @@ public class TransactionPerformer implements Serializable {
         return perform(() -> biConsumer.accept(model, object));
     }
 
-    private boolean perform(OperationPerformer performer) {
+    private boolean perform(VoidOperationPerformer performer) {
         try {
-            performer.perform();
+            performer.performOperation();
             return true;
         } catch (IllegalArgumentException e) {
             return false;

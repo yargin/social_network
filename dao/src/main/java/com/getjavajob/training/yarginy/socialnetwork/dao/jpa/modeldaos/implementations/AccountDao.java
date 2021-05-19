@@ -70,9 +70,9 @@ public class AccountDao extends GenericDao<Account> {
     @Transactional
     public void setRole(Account account, Role role) {
         try {
-            Query query = entityManager.createQuery("update Account a set a.role = :role where a.id = :id");
+            Query query = entityManager.createQuery("update Account a set a.role = :role where a = :acc");
             query.setParameter("role", role);
-            query.setParameter("id", account.getId());
+            query.setParameter("acc", account);
             query.executeUpdate();
         } catch (RuntimeException e) {
             throw new IllegalArgumentException(e);

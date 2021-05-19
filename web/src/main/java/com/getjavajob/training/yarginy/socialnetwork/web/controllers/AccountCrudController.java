@@ -232,7 +232,6 @@ public class AccountCrudController {
         model.setAccount(account);
         model.setPrivatePhones(getPhoneViews(allPhones, PRIVATE));
         model.setWorkPhones(getPhoneViews(allPhones, WORK));
-
         response.getWriter().print(accountXml);
     }
 
