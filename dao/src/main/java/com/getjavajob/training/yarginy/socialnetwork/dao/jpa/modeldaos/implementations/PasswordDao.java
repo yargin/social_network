@@ -22,10 +22,9 @@ public class PasswordDao extends GenericDao<Password> {
     @Override
     protected Supplier<TypedQuery<Password>> getSelectByAltKey(EntityManager entityManager, Password password) {
         return () -> {
-            TypedQuery<Password> query = entityManager.createQuery("select new Password(a, p.stringPassword) " +
-                            "from Password p join Account a on p.email = a.email where p.email =:email",
-                    Password.class);
-            query.setParameter("email", password.getAccount().getEmail());
+            TypedQuery<Password> query = entityManager.createQuery("select p from Password p " +
+                    "where p.account.email =:account", Password.class);
+            query.setParameter("account", password.getAccount().getEmail());
             return query;
         };
     }
@@ -58,11 +57,5 @@ public class PasswordDao extends GenericDao<Password> {
     @Override
     protected void prepareModelRelations(EntityManager entityManager, Password password) {
         password.setAccount(entityManager.getReference(Account.class, password.getAccount().getId()));
-    }
-
-    @Override
-    public void update(Password password) {
-        delete(password);
-        create(password);
     }
 }

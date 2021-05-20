@@ -53,12 +53,8 @@ public abstract class GenericDao<E extends Model> implements Dao<E> {
     @Override
     @Transactional
     public void create(E model) {
-        try {
-            if (model.getId() != 0 || checkEntityFail(model)) {
-                throw new IllegalArgumentException();
-            }
-        } catch (UnsupportedOperationException ignore) {
-            //password doesn't have id, but other handling is same
+        if (model.getId() != 0 || checkEntityFail(model)) {
+            throw new IllegalArgumentException();
         }
         try {
             prepareModelRelations(entityManager, model);

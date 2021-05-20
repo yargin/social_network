@@ -22,13 +22,13 @@ import java.util.Objects;
 @Table(name = "passwords")
 @NamedEntityGraph(name = "graph.Password.allProperties", includeAllAttributes = true)
 public class Password implements Model {
-    private static final String COLUMN_EMAIL = "email";
     @Id
-    @Column(name = COLUMN_EMAIL)
-    private String email;
-    @OneToOne(fetch = FetchType.LAZY)
-    @MapsId("email")
-    @JoinColumn(name= COLUMN_EMAIL, referencedColumnName= COLUMN_EMAIL, foreignKey = @ForeignKey(name = "c_21"))
+    @Column(name = "account_id")
+    private long id;
+    //todo fetch type
+    @OneToOne(fetch = FetchType.EAGER)
+    @MapsId
+    @JoinColumn(name = "account_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "c_21"))
     private Account account;
     @Column(name = "password")
     private String stringPassword;
@@ -43,17 +43,11 @@ public class Password implements Model {
         this.stringPassword = stringPassword;
     }
 
-    public Password(String email, String stringPassword) {
-        this.email = email;
-        this.stringPassword = stringPassword;
-    }
-
     public Account getAccount() {
         return account;
     }
 
     public void setAccount(Account account) {
-        email = account.getEmail();
         this.account = account;
     }
 
@@ -94,7 +88,7 @@ public class Password implements Model {
             return false;
         }
         Password pass = (Password) o;
-        return Objects.equals(email, pass.getAccount().getEmail()) && Objects.equals(stringPassword, pass.getStringPassword());
+        return Objects.equals(account, pass.getAccount()) && Objects.equals(stringPassword, pass.getStringPassword());
     }
 
     @Override

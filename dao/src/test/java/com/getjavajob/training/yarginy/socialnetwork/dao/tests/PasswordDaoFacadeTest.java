@@ -56,24 +56,19 @@ public class PasswordDaoFacadeTest {
 
     @Test
     public void testSelect() {
+        //todo
         accountDaoFacade.create(account);
         password.setAccount(account);
         assertTrue(passwordDaoFacade.create(password));
-        Account testAccount = new Account();
-        testAccount.setEmail(account.getEmail());
-        Password testPassword = new Password();
-        testPassword.setAccount(testAccount);
-        System.out.println("============");
-        Password created = passwordDaoFacade.select(testPassword);
-        System.out.println("==============");
-        assertEquals(password, created);
+        Password expected = new Password(account, password.getStringPassword());
+        assertEquals(expected, passwordDaoFacade.select(password));
     }
 
-    @Test
+    @Test(expected = IllegalStateException.class)
     public void testSelectNonExisting() {
         Password nonExistingPassword = new Password();
         nonExistingPassword.setAccount(new Account("Petr", "nonexisting@email.com"));
         nonExistingPassword.setStringPassword("nonExisting1");
-        assertEquals(passwordDaoFacade.getNullPassword(), passwordDaoFacade.select(nonExistingPassword));
+        passwordDaoFacade.select(nonExistingPassword);
     }
 }

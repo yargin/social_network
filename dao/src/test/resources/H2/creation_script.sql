@@ -100,16 +100,16 @@ ALTER TABLE Phones
 
 CREATE TABLE Passwords
 (
-    email    VARCHAR(40)  NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    version  BIGINT       NOT NULL
+    account_id VARCHAR(40)  NOT NULL,
+    password   VARCHAR(255) NOT NULL,
+    version    BIGINT       NOT NULL
 );
 
 ALTER TABLE Passwords
-    ADD CONSTRAINT C_20 PRIMARY KEY (email, password);
+    ADD CONSTRAINT C_20 PRIMARY KEY (account_id);
 
 ALTER TABLE Passwords
-    ADD CONSTRAINT C_21 FOREIGN KEY (email) REFERENCES Accounts (email) ON DELETE CASCADE ON UPDATE CASCADE;
+    ADD CONSTRAINT C_21 FOREIGN KEY (account_id) REFERENCES Accounts (id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 CREATE TABLE IF NOT EXISTS Groups_moderators
 (
