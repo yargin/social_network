@@ -3,7 +3,6 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.jpa.modeldaos;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import java.util.Collection;
@@ -27,7 +26,7 @@ public abstract class GenericBatchDao<E extends Model> extends GenericDao<E> imp
     public void delete(Collection<E> entities) {
         for (E entity : entities) {
             try {
-                Query query = getDeleteByAltKeyQuery(entityManager, entity);
+                Query query = getDeleteByAltKeyQuery(entity);
                 query.executeUpdate();
             } catch (PersistenceException e) {
                 throw new IllegalArgumentException(e);
@@ -35,7 +34,7 @@ public abstract class GenericBatchDao<E extends Model> extends GenericDao<E> imp
         }
     }
 
-    protected abstract Query getDeleteByAltKeyQuery(EntityManager entityManager, E model);
+    protected abstract Query getDeleteByAltKeyQuery(E model);
 
     @Override
     @Transactional

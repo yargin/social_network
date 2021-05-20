@@ -5,9 +5,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Password;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.modeldaos.GenericDao;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import java.util.function.Supplier;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.utils.NullModelsFactory.getNullPassword;
 import static java.util.Objects.isNull;
@@ -20,13 +18,11 @@ public class PasswordDao extends GenericDao<Password> {
     }
 
     @Override
-    protected Supplier<TypedQuery<Password>> getSelectByAltKey(EntityManager entityManager, Password password) {
-        return () -> {
-            TypedQuery<Password> query = entityManager.createQuery("select p from Password p " +
-                    "where p.account.email = :email", Password.class);
-            query.setParameter("email", password.getAccount().getEmail());
-            return query;
-        };
+    protected TypedQuery<Password> getSelectByAltKey(Password password) {
+        TypedQuery<Password> query = entityManager.createQuery("select p from Password p " +
+                "where p.account.email = :email", Password.class);
+        query.setParameter("email", password.getAccount().getEmail());
+        return query;
     }
 
     @Override
@@ -35,23 +31,21 @@ public class PasswordDao extends GenericDao<Password> {
     }
 
     @Override
-    protected Supplier<Password> getSelectByPk(EntityManager entityManager, long id) {
-        return () -> {
-            TypedQuery<Password> query = entityManager.createQuery("select p from Password p " +
-                    "where p.account.id = :id", Password.class);
-            query.setParameter("id", id);
-            return query.getSingleResult();
-        };
+    protected Password selectByPk(long id) {
+        TypedQuery<Password> query = entityManager.createQuery("select p from Password p " +
+                "where p.account.id = :id", Password.class);
+        query.setParameter("id", id);
+        return query.getSingleResult();
     }
 
     @Override
-    protected Supplier<TypedQuery<Password>> getSelectAll(EntityManager entityManager) {
-        return () -> entityManager.createQuery("select p from Password p join fetch p.account a", Password.class);
+    protected TypedQuery<Password> getSelectAll() {
+        return entityManager.createQuery("select p from Password p join fetch p.account a", Password.class);
     }
 
     @Override
-    protected Supplier<Password> getModelReference(EntityManager entityManager, Password password) {
-        return () -> entityManager.getReference(Password.class, password.getAccount());
+    protected Password getModelReference(Password password) {
+        return entityManager.getReference(Password.class, password.getAccount());
     }
 
     @Override
@@ -60,7 +54,7 @@ public class PasswordDao extends GenericDao<Password> {
     }
 
     @Override
-    protected void prepareModelRelations(EntityManager entityManager, Password password) {
+    protected void prepareModelRelations(Password password) {
         password.setAccount(entityManager.getReference(Account.class, password.getAccount().getId()));
     }
 }

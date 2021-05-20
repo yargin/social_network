@@ -12,7 +12,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import java.util.Collection;
-import java.util.function.Supplier;
 
 import static java.util.Objects.isNull;
 
@@ -20,23 +19,21 @@ public abstract class GenericDao<E extends Model> implements Dao<E> {
     @PersistenceContext
     protected transient EntityManager entityManager;
 
-    protected abstract Supplier<E> getSelectByPk(EntityManager entityManager, long id);
+    protected abstract E selectByPk(long id);
 
     @Override
     @Transactional
     public E select(long id) {
-        Supplier<E> selectByPkFunction = getSelectByPk(entityManager, id);
-        E model = selectByPkFunction.get();
+        E model = selectByPk(id);
         return isNull(model) ? getNullModel() : model;
     }
 
-    protected abstract Supplier<TypedQuery<E>> getSelectByAltKey(EntityManager entityManager, E model);
+    protected abstract TypedQuery<E> getSelectByAltKey(E model);
 
     @Override
     @Transactional
     public E select(E modelToSelect) {
-        Supplier<TypedQuery<E>> selectByAltKeyFunction = getSelectByAltKey(entityManager, modelToSelect);
-        TypedQuery<E> query = selectByAltKeyFunction.get();
+        TypedQuery<E> query = getSelectByAltKey(modelToSelect);
         try {
             return query.getSingleResult();
         } catch (NoResultException e) {
@@ -48,7 +45,7 @@ public abstract class GenericDao<E extends Model> implements Dao<E> {
 
     protected abstract boolean checkEntityFail(E model);
 
-    protected abstract void prepareModelRelations(EntityManager entityManager, E model);
+    protected abstract void prepareModelRelations(E model);
 
     @Override
     @Transactional
@@ -57,7 +54,7 @@ public abstract class GenericDao<E extends Model> implements Dao<E> {
             throw new IllegalArgumentException();
         }
         try {
-            prepareModelRelations(entityManager, model);
+            prepareModelRelations(model);
             entityManager.persist(model);
             entityManager.flush();
         } catch (DataIntegrityViolationException | PersistenceException e) {
@@ -65,14 +62,13 @@ public abstract class GenericDao<E extends Model> implements Dao<E> {
         }
     }
 
-    protected abstract Supplier<E> getModelReference(EntityManager entityManager, E model);
+    protected abstract E getModelReference(E model);
 
     @Override
     @Transactional
     public void update(E model) {
-        Supplier<E> storedSupplier = getModelReference(entityManager, model);
         try {
-            E stored = storedSupplier.get();
+            E stored = getModelReference(model);
             if (stored.getId() == 0 || checkEntityFail(model)) {
                 throw new IllegalArgumentException();
             }
@@ -89,20 +85,18 @@ public abstract class GenericDao<E extends Model> implements Dao<E> {
     @Transactional
     public void delete(E model) {
         try {
-            E entityToDelete = getModelReference(entityManager, model).get();
+            E entityToDelete = getModelReference(model);
             entityManager.remove(entityToDelete);
         } catch (RuntimeException e) {
             throw new IllegalArgumentException(e);
         }
     }
 
-    protected abstract Supplier<TypedQuery<E>> getSelectAll(EntityManager entityManager);
+    protected abstract TypedQuery<E> getSelectAll();
 
     @Override
     @Transactional
     public Collection<E> selectAll() {
-        Supplier<TypedQuery<E>> selectAll = getSelectAll(entityManager);
-        TypedQuery<E> query = selectAll.get();
-        return query.getResultList();
+        return getSelectAll().getResultList();
     }
 }

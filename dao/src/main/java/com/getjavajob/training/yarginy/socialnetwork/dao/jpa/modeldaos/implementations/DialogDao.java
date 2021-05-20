@@ -7,11 +7,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityGraph;
-import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Supplier;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.utils.NullModelsFactory.getNullDialog;
 import static java.util.Objects.isNull;
@@ -19,8 +17,8 @@ import static java.util.Objects.isNull;
 @Repository
 public class DialogDao extends GenericDao<Dialog> {
     @Override
-    protected Supplier<TypedQuery<Dialog>> getSelectAll(EntityManager entityManager) {
-        return () -> entityManager.createQuery("select d from Dialog d", Dialog.class);
+    protected TypedQuery<Dialog> getSelectAll() {
+        return entityManager.createQuery("select d from Dialog d", Dialog.class);
     }
 
     @Override
@@ -33,30 +31,28 @@ public class DialogDao extends GenericDao<Dialog> {
     }
 
     @Override
-    protected Supplier<TypedQuery<Dialog>> getSelectByAltKey(EntityManager entityManager, Dialog dialog) {
-        return () -> {
-            Account firstAccount = dialog.getFirstAccount();
-            Account secondAccount = dialog.getSecondAccount();
-            if (isNull(firstAccount) || isNull(secondAccount)) {
-                throw new IllegalArgumentException();
-            }
-            Account greaterAccount;
-            Account lowerAccount;
-            if (firstAccount.getId() > secondAccount.getId()) {
-                greaterAccount = firstAccount;
-                lowerAccount = secondAccount;
-            } else {
-                lowerAccount = firstAccount;
-                greaterAccount = secondAccount;
-            }
+    protected TypedQuery<Dialog> getSelectByAltKey(Dialog dialog) {
+        Account firstAccount = dialog.getFirstAccount();
+        Account secondAccount = dialog.getSecondAccount();
+        if (isNull(firstAccount) || isNull(secondAccount)) {
+            throw new IllegalArgumentException();
+        }
+        Account greaterAccount;
+        Account lowerAccount;
+        if (firstAccount.getId() > secondAccount.getId()) {
+            greaterAccount = firstAccount;
+            lowerAccount = secondAccount;
+        } else {
+            lowerAccount = firstAccount;
+            greaterAccount = secondAccount;
+        }
 
-            TypedQuery<Dialog> query = entityManager.createQuery("select d from Dialog d join fetch d.firstAccount f " +
-                    "join fetch d.secondAccount s where d.firstAccount = :greaterAccount " +
-                    "and d.secondAccount = :lowerAccount", Dialog.class);
-            query.setParameter("greaterAccount", greaterAccount);
-            query.setParameter("lowerAccount", lowerAccount);
-            return query;
-        };
+        TypedQuery<Dialog> query = entityManager.createQuery("select d from Dialog d join fetch d.firstAccount f " +
+                "join fetch d.secondAccount s where d.firstAccount = :greaterAccount " +
+                "and d.secondAccount = :lowerAccount", Dialog.class);
+        query.setParameter("greaterAccount", greaterAccount);
+        query.setParameter("lowerAccount", lowerAccount);
+        return query;
     }
 
     @Override
@@ -76,14 +72,14 @@ public class DialogDao extends GenericDao<Dialog> {
     }
 
     @Override
-    protected void prepareModelRelations(EntityManager entityManager, Dialog dialog) {
+    protected void prepareModelRelations(Dialog dialog) {
         dialog.setFirstAccount(entityManager.getReference(Account.class, dialog.getFirstAccount().getId()));
         dialog.setSecondAccount(entityManager.getReference(Account.class, dialog.getSecondAccount().getId()));
     }
 
     @Override
-    protected Supplier<Dialog> getSelectByPk(EntityManager entityManager, long id) {
-        return () -> entityManager.find(Dialog.class, id);
+    protected Dialog selectByPk(long id) {
+        return entityManager.find(Dialog.class, id);
     }
 
     @Override
@@ -92,7 +88,7 @@ public class DialogDao extends GenericDao<Dialog> {
     }
 
     @Override
-    protected Supplier<Dialog> getModelReference(EntityManager entityManager, Dialog dialog) {
-        return () -> entityManager.getReference(Dialog.class, dialog.getId());
+    protected Dialog getModelReference(Dialog dialog) {
+        return entityManager.getReference(Dialog.class, dialog.getId());
     }
 }

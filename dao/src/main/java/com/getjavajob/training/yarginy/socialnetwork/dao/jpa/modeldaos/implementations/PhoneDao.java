@@ -7,12 +7,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityGraph;
-import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Supplier;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.utils.NullModelsFactory.getNullPhone;
 import static java.util.Objects.isNull;
@@ -25,13 +23,11 @@ public class PhoneDao extends GenericBatchDao<Phone> {
     }
 
     @Override
-    protected Supplier<TypedQuery<Phone>> getSelectByAltKey(EntityManager entityManager, Phone phone) {
-        return () -> {
-            TypedQuery<Phone> query = entityManager.createQuery("select p from Phone p where p.number = :number",
-                    Phone.class);
-            query.setParameter("number", phone.getNumber());
-            return query;
-        };
+    protected TypedQuery<Phone> getSelectByAltKey(Phone phone) {
+        TypedQuery<Phone> query = entityManager.createQuery("select p from Phone p where p.number = :number",
+                Phone.class);
+        query.setParameter("number", phone.getNumber());
+        return query;
     }
 
     @Override
@@ -44,8 +40,8 @@ public class PhoneDao extends GenericBatchDao<Phone> {
     }
 
     @Override
-    protected Supplier<Phone> getSelectByPk(EntityManager entityManager, long id) {
-        return () -> entityManager.find(Phone.class, id);
+    protected Phone selectByPk(long id) {
+        return entityManager.find(Phone.class, id);
     }
 
     @Override
@@ -54,22 +50,22 @@ public class PhoneDao extends GenericBatchDao<Phone> {
     }
 
     @Override
-    protected void prepareModelRelations(EntityManager entityManager, Phone phone) {
+    protected void prepareModelRelations(Phone phone) {
         phone.setOwner(entityManager.getReference(Account.class, phone.getOwner().getId()));
     }
 
     @Override
-    protected Supplier<TypedQuery<Phone>> getSelectAll(EntityManager entityManager) {
-        return () -> entityManager.createQuery("select p from Phone p join fetch p.owner a", Phone.class);
+    protected TypedQuery<Phone> getSelectAll() {
+        return entityManager.createQuery("select p from Phone p join fetch p.owner a", Phone.class);
     }
 
     @Override
-    protected Supplier<Phone> getModelReference(EntityManager entityManager, Phone phone) {
-        return () -> entityManager.getReference(Phone.class, phone.getId());
+    protected Phone getModelReference(Phone phone) {
+        return entityManager.getReference(Phone.class, phone.getId());
     }
 
     @Override
-    protected Query getDeleteByAltKeyQuery(EntityManager entityManager, Phone phone) {
+    protected Query getDeleteByAltKeyQuery(Phone phone) {
         Query query = entityManager.createQuery("delete from Phone p where p.number = :number");
         query.setParameter("number", phone.getNumber());
         return query;

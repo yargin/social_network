@@ -7,20 +7,18 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityGraph;
-import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Supplier;
 
 import static com.getjavajob.training.yarginy.socialnetwork.common.utils.NullModelsFactory.getNullAccount;
 
 @Repository
 public class AccountDao extends GenericDao<Account> {
     @Override
-    protected Supplier<Account> getSelectByPk(EntityManager entityManager, long id) {
-        return () -> entityManager.find(Account.class, id);
+    protected Account selectByPk(long id) {
+        return entityManager.find(Account.class, id);
     }
 
     @Override
@@ -33,18 +31,16 @@ public class AccountDao extends GenericDao<Account> {
     }
 
     @Override
-    protected Supplier<TypedQuery<Account>> getSelectAll(EntityManager entityManager) {
-        return () -> entityManager.createQuery("select a from Account a", Account.class);
+    protected TypedQuery<Account> getSelectAll() {
+        return entityManager.createQuery("select a from Account a", Account.class);
     }
 
     @Override
-    protected Supplier<TypedQuery<Account>> getSelectByAltKey(EntityManager entityManager, Account account) {
-        return () -> {
-            TypedQuery<Account> query = entityManager.createQuery("select a from Account a where a.email = :email",
-                    Account.class);
-            query.setParameter("email", account.getEmail());
-            return query;
-        };
+    protected TypedQuery<Account> getSelectByAltKey(Account account) {
+        TypedQuery<Account> query = entityManager.createQuery("select a from Account a where a.email = :email",
+                Account.class);
+        query.setParameter("email", account.getEmail());
+        return query;
     }
 
     @Override
@@ -53,7 +49,7 @@ public class AccountDao extends GenericDao<Account> {
     }
 
     @Override
-    protected void prepareModelRelations(EntityManager entityManager, Account account) {
+    protected void prepareModelRelations(Account account) {
         //nothing to prepare
     }
 
@@ -63,8 +59,8 @@ public class AccountDao extends GenericDao<Account> {
     }
 
     @Override
-    protected Supplier<Account> getModelReference(EntityManager entityManager, Account account) {
-        return () -> entityManager.getReference(Account.class, account.getId());
+    protected Account getModelReference(Account account) {
+        return entityManager.getReference(Account.class, account.getId());
     }
 
     @Transactional
