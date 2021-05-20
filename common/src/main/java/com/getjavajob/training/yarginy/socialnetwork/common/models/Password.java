@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -25,8 +24,7 @@ public class Password implements Model {
     @Id
     @Column(name = "account_id")
     private long id;
-    //todo fetch type
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne
     @MapsId
     @JoinColumn(name = "account_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "c_21"))
     private Account account;
@@ -61,12 +59,12 @@ public class Password implements Model {
 
     @Override
     public long getId() {
-        throw new UnsupportedOperationException();
+        return id;
     }
 
     @Override
     public void setId(long id) {
-        throw new UnsupportedOperationException();
+        this.id = id;
     }
 
     @Override

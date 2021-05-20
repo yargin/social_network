@@ -26,6 +26,11 @@ public class PasswordDaoFacadeImpl implements PasswordDaoFacade {
     }
 
     @Override
+    public Password select(long accountId) {
+        return passwordDao.select(accountId);
+    }
+
+    @Override
     public boolean create(Password password) {
         return transactionPerformer.transactionPerformed(passwordDao::create, password);
     }

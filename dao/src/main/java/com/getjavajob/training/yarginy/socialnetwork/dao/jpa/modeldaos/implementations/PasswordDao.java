@@ -23,8 +23,8 @@ public class PasswordDao extends GenericDao<Password> {
     protected Supplier<TypedQuery<Password>> getSelectByAltKey(EntityManager entityManager, Password password) {
         return () -> {
             TypedQuery<Password> query = entityManager.createQuery("select p from Password p " +
-                    "where p.account.email =:account", Password.class);
-            query.setParameter("account", password.getAccount().getEmail());
+                    "where p.account.email = :email", Password.class);
+            query.setParameter("email", password.getAccount().getEmail());
             return query;
         };
     }
@@ -36,7 +36,12 @@ public class PasswordDao extends GenericDao<Password> {
 
     @Override
     protected Supplier<Password> getSelectByPk(EntityManager entityManager, long id) {
-        throw new UnsupportedOperationException();
+        return () -> {
+            TypedQuery<Password> query = entityManager.createQuery("select p from Password p " +
+                    "where p.account.id = :id", Password.class);
+            query.setParameter("id", id);
+            return query.getSingleResult();
+        };
     }
 
     @Override

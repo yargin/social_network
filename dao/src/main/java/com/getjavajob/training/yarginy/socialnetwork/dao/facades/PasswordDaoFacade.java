@@ -8,6 +8,8 @@ import java.io.Serializable;
 public interface PasswordDaoFacade extends Serializable {
     Password select(Password password);
 
+    Password select(long accountId);
+
     boolean create(Password password);
 
     boolean delete(Password password);
