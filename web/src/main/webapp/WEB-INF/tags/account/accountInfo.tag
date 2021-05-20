@@ -84,4 +84,5 @@
 <script>initDialog('<fmt:message key="label.ok" bundle="${label}"/>', '<fmt:message key="label.cancel" bundle="${label}"/>',
     () => {
         tryToExecute('${context}/account/delete?id=${id}')
-    })</script>
+    })
+</script>

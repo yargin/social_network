@@ -11,7 +11,7 @@ function tryToExecute(targetUrl) {
         dataType: 'text',
         success: function (successString) {
             if (successString === "") {
-                $("#notification").dialog("open");
+                callNotification();
             } else {
                 $(location).attr('href', execContext + successString);
             }

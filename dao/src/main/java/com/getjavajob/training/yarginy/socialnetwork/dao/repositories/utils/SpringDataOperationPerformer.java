@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.function.Consumer;
-//todo
+
 @Component
 public class SpringDataOperationPerformer implements Serializable {
     public <E extends Model> boolean performOperation(Consumer<E> function, E model) {

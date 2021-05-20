@@ -20,7 +20,7 @@ import static org.junit.Assert.assertTrue;
 @ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestOverrideSpringConfig.xml"})
 public class PasswordDaoFacadeTest {
     private final Account account = new Account("testName", "testSurname", "password@test.com");
-    private Password password = new Password();
+    private final Password password = new Password();
     @Autowired
     private AccountDaoFacade accountDaoFacade;
     @Autowired
@@ -55,12 +55,20 @@ public class PasswordDaoFacadeTest {
 
     @Test
     public void testSelect() {
+//        assertTrue(passwordDaoFacade.create(password));
+//        password = passwordDaoFacade.select(new Password(account, password.getStringPassword()));
+//        Password actual = passwordDaoFacade.select(new Password(account, password.getStringPassword()));
+//        assertEquals(password, actual);
+//        actual = passwordDaoFacade.select(actual.getId());
+//        assertEquals(password, actual);
+//        accountDaoFacade.create(account);
+        password.setAccount(account);
         assertTrue(passwordDaoFacade.create(password));
-        password = passwordDaoFacade.select(new Password(account, password.getStringPassword()));
-        Password actual = passwordDaoFacade.select(new Password(account, password.getStringPassword()));
-        assertEquals(password, actual);
-        actual = passwordDaoFacade.select(actual.getId());
-        assertEquals(password, actual);
+        Password expected = new Password(account, password.getStringPassword());
+        Password actual = passwordDaoFacade.select(password);
+        assertEquals(expected, actual);
+        actual = passwordDaoFacade.select(password.getId());
+        assertEquals(expected, actual);
     }
 
     @Test

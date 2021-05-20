@@ -81,7 +81,6 @@ public class GroupInfoController {
     }
 
     private void addInfoAndPhoto(ModelAndView modelAndView, Group group) {
-        //todo find out if needed
         byte[] photo = group.getPhoto();
         if (!isNull(photo)) {
             modelAndView.addObject(PHOTO, dataHandler.getHtmlPhoto(photo));

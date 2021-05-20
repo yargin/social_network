@@ -14,3 +14,7 @@ $(function () {
     });
     $("#notification").hide();
 });
+
+function callNotification() {
+    $('#notification').dialog('open');
+}

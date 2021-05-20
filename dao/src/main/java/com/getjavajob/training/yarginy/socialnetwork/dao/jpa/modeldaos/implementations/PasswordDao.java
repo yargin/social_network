@@ -55,6 +55,6 @@ public class PasswordDao extends GenericDao<Password> {
 
     @Override
     protected void prepareModelRelations(Password password) {
-        password.setAccount(entityManager.getReference(Account.class, password.getAccount().getId()));
+        password.setAccount(entityManager.find(Account.class, password.getAccount().getId()));
     }
 }

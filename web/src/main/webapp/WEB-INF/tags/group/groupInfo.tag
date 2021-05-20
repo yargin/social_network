@@ -6,12 +6,23 @@
 <c:set var="id" value="${group.id}"/>
 <c:set var="ownerObject" value="${group.owner}"/>
 
+<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript" src="${context}/js/confirmationDialog.js"></script>
 <div class="info">
     <fmt:message key="form.groupName" bundle="${form}"/> : ${group.name}<br>
     <fmt:message key="form.description" bundle="${form}"/> : ${group.description}<br>
     <fmt:message key="label.groupCreationDate" bundle="${label}"/> : ${group.creationDate}<br>
     <fmt:message key="label.creator" bundle="${label}"/> :
-    <a href="${context}/account/wall?id=${ownerObject.id}">${ownerObject.name} ${ownerObject.surname}</a>
+    <c:choose>
+        <c:when test="${not empty ownerObject}">
+            <a href="${context}/account/wall?id=${ownerObject.id}">${ownerObject.name} ${ownerObject.surname}</a>
+        </c:when>
+        <c:otherwise>
+            <a nohref style="cursor: pointer" onclick="callNotification()"><fmt:message key="label.deletedAccount"
+                                                                                        bundle="${label}"/></a>
+        </c:otherwise>
+    </c:choose>
 </div>
 <div class="info">
     <c:choose>
@@ -37,3 +48,7 @@
         <button type="submit"><fmt:message key="button.leaveGroup" bundle="${label}"/></button>
     </form>
 </c:if>
+
+<div id="notification">
+    <fmt:message key="label.deletedAccountNotification" bundle="${label}"/>
+</div>
