@@ -10,8 +10,8 @@
 
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 
-<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="${context}/webjars/jquery/2.2.4/jquery.min.js"></script>
+<script src="${context}/webjars/jquery-ui/1.12.1/jquery-ui.min.js"></script>
 <script type="text/javascript" src="${context}/js/phonesEdit.js"></script>
 <script type="text/javascript" src="${context}/js/confirmationDialog.js"></script>
 <c:if test="${not empty concurrentError}">

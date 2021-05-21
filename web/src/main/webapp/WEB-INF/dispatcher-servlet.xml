@@ -3,6 +3,7 @@
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns="http://www.springframework.org/schema/beans"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:websocket="http://www.springframework.org/schema/websocket"
 
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -11,7 +12,10 @@
        https://www.springframework.org/schema/context/spring-context.xsd
 
        http://www.springframework.org/schema/mvc
-       http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+
+       http://www.springframework.org/schema/websocket
+       http://www.springframework.org/schema/websocket/spring-websocket.xsd">
 
     <import resource="classpath:serviceSpringConfig.xml"/>
     <import resource="classpath:commonSpringConfig.xml"/>
@@ -39,11 +43,6 @@
         <property name="suffix" value=".jsp"/>
         <property name="order" value="1"/>
     </bean>
-
-    <mvc:resources mapping="/css/*" location="css"/>
-    <mvc:resources mapping="/js/*" location="js"/>
-    <mvc:resources mapping="/img/*" location="img"/>
-    <mvc:resources mapping="/font/*" location="font"/>
 
     <mvc:interceptors>
         <mvc:interceptor>
@@ -165,16 +164,24 @@
         </mvc:interceptor>
     </mvc:interceptors>
 
+    <!--    <mvc:resources mapping="/webjars/**" location=""/>-->
+    <mvc:resources mapping="/css/**" location="css"/>
+    <mvc:resources mapping="/js/**" location="js"/>
+    <mvc:resources mapping="/img/**" location="img"/>
+    <mvc:resources mapping="/font/**" location="font"/>
     <!--    ============================================================================-->
-    <bean id="htmlViewsResolver" class="org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator">
-        <property name="prefix" value="/WEB-INF/chat/"/>
-        <property name="suffix" value=".html"/>
-    </bean>
+    <!--    <bean id="handlerMapping" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/>-->
 
-    <mvc:default-servlet-handler/>
-    <!--    <websocket:handlers>-->
-    <!--        <websocket:mapping path="/chat" handler="chatController"/>-->
-    <!--    </websocket:handlers>-->
+    <!--    <bean class="com.getjavajob.training.yarginy.socialnetwork.web.chat.ReactiveChatController" name="/chat"/>-->
 
-    <bean class="com.getjavajob.training.yarginy.socialnetwork.web.chat.ReactiveChatController" id="chatController"/>
+    <bean id="echoHandler" class="com.getjavajob.training.yarginy.socialnetwork.web.chat.MessageHandler"/>
+
+    <websocket:message-broker application-destination-prefix="/sn">
+        <websocket:stomp-endpoint path="/ws">
+            <websocket:sockjs/>
+        </websocket:stomp-endpoint>
+        <websocket:simple-broker prefix="/topic"/>
+    </websocket:message-broker>
+
+    <bean id="taskExecutor" class="org.springframework.core.task.SimpleAsyncTaskExecutor"/>
 </beans>

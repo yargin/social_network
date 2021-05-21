@@ -6,8 +6,8 @@
 <c:set var="id" value="${group.id}"/>
 <c:set var="ownerObject" value="${group.owner}"/>
 
-<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="${context}/webjars/jquery/2.2.4/jquery.min.js"></script>
+<script src="${context}/webjars/jquery-ui/1.12.1/jquery-ui.min.js"></script>
 <script type="text/javascript" src="${context}/js/notification.js"></script>
 <div class="info">
     <fmt:message key="form.groupName" bundle="${form}"/> : ${group.name}<br>
