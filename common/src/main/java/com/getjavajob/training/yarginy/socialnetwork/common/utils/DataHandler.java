@@ -15,4 +15,11 @@ public class DataHandler implements Serializable {
         }
         return "";
     }
+
+    public byte[] getBytesDecoded(String file) {
+        if (!isNull(file) && !file.isEmpty()) {
+            return Base64.getDecoder().decode(file);
+        }
+        return new byte[0];
+    }
 }

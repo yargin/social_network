@@ -25,11 +25,11 @@ public abstract class Message<E extends Model> implements Model {
     @GeneratedValue
     private long id;
     @Column(name = "message")
-    protected String text;
+    private String text;
     @Lob
-    protected byte[] image;
+    private byte[] image;
     @Column(name = "posted")
-    protected Timestamp date;
+    private Timestamp date;
     @Version
     private long version;
 

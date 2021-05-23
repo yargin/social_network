@@ -7,18 +7,16 @@
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 
 <div class="wallMessage" style="margin-right: 40%">
-    <form action="${context}/message/dialog/add" method="post" enctype="multipart/form-data" style="">
-        <input type="hidden" value="${sessionScope.userId}" name="requesterId">
-        <input type="hidden" value="${dialog.id}" name="receiverId">
-        <input type="hidden" value="${type}" name="type">
+    <form>
+        <input type="hidden" value="${sessionScope.userId}" id="requesterId">
         <div style=" border-bottom: none;">
-            <textarea name="text" placeholder="<fmt:message key="form.inputText" bundle="${form}"/>"></textarea>
+            <textarea id="text" placeholder="<fmt:message key="form.inputText" bundle="${form}"/>"></textarea>
         </div>
         <br>
-        <input type="file" name="image" accept="image/*"
+        <input type="file" id="image" accept="image/*"
                title="<fmt:message key="form.uploadImage" bundle="${form}"/>">
         <br>
-        <button type="submit"><fmt:message key="button.send" bundle="${label}"/></button>
+        <button type="button" id="send"><fmt:message key="button.send" bundle="${label}"/></button>
     </form>
     <%-- bottom border --%>
     <div>
