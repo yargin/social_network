@@ -2,8 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="common" tagdir="/WEB-INF/tags" %>
 <fmt:setBundle basename="label"/>
-
-
+<fmt:message key="label.author" var="author"/>
+<fmt:message key="label.date" var="date"/>
 
 <div id="messagesShow"></div>
 <%--                <c:if test="${not empty admin or author.id == sessionScope.userId}">--%>
@@ -16,22 +16,17 @@
 <%--                    </form>--%>
 <%--                </c:if>--%>
 
-
-
-<%--<c:set var="author" value="${message.author}"/>--%>
-<%--<jsp:useBean id="dataHandler" class="com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler"/>--%>
-<%--<div class="wallMessage" style="margin-right: 40%;">--%>
-<%--    <div>--%>
-<%--        <p>date: ${message.date}</p>--%>
-<%--        <p>author:--%>
-<%--            <a href="${context}/account/wall?id=${author.id}">${author.name} ${author.surname}</a>--%>
-<%--        </p>--%>
-<%--    </div>--%>
-<%--    <div>--%>
-<%--        <p>${message.text}</p>--%>
-<%--        <c:if test="${not empty image}">--%>
-<%--        <c:set var="image" value="${dataHandler.getHtmlPhoto(message.getImage())}"/>--%>
-<%--            <img src="data:image/jpeg;base64, ${image}">--%>
-<%--        </c:if>--%>
-<%--    </div>--%>
-<%--</div>--%>
+<template id="template">
+    <div class="wallMessage">
+        <div>
+            <p id="dateLabel">${date}: </p>
+            <p id="authorLabel">${author}:
+                <a id="authorLink" href="${context}/account/wall?id="></a>
+            </p>
+        </div>
+        <div>
+            <p id="messageText">${message.text}</p>
+            <img id="messageImage">
+        </div>
+    </div>
+</template>

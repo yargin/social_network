@@ -6,6 +6,7 @@
 
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 
+<%--move to jsp--%>
 <div class="wallMessage" style="margin-right: 40%">
     <form>
         <input type="hidden" value="${sessionScope.userId}" id="requesterId">

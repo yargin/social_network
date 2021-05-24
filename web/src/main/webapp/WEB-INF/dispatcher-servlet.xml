@@ -170,12 +170,16 @@
     <mvc:resources mapping="/img/**" location="img"/>
     <mvc:resources mapping="/font/**" location="font"/>
 
+<!--    add prefix to all messages send to application-->
     <websocket:message-broker application-destination-prefix="/sn">
         <websocket:transport message-size="16000000" send-buffer-size="2000000" send-timeout="200000"/>
+        <!--        stomp connection address-->
         <websocket:stomp-endpoint path="/connection">
             <websocket:sockjs/>
         </websocket:stomp-endpoint>
-        <websocket:simple-broker prefix="*"/>
+        <!--        filter clients subscriptions destinations by prefix-->
+        <!--        <websocket:simple-broker prefix="/dialog"/>-->
+        <websocket:simple-broker prefix="/dialog"/>
     </websocket:message-broker>
     
     <websocket:handlers>

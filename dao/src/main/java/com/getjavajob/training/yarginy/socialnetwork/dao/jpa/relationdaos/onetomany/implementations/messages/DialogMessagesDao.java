@@ -32,7 +32,7 @@ public class DialogMessagesDao implements OneToManyDao<DialogMessage> {
     public Collection<DialogMessage> selectMany(long dialogId) {
         Dialog dialog = factory.getDialog(dialogId);
         TypedQuery<DialogMessage> selectMany = entityManager.createQuery("select m from DialogMessage m " +
-                        "join fetch m.author where m.receiver = :receiver order by m.date desc",
+                        "join fetch m.author where m.receiver = :receiver order by m.date",
                 DialogMessage.class);
         selectMany.setParameter("receiver", dialog);
         return selectMany.getResultList();
