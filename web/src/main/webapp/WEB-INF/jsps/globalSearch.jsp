@@ -10,9 +10,7 @@
 <fmt:message key="label.nothingFound" var="nothingFound"/>
 <fmt:message key="label.user" var="user"/>
 <fmt:message key="label.group" var="group"/>
-<script>
-    init('${nothingFound}', '${user}' + ' : ', '${group}' + ' : ', '${context}', '${searchString}');
-</script>
+<script> initSearchScript('${nothingFound}', '${user}', '${group}', '${context}', '${searchString}') </script>
 
 <common:layout>
     <div id="results"></div>

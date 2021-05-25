@@ -4,7 +4,6 @@
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 <c:set var="id" value="${group.id}"/>
 
-
 <%--if not a member don't show buttons--%>
 <c:choose>
     <c:when test="${tab eq 'wall'}">

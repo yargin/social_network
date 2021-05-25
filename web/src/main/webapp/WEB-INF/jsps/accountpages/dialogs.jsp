@@ -22,9 +22,7 @@
             </c:otherwise>
         </c:choose>
 
-        <a href="${context}/dialog/show?id=${dialog.id}">
-                ${talker.name} ${talker.surname}
-        </a>
+        <a href="${context}/dialog/show?id=${dialog.id}">${talker.name} ${talker.surname}</a>
         <br><br>
     </c:forEach>
 </common:layout>

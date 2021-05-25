@@ -16,7 +16,7 @@ var blurListeners = new Map();
 var duplicateNumber;
 var anotherDuplicate;
 
-function init(deleteButtonText, tooShortErr, tooLongErr, notPhoneErr, duplicateErr) {
+function initPhonesUpdateScript(deleteButtonText, tooShortErr, tooLongErr, notPhoneErr, duplicateErr) {
     deleteText = deleteButtonText;
     tooShortError = tooShortErr;
     tooLongError = tooLongErr;
@@ -234,7 +234,7 @@ function checkForErrorAddName(phones, type) {
             document.getElementById(phones[i]).focus();
             return false;
         }
-        document.getElementById(phones[i]).setAttribute('name', type + '[' + i + '].number');
+        document.getElementById(phones[i]).setAttribute('name', `${type}[${i}].number`);
     }
     return true;
 }

@@ -5,7 +5,6 @@
 
 <c:forEach items="${groups}" var="group">
     <c:if test="${empty allgroups}">
-        <%--        collection--%>
         <a href="${context}/group/wall?id=${group.id}">${group.name}</a>
         <c:if test="${not empty owner or not empty admin}">
             <form action="${context}/group/leave" method="post">

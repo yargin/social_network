@@ -92,7 +92,7 @@
 
 <div id="confirmDialog"><fmt:message key="label.areYouSure" bundle="${label}"/></div>
 <script>
-    initDialog('<fmt:message key="label.ok" bundle="${label}"/>', '<fmt:message key="label.cancel" bundle="${label}"/>',
+    initConfirmationScript('<fmt:message key="label.ok" bundle="${label}"/>', '<fmt:message key="label.cancel" bundle="${label}"/>',
         () => {
             $("#confirmAbleForm").submit();
         }, () => {

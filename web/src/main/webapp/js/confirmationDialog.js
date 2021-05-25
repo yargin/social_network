@@ -3,7 +3,7 @@ var okButtonText;
 var cancelButtonText;
 var callback;
 
-function initDialog(okButtonLabel, cancelButtonLabel, callbackFunction, additionalChecksFunction) {
+function initConfirmationScript(okButtonLabel, cancelButtonLabel, callbackFunction, additionalChecksFunction) {
     okButtonText = okButtonLabel;
     cancelButtonText = cancelButtonLabel;
     callback = callbackFunction;

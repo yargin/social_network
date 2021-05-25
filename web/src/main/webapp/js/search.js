@@ -1,55 +1,56 @@
 var notFound;
-var user;
-var group;
+var userLabel;
+var groupLabel;
 var context;
 var searchString;
 
 jQuery(document).ready(function () {
     $('#searchString').val(searchString);
-    getRequest();
-    $('#search').submit(() => getRequest());
+    search();
+    $('#search').submit(() => search());
 });
 
-function init(notFoundLabel, userLabel, groupLabel, contextAddr, searchParam) {
+function initSearchScript(notFoundLabel, userLabelText, groupLabelText, contextAddr, searchParam) {
     notFound = notFoundLabel;
-    user = userLabel;
-    group = groupLabel;
+    userLabel = userLabelText;
+    groupLabel = groupLabelText;
     context = contextAddr;
     searchString = searchParam;
 }
 
-function getRequest(page) {
+function search(page) {
     if (page === undefined) {
         page = 1;
     }
+    var searchString = $('#searchString').val();
     $.ajax({
-        url: context + '/find?string=' + $('#searchString').val() + '&page=' + page,
+        url: `${context}/find?string=${searchString}&page=${page}`,
         dataType: 'json',
         success: function (result) {
             drawResults(result, page);
         },
         fail: function () {
-            $(location).attr('href', context + '/account/wall');
+            $(location).attr('href', `${context}/account/wall`);
         }
     });
     return false;
 }
 
-function drawResults(results, page) {
+function drawResults(result, page) {
     var res = $('#results');
     res.empty();
-    if (results.searchAbles.length === 0) {
-        res.append("<div>" + notFound + "</div>");
+    if (result.searchAbles.length === 0) {
+        res.append(`<div>${notFound}</div>`);
     }
 
-    results.searchAbles.forEach(e => {
+    result.searchAbles.forEach(e => {
         appendLink(e, res);
     });
 
-    var pages = results.pages;
+    var pages = result.pages;
     pages.forEach(e => {
         if (e !== page) {
-            res.append("<a href=# onclick='getRequest(" + e + ")'>" + e + "</a> ");
+            res.append(`<a href=# onclick="${search(e)}">${e}</a>`);
         } else if (pages.length > 1) {
             res.append(e + ' ');
         }
@@ -59,10 +60,10 @@ function drawResults(results, page) {
 function appendLink(e, res) {
     var link;
     if (e.type === 'ACCOUNT') {
-        link = context + '/account/wall?id=' + e.id;
-        res.append("<a href='" + link + "'>" + user + e.name + "</a><br>");
+        link = `${context}/account/wall?id=${e.id}`;
+        res.append(`<a href="${link}">${userLabel} : ${e.name}</a><br>`);
     } else {
-        link = context + '/group/wall?id=' + e.id;
-        res.append("<a href='" + link + "'>" + group + e.name + "</a><br>");
+        link = `${context}/group/wall?id=${e.id}`;
+        res.append(`<a href="${link}">${groupLabel} : ${e.name}</a><br>`);
     }
 }

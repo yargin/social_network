@@ -5,7 +5,7 @@ var storedMessages;
 var dialogId;
 var connected;
 
-function initDialogProperties(contextAttr, sessionUserIdAttr, storedMessagesAttr, dialogIdAttr) {
+function initDialogScript(contextAttr, sessionUserIdAttr, storedMessagesAttr, dialogIdAttr) {
     context = contextAttr;
     sessionUserId = '' + sessionUserIdAttr;
     storedMessages = JSON.parse(storedMessagesAttr);
@@ -31,11 +31,11 @@ function connect() {
     var socket = new SockJS(context + '/connection');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
-        stompClient.subscribe('/dialog/messages/add?id=' + dialogId, function (message) {
+        stompClient.subscribe(`/dialog/messages/add?id=${dialogId}`, function (message) {
             var messageBody = JSON.parse(message.body);
             showMessage(messageBody);
         });
-        stompClient.subscribe('/dialog/messages/delete?id=' + dialogId, function (message) {
+        stompClient.subscribe(`/dialog/messages/delete?id=${dialogId}`, function (message) {
             var messageBody = JSON.parse(message.body);
             deleteMessage(messageBody);
         });
@@ -44,7 +44,7 @@ function connect() {
 }
 
 function deleteMessage(message) {
-    $('#' + message).remove();
+    $(`#${message}`).remove();
 }
 
 function sendMessage() {
@@ -67,7 +67,7 @@ function sendMessage() {
 
 function sendOverStomp(file) {
     var text = $('#text');
-    stompClient.send(context + '/message/dialog/add', {}, JSON.stringify({
+    stompClient.send(`${context}/message/dialog/add`, {}, JSON.stringify({
         'text': text.val(),
         'image': file,
         'authorId': $('#requesterId').val(),
@@ -92,12 +92,12 @@ function showMessage(message) {
     $('#dateLabel').append(message.stringPosted);
     var authorLink = $('#authorLink');
     authorLink.append(message.authorName + ' ' + message.authorSurname);
-    authorLink.prop('href', context + '/account/wall?id=' + message.authorId);
+    authorLink.prop('href', `${context}/account/wall?id=${message.authorId}`);
 
 
     $('#messageText').append(message.text);
     if (message.image !== '') {
-        $('#messageImage').prop('src', 'data:image/jpeg;base64, ' + message.image);
+        $('#messageImage').prop('src', `data:image/jpeg;base64, ${message.image}`);
     }
 
     var template = document.querySelector('#template');
@@ -107,6 +107,6 @@ function showMessage(message) {
 
 function sendDeleteRequest(id) {
     if (connected === true) {
-        stompClient.send(context + '/message/dialog/delete', {}, id);
+        stompClient.send(`${context}/message/dialog/delete`, {}, id);
     }
 }

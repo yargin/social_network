@@ -5,9 +5,6 @@
 <%@ taglib prefix="account" tagdir="/WEB-INF/tags/account" %>
 <%@ taglib prefix="message" tagdir="/WEB-INF/tags/message" %>
 <%@ taglib prefix="common" tagdir="/WEB-INF/tags" %>
-<fmt:setBundle basename="label"/>
-
-<c:set var="context" value="${pageContext.servletContext.contextPath}"/>
 
 <common:layout>
     <account:accountInfo/>

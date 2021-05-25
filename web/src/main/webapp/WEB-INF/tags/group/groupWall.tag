@@ -3,9 +3,7 @@
 <%@ taglib prefix="common" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="message" tagdir="/WEB-INF/tags/message" %>
 <fmt:setBundle basename="label"/>
-
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
-
 
 <c:if test="${empty member and empty owner and empty requester}">
     <form action="${context}/group/join?" method="post">

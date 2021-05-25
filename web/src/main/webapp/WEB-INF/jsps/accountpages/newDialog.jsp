@@ -15,8 +15,7 @@
                 <textarea name="text"></textarea>
             </div>
             <br>
-            <input type="file" name="imageUpload" accept="image/*"
-                   title="<fmt:message key="form.uploadImage"/>">
+            <input type="file" name="imageUpload" accept="image/*" title="<fmt:message key="form.uploadImage"/>">
             <br>
             <button type="submit"><fmt:message key="button.send"/></button>
         </form>

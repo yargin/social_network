@@ -11,7 +11,7 @@
 <fmt:message key="error.tooShort" bundle="${error}" var="tooShort"/>
 <fmt:message key="error.duplicate" bundle="${error}" var="duplicate"/>
 <script>
-    init("${deleteText}", "${tooShort}", "${tooLong}", "${notPhone}", "${duplicate}");
+    initPhonesUpdateScript('${deleteText}', '${tooShort}', '${tooLong}', '${notPhone}', '${duplicate}');
 </script>
 
 <br><label><fmt:message key="form.privatePhones" bundle="${form}"/></label><br>

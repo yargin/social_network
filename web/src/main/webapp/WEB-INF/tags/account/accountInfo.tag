@@ -81,7 +81,7 @@
     <fmt:message key="label.notEnoughPermissions" bundle="${label}"/>
 </div>
 
-<script>initDialog('<fmt:message key="label.ok" bundle="${label}"/>', '<fmt:message key="label.cancel" bundle="${label}"/>',
+<script>initConfirmationScript('<fmt:message key="label.ok" bundle="${label}"/>', '<fmt:message key="label.cancel" bundle="${label}"/>',
     () => {
         tryToExecute('${context}/account/delete?id=${id}')
     })
