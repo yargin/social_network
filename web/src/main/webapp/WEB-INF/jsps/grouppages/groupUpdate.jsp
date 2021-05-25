@@ -10,7 +10,7 @@
 <c:if test="${not empty concurrentError}">
     <script src="${context}/webjars/jquery/2.2.4/jquery.min.js"></script>
     <script src="${context}/webjars/jquery-ui/1.12.1/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="${context}/js/notification.js" defer></script>
+    <script src="${context}/js/notification.js" defer></script>
     <div id="notification">
         <fmt:message key="${concurrentError}" bundle="${error}"/>
     </div>

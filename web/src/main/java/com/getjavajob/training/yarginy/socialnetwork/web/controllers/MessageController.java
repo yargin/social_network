@@ -1,31 +1,22 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.controllers;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.AccountWallMessage;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.DialogMessage;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.GroupWallMessage;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.AccountWallMessageService;
-import com.getjavajob.training.yarginy.socialnetwork.service.messages.DialogMessagesService;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.GroupWallMessageService;
 import com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers.MessageDto;
-import com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers.dialog.DialogMessageDto;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.DtoMapper;
 import com.getjavajob.training.yarginy.socialnetwork.web.helpers.Redirector;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 
 import javax.servlet.http.HttpServletRequest;
-
-import java.text.SimpleDateFormat;
 import java.util.function.Predicate;
 
 import static java.util.Objects.isNull;
@@ -35,20 +26,14 @@ import static java.util.Objects.isNull;
 public class MessageController {
     private final AccountWallMessageService accountWallMessageService;
     private final GroupWallMessageService groupWallMessageService;
-    private final DialogMessagesService dialogMessagesService;
     private final Redirector redirector;
     private final DtoMapper dtoMapper;
-    private final SimpMessagingTemplate messagingTemplate;
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yy, HH:mm");
 
-    public MessageController(AccountWallMessageService accountWallMessageService,
-                             GroupWallMessageService groupWallMessageService, SimpMessagingTemplate messagingTemplate,
-                             DialogMessagesService dialogMessagesService, Redirector redirector, DtoMapper dtoMapper) {
+    public MessageController(AccountWallMessageService accountWallMessageService, Redirector redirector,
+                             GroupWallMessageService groupWallMessageService, DtoMapper dtoMapper) {
         this.accountWallMessageService = accountWallMessageService;
-        this.groupWallMessageService = groupWallMessageService;
-        this.messagingTemplate = messagingTemplate;
-        this.dialogMessagesService = dialogMessagesService;
         this.redirector = redirector;
+        this.groupWallMessageService = groupWallMessageService;
         this.dtoMapper = dtoMapper;
     }
 
@@ -65,16 +50,6 @@ public class MessageController {
         return addMessage(message, req, accountMessage -> groupWallMessageService.addMessage(
                 dtoMapper.getGroupWallMessage(requesterId, receiverId, message)));
     }
-
-//    @MessageMapping("/dialog/add")
-//    @ResponseBody
-//    public void addDialogMessage(@RequestBody DialogMessageDto dialogMessageDto) {
-//        DialogMessage message = dtoMapper.getDialogMessage(dialogMessageDto);
-//        if (dialogMessagesService.addMessage(message)) {
-//            dialogMessageDto.setStringPosted(dateFormat.format(message.getDate()));
-//            messagingTemplate.convertAndSend("dialog/messages?id='" + dialogMessageDto.getDialogId());
-//        }
-//    }
 
     private String addMessage(MessageDto message, HttpServletRequest request, Predicate<MessageDto> consumer) {
         if (!message.getText().isEmpty() || !isNull(message.getImage()) && message.getImage().length != 0) {
@@ -96,14 +71,6 @@ public class MessageController {
         GroupWallMessage message = new GroupWallMessage();
         message.setId(id);
         groupWallMessageService.deleteMessage(message);
-        return redirector.redirectBackView(req);
-    }
-
-    @PostMapping("/dialog/delete")
-    public String deleteDialogMessage(@RequestAttribute long id, HttpServletRequest req) {
-        DialogMessage message = new DialogMessage();
-        message.setId(id);
-        dialogMessagesService.deleteMessage(message);
         return redirector.redirectBackView(req);
     }
 

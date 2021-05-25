@@ -50,7 +50,9 @@ public class AccountWallMessageDao extends GenericDao<AccountWallMessage> {
 
     @Override
     protected AccountWallMessage getModelReference(AccountWallMessage message) {
-        return entityManager.getReference(AccountWallMessage.class, message.getId());
+        AccountWallMessage messageToDelete = entityManager.getReference(AccountWallMessage.class, message.getId());
+        message.setReceiver(messageToDelete.getReceiver());
+        return messageToDelete;
     }
 
     @Override

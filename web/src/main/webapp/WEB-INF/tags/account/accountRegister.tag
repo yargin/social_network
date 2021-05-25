@@ -7,7 +7,7 @@
 
 
 <c:set var="context" value="${pageContext.servletContext.contextPath}"/>
-<script type="text/javascript" src="${context}/js/phonesEdit.js"></script>
+<script src="${context}/js/phonesEdit.js"></script>
 
 <spring:message code="label.saveUpdates" var="confirmText"/>
 <div class="post">

@@ -10,10 +10,10 @@
 
 <script src="${context}/webjars/jquery/2.2.4/jquery.min.js"></script>
 <script src="${context}/webjars/jquery-ui/1.12.1/jquery-ui.min.js"></script>
-<script type="text/javascript" src="${context}/js/phonesEdit.js" defer></script>
-<script type="text/javascript" src="${context}/js/notification.js"></script>
-<script type="text/javascript" src="${context}/js/executeAccordingToPermissions.js"></script>
-<script type="text/javascript" src="${context}/js/confirmationDialog.js"></script>
+<script src="${context}/js/phonesEdit.js" defer></script>
+<script src="${context}/js/notification.js"></script>
+<script src="${context}/js/executeAccordingToPermissions.js"></script>
+<script src="${context}/js/confirmationDialog.js"></script>
 <script>
     initExec('${context}');
 </script>

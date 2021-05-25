@@ -8,7 +8,7 @@
 
 <script src="${context}/webjars/jquery/2.2.4/jquery.min.js"></script>
 <script src="${context}/webjars/jquery-ui/1.12.1/jquery-ui.min.js"></script>
-<script type="text/javascript" src="${context}/js/notification.js"></script>
+<script src="${context}/js/notification.js"></script>
 <div class="info">
     <fmt:message key="form.groupName" bundle="${form}"/> : ${group.name}<br>
     <fmt:message key="form.description" bundle="${form}"/> : ${group.description}<br>

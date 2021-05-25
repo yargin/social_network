@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.text.SimpleDateFormat;
 
 @RestController
-public class WebSocketController {
+public class DialogMessageController {
     private final DialogMessagesService dialogMessagesService;
     private final DtoMapper dtoMapper;
     private final SimpMessagingTemplate messagingTemplate;
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 
-    public WebSocketController(DialogMessagesService dialogMessagesService, DtoMapper dtoMapper,
-                               SimpMessagingTemplate messagingTemplate) {
+    public DialogMessageController(DialogMessagesService dialogMessagesService, DtoMapper dtoMapper,
+                                   SimpMessagingTemplate messagingTemplate) {
         this.dialogMessagesService = dialogMessagesService;
         this.dtoMapper = dtoMapper;
         this.messagingTemplate = messagingTemplate;
@@ -31,11 +31,21 @@ public class WebSocketController {
         DialogMessage message = dtoMapper.getDialogMessage(dialogMessageDto);
         if ((!dialogMessageDto.getText().isEmpty() || !dialogMessageDto.getImage().isEmpty()) &&
                 dialogMessagesService.addMessage(message)) {
+            dialogMessageDto.setId("" + message.getId());
             Account author = message.getAuthor();
             dialogMessageDto.setAuthorName(author.getName());
             dialogMessageDto.setAuthorSurname(author.getSurname());
             dialogMessageDto.setStringPosted(dateFormat.format(message.getDate()));
-            messagingTemplate.convertAndSend("/dialog/messages?id=" + dialogMessageDto.getDialogId(), dialogMessageDto);
+            messagingTemplate.convertAndSend("/dialog/messages/add?id=" + dialogMessageDto.getDialogId(), dialogMessageDto);
+        }
+    }
+
+    @MessageMapping("/message/dialog/delete")
+    public void deleteDialogMessage(@RequestBody String id) {
+        DialogMessage message = new DialogMessage();
+        message.setId(Long.parseLong(id));
+        if (dialogMessagesService.deleteMessage(message)) {
+            messagingTemplate.convertAndSend("/dialog/messages/delete?id=" + message.getReceiver().getId(), id);
         }
     }
 }

@@ -51,7 +51,9 @@ public class GroupWallMessageDao extends GenericDao<GroupWallMessage> {
 
     @Override
     protected GroupWallMessage getModelReference(GroupWallMessage message) {
-        return entityManager.getReference(GroupWallMessage.class, message.getId());
+        GroupWallMessage messageToDelete = entityManager.getReference(GroupWallMessage.class, message.getId());
+        message.setReceiver(messageToDelete.getReceiver());
+        return messageToDelete;
     }
 
     @Override

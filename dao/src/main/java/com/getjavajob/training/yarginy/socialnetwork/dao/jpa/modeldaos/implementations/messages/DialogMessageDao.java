@@ -51,7 +51,9 @@ public class DialogMessageDao extends GenericDao<DialogMessage> {
 
     @Override
     protected DialogMessage getModelReference(DialogMessage message) {
-        return entityManager.getReference(DialogMessage.class, message.getId());
+        DialogMessage messageToDelete = entityManager.getReference(DialogMessage.class, message.getId());
+        message.setReceiver(messageToDelete.getReceiver());
+        return messageToDelete;
     }
 
     @Override
