@@ -45,7 +45,7 @@ function checkPhone(elementId) {
         errorDiv.appendChild(document.createTextNode(tooShortError));
         return false;
     }
-    if (value.length > 13) {
+    if (value.length > 24) {
         errorDiv.appendChild(document.createTextNode(tooLongError));
         return false;
     }

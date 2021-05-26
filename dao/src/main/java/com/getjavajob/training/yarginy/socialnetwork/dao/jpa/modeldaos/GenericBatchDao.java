@@ -12,12 +12,13 @@ public abstract class GenericBatchDao<E extends Model> extends GenericDao<E> imp
     @Override
     @Transactional
     public void create(Collection<E> entities) {
-        for (E entity : entities) {
-            try {
+        try {
+            for (E entity : entities) {
                 entityManager.persist(entity);
-            } catch (PersistenceException e) {
-                throw new IllegalArgumentException(e);
             }
+            entityManager.flush();
+        } catch (PersistenceException e) {
+            throw new IllegalArgumentException(e);
         }
     }
 

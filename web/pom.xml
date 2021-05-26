@@ -72,7 +72,6 @@
             <version>${spring.version}</version>
         </dependency>
 
-
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
@@ -182,7 +181,11 @@
                     <appName>yarginy-socnet</appName>
                     <processTypes>
                         <!-- @formatter:off -->
-                        <web>java $JAVA_OPTS -cp target/dependency/webapp-runner.jar:target/dependency/tomcat-dbcp.jar webapp.runner.launch.Main --enable-naming --context-xml target/web-1.0.0-SNAPSHOT/META-INF/context.xml $WEBAPP_RUNNER_OPTS --port $PORT target/web-1.0.0-SNAPSHOT.war</web>
+                        <web>java $JAVA_OPTS -cp target/dependency/webapp-runner.jar:target/dependency/tomcat-dbcp.jar
+                            webapp.runner.launch.Main --enable-naming --context-xml
+                            target/web-1.0.0-SNAPSHOT/META-INF/heroku-context.xml $WEBAPP_RUNNER_OPTS --port $PORT
+                            target/web-1.0.0-SNAPSHOT.war
+                        </web>
                         <!-- @formatter:on -->
                     </processTypes>
                 </configuration>

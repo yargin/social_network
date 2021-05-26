@@ -7,7 +7,7 @@
 
 <c:forEach var="message" items="${messages}">
     <c:set var="author" value="${message.author}"/>
-    <jsp:useBean id="dataHandler" class="com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler"/>
+    <jsp:useBean id="dataConverter" class="com.getjavajob.training.yarginy.socialnetwork.web.helpers.DataConverter"/>
     <div class="wallMessage" style="margin-left: 10%; margin-right: 10%;">
         <div>
             <p><fmt:message key="label.date"/>: <fmt:formatDate value="${message.date}" type="both"/></p>
@@ -28,7 +28,7 @@
         </div>
         <div>
             <p>${message.text}</p>
-            <c:set var="image" value="${dataHandler.getHtmlPhoto(message.image)}"/>
+            <c:set var="image" value="${dataConverter.getHtmlPhoto(message.image)}"/>
             <c:if test="${not empty image}">
                 <img src="data:image/jpeg;base64, ${image}">
             </c:if>

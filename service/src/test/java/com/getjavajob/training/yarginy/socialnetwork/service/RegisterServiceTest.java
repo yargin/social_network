@@ -4,7 +4,6 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Password;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.Sex;
-import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.ModelsFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PasswordDaoFacade;
@@ -35,8 +34,6 @@ public class RegisterServiceTest {
     private PhoneDaoFacade phoneDaoFacade;
     @Mock
     private ModelsFactory modelsFactory;
-    @Mock
-    private DataHandler dataHandler;
     @Mock
     private PasswordEncoder passwordEncoder;
     @InjectMocks

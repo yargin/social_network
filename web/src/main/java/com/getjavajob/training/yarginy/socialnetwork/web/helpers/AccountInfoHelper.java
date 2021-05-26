@@ -3,7 +3,6 @@ package com.getjavajob.training.yarginy.socialnetwork.web.helpers;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.Role;
-import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
 import com.getjavajob.training.yarginy.socialnetwork.service.AccountService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,17 +20,17 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Att
 @Component
 public class AccountInfoHelper {
     private final AccountService accountService;
-    private final DataHandler dataHandler;
+    private final DataConverter dataConverter;
 
-    public AccountInfoHelper(AccountService accountService, DataHandler dataHandler) {
+    public AccountInfoHelper(AccountService accountService, DataConverter dataConverter) {
         this.accountService = accountService;
-        this.dataHandler = dataHandler;
+        this.dataConverter = dataConverter;
     }
 
     public void setAccountInfo(ModelAndView modelAndView, Account account) {
         modelAndView.addObject("user", account);
         modelAndView.addObject("id", account.getId());
-        modelAndView.addObject(PHOTO, dataHandler.getHtmlPhoto(account.getPhoto()));
+        modelAndView.addObject(PHOTO, dataConverter.getHtmlPhoto(account.getPhoto()));
 
         Collection<Phone> phones = accountService.getPhones(account.getId());
         Collection<Phone> privatePhones = phones.stream().filter(phone -> PRIVATE.equals(phone.getType())).

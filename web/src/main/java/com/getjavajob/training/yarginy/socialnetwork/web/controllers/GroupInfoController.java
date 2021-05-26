@@ -3,9 +3,9 @@ package com.getjavajob.training.yarginy.socialnetwork.web.controllers;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.GroupWallMessage;
-import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
 import com.getjavajob.training.yarginy.socialnetwork.service.GroupService;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.GroupWallMessageService;
+import com.getjavajob.training.yarginy.socialnetwork.web.helpers.DataConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
@@ -24,13 +24,13 @@ import static java.util.Objects.isNull;
 @RequestMapping("/group")
 public class GroupInfoController {
     private final GroupService groupService;
-    private final DataHandler dataHandler;
+    private final DataConverter dataConverter;
     private final GroupWallMessageService messageService;
 
-    public GroupInfoController(GroupService groupService, DataHandler dataHandler,
+    public GroupInfoController(GroupService groupService, DataConverter dataConverter,
                                GroupWallMessageService messageService) {
         this.groupService = groupService;
-        this.dataHandler = dataHandler;
+        this.dataConverter = dataConverter;
         this.messageService = messageService;
     }
 
@@ -83,7 +83,7 @@ public class GroupInfoController {
     private void addInfoAndPhoto(ModelAndView modelAndView, Group group) {
         byte[] photo = group.getPhoto();
         if (!isNull(photo)) {
-            modelAndView.addObject(PHOTO, dataHandler.getHtmlPhoto(photo));
+            modelAndView.addObject(PHOTO, dataConverter.getHtmlPhoto(photo));
         }
         modelAndView.addObject("group", group);
     }

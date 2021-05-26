@@ -5,9 +5,9 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.PhoneType;
-import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
 import com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers.AccountInfoMvcModel;
 import com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers.PhoneView;
+import com.getjavajob.training.yarginy.socialnetwork.web.helpers.DataConverter;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -26,7 +26,7 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pag
 import static java.util.Objects.isNull;
 
 public final class AccountFieldsUpdater {
-    private final DataHandler dataHandler = new DataHandler();
+    private final DataConverter dataConverter = new DataConverter();
     private final HttpSession session;
     private final String updateFailView;
     private final ModelAndView modelAndView;
@@ -42,7 +42,7 @@ public final class AccountFieldsUpdater {
         if (!isNull(account)) {
             byte[] photoBytes = account.getPhoto();
             if (!isNull(photoBytes)) {
-                String photo = dataHandler.getHtmlPhoto(photoBytes);
+                String photo = dataConverter.getHtmlPhoto(photoBytes);
                 modelAndView.addObject(PHOTO, photo);
             }
         }

@@ -14,8 +14,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Collection;
 
-import static java.sql.Date.*;
-import static java.time.LocalDate.*;
+import static java.sql.Date.valueOf;
+import static java.time.LocalDate.of;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

@@ -10,32 +10,30 @@ function initDialogScript(contextAttr, sessionUserIdAttr, storedMessagesAttr, di
     sessionUserId = '' + sessionUserIdAttr;
     storedMessages = JSON.parse(storedMessagesAttr);
     dialogId = dialogIdAttr;
-}
-
-function drawStoredMessages() {
-    storedMessages.forEach((m) => {
-        showMessage(m)
-    });
-    storedMessages = null;
-}
-
-$(document).ready(function() {
     connect();
     drawStoredMessages();
     $('#send').click(function () {
         sendMessage();
     });
-});
+}
+
+function drawStoredMessages() {
+    storedMessages.forEach((m) => {
+        showMessage(m);
+    });
+    storedMessages = null;
+}
 
 function connect() {
-    var socket = new SockJS(context + '/connection');
+    var socket = new SockJS(`${context}/dialog/connection`);
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
-        stompClient.subscribe(`/dialog/messages/add?id=${dialogId}`, function (message) {
+        console.log(frame);
+        stompClient.subscribe(`/dialog/${dialogId}/messages/add`, function (message) {
             var messageBody = JSON.parse(message.body);
             showMessage(messageBody);
         });
-        stompClient.subscribe(`/dialog/messages/delete?id=${dialogId}`, function (message) {
+        stompClient.subscribe(`/dialog/${dialogId}/messages/delete`, function (message) {
             var messageBody = JSON.parse(message.body);
             deleteMessage(messageBody);
         });
@@ -67,17 +65,21 @@ function sendMessage() {
 
 function sendOverStomp(file) {
     var text = $('#text');
-    stompClient.send(`${context}/message/dialog/add`, {}, JSON.stringify({
+    stompClient.send(`/message/dialog/add`, {}, JSON.stringify({
         'text': text.val(),
         'image': file,
         'authorId': $('#requesterId').val(),
         'dialogId': dialogId
-    }))
+    }));
     text.val('');
     $('#image').val('');
 }
 
 function showMessage(message) {
+    var template = document.querySelector('#template');
+    var newMessageDiv = document.importNode(template.content, true);
+    $('#messagesShow').prepend(newMessageDiv);
+
     var messageElement = $('#dialogMessage');
     if (sessionUserId === message.authorId) {
         messageElement.prop('style', 'margin-right: 40%;');
@@ -94,19 +96,12 @@ function showMessage(message) {
     authorLink.append(message.authorName + ' ' + message.authorSurname);
     authorLink.prop('href', `${context}/account/wall?id=${message.authorId}`);
 
-
     $('#messageText').append(message.text);
     if (message.image !== '') {
         $('#messageImage').prop('src', `data:image/jpeg;base64, ${message.image}`);
     }
-
-    var template = document.querySelector('#template');
-    var newMessageDiv = document.importNode(template.content, true);
-    $('#messagesShow').prepend(newMessageDiv);
 }
 
 function sendDeleteRequest(id) {
-    if (connected === true) {
-        stompClient.send(`${context}/message/dialog/delete`, {}, id);
-    }
+    stompClient.send(`/message/dialog/delete`, {}, id);
 }

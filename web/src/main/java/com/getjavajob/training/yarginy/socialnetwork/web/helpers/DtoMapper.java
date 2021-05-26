@@ -8,22 +8,18 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.Acco
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.DialogMessage;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.GroupWallMessage;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.Message;
-import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
 import com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers.MessageDto;
 import com.getjavajob.training.yarginy.socialnetwork.web.controllers.datakeepers.dialog.DialogMessageDto;
 import org.springframework.stereotype.Component;
 
-import java.util.Base64;
-
-import static java.lang.Long.*;
-import static java.util.Objects.isNull;
+import static java.lang.Long.parseLong;
 
 @Component
 public class DtoMapper {
-    private final DataHandler dataHandler;
+    private final DataConverter dataConverter;
 
-    public DtoMapper(DataHandler dataHandler) {
-        this.dataHandler = dataHandler;
+    public DtoMapper(DataConverter dataConverter) {
+        this.dataConverter = dataConverter;
     }
 
     private void mapMessageAttributes(Message<? extends Model> message, MessageDto messageDto) {
@@ -56,7 +52,7 @@ public class DtoMapper {
         Dialog dialog = new Dialog(parseLong(messageDto.getDialogId()));
         message.setReceiver(dialog);
         message.setText(messageDto.getText());
-        message.setImage(dataHandler.getBytesDecoded(messageDto.getImage()));
+        message.setImage(dataConverter.getBytesDecoded(messageDto.getImage()));
         return message;
     }
 }

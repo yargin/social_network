@@ -15,7 +15,6 @@
 <script src="${context}/webjars/stomp-websocket/2.3.4/stomp.min.js"></script>
 <script src="${context}/js/dialogChat.js"></script>
 
-<script>initDialogScript('${context}', '${sessionScope.userId}', '${messages}', '${dialog.id}')</script>
 <common:layout>
     <div class="wallMessage" style="margin-right: 40%">
         <form>
@@ -51,3 +50,5 @@
         </div>
     </template>
 </common:layout>
+
+<script> initDialogScript('${context}', '${sessionScope.userId}', '${messages}', '${dialog.id}') </script>

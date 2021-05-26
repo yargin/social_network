@@ -1,7 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.helpers.updaters;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
-import com.getjavajob.training.yarginy.socialnetwork.common.utils.DataHandler;
+import com.getjavajob.training.yarginy.socialnetwork.web.helpers.DataConverter;
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -18,7 +18,7 @@ public class GroupFieldsUpdater {
     private final HttpSession session;
     private final ModelAndView modelAndView;
     private final String updateFailView;
-    private final DataHandler dataHandler = new DataHandler();
+    private final DataConverter dataConverter = new DataConverter();
 
     public GroupFieldsUpdater(HttpSession session, String updateFailView) {
         modelAndView = new ModelAndView();
@@ -31,7 +31,7 @@ public class GroupFieldsUpdater {
         modelAndView.addObject("group", group);
         byte[] photoBytes = group.getPhoto();
         if (!isNull(photoBytes)) {
-            String photo = dataHandler.getHtmlPhoto(photoBytes);
+            String photo = dataConverter.getHtmlPhoto(photoBytes);
             modelAndView.addObject(PHOTO, photo);
         }
         return modelAndView;
