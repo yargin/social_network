@@ -32,7 +32,7 @@
             <constructor-arg value="com.getjavajob.training.yarginy.socialnetwork.service.AccountServiceTransactional"/>
         </bean>
         <bean id="transactionPerformer"
-              class="com.getjavajob.training.yarginy.socialnetwork.common.utils.TransactionPerformer"/>
+              class="com.getjavajob.training.yarginy.socialnetwork.dao.utils.TransactionPerformer"/>
         <bean class="com.getjavajob.training.yarginy.socialnetwork.service.AccountServiceImpl">
             <constructor-arg ref="accountDaoFacade"/>
             <constructor-arg ref="phoneDaoFacade"/>
@@ -58,7 +58,7 @@
             <constructor-arg ref="groupsModeratorsDaoFacade"/>
         </bean>
         <bean id="transactionPerformer"
-              class="com.getjavajob.training.yarginy.socialnetwork.common.utils.TransactionPerformer"/>
+              class="com.getjavajob.training.yarginy.socialnetwork.dao.utils.TransactionPerformer"/>
         <bean class="com.getjavajob.training.yarginy.socialnetwork.service.GroupServiceImpl">
             <constructor-arg ref="groupDaoFacade"/>
             <constructor-arg ref="groupsMembersDaoFacade"/>

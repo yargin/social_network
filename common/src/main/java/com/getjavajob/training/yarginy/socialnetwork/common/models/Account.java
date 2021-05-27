@@ -23,7 +23,7 @@ import java.util.Objects;
 
 import static java.util.Objects.isNull;
 
-@Component("account")
+@Component
 @Scope("prototype")
 @Entity
 @Table(name = "accounts")

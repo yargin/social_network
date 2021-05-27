@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.repositories.utils;
+package com.getjavajob.training.yarginy.socialnetwork.dao.utils;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
 import org.springframework.dao.DataAccessException;
