@@ -4,12 +4,15 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsMembersDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsModeratorsDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.utils.TransactionPerformer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.junit.Assert.assertFalse;
@@ -18,8 +21,6 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:serviceTestOverrideSpringConfig.xml"})
-@ActiveProfiles("groupServiceTest")
 public class GroupServiceTest {
     @Autowired
     private GroupDaoFacade groupDaoFacade;
@@ -45,5 +46,44 @@ public class GroupServiceTest {
         assertFalse(groupService.createGroup(group));
         when(moderatorsDao.addGroupModerator(1, 1)).thenReturn(true);
         assertTrue(groupService.createGroup(group));
+    }
+
+    @Configuration
+    static class TestConfig {
+        @Bean
+        public GroupDaoFacade groupDaoFacade() {
+            return Mockito.mock(GroupDaoFacade.class);
+        }
+
+        @Bean
+        public GroupsModeratorsDaoFacade groupsModeratorsDaoFacade() {
+            return Mockito.mock(GroupsModeratorsDaoFacade.class);
+        }
+
+        @Bean
+        public GroupsMembersDaoFacade groupsMembersDaoFacade() {
+            return Mockito.mock(GroupsMembersDaoFacade.class);
+        }
+
+        @Bean
+        public GroupServiceTransactional groupServiceTransactional(GroupDaoFacade groupDaoFacade,
+                                                                   GroupsModeratorsDaoFacade groupsModeratorsDaoFacade,
+                                                                   GroupsMembersDaoFacade groupsMembersDaoFacade) {
+            return new GroupServiceTransactional(groupDaoFacade, groupsModeratorsDaoFacade, groupsMembersDaoFacade);
+        }
+
+        @Bean
+        public TransactionPerformer transactionPerformer() {
+            return new TransactionPerformer();
+        }
+
+        @Bean
+        public GroupService groupService(GroupDaoFacade groupDaoFacade, GroupsMembersDaoFacade groupsMembersDaoFacade,
+                                         GroupsModeratorsDaoFacade groupModeratorsDaoFacade,
+                                         TransactionPerformer transactionPerformer,
+                                         GroupServiceTransactional groupServiceTransactional) {
+            return new GroupServiceImpl(groupDaoFacade, groupsMembersDaoFacade, groupModeratorsDaoFacade,
+                    transactionPerformer, groupServiceTransactional);
+        }
     }
 }

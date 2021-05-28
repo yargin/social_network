@@ -68,7 +68,7 @@ public class GroupMembershipDao extends GenericManyToMany<Account, Group> {
     @Transactional
     public Map<Group, Boolean> selectUnJoinedGroupsAreRequested(long accountId) {
         Query query = entityManager.createNativeQuery("SELECT g.id, g.name, gmr.group_id requested" +
-                " FROM `Groups` g LEFT JOIN " +
+                " FROM `groups` g LEFT JOIN " +
                 " (SELECT group_id FROM groups_memberships_requests" +
                 " WHERE account_id = ?) gmr " +
                 " ON gmr.group_id = g.id " +

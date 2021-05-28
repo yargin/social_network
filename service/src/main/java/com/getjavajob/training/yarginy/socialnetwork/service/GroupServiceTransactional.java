@@ -8,6 +8,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsMembersDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsModeratorsDaoFacade;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.sql.Date;
@@ -28,6 +29,7 @@ public class GroupServiceTransactional implements Serializable {
         this.membersDao = membersDao;
     }
 
+    @Transactional
     public void createGroupAndInviteOwner(Group group) {
         Account owner = group.getOwner();
         if (isNull(owner)) {
@@ -44,6 +46,7 @@ public class GroupServiceTransactional implements Serializable {
         }
     }
 
+    @Transactional
     public void acceptRequestTransactional(long accountId, long groupId) {
         if (!membersDao.joinGroup(accountId, groupId) || !membersDao.removeRequest(accountId, groupId)) {
             throw new IllegalArgumentException();

@@ -12,7 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 import java.util.Objects;
 
@@ -21,8 +20,7 @@ import static java.util.Objects.isNull;
 @Component
 @Scope("prototype")
 @Entity
-@Table(name = "dialogs", uniqueConstraints = {@UniqueConstraint(name = "dialogs_accounts_id",
-        columnNames = {"first_id", "second_id"})})
+@Table(name = "dialogs")
 @NamedEntityGraph(name = "graph.Dialog.allProperties", includeAllAttributes = true)
 public class Dialog implements Model {
     @Id

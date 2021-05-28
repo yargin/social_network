@@ -6,6 +6,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.Dial
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.service.messages.DialogMessagesService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class DialogServiceImpl implements DialogService {
@@ -33,6 +34,7 @@ public class DialogServiceImpl implements DialogService {
     }
 
     @Override
+    @Transactional
     public boolean create(Dialog dialog, DialogMessage message) {
         if (!dialogDaoFacade.create(dialog)) {
             throw new IllegalStateException();

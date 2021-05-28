@@ -1,6 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.tests.jpa;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
+import com.getjavajob.training.yarginy.socialnetwork.dao.configuration.TestDaoOverrideConfig;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import org.junit.After;
 import org.junit.Before;
@@ -20,7 +21,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestOverrideSpringConfig.xml"})
+@ContextConfiguration(classes = {TestDaoOverrideConfig.class})
 public class JpaAccountDaoTest {
     private final Account account = new Account("testName", "testSurname", "testEmail");
     @Autowired

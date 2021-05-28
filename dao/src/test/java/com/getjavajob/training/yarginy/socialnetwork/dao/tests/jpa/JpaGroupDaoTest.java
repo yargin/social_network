@@ -2,6 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.tests.jpa;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
+import com.getjavajob.training.yarginy.socialnetwork.dao.configuration.TestDaoOverrideConfig;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacadeImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacadeImpl;
 import org.junit.After;
@@ -21,7 +22,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestOverrideSpringConfig.xml"})
+@ContextConfiguration(classes = {TestDaoOverrideConfig.class})
 public class JpaGroupDaoTest {
     private final Account owner= new Account("testOwnerName", "testOwnerSurname", "testOwnerEmail");
     private Group group = new Group("testName", owner);

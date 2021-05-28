@@ -12,6 +12,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PasswordDaoFaca
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -39,6 +40,7 @@ public class RegisterServiceImpl implements RegisterService {
     }
 
     @Override
+    @Transactional
     public boolean register(Account account, Collection<Phone> phones, String password) {
         account.setRegistrationDate(Date.valueOf(LocalDate.now()));
         if (isNull(account.getRole())) {

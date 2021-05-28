@@ -50,7 +50,7 @@ public class GlobalSearchDao implements Serializable {
                 " (SELECT id, 'user' type, CONCAT(name, ' ', surname) name FROM accounts " +
                 " WHERE UPPER(name) LIKE UPPER(?) or UPPER(surname) LIKE UPPER(?)" +
                 " UNION " +
-                " SELECT id, 'group' type, name name FROM `Groups` " +
+                " SELECT id, 'group' type, name name FROM `groups` " +
                 " WHERE UPPER(name) LIKE UPPER(?) ) s " +
                 " LIMIT " + limit + " OFFSET " + (pageNumber - 1) * limit;
     }
@@ -60,7 +60,7 @@ public class GlobalSearchDao implements Serializable {
                 " (SELECT id, 'user' type, CONCAT(name, ' ', surname) name FROM accounts " +
                 " WHERE UPPER(name) LIKE UPPER(?) or UPPER(surname) LIKE UPPER(?)" +
                 " UNION " +
-                " SELECT id, 'group' type, name name FROM `Groups` " +
+                " SELECT id, 'group' type, name name FROM `groups` " +
                 " WHERE UPPER(name) LIKE UPPER(?) ) s";
     }
 }

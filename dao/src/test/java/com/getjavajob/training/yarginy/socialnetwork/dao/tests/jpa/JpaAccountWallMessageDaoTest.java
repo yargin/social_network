@@ -2,6 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.tests.jpa;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.messages.AccountWallMessage;
+import com.getjavajob.training.yarginy.socialnetwork.dao.configuration.TestDaoOverrideConfig;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacadeImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.messages.AccountWallMessageDaoFacadeImpl;
 import org.junit.Test;
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestOverrideSpringConfig.xml"})
+@ContextConfiguration(classes = {TestDaoOverrideConfig.class})
 public class JpaAccountWallMessageDaoTest {
     @Autowired
     private AccountWallMessageDaoFacadeImpl accountWallMessageDao;

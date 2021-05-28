@@ -31,8 +31,6 @@
     <beans:bean id="loginFailureHandler"
                 class="com.getjavajob.training.yarginy.socialnetwork.web.filters.LoginFailureFilter"/>
 
-    <beans:import resource="classpath*:commonSpringConfig.xml"/>
-
     <beans:bean id="userService" class="com.getjavajob.training.yarginy.socialnetwork.service.AuthService"/>
 
     <beans:bean id="daoAuthProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">

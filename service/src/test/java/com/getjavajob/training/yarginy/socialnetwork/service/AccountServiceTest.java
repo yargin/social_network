@@ -4,14 +4,16 @@ import com.getjavajob.training.yarginy.socialnetwork.common.exceptions.Incorrect
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.facades.DialogDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.FriendshipsDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
+import com.getjavajob.training.yarginy.socialnetwork.dao.utils.TransactionPerformer;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
@@ -23,11 +25,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:serviceTestOverrideSpringConfig.xml"})
-@ActiveProfiles("accountServiceTest")
 public class AccountServiceTest {
     @Autowired
     private AccountServiceTransactional accountServiceTransactional;
@@ -151,5 +152,47 @@ public class AccountServiceTest {
         when(phoneDaoFacade.selectPhonesByOwner(account.getId())).thenReturn(phones);
         Collection<Phone> actualPhones = accountService.getPhones(account.getId());
         assertEquals(phones, actualPhones);
+    }
+
+    @Configuration
+    static class TestConfig {
+        @Bean
+        public AccountDaoFacade accountDaoFacade() {
+            return mock(AccountDaoFacade.class);
+        }
+
+        @Bean
+        public FriendshipsDaoFacade friendshipsDaoFacade() {
+            return mock(FriendshipsDaoFacade.class);
+        }
+
+        @Bean
+        public PhoneDaoFacade phoneDaoFacade() {
+            return mock(PhoneDaoFacade.class);
+        }
+
+        @Bean
+        public DialogDaoFacade dialogDaoFacade() {
+            return mock(DialogDaoFacade.class);
+        }
+
+        @Bean
+        public AccountServiceTransactional accountServiceTransactional() {
+            return mock(AccountServiceTransactional.class);
+        }
+
+        @Bean
+        public AccountService accountService(AccountDaoFacade accountDaoFacade, PhoneDaoFacade phoneDaoFacade,
+                                             FriendshipsDaoFacade friendshipsDaoFacade, DialogDaoFacade dialogDaoFacade,
+                                             TransactionPerformer transactionPerformer,
+                                             AccountServiceTransactional accountServiceTransactional) {
+            return new AccountServiceImpl(accountDaoFacade, phoneDaoFacade, friendshipsDaoFacade, dialogDaoFacade,
+                    transactionPerformer, accountServiceTransactional);
+        }
+
+        @Bean
+        public TransactionPerformer transactionPerformer() {
+            return new TransactionPerformer();
+        }
     }
 }

@@ -1,16 +1,19 @@
 package com.getjavajob.training.yarginy.socialnetwork.service;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
-import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.Sex;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Phone;
+import com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.Sex;
 import com.getjavajob.training.yarginy.socialnetwork.service.dto.AccountInfoXml;
 import com.getjavajob.training.yarginy.socialnetwork.service.xml.AccountInfoXmlServiceImpl;
+import com.getjavajob.training.yarginy.socialnetwork.service.xml.XmlService;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.Dom4JDriver;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Collection;
@@ -21,8 +24,6 @@ import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:serviceTestOverrideSpringConfig.xml"})
-@ActiveProfiles("xmlTest")
 public class AccountInfoXmlServiceImplTest {
     @Autowired
     private AccountInfoXmlServiceImpl accountInfoXmlServiceImpl;
@@ -102,5 +103,18 @@ public class AccountInfoXmlServiceImplTest {
                 "  </account>\n" +
                 "</accountInfo";
         accountInfoXmlServiceImpl.fromXml(missingLastBracer);
+    }
+
+    @Configuration
+    static class TestConfig {
+        @Bean
+        public XStream xStream() {
+            return new XStream(new Dom4JDriver());
+        }
+
+        @Bean
+        public XmlService<AccountInfoXml> accountInfoXmlService() {
+            return new AccountInfoXmlServiceImpl();
+        }
     }
 }

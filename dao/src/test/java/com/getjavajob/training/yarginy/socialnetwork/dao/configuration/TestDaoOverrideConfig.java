@@ -1,52 +1,56 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.configuration;
 
-import com.getjavajob.training.yarginy.socialnetwork.common.configuration.CommonConfiguration;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
-import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.jdbc.datasource.init.DatabasePopulator;
+import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@Import(CommonConfiguration.class)
-@ComponentScan({"com.getjavajob.training.yarginy.socialnetwork.dao"})
-@EnableTransactionManagement
-@EnableAspectJAutoProxy(proxyTargetClass = true)
-@EnableJpaRepositories("com.getjavajob.training.yarginy.socialnetwork.dao.repositories")
-public class DaoConfiguration {
+@Import(DaoConfiguration.class)
+@PropertySource("classpath:H2Connection.properties")
+public class TestDaoOverrideConfig {
+    @Primary
     @Bean
-    public JndiDataSourceLookup jndiDataSourceLookup() {
-        return new JndiDataSourceLookup();
+    public DataSource dataSource(@Value("${url}") String url, @Value("${user}") String user,
+                                 @Value("${driver}") String driver) {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setUrl(url);
+        dataSource.setUsername(user);
+        dataSource.setDriverClassName(driver);
+        Resource resource = new ClassPathResource("H2scripts/creation_script.sql");
+        DatabasePopulator populator = new ResourceDatabasePopulator(resource);
+        DatabasePopulatorUtils.execute(populator, dataSource);
+        return dataSource;
     }
 
-    @Bean
-    public DataSource dataSource() {
-        return jndiDataSourceLookup().getDataSource("jdbc/DbConnection");
-    }
-
+    @Primary
     @Bean
     public JpaVendorAdapter jpaVendorAdapter() {
         HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
-        jpaVendorAdapter.setShowSql(false);
+        jpaVendorAdapter.setShowSql(true);
         jpaVendorAdapter.setDatabasePlatform("org.hibernate.dialect.MySQL5Dialect");
         return jpaVendorAdapter;
     }
 
+    @Primary
     @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
-        entityManagerFactory.setDataSource(dataSource());
+        entityManagerFactory.setDataSource(dataSource);
         entityManagerFactory.setPackagesToScan("com.getjavajob.training.yarginy.socialnetwork.common.models");
         entityManagerFactory.setJpaVendorAdapter(jpaVendorAdapter());
         entityManagerFactory.setJpaProperties(entityManagerProperties());
@@ -61,12 +65,5 @@ public class DaoConfiguration {
         properties.setProperty("hibernate.hbm2ddl.auto", "update");
         properties.setProperty("hibernate.globally_quoted_identifiers", "true");
         return properties;
-    }
-
-    @Bean
-    public PlatformTransactionManager transactionManager() {
-        JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
-        return transactionManager;
     }
 }

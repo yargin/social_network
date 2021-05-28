@@ -2,6 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.tests;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
+import com.getjavajob.training.yarginy.socialnetwork.dao.configuration.TestDaoOverrideConfig;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacadeImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupDaoFacadeImpl;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsMembersDaoFacade;
@@ -25,7 +26,7 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.assertSame;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestOverrideSpringConfig.xml"})
+@ContextConfiguration(classes = {TestDaoOverrideConfig.class})
 public class GroupMembersModeratorsJpaTest {
     private static final Logger logger = LoggerFactory.getLogger(GroupMembersModeratorsJpaTest.class);
     @Autowired

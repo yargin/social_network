@@ -12,6 +12,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PhoneDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.utils.TransactionPerformer;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -59,6 +60,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @Transactional
     public boolean createAccount(Account account, Collection<Phone> phones) {
         account.setRegistrationDate(valueOf(now()));
         if (!accountDaoFacade.create(account)) {
@@ -71,6 +73,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @Transactional
     public boolean updateAccount(Account account, Collection<Phone> phones, Collection<Phone> storedPhones) {
         if (!accountDaoFacade.update(account)) {
             throw new IncorrectDataException(EMAIL_DUPLICATE);

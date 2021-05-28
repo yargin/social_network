@@ -2,6 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.tests;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Password;
+import com.getjavajob.training.yarginy.socialnetwork.dao.configuration.TestDaoOverrideConfig;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.AccountDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PasswordDaoFacade;
 import org.junit.After;
@@ -17,7 +18,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:daoSpringConfig.xml", "classpath:daoTestOverrideSpringConfig.xml"})
+@ContextConfiguration(classes = {TestDaoOverrideConfig.class})
 public class PasswordDaoFacadeTest {
     private final Account account = new Account("testName", "testSurname", "password@test.com");
     private final Password password = new Password();
