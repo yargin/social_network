@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.web.filters;
+package com.getjavajob.training.yarginy.socialnetwork.web.interceptors;
 
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Messages;
 import org.slf4j.Logger;
@@ -7,6 +7,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,8 +16,9 @@ import java.io.IOException;
 
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.LOGIN;
 
-public class LoginFailureFilter implements AuthenticationFailureHandler {
-    private static final Logger logger = LoggerFactory.getLogger(LoginFailureFilter.class);
+@Component
+public class LoginFailureHandler implements AuthenticationFailureHandler {
+    private static final Logger logger = LoggerFactory.getLogger(LoginFailureHandler.class);
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest req, HttpServletResponse resp, AuthenticationException e)
