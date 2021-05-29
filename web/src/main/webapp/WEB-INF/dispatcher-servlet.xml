@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns="http://www.springframework.org/schema/beans"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:websocket="http://www.springframework.org/schema/websocket"
@@ -11,165 +10,41 @@
        http://www.springframework.org/schema/context
        https://www.springframework.org/schema/context/spring-context.xsd
 
-       http://www.springframework.org/schema/mvc
-       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+
+
 
        http://www.springframework.org/schema/websocket
        http://www.springframework.org/schema/websocket/spring-websocket.xsd">
 
-    <import resource="classpath:serviceSpringConfig.xml"/>
+    <!--    <import resource="classpath:serviceSpringConfig.xml"/>-->
 
     <context:component-scan base-package="com.getjavajob.training.yarginy.socialnetwork.web"/>
+    <!--    todo check why this doesn't work-->
+    <!--    <bean class="com.getjavajob.training.yarginy.socialnetwork.web.configuration.WebConfig"/>-->
 
-    <mvc:annotation-driven/>
+    <!--    <mvc:annotation-driven/>-->
 
-    <bean class="org.springframework.context.support.ResourceBundleMessageSource" id="messageSource">
-        <property name="basenames">
-            <list>
-                <value>form</value>
-                <value>error</value>
-                <value>label</value>
-            </list>
-        </property>
-    </bean>
+    <!--    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">-->
+    <!--        <property name="maxUploadSize" value="16000000"/>-->
+    <!--    </bean>-->
 
-    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <property name="maxUploadSize" value="16000000"/>
-    </bean>
+    <!--    <bean id="jspViewsResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
+    <!--        <property name="prefix" value="/WEB-INF/jsps/"/>-->
+    <!--        <property name="suffix" value=".jsp"/>-->
+    <!--        <property name="order" value="1"/>-->
+    <!--    </bean>-->
 
-    <bean id="jspViewsResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix" value="/WEB-INF/jsps/"/>
-        <property name="suffix" value=".jsp"/>
-        <property name="order" value="1"/>
-    </bean>
-
-    <mvc:interceptors>
-        <mvc:interceptor>
-            <mvc:mapping path="/**"/>
-            <mvc:mapping path="/*"/>
-            <mvc:exclude-mapping path="/registration"/>
-            <mvc:exclude-mapping path="/login"/>
-            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.common.SessionAuthChecker"/>
-        </mvc:interceptor>
-
-        <mvc:interceptor>
-            <mvc:mapping path="/account/wall"/>
-            <mvc:mapping path="/account/requests"/>
-            <mvc:mapping path="/account/friends"/>
-            <mvc:mapping path="/account/dialogs"/>
-            <mvc:mapping path="/account/groups"/>
-            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.common.IdSetter"/>
-        </mvc:interceptor>
-
-        <mvc:interceptor>
-            <mvc:mapping path="/dialog/show*"/>
-            <mvc:mapping path="/group/wall**"/>
-            <mvc:mapping path="/group/moderators*"/>
-            <mvc:mapping path="/group/requests*"/>
-            <mvc:mapping path="/group/members*"/>
-            <mvc:mapping path="/group/delete*"/>
-            <mvc:mapping path="/group/update*"/>
-            <mvc:mapping path="/account/delete*"/>
-            <mvc:mapping path="/account/update*"/>
-            <mvc:mapping path="/account/savexml*"/>
-            <mvc:mapping path="/account/upload*"/>
-            <mvc:mapping path="/message/*/delete*"/>
-            <mvc:mapping path="/account/wall*"/>
-            <mvc:mapping path="/account/requests*"/>
-            <mvc:mapping path="/account/friends*"/>
-            <mvc:mapping path="/account/dialogs*"/>
-            <mvc:mapping path="/account/groups*"/>
-            <mvc:mapping path="/account/upgraderole*"/>
-            <mvc:mapping path="/account/downgraderole*"/>
-            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.common.OneIdInterceptor"/>
-        </mvc:interceptor>
-
-        <mvc:interceptor>
-            <mvc:mapping path="/message/**"/>
-            <mvc:mapping path="/dialog/create*"/>
-            <mvc:mapping path="/dialog/new*"/>
-            <mvc:mapping path="/friendship/*"/>
-            <mvc:mapping path="/group/moderators/add*"/>
-            <mvc:mapping path="/group/moderators/remove*"/>
-            <mvc:mapping path="/group/join*"/>
-            <mvc:mapping path="/group/leave*"/>
-            <mvc:mapping path="/group/accept*"/>
-            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.common.TwoIdsInterceptor"/>
-        </mvc:interceptor>
-
-        <mvc:interceptor>
-            <mvc:mapping path="/dialog/create*"/>
-            <mvc:mapping path="/dialog/new*"/>
-            <mvc:mapping path="/account/*"/>
-            <mvc:mapping path="/friendship/accept*"/>
-            <mvc:mapping path="/friendship/remove*"/>
-            <mvc:mapping path="/account/delete*"/>
-            <mvc:mapping path="/account/update*"/>
-            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.account.AccountAccessSetter"/>
-        </mvc:interceptor>
-
-        <mvc:interceptor>
-            <mvc:mapping path="/group/**"/>
-            <mvc:exclude-mapping path="/group/join*"/>
-            <mvc:exclude-mapping path="/group/create*"/>
-            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.group.GroupAccessSetter"/>
-        </mvc:interceptor>
-
-        <mvc:interceptor>
-            <mvc:mapping path="/dialog/show*"/>
-            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.dialog.DialogAccessChecker"/>
-        </mvc:interceptor>
-
-        <mvc:interceptor>
-            <mvc:mapping path="/message/**"/>
-            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.message.MessageAccessChecker"/>
-        </mvc:interceptor>
-
-        <mvc:interceptor>
-            <mvc:mapping path="/account/friends*"/>
-            <mvc:mapping path="/account/groups*"/>
-            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.account.AccountOwnerFriendChecker"/>
-        </mvc:interceptor>
-
-        <mvc:interceptor>
-            <mvc:mapping path="/account/requests*"/>
-            <mvc:mapping path="/account/dialogs*"/>
-            <mvc:mapping path="/friendship/accept*"/>
-            <mvc:mapping path="/friendship/remove*"/>
-            <mvc:mapping path="/account/delete*"/>
-            <mvc:mapping path="/account/update*"/>
-            <mvc:mapping path="/account/savexml*"/>
-            <mvc:mapping path="account/upload*"/>
-            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.account.AccountOwnerChecker"/>
-        </mvc:interceptor>
-
-        <mvc:interceptor>
-            <mvc:mapping path="/group/moderators/*"/>
-            <mvc:mapping path="/group/requests*"/>
-            <mvc:mapping path="/group/accept*"/>
-            <mvc:mapping path="/group/delete*"/>
-            <mvc:mapping path="/group/update*"/>
-            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.group.GroupModerOwnerChecker"/>
-        </mvc:interceptor>
-
-        <mvc:interceptor>
-            <mvc:mapping path="/group/members*"/>
-            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.group.GroupMemberModerOwnerChecker"/>
-        </mvc:interceptor>
-
-        <mvc:interceptor>
-            <mvc:mapping path="/group/leave*"/>
-            <bean class="com.getjavajob.training.yarginy.socialnetwork.web.interceptors.group.GroupMemberModerOwnerChecker"/>
-        </mvc:interceptor>
-    </mvc:interceptors>
+    <!--    <mvc:interceptors>-->
+    <!--        </mvc:interceptor>-->
+    <!--    </mvc:interceptors>-->
 
     <!--    <mvc:resources mapping="/webjars/**" location=""/>-->
-    <mvc:resources mapping="/css/**" location="css"/>
-    <mvc:resources mapping="/js/**" location="js"/>
-    <mvc:resources mapping="/img/**" location="img"/>
-    <mvc:resources mapping="/font/**" location="font"/>
+    <!--    <mvc:resources mapping="/css/**" location="css"/>-->
+    <!--    <mvc:resources mapping="/js/**" location="js"/>-->
+    <!--    <mvc:resources mapping="/img/**" location="img"/>-->
+    <!--    <mvc:resources mapping="/font/**" location="font"/>-->
 
-<!--    add prefix to all messages send to application-->
+    <!--    add prefix to all messages send to application-->
     <websocket:message-broker>
         <websocket:transport message-size="16000000" send-buffer-size="2000000" send-timeout="200000"/>
         <!--        stomp connection address-->

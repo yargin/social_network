@@ -4,7 +4,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ComponentScan({"com.getjavajob.training.yarginy.socialnetwork.common.models",
-        "com.getjavajob.training.yarginy.socialnetwork.common.utils"})
+@ComponentScan({"com.getjavajob.training.yarginy.socialnetwork.common"})
 public class CommonConfiguration {
 }
