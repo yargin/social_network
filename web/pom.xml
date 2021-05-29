@@ -181,14 +181,24 @@
                     <appName>yarginy-socnet</appName>
                     <processTypes>
                         <!-- @formatter:off -->
-                        <web>java $JAVA_OPTS -cp target/dependency/webapp-runner.jar:target/dependency/tomcat-dbcp.jar
-                            webapp.runner.launch.Main --enable-naming --context-xml
-                            target/web-1.0.0-SNAPSHOT/META-INF/heroku-context.xml $WEBAPP_RUNNER_OPTS --port $PORT
-                            target/web-1.0.0-SNAPSHOT.war
-                        </web>
+                        <web>java $JAVA_OPTS -cp target/dependency/webapp-runner.jar:target/dependency/tomcat-dbcp.jar webapp.runner.launch.Main --enable-naming --context-xml  target/web-1.0.0-SNAPSHOT/META-INF/heroku-context.xml $WEBAPP_RUNNER_OPTS --port $PORT target/web-1.0.0-SNAPSHOT.war</web>
                         <!-- @formatter:on -->
                     </processTypes>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-war</id>
+                        <phase>prepare-package</phase>
+                        <configuration>
+                            <failOnMissingWebXml>false</failOnMissingWebXml>
+                            <archiveClasses>false</archiveClasses>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

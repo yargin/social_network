@@ -19,7 +19,6 @@ import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pag
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().anonymous().disable();

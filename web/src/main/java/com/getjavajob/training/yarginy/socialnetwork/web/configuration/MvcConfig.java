@@ -1,5 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.configuration;
 
+import com.getjavajob.training.yarginy.socialnetwork.service.configuration.ServiceConfig;
 import com.getjavajob.training.yarginy.socialnetwork.web.interceptors.account.AccountAccessSetter;
 import com.getjavajob.training.yarginy.socialnetwork.web.interceptors.account.AccountOwnerChecker;
 import com.getjavajob.training.yarginy.socialnetwork.web.interceptors.account.AccountOwnerFriendChecker;
@@ -14,20 +15,33 @@ import com.getjavajob.training.yarginy.socialnetwork.web.interceptors.group.Grou
 import com.getjavajob.training.yarginy.socialnetwork.web.interceptors.message.MessageAccessChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebMvc
+@ComponentScan("com.getjavajob.training.yarginy.socialnetwork.web")
+@Import(ServiceConfig.class)
 public class MvcConfig implements WebMvcConfigurer {
     private final ApplicationContext context;
 
     @Autowired
     public MvcConfig(ApplicationContext context) {
         this.context = context;
+    }
+
+    @Override
+    public void configureViewResolvers(ViewResolverRegistry registry) {
+        registry.jsp("/WEB-INF/jsps/", ".jsp");
     }
 
     @Override
@@ -66,5 +80,19 @@ public class MvcConfig implements WebMvcConfigurer {
                 "/group/requests*", "/group/accept*", "/group/delete*", "/group/update*");
         registry.addInterceptor(context.getBean(GroupMemberModerOwnerChecker.class)).addPathPatterns("/group/members*",
                 "/group/leave*");
+    }
+
+    @Bean
+    public ResourceBundleMessageSource resourceBundleMessageSource() {
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setBasenames("form", "error", "label");
+        return messageSource;
+    }
+
+    @Bean
+    public CommonsMultipartResolver commonsMultipartResolver() {
+        CommonsMultipartResolver resolver = new CommonsMultipartResolver();
+        resolver.setMaxUploadSize(16_000_000L);
+        return resolver;
     }
 }
