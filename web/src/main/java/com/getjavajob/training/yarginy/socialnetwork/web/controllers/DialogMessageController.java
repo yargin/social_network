@@ -30,7 +30,7 @@ public class DialogMessageController {
     public void addDialogMessage(@RequestBody DialogMessageDto messageDto) {
         DialogMessage message = dtoMapper.getDialogMessage(messageDto);
         if ((!messageDto.getText().isEmpty() || !messageDto.getImage().isEmpty()) && messagesService.addMessage(message)) {
-            messageDto.setId(Long.toString(+message.getId()));
+            messageDto.setId(Long.toString(message.getId()));
             Account author = message.getAuthor();
             messageDto.setAuthorName(author.getName());
             messageDto.setAuthorSurname(author.getSurname());

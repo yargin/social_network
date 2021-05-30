@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.web.interceptors;
+package com.getjavajob.training.yarginy.socialnetwork.web.interceptors.security;
 
 import com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Messages;
 import org.slf4j.Logger;

@@ -36,7 +36,7 @@
     <div id="messagesShow"></div>
 
     <template id="template">
-        <div class="wallMessage" id="dialogMessage" style="display: none">
+        <div class="wallMessage" id="dialogMessage">
             <div>
                 <p id="dateLabel">${date}: </p>
                 <p id="authorLabel">${author}: <a id="authorLink"></a></p>

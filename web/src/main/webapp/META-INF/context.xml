@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!--todo why dbcp recommended-->
+<!--todo class structure-->
+<!--todo controller advice-->
 <Context>
     <Resource name="jdbc/DbConnection" auth="Container" type="javax.sql.DataSource"
               factory="com.zaxxer.hikari.HikariJNDIFactory"

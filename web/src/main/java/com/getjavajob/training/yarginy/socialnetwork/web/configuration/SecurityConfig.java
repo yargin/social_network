@@ -2,7 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.web.configuration;
 
 import com.getjavajob.training.yarginy.socialnetwork.dao.facades.PasswordDaoFacade;
 import com.getjavajob.training.yarginy.socialnetwork.service.AuthService;
-import com.getjavajob.training.yarginy.socialnetwork.web.interceptors.LoginFailureHandler;
+import com.getjavajob.training.yarginy.socialnetwork.web.interceptors.security.LoginFailureHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
