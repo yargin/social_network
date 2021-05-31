@@ -24,8 +24,8 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
 @EnableWebMvc
@@ -37,11 +37,6 @@ public class MvcConfig implements WebMvcConfigurer {
     @Autowired
     public MvcConfig(ApplicationContext context) {
         this.context = context;
-    }
-
-    @Override
-    public void configureViewResolvers(ViewResolverRegistry registry) {
-        registry.jsp("/WEB-INF/jsps/", ".jsp");
     }
 
     @Override
@@ -83,16 +78,21 @@ public class MvcConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public ResourceBundleMessageSource resourceBundleMessageSource() {
+    public ResourceBundleMessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
         messageSource.setBasenames("form", "error", "label");
         return messageSource;
     }
 
     @Bean
-    public CommonsMultipartResolver commonsMultipartResolver() {
+    public CommonsMultipartResolver multipartResolver() {
         CommonsMultipartResolver resolver = new CommonsMultipartResolver();
         resolver.setMaxUploadSize(16_000_000L);
         return resolver;
+    }
+
+    @Bean
+    public InternalResourceViewResolver jspViewsResolver() {
+        return new InternalResourceViewResolver("/WEB-INF/jsps/", ".jsp");
     }
 }

@@ -1,5 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.configuration;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
@@ -10,9 +11,10 @@ import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
 
+
 public class WebInitializer implements WebApplicationInitializer {
     @Override
-    public void onStartup(ServletContext servletContext) {
+    public void onStartup(@NotNull ServletContext servletContext) {
         AnnotationConfigWebApplicationContext webCtx = new AnnotationConfigWebApplicationContext();
         webCtx.register(MvcConfig.class, SecurityConfig.class, WebSocketConfig.class);
         webCtx.setServletContext(servletContext);
