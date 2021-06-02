@@ -1,6 +1,5 @@
 package com.getjavajob.training.yarginy.socialnetwork.web.configuration;
 
-import com.getjavajob.training.yarginy.socialnetwork.service.configuration.ServiceConfig;
 import com.getjavajob.training.yarginy.socialnetwork.web.interceptors.account.AccountAccessSetter;
 import com.getjavajob.training.yarginy.socialnetwork.web.interceptors.account.AccountOwnerChecker;
 import com.getjavajob.training.yarginy.socialnetwork.web.interceptors.account.AccountOwnerFriendChecker;
@@ -15,22 +14,11 @@ import com.getjavajob.training.yarginy.socialnetwork.web.interceptors.group.Grou
 import com.getjavajob.training.yarginy.socialnetwork.web.interceptors.message.MessageAccessChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
-@EnableWebMvc
-@ComponentScan("com.getjavajob.training.yarginy.socialnetwork.web")
-@Import(ServiceConfig.class)
 public class MvcConfig implements WebMvcConfigurer {
     private final ApplicationContext context;
 
@@ -40,17 +28,10 @@ public class MvcConfig implements WebMvcConfigurer {
     }
 
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/css/**").addResourceLocations("css");
-        registry.addResourceHandler("/js/**").addResourceLocations("js");
-        registry.addResourceHandler("/img/**").addResourceLocations("img");
-        registry.addResourceHandler("/font/**").addResourceLocations("font");
-    }
-
-    @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(context.getBean(SessionAuthChecker.class)).addPathPatterns("/**", "/*").
-                excludePathPatterns("/login", "/registration");
+                excludePathPatterns("/login", "/registration", "/error", "/css/**", "/js/**", "/font/**", "/img/**",
+                        "/webjars/**");
         registry.addInterceptor(context.getBean(IdSetter.class)).addPathPatterns("/account/wall", "/account/requests",
                 "/account/friends", "/account/dialogs", "/account/groups");
         registry.addInterceptor(context.getBean(OneIdInterceptor.class)).addPathPatterns("/account/**", "/group/wall*",
@@ -75,24 +56,5 @@ public class MvcConfig implements WebMvcConfigurer {
                 "/group/requests*", "/group/accept*", "/group/delete*", "/group/update*");
         registry.addInterceptor(context.getBean(GroupMemberModerOwnerChecker.class)).addPathPatterns("/group/members*",
                 "/group/leave*");
-    }
-
-    @Bean
-    public ResourceBundleMessageSource messageSource() {
-        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-        messageSource.setBasenames("form", "error", "label");
-        return messageSource;
-    }
-
-    @Bean
-    public CommonsMultipartResolver multipartResolver() {
-        CommonsMultipartResolver resolver = new CommonsMultipartResolver();
-        resolver.setMaxUploadSize(16_000_000L);
-        return resolver;
-    }
-
-    @Bean
-    public InternalResourceViewResolver jspViewsResolver() {
-        return new InternalResourceViewResolver("/WEB-INF/jsps/", ".jsp");
     }
 }

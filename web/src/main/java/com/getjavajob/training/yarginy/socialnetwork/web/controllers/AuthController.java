@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.ACCOUNT_WALL;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.LOGIN;
 import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Pages.REDIRECT;
-import static com.getjavajob.training.yarginy.socialnetwork.web.staticvalues.Views.LOGIN_VIEW;
 import static java.util.Objects.isNull;
 
 @Controller
@@ -35,7 +34,7 @@ public class AuthController {
         if (!isNull(authentication) && authentication.isAuthenticated()) {
             return redirector.redirectBackView(req);
         } else {
-            return LOGIN_VIEW;
+            return "login";
         }
     }
 

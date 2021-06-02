@@ -37,10 +37,12 @@ public class SessionAuthChecker extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession(true);
         logger.info("=================NEW CHAIN==================");
+        logger.info(request.getRequestURI());
         Object userIdObject = session.getAttribute(USER_ID);
         if (isNull(userIdObject)) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (isNull(authentication)) {
+                logger.info("no current user's session");
                 redirector.redirect(request, response, LOGIN);
                 return false;
             }

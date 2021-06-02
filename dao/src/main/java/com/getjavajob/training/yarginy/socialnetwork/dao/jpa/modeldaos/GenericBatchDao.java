@@ -1,6 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.jpa.modeldaos;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.PersistenceException;
@@ -17,7 +18,7 @@ public abstract class GenericBatchDao<E extends Model> extends GenericDao<E> imp
                 entityManager.persist(entity);
             }
             entityManager.flush();
-        } catch (PersistenceException e) {
+        } catch (DataIntegrityViolationException | PersistenceException e) {
             throw new IllegalArgumentException(e);
         }
     }

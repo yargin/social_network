@@ -1,10 +1,10 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.configuration;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.configuration.CommonConfiguration;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
@@ -22,7 +22,7 @@ import java.util.Properties;
 @Import(CommonConfiguration.class)
 @ComponentScan({"com.getjavajob.training.yarginy.socialnetwork.dao"})
 @EnableTransactionManagement
-@EnableAspectJAutoProxy(proxyTargetClass = true)
+//@EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableJpaRepositories("com.getjavajob.training.yarginy.socialnetwork.dao.repositories")
 public class DaoConfiguration {
     @Bean
@@ -32,7 +32,17 @@ public class DaoConfiguration {
 
     @Bean
     public DataSource dataSource() {
-        return jndiDataSourceLookup().getDataSource("jdbc/DbConnection");
+        HikariDataSource dataSource = new HikariDataSource();
+        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/social_network?serverTimezone=UTC");
+        dataSource.setUsername("root");
+        dataSource.setPassword("12131415a");
+        //todo if present - cp ignores jdbc url WHY????
+//        dataSource.setDataSourceClassName("com.mysql.cj.jdbc.MysqlDataSource");
+//        dataSource.setDriverClassName("com.mysql.");
+        dataSource.setMinimumIdle(2);
+        dataSource.setMaximumPoolSize(10);
+        dataSource.setConnectionTimeout(10000);
+        return dataSource;
     }
 
     @Bean
