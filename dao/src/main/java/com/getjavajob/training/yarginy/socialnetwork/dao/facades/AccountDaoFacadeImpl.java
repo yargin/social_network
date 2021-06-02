@@ -56,7 +56,14 @@ public class AccountDaoFacadeImpl implements AccountDaoFacade {
 
     @Override
     public boolean create(Account account) {
-        return transactionPerformer.transactionPerformed(accountDao::create, account);
+        //todo
+//        return transactionPerformer.transactionPerformed(accountDao::create, account);
+        try {
+            accountDao.create(account);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+        return true;
     }
 
     @Override

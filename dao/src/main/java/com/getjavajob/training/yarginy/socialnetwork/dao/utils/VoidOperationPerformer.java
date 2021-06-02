@@ -2,5 +2,5 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.utils;
 
 @FunctionalInterface
 public interface VoidOperationPerformer {
-    void performOperation();
+    void performOperation() throws IllegalArgumentException;
 }

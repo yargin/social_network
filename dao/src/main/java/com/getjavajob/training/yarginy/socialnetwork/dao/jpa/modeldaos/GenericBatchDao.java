@@ -19,6 +19,7 @@ public abstract class GenericBatchDao<E extends Model> extends GenericDao<E> imp
             }
             entityManager.flush();
         } catch (DataIntegrityViolationException | PersistenceException e) {
+            e.printStackTrace();
             throw new IllegalArgumentException(e);
         }
     }
@@ -31,6 +32,7 @@ public abstract class GenericBatchDao<E extends Model> extends GenericDao<E> imp
                 Query query = getDeleteByAltKeyQuery(entity);
                 query.executeUpdate();
             } catch (PersistenceException e) {
+                e.printStackTrace();
                 throw new IllegalArgumentException(e);
             }
         }

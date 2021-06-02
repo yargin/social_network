@@ -12,7 +12,14 @@ import java.util.function.Consumer;
 public class TransactionPerformer implements Serializable {
     //for model crud operations
     public <E extends Model> boolean transactionPerformed(Consumer<E> consumer, E model) {
-        return perform(() -> consumer.accept(model));
+//        return perform(() -> consumer.accept(model));
+        //todo
+        try {
+            consumer.accept(model);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 
     //for models batch updates

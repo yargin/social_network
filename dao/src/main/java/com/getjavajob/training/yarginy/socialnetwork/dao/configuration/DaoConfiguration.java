@@ -5,6 +5,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
@@ -22,7 +23,7 @@ import java.util.Properties;
 @Import(CommonConfiguration.class)
 @ComponentScan({"com.getjavajob.training.yarginy.socialnetwork.dao"})
 @EnableTransactionManagement
-//@EnableAspectJAutoProxy(proxyTargetClass = true)
+@EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableJpaRepositories("com.getjavajob.training.yarginy.socialnetwork.dao.repositories")
 public class DaoConfiguration {
     @Bean

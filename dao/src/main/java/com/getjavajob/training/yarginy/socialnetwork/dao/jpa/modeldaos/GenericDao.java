@@ -1,7 +1,9 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.jpa.modeldaos;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -16,6 +18,7 @@ import java.util.Collection;
 import static java.util.Objects.isNull;
 
 public abstract class GenericDao<E extends Model> implements Dao<E> {
+    public static final Logger logger = LoggerFactory.getLogger(GenericDao.class);
     @PersistenceContext
     protected transient EntityManager entityManager;
 
@@ -57,8 +60,9 @@ public abstract class GenericDao<E extends Model> implements Dao<E> {
             prepareModelRelations(model);
             entityManager.persist(model);
             entityManager.flush();
-        } catch (DataIntegrityViolationException | PersistenceException e) {
-            throw new IllegalArgumentException(e);
+        } catch (DataAccessException | PersistenceException e) {
+            logger.error("exception stack trace ", e);
+            throw new IllegalArgumentException("wrong entity parameters or entity already exists");
         }
     }
 
@@ -74,8 +78,10 @@ public abstract class GenericDao<E extends Model> implements Dao<E> {
             }
             entityManager.merge(model);
         } catch (OptimisticLockException e) {
+            e.printStackTrace();
             throw new IllegalStateException(e);
         } catch (RuntimeException e) {
+            e.printStackTrace();
             throw new IllegalArgumentException(e);
         }
         model.setVersion(model.getVersion() + 1);
@@ -88,6 +94,7 @@ public abstract class GenericDao<E extends Model> implements Dao<E> {
             E entityToDelete = getModelReference(model);
             entityManager.remove(entityToDelete);
         } catch (RuntimeException e) {
+            e.printStackTrace();
             throw new IllegalArgumentException(e);
         }
     }
