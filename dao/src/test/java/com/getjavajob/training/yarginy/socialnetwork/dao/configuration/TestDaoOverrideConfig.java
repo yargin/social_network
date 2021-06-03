@@ -1,6 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.configuration;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.configuration.CommonConfiguration;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -8,7 +9,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -31,14 +31,22 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 @EnableJpaRepositories("com.getjavajob.training.yarginy.socialnetwork.dao.repositories")
 public class TestDaoOverrideConfig {
-    @Primary
+    @Value("${test.datasource.url}")
+    private String url;
+    @Value("${test.datasource.username}")
+    private String user;
+    @Value("${test.datasource.driver-class-name}")
+    private String driver;
+    @Value("${test.datasource.init-script-location}")
+    private String initScriptLocation;
+
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setUrl("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;MODE=MYSQL;DATABASE_TO_UPPER=false");
-        dataSource.setUsername("sa");
-        dataSource.setDriverClassName("org.h2.Driver");
-        Resource resource = new ClassPathResource("H2scripts/creation_script.sql");
+        dataSource.setUrl(url);
+        dataSource.setUsername(user);
+        dataSource.setDriverClassName(driver);
+        Resource resource = new ClassPathResource(initScriptLocation);
         DatabasePopulator populator = new ResourceDatabasePopulator(resource);
         DatabasePopulatorUtils.execute(populator, dataSource);
         return dataSource;

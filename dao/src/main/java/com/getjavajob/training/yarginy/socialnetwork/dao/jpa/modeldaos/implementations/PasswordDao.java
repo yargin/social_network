@@ -45,7 +45,7 @@ public class PasswordDao extends GenericDao<Password> {
 
     @Override
     protected Password getModelReference(Password password) {
-        return entityManager.getReference(Password.class, password.getAccount());
+        return entityManager.getReference(Password.class, password.getAccount().getId());
     }
 
     @Override
