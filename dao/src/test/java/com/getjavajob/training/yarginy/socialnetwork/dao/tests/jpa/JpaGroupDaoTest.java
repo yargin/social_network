@@ -10,9 +10,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.sql.DataSource;
 import java.util.Collection;
 
 import static java.sql.Date.valueOf;
@@ -22,14 +23,16 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {TestDaoOverrideConfig.class})
+@SpringBootTest(classes = {TestDaoOverrideConfig.class})
 public class JpaGroupDaoTest {
-    private final Account owner= new Account("testOwnerName", "testOwnerSurname", "testOwnerEmail");
+    private final Account owner = new Account("testOwnerName", "testOwnerSurname", "testOwnerEmail");
     private Group group = new Group("testName", owner);
     @Autowired
     private GroupDaoFacadeImpl groupDao;
     @Autowired
     private AccountDaoFacadeImpl accountDao;
+    @Autowired
+    DataSource dataSource;
 
     @Before
     public void initValues() {

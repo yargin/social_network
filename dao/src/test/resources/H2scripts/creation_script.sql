@@ -15,8 +15,16 @@ DROP TABLE IF EXISTS `accounts`;
 
 CREATE TABLE IF NOT EXISTS `accounts`
 (
-    `id`                BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    `name`              VARCHAR(40) NOT NULL,
+    `id`
+    BIGINT
+    AUTO_INCREMENT
+    PRIMARY
+    KEY,
+    `name`
+    VARCHAR
+(
+    40
+) NOT NULL,
     `surname`           VARCHAR(40) NOT NULL,
     `patronymic`        VARCHAR(40),
     `sex`               CHAR(6),
@@ -153,13 +161,13 @@ ALTER TABLE `friendships_requests`
 
 CREATE TABLE `account_wall_messages`
 (
-    `id`          bigint unsigned NOT NULL AUTO_INCREMENT,
+    `id`          bigint AUTO_INCREMENT NOT NULL PRIMARY KEY,
     `author`      bigint unsigned NOT NULL,
     `message`     varchar(500),
     `image`       mediumblob,
     `receiver_id` bigint unsigned NOT NULL,
-    `posted`      datetime        NOT NULL,
-    `version`     BIGINT          NOT NULL
+    `posted`      datetime NOT NULL,
+    `version`     BIGINT   NOT NULL
 );
 
 ALTER TABLE `account_wall_messages`

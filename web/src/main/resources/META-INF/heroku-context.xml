@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Context>
+    <Resource name="jdbc/DbConnection" auth="Container" type="javax.sql.DataSource"
+              factory="com.zaxxer.hikari.HikariJNDIFactory"
+              minimumIdle="2" maximumPoolSize="3" maxWaitMillis="10000"
+              connectionTimeout="10000"
+              dataSourceClassName="com.mysql.cj.jdbc.MysqlDataSource"
+              dataSource.url="jdbc:mysql://q2gen47hi68k1yrb.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/crmpcpc571dqa7ra?useSSL=false"
+              dataSource.user="ob3tdoreg91spqkc" dataSource.password="tpkl0gslmimomhgg"/>
+</Context>
