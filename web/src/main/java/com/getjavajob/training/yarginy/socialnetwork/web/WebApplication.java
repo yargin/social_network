@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.web.configuration;
+package com.getjavajob.training.yarginy.socialnetwork.web;
 
 import com.getjavajob.training.yarginy.socialnetwork.service.configuration.ServiceConfig;
 import org.springframework.boot.SpringApplication;

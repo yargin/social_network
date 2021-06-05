@@ -31,7 +31,7 @@ public class MvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(context.getBean(SessionAuthChecker.class)).addPathPatterns("/**", "/*").
                 excludePathPatterns("/login", "/registration", "/error", "/css/**", "/js/**", "/font/**", "/img/**",
-                        "/webjars/**");
+                        "/webjars/**", "/favicon.ico");
         registry.addInterceptor(context.getBean(IdSetter.class)).addPathPatterns("/account/wall", "/account/requests",
                 "/account/friends", "/account/dialogs", "/account/groups");
         registry.addInterceptor(context.getBean(OneIdInterceptor.class)).addPathPatterns("/account/**", "/group/wall*",
