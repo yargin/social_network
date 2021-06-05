@@ -101,7 +101,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean addFriend(long firstId, long secondId) {
-        return transactionPerformer.transactionPerformed(serviceTransactional::addFriendTransactional, firstId, secondId);
+        return transactionPerformer.perform(() -> serviceTransactional.addFriendTransactional(firstId, secondId));
     }
 
     @Override

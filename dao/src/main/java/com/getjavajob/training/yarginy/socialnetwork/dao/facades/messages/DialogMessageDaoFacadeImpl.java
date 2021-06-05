@@ -33,17 +33,17 @@ public class DialogMessageDaoFacadeImpl implements DialogMessageDaoFacade {
 
     @Override
     public boolean create(DialogMessage message) {
-        return transactionPerformer.transactionPerformed(dialogMessageDao::create, message);
+        return transactionPerformer.perform(() -> dialogMessageDao.create(message));
     }
 
     @Override
     public boolean update(DialogMessage message) {
-        return transactionPerformer.transactionPerformed(dialogMessageDao::update, message);
+        return transactionPerformer.perform(() -> dialogMessageDao.update(message));
     }
 
     @Override
     public boolean delete(DialogMessage message) {
-        return transactionPerformer.transactionPerformed(dialogMessageDao::delete, message);
+        return transactionPerformer.perform(() -> dialogMessageDao.delete(message));
     }
 
     @Override

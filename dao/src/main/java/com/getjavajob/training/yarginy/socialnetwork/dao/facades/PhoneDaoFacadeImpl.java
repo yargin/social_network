@@ -38,27 +38,27 @@ public class PhoneDaoFacadeImpl implements PhoneDaoFacade {
 
     @Override
     public boolean create(Phone phone) {
-        return transactionPerformer.transactionPerformed(phoneDao::create, phone);
+        return transactionPerformer.perform(() -> phoneDao.create(phone));
     }
 
     @Override
     public boolean update(Phone phone) {
-        return transactionPerformer.transactionPerformed(phoneDao::update, phone);
+        return transactionPerformer.perform(() -> phoneDao.update(phone));
     }
 
     @Override
     public boolean update(Collection<Phone> storedPhones, Collection<Phone> newPhones) {
-        return transactionPerformer.transactionPerformed(phoneDao::update, storedPhones, newPhones);
+        return transactionPerformer.perform(() -> phoneDao.update(storedPhones, newPhones));
     }
 
     @Override
     public boolean delete(Phone phone) {
-        return transactionPerformer.transactionPerformed(phoneDao::delete, phone);
+        return transactionPerformer.perform(() -> phoneDao.delete(phone));
     }
 
     @Override
     public boolean delete(Collection<Phone> phones) {
-        return transactionPerformer.transactionPerformed(phoneDao::delete, phones);
+        return transactionPerformer.perform(() -> phoneDao.delete(phones));
     }
 
     @Override
@@ -78,6 +78,6 @@ public class PhoneDaoFacadeImpl implements PhoneDaoFacade {
 
     @Override
     public boolean create(Collection<Phone> phones) {
-        return transactionPerformer.transactionPerformed(phoneDao::create, phones);
+        return transactionPerformer.perform(() -> phoneDao.create(phones));
     }
 }

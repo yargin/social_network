@@ -34,17 +34,17 @@ public class GroupWallMessageFacadeDaoImpl implements GroupWallMessageDaoFacade 
 
     @Override
     public boolean create(GroupWallMessage message) {
-        return transactionPerformer.transactionPerformed(groupWallMessageDao::create, message);
+        return transactionPerformer.perform(() -> groupWallMessageDao.create(message));
     }
 
     @Override
     public boolean update(GroupWallMessage message) {
-        return transactionPerformer.transactionPerformed(groupWallMessageDao::update, message);
+        return transactionPerformer.perform(() -> groupWallMessageDao.update(message));
     }
 
     @Override
     public boolean delete(GroupWallMessage message) {
-        return transactionPerformer.transactionPerformed(groupWallMessageDao::delete, message);
+        return transactionPerformer.perform(() -> groupWallMessageDao.delete(message));
     }
 
     @Override

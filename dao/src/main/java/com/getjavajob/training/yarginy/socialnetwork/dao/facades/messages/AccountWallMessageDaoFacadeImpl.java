@@ -34,17 +34,17 @@ public class AccountWallMessageDaoFacadeImpl implements AccountWallMessageDaoFac
 
     @Override
     public boolean create(AccountWallMessage message) {
-        return transactionPerformer.transactionPerformed(accountWallMessageDao::create, message);
+        return transactionPerformer.perform(() -> accountWallMessageDao.create(message));
     }
 
     @Override
     public boolean update(AccountWallMessage message) {
-        return transactionPerformer.transactionPerformed(accountWallMessageDao::update, message);
+        return transactionPerformer.perform(() -> accountWallMessageDao.update(message));
     }
 
     @Override
     public boolean delete(AccountWallMessage message) {
-        return transactionPerformer.transactionPerformed(accountWallMessageDao::delete, message);
+        return transactionPerformer.perform(() -> accountWallMessageDao.delete(message));
     }
 
     @Override

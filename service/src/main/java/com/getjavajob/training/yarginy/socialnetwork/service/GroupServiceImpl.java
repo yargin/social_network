@@ -64,8 +64,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public boolean acceptRequest(long accountId, long groupId) {
-        return transactionPerformer.transactionPerformed(serviceTransactional::acceptRequestTransactional,
-                accountId, groupId);
+        return transactionPerformer.perform(() -> serviceTransactional.acceptRequestTransactional(accountId, groupId));
     }
 
     @Override
@@ -117,7 +116,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public boolean createGroup(Group group) {
-        return transactionPerformer.transactionPerformed(serviceTransactional::createGroupAndInviteOwner, group);
+        return transactionPerformer.perform(() -> serviceTransactional.createGroupAndInviteOwner(group));
     }
 
     @Override

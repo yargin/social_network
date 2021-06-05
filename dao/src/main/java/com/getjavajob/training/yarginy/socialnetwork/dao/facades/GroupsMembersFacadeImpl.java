@@ -35,12 +35,12 @@ public class GroupsMembersFacadeImpl implements GroupsMembersDaoFacade {
 
     @Override
     public boolean joinGroup(long accountId, long groupId) {
-        return transactionPerformer.transactionPerformed(groupMembershipDao::create, accountId, groupId);
+        return transactionPerformer.perform(() -> groupMembershipDao.create(accountId, groupId));
     }
 
     @Override
     public boolean leaveGroup(long accountId, long groupId) {
-        return transactionPerformer.transactionPerformed(groupMembershipDao::delete, accountId, groupId);
+        return transactionPerformer.perform(() -> groupMembershipDao.delete(accountId, groupId));
     }
 
     @Override
@@ -55,12 +55,12 @@ public class GroupsMembersFacadeImpl implements GroupsMembersDaoFacade {
 
     @Override
     public boolean createRequest(long accountId, long groupId) {
-        return transactionPerformer.transactionPerformed(membershipRequestsDao::create, accountId, groupId);
+        return transactionPerformer.perform(() -> membershipRequestsDao.create(accountId, groupId));
     }
 
     @Override
     public boolean removeRequest(long accountId, long groupId) {
-        return transactionPerformer.transactionPerformed(membershipRequestsDao::delete, accountId, groupId);
+        return transactionPerformer.perform(() -> membershipRequestsDao.delete(accountId, groupId));
     }
 
     @Override

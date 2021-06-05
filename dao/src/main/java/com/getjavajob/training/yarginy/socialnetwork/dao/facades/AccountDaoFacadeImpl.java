@@ -56,22 +56,22 @@ public class AccountDaoFacadeImpl implements AccountDaoFacade {
 
     @Override
     public boolean create(Account account) {
-        return transactionPerformer.transactionPerformed(accountDao::create, account);
+        return transactionPerformer.perform(() -> accountDao.create(account));
     }
 
     @Override
     public boolean update(Account account) {
-        return transactionPerformer.transactionPerformed(accountDao::update, account);
+        return transactionPerformer.perform(() -> accountDao.update(account));
     }
 
     @Override
     public boolean delete(Account account) {
-        return transactionPerformer.transactionPerformed(accountDao::delete, account);
+        return transactionPerformer.perform(() -> accountDao.delete(account));
     }
 
     @Override
     public boolean setRole(Account account, Role role) {
-        return transactionPerformer.transactionPerformed(accountDao::setRole, account, role);
+        return transactionPerformer.perform(() -> accountDao.setRole(account, role));
     }
 
     @Override

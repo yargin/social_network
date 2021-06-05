@@ -93,6 +93,7 @@ public abstract class GenericDao<E extends Model> implements Dao<E> {
         try {
             E entityToDelete = getModelReference(model);
             entityManager.remove(entityToDelete);
+            //todo persistence exception?
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new IllegalArgumentException(e);

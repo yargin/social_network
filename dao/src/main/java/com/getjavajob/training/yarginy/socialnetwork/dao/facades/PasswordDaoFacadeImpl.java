@@ -32,12 +32,12 @@ public class PasswordDaoFacadeImpl implements PasswordDaoFacade {
 
     @Override
     public boolean create(Password password) {
-        return transactionPerformer.transactionPerformed(passwordDao::create, password);
+        return transactionPerformer.perform(() -> passwordDao.create(password));
     }
 
     @Override
     public boolean delete(Password password) {
-        return transactionPerformer.transactionPerformed(passwordDao::delete, password);
+        return transactionPerformer.perform(() -> passwordDao.delete(password));
     }
 
     @Override

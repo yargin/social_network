@@ -28,12 +28,12 @@ public class FriendshipsDaoFacadeImpl implements FriendshipsDaoFacade {
 
     @Override
     public boolean createFriendship(long firstId, long secondId) {
-        return transactionPerformer.transactionPerformed(friendshipDao::create, firstId, secondId);
+        return transactionPerformer.perform(() -> friendshipDao.create(firstId, secondId));
     }
 
     @Override
     public boolean removeFriendship(long firstId, long secondId) {
-        return transactionPerformer.transactionPerformed(friendshipDao::delete, firstId, secondId);
+        return transactionPerformer.perform(() -> friendshipDao.delete(firstId, secondId));
     }
 
     @Override
@@ -43,12 +43,12 @@ public class FriendshipsDaoFacadeImpl implements FriendshipsDaoFacade {
 
     @Override
     public boolean createRequest(long requesterId, long receiverId) {
-        return transactionPerformer.transactionPerformed(friendshipRequestsDao::create, requesterId, receiverId);
+        return transactionPerformer.perform(() -> friendshipRequestsDao.create(requesterId, receiverId));
     }
 
     @Override
     public boolean deleteRequest(long requesterId, long receiverId) {
-        return transactionPerformer.transactionPerformed(friendshipRequestsDao::delete, requesterId, receiverId);
+        return transactionPerformer.perform(() -> friendshipRequestsDao.delete(requesterId, receiverId));
     }
 
     @Override

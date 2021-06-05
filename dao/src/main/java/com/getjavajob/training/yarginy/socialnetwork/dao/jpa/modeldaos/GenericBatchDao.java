@@ -14,9 +14,7 @@ public abstract class GenericBatchDao<E extends Model> extends GenericDao<E> imp
     @Transactional
     public void create(Collection<E> entities) {
         try {
-            for (E entity : entities) {
-                entityManager.persist(entity);
-            }
+            entities.forEach(e -> entityManager.persist(e));
             entityManager.flush();
         } catch (DataIntegrityViolationException | PersistenceException e) {
             e.printStackTrace();
@@ -27,14 +25,11 @@ public abstract class GenericBatchDao<E extends Model> extends GenericDao<E> imp
     @Override
     @Transactional
     public void delete(Collection<E> entities) {
-        for (E entity : entities) {
-            try {
-                Query query = getDeleteByAltKeyQuery(entity);
-                query.executeUpdate();
-            } catch (PersistenceException e) {
-                e.printStackTrace();
-                throw new IllegalArgumentException(e);
-            }
+        try {
+            entities.forEach(e -> getDeleteByAltKeyQuery(e).executeUpdate());
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException(e);
         }
     }
 

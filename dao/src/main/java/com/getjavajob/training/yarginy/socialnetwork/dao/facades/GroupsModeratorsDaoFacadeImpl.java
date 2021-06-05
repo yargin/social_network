@@ -31,12 +31,12 @@ public class GroupsModeratorsDaoFacadeImpl implements GroupsModeratorsDaoFacade 
 
     @Override
     public boolean addGroupModerator(long accountId, long groupId) {
-        return transactionPerformer.transactionPerformed(groupModeratorsDao::create, accountId, groupId);
+        return transactionPerformer.perform(() -> groupModeratorsDao.create(accountId, groupId));
     }
 
     @Override
     public boolean deleteGroupModerator(long accountId, long groupId) {
-        return transactionPerformer.transactionPerformed(groupModeratorsDao::delete, accountId, groupId);
+        return transactionPerformer.perform(() -> groupModeratorsDao.delete(accountId, groupId));
     }
 
     @Override
