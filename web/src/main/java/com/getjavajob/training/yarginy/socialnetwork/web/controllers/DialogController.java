@@ -74,7 +74,7 @@ public class DialogController {
 
     @GetMapping("/show")
     public ModelAndView showDialog(HttpServletRequest req, @RequestAttribute long id) throws JsonProcessingException {
-        Dialog dialog = dialogService.getFullInfo(id);
+        Dialog dialog = dialogService.get(id);
         if (Objects.equals(dialog, dialogService.getNullDialog())) {
             return new ModelAndView(redirector.redirectBackView(req));
         }

@@ -4,7 +4,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -26,10 +25,10 @@ public class Dialog implements Model {
     @Id
     @GeneratedValue
     private long id;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(nullable = false, name = "first_id", foreignKey = @ForeignKey(name = "dialogs_accounts_id_fk"))
     private Account firstAccount;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(nullable = false, name = "second_id", foreignKey = @ForeignKey(name = "dialogs_accounts_id_fk_2"))
     private Account secondAccount;
     @Version

@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao.repositories;
+package com.getjavajob.training.yarginy.socialnetwork.dao.repositories.specificdaos;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 
@@ -8,7 +8,7 @@ import javax.persistence.PersistenceContext;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GroupGraphRepositoryImpl implements GroupGraphRepository {
+public class GroupSpecificDaoImpl implements GroupSpecificDao {
     @PersistenceContext
     private EntityManager entityManager;
 

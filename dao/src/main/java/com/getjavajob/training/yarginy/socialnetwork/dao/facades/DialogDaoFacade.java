@@ -8,11 +8,9 @@ import java.util.Collection;
 public interface DialogDaoFacade extends Serializable {
     Dialog select(long id);
 
-    Dialog selectFullInfo(long id);
-
     Dialog select(Dialog dialog);
 
-    Dialog getNullModel();
+    Dialog getNullDialog();
 
     boolean create(Dialog dialog);
 
@@ -24,5 +22,5 @@ public interface DialogDaoFacade extends Serializable {
 
     Collection<Dialog> selectDialogsByAccount(long accountId);
 
-    boolean isTalker(long accountId, long dialogId);
+    boolean isTalker(long dialogId, long accountId);
 }

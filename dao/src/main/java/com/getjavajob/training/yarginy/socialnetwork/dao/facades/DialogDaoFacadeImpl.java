@@ -1,72 +1,90 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.facades;
 
+import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Dialog;
-import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.modeldaos.implementations.DialogDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.onetomany.implementations.AccountDialogsDao;
+import com.getjavajob.training.yarginy.socialnetwork.common.utils.NullModelsFactory;
+import com.getjavajob.training.yarginy.socialnetwork.dao.repositories.DialogDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.utils.TransactionPerformer;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
+import static java.util.Objects.isNull;
+
 @Component("dialogDaoFacade")
 public class DialogDaoFacadeImpl implements DialogDaoFacade {
     private final DialogDao dialogDao;
-    private final AccountDialogsDao accountDialogsDao;
     private final TransactionPerformer transactionPerformer;
 
-    public DialogDaoFacadeImpl(DialogDao dialogDao, AccountDialogsDao accountDialogsDao, TransactionPerformer transactionPerformer) {
+    public DialogDaoFacadeImpl(@Qualifier("dialogRepo") DialogDao dialogDao, TransactionPerformer transactionPerformer) {
         this.dialogDao = dialogDao;
-        this.accountDialogsDao = accountDialogsDao;
         this.transactionPerformer = transactionPerformer;
     }
 
     @Override
     public Dialog select(long id) {
-        return dialogDao.select(id);
-    }
-
-    @Override
-    public Dialog selectFullInfo(long id) {
-        return dialogDao.selectFullInfo(id);
+        return dialogDao.findById(id).orElseGet(this::getNullDialog);
     }
 
     @Override
     public Dialog select(Dialog dialog) {
-        return dialogDao.select(dialog);
+        orderAccountsById(dialog);
+        Dialog selectedDialog = dialogDao.findByFirstAccountAndSecondAccount(dialog.getFirstAccount(),
+                dialog.getSecondAccount());
+        return isNull(selectedDialog) ? getNullDialog() : selectedDialog;
+    }
+
+    private void orderAccountsById(Dialog dialog) {
+        Account firstAccount = dialog.getFirstAccount();
+        Account secondAccount = dialog.getSecondAccount();
+        if (isNull(firstAccount) || isNull(secondAccount)) {
+            throw new IllegalArgumentException();
+        }
+        Account greaterAccount;
+        if (firstAccount.getId() < secondAccount.getId()) {
+            greaterAccount = secondAccount;
+            dialog.setSecondAccount(dialog.getFirstAccount());
+            dialog.setFirstAccount(greaterAccount);
+        }
     }
 
     @Override
-    public Dialog getNullModel() {
-        return dialogDao.getNullModel();
+    public Dialog getNullDialog() {
+        return NullModelsFactory.getNullDialog();
     }
 
     @Override
     public boolean create(Dialog dialog) {
-        return transactionPerformer.perform(() -> dialogDao.create(dialog));
+        orderAccountsById(dialog);
+        return transactionPerformer.repoPerformCreate(dialog, dialogDao);
     }
 
     @Override
     public boolean update(Dialog dialog) {
-        return transactionPerformer.perform(() -> dialogDao.update(dialog));
+        orderAccountsById(dialog);
+        return transactionPerformer.repoPerformUpdateOrDelete(dialog, dialogDao, dialogDao::save);
     }
 
     @Override
     public boolean delete(Dialog dialog) {
-        return transactionPerformer.perform(() -> dialogDao.delete(dialog));
+        return transactionPerformer.repoPerformUpdateOrDelete(dialog, dialogDao, dialogDao::delete);
     }
 
     @Override
     public Collection<Dialog> selectAll() {
-        return dialogDao.selectAll();
+        return dialogDao.findAll();
     }
 
     @Override
     public Collection<Dialog> selectDialogsByAccount(long accountId) {
-        return accountDialogsDao.selectMany(accountId);
+        Account account = new Account(accountId);
+        return dialogDao.findByFirstAccountOrSecondAccount(account, account);
     }
 
     @Override
     public boolean isTalker(long dialogId, long accountId) {
-        return accountDialogsDao.relationExists(dialogId, accountId);
+        Account account = new Account(accountId);
+        return !isNull(dialogDao.selectByIdAndTalker(dialogId, account, account));
     }
 }

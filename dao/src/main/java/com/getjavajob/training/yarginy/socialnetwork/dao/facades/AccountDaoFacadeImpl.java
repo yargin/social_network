@@ -8,7 +8,7 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.modeldaos.implement
 import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.manytomany.implementations.GroupMembershipDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.onetomany.implementations.AccountPhonesDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.selfmanytomany.implementations.FriendshipsDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.repositories.RepoGroupDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.repositories.GroupDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.utils.TransactionPerformer;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +17,7 @@ import java.util.Collection;
 @Component("accountDaoFacade")
 public class AccountDaoFacadeImpl implements AccountDaoFacade {
     private final AccountDao accountDao;
-    private final RepoGroupDao repoGroupDao;
+    private final GroupDao groupDao;
     private final AccountPhonesDao accountPhonesDao;
     private final GroupMembershipDao accountsInGroupsDao;
     private final FriendshipsDao accountFriendsDao;
@@ -25,13 +25,13 @@ public class AccountDaoFacadeImpl implements AccountDaoFacade {
 
     public AccountDaoFacadeImpl(AccountDao accountDao, AccountPhonesDao accountPhonesDao,
                                 GroupMembershipDao accountsInGroupsDao, FriendshipsDao accountFriendsDao,
-                                TransactionPerformer transactionPerformer, RepoGroupDao repoGroupDao) {
+                                TransactionPerformer transactionPerformer, GroupDao groupDao) {
         this.accountDao = accountDao;
         this.accountPhonesDao = accountPhonesDao;
         this.accountsInGroupsDao = accountsInGroupsDao;
         this.accountFriendsDao = accountFriendsDao;
         this.transactionPerformer = transactionPerformer;
-        this.repoGroupDao = repoGroupDao;
+        this.groupDao = groupDao;
     }
 
     @Override
@@ -81,7 +81,7 @@ public class AccountDaoFacadeImpl implements AccountDaoFacade {
 
     @Override
     public Collection<Group> getOwnedGroups(long accountId) {
-        return repoGroupDao.findByOwner(new Account(accountId));
+        return groupDao.findByOwner(new Account(accountId));
     }
 
     @Override

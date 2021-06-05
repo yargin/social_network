@@ -1,5 +1,7 @@
+const notificationDiv = $("#notification");
+
 $(function () {
-    $("#notification").dialog({
+    notificationDiv.dialog({
         autoOpen: false,
         modal: true,
         buttons: {
@@ -12,9 +14,10 @@ $(function () {
             at: "middle top"
         }
     });
-    $("#notification").hide();
+    alert("hiding");
+    notificationDiv.hide();
 });
 
 function callNotification() {
-    $('#notification').dialog('open');
+    notificationDiv.dialog('open');
 }

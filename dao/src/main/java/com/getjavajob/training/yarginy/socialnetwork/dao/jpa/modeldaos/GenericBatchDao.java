@@ -27,7 +27,7 @@ public abstract class GenericBatchDao<E extends Model> extends GenericDao<E> imp
     public void delete(Collection<E> entities) {
         try {
             entities.forEach(e -> getDeleteByAltKeyQuery(e).executeUpdate());
-        } catch (PersistenceException e) {
+        } catch (DataIntegrityViolationException | PersistenceException e) {
             e.printStackTrace();
             throw new IllegalArgumentException(e);
         }

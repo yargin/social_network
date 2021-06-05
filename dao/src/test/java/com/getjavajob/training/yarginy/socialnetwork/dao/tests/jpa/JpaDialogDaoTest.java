@@ -56,16 +56,16 @@ public class JpaDialogDaoTest {
 
     @Test
     public void testGetDialogById() {
-        Dialog selectedDialog = dialogDao.selectFullInfo(dialog.getId());
+        Dialog selectedDialog = dialogDao.select(dialog.getId());
         assertEquals(dialog, selectedDialog);
         selectedDialog = dialogDao.select(22);
-        assertEquals(dialogDao.getNullModel(), selectedDialog);
+        assertEquals(dialogDao.getNullDialog(), selectedDialog);
     }
 
     @Test
     public void testGetDialogByIdentifier() {
         assertEquals(dialog, dialogDao.select(dialog));
-        assertEquals(dialogDao.getNullModel(), dialogDao.select(new Dialog(thirdAccount, secondAccount)));
+        assertEquals(dialogDao.getNullDialog(), dialogDao.select(new Dialog(thirdAccount, secondAccount)));
     }
 
     @Test

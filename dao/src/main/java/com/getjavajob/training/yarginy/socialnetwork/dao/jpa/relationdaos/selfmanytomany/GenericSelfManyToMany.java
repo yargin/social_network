@@ -2,6 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.selfm
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.SelfManyToMany;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -41,7 +42,7 @@ public abstract class GenericSelfManyToMany<E extends Model> implements SelfMany
         try {
             entityManager.persist(manyToMany);
             entityManager.flush();
-        } catch (PersistenceException e) {
+        } catch (DataIntegrityViolationException | PersistenceException e) {
             throw new IllegalArgumentException(e);
         }
     }
@@ -75,7 +76,7 @@ public abstract class GenericSelfManyToMany<E extends Model> implements SelfMany
         try {
             SelfManyToMany<E> friendship = genericGetReference(entityManager, greaterId, lowerId);
             entityManager.remove(friendship);
-        } catch (PersistenceException e) {
+        } catch (DataIntegrityViolationException | PersistenceException e) {
             throw new IllegalArgumentException(e);
         }
     }

@@ -10,7 +10,6 @@ import com.getjavajob.training.yarginy.socialnetwork.dao.facades.GroupsModerator
 import com.getjavajob.training.yarginy.socialnetwork.dao.utils.TransactionPerformer;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.OptimisticLockException;
 import java.util.Collection;
 import java.util.Map;
 
@@ -126,12 +125,8 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public boolean updateGroup(Group group) {
-        try {
-            if (!groupDaoFacade.update(group)) {
-                throw new IncorrectDataException(IncorrectData.GROUP_DUPLICATE);
-            }
-        } catch (OptimisticLockException e) {
-            return false;
+        if (!groupDaoFacade.update(group)) {
+            throw new IncorrectDataException(IncorrectData.GROUP_DUPLICATE);
         }
         return true;
     }

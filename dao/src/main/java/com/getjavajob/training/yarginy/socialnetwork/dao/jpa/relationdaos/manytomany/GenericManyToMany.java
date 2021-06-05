@@ -2,6 +2,7 @@ package com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.manyt
 
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Model;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.manytomany.ManyToMany;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -52,7 +53,7 @@ public abstract class GenericManyToMany<F extends Model, S extends Model> implem
         try {
             entityManager.persist(manyToMany);
             entityManager.flush();
-        } catch (PersistenceException e) {
+        } catch (DataIntegrityViolationException | PersistenceException e) {
             throw new IllegalArgumentException(e);
         }
     }
@@ -66,7 +67,7 @@ public abstract class GenericManyToMany<F extends Model, S extends Model> implem
         try {
             ManyToMany<F, S> manyToMany = genericGetReference(entityManager, firstId, secondId);
             entityManager.remove(manyToMany);
-        } catch (PersistenceException e) {
+        } catch (DataIntegrityViolationException | PersistenceException e) {
             throw new IllegalArgumentException(e);
         }
     }

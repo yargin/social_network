@@ -4,7 +4,7 @@ import com.getjavajob.training.yarginy.socialnetwork.common.models.Account;
 import com.getjavajob.training.yarginy.socialnetwork.common.models.Group;
 import com.getjavajob.training.yarginy.socialnetwork.common.utils.NullModelsFactory;
 import com.getjavajob.training.yarginy.socialnetwork.dao.jpa.relationdaos.manytomany.implementations.GroupMembershipDao;
-import com.getjavajob.training.yarginy.socialnetwork.dao.repositories.RepoGroupDao;
+import com.getjavajob.training.yarginy.socialnetwork.dao.repositories.GroupDao;
 import com.getjavajob.training.yarginy.socialnetwork.dao.utils.TransactionPerformer;
 import org.springframework.stereotype.Component;
 
@@ -16,28 +16,28 @@ import static java.util.Objects.isNull;
 public class GroupDaoFacadeImpl implements GroupDaoFacade {
     private final GroupMembershipDao accountsGroupMembershipDao;
     private final TransactionPerformer transactionPerformer;
-    private final RepoGroupDao repoGroupDao;
+    private final GroupDao groupDao;
 
     public GroupDaoFacadeImpl(GroupMembershipDao accountsGroupMembershipDao,
-                              TransactionPerformer transactionPerformer, RepoGroupDao repoGroupDao) {
+                              TransactionPerformer transactionPerformer, GroupDao groupDao) {
         this.accountsGroupMembershipDao = accountsGroupMembershipDao;
         this.transactionPerformer = transactionPerformer;
-        this.repoGroupDao = repoGroupDao;
+        this.groupDao = groupDao;
     }
 
     @Override
     public Group select(long id) {
-        return repoGroupDao.findById(id).orElseGet(this::getNullGroup);
+        return groupDao.findById(id).orElseGet(this::getNullGroup);
     }
 
     @Override
     public Group selectFullInfo(long id) {
-        return repoGroupDao.getFullInfo(id);
+        return groupDao.getFullInfo(id);
     }
 
     @Override
     public Group select(Group group) {
-        Group selectedGroup = repoGroupDao.findByName(group.getName());
+        Group selectedGroup = groupDao.findByName(group.getName());
         return isNull(selectedGroup) ? getNullGroup() : selectedGroup;
     }
 
@@ -48,32 +48,32 @@ public class GroupDaoFacadeImpl implements GroupDaoFacade {
 
     @Override
     public boolean create(Group group) {
-        return transactionPerformer.repoPerformCreate(group, repoGroupDao);
+        return transactionPerformer.repoPerformCreate(group, groupDao);
     }
 
     @Override
     public boolean update(Group group) {
-        return transactionPerformer.repoPerformUpdateOrDelete(group, repoGroupDao, repoGroupDao::save);
+        return transactionPerformer.repoPerformUpdateOrDelete(group, groupDao, groupDao::save);
     }
 
     @Override
     public boolean delete(Group group) {
-        return transactionPerformer.repoPerformUpdateOrDelete(group, repoGroupDao, repoGroupDao::delete);
+        return transactionPerformer.repoPerformUpdateOrDelete(group, groupDao, groupDao::delete);
     }
 
     @Override
     public Collection<Group> selectAll() {
-        return repoGroupDao.findAll();
+        return groupDao.findAll();
     }
 
     @Override
     public Collection<Group> selectGroupsByOwner(long accountId) {
-        return repoGroupDao.findByOwner(new Account(accountId));
+        return groupDao.findByOwner(new Account(accountId));
     }
 
     @Override
     public boolean isOwner(long accountId, long groupId) {
-        return !isNull(repoGroupDao.findByIdAndOwner(groupId, new Account(accountId)));
+        return !isNull(groupDao.findByIdAndOwner(groupId, new Account(accountId)));
     }
 
     @Override

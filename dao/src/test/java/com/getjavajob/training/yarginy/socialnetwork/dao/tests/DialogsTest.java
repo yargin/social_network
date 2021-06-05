@@ -68,20 +68,20 @@ public class DialogsTest {
 
     @Test
     public void testSelectDialog() {
-        Dialog actualDialog = dialogDaoFacade.select(dialog);
+        Dialog actualDialog = dialogDaoFacade.select(dialog.getId());
         assertEquals(dialog, actualDialog);
     }
 
     @Test
     public void testSelectNonExistingDialog() {
         dialogDaoFacade.delete(dialog);
-        assertEquals(dialogDaoFacade.getNullModel(), dialogDaoFacade.select(dialog));
+        assertEquals(dialogDaoFacade.getNullDialog(), dialogDaoFacade.select(dialog));
     }
 
     @Test
     public void testDeleteDialog() {
         assertTrue(dialogDaoFacade.delete(dialog));
-        assertEquals(dialogDaoFacade.getNullModel(), dialogDaoFacade.select(dialog));
+        assertEquals(dialogDaoFacade.getNullDialog(), dialogDaoFacade.select(dialog));
     }
 
     @Test
@@ -99,7 +99,7 @@ public class DialogsTest {
 
     @Test
     public void testDialogExists() {
-        assertTrue(dialogDaoFacade.isTalker(firstAccount.getId(), dialog.getId()));
-        assertTrue(dialogDaoFacade.isTalker(secondAccount.getId(), dialog.getId()));
+        assertTrue(dialogDaoFacade.isTalker(dialog.getId(), firstAccount.getId()));
+        assertTrue(dialogDaoFacade.isTalker(dialog.getId(), secondAccount.getId()));
     }
 }
