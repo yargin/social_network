@@ -11,37 +11,37 @@ function initConfirmationScript(okButtonLabel, cancelButtonLabel, callbackFuncti
 }
 
 $(function () {
-    $("#confirmDialog").dialog({
+    $('#confirmDialog').dialog({
         autoOpen: false,
         modal: true,
         buttons: [{
             text: okButtonText,
             click: function () {
                 callback();
-                $(this).dialog("close");
+                $(this).dialog('close');
             }
         }, {
             text: cancelButtonText,
             click: function () {
-                $(this).dialog("close");
+                $(this).dialog('close');
             }
         }],
         position: {
-            my: "middle top",
-            at: "middle top"
+            my: 'middle top',
+            at: 'middle top'
         }
     });
 
-    $("#confirmDialog.ui-dialog-titlebar").hide();
+    $('#confirmDialog.ui-dialog-titlebar').hide();
 
-    $("#opener").click(function (e) {
+    $('#opener').click(function (e) {
         e.preventDefault();
         if (additionalChecks === undefined || additionalChecks()) {
-            $("#confirmDialog").dialog("open");
+            $('#confirmDialog').dialog('open');
         }
     });
 });
 
 function skip() {
-    $("#confirmAbleForm").submit();
+    $('#confirmAbleForm').submit();
 }

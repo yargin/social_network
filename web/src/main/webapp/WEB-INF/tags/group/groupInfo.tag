@@ -16,9 +16,11 @@
     <fmt:message key="label.creator" bundle="${label}"/> :
     <c:choose>
         <c:when test="${not empty ownerObject}">
+            <br>asdasasdd<br>
             <a href="${context}/account/wall?id=${ownerObject.id}">${ownerObject.name} ${ownerObject.surname}</a>
         </c:when>
         <c:otherwise>
+            <br>asdasasdd<br>
             <a nohref style="cursor: pointer" onclick="callNotification()">
                 <fmt:message key="label.deletedAccount" bundle="${label}"/>
             </a>

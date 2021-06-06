@@ -5,7 +5,6 @@ function initExec(contextAddr) {
 }
 
 function tryToExecute(targetUrl) {
-    //add dialog here
     $.ajax({
         url: targetUrl,
         dataType: 'text',

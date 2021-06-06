@@ -1,6 +1,7 @@
 package com.getjavajob.training.yarginy.socialnetwork.dao.configuration;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.configuration.CommonConfiguration;
+import com.getjavajob.training.yarginy.socialnetwork.dao.DaoConfiguration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

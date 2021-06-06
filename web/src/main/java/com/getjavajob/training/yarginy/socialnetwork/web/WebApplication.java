@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 
-@SpringBootApplication(scanBasePackages = "com.getjavajob.training.yarginy.socialnetwork.web")
+@SpringBootApplication
 @Import(ServiceConfig.class)
 public class WebApplication {
     public static void main(String[] args) {
