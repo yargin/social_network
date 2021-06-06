@@ -1,23 +1,31 @@
-const notificationDiv = $('#notification');
+var onLoad;
+
+function callOnLoad() {
+    onLoad = true;
+}
 
 $(function () {
-    $("#notification").dialog({
+    let notificationDiv = $('#notification');
+    notificationDiv.dialog({
         autoOpen: false,
         modal: true,
         buttons: {
             Ok: function () {
-                $(this).dialog("close");
+                $(this).dialog('close');
             }
         },
         position: {
-            my: "middle top",
-            at: "middle top"
+            my: 'middle top',
+            at: 'middle top'
         }
     });
-    $("#notification.ui-dialog-titlebar").hide();
-    $("#notification").hide();
+    if (onLoad) {
+        callNotification(notificationDiv);
+    } else {
+        notificationDiv.hide();
+    }
 });
 
-function callNotification() {
-    $("#notification").dialog('open');
+function callNotification(notificationDiv) {
+    notificationDiv.dialog('open');
 }

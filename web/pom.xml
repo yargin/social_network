@@ -49,6 +49,7 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+<!--        todo check scope-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
@@ -114,6 +115,7 @@
     </dependencies>
 
     <build>
+        <!--    todo check jsps locally packaging jar-->
         <plugins>
             <plugin>
                 <groupId>com.heroku.sdk</groupId>

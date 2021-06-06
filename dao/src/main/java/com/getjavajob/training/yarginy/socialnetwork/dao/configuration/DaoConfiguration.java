@@ -1,4 +1,4 @@
-package com.getjavajob.training.yarginy.socialnetwork.dao;
+package com.getjavajob.training.yarginy.socialnetwork.dao.configuration;
 
 import com.getjavajob.training.yarginy.socialnetwork.common.configuration.CommonConfiguration;
 import org.springframework.context.annotation.ComponentScan;

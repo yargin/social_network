@@ -15,10 +15,11 @@
 <script src="${context}/js/phonesEdit.js"></script>
 <script src="${context}/js/confirmationDialog.js"></script>
 <c:if test="${not empty concurrentError}">
-    <script src="${context}/js/notification.js" defer></script>
+    <script src="${context}/js/notification.js"></script>
     <div id="notification">
         <fmt:message key="${concurrentError}" bundle="${error}"/>
     </div>
+    <script> callOnLoad() </script>
 </c:if>
 
 <div class="info">

@@ -1,6 +1,6 @@
 package com.getjavajob.training.yarginy.socialnetwork.service.configuration;
 
-import com.getjavajob.training.yarginy.socialnetwork.dao.DaoConfiguration;
+import com.getjavajob.training.yarginy.socialnetwork.dao.configuration.DaoConfiguration;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.Dom4JDriver;
 import org.springframework.context.annotation.Bean;
