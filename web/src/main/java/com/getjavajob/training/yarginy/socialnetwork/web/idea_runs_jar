@@ -1,0 +1,12 @@
+"C:\Program Files\Java\jdk1.8.0_291\bin\java.exe"
+-Dspring.profiles.active=local
+-Ddebug -XX:TieredStopAtLevel=1 -noverify
+-Dspring.output.ansi.enabled=always
+"-javaagent:C:\Program Files\JetBrains\IntelliJ IDEA 2021.1.1\lib\idea_rt.jar=50201:
+C:\Program Files\JetBrains\IntelliJ IDEA 2021.1.1\bin"
+-Dcom.sun.management.jmxremote
+-Dspring.jmx.enabled=true
+-Dspring.liveBeansView.mbeanDomain
+-Dspring.application.admin.enabled=true
+-Dfile.encoding=UTF-8
+-classpath C:\Users\User\AppData\Local\Temp\classpath601482931.jar com.getjavajob.training.yarginy.socialnetwork.web.WebApplication

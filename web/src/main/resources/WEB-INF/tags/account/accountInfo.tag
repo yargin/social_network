@@ -1,6 +1,6 @@
 <%--@elvariable id="user" type="com.getjavajob.training.yarginy.socialnetwork.common.models.Account"--%>
-<%@ tag import="com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.Sex" %>
 <%@ tag import="com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.Role" %>
+<%@ tag import="com.getjavajob.training.yarginy.socialnetwork.common.models.additionaldata.Sex" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
