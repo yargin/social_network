@@ -117,41 +117,41 @@
     <build>
         <!--    todo check jsps locally packaging jar-->
         <plugins>
-            <plugin>
-                <groupId>com.heroku.sdk</groupId>
-                <artifactId>heroku-maven-plugin</artifactId>
-                <version>2.0.13</version>
-                <configuration>
-                    <appName>yarginy-socnet</appName>
-                    <processTypes>
-                        <!-- @formatter:off -->
-                        <web>java $JAVA_OPTS -Dserver.port=$PORT -jar target/web-1.0.0-SNAPSHOT.jar</web>
-                        <!-- @formatter:on -->
-                    </processTypes>
-                </configuration>
-            </plugin>
             <!--            <plugin>-->
-            <!--                <groupId>org.codehaus.mojo</groupId>-->
-            <!--                <artifactId>appassembler-maven-plugin</artifactId>-->
-            <!--                <version>2.0.0</version>-->
+            <!--                <groupId>com.heroku.sdk</groupId>-->
+            <!--                <artifactId>heroku-maven-plugin</artifactId>-->
+            <!--                <version>2.0.13</version>-->
             <!--                <configuration>-->
-            <!--                    <assembleDirectory>target</assembleDirectory>-->
-            <!--                    <programs>-->
-            <!--                        <program>-->
-            <!--                            <mainClass>com.getjavajob.training.yarginy.socialnetwork.web.WebApplication</mainClass>-->
-            <!--                            <name>webapp</name>-->
-            <!--                        </program>-->
-            <!--                    </programs>-->
+            <!--                    <appName>yarginy-socnet</appName>-->
+            <!--                    <processTypes>-->
+            <!--                        &lt;!&ndash; @formatter:off &ndash;&gt;-->
+<!--                        <web>java $JAVA_OPTS -Dserver.port=$PORT -jar target/web-1.0.0-SNAPSHOT.jar</web>-->
+<!--                        &lt;!&ndash; @formatter:on &ndash;&gt;-->
+            <!--                    </processTypes>-->
             <!--                </configuration>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <phase>package</phase>-->
-            <!--                        <goals>-->
-            <!--                            <goal>assemble</goal>-->
-            <!--                        </goals>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
             <!--            </plugin>-->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>appassembler-maven-plugin</artifactId>
+                <version>2.0.0</version>
+                <configuration>
+                    <assembleDirectory>target</assembleDirectory>
+                    <programs>
+                        <program>
+                            <mainClass>com.getjavajob.training.yarginy.socialnetwork.web.WebApplication</mainClass>
+                            <name>webapp</name>
+                        </program>
+                    </programs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>assemble</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
