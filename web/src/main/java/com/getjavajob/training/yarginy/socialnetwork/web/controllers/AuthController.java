@@ -29,6 +29,7 @@ public class AuthController {
 
     @RequestMapping("/")
     public String welcomeRedirect() {
+//        return "hello";
         return REDIRECT + ACCOUNT_WALL;
     }
 
