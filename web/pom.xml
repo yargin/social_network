@@ -137,6 +137,7 @@
                 <configuration>
                     <extraJvmArguments>$JAVA_OPTS -Dserver.port=$PORT</extraJvmArguments>
                     <assembleDirectory>target</assembleDirectory>
+                    <basedir>web</basedir>
                     <programs>
                         <program>
                             <mainClass>com.getjavajob.training.yarginy.socialnetwork.web.WebApplication</mainClass>
